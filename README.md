@@ -7,12 +7,12 @@ Static landing page for **Propwash FPV**, an FPV drone racing and freestyle mod 
 
 - `index.html` – the page (English and German, switchable)
 - `assets/css/style.css` – styles
-- `assets/js/main.js` – language switch, image switchers, video demo, gallery lightbox
+- `assets/js/main.js` – language switch, section menu, hero feed with pause switch, image switchers, video demo, gallery lightbox
 - `assets/img/` – real in-game screenshots as WebP (800 and 1600 px wide, plus cropped shots) and `og-image.jpg` for link previews
 - `assets/fonts/` – Saira and JetBrains Mono, both under the SIL Open Font License 1.1
 
-No build step, no external requests, no cookies, no tracking. The chosen language is kept in the
-browser's `localStorage`.
+No build step, no external requests, no cookies, no tracking. The chosen language and the hero's pause switch are
+kept in the browser's `localStorage`.
 
 ## Preview
 

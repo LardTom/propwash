@@ -84,6 +84,36 @@
   });
   applyLang(lang(), false);
 
+  /* ---------- Section menu (below 960 px) ---------- */
+
+  (function navMenu() {
+    var toggle = $('[data-nav-toggle]');
+    var nav = $('#site-nav');
+    if (!toggle || !nav) return;
+    var wide = window.matchMedia ? window.matchMedia('(min-width: 960px)') : null;
+
+    function setOpen(open, returnFocus) {
+      toggle.setAttribute('aria-expanded', String(open));
+      nav.classList.toggle('is-open', open);
+      if (!open && returnFocus) toggle.focus();
+    }
+    function isOpen() { return toggle.getAttribute('aria-expanded') === 'true'; }
+
+    toggle.addEventListener('click', function () { setOpen(!isOpen(), false); });
+    $$('a', nav).forEach(function (a) {
+      a.addEventListener('click', function () { if (isOpen()) setOpen(false, false); });
+    });
+    doc.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && isOpen()) setOpen(false, true);
+    });
+    doc.addEventListener('click', function (e) {
+      if (isOpen() && !nav.contains(e.target) && !toggle.contains(e.target)) setOpen(false, false);
+    });
+    if (wide && wide.addEventListener) {
+      wide.addEventListener('change', function (e) { if (e.matches) setOpen(false, false); });
+    }
+  })();
+
   /* ---------- Image switchers ---------- */
 
   $$('[data-tabs]').forEach(function (wrap) {
@@ -139,6 +169,8 @@
     var CYCLE = 200;
     var autoTimer = null;
     var tickTimer = null;
+    var pauseBtn = $('[data-motion-toggle]', feed);
+    var paused = root.classList.contains('motion-paused');
 
     function show(i, fromUser) {
       current = (i + imgs.length) % imgs.length;
@@ -177,7 +209,7 @@
       setLink(r > 0.9 ? 3 : r > 0.55 ? 4 : 5);
     }
 
-    function running() { return visible && !doc.hidden && !reduceMotion; }
+    function running() { return visible && !doc.hidden && !reduceMotion && !paused; }
 
     function restartAuto() {
       window.clearInterval(autoTimer);
@@ -197,6 +229,18 @@
 
     function refresh() { restartAuto(); restartTick(); }
 
+    function setPaused(next) {
+      paused = next;
+      root.classList.toggle('motion-paused', next);
+      if (pauseBtn) pauseBtn.setAttribute('aria-pressed', String(next));
+      try { window.localStorage.setItem('propwash-motion', next ? 'paused' : 'on'); } catch (e) { /* storage unavailable */ }
+      refresh();
+    }
+
+    if (pauseBtn) {
+      pauseBtn.setAttribute('aria-pressed', String(paused));
+      pauseBtn.addEventListener('click', function () { setPaused(!paused); });
+    }
     if (nextBtn) nextBtn.addEventListener('click', function () { show(current + 1, true); });
     feed.addEventListener('mouseenter', function () { hovered = true; });
     feed.addEventListener('mouseleave', function () { hovered = false; });

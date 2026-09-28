@@ -29,7 +29,10 @@
 (function () {
   var d = document.documentElement, lang = null;
   d.className = d.className.replace('no-js', 'js');
-  try { lang = localStorage.getItem('propwash-lang'); } catch (e) {}
+  try {
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
   if (lang !== 'en' && lang !== 'de') {
     var langs = navigator.languages || [navigator.language || 'en'];
     lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
@@ -47,7 +50,7 @@
       <img src="assets/img/logo-96.webp" width="36" height="36" alt="">
       <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
     </a>
-    <nav class="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
+    <nav class="site-nav" id="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
       <a href="#how"><span lang="en">How it works</span><span lang="de">So geht’s</span></a>
       <a href="#flight"><span lang="en">Flight</span><span lang="de">Flug</span></a>
       <a href="#video">Video</a>
@@ -59,6 +62,9 @@
       <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
       <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
     </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
   </div>
 </header>
 
@@ -107,7 +113,7 @@
         <div class="feed__screen">
           <img class="feed__img is-active" src="assets/img/osd-flight-1600.webp" srcset="assets/img/osd-flight-800.webp 800w, assets/img/osd-flight-1600.webp 1600w" sizes="(min-width: 1060px) 640px, 100vw" width="1600" height="900" fetchpriority="high" alt="FPV view through the goggles: flying towards the checkered start/finish gate with the Betaflight-style OSD" data-de-alt="FPV-Blick durch die Brille: Anflug auf das karierte Start-/Ziel-Gate mit OSD im Betaflight-Stil">
           <img class="feed__img" src="assets/img/trick-popup-fpv-1600.webp" srcset="assets/img/trick-popup-fpv-800.webp 800w, assets/img/trick-popup-fpv-1600.webp 1600w" sizes="(min-width: 1060px) 640px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Freestyle in FPV: the OSD scores a flip with +120 points" data-de-alt="Freestyle im FPV: Das OSD wertet einen Flip mit +120 Punkten">
-          <img class="feed__img" src="assets/img/race-line-fpv-1600.webp" srcset="assets/img/race-line-fpv-800.webp 800w, assets/img/race-line-fpv-1600.webp 1600w" sizes="(min-width: 1060px) 640px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Racing in FPV: a glowing race line leads through gate 2 towards gates 3 and 4" data-de-alt="Rennen im FPV: Eine leuchtende Ideallinie führt durch Gate 2 zu den Gates 3 und 4">
+          <img class="feed__img" src="assets/img/action-cam-rec-osd-1600.webp" srcset="assets/img/action-cam-rec-osd-800.webp 800w, assets/img/action-cam-rec-osd-1600.webp 1600w" sizes="(min-width: 1060px) 640px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Racing in FPV while the action cam records: a glowing race line leads through gate 2 towards gates 3 and 4" data-de-alt="Rennen im FPV, während die Action-Cam aufnimmt: Eine leuchtende Ideallinie führt durch Gate 2 zu den Gates 3 und 4">
           <span class="feed__static" aria-hidden="true"></span>
           <span class="feed__scan" aria-hidden="true"></span>
           <span class="feed__corners" aria-hidden="true"></span>
@@ -116,10 +122,15 @@
           <span class="osd-item" aria-hidden="true"><b>BAT</b><span class="osd-bat"><i data-bat-level></i></span><span data-bat-volts>25.2V</span></span>
           <span class="osd-item" aria-hidden="true"><b>FLY</b><span data-fly-time>00:00</span></span>
           <span class="osd-item" aria-hidden="true"><b>LINK</b><span class="osd-bars" data-link-bars><i></i><i></i><i></i><i></i><i></i></span></span>
-          <button type="button" class="feed__next needs-js" data-feed-next aria-label="Next camera feed" data-de-aria-label="Nächstes Kamerabild">
-            <span class="feed__count" aria-hidden="true"><span data-feed-index>1</span>/3</span>
-            <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
-          </button>
+          <span class="feed__ctrl needs-js">
+            <button type="button" class="feed__btn feed__pause" data-motion-toggle aria-pressed="false" aria-label="Pause animations" data-de-aria-label="Animationen anhalten">
+              <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14"><path class="icon-pause" d="M5 3.5v9M11 3.5v9"/><path class="icon-play" d="M5 3.2v9.6L12.6 8z"/></svg>
+            </button>
+            <button type="button" class="feed__btn feed__next" data-feed-next aria-label="Next camera feed" data-de-aria-label="Nächstes Kamerabild">
+              <span class="feed__count" aria-hidden="true"><span data-feed-index>1</span>/3</span>
+              <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14"><path d="M6 3.5 10.5 8 6 12.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+            </button>
+          </span>
         </div>
       </div>
       <p class="hero__note"><span lang="en">Real in-game screenshots. The frame around them is decoration.</span><span lang="de">Echte Screenshots aus dem Spiel. Der Rahmen drumherum ist Deko.</span></p>
@@ -152,7 +163,7 @@
           <p lang="en">Put a frame, flight controller, four motors, four props, a battery and a video unit together at the <strong>Drone Workbench</strong>. The live 3D preview shows weight, thrust-to-weight, hover throttle, top speed and flight time&nbsp;– and warns you about parts that don’t fit.</p>
           <p lang="de">Setz an der <strong>Drohnen-Werkbank</strong> Rahmen, Flight-Controller, vier Motoren, vier Propeller, Akku und Videoeinheit zusammen. Die 3D-Vorschau zeigt Gewicht, Schub-Gewicht-Verhältnis, Schwebegas, Höchstgeschwindigkeit und Flugzeit&nbsp;– und warnt dich vor Teilen, die nicht zusammenpassen.</p>
           <ul class="chips">
-            <li><span lang="en">Whoop · Cinewhoop · Freestyle · Race · Long range</span><span lang="de">Whoop · Cinewhoop · Freestyle · Race · Long Range</span></li>
+            <li><span lang="en">Whoop · Cinewhoop · Freestyle · Race · Long&nbsp;range</span><span lang="de">Whoop · Cinewhoop · Freestyle · Race · Long&nbsp;Range</span></li>
             <li><span lang="en">Ready-to-fly presets in creative</span><span lang="de">Flugfertige Vorlagen im Kreativmodus</span></li>
           </ul>
         </div>
@@ -186,7 +197,7 @@
         <div class="step__body">
           <h3><span lang="en">Fly FPV&nbsp;– or line of sight</span><span lang="de">FPV fliegen&nbsp;– oder auf Sicht</span></h3>
           <p lang="en">Hold the radio and right-click into the air. With matching goggles you see through the drone’s camera, with a Betaflight-like OSD. Without goggles you fly line of sight: your view follows the drone and a compact radio HUD shows battery, signal and mode. Arm with a switch or <kbd>Z</kbd>&nbsp;– and go.</p>
-          <p lang="de">Nimm die Funke in die Hand und klick in die Luft. Mit passender Brille siehst du durch die Kamera der Drohne, mit einem OSD wie bei Betaflight. Ohne Brille fliegst du auf Sicht: Dein Blick folgt der Drohne, ein kompaktes Funk-HUD zeigt Akku, Signal und Flugmodus. Scharf schalten per Schalter oder <kbd>Y</kbd> (QWERTZ)&nbsp;– und los.</p>
+          <p lang="de">Nimm die Funke in die Hand und klick in die Luft. Mit passender Brille siehst du durch die Kamera der Drohne, mit einem OSD wie bei Betaflight. Ohne Brille fliegst du auf Sicht: Dein Blick folgt der Drohne, ein kompaktes Funk-HUD zeigt Akku, Signal und Flugmodus. Scharfschalten per Schalter oder <span class="nowrap"><kbd>Y</kbd> (QWERTZ)</span>&nbsp;– und los.</p>
         </div>
         <figure class="step__media" data-tabs>
           <div class="tabs needs-js" role="group" aria-label="View" data-de-aria-label="Ansicht">
@@ -322,7 +333,7 @@
               <img class="feed__img" loading="lazy" src="assets/img/video-analog-stage5-1600.webp" srcset="assets/img/video-analog-stage5-800.webp 800w, assets/img/video-analog-stage5-1600.webp 1600w" sizes="(min-width: 1060px) 760px, 100vw" width="1600" height="900" decoding="async" alt="Analog video lost: full static and NO VIDEO in the OSD" data-de-alt="Analoges Video weg: volles Rauschen, im OSD „NO VIDEO“">
             </div>
             <div class="vlab__set" data-system="digital" hidden>
-              <img class="feed__img is-active" loading="lazy" src="assets/img/race-line-fpv-1600.webp" srcset="assets/img/race-line-fpv-800.webp 800w, assets/img/race-line-fpv-1600.webp 1600w" sizes="(min-width: 1060px) 760px, 100vw" width="1600" height="900" decoding="async" alt="Digital video: a clean HD picture of the race gates" data-de-alt="Digitales Video: klares HD-Bild der Renn-Gates">
+              <img class="feed__img is-active" loading="lazy" src="assets/img/action-cam-rec-osd-1600.webp" srcset="assets/img/action-cam-rec-osd-800.webp 800w, assets/img/action-cam-rec-osd-1600.webp 1600w" sizes="(min-width: 1060px) 760px, 100vw" width="1600" height="900" decoding="async" alt="Digital video: a clean HD picture of the race gates and the race line" data-de-alt="Digitales Video: klares HD-Bild der Renn-Gates mit Ideallinie">
               <img class="feed__img" loading="lazy" src="assets/img/video-digital-breakup-1600.webp" srcset="assets/img/video-digital-breakup-800.webp 800w, assets/img/video-digital-breakup-1600.webp 1600w" sizes="(min-width: 1060px) 760px, 100vw" width="1600" height="900" decoding="async" alt="Digital video breaking up: blur and block artifacts smear the picture" data-de-alt="Digitales Video bricht ein: Unschärfe und Blockartefakte verschmieren das Bild">
             </div>
             <span class="feed__static" aria-hidden="true"></span>
@@ -363,13 +374,13 @@
         </div>
         <div class="vnote" data-vnote="digital">
           <h3>Digital</h3>
-          <p lang="en">A clean HD picture with a little more latency. At the edge of range: blur, block artifacts, stutter and freezes&nbsp;– then a hard cut to <span class="mono">NO SIGNAL</span>. Never analog snow.</p>
-          <p lang="de">Klares HD-Bild mit etwas mehr Latenz. Am Rand der Reichweite: Unschärfe, Blockartefakte, Ruckler und Standbild&nbsp;– dann bricht das Bild hart auf <span class="mono">KEIN SIGNAL</span> ab. Nie analoger Schnee.</p>
+          <p lang="en">A clean HD picture with a little more latency. At the edge of range: blur, block artifacts, stutter and freezes&nbsp;– then a hard cut to <span class="mono nowrap">NO SIGNAL</span>. Never analog snow.</p>
+          <p lang="de">Klares HD-Bild mit etwas mehr Latenz. Am Rand der Reichweite: Unschärfe, Blockartefakte, Ruckler und Standbild&nbsp;– dann bricht das Bild hart auf <span class="mono nowrap">KEIN SIGNAL</span> ab. Nie analoger Schnee.</p>
         </div>
         <div class="vnote vnote--plain">
           <h3><span lang="en">Real channels</span><span lang="de">Echte Kanäle</span></h3>
-          <p lang="en">Every transmitter sends on a channel: analog R1–R8 and F1–F8 with the real 5.8&nbsp;GHz frequencies, digital CH1–CH8. The creative goggles receive every system and let you set latency, range and noise freely.</p>
-          <p lang="de">Jeder Sender funkt auf einem Kanal: analog R1–R8 und F1–F8 mit den echten 5,8-GHz-Frequenzen, digital CH1–CH8. Die Kreativ-Brille empfängt jedes System; Latenz, Reichweite und Rauschen stellst du frei ein.</p>
+          <p lang="en">Every transmitter sends on a channel: analog <span class="nowrap">R1–R8</span> and <span class="nowrap">F1–F8</span> with the real 5.8&nbsp;GHz frequencies, digital <span class="nowrap">CH1–CH8</span>. The creative goggles receive every system and let you set latency, range and noise freely.</p>
+          <p lang="de">Jeder Sender funkt auf einem Kanal: analog <span class="nowrap">R1–R8</span> und <span class="nowrap">F1–F8</span> mit den echten 5,8-GHz-Frequenzen, digital <span class="nowrap">CH1–CH8</span>. Die Kreativ-Brille empfängt jedes System; Latenz, Reichweite und Rauschen stellst du frei ein.</p>
         </div>
       </div>
     </div>
@@ -411,7 +422,7 @@
 
     <ul class="ticks">
       <li><span lang="en">Gates in three sizes&nbsp;– stack up to four into ladders and double gates</span><span lang="de">Gates in drei Größen&nbsp;– bis zu vier hoch zu Leitern und Doppel-Gates stapeln</span></li>
-      <li><span lang="en">Standing starts with start lights for several pilots and a 3-second false-start penalty</span><span lang="de">Stehende Starts mit Startampel für mehrere Piloten und 3 Sekunden Frühstart-Strafe</span></li>
+      <li><span lang="en">Standing starts with start lights for several pilots and a <span class="nowrap">3-second</span> false-start penalty</span><span lang="de">Stehende Starts mit Startampel für mehrere Piloten und 3&nbsp;Sekunden Frühstart-Strafe</span></li>
       <li><span lang="en">Lap timing with splits and the gap to the ghost at every gate</span><span lang="de">Zeitmessung mit Zwischenzeiten und dem Abstand zum Geist an jedem Gate</span></li>
       <li><span lang="en">Leaderboards per course and drone class&nbsp;– only server-verified laps count</span><span lang="de">Bestenlisten je Kurs und Drohnenklasse&nbsp;– nur vom Server geprüfte Runden zählen</span></li>
     </ul>
@@ -494,23 +505,27 @@
             <span lang="en">Headlight</span><span lang="de">Scheinwerfer</span>
           </button>
         </div>
-        <h3><span lang="en">Light up the cave</span><span lang="de">Licht in der Höhle</span></h3>
-        <p lang="en">LED strips in 11 colors with Betaflight-style modes&nbsp;– in FPV they light the way ahead, so caves become flyable. Switch them in flight with a radio switch or <span class="nowrap"><kbd>F8</kbd>.</span> With LambDynamicLights (optional) your drone becomes a real light source.</p>
-        <p lang="de">LED-Streifen in 11 Farben mit Modi wie bei Betaflight&nbsp;– im FPV leuchten sie den Weg aus, Höhlen werden fliegbar. Im Flug per Schalter an der Funke oder <kbd>F8</kbd> schalten. Mit LambDynamicLights (optional) wird deine Drohne zur echten Lichtquelle.</p>
+        <div class="tile__text">
+          <h3><span lang="en">Light up the cave</span><span lang="de">Licht in der Höhle</span></h3>
+          <p lang="en">LED strips in 11 colors with Betaflight-style modes&nbsp;– in FPV they light the way ahead, so caves become flyable. Switch them in flight with a radio switch or <span class="nowrap"><kbd>F8</kbd>.</span> With LambDynamicLights (optional) your drone becomes a real light source.</p>
+          <p lang="de">LED-Streifen in 11 Farben mit Modi wie bei Betaflight&nbsp;– im FPV leuchten sie den Weg aus, Höhlen werden fliegbar. Im Flug per Schalter an der Funke oder <kbd>F8</kbd> schalten. Mit LambDynamicLights (optional) wird deine Drohne zur echten Lichtquelle.</p>
+        </div>
       </article>
 
       <article class="tile tile--cam">
-        <div class="pip">
+        <div class="pip pip--stack">
           <div class="shot">
             <img src="assets/img/drone-closeup-action-cam-heavy-800.webp" srcset="assets/img/drone-closeup-action-cam-heavy-800.webp 800w, assets/img/drone-closeup-action-cam-heavy-1600.webp 1600w" sizes="(min-width: 1060px) 560px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="A 5″ drone with the Action Cam Heavy mounted on top" data-de-alt="Eine 5-Zoll-Drohne mit aufgesetzter Action-Cam Heavy">
           </div>
-          <div class="shot pip__inset">
-            <img src="assets/img/action-cam-recordings-800.webp" width="800" height="450" loading="lazy" decoding="async" data-zoom-src="assets/img/action-cam-recordings-1600.webp" alt="The Recordings window with a 1080p60 clip, its thumbnail and file size" data-de-alt="Das Aufnahmen-Fenster mit einem 1080p60-Clip, Vorschaubild und Dateigröße">
+          <div class="shot shot--ui pip__inset">
+            <img src="assets/img/action-cam-recordings-ui-888.webp" srcset="assets/img/action-cam-recordings-ui-640.webp 640w, assets/img/action-cam-recordings-ui-888.webp 888w" sizes="(min-width: 1060px) 460px, (min-width: 760px) 50vw, 100vw" width="888" height="338" loading="lazy" decoding="async" alt="The Recordings window: a recording running at 1080p60 and a finished 4-second clip with thumbnail, 3.2 MB, with sound, saved as an MP4 file" data-de-alt="Das Aufnahmen-Fenster: eine laufende Aufnahme in 1080p60 und ein fertiger 4-Sekunden-Clip mit Vorschaubild, 3,2 MB, mit Ton, gespeichert als MP4-Datei">
           </div>
         </div>
-        <h3><span lang="en">Action cams that really record</span><span lang="de">Action-Cams, die wirklich aufnehmen</span></h3>
-        <p lang="en">Mount an action cam and record your flight as a real MP4 video&nbsp;– H.264, up to 1440p60, optionally with the motor sound. <strong>Light</strong> (42&nbsp;g, powered by the flight pack) or <strong>Heavy</strong> (150&nbsp;g, stabilized, its own battery)&nbsp;– and you feel the extra weight in the air.</p>
-        <p lang="de">Eine Action-Cam obendrauf nimmt deinen Flug als echtes MP4-Video auf&nbsp;– H.264, bis 1440p60, auf Wunsch mit Motorsound. <strong>Light</strong> (42&nbsp;g, Strom aus dem Flugakku) oder <strong>Heavy</strong> (150&nbsp;g, stabilisiert, eigener Akku)&nbsp;– das Zusatzgewicht spürst du im Flug.</p>
+        <div class="tile__text">
+          <h3><span lang="en">Action cams that really record</span><span lang="de">Action-Cams, die wirklich aufnehmen</span></h3>
+          <p lang="en">Mount an action cam and record your flight as a real MP4 video&nbsp;– H.264, up to 1440p60, optionally with the motor sound. <strong>Light</strong> (42&nbsp;g, powered by the flight pack) or <strong>Heavy</strong> (150&nbsp;g, stabilized, its own battery)&nbsp;– and you feel the extra weight in the air.</p>
+          <p lang="de">Eine Action-Cam obendrauf nimmt deinen Flug als echtes MP4-Video auf&nbsp;– H.264, bis 1440p60, auf Wunsch mit Motorsound. <strong>Light</strong> (42&nbsp;g, Strom aus dem Flugakku) oder <strong>Heavy</strong> (150&nbsp;g, stabilisiert, eigener Akku)&nbsp;– das Zusatzgewicht spürst du im Flug.</p>
+        </div>
       </article>
 
       <article class="tile tile--paint">
@@ -522,18 +537,22 @@
             <img src="assets/img/drone-closeup-paint-neon-800.webp" width="800" height="450" loading="lazy" decoding="async" data-zoom-src="assets/img/drone-closeup-paint-neon-1600.webp" alt="A drone in the Neon paint preset" data-de-alt="Eine Drohne mit der Lackier-Vorlage Neon">
           </div>
         </div>
-        <h3><span lang="en">Paint every part</span><span lang="de">Jedes Teil lackieren</span></h3>
-        <p lang="en">Color twelve parts separately&nbsp;– frame, motor bells, each prop, battery wrap, camera and more&nbsp;– with 16 dyes, five finishes like carbon and gold, any hex color and presets. Other players see your colors.</p>
-        <p lang="de">Zwölf Teile einzeln färben&nbsp;– Rahmen, Motorglocken, jeden Prop, Akku, Kamera und mehr&nbsp;– mit 16 Farbstoffen, fünf Oberflächen wie Carbon und Gold, beliebigen Hex-Farben und Vorlagen. Andere Spieler sehen deine Farben.</p>
+        <div class="tile__text">
+          <h3><span lang="en">Paint every part</span><span lang="de">Jedes Teil lackieren</span></h3>
+          <p lang="en">Color twelve parts separately&nbsp;– frame, motor bells, each prop, battery wrap, camera and more&nbsp;– with 16 dyes, five finishes like carbon and gold, any hex color and presets. Other players see your colors.</p>
+          <p lang="de">Zwölf Teile einzeln färben&nbsp;– Rahmen, Motorglocken, jeden Prop, Akku, Kamera und mehr&nbsp;– mit 16 Farbstoffen, fünf Oberflächen wie Carbon und Gold, beliebigen Hex-Farben und Vorlagen. Andere Spieler sehen deine Farben.</p>
+        </div>
       </article>
 
       <article class="tile tile--tricks">
         <div class="shot shot--feed">
           <img src="assets/img/trick-popup-fpv-800.webp" srcset="assets/img/trick-popup-fpv-800.webp 800w, assets/img/trick-popup-fpv-1600.webp 1600w" sizes="(min-width: 1060px) 400px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Freestyle in FPV: the OSD scores a flip with +120 points" data-de-alt="Freestyle im FPV: Das OSD wertet einen Flip mit +120 Punkten">
         </div>
-        <h3><span lang="en">Tricks that count</span><span lang="de">Tricks, die zählen</span></h3>
-        <p lang="en">Flips, rolls, power loops, Matty flips, split-S, orbits, gaps and proximity passes are recognized&nbsp;– with points, style bonuses and combos up to ×4.</p>
-        <p lang="de">Flips, Rollen, Power Loops, Matty Flips, Split-S, Orbits, Gaps und Proximity-Vorbeiflüge werden erkannt&nbsp;– mit Punkten, Stil-Boni und Kombos bis ×4.</p>
+        <div class="tile__text">
+          <h3><span lang="en">Tricks that count</span><span lang="de">Tricks, die zählen</span></h3>
+          <p lang="en">Flips, rolls, power loops, Matty flips, split-S, orbits, gaps and proximity passes are recognized&nbsp;– with points, style bonuses and combos up to ×4.</p>
+          <p lang="de">Flips, Rollen, Power Loops, Matty Flips, Split-S, Orbits, Gaps und Proximity-Vorbeiflüge werden erkannt&nbsp;– mit Punkten, Stil-Boni und Kombos bis ×4.</p>
+        </div>
       </article>
 
       <article class="tile tile--school">
@@ -542,22 +561,26 @@
             <img src="assets/img/flight-school-build-1600.webp" srcset="assets/img/flight-school-build-800.webp 800w, assets/img/flight-school-build-1600.webp 1600w" sizes="(min-width: 1060px) 720px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Flight School lesson: building a drone at the workbench, with callouts and a timeline" data-de-alt="Flugschul-Lektion: eine Drohne an der Werkbank bauen, mit Hinweisen und Zeitleiste">
           </div>
           <div class="shot pip__inset">
-            <img src="assets/img/flight-school-index-800.webp" width="800" height="450" loading="lazy" decoding="async" data-zoom-src="assets/img/flight-school-index-1600.webp" alt="Flight School overview with all lessons" data-de-alt="Flugschul-Übersicht mit allen Lektionen">
+            <img src="assets/img/flight-school-race-640.webp" srcset="assets/img/flight-school-race-640.webp 640w, assets/img/flight-school-race-1250.webp 1250w" sizes="(min-width: 760px) 260px, 100vw" width="1250" height="700" loading="lazy" decoding="async" alt="Flight School lesson on racing, as a 3D diorama: the next gate glows green, the others stay white" data-de-alt="Flugschul-Lektion zum Rennen als 3D-Diorama: Das nächste Gate leuchtet grün, die anderen bleiben weiß">
           </div>
         </div>
-        <h3><span lang="en">Learn it in the game</span><span lang="de">Lernen im Spiel</span></h3>
-        <p lang="en">The animated Flight School explains the whole mod with small 3D dioramas, callouts and your real key bindings. Hold <kbd>M</kbd> over any Propwash item to open its lesson, or <kbd>Shift</kbd> for a detailed tooltip.</p>
-        <p lang="de">Die animierte Flugschule erklärt die ganze Mod mit kleinen 3D-Dioramen, Hinweisen und deiner echten Tastenbelegung. Halte <kbd>M</kbd> über ein Propwash-Item für seine Lektion oder <kbd>Shift</kbd> für einen ausführlichen Tooltip.</p>
+        <div class="tile__text">
+          <h3><span lang="en">Learn it in the game</span><span lang="de">Lernen im Spiel</span></h3>
+          <p lang="en">The animated Flight School explains the whole mod with small 3D dioramas, callouts and your real key bindings. Hold <kbd>M</kbd> over any Propwash item to open its lesson, or <kbd>Shift</kbd> for a detailed tooltip.</p>
+          <p lang="de">Die animierte Flugschule erklärt die ganze Mod mit kleinen 3D-Dioramen, Hinweisen und deiner echten Tastenbelegung. Halte <kbd>M</kbd> über ein Propwash-Item für seine Lektion oder <kbd>Shift</kbd> für einen ausführlichen Tooltip.</p>
+        </div>
       </article>
 
       <article class="tile tile--dust">
         <div class="shot shot--feed">
-          <img src="assets/img/dust-takeoff-800.webp" srcset="assets/img/dust-takeoff-800.webp 800w, assets/img/dust-takeoff-1600.webp 1600w" sizes="(min-width: 1060px) 460px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="A drone just after take-off, stirring up a little dust from the grass below" data-de-alt="Eine Drohne kurz nach dem Start wirbelt etwas Staub vom Gras darunter auf">
+          <img src="assets/img/dust-closeup-640.webp" srcset="assets/img/dust-closeup-640.webp 640w, assets/img/dust-closeup-960.webp 960w" sizes="(min-width: 1060px) 460px, (min-width: 760px) 50vw, 100vw" width="960" height="540" loading="lazy" decoding="async" alt="Close-up of a drone just after take-off: its rotors stir up dust from the grass below (dust amount set to maximum)" data-de-alt="Nahaufnahme einer Drohne kurz nach dem Start: Die Rotoren wirbeln Staub vom Gras darunter auf (Staubmenge auf Maximum)">
         </div>
-        <p class="tile__label">Sound &amp; <span lang="en">dust</span><span lang="de">Staub</span></p>
-        <h3><span lang="en">You hear it, you see it</span><span lang="de">Du hörst es, du siehst es</span></h3>
-        <p lang="en">Every drone gets its own motor sound, synthesized in real time with Doppler effect and beeps. Fly low and the rotors stir up a subtle cloud of dust in the color of the block below&nbsp;– or a fine spray over water.</p>
-        <p lang="de">Jede Drohne hat ihren eigenen Motorsound, in Echtzeit synthetisiert, mit Doppler-Effekt und Pieptönen. Fliegst du tief, wirbeln die Rotoren dezent Staub in der Farbe des Blocks darunter auf&nbsp;– über Wasser feine Gischt.</p>
+        <div class="tile__text">
+          <p class="tile__label">Sound &amp; <span lang="en">dust</span><span lang="de">Staub</span></p>
+          <h3><span lang="en">You hear it, you see it</span><span lang="de">Du hörst es, du siehst es</span></h3>
+          <p lang="en">Every drone gets its own motor sound, synthesized in real time with Doppler effect and beeps. Fly low and the rotors stir up a subtle cloud of dust in the color of the block below&nbsp;– or a fine spray over water.</p>
+          <p lang="de">Jede Drohne hat ihren eigenen Motorsound, in Echtzeit synthetisiert, mit Doppler-Effekt und Pieptönen. Fliegst du tief, wirbeln die Rotoren dezent Staub in der Farbe des Blocks darunter auf&nbsp;– über Wasser feine Gischt.</p>
+        </div>
       </article>
     </div>
   </div>
@@ -571,15 +594,15 @@
         <p class="kicker">Screenshots</p>
         <h2 id="gallery-title"><span lang="en">Straight from the game</span><span lang="de">Direkt aus dem Spiel</span></h2>
       </div>
-      <p class="section__intro" lang="en">Every screenshot is real and unretouched (some are cropped). Click any screenshot on this page to enlarge it.</p>
-      <p class="section__intro" lang="de">Alle Screenshots sind echt und unretuschiert (teils zugeschnitten). Klick auf dieser Seite einen Screenshot an, um ihn zu vergrößern.</p>
+      <p class="section__intro" lang="en">Every screenshot is real and unretouched (some are cropped). Click or tap any screenshot on this page to enlarge it.</p>
+      <p class="section__intro" lang="de">Alle Screenshots sind echt und unretuschiert (teils zugeschnitten). Klick oder tipp auf dieser Seite einen Screenshot an, um ihn zu vergrößern.</p>
     </header>
 
     <ul class="gallery" data-gallery>
       <li><a href="assets/img/osd-flight-1600.webp"><img src="assets/img/osd-flight-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="FPV view through the goggles: flying towards the start/finish gate with the Betaflight-style OSD" data-de-alt="FPV-Blick durch die Brille: Anflug auf das Start-/Ziel-Gate mit OSD im Betaflight-Stil"></a></li>
       <li><a href="assets/img/drone-closeup-1600.webp"><img src="assets/img/drone-closeup-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="A 5″ freestyle drone built from real parts: frame, stack, four motors, props, HD video unit and a 6S battery" data-de-alt="Eine 5-Zoll-Freestyle-Drohne aus realen Teilen: Rahmen, Stack, vier Motoren, Props, HD-Videoeinheit und 6S-Akku"></a></li>
       <li><a href="assets/img/workbench-freestyle-1600.webp"><img src="assets/img/workbench-freestyle-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="The Drone Workbench with live 3D preview and build analysis" data-de-alt="Die Drohnen-Werkbank mit 3D-Vorschau und Build-Analyse"></a></li>
-      <li><a href="assets/img/race-line-fpv-1600.webp"><img src="assets/img/race-line-fpv-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Racing in FPV: the race line leads through gate 2 towards gates 3 and 4" data-de-alt="Rennen im FPV: Die Ideallinie führt durch Gate 2 zu den Gates 3 und 4"></a></li>
+      <li><a href="assets/img/action-cam-rec-osd-1600.webp"><img src="assets/img/action-cam-rec-osd-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Racing in FPV with the action cam recording: the race line leads through gate 2 towards gates 3 and 4" data-de-alt="Rennen im FPV mit laufender Action-Cam: Die Ideallinie führt durch Gate 2 zu den Gates 3 und 4"></a></li>
       <li><a href="assets/img/race-start-go-1600.webp"><img src="assets/img/race-start-go-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="GO! – the start lights turn green at a standing start" data-de-alt="„GO!“ – die Startampel schaltet beim stehenden Start auf Grün"></a></li>
       <li><a href="assets/img/pilot-third-person-1600.webp"><img src="assets/img/pilot-third-person-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="The pilot with goggles on and the radio in both hands" data-de-alt="Der Pilot mit aufgesetzter Brille und der Funke in beiden Händen"></a></li>
       <li><a href="assets/img/remote-first-person-1600.webp"><img src="assets/img/remote-first-person-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="The radio held with both hands in first person" data-de-alt="Die Funke mit beiden Händen in der Ich-Perspektive"></a></li>
@@ -680,8 +703,8 @@
       <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
       <p lang="en">Propwash FPV is an original mod. It is not affiliated with Betaflight, EdgeTX, OpenTX or any drone manufacturer.</p>
       <p lang="de">Propwash FPV ist eine eigenständige Mod und steht in keiner Verbindung zu Betaflight, EdgeTX, OpenTX oder einem Drohnenhersteller.</p>
-      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice is kept in your browser. Fonts: Saira and JetBrains Mono (<a href="assets/fonts/OFL-Saira.txt">OFL</a>, <a href="assets/fonts/OFL-JetBrainsMono.txt">OFL</a>), served from this site.</p>
-      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl bleibt in deinem Browser. Schriften: Saira und JetBrains Mono (<a href="assets/fonts/OFL-Saira.txt">OFL</a>, <a href="assets/fonts/OFL-JetBrainsMono.txt">OFL</a>), direkt von dieser Seite geladen.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice and whether you paused the animations are kept in your browser. Fonts: <a href="assets/fonts/OFL-Saira.txt">Saira</a> and <a href="assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (both SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl und ob du die Animationen angehalten hast, bleiben in deinem Browser. Schriften: <a href="assets/fonts/OFL-Saira.txt">Saira</a> und <a href="assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (beide SIL Open Font License), direkt von dieser Seite geladen.</p>
     </div>
     <a class="site-footer__top" href="#top"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
   </div>

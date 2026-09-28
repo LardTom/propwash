@@ -41,6 +41,7 @@
   --mono: "PW Mono", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
 
   --gutter: 16px;
+  --measure: 34em;
   --radius: 8px;
   --header-h: 60px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -112,6 +113,13 @@ h3 {
 
 p {
   margin: 0;
+}
+
+p,
+li,
+dd,
+figcaption {
+  text-wrap: pretty;
 }
 
 a {
@@ -308,10 +316,81 @@ kbd {
   }
 }
 
+@media (max-width: 959px) {
+  .site-nav.is-open {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 12px;
+    margin: 0;
+    padding: 10px var(--gutter) 18px;
+    border-bottom: 1px solid var(--border);
+    background: #171717;
+    box-shadow: 0 24px 40px -24px rgba(0, 0, 0, 0.9);
+  }
+  .site-nav.is-open a {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 8px 12px;
+    border: 1px solid var(--border-soft);
+    background: var(--panel-2);
+    color: var(--text);
+    font-size: 1rem;
+  }
+}
+
+.nav-toggle {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--field);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.nav-toggle:hover,
+.nav-toggle[aria-expanded="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.nav-toggle svg {
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: square;
+}
+
+.nav-toggle__close,
+.nav-toggle[aria-expanded="true"] .nav-toggle__open {
+  display: none;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle__close {
+  display: inline;
+}
+
+@media (min-width: 960px) {
+  .nav-toggle {
+    display: none;
+  }
+}
+
 .lang-switch {
   display: inline-flex;
   margin-left: auto;
-  padding: 3px;
+  padding: 2px;
   gap: 2px;
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -324,9 +403,37 @@ kbd {
   }
 }
 
+@media (max-width: 399px) {
+  .site-header__inner {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 419px) {
+  .brand {
+    gap: 8px;
+  }
+  .brand img {
+    width: 32px;
+    height: 32px;
+  }
+  .brand__word {
+    font-size: 0.92rem;
+  }
+  .site-header .lang-switch button {
+    min-width: 40px;
+  }
+}
+
+@media (max-width: 359px) {
+  .brand__word {
+    display: none;
+  }
+}
+
 .lang-switch button {
-  min-width: 40px;
-  min-height: 32px;
+  min-width: 44px;
+  min-height: 44px;
   padding: 4px 8px;
   border: 0;
   border-radius: 4px;
@@ -498,6 +605,7 @@ kbd {
   .section__head--row .section__intro {
     max-width: 38ch;
     margin: 0;
+    text-wrap: balance;
   }
 }
 
@@ -512,7 +620,7 @@ h2 {
 
 .section__intro {
   margin-top: 20px;
-  max-width: 62ch;
+  max-width: var(--measure);
   color: var(--muted);
   font-size: clamp(1.03rem, 0.96rem + 0.3vw, 1.16rem);
 }
@@ -707,7 +815,7 @@ figcaption {
 
 .hero__lead {
   margin-top: 24px;
-  max-width: 56ch;
+  max-width: var(--measure);
   color: var(--muted);
   font-size: clamp(1.03rem, 0.98rem + 0.25vw, 1.14rem);
 }
@@ -1028,13 +1136,20 @@ figcaption {
   100% { opacity: 0; background-position: 90px 20px; }
 }
 
-.feed__next {
+.feed__ctrl {
+  display: inline-flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.feed__btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  min-height: 32px;
-  margin-left: auto;
-  padding: 4px 10px;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 4px 12px;
   border: 1px solid var(--border-strong);
   border-radius: 4px;
   background: var(--bg);
@@ -1042,12 +1157,57 @@ figcaption {
   font: 600 0.72rem/1 var(--mono);
   letter-spacing: 0.08em;
   cursor: pointer;
-  transition: border-color 0.2s, background-color 0.2s;
+  transition: border-color 0.2s, background-color 0.2s, color 0.2s;
 }
 
-.feed__next:hover {
+.feed__btn:hover {
   border-color: var(--accent);
   background: var(--panel-hi);
+}
+
+.feed__pause {
+  padding: 4px;
+}
+
+.feed__pause svg {
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: square;
+}
+
+.feed__pause .icon-play {
+  display: none;
+  fill: currentColor;
+  stroke: none;
+}
+
+.feed__pause[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.feed__pause[aria-pressed="true"] .icon-pause {
+  display: none;
+}
+
+.feed__pause[aria-pressed="true"] .icon-play {
+  display: inline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feed__pause {
+    display: none;
+  }
+}
+
+/* Pause switch: freezes the looping animations (the hero feed itself stops in JS) */
+html.motion-paused .soon-dot::after,
+html.motion-paused .osd-rec i,
+html.motion-paused .feed__scan::after,
+html.motion-paused .tape__track {
+  animation-play-state: paused !important;
 }
 
 .feed__count {
@@ -1247,6 +1407,21 @@ figcaption {
   font-family: var(--mono);
   font-size: 0.74rem;
   line-height: 1.4;
+}
+
+/* Comfortable line length (about 75 characters) wherever a text column can run the full content width (tablets) */
+.step__body > p,
+.specs dd,
+.vnote p,
+.input p,
+.inputs__foot,
+.loot p,
+.survival__recipe figcaption,
+.trio figcaption p,
+.tile__text p,
+.compat__list dd,
+.compat__note {
+  max-width: var(--measure);
 }
 
 /* ---------- Flight ---------- */
@@ -1544,6 +1719,15 @@ figcaption {
   min-width: 0;
 }
 
+@media (min-width: 700px) and (max-width: 1059px) {
+  .vlab__notes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .vnote--plain {
+    grid-column: 1 / -1;
+  }
+}
+
 .vnote {
   padding: 20px 22px;
   border: 1px solid var(--border-soft);
@@ -1623,12 +1807,13 @@ figcaption {
   }
 }
 
+/* Wide hero column: its box stays close to 16:9, and any crop only trims the right edge, never the HUD */
 @media (min-width: 1060px) {
   .bento {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 2.7fr) repeat(2, minmax(0, 1fr));
   }
   .bento__item--hero {
-    grid-column: span 2;
+    grid-column: 1;
     grid-row: span 2;
   }
   .bento__item--hero img {
@@ -1636,6 +1821,7 @@ figcaption {
     min-height: 0;
     aspect-ratio: auto;
     height: 100%;
+    object-position: left top;
   }
 }
 
@@ -1723,6 +1909,22 @@ figcaption {
   margin-top: clamp(3.5rem, 2.5rem + 4vw, 5.5rem);
 }
 
+/* Tablets: picture and text side by side instead of three huge stacked screenshots */
+@media (min-width: 640px) and (max-width: 899px) {
+  .trio {
+    gap: 32px;
+  }
+  .trio figure {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: 28px;
+  }
+  .trio figcaption {
+    margin-top: 0;
+  }
+}
+
 @media (min-width: 900px) {
   .trio {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1754,25 +1956,6 @@ figcaption {
   gap: 16px;
 }
 
-@media (min-width: 760px) {
-  .extras {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1060px) {
-  .extras {
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    gap: 18px;
-  }
-  .tile--light,
-  .tile--cam { grid-column: span 6; }
-  .tile--paint,
-  .tile--school { grid-column: span 7; }
-  .tile--tricks,
-  .tile--dust { grid-column: span 5; }
-}
-
 .tile {
   display: flex;
   flex-direction: column;
@@ -1782,6 +1965,10 @@ figcaption {
   border-radius: 12px;
   background: var(--panel-2);
   color: var(--muted);
+}
+
+.tile__text {
+  min-width: 0;
 }
 
 .tile h3 {
@@ -1803,7 +1990,51 @@ figcaption {
   margin-top: 6px;
 }
 
+/* Tablets: one tile per row, picture and text side by side, alternating sides */
+@media (min-width: 760px) and (max-width: 1059px) {
+  .tile {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 28px;
+    padding: 12px 28px 12px 12px;
+  }
+  .tile:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    padding: 12px 12px 12px 28px;
+  }
+  .tile:nth-child(even) > .tile__text {
+    order: -1;
+  }
+  .tile__text {
+    padding-block: 14px;
+  }
+  .tile h3 {
+    margin: 0 0 10px;
+  }
+  .tile p {
+    margin-inline: 0;
+  }
+  .tile--dust .tile__label {
+    margin: 0 0 6px;
+  }
+  .tile--dust h3 {
+    margin-top: 0;
+  }
+}
+
 @media (min-width: 1060px) {
+  .extras {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 18px;
+  }
+  .tile--light,
+  .tile--paint,
+  .tile--school { grid-column: span 7; }
+  .tile--cam,
+  .tile--tricks,
+  .tile--dust { grid-column: span 5; }
+  .tile--light .shot,
   .tile--tricks .shot,
   .tile--dust .shot {
     flex: 1 1 auto;
@@ -1820,21 +2051,21 @@ figcaption {
   margin-top: 8px;
 }
 
-@media (min-width: 1060px) {
-  .pip__inset {
+@media (min-width: 760px) {
+  .pip:not(.pip--stack) .pip__inset {
     position: absolute;
-    right: 12px;
-    bottom: 12px;
-    width: 44%;
+    right: -6px;
+    bottom: -14px;
+    width: 40%;
     margin-top: 0;
     border: 2px solid var(--bg);
     border-radius: 6px;
     box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
   }
-  .tile--school .pip__inset,
-  .tile--paint .pip__inset {
-    right: -6px;
-    bottom: -14px;
+}
+
+@media (min-width: 1060px) {
+  .pip:not(.pip--stack) .pip__inset {
     width: 34%;
   }
 }
@@ -1860,7 +2091,7 @@ figcaption {
   background: rgba(18, 18, 18, 0.72);
   color: var(--text);
   cursor: zoom-in;
-  opacity: 0.8;
+  opacity: 0;
   transition: opacity 0.2s, border-color 0.2s, color 0.2s;
 }
 
@@ -1874,10 +2105,14 @@ figcaption {
   stroke-linecap: square;
 }
 
+/* Hidden until the screenshot is hovered or the button has keyboard focus, so it never covers in-game labels */
 .zoom-host:hover .zoom-btn,
-.zoom-btn:hover,
 .zoom-btn:focus-visible {
   opacity: 1;
+}
+
+.zoom-btn:hover,
+.zoom-btn:focus-visible {
   border-color: var(--accent);
   color: var(--accent);
 }
@@ -1974,16 +2209,11 @@ html[lang="de"] .toggle[aria-pressed="true"]::after {
   list-style: none;
 }
 
-@media (min-width: 700px) {
-  .gallery {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 12px;
-  }
-}
-
-@media (min-width: 1060px) {
+/* 16 screenshots: 2 or 4 per row, so the last row is always full */
+@media (min-width: 760px) {
   .gallery {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
   }
 }
 
@@ -2206,7 +2436,7 @@ html[lang="de"] .toggle[aria-pressed="true"]::after {
 }
 
 .faq details p {
-  max-width: 66ch;
+  max-width: var(--measure);
   padding-bottom: 24px;
   color: var(--muted);
 }
