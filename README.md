@@ -8,7 +8,7 @@ Static landing page for **Propwash FPV**, an FPV drone racing and freestyle mod 
 - `index.html` – the page (English and German, switchable)
 - `assets/css/style.css` – styles
 - `assets/js/main.js` – language switch, image switchers, video demo, gallery lightbox
-- `assets/img/` – real in-game screenshots as WebP (800 and 1600 px wide, plus cropped UI shots)
+- `assets/img/` – real in-game screenshots as WebP (800 and 1600 px wide, plus cropped shots) and `og-image.jpg` for link previews
 - `assets/fonts/` – Saira and JetBrains Mono, both under the SIL Open Font License 1.1
 
 No build step, no external requests, no cookies, no tracking. The chosen language is kept in the
@@ -30,8 +30,15 @@ python3 -m http.server 8000
 
 All paths are relative, so the page also works from a project URL like `https://<user>.github.io/<repo>/`.
 
-Once the mod is live on Modrinth, point the two "Coming soon on Modrinth" buttons (`href="#release"`) and the
-release section at the project page.
+Once the mod is live on Modrinth, point the "Coming soon to Modrinth" button in the hero (`href="#release"`) and
+the release section at the project page.
+
+## Link previews
+
+`og:image` and `twitter:image` need an absolute URL. They point to
+`https://lardtom.github.io/propwash-site/assets/img/og-image.jpg`, which is right if the repository is called
+`propwash-site`. With a different repository name (or a custom domain), change both URLs in the `<head>` of
+`index.html`.
 
 ---
 

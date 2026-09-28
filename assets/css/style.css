@@ -146,6 +146,34 @@ kbd {
   vertical-align: 0.08em;
 }
 
+.kbd-arrow svg {
+  display: inline-block;
+  width: 0.95em;
+  height: 0.95em;
+  vertical-align: -0.12em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: square;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
 .mono {
   font-family: var(--mono);
   font-size: 0.9em;
@@ -341,6 +369,29 @@ kbd {
   margin-right: 12px;
   vertical-align: 0.3em;
   background: currentColor;
+}
+
+/* Hero kicker: breaks only at its separators, never inside "Fabric & NeoForge" */
+.hero__kicker .kicker__sep {
+  display: none;
+}
+
+@media (min-width: 380px) {
+  .hero__kicker .kicker__sep--2 {
+    display: inline;
+  }
+  .hero__kicker .kicker__br--2 {
+    display: none;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1059px) {
+  .hero__kicker .kicker__sep--1 {
+    display: inline;
+  }
+  .hero__kicker .kicker__br--1 {
+    display: none;
+  }
 }
 
 .btn {
@@ -1766,22 +1817,89 @@ figcaption {
 }
 
 .pip__inset {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  width: 44%;
-  border: 2px solid var(--bg);
-  border-radius: 6px;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+  margin-top: 8px;
 }
 
 @media (min-width: 1060px) {
+  .pip__inset {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    width: 44%;
+    margin-top: 0;
+    border: 2px solid var(--bg);
+    border-radius: 6px;
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+  }
   .tile--school .pip__inset,
   .tile--paint .pip__inset {
     right: -6px;
     bottom: -14px;
     width: 34%;
   }
+}
+
+/* Zoom: every screenshot outside the gallery opens in the lightbox */
+
+.zoomable {
+  cursor: zoom-in;
+}
+
+.zoom-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 6px;
+  background: rgba(18, 18, 18, 0.72);
+  color: var(--text);
+  cursor: zoom-in;
+  opacity: 0.8;
+  transition: opacity 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.zoom-btn svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: square;
+}
+
+.zoom-host:hover .zoom-btn,
+.zoom-btn:hover,
+.zoom-btn:focus-visible {
+  opacity: 1;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.zoom-btn:focus-visible {
+  outline-offset: 2px;
+}
+
+.bento__item.zoom-host {
+  position: relative;
+}
+
+.pip__inset .zoom-btn {
+  top: 6px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+}
+
+.pip__inset .zoom-btn svg {
+  width: 14px;
+  height: 14px;
 }
 
 .toggle {
@@ -2128,11 +2246,15 @@ html[lang="de"] .toggle[aria-pressed="true"]::after {
   border-radius: 8px;
 }
 
-.site-footer__legal p + p {
-  margin-top: 8px;
+.site-footer__legal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.site-footer__legal p:first-child {
+html[lang="en"] .legal-mc[lang="en"],
+html[lang="de"] .legal-mc[lang="de"] {
+  order: -1;
   color: var(--text-2);
 }
 
@@ -2150,6 +2272,10 @@ html[lang="de"] .toggle[aria-pressed="true"]::after {
 
 .site-footer__top {
   justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: -12px;
   font-family: var(--mono);
   font-size: 0.78rem;
   letter-spacing: 0.08em;
@@ -2257,6 +2383,12 @@ html[lang="de"] .toggle[aria-pressed="true"]::after {
 .icon-btn:hover {
   border-color: var(--accent);
   background: var(--panel-hi);
+}
+
+.lightbox.is-single .lightbox__count,
+.lightbox.is-single [data-lightbox-prev],
+.lightbox.is-single [data-lightbox-next] {
+  display: none;
 }
 
 html.lightbox-open {

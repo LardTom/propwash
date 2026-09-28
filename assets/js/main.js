@@ -18,6 +18,20 @@
   var uid = 0;
   function nextId(prefix) { uid += 1; return prefix + '-' + uid; }
 
+  function eagerLoad(scope) {
+    $$('img[loading="lazy"]', scope).forEach(function (img) { img.loading = 'eager'; });
+  }
+
+  function preloadNear(el, margin) {
+    if (!('IntersectionObserver' in window)) { eagerLoad(el); return; }
+    var io = new IntersectionObserver(function (entries) {
+      if (!entries[0].isIntersecting) return;
+      eagerLoad(el);
+      io.disconnect();
+    }, { rootMargin: (margin || 400) + 'px 0px' });
+    io.observe(el);
+  }
+
   function flashStatic(screen) {
     if (reduceMotion || !screen) return;
     screen.classList.remove('is-switching');
@@ -78,6 +92,7 @@
     if (!buttons.length || buttons.length !== panels.length) return;
     var shot = $('.shot', wrap);
     if (!shot.id) shot.id = nextId('view');
+    preloadNear(wrap);
     buttons.forEach(function (btn, i) {
       btn.setAttribute('aria-controls', shot.id);
       btn.addEventListener('click', function () { select(i); });
@@ -235,6 +250,8 @@
     var barsWrap = $('[data-vlab-bars]', lab);
     var systemEl = $('[data-vlab-system]', lab);
     var stageNameEl = $('[data-vlab-stage-name]', lab);
+    var ends = {};
+    $$('[data-vlab-ends]', lab).forEach(function (e) { ends[e.getAttribute('data-vlab-ends')] = e; });
     var BARS = { analog: [4, 3, 1, 0], digital: [5, 2] };
     var mode = 'analog';
     var stage = 0;
@@ -243,9 +260,7 @@
     function loadAll() {
       if (loaded) return;
       loaded = true;
-      $$('img[loading="lazy"]', lab).forEach(function (img) {
-        img.loading = 'eager';
-      });
+      eagerLoad(lab);
     }
 
     function imgsOf(m) { return $$('.feed__img', sets[m]); }
@@ -281,6 +296,7 @@
       Object.keys(sets).forEach(function (k) {
         sets[k].hidden = k !== m;
         if (tickGroups[k]) tickGroups[k].hidden = k !== m;
+        if (ends[k]) ends[k].hidden = k !== m;
       });
       modeBtns.forEach(function (b) {
         var on = b.getAttribute('data-vlab-mode') === m;
@@ -339,6 +355,7 @@
     var on = $('.headlight-on', tile);
     var off = $('.headlight-off', tile);
     if (!btn || !on || !off) return;
+    preloadNear(tile);
     btn.addEventListener('click', function () {
       var next = btn.getAttribute('aria-pressed') !== 'true';
       btn.setAttribute('aria-pressed', String(next));
@@ -351,12 +368,13 @@
 
   (function lightbox() {
     var dlg = $('[data-lightbox]');
-    var links = $$('[data-gallery] a');
-    if (!dlg || !links.length || typeof dlg.showModal !== 'function') return;
+    if (!dlg || typeof dlg.showModal !== 'function') return;
     var img = $('[data-lightbox-img]', dlg);
     var caption = $('[data-lightbox-caption]', dlg);
     var count = $('[data-lightbox-count]', dlg);
     var stage = $('.lightbox__stage', dlg);
+    var closeBtn = $('[data-lightbox-close]', dlg);
+    var items = [];
     var index = 0;
     var trigger = null;
     var startX = null;
@@ -365,49 +383,101 @@
 
     function pad(n) { return (n < 10 ? '0' : '') + n; }
 
+    function zoomSrc(el) {
+      var direct = el.getAttribute('data-zoom-src');
+      if (direct) return direct;
+      var best = null;
+      var bestW = 0;
+      (el.getAttribute('srcset') || '').split(',').forEach(function (part) {
+        var bits = part.trim().split(/\s+/);
+        var w = parseInt(bits[1], 10) || 0;
+        if (bits[0] && w >= bestW) { best = bits[0]; bestW = w; }
+      });
+      return best || el.getAttribute('src');
+    }
+
     function render() {
-      var link = links[index];
-      var thumb = $('img', link);
+      var item = items[index];
+      var text = item.thumb ? item.thumb.alt : '';
       img.classList.remove('is-in');
-      img.src = link.getAttribute('href');
-      img.alt = thumb ? thumb.alt : '';
+      img.src = item.src;
+      img.alt = text;
       void img.offsetWidth;
       img.classList.add('is-in');
-      caption.textContent = thumb ? thumb.alt : '';
-      count.textContent = pad(index + 1) + ' / ' + pad(links.length);
+      caption.textContent = text;
+      count.textContent = pad(index + 1) + ' / ' + pad(items.length);
+      dlg.classList.toggle('is-single', items.length < 2);
+      if (items.length < 2) return;
       [index - 1, index + 1].forEach(function (k) {
-        var l = links[(k + links.length) % links.length];
         var pre = new Image();
-        pre.src = l.getAttribute('href');
+        pre.src = items[(k + items.length) % items.length].src;
       });
     }
 
     function go(step) {
-      index = (index + step + links.length) % links.length;
+      if (items.length < 2) return;
+      index = (index + step + items.length) % items.length;
       render();
     }
 
-    function open(i) {
-      trigger = links[i];
+    function open(list, i, from) {
+      items = list;
       index = i;
+      trigger = from;
       render();
-      dlg.showModal();
+      if (!dlg.open) dlg.showModal();
       root.classList.add('lightbox-open');
-      var closeBtn = $('[data-lightbox-close]', dlg);
       if (closeBtn) closeBtn.focus();
     }
 
+    var links = $$('[data-gallery] a');
+    var galleryItems = links.map(function (link) {
+      return { src: link.getAttribute('href'), thumb: $('img', link) };
+    });
     links.forEach(function (link, i) {
       link.addEventListener('click', function (e) {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
         e.preventDefault();
-        open(i);
+        open(galleryItems, i, link);
+      });
+    });
+
+    var ZOOM_LABEL = { en: 'Enlarge screenshot', de: 'Screenshot vergrößern' };
+    var ZOOM_ICON = '<svg aria-hidden="true" viewBox="0 0 16 16"><path d="M9.5 2.5h4v4M13.5 2.5 9 7M6.5 13.5h-4v-4M2.5 13.5 7 9"/></svg>';
+
+    $$('main .shot, main .bento__item').forEach(function (host) {
+      if (host.closest('[data-feed], [data-vlab]')) return;
+      var imgs = Array.prototype.filter.call(host.children, function (el) { return el.tagName === 'IMG'; });
+      if (!imgs.length) return;
+      var btn = doc.createElement('button');
+      btn.type = 'button';
+      btn.className = 'zoom-btn';
+      btn.setAttribute('data-en-aria-label', ZOOM_LABEL.en);
+      btn.setAttribute('data-de-aria-label', ZOOM_LABEL.de);
+      btn.setAttribute('aria-label', ZOOM_LABEL[lang()]);
+      btn.innerHTML = ZOOM_ICON;
+      host.classList.add('zoom-host');
+      host.appendChild(btn);
+
+      function openHost() {
+        var start = 0;
+        var list = imgs.map(function (el, j) {
+          if (!el.hidden) start = j;
+          return { src: zoomSrc(el), thumb: el };
+        });
+        open(list, start, btn);
+      }
+
+      btn.addEventListener('click', openHost);
+      imgs.forEach(function (el) {
+        el.classList.add('zoomable');
+        el.addEventListener('click', openHost);
       });
     });
 
     $('[data-lightbox-prev]', dlg).addEventListener('click', function () { go(-1); });
     $('[data-lightbox-next]', dlg).addEventListener('click', function () { go(1); });
-    $('[data-lightbox-close]', dlg).addEventListener('click', function () { dlg.close(); });
+    if (closeBtn) closeBtn.addEventListener('click', function () { dlg.close(); });
 
     dlg.addEventListener('keydown', function (e) {
       if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
@@ -434,7 +504,7 @@
       var dx = e.clientX - startX;
       var dy = e.clientY - startY;
       startX = null;
-      if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+      if (items.length > 1 && Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.2) {
         swiped = true;
         window.setTimeout(function () { swiped = false; }, 400);
         go(dx < 0 ? 1 : -1);
@@ -443,10 +513,9 @@
     stage.addEventListener('pointercancel', function () { startX = null; });
 
     doc.addEventListener('propwash:lang', function () {
-      if (dlg.open) {
-        var thumb = $('img', links[index]);
-        if (thumb) { img.alt = thumb.alt; caption.textContent = thumb.alt; }
-      }
+      if (!dlg.open || !items[index] || !items[index].thumb) return;
+      img.alt = items[index].thumb.alt;
+      caption.textContent = img.alt;
     });
   })();
 })();
