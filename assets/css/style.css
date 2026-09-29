@@ -310,13 +310,13 @@ kbd {
   background: var(--panel-hi);
 }
 
-@media (min-width: 960px) {
+@media (min-width: 1100px) {
   .site-nav {
     display: flex;
   }
 }
 
-@media (max-width: 959px) {
+@media (max-width: 1099px) {
   .site-nav.is-open {
     position: absolute;
     top: 100%;
@@ -381,7 +381,7 @@ kbd {
   display: inline;
 }
 
-@media (min-width: 960px) {
+@media (min-width: 1100px) {
   .nav-toggle {
     display: none;
   }
@@ -397,7 +397,7 @@ kbd {
   background: var(--field);
 }
 
-@media (min-width: 960px) {
+@media (min-width: 1100px) {
   .lang-switch {
     margin-left: 8px;
   }
@@ -2643,3 +2643,25 @@ html.lightbox-open {
     animation: none;
   }
 }
+
+.community{margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border, #383838)}
+.community p{margin:.4rem 0 0;color:#bdbdbd;max-width:42rem}
+.community .hero__cta{margin-top:1rem}
+.community .btn svg{margin-right:.45rem;flex:none}
+.site-footer__links{margin:.5rem 0 0;font-size:.875rem}
+.site-footer__links a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+.site-footer__links a:hover,.site-footer__links a:focus-visible{color:var(--accent)}
+
+.social{display:flex;gap:4px;align-items:center;margin-left:auto}
+.social + .lang-switch{margin-left:0}
+@media (min-width: 1100px){.social{margin-left:8px}.social + .lang-switch{margin-left:8px}.site-nav__social{display:none}}
+@media (max-width: 519px){.social{display:none}.social + .lang-switch{margin-left:auto}}
+.site-nav__social svg{vertical-align:-3px;margin-right:.3rem}
+.social__link{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid var(--border, #383838);border-radius:6px;color:#d8d8d8;background:transparent;transition:color .15s,border-color .15s,background-color .15s}
+.social__link:hover,.social__link:focus-visible{color:var(--accent);border-color:var(--accent)}
+.social__link svg{display:block}
+.site-footer__links a svg{vertical-align:-2px;margin-right:.2rem}
+
+.site-nav a{white-space:nowrap}
+.site-footer__brand{flex-wrap:wrap}
+.site-footer__links{flex-basis:100%}
