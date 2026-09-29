@@ -45,11 +45,11 @@
   var META = {
     en: {
       title: 'Propwash FPV – Real FPV drone racing in Minecraft',
-      description: 'Propwash FPV is an FPV drone racing and freestyle mod for Minecraft 26.3 on Fabric and NeoForge: build quadcopters from real parts, fly them with your RC transmitter, a gamepad or the keyboard and race through gates. Coming soon to Modrinth.'
+      description: 'Propwash FPV is an FPV drone racing and freestyle mod for Minecraft 26.3 on Fabric and NeoForge: build quadcopters from real parts, fly them with your RC transmitter, a gamepad or the keyboard and race through gates. Available on CurseForge, soon on Modrinth.'
     },
     de: {
       title: 'Propwash FPV – Echtes FPV-Drohnenrennen in Minecraft',
-      description: 'Propwash FPV ist eine FPV-Drohnen-Mod für Minecraft 26.3 mit Fabric und NeoForge: Quadcopter aus realen Teilen bauen, mit Funke, Gamepad oder Tastatur fliegen und durch Renn-Gates jagen. Bald auf Modrinth.'
+      description: 'Propwash FPV ist eine FPV-Drohnen-Mod für Minecraft 26.3 mit Fabric und NeoForge: Quadcopter aus realen Teilen bauen, mit Funke, Gamepad oder Tastatur fliegen und durch Renn-Gates jagen. Auf CurseForge verfügbar, bald auch auf Modrinth.'
     }
   };
   var I18N_ATTRS = ['alt', 'aria-label', 'title'];
