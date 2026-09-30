@@ -65,6 +65,10 @@ node tools/test-configurator.mjs           # share codes, presets, analysis and 
 node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts and assembly
 ```
 
+Render definitions may carry a vanilla `transformation` (Just More Parts 1.0.1 shrinks the X-Class frame models to fit
+Minecraft's model limit and scales them back to real size this way); `build-configurator-models.mjs` bakes it into the
+element coordinates, and the render test checks that every frame model reaches its motor positions.
+
 ### Rebuilding the three.js bundle
 
 `assets/vendor/three/three.min.js` contains only what the viewer imports (`tools/three-entry.js`). With `three` and

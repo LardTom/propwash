@@ -9,7 +9,7 @@
 // 2. Presets in the catalog: share code, check and analysis; flight tune defaults of every preset (tune.json#defaults),
 //    normalisation and edits of the tune; paint swatches and random paint schemes round-trip through the share code.
 // 3. Tolerant decoding and error statuses (spelling variants, damaged and hostile codes).
-// 4. If the web export is available (default ../propwash-justmoreparts/release/1.0.0/web-export or JMP_WEB_EXPORT):
+// 4. If the web export is available (default ../propwash-justmoreparts/release/1.0.1/web-export or JMP_WEB_EXPORT):
 //    the one-part-swapped analysis variants of every preset (analysis/<preset>.json).
 // Exit code 0 only if every check passes.
 
@@ -332,7 +332,7 @@ function crcOf(bytes) {
   const i = argv.indexOf('--export');
   const dir = i >= 0 && argv[i + 1] ? path.resolve(argv[i + 1])
     : process.env.JMP_WEB_EXPORT ? path.resolve(process.env.JMP_WEB_EXPORT)
-      : path.resolve(ROOT, '../propwash-justmoreparts/release/1.0.0/web-export');
+      : path.resolve(ROOT, '../propwash-justmoreparts/release/1.0.1/web-export');
   const analysisDir = path.join(dir, 'analysis');
   if (fs.existsSync(analysisDir)) {
     const before = failed;

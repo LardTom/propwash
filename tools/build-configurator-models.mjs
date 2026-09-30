@@ -14,6 +14,8 @@
 //
 // Only files from the web export are used. The block models keep Minecraft's model units (0–16 per model block);
 // worn, damaged, broken and blur variants are left out because the configurator shows new parts at rest.
+// A render definition may carry a vanilla "transformation" (JMP 1.0.1 X-Class frames: the model is shrunk to fit the
+// −16…32 model limit and scaled back to real size); it is baked into the element coordinates here.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -76,6 +78,46 @@ function corners(e) {
   });
 }
 
+const IDENTITY_QUATERNION = [0, 0, 0, 1];
+
+// Vanilla item transformation (translation, left_rotation, scale, right_rotation) applied in model space 0…1, i.e.
+// p' = 16·translation + scale·p in model units. Only rotation-free transformations with a positive scale are baked;
+// a non-uniform scale is only allowed for models without rotated elements.
+function transformOf(t, where) {
+  if (t == null) return null;
+  if (Array.isArray(t) || typeof t !== 'object') throw new Error(`${where}: only the object form of "transformation" is supported`);
+  for (const key of ['left_rotation', 'right_rotation']) {
+    const q = t[key] == null ? IDENTITY_QUATERNION : t[key];
+    if (!Array.isArray(q) || q.length !== 4 || q.some((v, i) => Math.abs(v - IDENTITY_QUATERNION[i]) > 1e-9)) {
+      throw new Error(`${where}: "transformation.${key}" other than identity is not supported`);
+    }
+  }
+  const scale = t.scale == null ? [1, 1, 1] : t.scale;
+  const translation = t.translation == null ? [0, 0, 0] : t.translation;
+  if (!Array.isArray(scale) || scale.length !== 3 || !scale.every((v) => Number.isFinite(v) && v > 0)) {
+    throw new Error(`${where}: "transformation.scale" must be three positive numbers`);
+  }
+  if (!Array.isArray(translation) || translation.length !== 3 || !translation.every(Number.isFinite)) {
+    throw new Error(`${where}: "transformation.translation" must be three numbers`);
+  }
+  if (scale.every((v) => v === 1) && translation.every((v) => v === 0)) return null;
+  return { scale, offset: translation.map((v) => v * 16) };
+}
+
+function applyTransform(model, transform, where) {
+  if (!transform) return model;
+  const { scale, offset } = transform;
+  const uniform = scale[0] === scale[1] && scale[1] === scale[2];
+  const point = (p) => p.map((v, i) => offset[i] + scale[i] * v);
+  const elements = (model.elements || []).map((e) => {
+    if (e.rotation && !uniform) throw new Error(`${where}: non-uniform scale on a rotated element`);
+    const out = { ...e, from: point(e.from), to: point(e.to) };
+    if (e.rotation) out.rotation = { ...e.rotation, origin: point(e.rotation.origin) };
+    return out;
+  });
+  return { ...model, elements };
+}
+
 function compactModel(model, where) {
   const textures = Object.entries(model.textures || {}).filter(([k]) => k !== 'particle');
   if (textures.length !== 1) throw new Error(`${where}: exactly one texture expected, found ${textures.length}`);
@@ -133,7 +175,7 @@ function main() {
   function renderModel(defPath) {
     const def = readJson(dir, defPath).model;
     if (!def || def.type !== 'minecraft:model') throw new Error(`${defPath}: plain minecraft:model expected`);
-    return def.model;
+    return { model: def.model, transform: transformOf(def.transformation, defPath) };
   }
 
   const outModels = path.join(OUT, 'models');
@@ -165,7 +207,8 @@ function main() {
     const add = (name, suffix, geometryOf) => {
       const def = variantPath(suffix);
       if (!available.has(def)) return false;
-      const model = compactModel(readJson(dir, modelFile(renderModel(def))), def);
+      const render = renderModel(def);
+      const model = compactModel(applyTransform(readJson(dir, modelFile(render.model)), render.transform, def), def);
       const entry = { tex: textureIndex(model.texture) };
       if (geometryOf) {
         const base = variants[geometryOf];

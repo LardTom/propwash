@@ -4,6 +4,7 @@
 //   - paint tints: PaintChannel.tint(base) of every tint group equals the default tint of the "_paint" render
 //     definition in the web export (only when the export is available)
 //   - every preset and every frame assembles with finite positions; built-in frames use drone_layout.json
+//   - frame models are drawn at real size: they reach their motor positions (render "transformation" baked in)
 //
 //   node tools/test-configurator-render.mjs [--export <web-export dir>]
 
@@ -101,6 +102,15 @@ for (const frame of catalog.partsIn('frame')) {
   if (frame.model.kind !== 'model') {
     const shapes = proceduralFrame(frame, layout, catalog);
     check(shapes.length > 4 && shapes.every((s) => finiteVec(s.center) && s.size.every((n) => Number.isFinite(n) && n > 0)), `${frame.id}: procedural shape`);
+  } else if (models.has(frame.id)) {
+    // Real size (render definitions with a "transformation" are baked): the frame model reaches its motor positions.
+    const box = models.get(frame.id).variants.base.box;
+    const reach = (lo, hi) => Math.max(Math.abs(lo - 8), Math.abs(hi - 8)) * 8;
+    for (const [axis, lo, hi] of [[0, box[0], box[3]], [2, box[2], box[5]]]) {
+      const motor = Math.max(...layout.motors.map((m) => Math.abs(m[axis])));
+      const ratio = reach(lo, hi) / motor;
+      check(ratio >= 0.95 && ratio <= 2.5, `${frame.id}: model reaches ${ratio.toFixed(2)}× the motor distance on ${axis ? 'z' : 'x'}`);
+    }
   }
 }
 check(proceduralAccessoryBase(0xd6333a).length === 8, 'top mount base shape');

@@ -3,7 +3,7 @@
 //
 //   node tools/build-configurator-data.mjs [--export <web-export dir>]
 //
-// Default export location: ../propwash-justmoreparts/release/1.0.0/web-export (sibling checkout),
+// Default export location: ../propwash-justmoreparts/release/1.0.1/web-export (sibling checkout),
 // or the JMP_WEB_EXPORT environment variable.
 //
 // Writes:
@@ -24,7 +24,7 @@ export function exportDir(argv = process.argv.slice(2)) {
   const i = argv.indexOf('--export');
   if (i >= 0 && argv[i + 1]) return path.resolve(argv[i + 1]);
   if (process.env.JMP_WEB_EXPORT) return path.resolve(process.env.JMP_WEB_EXPORT);
-  return path.resolve(ROOT, '../propwash-justmoreparts/release/1.0.0/web-export');
+  return path.resolve(ROOT, '../propwash-justmoreparts/release/1.0.1/web-export');
 }
 
 function read(dir, file) {
