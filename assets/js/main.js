@@ -65,9 +65,12 @@
         el.setAttribute(attr, next === 'de' ? de : el.getAttribute(enKey));
       });
     });
-    doc.title = META[next].title;
+    var meta = root.hasAttribute('data-title-' + next)
+      ? { title: root.getAttribute('data-title-' + next), description: root.getAttribute('data-description-' + next) || '' }
+      : META[next];
+    doc.title = meta.title;
     var desc = $('meta[name="description"]');
-    if (desc) desc.setAttribute('content', META[next].description);
+    if (desc) desc.setAttribute('content', meta.description);
     $$('[data-set-lang]').forEach(function (btn) {
       btn.setAttribute('aria-pressed', String(btn.getAttribute('data-set-lang') === next));
     });

@@ -1,22 +1,78 @@
-# Propwash FPV – landing page
+# Propwash FPV – landing page and drone configurator
 
-Static landing page for **Propwash FPV**, an FPV drone racing and freestyle mod for Minecraft 26.3
-(Fabric and NeoForge). This repository contains only the website.
+Static website for **Propwash FPV**, an FPV drone racing and freestyle mod for Minecraft 26.3
+(Fabric and NeoForge), with an online drone configurator for the addon **Propwash: Just More Parts**.
+This repository contains only the website, no mod source code.
 
 ## Structure
 
-- `index.html` – the page (English and German, switchable)
-- `assets/css/style.css` – styles
+- `index.html` – the landing page (English and German, switchable)
+- `configurator/index.html` – the drone configurator (English and German, same switch)
+- `assets/css/style.css` – styles of both pages; `assets/css/configurator.css` – configurator only
 - `assets/js/main.js` – language switch, section menu, hero feed with pause switch, image switchers, video demo, gallery lightbox
+- `assets/js/configurator/` – the configurator as plain ES modules:
+  - core: `data.js` (catalog), `sharecode.js` + `crc32.js` + `inflate.js` + `tune.js` (PW1 share codes),
+    `rules.js` (compatibility), `analysis.js` (flight analysis), `tuning.js` (tune defaults and editing), `index.js`
+  - page: `ui.js` (part pickers, paint, tune editor, OSD layer, stats, share code, import), `i18n.js` (texts),
+    `assembly.js` (where every part sits on the drone), `paint.js` (paint tints), `viewer.js` (three.js viewer)
+- `assets/data/configurator/` – data from the Just More Parts web export: `catalog.json` (parts, presets, rules, paint,
+  tune and share-code tables), `render.json` (frame layouts, motor seats, paint channels) and `models/` (one file per part:
+  block-model geometry plus textures, loaded only for the parts on the drone)
+- `assets/vendor/three/` – three.js r186 as a trimmed, minified bundle (MIT, `LICENSE`)
+- `assets/vendor/pako/` – the deflate part of pako 2.1.0 (MIT, `LICENSE`), so share codes are byte-identical to the mod's
 - `assets/img/` – real in-game screenshots as WebP (800 and 1600 px wide, plus cropped shots) and `og-image.jpg` for link previews
 - `assets/fonts/` – Saira and JetBrains Mono, both under the SIL Open Font License 1.1
+- `tools/` – build and test scripts for the configurator data (not needed at runtime)
 
 No build step, no external requests, no cookies, no tracking. The chosen language and the hero's pause switch are
-kept in the browser's `localStorage`.
+kept in the browser's `localStorage`; the drone built in the configurator lives only in the page address
+(`configurator/#PW1-…`).
+
+## Drone configurator
+
+`configurator/` builds a drone from every Propwash and Just More Parts part:
+
+- part pickers per category with search, a class filter (whoop, toothpick, cinewhoop, freestyle, race, long range,
+  X-Class; video by link, accessories by mount), “only parts that fit”, fit badges and tips with pros, cons and what the
+  part would change
+- live flight figures (weight, thrust-to-weight, hover throttle, flight times, top speed and the rest of the workbench
+  analysis) and the compatibility check (voltage, prop size vs. frame, battery fit, mounts, ESC and battery load)
+- paint for every paint slot the build shows, like the paint screen in the game
+- tune editor for rates (with a live rate-curve graph), PID, feedforward, TPA, filters and throttle curve (with graph),
+  using the defaults the game derives from the build
+- optional OSD layer (a Propwash OSD preset or the layout from an opened code)
+- share code with copy button, share link and import field; opening a link or pasting a code loads the build and lists
+  unknown parts
+- 3D view with three.js: the parts' Minecraft block models, textures and paint tints placed like the mod's drone
+  renderer (frame layouts, motor seats, camera tilt, accessory anchors); drag to turn, scroll or pinch to zoom,
+  auto-rotate (off with reduced motion or paused animations), keyboard control on the canvas
+
+### Updating the data
+
+With a new web export of Just More Parts (default location `../propwash-justmoreparts/release/<version>/web-export`,
+or pass `--export <dir>` / set `JMP_WEB_EXPORT`):
+
+```sh
+node tools/build-configurator-data.mjs     # catalog.json and the share-code test vectors
+node tools/build-configurator-models.mjs   # render.json and models/
+node tools/test-configurator.mjs           # share codes, presets, analysis and tune defaults against the export
+node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts and assembly
+```
+
+### Rebuilding the three.js bundle
+
+`assets/vendor/three/three.min.js` contains only what the viewer imports (`tools/three-entry.js`). With `three` and
+`esbuild` installed in a scratch folder:
+
+```sh
+NODE_PATH=<scratch>/node_modules <scratch>/node_modules/.bin/esbuild tools/three-entry.js --bundle --format=esm \
+  --minify --target=es2020 --legal-comments=none \
+  "--banner:js=/* three.js r186 (MIT), trimmed bundle, see LICENSE */" --outfile=assets/vendor/three/three.min.js
+```
 
 ## Preview
 
-Open `index.html` directly in a browser, or serve the folder locally:
+Serve the folder locally (the configurator loads its data with `fetch`, which does not work from `file://`):
 
 ```sh
 python3 -m http.server 8000
@@ -24,21 +80,18 @@ python3 -m http.server 8000
 
 ## Publish on GitHub Pages
 
-1. Push this folder to a GitHub repository.
+1. Push this folder to the repository `LardTom/propwash`.
 2. Settings → Pages → Build and deployment → Source: *Deploy from a branch*, branch `main`, folder `/ (root)`.
 3. `.nojekyll` is included, so the files are served exactly as they are.
 
-All paths are relative, so the page also works from a project URL like `https://<user>.github.io/<repo>/`.
-
-Once the mod is live on Modrinth, point the "Coming soon to Modrinth" button in the hero (`href="#release"`) and
-the release section at the project page.
+All paths are relative, so the pages work from the project URL `https://lardtom.github.io/propwash/`, the configurator
+from `https://lardtom.github.io/propwash/configurator/`.
 
 ## Link previews
 
 `og:image` and `twitter:image` need an absolute URL. They point to
-`https://lardtom.github.io/propwash-site/assets/img/og-image.jpg`, which is right if the repository is called
-`propwash-site`. With a different repository name (or a custom domain), change both URLs in the `<head>` of
-`index.html`.
+`https://lardtom.github.io/propwash/assets/img/og-image.jpg`. With a different repository name (or a custom domain),
+change the URLs in the `<head>` of `index.html` and `configurator/index.html`.
 
 ---
 

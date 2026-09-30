@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="Drone configurator – Propwash: Just More Parts" data-title-de="Drohnen-Konfigurator – Propwash: Just More Parts" data-description-en="Build an FPV drone from every Propwash and Just More Parts part in your browser: paint it, tune it, see live flight stats and a 3D model, and take it into Minecraft with a PW1 share code." data-description-de="Stell im Browser eine FPV-Drohne aus allen Teilen von Propwash und Just More Parts zusammen: lackieren, tunen, Flugwerte und 3D-Modell live sehen und per PW1-Sharecode ins Spiel mitnehmen.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Drone configurator – Propwash: Just More Parts</title>
+<meta name="description" content="Build an FPV drone from every Propwash and Just More Parts part in your browser: paint it, tune it, see live flight stats and a 3D model, and take it into Minecraft with a PW1 share code.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="Drone configurator – Propwash: Just More Parts">
+<meta property="og:description" content="Build, paint and tune an FPV drone from every Propwash and Just More Parts part, then take it into Minecraft with a share code.">
+<meta property="og:image" content="https://lardtom.github.io/propwash/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://lardtom.github.io/propwash/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/configurator.css">
+<link rel="modulepreload" href="../assets/js/configurator/ui.js">
+<script>
+(function () {
+  var d = document.documentElement, lang = null;
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="cfg-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 16 16"><path d="M5.5 5.5h8v8h-8z M10.5 5.5v-3h-8v8h3" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-link" viewBox="0 0 16 16"><path d="M6.8 9.2 9.2 6.8M7.4 4.6l1.3-1.3a2.6 2.6 0 0 1 3.7 3.7l-1.3 1.3M8.6 11.4l-1.3 1.3a2.6 2.6 0 0 1-3.7-3.7l1.3-1.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+  <symbol id="i-rotate" viewBox="0 0 16 16"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></symbol>
+  <symbol id="i-target" viewBox="0 0 16 16"><path d="M8 1.5v3M8 11.5v3M1.5 8h3M11.5 8h3" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+  <symbol id="i-reset" viewBox="0 0 16 16"><path d="M3.5 8a4.5 4.5 0 1 0 1.4-3.3M3 2.5v3h3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></symbol>
+  <symbol id="i-info" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m10.4 10.4 3.8 3.8" stroke="currentColor" stroke-width="1.6"/></symbol>
+</svg>
+<a class="skip" href="#cfg"><span lang="en">Skip to the configurator</span><span lang="de">Zum Konfigurator springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
+      <a href="../#how"><span lang="en">How it works</span><span lang="de">So geht’s</span></a>
+      <a href="../#flight"><span lang="en">Flight</span><span lang="de">Flug</span></a>
+      <a href="../#video">Video</a>
+      <a href="../#racing"><span lang="en">Racing</span><span lang="de">Rennen</span></a>
+      <a href="../#gallery"><span lang="en">Screenshots</span><span lang="de">Bilder</span></a>
+      <a href="../#faq">FAQ</a>
+      <a href="./" aria-current="page"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="16" height="16"><use href="#i-discord"/></svg> Discord</a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="cfg-intro" aria-labelledby="cfg-title">
+    <div class="wrap cfg-intro__inner">
+      <div class="cfg-intro__copy">
+        <p class="kicker">Propwash: Just More Parts<span aria-hidden="true"> · </span><span lang="en">online</span><span lang="de">online</span></p>
+        <h1 id="cfg-title" class="cfg-title"><span lang="en">Drone configurator</span><span lang="de">Drohnen-Konfigurator</span></h1>
+        <p class="cfg-lead" lang="en">Put a drone together from every Propwash and Just More Parts part, paint it, tune it and see the same flight figures as the workbench in the game. Take it along as a share code.</p>
+        <p class="cfg-lead" lang="de">Bau eine Drohne aus allen Teilen von Propwash und Just More Parts, lackier und tune sie und sieh dieselben Flugwerte wie an der Werkbank im Spiel. Mitnehmen kannst du sie als Sharecode.</p>
+      </div>
+      <div class="cfg-intro__tools needs-js">
+        <label class="field">
+          <span class="field__label"><span lang="en">Start from a preset</span><span lang="de">Mit einem Preset starten</span></span>
+          <select class="field__control" data-preset></select>
+        </label>
+        <a class="btn btn--ghost cfg-intro__import" href="#share-import" data-goto-import><span lang="en">Paste a code</span><span lang="de">Code einfügen</span></a>
+      </div>
+    </div>
+  </section>
+
+  <noscript>
+    <div class="wrap"><p class="cfg-note cfg-note--problem"><span lang="en">The configurator needs JavaScript.</span><span lang="de">Der Konfigurator braucht JavaScript.</span></p></div>
+  </noscript>
+
+  <div class="wrap cfg" id="cfg" data-cfg aria-busy="true">
+    <p class="cfg-loading" data-loading role="status"><span lang="en">Loading parts …</span><span lang="de">Teile werden geladen …</span></p>
+
+    <div class="cfg-stage" data-stage hidden>
+      <div class="viewer" data-viewer>
+        <div class="viewer__canvas-wrap" data-viewer-canvas></div>
+        <p class="viewer__fallback" data-viewer-fallback hidden></p>
+        <p class="viewer__name" data-viewer-name aria-hidden="true"></p>
+        <div class="viewer__tools">
+          <button type="button" class="viewer__btn" data-autorotate aria-pressed="false" title="Turn automatically" data-de-title="Automatisch drehen"><svg aria-hidden="true" width="16" height="16"><use href="#i-rotate"/></svg><span lang="en">Auto-rotate</span><span lang="de">Drehen</span></button>
+          <button type="button" class="viewer__btn" data-reset-view title="Reset view" data-de-title="Ansicht zurücksetzen"><svg aria-hidden="true" width="16" height="16"><use href="#i-target"/></svg><span class="visually-hidden"><span lang="en">Reset view</span><span lang="de">Ansicht zurücksetzen</span></span></button>
+        </div>
+      </div>
+      <dl class="keystats" data-keystats aria-label="Flight figures" data-de-aria-label="Flugwerte"></dl>
+      <div class="checks" data-checks aria-live="polite"></div>
+    </div>
+
+    <div class="cfg-panel" data-panel hidden>
+      <div class="cfg-name">
+        <label class="field field--grow">
+          <span class="field__label"><span lang="en">Drone name</span><span lang="de">Name der Drohne</span> <span class="field__hint">(<span lang="en">optional, up to 48 characters</span><span lang="de">optional, bis 48 Zeichen</span>)</span></span>
+          <input class="field__control" type="text" maxlength="48" autocomplete="off" spellcheck="false" data-name>
+        </label>
+      </div>
+
+      <div class="tabs-bar" role="tablist" aria-label="Configurator" data-de-aria-label="Konfigurator" data-tabs>
+        <button type="button" role="tab" id="tab-parts" aria-controls="panel-parts" aria-selected="true" data-tab="parts"><span lang="en">Parts</span><span lang="de">Teile</span></button>
+        <button type="button" role="tab" id="tab-paint" aria-controls="panel-paint" aria-selected="false" tabindex="-1" data-tab="paint"><span lang="en">Paint</span><span lang="de">Lack</span></button>
+        <button type="button" role="tab" id="tab-tune" aria-controls="panel-tune" aria-selected="false" tabindex="-1" data-tab="tune"><span lang="en">Tuning</span><span lang="de">Tuning</span></button>
+        <button type="button" role="tab" id="tab-osd" aria-controls="panel-osd" aria-selected="false" tabindex="-1" data-tab="osd">OSD</button>
+      </div>
+
+      <section class="tab-panel" role="tabpanel" id="panel-parts" aria-labelledby="tab-parts" data-panel-parts>
+        <div class="slots" data-slots></div>
+        <div class="picker" data-picker></div>
+      </section>
+
+      <section class="tab-panel" role="tabpanel" id="panel-paint" aria-labelledby="tab-paint" hidden data-panel-paint></section>
+      <section class="tab-panel" role="tabpanel" id="panel-tune" aria-labelledby="tab-tune" hidden data-panel-tune></section>
+      <section class="tab-panel" role="tabpanel" id="panel-osd" aria-labelledby="tab-osd" hidden data-panel-osd></section>
+
+      <section class="cfg-card cfg-analysis" aria-labelledby="analysis-title">
+        <h2 class="cfg-card__title" id="analysis-title"><span lang="en">Flight analysis</span><span lang="de">Flug-Analyse</span></h2>
+        <p class="cfg-card__intro" lang="en">Calculated like the drone workbench in the game (Propwash 0.4.0) for a new battery at 25&nbsp;°C.</p>
+        <p class="cfg-card__intro" lang="de">Berechnet wie an der Drohnen-Werkbank im Spiel (Propwash 0.4.0), mit vollem Akku bei 25&nbsp;°C.</p>
+        <p class="cfg-note" data-stats-note hidden></p>
+        <dl class="stats" data-stats></dl>
+      </section>
+
+      <section class="cfg-card cfg-share" id="share" aria-labelledby="share-title">
+        <h2 class="cfg-card__title" id="share-title"><span lang="en">Share code</span><span lang="de">Sharecode</span></h2>
+        <fieldset class="layers" data-layers>
+          <legend><span lang="en">In the code</span><span lang="de">Im Code</span></legend>
+        </fieldset>
+        <div class="code" data-code-box>
+          <p class="code__text mono" data-code tabindex="0" aria-label="Share code" data-de-aria-label="Sharecode"></p>
+          <p class="code__meta" data-code-meta></p>
+        </div>
+        <div class="code__actions">
+          <button type="button" class="btn btn--primary" data-copy-code><svg aria-hidden="true" width="16" height="16"><use href="#i-copy"/></svg><span lang="en">Copy code</span><span lang="de">Code kopieren</span></button>
+          <button type="button" class="btn btn--ghost" data-copy-link><svg aria-hidden="true" width="16" height="16"><use href="#i-link"/></svg><span lang="en">Copy share link</span><span lang="de">Link kopieren</span></button>
+          <span class="code__flash" data-copy-status role="status" aria-live="polite"></span>
+        </div>
+        <details class="howto">
+          <summary><span lang="en">How do I get it into the game?</span><span lang="de">Wie kommt die Drohne ins Spiel?</span></summary>
+          <ol lang="en">
+            <li>Install Propwash FPV and the addon <strong>Propwash: Just More Parts</strong>.</li>
+            <li>At the drone workbench, open <strong>Share code</strong> → <strong>Import</strong> and paste the code. The workbench shows the parts you need.</li>
+            <li>In creative mode, <span class="mono">/jmp code import &lt;code&gt;</span> puts the finished drone straight into your inventory (the chat takes codes up to 256 characters).</li>
+          </ol>
+          <ol lang="de">
+            <li>Installiere Propwash FPV und das Addon <strong>Propwash: Just More Parts</strong>.</li>
+            <li>Öffne an der Drohnen-Werkbank <strong>Sharecode</strong> → <strong>Importieren</strong> und füg den Code ein. Die Werkbank zeigt, welche Teile du brauchst.</li>
+            <li>Im Kreativmodus legt <span class="mono">/jmp code import &lt;code&gt;</span> die fertige Drohne direkt ins Inventar (der Chat nimmt Codes bis 256 Zeichen).</li>
+          </ol>
+        </details>
+
+        <div class="import" id="share-import">
+          <label class="field field--grow">
+            <span class="field__label"><span lang="en">Open a code or link</span><span lang="de">Code oder Link öffnen</span></span>
+            <textarea class="field__control import__input mono" rows="3" spellcheck="false" autocomplete="off" autocapitalize="characters" placeholder="PW1-…" data-import></textarea>
+          </label>
+          <div class="import__result" data-import-result aria-live="polite"></div>
+        </div>
+
+        <aside class="discord-hint" aria-labelledby="discord-hint-title">
+          <svg class="discord-hint__icon" aria-hidden="true" width="28" height="28"><use href="#i-discord"/></svg>
+          <div>
+            <h3 id="discord-hint-title"><span lang="en">Share your build in the Discord forum</span><span lang="de">Teil deinen Build im Discord-Forum</span></h3>
+            <p lang="en">Post the share link with a screenshot in the builds forum of the Propwash Discord. Anyone can open it here or import the code in the game.</p>
+            <p lang="de">Poste den Link mit einem Screenshot im Build-Forum des Propwash-Discords. Alle können ihn hier öffnen oder den Code im Spiel importieren.</p>
+            <a class="btn btn--ghost" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="18" height="18"><use href="#i-discord"/></svg><span lang="en">Open the Discord</span><span lang="de">Zum Discord</span></a>
+          </div>
+        </aside>
+      </section>
+    </div>
+  </div>
+
+  <section class="wrap cfg-about" aria-labelledby="about-title">
+    <h2 id="about-title" class="cfg-about__title"><span lang="en">About this page</span><span lang="de">Über diese Seite</span></h2>
+    <p lang="en">Parts, rules, paint and the flight analysis come from the data export of Just More Parts 1.0.0 for Propwash 0.4.0. Share codes use the PW1 format of the addon and work both ways. Everything runs in your browser; nothing is sent anywhere.</p>
+    <p lang="de">Teile, Regeln, Lack und Flug-Analyse stammen aus dem Datenexport von Just More Parts 1.0.0 für Propwash 0.4.0. Sharecodes nutzen das PW1-Format des Addons und funktionieren in beide Richtungen. Alles läuft in deinem Browser, nichts wird irgendwohin geschickt.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice and whether you paused the animations are kept in your browser. The drone you build lives in the page address. 3D view: <a href="../assets/vendor/three/LICENSE">three.js</a> (MIT); fonts: <a href="../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), all served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl und ob du die Animationen angehalten hast, bleiben in deinem Browser. Die gebaute Drohne steht in der Adresse der Seite. 3D-Ansicht: <a href="../assets/vendor/three/LICENSE">three.js</a> (MIT); Schriften: <a href="../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), alles direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<div class="part-tip" data-tip hidden aria-hidden="true"></div>
+
+<script src="../assets/js/main.js" defer></script>
+<script type="module" src="../assets/js/configurator/ui.js"></script>
+</body>
+</html>
