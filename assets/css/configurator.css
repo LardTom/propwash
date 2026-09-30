@@ -399,9 +399,118 @@ button {
   border-color: var(--accent);
 }
 
-.viewer__btn[aria-pressed="true"] {
+.viewer__btn[aria-pressed="true"],
+.viewer__btn[aria-expanded="true"] {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+/* Narrow screens: the screenshot button keeps only its icon, so the toolbar stays on one line. */
+@media (max-width: 479px) {
+  .viewer__btn-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* Screenshot menu: opens upwards from the toolbar, anchored to its right edge. */
+.viewer__menu {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 6px);
+  display: grid;
+  gap: 2px;
+  width: min(300px, calc(100vw - 2 * var(--gutter) - 20px));
+  padding: 4px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: rgba(18, 18, 18, 0.96);
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.9);
+}
+
+.viewer__menu-item {
+  display: grid;
+  gap: 3px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+}
+
+.viewer__menu-item:hover,
+.viewer__menu-item:focus-visible {
+  background: var(--panel-hi);
+}
+
+.viewer__menu-item:focus-visible {
+  outline-offset: -2px;
+}
+
+@media (max-width: 359px) {
+  .viewer__menu-hint {
+    display: none;
+  }
+}
+
+.viewer__menu-title {
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.viewer__menu-hint {
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.toast-host {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  z-index: 70;
+  width: max-content;
+  max-width: calc(100vw - 2 * var(--gutter));
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.toast {
+  padding: 11px 16px;
+  border: 1px solid var(--border-strong);
+  border-left: 3px solid var(--gate);
+  border-radius: 4px;
+  background: #151515;
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.9);
+  font-size: 0.93rem;
+  animation: toast-in 0.25s var(--ease-out);
+}
+
+.toast.is-warn {
+  border-left-color: var(--accent);
+}
+
+.toast.is-bad {
+  border-left-color: var(--danger);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    animation: none;
+  }
 }
 
 /* ---------- Key stats and checks ---------- */

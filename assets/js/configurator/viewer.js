@@ -512,6 +512,76 @@ export function createViewer(container, options) {
       requestRender();
     },
     autoRotate: () => controls.autoRotate,
+    /**
+     * The drone alone on a transparent 2D canvas, from the current view direction, cropped to the drone plus pad
+     * (share of its longer side) and as large as fits into maxWidth × maxHeight. Null when nothing is drawn.
+     */
+    snapshot({ maxWidth = 1600, maxHeight = 1600, pad = 0.05 } = {}) {
+      const box = new Box3().setFromObject(droneGroup);
+      if (box.isEmpty()) return null;
+      const sphere = box.getBoundingSphere(new Sphere());
+      const shot = camera.clone();
+      const dir = camera.position.clone().sub(controls.target).normalize();
+      const distance = Math.max(camera.position.distanceTo(controls.target), (sphere.radius / Math.sin((shot.fov * DEG) / 2)) * 1.02);
+      shot.position.copy(sphere.center).add(dir.multiplyScalar(distance));
+      shot.lookAt(sphere.center);
+      shot.aspect = 1;
+      shot.near = Math.max(0.5, distance - sphere.radius * 1.5);
+      shot.far = distance + sphere.radius * 1.5;
+      shot.updateProjectionMatrix();
+
+      const ratio = renderer.getPixelRatio();
+      const shadowVisible = shadow.visible;
+      shadow.visible = false;
+      renderer.setPixelRatio(1);
+      const draw = (w, h) => {
+        renderer.setSize(w, h, false);
+        renderer.render(scene, shot);
+        const out = document.createElement('canvas');
+        out.width = w;
+        out.height = h;
+        out.getContext('2d').drawImage(canvas, 0, 0);
+        return out;
+      };
+      let out = null;
+      try {
+        const probeSize = 640;
+        const probe = draw(probeSize, probeSize);
+        const data = probe.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, probeSize, probeSize).data;
+        let x0 = probeSize;
+        let y0 = probeSize;
+        let x1 = -1;
+        let y1 = -1;
+        for (let y = 0; y < probeSize; y++) {
+          for (let x = 0; x < probeSize; x++) {
+            if (data[(y * probeSize + x) * 4 + 3] > 8) {
+              if (x < x0) x0 = x;
+              if (x > x1) x1 = x;
+              if (y < y0) y0 = y;
+              if (y > y1) y1 = y;
+            }
+          }
+        }
+        if (x1 >= 0) {
+          const margin = Math.max(x1 - x0 + 1, y1 - y0 + 1) * pad + 1;
+          const left = (x0 - margin) / probeSize;
+          const top = (y0 - margin) / probeSize;
+          const width = (x1 + 1 - x0 + 2 * margin) / probeSize;
+          const height = (y1 + 1 - y0 + 2 * margin) / probeSize;
+          const full = Math.min(maxWidth / width, maxHeight / height);
+          const w = Math.max(1, Math.round(width * full));
+          const h = Math.max(1, Math.round(height * full));
+          shot.setViewOffset(full, full, left * full, top * full, w, h);
+          out = draw(w, h);
+        }
+      } finally {
+        shadow.visible = shadowVisible;
+        renderer.setPixelRatio(ratio);
+        resize();
+        renderer.render(scene, camera);
+      }
+      return out;
+    },
     resetView() {
       fitted = false;
       fit();

@@ -1529,9 +1529,260 @@ async function startViewer() {
       button.setAttribute('aria-pressed', 'false');
     }
   });
+  wireShotMenu();
   viewerName();
   const shown = await viewer.show(state.build, state.paint);
   if (shown) viewerNote(!shown.layout ? t('ui.noFrame') : '');
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Screenshots: the drone alone as a transparent PNG (cover image of a forum post) or a detail card with name, class,
+// key figures and share code. Both go to the clipboard; where images can't be copied, the PNG is downloaded.
+
+const CARD_W = 1600;
+const CARD_H = 900;
+const CARD_STRIP = 236;
+const CARD_PAD = 60;
+const CARD_MARK = 'lardtom.github.io/propwash/configurator';
+const CARD_STATS = ['mass_grams', 'thrust_to_weight', 'hover_flight_time_min'];
+const SAIRA = '"PW Saira", "Saira", system-ui, sans-serif';
+const MONO = '"PW Mono", ui-monospace, Menlo, Consolas, monospace';
+
+function wireShotMenu() {
+  const box = $('[data-shot]');
+  const toggle = $('[data-shot-toggle]');
+  const menu = $('[data-shot-menu]');
+  const items = [...menu.querySelectorAll('[role="menuitem"]')];
+  box.hidden = false;
+  const open = (index) => {
+    menu.hidden = false;
+    toggle.setAttribute('aria-expanded', 'true');
+    items[index].focus();
+  };
+  const close = (focusToggle) => {
+    if (menu.hidden) return;
+    menu.hidden = true;
+    toggle.setAttribute('aria-expanded', 'false');
+    if (focusToggle) toggle.focus();
+  };
+  toggle.addEventListener('click', () => (menu.hidden ? open(0) : close(false)));
+  toggle.addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+    e.preventDefault();
+    open(e.key === 'ArrowDown' ? 0 : items.length - 1);
+  });
+  menu.addEventListener('keydown', (e) => {
+    const i = items.indexOf(doc.activeElement);
+    let j = null;
+    if (e.key === 'ArrowDown') j = (i + 1) % items.length;
+    else if (e.key === 'ArrowUp') j = (i - 1 + items.length) % items.length;
+    else if (e.key === 'Home') j = 0;
+    else if (e.key === 'End') j = items.length - 1;
+    else if (e.key === 'Escape') {
+      e.preventDefault();
+      close(true);
+      return;
+    } else if (e.key === 'Tab') {
+      close(false);
+      return;
+    } else return;
+    e.preventDefault();
+    items[j].focus();
+  });
+  for (const item of items) {
+    item.addEventListener('click', () => {
+      close(true);
+      shareShot(item.dataset.shotKind);
+    });
+  }
+  box.addEventListener('focusout', (e) => {
+    if (!box.contains(e.relatedTarget)) close(false);
+  });
+  doc.addEventListener('pointerdown', (e) => {
+    if (!box.contains(e.target)) close(false);
+  });
+}
+
+/** Copies the picture; the clipboard gets a promise of the PNG so Safari keeps the click as the user gesture. */
+function shareShot(kind) {
+  const blob = shotBlob(kind);
+  const code = currentCode().code;
+  const name = `propwash-${kind === 'card' ? 'build' : 'drone'}-${code ? code.slice(4, 21).replace(/[^0-9A-Z-]/gi, '') : 'png'}.png`;
+  let written;
+  try {
+    written = navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+  } catch (e) {
+    written = Promise.reject(e);
+  }
+  written.then(() => toast(t('ui.shotCopied'), 'ok'), async () => {
+    try {
+      downloadBlob(await blob, name);
+      toast(t('ui.shotDownloaded'), 'warn');
+    } catch {
+      toast(t('ui.shotFailed'), 'bad');
+    }
+  });
+}
+
+async function shotBlob(kind) {
+  const drone = kind === 'card'
+    ? viewer.snapshot({ maxWidth: CARD_W - 2 * CARD_PAD, maxHeight: CARD_H - CARD_STRIP - 2 * CARD_PAD })
+    : viewer.snapshot({ maxWidth: 1600, maxHeight: 1600 });
+  if (!drone) throw new Error('nothing drawn');
+  const canvas = kind === 'card' ? await cardCanvas(drone) : drone;
+  return new Promise((resolve, reject) => canvas.toBlob((b) => (b ? resolve(b) : reject(new Error('toBlob'))), 'image/png'));
+}
+
+function downloadBlob(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const a = el('a', { href: url, download: name, hidden: true });
+  doc.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+
+/** Class line of the card: drone class, cells and prop size. */
+function cardClass() {
+  const frame = catalog.part(state.build.frame);
+  const battery = catalog.part(state.build.battery);
+  const prop = catalog.part(state.build.prop);
+  return [
+    frame && frame.data.role ? t(`roles.${frame.data.role}`) : null,
+    battery ? `${battery.data.cells}S` : null,
+    prop ? `${num(prop.derived.diameter_in, 1)}″` : null,
+  ].filter(Boolean).join('  ·  ');
+}
+
+/** Text cut to maxWidth with an ellipsis. */
+function fitText(g, text, maxWidth) {
+  if (g.measureText(text).width <= maxWidth) return text;
+  let cut = text;
+  while (cut.length > 1 && g.measureText(`${cut}…`).width > maxWidth) cut = cut.slice(0, -1);
+  return `${cut.trimEnd()}…`;
+}
+
+/** Share code in lines of whole groups; the font shrinks until it fits into maxLines. */
+function codeLines(g, code, maxWidth, maxLines) {
+  const groups = code.split('-').map((part, i, all) => (i < all.length - 1 ? `${part}-` : part));
+  for (let size = 18; size >= 12; size--) {
+    g.font = `500 ${size}px ${MONO}`;
+    const lines = [''];
+    for (const group of groups) {
+      if (lines[lines.length - 1] && g.measureText(lines[lines.length - 1] + group).width > maxWidth) lines.push('');
+      lines[lines.length - 1] += group;
+    }
+    if (lines.length <= maxLines || size === 12) return { size, lines: lines.slice(0, maxLines) };
+  }
+  return { size: 12, lines: [] };
+}
+
+async function cardCanvas(drone) {
+  if (doc.fonts && doc.fonts.load) {
+    await Promise.all([`700 48px ${SAIRA}`, `500 24px ${SAIRA}`, `500 18px ${MONO}`, `700 18px ${MONO}`]
+      .map((font) => doc.fonts.load(font).catch(() => null)));
+  }
+  const canvas = el('canvas', { width: CARD_W, height: CARD_H });
+  const g = canvas.getContext('2d');
+  const spaced = (em) => {
+    if ('letterSpacing' in g) g.letterSpacing = `${em}px`;
+  };
+
+  const bg = g.createLinearGradient(0, 0, 0, CARD_H);
+  bg.addColorStop(0, '#202020');
+  bg.addColorStop(1, '#141414');
+  g.fillStyle = bg;
+  g.fillRect(0, 0, CARD_W, CARD_H);
+  const glow = g.createRadialGradient(CARD_W / 2, 300, 0, CARD_W / 2, 300, 760);
+  glow.addColorStop(0, 'rgba(255, 187, 0, 0.08)');
+  glow.addColorStop(1, 'rgba(255, 187, 0, 0)');
+  g.fillStyle = glow;
+  g.fillRect(0, 0, CARD_W, CARD_H);
+  g.fillStyle = 'rgba(255, 255, 255, 0.018)';
+  for (let y = 0; y < CARD_H; y += 4) g.fillRect(0, y, CARD_W, 1);
+
+  const areaH = CARD_H - CARD_STRIP - 2 * CARD_PAD;
+  const dx = Math.round((CARD_W - drone.width) / 2);
+  const dy = Math.round(CARD_PAD + (areaH - drone.height) / 2);
+  g.save();
+  g.translate(CARD_W / 2, dy + drone.height * 0.9);
+  g.scale(1, 0.14);
+  const r = drone.width * 0.46;
+  const shade = g.createRadialGradient(0, 0, 0, 0, 0, r);
+  shade.addColorStop(0, 'rgba(0, 0, 0, 0.45)');
+  shade.addColorStop(1, 'rgba(0, 0, 0, 0)');
+  g.fillStyle = shade;
+  g.fillRect(-r, -r, 2 * r, 2 * r);
+  g.restore();
+  g.drawImage(drone, dx, dy);
+
+  g.textBaseline = 'alphabetic';
+  g.font = `700 17px ${MONO}`;
+  spaced(2.4);
+  g.fillStyle = '#ffbb00';
+  g.fillText('PROPWASH', CARD_PAD, 54);
+  const markX = CARD_PAD + g.measureText('PROPWASH').width;
+  g.font = `500 17px ${MONO}`;
+  spaced(0.6);
+  g.fillStyle = '#969696';
+  g.fillText(`  ·  ${CARD_MARK}`, markX, 54);
+
+  const top = CARD_H - CARD_STRIP;
+  g.fillStyle = 'rgba(12, 12, 12, 0.88)';
+  g.fillRect(0, top, CARD_W, CARD_STRIP);
+  g.fillStyle = '#383838';
+  g.fillRect(0, top, CARD_W, 1);
+  g.fillStyle = '#ffbb00';
+  g.fillRect(0, top, 5, CARD_STRIP);
+
+  const statW = 200;
+  const statsX = CARD_W - CARD_PAD - CARD_STATS.length * statW;
+  g.font = `700 17px ${MONO}`;
+  spaced(2);
+  g.fillStyle = '#ffbb00';
+  g.fillText(fitText(g, cardClass().toUpperCase(), statsX - CARD_PAD - 40), CARD_PAD, top + 50);
+  g.font = `700 50px ${SAIRA}`;
+  spaced(0);
+  g.fillStyle = '#e8e8e8';
+  const title = state.name.trim() || (state.presetId ? catalog.presetName(state.presetId, lang()) : t('ui.cardUnnamed'));
+  g.fillText(fitText(g, title, statsX - CARD_PAD - 40), CARD_PAD, top + 106);
+
+  CARD_STATS.forEach((key, i) => {
+    const [, , unit, decimals] = entry(`stats.${key}`);
+    const x = statsX + i * statW;
+    g.font = `600 14px ${MONO}`;
+    spaced(1.8);
+    g.fillStyle = '#969696';
+    g.fillText(fitText(g, t(`keyStats.${key}`).toUpperCase(), statW - 20), x, top + 50);
+    g.font = `700 40px ${SAIRA}`;
+    spaced(0);
+    g.fillStyle = '#e8e8e8';
+    const value = derived.analysis ? num(derived.analysis[key], decimals) : t('ui.noValue');
+    g.fillText(value, x, top + 104);
+    if (derived.analysis) {
+      const w = g.measureText(value).width;
+      g.font = `500 22px ${SAIRA}`;
+      g.fillStyle = '#b0b0b0';
+      g.fillText(unit.startsWith(':') ? unit : ` ${unit}`, x + w + (unit.startsWith(':') ? 2 : 0), top + 104);
+    }
+  });
+
+  const code = currentCode().code;
+  if (code) {
+    const { size, lines } = codeLines(g, code, CARD_W - 2 * CARD_PAD, 3);
+    g.font = `500 ${size}px ${MONO}`;
+    spaced(0);
+    g.fillStyle = '#b0b0b0';
+    lines.forEach((line, i) => g.fillText(line, CARD_PAD, top + 150 + i * Math.round(size * 1.45)));
+  }
+  return canvas;
+}
+
+function toast(message, level) {
+  const host = $('[data-toast]');
+  host.replaceChildren(el('p', { class: `toast is-${level}` }, message));
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => host.replaceChildren(), 4500);
 }
 
 // ---------------------------------------------------------------------------------------------------------------

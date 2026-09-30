@@ -45,6 +45,7 @@
   <symbol id="i-target" viewBox="0 0 16 16"><path d="M8 1.5v3M8 11.5v3M1.5 8h3M11.5 8h3" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="8" r="3.2" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
   <symbol id="i-reset" viewBox="0 0 16 16"><path d="M3.5 8a4.5 4.5 0 1 0 1.4-3.3M3 2.5v3h3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></symbol>
   <symbol id="i-info" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 16 16"><path d="M1.8 5.2h3l1.3-2h3.8l1.3 2h3v7.9H1.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="8" cy="8.9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
   <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m10.4 10.4 3.8 3.8" stroke="currentColor" stroke-width="1.6"/></symbol>
 </svg>
 <a class="skip" href="#cfg"><span lang="en">Skip to the configurator</span><span lang="de">Zum Konfigurator springen</span></a>
@@ -110,6 +111,19 @@
         <p class="viewer__fallback" data-viewer-fallback hidden></p>
         <p class="viewer__name" data-viewer-name aria-hidden="true"></p>
         <div class="viewer__tools">
+          <div class="viewer__shot" data-shot hidden>
+            <button type="button" class="viewer__btn" data-shot-toggle aria-haspopup="menu" aria-expanded="false" aria-controls="shot-menu" title="Copy a picture of the drone" data-de-title="Bild der Drohne kopieren"><svg aria-hidden="true" width="16" height="16"><use href="#i-camera"/></svg><span class="viewer__btn-label">Screenshot</span></button>
+            <div class="viewer__menu" id="shot-menu" role="menu" aria-label="Screenshot" data-shot-menu hidden>
+              <button type="button" role="menuitem" class="viewer__menu-item" tabindex="-1" data-shot-kind="drone">
+                <span class="viewer__menu-title"><span lang="en">Drone as PNG</span><span lang="de">Drohne als PNG</span></span>
+                <span class="viewer__menu-hint"><span lang="en">Transparent and cropped, as the cover image of a forum post</span><span lang="de">Transparent und freigestellt, als Titelbild für einen Forumsbeitrag</span></span>
+              </button>
+              <button type="button" role="menuitem" class="viewer__menu-item" tabindex="-1" data-shot-kind="card">
+                <span class="viewer__menu-title"><span lang="en">Detail card</span><span lang="de">Detailkarte</span></span>
+                <span class="viewer__menu-hint"><span lang="en">With name, class, key figures and share code</span><span lang="de">Mit Name, Klasse, Kennwerten und Sharecode</span></span>
+              </button>
+            </div>
+          </div>
           <button type="button" class="viewer__btn" data-autorotate aria-pressed="false" title="Turn automatically" data-de-title="Automatisch drehen"><svg aria-hidden="true" width="16" height="16"><use href="#i-rotate"/></svg><span lang="en">Auto-rotate</span><span lang="de">Drehen</span></button>
           <button type="button" class="viewer__btn" data-reset-view title="Reset view" data-de-title="Ansicht zurücksetzen"><svg aria-hidden="true" width="16" height="16"><use href="#i-target"/></svg><span class="visually-hidden"><span lang="en">Reset view</span><span lang="de">Ansicht zurücksetzen</span></span></button>
         </div>
@@ -224,6 +238,7 @@
 </footer>
 
 <div class="part-tip" data-tip hidden aria-hidden="true"></div>
+<div class="toast-host" data-toast role="status" aria-live="polite"></div>
 
 <script src="../assets/js/main.js" defer></script>
 <script type="module" src="../assets/js/configurator/ui.js"></script>

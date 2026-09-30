@@ -47,6 +47,9 @@ kept in the browser's `localStorage`; the drone built in the configurator lives 
 - 3D view with three.js: the parts' Minecraft block models, textures and paint tints placed like the mod's drone
   renderer (frame layouts, motor seats, camera tilt, accessory anchors); drag to turn, scroll or pinch to zoom,
   auto-rotate (off with reduced motion or paused animations), keyboard control on the canvas
+- screenshot menu in the 3D view: “Drone as PNG” (the drone alone, transparent, cropped, up to 1600 px, from the current
+  view angle, e.g. as the cover image of a forum post) and “Detail card” (1600 × 900 with name, class, key figures and
+  share code); both are copied to the clipboard, or downloaded where the browser can’t copy images
 
 ### Updating the data
 
