@@ -94,13 +94,13 @@ python3 -m http.server 8000
 2. Settings → Pages → Build and deployment → Source: *Deploy from a branch*, branch `main`, folder `/ (root)`.
 3. `.nojekyll` is included, so the files are served exactly as they are.
 
-All paths are relative, so the pages work from the project URL `https://lardtom.github.io/propwash/`, the configurator
-from `https://lardtom.github.io/propwash/configurator/`.
+All paths are relative, so the pages work from the custom domain `https://propwashfpv.com/` (fallback `https://lardtom.github.io/propwash/`), the configurator
+from `https://propwashfpv.com/configurator/`.
 
 ## Link previews
 
 `og:image` and `twitter:image` need an absolute URL. They point to
-`https://lardtom.github.io/propwash/assets/img/og-image.jpg`. With a different repository name (or a custom domain),
+`https://propwashfpv.com/assets/img/og-image.jpg`. With a different repository name (or a custom domain),
 change the URLs in the `<head>` of `index.html` and `configurator/index.html`.
 
 ---
