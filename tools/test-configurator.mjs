@@ -212,18 +212,24 @@ console.log(`Presets: ${presetPass}/${catalog.presets.length} (share code, check
       compareAnalysis(catalog.analyze(d.content.build), v.analysis, v.name);
       const view = catalog.cameraView(d.content.build);
       compareCameraView(view, v.camera_view, v.name);
-      if (v.before && view) {
-        // The old lens position must reproduce what the game rendered (not the 0.0 % of the old calculation).
-        const r = { ...view.rig, lens: v.before.lens_mm.map(Math.fround) };
-        const [w, h] = v.before.image;
+      if (v.game && view) {
+        // What the game rendered for this build: the analysis at the captured image size must match the counted
+        // pixels, and the configurator must never say 0 % where the game shows props (the reported 0.0 %).
+        const r = view.rig;
+        const [w, h] = v.game.image;
         const percent = occlusionPercent(r, r.tilt, r.fov, w / h, h);
-        ok(Math.abs(percent - v.before.analysis_percent) < 0.005, `${v.name}: old lens ${percent.toFixed(3)} % vs analysis ${v.before.analysis_percent} %`);
-        ok(Math.abs(percent - v.before.rendered_percent) < 0.25, `${v.name}: old lens ${percent.toFixed(3)} % vs rendered ${v.before.rendered_percent} %`);
+        ok(Math.abs(percent - v.game.analysis_percent) < 0.005, `${v.name}: ${percent.toFixed(3)} % at ${w} x ${h} vs game analysis ${v.game.analysis_percent} %`);
+        ok(Math.abs(percent - v.game.rendered_percent) < 0.25, `${v.name}: ${percent.toFixed(3)} % vs rendered ${v.game.rendered_percent} %`);
+        if (v.game.rendered_percent > 0) {
+          const shown = catalog.analyze(d.content.build).props_in_view_percent;
+          ok(shown >= 0.05 && shown > v.game.reported_percent, `${v.name}: shows ${shown.toFixed(2)} % while the game shows props (reported ${v.game.reported_percent} %)`);
+          ok(view.props_in_view_percent >= 0.05, `${v.name}: camera preview ${view.props_in_view_percent.toFixed(2)} % while the game shows props`);
+        }
       }
     }
     if (failed === before) pass++;
   }
-  console.log(`Report vectors: ${pass}/${reportVectors.length} (decode, layers, build, re-encode, analysis, FPV camera, old lens against the game's image)`);
+  console.log(`Report vectors: ${pass}/${reportVectors.length} (decode, layers, build, re-encode, analysis, FPV camera, against the game's image)`);
 }
 
 // 2b. Flight tune defaults per preset (tune.json#defaults) and stored preset tunes as fixed points of normalisation

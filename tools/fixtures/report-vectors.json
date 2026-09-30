@@ -1,7 +1,7 @@
 [
  {
   "name": "Report 2026-09-30: Deadcat LR 7″ · 8S",
-  "about": "Owner report: the configurator showed 0.0 % props in the camera view, the game showed prop blades at the left and right image edges. Just More Parts 1.0.2 moves the lens in front of the front motors; the analysis (Propwash 0.4.1) follows the FPV renderer.",
+  "about": "Owner report: the configurator showed 0.0 % props in the camera view, the game showed prop blades at the left and right image edges. The analysis (Propwash 0.4.1) now follows the FPV renderer; Just More Parts 1.0.3 keeps the lens where the owner flew it (z = -78 mm), so the configurator shows the same prop tips at the image edges.",
   "code": "PW1-0400E-MG21H-P74QS-QBXJ6-ARB4C-DGQ80-GFEDT-62RVB-BWSK0-QSRED-FKCDB-10856-TCHR6-0VNYC-9H60R-043KG-64VKG-QSM61-FK4RJ-ZCDK6-W0GAC-HMPET-BMC5P-5YV3J-08464-E3KBW-S34C1-G005G-01RV3-MG1YV-ZBF70-FY080-YVQT8-SR",
   "preset": "justmoreparts:lr7_8s",
   "layers": [
@@ -31,14 +31,14 @@
    "motor_response_ms": 22.98397382115879,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 123.60263841664008,
-   "props_in_view_percent": 0,
+   "props_in_view_percent": 2.016540184661153,
    "warnings": []
   },
   "camera_view": {
    "lens_mm": [
     0,
     16,
-    -125
+    -78
    ],
    "uptilt_deg": 22,
    "horizontal_fov_deg": 130,
@@ -83,21 +83,17 @@
      "hub_radius_mm": 8.010000228881836
     }
    ],
-   "props_in_view_percent": 0
+   "props_in_view_percent": 2.016540184661153
   },
-  "before": {
-   "about": "The same build with the lens of Just More Parts 1.0.1 (z = -78 mm): Propwash 0.4.1 renders 2.01 % and analyses 2.02 % of a 1708 x 960 image; the old calculation said 0.0 %.",
-   "lens_mm": [
-    0,
-    16,
-    -78
-   ],
+  "game": {
+   "about": "Propwash 0.4.1 self test 'drone-render: Props im FPV-Bild' with Just More Parts 1.0.3: magenta prop mask counted in the 1708 x 960 FPV image before the video effect. The configurator of the report (Propwash 0.4.0 calculation) said 0.0 %.",
    "image": [
     1708,
     960
    ],
    "rendered_percent": 2.01,
-   "analysis_percent": 2.02
+   "analysis_percent": 2.02,
+   "reported_percent": 0
   }
  }
 ]

@@ -75,7 +75,8 @@ node tools/test-configurator-render.mjs    # model files, paint tints, frame lay
 `tools/fixtures/report-vectors.json` keeps share codes from bug reports with the build, analysis and FPV camera the
 mod gives for them (hand-maintained, not overwritten by the build scripts); the test decodes, re-encodes and analyses
 each one. The first is the 7″ deadcat whose props the game showed at the image edges while the old calculation said
-0.0 %.
+0.0 %; its `game` entry holds what Propwash's self test counted in the rendered FPV image (2.01 % of 1708 × 960 pixels),
+and the test fails if the configurator ever shows 0 % for it again.
 
 Render definitions may carry a vanilla `transformation` (Just More Parts 1.0.1 shrinks the X-Class frame models to fit
 Minecraft's model limit and scales them back to real size this way); `build-configurator-models.mjs` bakes it into the

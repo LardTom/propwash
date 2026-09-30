@@ -2366,7 +2366,7 @@
    "motor_response_ms": 24.37836932479739,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 78.47855496283287,
-   "props_in_view_percent": 0,
+   "props_in_view_percent": 1.8411821224951799,
    "warnings": [
     "heavy_sag",
     "battery_overload"
@@ -2419,7 +2419,7 @@
    "motor_response_ms": 24.37836932479739,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 78.47855496283287,
-   "props_in_view_percent": 0,
+   "props_in_view_percent": 1.8411821224951799,
    "warnings": [
     "heavy_sag",
     "battery_overload"
@@ -2476,7 +2476,7 @@
    "motor_response_ms": 22.98397382115879,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 123.60263841664008,
-   "props_in_view_percent": 0,
+   "props_in_view_percent": 2.016540184661153,
    "warnings": []
   }
  },
@@ -2524,7 +2524,7 @@
    "motor_response_ms": 22.98397382115879,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 123.60263841664008,
-   "props_in_view_percent": 0,
+   "props_in_view_percent": 2.016540184661153,
    "warnings": []
   }
  },
