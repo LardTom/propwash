@@ -140,6 +140,31 @@ for (const preset of catalog.presets) {
   check(tints === null, `${preset.id}: front-left prop unpainted when only front-right is painted`);
 }
 
+// The camera preview draws the FPV rig of the analysis (fpv.js); its hubs must sit where the drone renderer puts the
+// props, for every frame with every preset's other parts (built-in layouts, arms, motor seats).
+{
+  let rigs = 0;
+  let worst = 0;
+  for (const preset of catalog.presets) {
+    for (const frame of catalog.partsIn('frame')) {
+      const build = { ...catalog.presetBuild(preset.id), frame: frame.id, accessories: {} };
+      const view = catalog.cameraView(build);
+      if (!view) continue;
+      const a = assemble(build, env);
+      const props = a.pieces.filter((p) => p.role === 'prop');
+      rigs++;
+      props.forEach((p, slot) => {
+        const hub = view.rig.hubs[slot];
+        const d = Math.max(...hub.map((v, k) => Math.abs(v - p.position[k])));
+        worst = Math.max(worst, d);
+        check(d < 1e-3, `${preset.id} on ${frame.id}: FPV hub ${slot} ${hub} vs prop ${p.position}`);
+      });
+      check(view.uptilt_deg === Math.fround(a.cameraTilt), `${preset.id} on ${frame.id}: uptilt ${view.uptilt_deg} vs ${a.cameraTilt}`);
+    }
+  }
+  console.log(`FPV rig: ${rigs} builds, prop hubs within ${worst.toExponential(1)} mm of the drone renderer's props`);
+}
+
 // Unknown parts are left out, not drawn.
 const unknown = { ...catalog.presetBuild('propwash:freestyle'), motor: '?7:mystery_motor' };
 const u = assemble(unknown, env);

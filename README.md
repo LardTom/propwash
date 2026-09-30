@@ -12,7 +12,8 @@ This repository contains only the website, no mod source code.
 - `assets/js/main.js` – language switch, section menu, hero feed with pause switch, image switchers, video demo, gallery lightbox
 - `assets/js/configurator/` – the configurator as plain ES modules:
   - core: `data.js` (catalog), `sharecode.js` + `crc32.js` + `inflate.js` + `tune.js` (PW1 share codes),
-    `rules.js` (compatibility), `analysis.js` (flight analysis), `tuning.js` (tune defaults and editing), `index.js`
+    `rules.js` (compatibility), `analysis.js` (flight analysis), `fpv.js` (FPV camera rig and props in view),
+    `tuning.js` (tune defaults and editing), `index.js`
   - page: `ui.js` (part pickers, paint, tune editor, OSD layer, stats, share code, import), `i18n.js` (texts),
     `assembly.js` (where every part sits on the drone), `paint.js` (paint tints), `viewer.js` (three.js viewer)
 - `assets/data/configurator/` – data from the Just More Parts web export: `catalog.json` (parts, presets, rules, paint,
@@ -49,21 +50,32 @@ kept in the browser's `localStorage`; the drone built in the configurator lives 
 - 3D view with three.js: the parts' Minecraft block models, textures and paint tints placed like the mod's drone
   renderer (frame layouts, motor seats, camera tilt, accessory anchors); drag to turn, scroll or pinch to zoom,
   auto-rotate (off with reduced motion or paused animations), keyboard control on the canvas
+- FPV camera preview (switch “3D / FPV camera” in the viewer, or open `configurator/?view=camera#PW1-…`): the image the
+  drone's camera sends, drawn like the game's FPV view (Propwash 0.4.1): 16:9 rectilinear from the lens with the frame's
+  uptilt and the goggles' field of view (analog 120°, digital 130°), the drone itself hidden except its props, spinning
+  props as translucent blur discs in their paint colour, over a sky and grass backdrop; sliders for uptilt (0–80°, as
+  the pilot can set it in the game) and goggle FOV (60–160°) with the live props-in-view share, and toggles to mark the
+  counted disc area, show still blades or draw the frame too
 - screenshot menu in the 3D view: “Drone as PNG” (the drone alone, transparent, cropped, up to 1600 px, from the current
   view angle, e.g. as the cover image of a forum post) and “Detail card” (1600 × 900 with name, class, key figures and
   share code); both are copied to the clipboard, or downloaded where the browser can’t copy images
 
 ### Updating the data
 
-With a new web export of Just More Parts (default location `../propwash-justmoreparts/release/<version>/web-export`,
+With a new web export of Just More Parts (default location: the newest `../propwash-justmoreparts/release/<version>/web-export`,
 or pass `--export <dir>` / set `JMP_WEB_EXPORT`):
 
 ```sh
 node tools/build-configurator-data.mjs     # catalog.json and the share-code test vectors
 node tools/build-configurator-models.mjs   # render.json and models/
-node tools/test-configurator.mjs           # share codes, presets, analysis and tune defaults against the export
-node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts and assembly
+node tools/test-configurator.mjs           # share codes, presets, analysis, FPV camera and tune defaults against the export
+node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts, assembly and FPV prop hubs
 ```
+
+`tools/fixtures/report-vectors.json` keeps share codes from bug reports with the build, analysis and FPV camera the
+mod gives for them (hand-maintained, not overwritten by the build scripts); the test decodes, re-encodes and analyses
+each one. The first is the 7″ deadcat whose props the game showed at the image edges while the old calculation said
+0.0 %.
 
 Render definitions may carry a vanilla `transformation` (Just More Parts 1.0.1 shrinks the X-Class frame models to fit
 Minecraft's model limit and scales them back to real size this way); `build-configurator-models.mjs` bakes it into the

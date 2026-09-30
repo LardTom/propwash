@@ -43,7 +43,7 @@
    "motor_response_ms": 12.34200842654039,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 94.52573019061191,
-   "props_in_view_percent": 1.7361111111111112,
+   "props_in_view_percent": 5.292123621573374,
    "warnings": []
   }
  },
@@ -111,7 +111,7 @@
    "motor_response_ms": 12.049895933659018,
    "crash_speed_ms": 8.5,
    "sustained_motor_temp_c": 85.09020631941927,
-   "props_in_view_percent": 0.3472222222222222,
+   "props_in_view_percent": 0,
    "warnings": []
   }
  },
@@ -173,7 +173,7 @@
    "motor_response_ms": 18.87529281104635,
    "crash_speed_ms": 6,
    "sustained_motor_temp_c": 125.93612232314798,
-   "props_in_view_percent": 3.0478395061728394,
+   "props_in_view_percent": 1.6517043806574947,
    "warnings": []
   }
  },
@@ -269,7 +269,7 @@
    "motor_response_ms": 12.34200842654039,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 94.52573019061191,
-   "props_in_view_percent": 1.7361111111111112,
+   "props_in_view_percent": 5.292123621573374,
    "warnings": []
   }
  },
@@ -332,7 +332,7 @@
    "motor_response_ms": 50.48499208949444,
    "crash_speed_ms": 14,
    "sustained_motor_temp_c": 29.906357931007992,
-   "props_in_view_percent": 12.654320987654321,
+   "props_in_view_percent": 8.784083753582237,
    "warnings": []
   }
  },
@@ -380,7 +380,7 @@
    "motor_response_ms": 50.48499208949444,
    "crash_speed_ms": 14,
    "sustained_motor_temp_c": 29.906357931007992,
-   "props_in_view_percent": 12.654320987654321,
+   "props_in_view_percent": 8.784083753582237,
    "warnings": []
   }
  },
@@ -429,7 +429,7 @@
    "motor_response_ms": 25.99126857715006,
    "crash_speed_ms": 11,
    "sustained_motor_temp_c": 101.10841734590957,
-   "props_in_view_percent": 16.97530864197531,
+   "props_in_view_percent": 20.87097546462457,
    "warnings": []
   }
  },
@@ -477,7 +477,7 @@
    "motor_response_ms": 25.99126857715006,
    "crash_speed_ms": 11,
    "sustained_motor_temp_c": 101.10841734590957,
-   "props_in_view_percent": 16.97530864197531,
+   "props_in_view_percent": 20.87097546462457,
    "warnings": []
   }
  },
@@ -526,7 +526,7 @@
    "motor_response_ms": 12.333653659872153,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 94.41602434077677,
-   "props_in_view_percent": 1.8518518518518519,
+   "props_in_view_percent": 11.725616659429681,
    "warnings": []
   }
  },
@@ -574,7 +574,7 @@
    "motor_response_ms": 12.333653659872153,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 94.41602434077677,
-   "props_in_view_percent": 1.8518518518518519,
+   "props_in_view_percent": 11.725616659429681,
    "warnings": []
   }
  },
@@ -722,7 +722,7 @@
    "motor_response_ms": 22.555375555448556,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 97.93460778034438,
-   "props_in_view_percent": 11.226851851851851,
+   "props_in_view_percent": 19.502528655184886,
    "warnings": [
     "heavy_sag",
     "battery_overload"
@@ -775,7 +775,7 @@
    "motor_response_ms": 22.555375555448556,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 97.93460778034438,
-   "props_in_view_percent": 11.226851851851851,
+   "props_in_view_percent": 19.502528655184886,
    "warnings": [
     "heavy_sag",
     "battery_overload"
@@ -831,7 +831,7 @@
    "motor_response_ms": 55.0878928757751,
    "crash_speed_ms": 13,
    "sustained_motor_temp_c": 36.24679303618846,
-   "props_in_view_percent": 9.992283950617283,
+   "props_in_view_percent": 7.651174216288536,
    "warnings": []
   }
  },
@@ -879,7 +879,7 @@
    "motor_response_ms": 55.0878928757751,
    "crash_speed_ms": 13,
    "sustained_motor_temp_c": 36.24679303618846,
-   "props_in_view_percent": 9.992283950617283,
+   "props_in_view_percent": 7.651174216288536,
    "warnings": []
   }
  },
@@ -932,7 +932,7 @@
    "motor_response_ms": 44.731500950648766,
    "crash_speed_ms": 12,
    "sustained_motor_temp_c": 46.926846312746065,
-   "props_in_view_percent": 9.953703703703704,
+   "props_in_view_percent": 1.3472857850126072,
    "warnings": []
   }
  },
@@ -980,7 +980,7 @@
    "motor_response_ms": 44.731500950648766,
    "crash_speed_ms": 12,
    "sustained_motor_temp_c": 46.926846312746065,
-   "props_in_view_percent": 9.953703703703704,
+   "props_in_view_percent": 1.3472857850126072,
    "warnings": []
   }
  },
@@ -1033,7 +1033,7 @@
    "motor_response_ms": 31.612944949778434,
    "crash_speed_ms": 9,
    "sustained_motor_temp_c": 38.194248370896254,
-   "props_in_view_percent": 10.725308641975309,
+   "props_in_view_percent": 2.4593029870448957,
    "warnings": []
   }
  },
@@ -1081,7 +1081,7 @@
    "motor_response_ms": 31.612944949778434,
    "crash_speed_ms": 9,
    "sustained_motor_temp_c": 38.194248370896254,
-   "props_in_view_percent": 10.725308641975309,
+   "props_in_view_percent": 2.4593029870448957,
    "warnings": []
   }
  },
@@ -1134,7 +1134,7 @@
    "motor_response_ms": 24.02176713420667,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 79.05111865128302,
-   "props_in_view_percent": 8.410493827160494,
+   "props_in_view_percent": 11.57676005569595,
    "warnings": []
   }
  },
@@ -1182,7 +1182,7 @@
    "motor_response_ms": 24.02176713420667,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 79.05111865128302,
-   "props_in_view_percent": 8.410493827160494,
+   "props_in_view_percent": 11.57676005569595,
    "warnings": []
   }
  },
@@ -1235,7 +1235,7 @@
    "motor_response_ms": 25.222492961800295,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 102.9984662634882,
-   "props_in_view_percent": 7.484567901234568,
+   "props_in_view_percent": 7.605561949634575,
    "warnings": []
   }
  },
@@ -1283,7 +1283,7 @@
    "motor_response_ms": 25.222492961800295,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 102.9984662634882,
-   "props_in_view_percent": 7.484567901234568,
+   "props_in_view_percent": 7.605561949634575,
    "warnings": []
   }
  },
@@ -1337,7 +1337,7 @@
    "motor_response_ms": 20.46548404579862,
    "crash_speed_ms": 12,
    "sustained_motor_temp_c": 59.93255099059877,
-   "props_in_view_percent": 14.158950617283951,
+   "props_in_view_percent": 17.36136889282736,
    "warnings": []
   }
  },
@@ -1385,7 +1385,7 @@
    "motor_response_ms": 20.46548404579862,
    "crash_speed_ms": 12,
    "sustained_motor_temp_c": 59.93255099059877,
-   "props_in_view_percent": 14.158950617283951,
+   "props_in_view_percent": 17.36136889282736,
    "warnings": []
   }
  },
@@ -1439,7 +1439,7 @@
    "motor_response_ms": 22.43429737909299,
    "crash_speed_ms": 11,
    "sustained_motor_temp_c": 79.61407393137137,
-   "props_in_view_percent": 15.66358024691358,
+   "props_in_view_percent": 19.925604995216123,
    "warnings": []
   }
  },
@@ -1487,7 +1487,7 @@
    "motor_response_ms": 22.43429737909299,
    "crash_speed_ms": 11,
    "sustained_motor_temp_c": 79.61407393137137,
-   "props_in_view_percent": 15.66358024691358,
+   "props_in_view_percent": 19.925604995216123,
    "warnings": []
   }
  },
@@ -1541,7 +1541,7 @@
    "motor_response_ms": 12.795598009799763,
    "crash_speed_ms": 10,
    "sustained_motor_temp_c": 92.19365350932841,
-   "props_in_view_percent": 5.902777777777778,
+   "props_in_view_percent": 11.715245829553234,
    "warnings": []
   }
  },
@@ -1589,7 +1589,7 @@
    "motor_response_ms": 12.795598009799763,
    "crash_speed_ms": 10,
    "sustained_motor_temp_c": 92.19365350932841,
-   "props_in_view_percent": 5.902777777777778,
+   "props_in_view_percent": 11.715245829553234,
    "warnings": []
   }
  },
@@ -1643,7 +1643,7 @@
    "motor_response_ms": 12.451952421841673,
    "crash_speed_ms": 8.5,
    "sustained_motor_temp_c": 88.51568475161226,
-   "props_in_view_percent": 4.398148148148148,
+   "props_in_view_percent": 6.896682396944707,
    "warnings": []
   }
  },
@@ -1691,7 +1691,7 @@
    "motor_response_ms": 12.451952421841673,
    "crash_speed_ms": 8.5,
    "sustained_motor_temp_c": 88.51568475161226,
-   "props_in_view_percent": 4.398148148148148,
+   "props_in_view_percent": 6.896682396944707,
    "warnings": []
   }
  },
@@ -1745,7 +1745,7 @@
    "motor_response_ms": 12.06631328286593,
    "crash_speed_ms": 8.5,
    "sustained_motor_temp_c": 85.16214194189413,
-   "props_in_view_percent": 0.3472222222222222,
+   "props_in_view_percent": 0,
    "warnings": []
   }
  },
@@ -1793,7 +1793,7 @@
    "motor_response_ms": 12.06631328286593,
    "crash_speed_ms": 8.5,
    "sustained_motor_temp_c": 85.16214194189413,
-   "props_in_view_percent": 0.3472222222222222,
+   "props_in_view_percent": 0,
    "warnings": []
   }
  },
@@ -1847,7 +1847,7 @@
    "motor_response_ms": 13.027568245074802,
    "crash_speed_ms": 6.5,
    "sustained_motor_temp_c": 75.90575014836367,
-   "props_in_view_percent": 0,
+   "props_in_view_percent": 1.9299803478055881,
    "warnings": []
   }
  },
@@ -1895,7 +1895,7 @@
    "motor_response_ms": 13.027568245074802,
    "crash_speed_ms": 6.5,
    "sustained_motor_temp_c": 75.90575014836367,
-   "props_in_view_percent": 0,
+   "props_in_view_percent": 1.9299803478055881,
    "warnings": []
   }
  },
@@ -2158,7 +2158,7 @@
    "motor_response_ms": 24.198008714260286,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 87.68319080823062,
-   "props_in_view_percent": 7.253086419753086,
+   "props_in_view_percent": 8.932563062020918,
    "warnings": []
   }
  },
@@ -2208,7 +2208,7 @@
    "motor_response_ms": 24.198008714260286,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 87.68319080823062,
-   "props_in_view_percent": 7.253086419753086,
+   "props_in_view_percent": 8.932563062020918,
    "warnings": []
   }
  },
@@ -2262,7 +2262,7 @@
    "motor_response_ms": 17.234498236487433,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 107.07488497184067,
-   "props_in_view_percent": 7.253086419753086,
+   "props_in_view_percent": 17.944198753130454,
    "warnings": []
   }
  },
@@ -2310,7 +2310,7 @@
    "motor_response_ms": 17.234498236487433,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 107.07488497184067,
-   "props_in_view_percent": 7.253086419753086,
+   "props_in_view_percent": 17.944198753130454,
    "warnings": []
   }
  },
@@ -2366,7 +2366,7 @@
    "motor_response_ms": 24.37836932479739,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 78.47855496283287,
-   "props_in_view_percent": 0.07716049382716049,
+   "props_in_view_percent": 0,
    "warnings": [
     "heavy_sag",
     "battery_overload"
@@ -2419,7 +2419,7 @@
    "motor_response_ms": 24.37836932479739,
    "crash_speed_ms": 8,
    "sustained_motor_temp_c": 78.47855496283287,
-   "props_in_view_percent": 0.07716049382716049,
+   "props_in_view_percent": 0,
    "warnings": [
     "heavy_sag",
     "battery_overload"
@@ -2580,7 +2580,7 @@
    "motor_response_ms": 32.62691000550204,
    "crash_speed_ms": 7.5,
    "sustained_motor_temp_c": 125.04199140127952,
-   "props_in_view_percent": 8.217592592592593,
+   "props_in_view_percent": 17.109184162795533,
    "warnings": []
   }
  },
@@ -2630,7 +2630,7 @@
    "motor_response_ms": 32.62691000550204,
    "crash_speed_ms": 7.5,
    "sustained_motor_temp_c": 125.04199140127952,
-   "props_in_view_percent": 8.217592592592593,
+   "props_in_view_percent": 17.109184162795533,
    "warnings": []
   }
  },
@@ -2684,7 +2684,7 @@
    "motor_response_ms": 21.54373431706989,
    "crash_speed_ms": 7,
    "sustained_motor_temp_c": 110.44745274362946,
-   "props_in_view_percent": 14.660493827160494,
+   "props_in_view_percent": 14.062320341762202,
    "warnings": []
   }
  },
@@ -2732,7 +2732,7 @@
    "motor_response_ms": 21.54373431706989,
    "crash_speed_ms": 7,
    "sustained_motor_temp_c": 110.44745274362946,
-   "props_in_view_percent": 14.660493827160494,
+   "props_in_view_percent": 14.062320341762202,
    "warnings": []
   }
  },
@@ -2786,7 +2786,7 @@
    "motor_response_ms": 13.50795793667192,
    "crash_speed_ms": 6.5,
    "sustained_motor_temp_c": 114.54093323391822,
-   "props_in_view_percent": 5.401234567901234,
+   "props_in_view_percent": 3.478521744877489,
    "warnings": []
   }
  },
@@ -2834,7 +2834,7 @@
    "motor_response_ms": 13.50795793667192,
    "crash_speed_ms": 6.5,
    "sustained_motor_temp_c": 114.54093323391822,
-   "props_in_view_percent": 5.401234567901234,
+   "props_in_view_percent": 3.478521744877489,
    "warnings": []
   }
  },
@@ -2888,7 +2888,7 @@
    "motor_response_ms": 18.87529281104635,
    "crash_speed_ms": 6,
    "sustained_motor_temp_c": 125.93612232314798,
-   "props_in_view_percent": 3.0478395061728394,
+   "props_in_view_percent": 1.6517043806574947,
    "warnings": []
   }
  },
@@ -2936,7 +2936,7 @@
    "motor_response_ms": 18.87529281104635,
    "crash_speed_ms": 6,
    "sustained_motor_temp_c": 125.93612232314798,
-   "props_in_view_percent": 3.0478395061728394,
+   "props_in_view_percent": 1.6517043806574947,
    "warnings": []
   }
  },

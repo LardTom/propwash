@@ -9,8 +9,11 @@
 // 2. Presets in the catalog: share code, check and analysis; flight tune defaults of every preset (tune.json#defaults),
 //    normalisation and edits of the tune; paint swatches and random paint schemes round-trip through the share code.
 // 3. Tolerant decoding and error statuses (spelling variants, damaged and hostile codes).
-// 4. If the web export is available (default ../propwash-justmoreparts/release/1.0.1/web-export or JMP_WEB_EXPORT):
-//    the one-part-swapped analysis variants of every preset (analysis/<preset>.json).
+// 3b. Report vectors (tools/fixtures/report-vectors.json): codes from bug reports with their expected build, analysis
+//    and FPV camera, e.g. the deadcat whose props the game showed while the configurator said 0.0 %.
+// 4. If the web export is available (default: newest ../propwash-justmoreparts/release/<version>/web-export, or
+//    JMP_WEB_EXPORT / --export): the one-part-swapped analysis variants of every preset (analysis/<preset>.json) and the
+//    FPV camera of every preset and variant (camera_view).
 // Exit code 0 only if every check passes.
 
 import fs from 'node:fs';
@@ -19,8 +22,10 @@ import { fileURLToPath } from 'node:url';
 import { createCatalog } from '../assets/js/configurator/data.js';
 import * as share from '../assets/js/configurator/sharecode.js';
 import { STAT_KEYS } from '../assets/js/configurator/analysis.js';
+import { occlusionPercent } from '../assets/js/configurator/fpv.js';
 import { TUNE_PARAMS, sanitizeTuneValue } from '../assets/js/configurator/tuning.js';
 import { PAINT_SWATCHES, swatchOf, randomPaint } from '../assets/js/configurator/paint.js';
+import { exportDir } from './build-configurator-data.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);
@@ -33,6 +38,7 @@ const ABS_TOL = 1e-9;
 
 const catalog = createCatalog(JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/configurator/catalog.json'), 'utf8')));
 const vectors = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/fixtures/sharecode-vectors.json'), 'utf8'));
+const reportVectors = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/fixtures/report-vectors.json'), 'utf8'));
 
 let passed = 0;
 let failed = 0;
@@ -75,6 +81,27 @@ function compareAnalysis(actual, expected, where) {
   let good = true;
   for (const key of STAT_KEYS) good = sameNumber(actual[key], expected[key], `${where}.${key}`) && good;
   good = ok(same(actual.warnings, expected.warnings), `${where}.warnings ${JSON.stringify(actual.warnings)} vs ${JSON.stringify(expected.warnings)}`) && good;
+  return good;
+}
+
+/** FPV camera against the web export's camera_view (lens, uptilt, goggle FOV, prop discs, props in view). */
+function compareCameraView(actual, expected, where) {
+  if (!expected) return true;
+  if (!ok(actual !== null, `${where}: camera view missing`)) return false;
+  let good = true;
+  const num = (a, e, what) => {
+    good = sameNumber(a, e, `${where}.camera_view.${what}`) && good;
+  };
+  for (let k = 0; k < 3; k++) num(actual.lens_mm[k], expected.lens_mm[k], `lens_mm[${k}]`);
+  for (const key of ['uptilt_deg', 'horizontal_fov_deg', 'vertical_fov_deg', 'aspect', 'props_in_view_percent']) num(actual[key], expected[key], key);
+  good = ok(actual.projection === expected.projection, `${where}.camera_view.projection`) && good;
+  good = ok(actual.props.length === expected.props.length, `${where}.camera_view.props length`) && good;
+  expected.props.forEach((e, i) => {
+    const a = actual.props[i] || { center_mm: [], radius_mm: NaN, hub_radius_mm: NaN };
+    for (let k = 0; k < 3; k++) num(a.center_mm[k], e.center_mm[k], `props[${i}].center_mm[${k}]`);
+    num(a.radius_mm, e.radius_mm, `props[${i}].radius_mm`);
+    num(a.hub_radius_mm, e.hub_radius_mm, `props[${i}].hub_radius_mm`);
+  });
   return good;
 }
 
@@ -169,6 +196,35 @@ for (const preset of catalog.presets) {
   if (failed === before) presetPass++;
 }
 console.log(`Presets: ${presetPass}/${catalog.presets.length} (share code, check, analysis)`);
+
+// 3b. Report vectors
+{
+  let pass = 0;
+  for (const v of reportVectors) {
+    const before = failed;
+    const d = catalog.decode(v.code);
+    ok(d.ok, `${v.name}: decodes (${d.status})`);
+    if (d.ok) {
+      ok(same(d.content.build, v.build), `${v.name}: build ${JSON.stringify(d.content.build)}`);
+      ok(same(d.layers, v.layers), `${v.name}: layers ${d.layers}`);
+      ok(share.encode(d.content) === v.code, `${v.name}: re-encoded byte-identically`);
+      if (v.preset) ok(catalog.preset(v.preset) && catalog.preset(v.preset).sharecode === v.code, `${v.name}: is preset ${v.preset}`);
+      compareAnalysis(catalog.analyze(d.content.build), v.analysis, v.name);
+      const view = catalog.cameraView(d.content.build);
+      compareCameraView(view, v.camera_view, v.name);
+      if (v.before && view) {
+        // The old lens position must reproduce what the game rendered (not the 0.0 % of the old calculation).
+        const r = { ...view.rig, lens: v.before.lens_mm.map(Math.fround) };
+        const [w, h] = v.before.image;
+        const percent = occlusionPercent(r, r.tilt, r.fov, w / h, h);
+        ok(Math.abs(percent - v.before.analysis_percent) < 0.005, `${v.name}: old lens ${percent.toFixed(3)} % vs analysis ${v.before.analysis_percent} %`);
+        ok(Math.abs(percent - v.before.rendered_percent) < 0.25, `${v.name}: old lens ${percent.toFixed(3)} % vs rendered ${v.before.rendered_percent} %`);
+      }
+    }
+    if (failed === before) pass++;
+  }
+  console.log(`Report vectors: ${pass}/${reportVectors.length} (decode, layers, build, re-encode, analysis, FPV camera, old lens against the game's image)`);
+}
 
 // 2b. Flight tune defaults per preset (tune.json#defaults) and stored preset tunes as fixed points of normalisation
 {
@@ -329,19 +385,22 @@ function crcOf(bytes) {
 
 // 4. Analysis variants from the web export (optional)
 {
-  const i = argv.indexOf('--export');
-  const dir = i >= 0 && argv[i + 1] ? path.resolve(argv[i + 1])
-    : process.env.JMP_WEB_EXPORT ? path.resolve(process.env.JMP_WEB_EXPORT)
-      : path.resolve(ROOT, '../propwash-justmoreparts/release/1.0.1/web-export');
+  const dir = exportDir(argv);
   const analysisDir = path.join(dir, 'analysis');
   if (fs.existsSync(analysisDir)) {
     const before = failed;
     let count = 0;
+    let cameraViews = 0;
+    const presetsFile = JSON.parse(fs.readFileSync(path.join(dir, 'presets.json'), 'utf8'));
     for (const preset of catalog.presets) {
       const [ns, p] = preset.id.split(':');
       const file = path.join(analysisDir, ns, `${p}.json`);
       if (!ok(fs.existsSync(file), `analysis file for ${preset.id}`)) continue;
       const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+      const exported = presetsFile.find((x) => x.id === preset.id);
+      compareCameraView(catalog.cameraView(catalog.presetBuild(preset.id)), exported && exported.camera_view, `preset ${preset.id}`);
+      compareCameraView(catalog.cameraView(catalog.presetBuild(preset.id)), data.camera_view, `${preset.id} (analysis file)`);
+      if (data.camera_view || (exported && exported.camera_view)) cameraViews++;
       for (const variant of data.variants) {
         const build = catalog.presetBuild(preset.id);
         if (variant.category === 'accessory') build.accessories[catalog.part(variant.id).data.slot] = variant.id;
@@ -349,10 +408,14 @@ function crcOf(bytes) {
         const where = `${preset.id} + ${variant.id}`;
         compareCheck(catalog.check(build), variant.check, where);
         compareAnalysis(catalog.analyze(build), variant.analysis, where);
+        if (variant.camera_view) {
+          compareCameraView(catalog.cameraView(build), variant.camera_view, where);
+          cameraViews++;
+        }
         count++;
       }
     }
-    console.log(`Analysis variants (web export): ${count} builds, ${failed === before ? 'all passed' : 'FAILED'}`);
+    console.log(`Analysis variants (web export ${path.basename(path.dirname(dir))}): ${count} builds, ${cameraViews} FPV cameras, ${failed === before ? 'all passed' : 'FAILED'}`);
   } else {
     console.log('Analysis variants: web export not found, skipped (use --export <dir> or JMP_WEB_EXPORT)');
   }

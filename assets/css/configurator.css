@@ -417,6 +417,234 @@ button {
   }
 }
 
+/* View switch (3D model / FPV camera), top right of the viewer. */
+.viewer__modes {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  display: flex;
+  padding: 2px;
+  border: 1px solid var(--border-strong);
+  border-radius: 5px;
+  background: rgba(18, 18, 18, 0.85);
+}
+
+.viewer__mode {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 4px 10px;
+  border: 0;
+  border-radius: 3px;
+  background: none;
+  color: var(--text-2);
+  font: 600 0.7rem/1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.2s, background-color 0.2s;
+}
+
+.viewer__mode:hover {
+  color: var(--text);
+}
+
+.viewer__mode[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.viewer__mode:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.viewer:has(.viewer__modes:not([hidden])) .viewer__name {
+  right: 190px;
+}
+
+/* Camera preview: the 16:9 FPV image above its controls. On the sticky desktop stage the viewer keeps its size and
+   the image is letterboxed into the space above the controls; elsewhere the viewer grows to image plus controls. */
+.viewer.is-camera {
+  display: flex;
+  flex-direction: column;
+}
+
+.viewer.is-camera .viewer__canvas-wrap {
+  position: relative;
+  inset: auto;
+  flex: 1 1 0;
+  min-height: 0;
+  touch-action: auto;
+}
+
+.viewer.is-camera .viewer__canvas {
+  cursor: default;
+}
+
+.viewer.is-camera .viewer__tools {
+  display: none;
+}
+
+@media (max-width: 1059px), (max-height: 559px) {
+  .viewer.is-camera {
+    aspect-ratio: auto;
+    max-height: none;
+  }
+  .viewer.is-camera .viewer__canvas-wrap {
+    flex: none;
+    aspect-ratio: 16 / 9;
+  }
+}
+
+.fpv {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  padding: 10px 12px 10px 14px;
+  border-top: 1px solid var(--border);
+  background: rgba(18, 18, 18, 0.94);
+}
+
+.fpv[hidden] {
+  display: none;
+}
+
+.fpv__readout {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  min-width: 118px;
+}
+
+.fpv__label,
+.fpv__head {
+  color: var(--muted);
+  font: 600 0.66rem/1.3 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.fpv__value {
+  color: var(--text);
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.fpv__value strong {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.fpv__readout.is-warn .fpv__value {
+  color: var(--accent);
+}
+
+.fpv__slider {
+  display: grid;
+  flex: 1 1 140px;
+  gap: 4px;
+  min-width: 0;
+}
+
+.fpv__head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.fpv__head output {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.fpv__slider input {
+  width: 100%;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.fpv__options {
+  display: flex;
+  gap: 6px;
+}
+
+.fpv__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 4px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: none;
+  color: var(--text-2);
+  font: 600 0.68rem/1.1 var(--mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.fpv__toggle:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.fpv__toggle[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.fpv__toggle:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.fpv__toggle:disabled:hover {
+  border-color: var(--border-strong);
+  color: var(--text-2);
+}
+
+.fpv__reset {
+  padding: 4px;
+}
+
+.fpv__note {
+  flex: 1 1 220px;
+  margin: 0;
+  color: var(--faint);
+  font-size: 0.74rem;
+  line-height: 1.35;
+}
+
+@media (max-width: 479px) {
+  .viewer__mode span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .viewer:has(.viewer__modes:not([hidden])) .viewer__name {
+    right: 100px;
+  }
+  .fpv__readout {
+    flex: 1 1 100%;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+  }
+}
+
 /* Screenshot menu: opens upwards from the toolbar, anchored to its right edge. */
 .viewer__menu {
   position: absolute;

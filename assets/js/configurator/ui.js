@@ -6,7 +6,8 @@ import { loadCatalog, localText } from './data.js';
 import { shareLink, codeFromHash, PAINT_SLOTS } from './sharecode.js';
 import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js';
 import { FLIGHT_GROUPS } from './tune.js';
-import { STAT_KEYS } from './analysis.js';
+import { STAT_KEYS, PROPS_IN_VIEW_WARNING } from './analysis.js';
+import { occlusionPercent } from './fpv.js';
 import { batteryFit } from './rules.js';
 import { assemble, PROP_SLOTS } from './assembly.js';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js';
@@ -74,7 +75,10 @@ const state = {
   linkProps: true,
 };
 
-let derived = { check: null, analysis: null, defaults: null, effective: null, assembly: null, paintDefaults: {}, available: new Set() };
+let derived = { check: null, analysis: null, camera: null, defaults: null, effective: null, assembly: null, paintDefaults: {}, available: new Set() };
+// Camera preview: shown or not, the pilot's uptilt and goggle FOV (null = the build's default), still props, frame drawn,
+// props marked.
+const fpvState = { on: false, tilt: null, fov: null, still: false, frame: false, mark: false, frameId: null };
 let lastHashCode = null;
 let undoSnapshot = null;
 
@@ -122,6 +126,7 @@ function recompute() {
   const build = state.build;
   derived.check = catalog.check(build);
   derived.analysis = catalog.analyze(build);
+  derived.camera = catalog.cameraView(build);
   derived.defaults = null;
   derived.effective = null;
   if (knownBuild(build)) {
@@ -551,6 +556,110 @@ function renderStats() {
   const note = $('[data-stats-note]');
   note.textContent = a ? '' : t('ui.noAnalysis');
   note.hidden = !!a;
+  renderCamera();
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Camera preview: props-in-view share for the pilot's uptilt and goggle FOV (the analysis uses the defaults), and the
+// viewer's FPV image. A new frame brings its own default uptilt.
+
+function renderCamera() {
+  const view = derived.camera;
+  if (state.build.frame !== fpvState.frameId) {
+    fpvState.frameId = state.build.frame;
+    fpvState.tilt = null;
+  }
+  const tiltInput = $('[data-fpv-tilt]');
+  const fovInput = $('[data-fpv-fov]');
+  const readout = $('[data-fpv-readout]');
+  const note = $('[data-fpv-note]');
+  tiltInput.disabled = !view;
+  fovInput.disabled = !view;
+  $('[data-fpv-reset]').disabled = !view || (fpvState.tilt === null && fpvState.fov === null);
+  $('[data-fpv-still]').setAttribute('aria-pressed', String(fpvState.still));
+  $('[data-fpv-frame]').setAttribute('aria-pressed', String(fpvState.frame));
+  $('[data-fpv-mark]').setAttribute('aria-pressed', String(fpvState.mark));
+  if (!view) {
+    $('[data-fpv-percent]').textContent = t('ui.noValue');
+    $('[data-fpv-tilt-out]').textContent = '';
+    $('[data-fpv-fov-out]').textContent = '';
+    readout.classList.remove('is-warn');
+    note.textContent = t('ui.fpvNone');
+    if (viewer) viewer.setCamera({ on: fpvState.on });
+    cameraLabel(null);
+    return;
+  }
+  const tilt = fpvState.tilt === null ? view.uptilt_deg : fpvState.tilt;
+  const fov = fpvState.fov === null ? view.horizontal_fov_deg : fpvState.fov;
+  const standard = tilt === view.uptilt_deg && fov === view.horizontal_fov_deg;
+  const percent = standard ? view.props_in_view_percent : occlusionPercent(view.rig, tilt, fov);
+  tiltInput.value = String(tilt);
+  fovInput.value = String(fov);
+  tiltInput.setAttribute('aria-valuetext', `${num(tilt, 0)}°`);
+  fovInput.setAttribute('aria-valuetext', `${num(fov, 0)}°`);
+  $('[data-fpv-tilt-out]').textContent = `${num(tilt, 0)}°`;
+  $('[data-fpv-fov-out]').textContent = `${num(fov, 0)}°`;
+  $('[data-fpv-percent]').textContent = num(percent, 1);
+  readout.classList.toggle('is-warn', percent > PROPS_IN_VIEW_WARNING);
+  const video = catalog.part(state.build.video);
+  const link = t(`ui.fpvLink.${video && video.data.link in (entry('ui.fpvLink') || {}) ? video.data.link : 'analog'}`);
+  note.textContent = standard
+    ? t('ui.fpvNoteDefault', { tilt: num(view.uptilt_deg, 0), fov: num(view.horizontal_fov_deg, 0), link })
+    : t('ui.fpvNoteChanged', { tilt: num(view.uptilt_deg, 0), fov: num(view.horizontal_fov_deg, 0), percent: num(view.props_in_view_percent, 1) });
+  if (viewer) viewer.setCamera({ on: fpvState.on, tilt, fov, spinning: !fpvState.still, frame: fpvState.frame, mark: fpvState.mark });
+  cameraLabel(percent);
+}
+
+function cameraLabel(percent) {
+  if (!viewer) return;
+  viewer.canvas.setAttribute('aria-label', fpvState.on
+    ? t('ui.cameraLabel', { percent: num(percent, 1) })
+    : t('ui.viewerLabel'));
+}
+
+function setViewMode(mode) {
+  fpvState.on = mode === 'camera';
+  for (const button of doc.querySelectorAll('[data-view-mode]')) {
+    button.setAttribute('aria-pressed', String(button.dataset.viewMode === mode));
+  }
+  $('[data-viewer]').classList.toggle('is-camera', fpvState.on);
+  $('[data-fpv]').hidden = !fpvState.on;
+  renderCamera();
+}
+
+function wireCamera() {
+  for (const button of doc.querySelectorAll('[data-view-mode]')) {
+    button.addEventListener('click', () => setViewMode(button.dataset.viewMode));
+  }
+  $('[data-fpv-tilt]').addEventListener('input', (e) => {
+    fpvState.tilt = Number(e.target.value);
+    renderCamera();
+  });
+  $('[data-fpv-fov]').addEventListener('input', (e) => {
+    fpvState.fov = Number(e.target.value);
+    renderCamera();
+  });
+  $('[data-fpv-still]').addEventListener('click', () => {
+    fpvState.still = !fpvState.still;
+    renderCamera();
+  });
+  $('[data-fpv-frame]').addEventListener('click', () => {
+    fpvState.frame = !fpvState.frame;
+    renderCamera();
+  });
+  $('[data-fpv-mark]').addEventListener('click', () => {
+    fpvState.mark = !fpvState.mark;
+    renderCamera();
+  });
+  $('[data-fpv-reset]').addEventListener('click', () => {
+    fpvState.tilt = null;
+    fpvState.fov = null;
+    renderCamera();
+    $('[data-fpv-tilt]').focus();
+  });
+  $('[data-view-modes]').hidden = false;
+  const params = new URLSearchParams(location.search);
+  setViewMode(params.get('view') === 'camera' ? 'camera' : 'model');
 }
 
 function renderChecks() {
@@ -1539,12 +1648,13 @@ async function startViewer() {
   });
   $('[data-reset-view]').addEventListener('click', () => viewer.resetView());
   viewer.canvas.addEventListener('pointerdown', () => {
-    if (viewer.autoRotate()) {
+    if (viewer.autoRotate() && !fpvState.on) {
       viewer.setAutoRotate(false);
       button.setAttribute('aria-pressed', 'false');
     }
   });
   wireShotMenu();
+  wireCamera();
   viewerName();
   const shown = await viewer.show(state.build, state.paint);
   if (shown) viewerNote(!shown.layout ? t('ui.noFrame') : '');
@@ -1923,7 +2033,6 @@ function wireEvents() {
   });
   doc.addEventListener('propwash:lang', () => {
     if (!catalog) return;
-    if (viewer) viewer.canvas.setAttribute('aria-label', t('ui.viewerLabel'));
     refreshAll();
     if (state.tab === 'paint') renderPaint();
     const raw = $('[data-import]').value.trim();

@@ -3,7 +3,7 @@
 // external requests); createCatalog() wraps already parsed JSON (used by the node tests).
 
 import { check as checkBuild } from './rules.js';
-import { analyze as analyzeBuild } from './analysis.js';
+import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js';
 import { encode as encodeCode, decode as decodeCode, hexColor } from './sharecode.js';
 import { flightOnly } from './tune.js';
 import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js';
@@ -73,6 +73,7 @@ export function createCatalog(json) {
     tune: json.tune,
     mounts: json.mounts,
     sharecodeInfo: json.sharecode,
+    fpv: json.fpv || { layouts: {} },
 
     /** Part object by id, or null. */
     part: (id) => byId.get(id) || null,
@@ -149,6 +150,8 @@ export function createCatalog(json) {
     check: (build) => checkBuild(build, catalog),
     /** Flight analysis like the mod's workbench (analysis.js); null if a part is unknown. */
     analyze: (build) => analyzeBuild(build, catalog),
+    /** FPV camera like the web export's camera_view, with the rig for the camera preview (fpv.js); null if unknown. */
+    cameraView: (build) => cameraViewOf(build, catalog),
     /** Full default flight tune of a build (tuning.js); throws for unknown parts. */
     defaultTune: (build) => defaultTune(build, catalog),
     /** Every flight value the build flies with for a stored tune. */

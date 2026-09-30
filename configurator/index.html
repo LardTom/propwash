@@ -46,6 +46,8 @@
   <symbol id="i-reset" viewBox="0 0 16 16"><path d="M3.5 8a4.5 4.5 0 1 0 1.4-3.3M3 2.5v3h3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="square"/></symbol>
   <symbol id="i-info" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M8 7v4.2M8 4.6v.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
   <symbol id="i-camera" viewBox="0 0 16 16"><path d="M1.8 5.2h3l1.3-2h3.8l1.3 2h3v7.9H1.8z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="8" cy="8.9" r="2.4" fill="none" stroke="currentColor" stroke-width="1.5"/></symbol>
+  <symbol id="i-cube" viewBox="0 0 16 16"><path d="M8 1.8 13.6 5v6L8 14.2 2.4 11V5zM2.4 5 8 8.2 13.6 5M8 8.2v6" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></symbol>
+  <symbol id="i-goggles" viewBox="0 0 16 16"><path d="M1.6 5.4h12.8v5.2a1 1 0 0 1-1 1H10L8 9.6 6 11.6H2.6a1 1 0 0 1-1-1z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><circle cx="4.9" cy="8.3" r="1.3" fill="currentColor"/><circle cx="11.1" cy="8.3" r="1.3" fill="currentColor"/></symbol>
   <symbol id="i-dice" viewBox="0 0 16 16"><rect x="2.2" y="2.2" width="11.6" height="11.6" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="5.5" cy="5.5" r="1.2" fill="currentColor"/><circle cx="8" cy="8" r="1.2" fill="currentColor"/><circle cx="10.5" cy="10.5" r="1.2" fill="currentColor"/></symbol>
   <symbol id="i-search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.6" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="m10.4 10.4 3.8 3.8" stroke="currentColor" stroke-width="1.6"/></symbol>
 </svg>
@@ -111,6 +113,31 @@
         <div class="viewer__canvas-wrap" data-viewer-canvas></div>
         <p class="viewer__fallback" data-viewer-fallback hidden></p>
         <p class="viewer__name" data-viewer-name aria-hidden="true"></p>
+        <div class="viewer__modes" role="group" aria-label="View" data-de-aria-label="Ansicht" data-view-modes hidden>
+          <button type="button" class="viewer__mode" aria-pressed="true" data-view-mode="model" title="3D model, drag to turn" data-de-title="3D-Modell, ziehen zum Drehen"><svg aria-hidden="true" width="16" height="16"><use href="#i-cube"/></svg><span>3D</span></button>
+          <button type="button" class="viewer__mode" aria-pressed="false" data-view-mode="camera" title="What the FPV camera sees, like in the game" data-de-title="Was die FPV-Kamera sieht, wie im Spiel"><svg aria-hidden="true" width="16" height="16"><use href="#i-goggles"/></svg><span lang="en">FPV camera</span><span lang="de">FPV-Kamera</span></button>
+        </div>
+        <div class="fpv" data-fpv hidden>
+          <p class="fpv__readout" data-fpv-readout>
+            <span class="fpv__label"><span lang="en">Props in the image</span><span lang="de">Props im Bild</span></span>
+            <span class="fpv__value"><strong data-fpv-percent>–</strong>&nbsp;%</span>
+          </p>
+          <label class="fpv__slider">
+            <span class="fpv__head"><span lang="en">Camera uptilt</span><span lang="de">Kamera-Uptilt</span><output data-fpv-tilt-out></output></span>
+            <input type="range" min="0" max="80" step="1" data-fpv-tilt>
+          </label>
+          <label class="fpv__slider">
+            <span class="fpv__head"><span lang="en">Goggle FOV</span><span lang="de">Brillen-FOV</span><output data-fpv-fov-out></output></span>
+            <input type="range" min="60" max="160" step="1" data-fpv-fov>
+          </label>
+          <div class="fpv__options">
+            <button type="button" class="fpv__toggle" aria-pressed="false" data-fpv-mark title="Mark the props: the area the percentage counts" data-de-title="Props markieren: die Fläche, die der Prozentwert zählt"><span lang="en">Mark</span><span lang="de">Markieren</span></button>
+            <button type="button" class="fpv__toggle" aria-pressed="false" data-fpv-still title="Props standing still instead of spinning blur discs" data-de-title="Stehende Props statt drehender Unschärfe-Scheiben"><span lang="en">Still</span><span lang="de">Stehend</span></button>
+            <button type="button" class="fpv__toggle" aria-pressed="false" data-fpv-frame title="Also draw the drone itself (the game hides it in FPV)" data-de-title="Auch die Drohne selbst zeichnen (das Spiel blendet sie im FPV aus)"><span lang="en">Frame</span><span lang="de">Rahmen</span></button>
+            <button type="button" class="fpv__toggle fpv__reset" data-fpv-reset title="Uptilt and FOV back to the build’s defaults" data-de-title="Uptilt und FOV auf die Standardwerte des Builds"><svg aria-hidden="true" width="16" height="16"><use href="#i-reset"/></svg><span class="visually-hidden"><span lang="en">Reset uptilt and FOV</span><span lang="de">Uptilt und FOV zurücksetzen</span></span></button>
+          </div>
+          <p class="fpv__note" data-fpv-note></p>
+        </div>
         <div class="viewer__tools">
           <div class="viewer__shot" data-shot hidden>
             <button type="button" class="viewer__btn" data-shot-toggle aria-haspopup="menu" aria-expanded="false" aria-controls="shot-menu" title="Copy a picture of the drone" data-de-title="Bild der Drohne kopieren"><svg aria-hidden="true" width="16" height="16"><use href="#i-camera"/></svg><span class="viewer__btn-label">Screenshot</span></button>
@@ -159,8 +186,8 @@
 
       <section class="cfg-card cfg-analysis" aria-labelledby="analysis-title">
         <h2 class="cfg-card__title" id="analysis-title"><span lang="en">Flight analysis</span><span lang="de">Flug-Analyse</span></h2>
-        <p class="cfg-card__intro" lang="en">Calculated like the drone workbench in the game (Propwash 0.4.0) for a new battery at 25&nbsp;°C.</p>
-        <p class="cfg-card__intro" lang="de">Berechnet wie an der Drohnen-Werkbank im Spiel (Propwash 0.4.0), mit vollem Akku bei 25&nbsp;°C.</p>
+        <p class="cfg-card__intro" lang="en">Calculated like the drone workbench in the game (Propwash 0.4.1) for a new battery at 25&nbsp;°C.</p>
+        <p class="cfg-card__intro" lang="de">Berechnet wie an der Drohnen-Werkbank im Spiel (Propwash 0.4.1), mit vollem Akku bei 25&nbsp;°C.</p>
         <p class="cfg-note" data-stats-note hidden></p>
         <dl class="stats" data-stats></dl>
       </section>
@@ -216,8 +243,8 @@
 
   <section class="wrap cfg-about" aria-labelledby="about-title">
     <h2 id="about-title" class="cfg-about__title"><span lang="en">About this page</span><span lang="de">Über diese Seite</span></h2>
-    <p lang="en">Parts, rules, paint and the flight analysis come from the data export of Just More Parts 1.0.0 for Propwash 0.4.0. Share codes use the PW1 format of the addon and work both ways. Everything runs in your browser; nothing is sent anywhere.</p>
-    <p lang="de">Teile, Regeln, Lack und Flug-Analyse stammen aus dem Datenexport von Just More Parts 1.0.0 für Propwash 0.4.0. Sharecodes nutzen das PW1-Format des Addons und funktionieren in beide Richtungen. Alles läuft in deinem Browser, nichts wird irgendwohin geschickt.</p>
+    <p lang="en">Parts, rules, paint and the flight analysis come from the data export of Just More Parts 1.0.2 for Propwash 0.4.1. Share codes use the PW1 format of the addon and work both ways. Everything runs in your browser; nothing is sent anywhere.</p>
+    <p lang="de">Teile, Regeln, Lack und Flug-Analyse stammen aus dem Datenexport von Just More Parts 1.0.2 für Propwash 0.4.1. Sharecodes nutzen das PW1-Format des Addons und funktionieren in beide Richtungen. Alles läuft in deinem Browser, nichts wird irgendwohin geschickt.</p>
   </section>
 </main>
 

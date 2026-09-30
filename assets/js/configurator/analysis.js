@@ -1,5 +1,6 @@
-// Flight analysis of a build, a port of Propwash 0.4.0 BuildAccess#analyze (BuildStats): airframe derivation,
-// steady operating points of motors and battery, top speed, flight times, motor heating and camera occlusion.
+// Flight analysis of a build, a port of Propwash 0.4.1 BuildAccess#analyze (BuildStats): airframe derivation,
+// steady operating points of motors and battery, top speed, flight times, motor heating and camera occlusion (the FPV
+// rig of the renderer, fpv.js).
 // Only the parts of the model that BuildStats needs are ported; every formula keeps the mod's operation order so
 // the numbers match the mod's (the web export's test vectors) to the last digits.
 //
@@ -10,6 +11,7 @@
 // NaN (e.g. hover values of a build that cannot hover) means "no value".
 
 import { resolveBuild, batteryContinuousCurrent } from './rules.js';
+import { rig as fpvRig, occlusionPercent, cameraView as rigCameraView } from './fpv.js';
 
 // ---------------------------------------------------------------------------------------------------------------
 // Constants of the model
@@ -74,10 +76,7 @@ const SIM_MOTOR_BY_POSITION = [3, 1, 2, 0];
 const ARM_KEYS = ['front_left', 'front_right', 'rear_left', 'rear_right'];
 
 const HINGE_CLEARANCE_MM = 5.0;
-const DEFAULT_FOV_DEG = 120.0;
-const ASPECT = 16.0 / 9.0;
-const COLUMNS = 96;
-const ROWS = 54;
+const HULL_MARGIN = 0.003;
 
 const MOTOR_STEPS = 60;
 const BUS_STEPS = 50;
@@ -95,13 +94,13 @@ const MAX_TILT = toRadians(89.0);
 const DEFAULT_ANGLE_LIMIT = toRadians(60.0);
 const TOP_SPEED_SOC = 0.8;
 const REFERENCE_AMBIENT_C = 25.0;
-const PROPS_IN_VIEW_WARNING = 20.0;
+/** BuildWarning.PROPS_IN_VIEW: warning above this share of the FPV image (Propwash 0.4.1). */
+export const PROPS_IN_VIEW_WARNING = 30.0;
 
 /** Analysis warnings in Propwash's order (BuildWarning). */
 export const ANALYSIS_WARNINGS = Object.freeze(['cannot_hover', 'underpowered', 'sluggish_motors', 'heavy_sag',
   'esc_current_limited', 'battery_overload', 'motor_thermal', 'props_in_view', 'esc_overvoltage']);
 
-const clamp = (v, lo, hi) => (v < lo ? lo : v > hi ? hi : v);
 const clamp01 = (v) => (v < 0.0 ? 0.0 : v > 1.0 ? 1.0 : v);
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -309,10 +308,8 @@ function deriveAirframe(parts, catalog) {
   p.areaY = fd.aero.top_area_m2 != null ? fd.aero.top_area_m2 + topFactor * accessoryArea : topFactor * az;
   p.dragCoefficient = fd.aero.drag_coefficient;
   p.impactTolerance = fd.impact_tolerance;
-  p.cameraTiltDeg = fd.camera.tilt_deg;
-  p.cameraFovDeg = video.data.camera_fov_deg != null ? video.data.camera_fov_deg : DEFAULT_FOV_DEG;
 
-  const body = { batteryMass, batteryY, bw, bh, bl, electronicsMass, electronicsY, motorMass, propMass, frameMass, rotorY,
+  const body = { batteryMass, batteryY, batteryOnTop, bw, bh, bl, electronicsMass, electronicsY, motorMass, propMass, frameMass, rotorY,
     accessoryMass, accessoryCenter, accessorySize, accessoryMoment, massSplit: fd.mass_split };
   p.rm = rm;
   p.damping = damping;
@@ -326,8 +323,19 @@ function deriveAirframe(parts, catalog) {
   if (fd.arms_explicit) geometric(p, fd, body);
   else legacy(p, fd, body);
   lens(p, fd);
+  p.fpv = fpvRig(parts, p, catalog);
   return p;
 }
+
+// Lowest hull point below the centre of mass (AirframeSpec.hitboxFootOffset); the FPV rig only needs its sign. The
+// battery top face that an accessory may replace never lowers it, the other battery face stays in the hull.
+function footOffset(motorY, bottom, batteryFace, lowPoint) {
+  let min = Math.min(bottom, batteryFace, lowPoint);
+  for (const y of motorY) min = Math.min(min, y);
+  return min;
+}
+
+const batteryFace = (body, com) => (body.batteryOnTop ? body.batteryY + body.bh / 2.0 : body.batteryY - body.bh / 2.0) - com;
 
 function thermal(p, motor) {
   const t = motor.data.thermal;
@@ -419,6 +427,7 @@ function legacy(p, fd, body) {
     p.mixRoll[i] = sx[i] / s;
     p.mixPitch[i] = -sz[i] / s;
   }
+  p.hitboxFootOffset = footOffset(p.motorY, -yCom - HULL_MARGIN, batteryFace(body, yCom), body.electronicsY - yCom);
 }
 
 // Moments of inertia of point masses, rods, boxes and rings (ParamDerivation.Inertia).
@@ -561,6 +570,12 @@ function geometric(p, fd, body) {
   p.inertiaXx = inertia.xx;
   p.inertiaYy = inertia.yy;
   p.inertiaZz = inertia.zz;
+
+  let armLow = Infinity;
+  for (let i = 0; i < MOTORS; i++) armLow = Math.min(armLow, ay[i]);
+  const camera = fd.camera.pos;
+  const low = camera ? camera[1] / 1000.0 - cy : body.electronicsY - cy;
+  p.hitboxFootOffset = footOffset(p.motorY, armLow - cy - HULL_MARGIN, batteryFace(body, cy), low);
 }
 
 function lever(position, mix, sign) {
@@ -891,44 +906,6 @@ function fullThrottleMotorTemp(p, ambient) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-// Camera occlusion: share of the FPV image covered by prop discs
-
-function propsInViewPercent(p) {
-  const fovDeg = Number.isFinite(p.cameraFovDeg) ? clamp(p.cameraFovDeg, 30.0, 170.0) : DEFAULT_FOV_DEG;
-  const tilt = toRadians(Number.isFinite(p.cameraTiltDeg) ? p.cameraTiltDeg : 0.0);
-  const tanH = Math.tan(toRadians(fovDeg) / 2.0);
-  const tanV = tanH / ASPECT;
-  const sin = Math.sin(tilt);
-  const cos = Math.cos(tilt);
-  const lx = -p.lensRight;
-  const ly = p.lensUp;
-  const lz = p.lensForward;
-  const r2 = p.propRadius * p.propRadius;
-  let hits = 0;
-  for (let row = 0; row < ROWS; row++) {
-    const b = (1.0 - 2.0 * (row + 0.5) / ROWS) * tanV;
-    for (let col = 0; col < COLUMNS; col++) {
-      const a = (2.0 * (col + 0.5) / COLUMNS - 1.0) * tanH;
-      const dx = -a;
-      const dy = sin + b * cos;
-      const dz = cos - b * sin;
-      if (Math.abs(dy) < 1e-9) continue;
-      for (let i = 0; i < MOTORS; i++) {
-        const t = (p.motorY[i] - ly) / dy;
-        if (t <= 0.0) continue;
-        const ex = lx + t * dx - p.motorX[i];
-        const ez = lz + t * dz - p.motorZ[i];
-        if (ex * ex + ez * ez <= r2) {
-          hits++;
-          break;
-        }
-      }
-    }
-  }
-  return 100.0 * hits / (ROWS * COLUMNS);
-}
-
-// ---------------------------------------------------------------------------------------------------------------
 // BuildAnalysis
 
 function compute(p) {
@@ -976,7 +953,7 @@ function compute(p) {
 
   const motorTemp = fullThrottleMotorTemp(p, REFERENCE_AMBIENT_C);
   if (motorTemp > p.motorDerateStartC) warnings.add('motor_thermal');
-  const propsInView = propsInViewPercent(p);
+  const propsInView = occlusionPercent(p.fpv);
   if (propsInView > PROPS_IN_VIEW_WARNING) warnings.add('props_in_view');
   if (p.escOvervoltage) warnings.add('esc_overvoltage');
 
@@ -1029,6 +1006,18 @@ export function hoverStick(p, soc) {
 export const STAT_KEYS = Object.freeze(['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'hover_flight_time_min',
   'cruise_flight_time_min', 'top_speed_kmh', 'full_throttle_current_a', 'esc_load_percent', 'battery_load_percent',
   'motor_response_ms', 'crash_speed_ms', 'sustained_motor_temp_c', 'props_in_view_percent']);
+
+/**
+ * FPV camera of a build like the web export's camera_view (BuildAccess#cameraView): lens, uptilt, goggle FOV, the four
+ * prop discs and the props-in-view share; with `rig` for the camera preview. Null if the build cannot be analysed.
+ */
+export function cameraView(build, catalog) {
+  const { parts, unknown, misplaced } = resolveBuild(build, catalog);
+  if (unknown.length || misplaced) return null;
+  const p = deriveAirframe(parts, catalog);
+  if (!p) return null;
+  return { ...rigCameraView(p.fpv), rig: p.fpv };
+}
 
 /**
  * Analyses a build like the mod's workbench.

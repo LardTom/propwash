@@ -3,11 +3,12 @@
 //
 //   node tools/build-configurator-data.mjs [--export <web-export dir>]
 //
-// Default export location: ../propwash-justmoreparts/release/1.0.1/web-export (sibling checkout),
+// Default export location: the newest ../propwash-justmoreparts/release/<version>/web-export (sibling checkout),
 // or the JMP_WEB_EXPORT environment variable.
 //
 // Writes:
-//   assets/data/configurator/catalog.json   everything the configurator needs at runtime
+//   assets/data/configurator/catalog.json   everything the configurator needs at runtime (incl. the FPV layout data
+//                                           of every drone_layout.json for the camera rig of the analysis)
 //   tools/fixtures/sharecode-vectors.json   the exported PW1 test vectors (used by tools/test-configurator.mjs)
 //
 // Only data from the web export is used. Model and texture files are referenced by their export paths
@@ -20,11 +21,38 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
+const RELEASES = path.resolve(ROOT, '../propwash-justmoreparts/release');
+
+const versionParts = (v) => v.split('.').map((n) => Number.parseInt(n, 10) || 0);
+
+function compareVersions(a, b) {
+  const x = versionParts(a);
+  const y = versionParts(b);
+  for (let i = 0; i < Math.max(x.length, y.length); i++) {
+    const d = (x[i] || 0) - (y[i] || 0);
+    if (d) return d;
+  }
+  return 0;
+}
+
+/** Newest release of the sibling checkout that carries a web export (release/<version>/web-export). */
+export function newestExport() {
+  let versions = [];
+  try {
+    versions = fs.readdirSync(RELEASES).filter((v) => /^\d+(\.\d+)*$/.test(v)
+      && fs.existsSync(path.join(RELEASES, v, 'web-export', 'manifest.json')));
+  } catch {
+    versions = [];
+  }
+  versions.sort(compareVersions);
+  return path.join(RELEASES, versions.length ? versions[versions.length - 1] : '1.0.2', 'web-export');
+}
+
 export function exportDir(argv = process.argv.slice(2)) {
   const i = argv.indexOf('--export');
   if (i >= 0 && argv[i + 1]) return path.resolve(argv[i + 1]);
   if (process.env.JMP_WEB_EXPORT) return path.resolve(process.env.JMP_WEB_EXPORT);
-  return path.resolve(ROOT, '../propwash-justmoreparts/release/1.0.1/web-export');
+  return newestExport();
 }
 
 function read(dir, file) {
@@ -95,6 +123,83 @@ function part(p) {
   return out;
 }
 
+// FpvLayoutData.parse of Propwash 0.4.1: motor seats and frame motor positions of assets/<namespace>/drone_layout.json,
+// read as float like the mod (Gson getAsFloat) and with the same validity limits. Keys without a namespace belong to
+// the file's namespace.
+const f32 = Math.fround;
+const MAX_ABS_MM = 2000;
+
+function layoutId(key, namespace) {
+  if (!key) return null;
+  return key.includes(':') ? key : `${namespace}:${key}`;
+}
+
+function layoutVector(v) {
+  if (!Array.isArray(v) || v.length !== 3) return null;
+  const out = [];
+  for (const n of v) {
+    if (typeof n !== 'number') return null;
+    const x = f32(n);
+    if (!Number.isFinite(x) || Math.abs(x) > MAX_ABS_MM) return null;
+    out.push(x);
+  }
+  return out;
+}
+
+export function fpvLayout(json, namespace) {
+  const seats = {};
+  const frames = {};
+  if (!json || typeof json !== 'object' || Array.isArray(json)) return { seats, frames };
+  if (json.motor_seat && typeof json.motor_seat === 'object' && !Array.isArray(json.motor_seat)) {
+    for (const [key, value] of Object.entries(json.motor_seat)) {
+      const id = layoutId(key, namespace);
+      if (!id || typeof value !== 'number') continue;
+      const seat = f32(value);
+      if (Number.isFinite(seat) && seat > 0 && seat < 100) seats[id] = seat;
+    }
+  }
+  if (json.frames && typeof json.frames === 'object' && !Array.isArray(json.frames)) {
+    for (const [key, frame] of Object.entries(json.frames)) {
+      const id = layoutId(key, namespace);
+      if (!id || !frame || typeof frame !== 'object' || Array.isArray(frame)) continue;
+      let motors = null;
+      let valid = true;
+      if (frame.motors !== undefined) {
+        if (Array.isArray(frame.motors) && frame.motors.length === 4) {
+          motors = frame.motors.map(layoutVector);
+          valid = motors.every((m) => m !== null);
+        } else {
+          valid = false;
+        }
+      }
+      let propHeight = null;
+      if (typeof frame.prop_height === 'number') {
+        const h = f32(frame.prop_height);
+        if (Number.isFinite(h) && h >= 0 && h <= 200) propHeight = h;
+      }
+      frames[id] = { motors: valid ? motors : null, prop_height: propHeight, valid };
+    }
+  }
+  return { seats, frames };
+}
+
+function fpvLayouts(dir) {
+  const layouts = {};
+  const assets = path.join(dir, 'assets');
+  for (const namespace of fs.readdirSync(assets).sort()) {
+    const file = path.join(assets, namespace, 'drone_layout.json');
+    if (!fs.existsSync(file)) continue;
+    let json = null;
+    try {
+      json = JSON.parse(fs.readFileSync(file, 'utf8'));
+    } catch {
+      json = null;
+    }
+    layouts[namespace] = fpvLayout(json, namespace);
+  }
+  return layouts;
+}
+
 export function buildCatalog(dir) {
   const manifest = read(dir, 'manifest.json');
   if (manifest.format !== 1) throw new Error(`unsupported web-export format ${manifest.format}`);
@@ -138,6 +243,7 @@ export function buildCatalog(dir) {
       pw1_keys: tune.pw1_keys,
       defaults: Object.fromEntries(Object.entries(tune.defaults).map(([id, values]) => [id, flightOnly(values, tune.groups.flight)])),
     },
+    fpv: { layouts: fpvLayouts(dir) },
     presets: presets.map((p) => ({
       id: p.id,
       name: p.name,

@@ -1,6 +1,10 @@
 // 3D drone viewer of the configurator (three.js, WebGL). Draws the parts' Minecraft block models like the mod's drone
 // renderer: model point (8, 8, 8) at the part position, 1 model unit = 8 mm, texture × tint × Minecraft's entity
 // lighting (two fixed lights, 0.6 diffuse + 0.4 ambient), cutout alpha, nearest-neighbour textures.
+//
+// Camera preview: the FPV image like Propwash 0.4.1 draws it (FpvProps): a 16:9 rectilinear view from the lens with
+// the uptilt and the goggles' horizontal field of view, the own drone hidden except its props, spinning props as
+// translucent blur discs (three bands from the hub to the blade tip) or still blades, over a sky and ground backdrop.
 
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Group, Mesh, BufferGeometry, BufferAttribute, ShaderMaterial, Texture,
@@ -8,7 +12,8 @@ import {
   LinearSRGBColorSpace, OrbitControls,
 } from '../../vendor/three/three.min.js';
 import { assemble, proceduralFrame, proceduralAccessoryBase, MM_PER_MODEL_UNIT } from './assembly.js';
-import { paintTints, groupsOf, rgbOf } from './paint.js';
+import { paintTints, groupsOf, rgbOf, slotOf, shade } from './paint.js';
+import { discCenter, verticalFov, ASPECT as FPV_ASPECT, SLOTS } from './fpv.js';
 
 const MAX_TINTS = 8;
 const DEG = Math.PI / 180;
@@ -58,6 +63,80 @@ void main() {
   vec3 n = normalize(vNormal);
   float light = min(1.0, (max(0.0, dot(light0, n)) + max(0.0, dot(light1, n))) * 0.6 + 0.4);
   gl_FragColor = vec4(texel.rgb * vColor * light, 1.0);
+}`;
+
+// FpvProps.buildBlur: bands [from, to] as share of the tip radius (null = hub), alpha at both edges; colour × 0.85.
+const BLUR_SEGMENTS = 64;
+const BLUR_SHADE = 0.85;
+const BLUR_BANDS = [[null, 0.6, 0x58, 0x4c], [0.6, 0.85, 0x4c, 0x40], [0.85, 1.0, 0x40, 0x1c]];
+// FallbackShapes.propColor by material when a prop has neither paint groups nor an accent colour.
+const PROP_MATERIAL_COLOR = { carbon: 0x2b2c31, carbon_fiber_nylon: 0x3a3c42, glass_fiber_nylon: 0x5c6068 };
+const PROP_DEFAULT_COLOR = 0xe4e4ea;
+// Clip depth of the FPV props (FpvProps.CLIP_DEPTH_MM) as near plane.
+const FPV_NEAR_MM = 0.25;
+const FPV_FAR_MM = 8000;
+const FPV_ALTITUDE_M = 2.5;
+
+const DISC_VERTEX = /* glsl */ `
+attribute vec4 rgba;
+varying vec4 vColor;
+void main() {
+  vColor = rgba;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}`;
+
+const DISC_FRAGMENT = /* glsl */ `
+varying vec4 vColor;
+void main() {
+  gl_FragColor = vColor;
+}`;
+
+// Marked props: the disc area the props-in-view share counts, in the site's accent colour.
+const MARK_FRAGMENT = /* glsl */ `
+varying vec4 vColor;
+void main() {
+  gl_FragColor = vec4(1.0, 0.733, 0.0, 0.62);
+}`;
+
+// Backdrop of the camera preview: every pixel's view ray (camera looking along −z, tilted up around x) meets either the
+// sky or a grass plane of 1 m blocks below the drone, fading into the horizon haze.
+const BACKDROP_VERTEX = /* glsl */ `
+varying vec2 vNdc;
+void main() {
+  vNdc = position.xy;
+  gl_Position = vec4(position.xy, 0.0, 1.0);
+}`;
+
+const BACKDROP_FRAGMENT = /* glsl */ `
+uniform float tanH;
+uniform float tanV;
+uniform float tilt;
+uniform float altitude;
+varying vec2 vNdc;
+float hash(vec2 p) {
+  return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453);
+}
+void main() {
+  float c = cos(tilt);
+  float s = sin(tilt);
+  vec3 cam = vec3(vNdc.x * tanH, vNdc.y * tanV, -1.0);
+  vec3 dir = normalize(vec3(cam.x, cam.y * c - cam.z * s, cam.y * s + cam.z * c));
+  vec3 haze = vec3(0.78, 0.85, 0.92);
+  vec3 color;
+  if (dir.y >= 0.0) {
+    color = mix(haze, vec3(0.30, 0.50, 0.82), pow(dir.y, 0.6));
+  } else {
+    float t = altitude / -dir.y;
+    vec2 p = dir.xz * t;
+    float n = hash(floor(p));
+    vec3 grass = mix(vec3(0.33, 0.52, 0.22), vec3(0.40, 0.60, 0.27), n);
+    vec2 w = fwidth(p);
+    vec2 g = abs(fract(p - 0.5) - 0.5) / max(w, vec2(1e-4));
+    float line = (1.0 - min(min(g.x, g.y), 1.0)) * clamp(1.0 - 2.0 * max(w.x, w.y), 0.0, 1.0);
+    grass *= 1.0 - 0.22 * line;
+    color = mix(grass, haze, 1.0 - exp(-t * 0.015));
+  }
+  gl_FragColor = vec4(color, 1.0);
 }`;
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -189,6 +268,48 @@ function shapeGeometry(shapes) {
 // ---------------------------------------------------------------------------------------------------------------
 // Viewer
 
+/** Blur disc of one prop (FpvProps.buildBlur) around its centre in the drone's frame, colour 0xRRGGBB. */
+function discGeometry(center, hubRadius, radius, rgb) {
+  const positions = [];
+  const colors = [];
+  const index = [];
+  const r = ((rgb >> 16) & 255) / 255;
+  const g = ((rgb >> 8) & 255) / 255;
+  const b = (rgb & 255) / 255;
+  for (const [from, to, innerAlpha, outerAlpha] of BLUR_BANDS) {
+    const inner = from == null ? hubRadius : radius * from;
+    const outer = radius * to;
+    const base = positions.length / 3;
+    for (let k = 0; k <= BLUR_SEGMENTS; k++) {
+      const a = (k / BLUR_SEGMENTS) * Math.PI * 2;
+      const cos = Math.cos(a);
+      const sin = Math.sin(a);
+      positions.push(center[0] + inner * cos, center[1], center[2] + inner * sin, center[0] + outer * cos, center[1], center[2] + outer * sin);
+      colors.push(r, g, b, innerAlpha / 255, r, g, b, outerAlpha / 255);
+    }
+    for (let k = 0; k < BLUR_SEGMENTS; k++) {
+      const i = base + 2 * k;
+      index.push(i, i + 1, i + 3, i, i + 3, i + 2);
+    }
+  }
+  const geometry = new BufferGeometry();
+  geometry.setAttribute('position', new BufferAttribute(new Float32Array(positions), 3));
+  geometry.setAttribute('rgba', new BufferAttribute(new Float32Array(colors), 4));
+  geometry.setIndex(index);
+  return geometry;
+}
+
+/** FpvProps.blurRgb: the prop's paint at this position, else the prop channel of its model, else its accent colour. */
+function discColor(prop, model, paint, slot) {
+  const painted = paint && paint[slotOf('prop', slot)];
+  if (painted) return rgbOf(painted);
+  const groups = model && model.variants && model.variants.paint && model.variants.paint.groups;
+  const group = groups && groups.find(([channel]) => channel === 'prop');
+  if (group) return rgbOf(group[1]);
+  if (prop.basics && prop.basics.accent) return rgbOf(prop.basics.accent);
+  return PROP_MATERIAL_COLOR[prop.data.material] || PROP_DEFAULT_COLOR;
+}
+
 export function webglAvailable() {
   try {
     const canvas = document.createElement('canvas');
@@ -229,6 +350,27 @@ export function createViewer(container, options) {
 
   const droneGroup = new Group();
   scene.add(droneGroup);
+  const discs = new Group();
+  discs.visible = false;
+  scene.add(discs);
+  const discMaterial = new ShaderMaterial({ vertexShader: DISC_VERTEX, fragmentShader: DISC_FRAGMENT, transparent: true, depthWrite: false, side: 2 });
+  const markMaterial = new ShaderMaterial({ vertexShader: DISC_VERTEX, fragmentShader: MARK_FRAGMENT, transparent: true, depthWrite: false, side: 2 });
+
+  // Camera preview state: on, uptilt and goggle FOV (degrees), spinning (blur discs) or still blades, frame shown,
+  // discs marked.
+  const fpv = { on: false, tilt: 0, fov: 120, spinning: true, frame: false, mark: false };
+  const fpvCamera = new PerspectiveCamera(60, FPV_ASPECT, FPV_NEAR_MM, FPV_FAR_MM);
+  const backdropMaterial = new ShaderMaterial({
+    vertexShader: BACKDROP_VERTEX,
+    fragmentShader: BACKDROP_FRAGMENT,
+    uniforms: { tanH: { value: 1 }, tanV: { value: 1 }, tilt: { value: 0 }, altitude: { value: FPV_ALTITUDE_M } },
+    depthTest: false,
+    depthWrite: false,
+  });
+  const backdrop = new Scene();
+  const backdropQuad = new Mesh(new PlaneGeometry(2, 2), backdropMaterial);
+  backdropQuad.frustumCulled = false;
+  backdrop.add(backdropQuad);
 
   // Soft ground shadow.
   const shadowCanvas = document.createElement('canvas');
@@ -341,6 +483,7 @@ export function createViewer(container, options) {
       }
       mesh = new Mesh(geometryFor(model, piece.id, name), mat);
     }
+    mesh.userData.role = piece.role;
     const [x, y, z] = piece.position;
     mesh.position.set(x, y, z);
     if (piece.tiltX) mesh.rotation.x = piece.tiltX * DEG;
@@ -365,8 +508,90 @@ export function createViewer(container, options) {
       if (!model && !piece.procedural) continue;
       droneGroup.add(pieceMesh(piece, model, paint));
     }
+    rebuildDiscs(paint);
+    fpvVisibility();
     fit();
     requestRender();
+  }
+
+  function rebuildDiscs(paint) {
+    for (const child of [...discs.children]) {
+      discs.remove(child);
+      child.geometry.dispose();
+    }
+    const view = current && current.camera;
+    const prop = current && catalog.part(current.build.prop);
+    if (!view || !prop) return;
+    const rig = view.rig;
+    const model = current.models.get(prop.id);
+    for (let slot = 0; slot < SLOTS; slot++) {
+      const rgb = shade(discColor(prop, model, paint, slot), BLUR_SHADE);
+      discs.add(new Mesh(discGeometry(discCenter(rig, slot), rig.hubRadius, rig.radius, rgb), discMaterial));
+    }
+  }
+
+  // In the game the own drone is hidden in FPV (QuadcopterRenderer) except its props; the frame is optional here.
+  function fpvVisibility() {
+    shadow.visible = !fpv.on;
+    discs.visible = fpv.on && (fpv.spinning || fpv.mark);
+    for (const disc of discs.children) disc.material = fpv.mark ? markMaterial : discMaterial;
+    for (const child of droneGroup.children) {
+      const role = child.userData.role;
+      if (!fpv.on) child.visible = true;
+      else if (role === 'prop') child.visible = !fpv.spinning;
+      else if (role === 'video') child.visible = false;
+      else child.visible = fpv.frame;
+    }
+  }
+
+  // The 16:9 image, as large as fits into the canvas, centred.
+  function fpvRect() {
+    const w = container.clientWidth || 1;
+    const h = container.clientHeight || 1;
+    let vw = w;
+    let vh = w / FPV_ASPECT;
+    if (vh > h) {
+      vh = h;
+      vw = h * FPV_ASPECT;
+    }
+    return { x: Math.round((w - vw) / 2), y: Math.round((h - vh) / 2), w: Math.round(vw), h: Math.round(vh), cw: w, ch: h };
+  }
+
+  function drawCamera() {
+    const view = current && current.camera;
+    const r = fpvRect();
+    renderer.setScissorTest(false);
+    renderer.setViewport(0, 0, r.cw, r.ch);
+    renderer.clear();
+    if (!view) return;
+    const tanH = Math.tan((fpv.fov * DEG) / 2);
+    fpvCamera.fov = verticalFov(fpv.fov, FPV_ASPECT);
+    fpvCamera.aspect = FPV_ASPECT;
+    fpvCamera.position.set(view.lens_mm[0], view.lens_mm[1], view.lens_mm[2]);
+    fpvCamera.rotation.set(fpv.tilt * DEG, 0, 0);
+    fpvCamera.updateProjectionMatrix();
+    fpvCamera.updateMatrixWorld();
+    backdropMaterial.uniforms.tanH.value = tanH;
+    backdropMaterial.uniforms.tanV.value = tanH / FPV_ASPECT;
+    backdropMaterial.uniforms.tilt.value = fpv.tilt * DEG;
+    renderer.setViewport(r.x, r.y, r.w, r.h);
+    renderer.setScissor(r.x, r.y, r.w, r.h);
+    renderer.setScissorTest(true);
+    renderer.autoClear = false;
+    try {
+      renderer.render(backdrop, fpvCamera);
+      renderer.clearDepth();
+      renderer.render(scene, fpvCamera);
+    } finally {
+      renderer.autoClear = true;
+      renderer.setScissorTest(false);
+      renderer.setViewport(0, 0, r.cw, r.ch);
+    }
+  }
+
+  function draw() {
+    if (fpv.on) drawCamera();
+    else renderer.render(scene, camera);
   }
 
   function fit() {
@@ -411,12 +636,13 @@ export function createViewer(container, options) {
     if (disposed) return;
     running = false;
     if (!visible) return;
-    const moving = controls.update();
-    if (needsRender || moving || controls.autoRotate) {
-      renderer.render(scene, camera);
+    const orbiting = !fpv.on;
+    const moving = orbiting && controls.update();
+    if (needsRender || moving || (orbiting && controls.autoRotate)) {
+      draw();
       needsRender = false;
     }
-    if (controls.autoRotate || moving) loop();
+    if (orbiting && (controls.autoRotate || moving)) loop();
   }
 
   function loop() {
@@ -445,6 +671,7 @@ export function createViewer(container, options) {
   // Keyboard: arrows orbit, +/- zoom, 0 resets.
   canvas.tabIndex = 0;
   canvas.addEventListener('keydown', (e) => {
+    if (fpv.on) return;
     const step = 0.12;
     const offset = camera.position.clone().sub(controls.target);
     let handled = true;
@@ -497,10 +724,23 @@ export function createViewer(container, options) {
       })));
       if (token !== generation || disposed) return null;
       const assembly = assemble(build, { catalog, render, model: (id) => models.get(id) || null });
-      current = { build, models, assembly, layout: assembly.layout };
+      current = { build, models, assembly, layout: assembly.layout, camera: catalog.cameraView(build) };
       rebuild(paint);
       return current;
     },
+    /**
+     * Camera preview on or off and its settings: {on, tilt (uptilt °), fov (horizontal goggle FOV °), spinning (blur
+     * discs, else still blades), frame (draw the drone's own parts, which the game hides), mark (discs in the accent
+     * colour: the area the props-in-view share counts)}.
+     */
+    setCamera(options) {
+      Object.assign(fpv, options);
+      controls.enabled = !fpv.on;
+      fpvVisibility();
+      requestRender();
+      if (!fpv.on) loop();
+    },
+    camera: () => ({ ...fpv }),
     /** Repaints the current build. */
     paint(paint) {
       rebuild(paint);
@@ -578,7 +818,7 @@ export function createViewer(container, options) {
         shadow.visible = shadowVisible;
         renderer.setPixelRatio(ratio);
         resize();
-        renderer.render(scene, camera);
+        draw();
       }
       return out;
     },
@@ -593,6 +833,11 @@ export function createViewer(container, options) {
       io.disconnect();
       controls.dispose();
       clearGroup();
+      for (const child of discs.children) child.geometry.dispose();
+      discMaterial.dispose();
+      markMaterial.dispose();
+      backdropMaterial.dispose();
+      backdropQuad.geometry.dispose();
       renderer.dispose();
       canvas.remove();
     },
