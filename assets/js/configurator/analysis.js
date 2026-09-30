@@ -1,4 +1,4 @@
-// Flight analysis of a build, a port of Propwash 0.4.3 BuildAccess#analyze (BuildStats): airframe derivation,
+// Flight analysis of a build, a port of Propwash 0.4.0 BuildAccess#analyze (BuildStats): airframe derivation,
 // steady operating points of motors and battery, top speed, the energy balance of sim.EnergyModel (pack current with
 // drive losses, prop factor and avionics load, flight times for hover, cruise, mixed and aggressive flying down to the
 // landing voltage, motor heating) and camera occlusion (the FPV rig of the renderer, fpv.js).
@@ -62,7 +62,7 @@ const DUCT_CLEARANCE = 0.003;
 const IDLE_REFERENCE = 0.055;
 const SOC_MIN = -0.1;
 
-// sim.EnergyModel (Propwash 0.4.3): energy balance on top of the unchanged flight physics.
+// sim.EnergyModel (Propwash 0.4.0): energy balance on top of the unchanged flight physics.
 const AVIONICS_BASE_W = 0.6;
 const DRIVE_LOSS_W = 1.03;
 const DRIVE_LOSS_MASS_EXP = 0.5;
@@ -81,7 +81,7 @@ const IDLE_SOC = 0.5;
 const MINUTE_S = 60.0;
 const PROP_SIZE_MM = [31.0, 51.0, 76.0, 89.0, 102.0, 130.0, 178.0, 254.0, 330.0];
 const PROP_SIZE_FACTOR = [0.84, 0.78, 0.72, 0.67, 0.80, 1.02, 1.0, 0.93, 0.93];
-// Prop energy factor at full load (Propwash 0.4.3): small props draw their full-throttle current again.
+// Prop energy factor at full load (Propwash 0.4.0): small props draw their full-throttle current again.
 const PROP_FULL_FACTOR = [0.84, 1.05, 1.0, 1.0, 1.0, 1.02, 1.0, 0.93, 0.93];
 const BLADE_LOSS = 0.38;
 const BLADE_INTERFERENCE_MM = 45.0;
@@ -128,7 +128,7 @@ const DEFAULT_ANGLE_LIMIT = toRadians(60.0);
 const TOP_SPEED_SOC = 0.8;
 const REFERENCE_AMBIENT_C = 25.0;
 const MOTOR_TEMP_WINDOW_S = 60.0;
-/** BuildWarning.PROPS_IN_VIEW: warning above this share of the FPV image (Propwash 0.4.1). */
+/** BuildWarning.PROPS_IN_VIEW: warning above this share of the FPV image (Propwash 0.4.0). */
 export const PROPS_IN_VIEW_WARNING = 30.0;
 
 /** Analysis warnings in Propwash's order (BuildWarning). */
@@ -918,7 +918,7 @@ function tiltForSpeed(p, speed, maxTilt) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-// Energy balance (sim.EnergyModel of Propwash 0.4.3): what the pack really delivers on top of the flight physics
+// Energy balance (sim.EnergyModel of Propwash 0.4.0): what the pack really delivers on top of the flight physics
 
 // Mix of a flying style per frame role: shares of cruise, punches and idle, and the punch thrust-to-weight.
 function styleMix(p, profile) {
@@ -1394,7 +1394,7 @@ export function hoverStick(p, soc) {
   return (pt.duty - IDLE_REFERENCE) / (1.0 - IDLE_REFERENCE);
 }
 
-/** The key figures of BuildStats (Propwash 0.4.3, Parts-API 1.2) in the web export's order (without warnings). */
+/** The key figures of BuildStats (Propwash 0.4.0, Parts-API 1.2) in the web export's order (without warnings). */
 export const STAT_KEYS = Object.freeze(['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'hover_flight_time_min',
   'cruise_flight_time_min', 'mixed_flight_time_min', 'aggressive_flight_time_min', 'cruise_speed_kmh', 'hover_current_a',
   'cruise_current_a', 'mixed_current_a', 'landing_cell_voltage', 'avionics_power_w', 'top_speed_kmh', 'full_throttle_current_a',

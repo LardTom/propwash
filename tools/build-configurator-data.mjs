@@ -45,7 +45,7 @@ export function newestExport() {
     versions = [];
   }
   versions.sort(compareVersions);
-  return path.join(RELEASES, versions.length ? versions[versions.length - 1] : '1.0.5', 'web-export');
+  return path.join(RELEASES, versions.length ? versions[versions.length - 1] : '1.0.0', 'web-export');
 }
 
 export function exportDir(argv = process.argv.slice(2)) {
@@ -123,7 +123,7 @@ function part(p) {
   return out;
 }
 
-// FpvLayoutData.parse of Propwash 0.4.1: motor seats and frame motor positions of assets/<namespace>/drone_layout.json,
+// FpvLayoutData.parse of Propwash 0.4.0: motor seats and frame motor positions of assets/<namespace>/drone_layout.json,
 // read as float like the mod (Gson getAsFloat) and with the same validity limits. Keys without a namespace belong to
 // the file's namespace.
 const f32 = Math.fround;

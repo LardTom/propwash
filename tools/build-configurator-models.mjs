@@ -14,7 +14,7 @@
 //
 // Only files from the web export are used. The block models keep Minecraft's model units (0–16 per model block);
 // worn, damaged, broken and blur variants are left out because the configurator shows new parts at rest.
-// A render definition may carry a vanilla "transformation" (JMP 1.0.1 X-Class frames: the model is shrunk to fit the
+// A render definition may carry a vanilla "transformation" (JMP X-Class frames: the model is shrunk to fit the
 // −16…32 model limit and scaled back to real size); it is baked into the element coordinates here.
 
 import fs from 'node:fs';

@@ -2,7 +2,7 @@
 // renderer: model point (8, 8, 8) at the part position, 1 model unit = 8 mm, texture × tint × Minecraft's entity
 // lighting (two fixed lights, 0.6 diffuse + 0.4 ambient), cutout alpha, nearest-neighbour textures.
 //
-// Camera preview: the FPV image like Propwash 0.4.1 draws it (FpvProps): a 16:9 rectilinear view from the lens with
+// Camera preview: the FPV image like Propwash 0.4.0 draws it (FpvProps): a 16:9 rectilinear view from the lens with
 // the uptilt and the goggles' horizontal field of view, the own drone hidden except its props, spinning props as
 // translucent blur discs (three bands from the hub to the blade tip) or still blades, over a sky and ground backdrop.
 

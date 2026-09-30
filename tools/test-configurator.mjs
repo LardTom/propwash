@@ -213,7 +213,7 @@ console.log(`Presets: ${presetPass}/${catalog.presets.length} (share code, check
       const analysis = catalog.analyze(d.content.build);
       compareAnalysis(analysis, v.analysis, v.name);
       if (v.analysis_before && analysis) {
-        // Recalibrated energy balance (Propwash 0.4.2): the flight physics stays bit-identical, only the energy
+        // Recalibrated energy balance (Propwash 0.4.0): the flight physics stays bit-identical, only the energy
         // figures (flight times, pack currents, motor temperatures) change.
         for (const key of ['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'top_speed_kmh', 'esc_load_percent',
           'motor_response_ms', 'crash_speed_ms', 'props_in_view_percent']) {

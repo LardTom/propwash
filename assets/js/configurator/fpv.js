@@ -1,4 +1,4 @@
-// FPV camera of a build, a port of Propwash 0.4.1 sim.FpvRig and sim.CameraOcclusion: the lens, the uptilt, the four
+// FPV camera of a build, a port of Propwash 0.4.0 sim.FpvRig and sim.CameraOcclusion: the lens, the uptilt, the four
 // prop discs exactly as the game's FPV renderer draws them, and the share of the 16:9 image the discs cover
 // ("props in the camera view").
 //

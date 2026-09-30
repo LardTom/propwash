@@ -12,7 +12,7 @@ This repository contains only the website, no mod source code.
 - `assets/js/main.js` – language switch, section menu, hero feed with pause switch, image switchers, video demo, gallery lightbox
 - `assets/js/configurator/` – the configurator as plain ES modules:
   - core: `data.js` (catalog), `sharecode.js` + `crc32.js` + `inflate.js` + `tune.js` (PW1 share codes),
-    `rules.js` (compatibility), `analysis.js` (flight analysis with the energy balance of Propwash 0.4.3), `fpv.js` (FPV camera rig and props in view),
+    `rules.js` (compatibility), `analysis.js` (flight analysis with the energy balance of Propwash 0.4.0), `fpv.js` (FPV camera rig and props in view),
     `tuning.js` (tune defaults and editing), `index.js`
   - page: `ui.js` (part pickers, paint, tune editor, OSD layer, stats, share code, import), `i18n.js` (texts),
     `assembly.js` (where every part sits on the drone), `paint.js` (paint tints), `viewer.js` (three.js viewer)
@@ -36,7 +36,7 @@ kept in the browser's `localStorage`; the drone built in the configurator lives 
 - part pickers per category with search, a class filter (whoop, toothpick, cinewhoop, freestyle, race, long range,
   X-Class; video by link, accessories by mount), “only parts that fit”, fit badges and tips with pros, cons and what the
   part would change
-- live flight figures like the workbench of Propwash 0.4.3 (weight, thrust-to-weight, hover throttle, top speed and its
+- live flight figures like the workbench of Propwash 0.4.0 (weight, thrust-to-weight, hover throttle, top speed and its
   energy balance: flight times down to the landing voltage for mixed flying of the frame's class as the main value,
   aggressive/racing, hovering and cruising at the class's cruise speed, pack currents, landing voltage under load,
   base load of flight controller and video, motor temperature after 60 s full throttle and after a mixed flight) and
@@ -54,7 +54,7 @@ kept in the browser's `localStorage`; the drone built in the configurator lives 
   renderer (frame layouts, motor seats, camera tilt, accessory anchors); drag to turn, scroll or pinch to zoom,
   auto-rotate (off with reduced motion or paused animations), keyboard control on the canvas
 - FPV camera preview (switch “3D / FPV camera” in the viewer, or open `configurator/?view=camera#PW1-…`): the image the
-  drone's camera sends, drawn like the game's FPV view (Propwash 0.4.1): 16:9 rectilinear from the lens with the frame's
+  drone's camera sends, drawn like the game's FPV view (Propwash 0.4.0): 16:9 rectilinear from the lens with the frame's
   uptilt and the goggles' field of view (analog 120°, digital 130°), the drone itself hidden except its props, spinning
   props as translucent blur discs in their paint colour, over a sky and grass backdrop; sliders for uptilt (0–80°, as
   the pilot can set it in the game) and goggle FOV (60–160°) with the live props-in-view share, and toggles to mark the
@@ -81,12 +81,12 @@ each one. The first is the 7″ deadcat whose props the game showed at the image
 0.0 %; its `game` entry holds what Propwash's self test counted in the rendered FPV image (2.01 % of 1708 × 960 pixels),
 and the test fails if the configurator ever shows 0 % for it again. The same code carries the second report (flight
 times and part stats a bit off, e.g. 24.2 min hovering and 124 °C at full throttle): `analysis` holds the figures of
-Propwash 0.4.2 and Just More Parts 1.0.4 (19.5 min hovering, 11.8 min cruising, 8.0 min mixed, 5.7 min aggressive,
-95 °C after 60 s full throttle; unchanged in Propwash 0.4.3 and Just More Parts 1.0.5), `analysis_before` the old ones; the test checks that weight, thrust-to-weight, hover
+Propwash 0.4.0 and Just More Parts 1.0.0 (19.5 min hovering, 11.8 min cruising, 8.0 min mixed, 5.7 min aggressive,
+95 °C after 60 s full throttle), `analysis_before` the ones of an earlier pre-release build; the test checks that weight, thrust-to-weight, hover
 throttle, top speed and props in view stay unchanged (the flight physics is bit-identical) and that the energy figures
 changed.
 
-Render definitions may carry a vanilla `transformation` (Just More Parts 1.0.1 shrinks the X-Class frame models to fit
+Render definitions may carry a vanilla `transformation` (Just More Parts shrinks the X-Class frame models to fit
 Minecraft's model limit and scales them back to real size this way); `build-configurator-models.mjs` bakes it into the
 element coordinates, and the render test checks that every frame model reaches its motor positions.
 
