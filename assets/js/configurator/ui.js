@@ -9,7 +9,7 @@ import { FLIGHT_GROUPS } from './tune.js';
 import { STAT_KEYS } from './analysis.js';
 import { batteryFit } from './rules.js';
 import { assemble, PROP_SLOTS } from './assembly.js';
-import { paintDefaults, paintAvailable, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js';
+import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js';
 import { t, tk, entry, num, lang } from './i18n.js';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
@@ -630,9 +630,24 @@ function renderPaint() {
   panel.replaceChildren(
     el('p', { class: 'panel-intro' }, t('ui.paintIntro')),
     derived.proceduralFrame ? el('p', { class: 'cfg-note' }, t('ui.procedural')) : '',
-    el('label', { class: 'check' }, el('input', { type: 'checkbox', checked: state.linkProps || null, onchange: (e) => { state.linkProps = e.target.checked; } }), el('span', null, t('ui.linkProps'))),
+    el('div', { class: 'paint-tools' },
+      el('label', { class: 'check' }, el('input', { type: 'checkbox', checked: state.linkProps || null, onchange: (e) => { state.linkProps = e.target.checked; } }), el('span', null, t('ui.linkProps'))),
+      el('button', { type: 'button', id: 'paint-randomize', class: 'btn btn--ghost btn--small', title: t('ui.randomPaintHint'), onclick: randomizePaint },
+        useIcon('i-dice'), el('span', null, t('ui.randomPaint')))),
     rows,
     el('button', { type: 'button', class: 'btn btn--ghost btn--small', disabled: Object.keys(state.paint).length ? null : true, onclick: () => { state.paint = {}; afterPaint(true); renderPaint(); } }, t('ui.resetPaint')));
+}
+
+/** Paints every slot of the build with a new random scheme (never the one it has now). */
+function randomizePaint() {
+  const slots = PAINT_SLOTS.filter((s) => derived.available.has(s));
+  const before = canonical(state.paint);
+  let next = randomPaint(slots);
+  for (let i = 0; i < 12 && canonical(next) === before; i++) next = randomPaint(slots);
+  state.paint = next;
+  afterPaint(true);
+  renderPaint();
+  $('#paint-randomize').focus();
 }
 
 /** Colour of a slot as text: swatch name and hex when it is a swatch colour, else the hex. */

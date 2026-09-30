@@ -1326,6 +1326,14 @@ button {
 
 /* ---------- Paint ---------- */
 
+.paint-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+}
+
 .paint-rows {
   --chip-w: 30px;
   --chip-h: 20px;

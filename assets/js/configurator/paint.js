@@ -50,6 +50,89 @@ export function shade(rgb, factor) {
   return out;
 }
 
+function mix(rgb, other, share) {
+  let out = 0;
+  for (let shift = 16; shift >= 0; shift -= 8) {
+    const a = (rgb >> shift) & 0xff;
+    out = (out << 8) | Math.round(a + (((other >> shift) & 0xff) - a) * share);
+  }
+  return out;
+}
+
+function hueOf(rgb) {
+  const r = (rgb >> 16) & 0xff;
+  const g = (rgb >> 8) & 0xff;
+  const b = rgb & 0xff;
+  const max = Math.max(r, g, b);
+  const d = max - Math.min(r, g, b);
+  if (!d) return 0;
+  const h = max === r ? (g - b) / d : max === g ? 2 + (b - r) / d : 4 + (r - g) / d;
+  return (h * 60 + 360) % 360;
+}
+
+const hueDistance = (a, b) => Math.min(Math.abs(a - b), 360 - Math.abs(a - b));
+const SWATCH = Object.fromEntries(PAINT_SWATCHES.map((s) => [s.key, s]));
+// Colourful dyes that carry a scheme; brown and the greys only ever play the neutral part.
+const ACCENTS = ['red', 'orange', 'yellow', 'lime', 'green', 'cyan', 'light_blue', 'blue', 'purple', 'magenta', 'pink']
+  .map((key) => ({ swatch: SWATCH[key], hue: hueOf(SWATCH[key].rgb) }));
+
+/**
+ * A random paint job that still looks planned: one accent dye, a partner (complementary, neighbouring hue or a
+ * neutral), a dark, light or metal base for frame and stack, neutrals for battery and camera, props all alike or
+ * front/rear in two colours for orientation, and now and then a lighter or darker tone of the accent as custom
+ * colour. Only swatch colours and such tones are used. random() gives numbers in [0, 1).
+ * @returns {object} slot → '#rrggbb' for every slot in slots
+ */
+export function randomPaint(slots, random = Math.random) {
+  const pick = (list) => list[Math.min(list.length - 1, Math.floor(random() * list.length))];
+  const chance = (p) => random() < p;
+  const accent = pick(ACCENTS);
+  const a = accent.swatch;
+  const others = ACCENTS.filter((c) => c !== accent);
+  const byDistance = (target) => [...others].sort((x, y) => hueDistance(x.hue, target) - hueDistance(y.hue, target));
+  const harmony = random();
+  let partner = null;
+  if (harmony < 0.4) partner = pick(byDistance(accent.hue + 180).slice(0, 2)).swatch;
+  else if (harmony < 0.7) {
+    const near = others.filter((c) => hueDistance(c.hue, accent.hue) <= 75);
+    partner = (near.length ? pick(near) : byDistance(accent.hue + 180)[0]).swatch;
+  }
+  const style = chance(0.58) ? 'dark' : chance(0.55) ? 'light' : 'metal';
+  const light = style === 'light';
+  const base = SWATCH[light ? pick(['white', 'white', 'aluminium']) : style === 'metal' ? pick(['carbon', 'gunmetal'])
+    : chance(0.7) ? 'carbon' : pick(['black', 'gunmetal'])];
+  const neutral = SWATCH[light ? pick(['white', 'light_gray', 'aluminium']) : pick(['black', 'gunmetal', 'gray', 'carbon'])];
+  const metal = SWATCH[style === 'metal' ? pick(['gold', 'copper', 'aluminium']) : pick(['aluminium', 'gunmetal', 'gold', 'copper'])];
+  const second = partner || SWATCH[light ? pick(['black', 'aluminium']) : pick(['white', 'black', 'light_gray'])];
+  const contrast = SWATCH[light || base.key === 'white' ? 'black' : 'white'];
+
+  const colour = {
+    frame: base.rgb,
+    tpu: (chance(0.75) ? a : second).rgb,
+    motors: (chance(0.4) ? metal : chance(0.5) ? second : a).rgb,
+    stack: SWATCH[chance(0.8) ? 'carbon' : pick(['black', 'gunmetal'])].rgb,
+    battery: (chance(0.6) ? neutral : second).rgb,
+    camera: (chance(0.6) ? SWATCH[light ? pick(['white', 'black']) : pick(['black', 'gunmetal', 'carbon'])] : a).rgb,
+    antenna: (chance(0.65) ? a : second).rgb,
+    accessories: (chance(0.5) ? neutral : chance(0.5) ? metal : second).rgb,
+  };
+  let front = a;
+  let rear = a;
+  if (chance(0.5)) {
+    rear = chance(0.6) ? second : contrast;
+    if (rear === front) rear = contrast;
+  } else if (chance(0.3)) {
+    front = rear = second;
+  }
+  colour.prop_fl = colour.prop_fr = front.rgb;
+  colour.prop_rl = colour.prop_rr = rear.rgb;
+  if (chance(0.2)) {
+    const slot = pick(['motors', 'antenna', 'accessories', 'camera']);
+    colour[slot] = chance(0.5) ? shade(a.rgb, 0.72) : mix(a.rgb, 0xffffff, 0.35);
+  }
+  return Object.fromEntries(slots.filter((slot) => slot in colour).map((slot) => [slot, hexOf(colour[slot])]));
+}
+
 /** PaintChannel.tint: colour scaled so that the channel's reference grey in the paint texture gives the colour. */
 export function channelTint(rgb, reference) {
   let out = 0;

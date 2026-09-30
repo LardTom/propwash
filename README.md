@@ -38,7 +38,9 @@ kept in the browser's `localStorage`; the drone built in the configurator lives 
 - live flight figures (weight, thrust-to-weight, hover throttle, flight times, top speed and the rest of the workbench
   analysis) and the compatibility check (voltage, prop size vs. frame, battery fit, mounts, ESC and battery load)
 - paint for every paint slot the build shows, like the paint screen in the game: the 16 dye colours, the 5 finishes
-  (carbon, gunmetal, aluminium, gold, copper) and a custom colour; a swatch paints exactly its RGB value, as in the mod
+  (carbon, gunmetal, aluminium, gold, copper) and a custom colour; a swatch paints exactly its RGB value, as in the mod;
+  “Randomize” paints all slots with a random but matching scheme (accent and partner colour, dark/light/metal base,
+  props alike or front/rear for orientation)
 - tune editor for rates (with a live rate-curve graph), PID, feedforward, TPA, filters and throttle curve (with graph),
   using the defaults the game derives from the build
 - optional OSD layer (a Propwash OSD preset or the layout from an opened code)

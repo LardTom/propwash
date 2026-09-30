@@ -7,7 +7,7 @@
 //    to the exported status, layers, content, skipped entries, unknown/wrong-kind parts, and re-encode byte-identically
 //    (uncompressed and compressed); the compatibility check and all analysis figures must match the mod's.
 // 2. Presets in the catalog: share code, check and analysis; flight tune defaults of every preset (tune.json#defaults),
-//    normalisation and edits of the tune; paint swatches round-trip through the share code.
+//    normalisation and edits of the tune; paint swatches and random paint schemes round-trip through the share code.
 // 3. Tolerant decoding and error statuses (spelling variants, damaged and hostile codes).
 // 4. If the web export is available (default ../propwash-justmoreparts/release/1.0.0/web-export or JMP_WEB_EXPORT):
 //    the one-part-swapped analysis variants of every preset (analysis/<preset>.json).
@@ -20,7 +20,7 @@ import { createCatalog } from '../assets/js/configurator/data.js';
 import * as share from '../assets/js/configurator/sharecode.js';
 import { STAT_KEYS } from '../assets/js/configurator/analysis.js';
 import { TUNE_PARAMS, sanitizeTuneValue } from '../assets/js/configurator/tuning.js';
-import { PAINT_SWATCHES, swatchOf } from '../assets/js/configurator/paint.js';
+import { PAINT_SWATCHES, swatchOf, randomPaint } from '../assets/js/configurator/paint.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);
@@ -215,6 +215,41 @@ console.log(`Presets: ${presetPass}/${catalog.presets.length} (share code, check
     ok(swatchOf(swatch.hex) === swatch && swatchOf(swatch.rgb) === swatch, `swatch ${swatch.key}: byColor`);
   }
   console.log(`Paint swatches: ${PAINT_SWATCHES.length} ${failed === before ? 'round-trip through the share code' : 'FAILED'}`);
+}
+
+// 2d. Random paint schemes: every slot painted with a swatch or a tone of the scheme's accent, valid RGB, round trip
+{
+  const before = failed;
+  let seed = 20260930;
+  const random = () => {
+    seed = (seed + 0x6d2b79f5) >>> 0;
+    let x = Math.imul(seed ^ (seed >>> 15), seed | 1);
+    x ^= x + Math.imul(x ^ (x >>> 7), x | 61);
+    return ((x ^ (x >>> 14)) >>> 0) / 2 ** 32;
+  };
+  const base = catalog.presetContent(catalog.presets[0].id);
+  const seen = new Set();
+  const runs = 400;
+  let customs = 0;
+  let alternating = 0;
+  for (let i = 0; i < runs; i++) {
+    const slots = i % 5 === 4 ? share.PAINT_SLOTS.filter((s) => !['accessories', 'antenna'].includes(s)) : share.PAINT_SLOTS;
+    const paint = randomPaint(slots, random);
+    seen.add(JSON.stringify(paint));
+    ok(same(Object.keys(paint), [...slots]), `random paint ${i}: exactly the given slots`);
+    ok(Object.values(paint).every((c) => /^#[0-9a-f]{6}$/.test(c)), `random paint ${i}: '#rrggbb' colours`);
+    const custom = Object.values(paint).filter((c) => !swatchOf(c));
+    customs += custom.length ? 1 : 0;
+    ok(custom.length <= 1, `random paint ${i}: at most one custom tone`);
+    ok(paint.prop_fl === paint.prop_fr && paint.prop_rl === paint.prop_rr, `random paint ${i}: props in front/rear pairs`);
+    if (paint.prop_fl !== paint.prop_rl) alternating++;
+    const back = share.decode(share.encode({ ...base, paint }));
+    ok(back.ok && same(back.content.paint, paint), `random paint ${i}: round-trips through the share code`);
+  }
+  ok(seen.size > runs * 0.9, `random paint: schemes differ (${seen.size} of ${runs})`);
+  ok(customs > 0 && customs < runs * 0.35, `random paint: custom tones are the exception (${customs} of ${runs})`);
+  ok(alternating > runs * 0.25 && alternating < runs * 0.75, `random paint: props sometimes alike, sometimes front/rear (${alternating} of ${runs})`);
+  console.log(`Random paint: ${runs} schemes ${failed === before ? `valid and round-trip (${seen.size} different, ${alternating} front/rear, ${customs} with a custom tone)` : 'FAILED'}`);
 }
 
 // 3. Tolerant decoding and error statuses

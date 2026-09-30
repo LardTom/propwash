@@ -113,6 +113,8 @@ const TEXT = {
     viewerFailed: ['The 3D view could not be started.', 'Die 3D-Ansicht konnte nicht gestartet werden.'],
     procedural: ['This frame has no model; the game and this page draw it from its measurements, and paint does not show on it.', 'Dieser Rahmen hat kein Modell; Spiel und Seite zeichnen ihn aus seinen Maßen, Lack ist darauf nicht zu sehen.'],
     paintIntro: ['Paint works like the paint screen in the game: every slot gets one of the 16 dye colours, a finish or a custom colour; unpainted slots keep the original colours.', 'Lackieren funktioniert wie im Lackier-Bildschirm im Spiel: Jeder Platz bekommt eine der 16 Farbstoff-Farben, eine Oberfläche oder eine eigene Farbe, ungelackte Plätze behalten die Originalfarben.'],
+    randomPaint: ['Randomize', 'Zufällig'],
+    randomPaintHint: ['Paint every part with a random colour scheme', 'Alle Teile mit einem zufälligen Farbschema lackieren'],
     paintCustom: ['Custom colour', 'Eigene Farbe'], paintCustomHint: ['Opens the colour picker', 'Öffnet die Farbauswahl'],
     paintDye: ['dye', 'Farbstoff'], paintFinish: ['finish', 'Oberfläche'],
     linkProps: ['Same colour on all four props', 'Gleiche Farbe für alle vier Props'],
