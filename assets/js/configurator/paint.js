@@ -23,6 +23,33 @@ export function hexOf(rgb) {
   return '#' + (rgb & 0xffffff).toString(16).padStart(6, '0');
 }
 
+/**
+ * PaintSwatch: the 16 dye colours, then the 5 finishes, in the order of the paint screen. A swatch paints its RGB
+ * value like any other colour (finishes too), so a swatch and the same custom colour give the same share code.
+ */
+export const PAINT_SWATCHES = Object.freeze([
+  ['white', 0xf9fffe], ['light_gray', 0x9d9d97], ['gray', 0x474f52], ['black', 0x1d1d21],
+  ['brown', 0x835432], ['red', 0xb02e26], ['orange', 0xf9801d], ['yellow', 0xfed83d],
+  ['lime', 0x80c71f], ['green', 0x5e7c16], ['cyan', 0x169c9c], ['light_blue', 0x3ab3da],
+  ['blue', 0x3c44aa], ['purple', 0x8932b8], ['magenta', 0xc74ebd], ['pink', 0xf38baa],
+  ['carbon', 0x2a2c30, true], ['gunmetal', 0x4e535b, true], ['aluminium', 0xb8bec6, true], ['gold', 0xd8a93b, true],
+  ['copper', 0xb8693a, true],
+].map(([key, rgb, finish = false]) => Object.freeze({ key, rgb, hex: hexOf(rgb), finish })));
+
+/** PaintSwatch.byColor: the swatch with exactly this colour, or null. */
+export function swatchOf(color) {
+  if (!color) return null;
+  const rgb = typeof color === 'number' ? color & 0xffffff : rgbOf(color);
+  return PAINT_SWATCHES.find((s) => s.rgb === rgb) || null;
+}
+
+/** PaintSwatches.shade: every channel times factor, capped at 255. */
+export function shade(rgb, factor) {
+  let out = 0;
+  for (let shift = 16; shift >= 0; shift -= 8) out = (out << 8) | Math.min(255, Math.round(((rgb >> shift) & 0xff) * factor));
+  return out;
+}
+
 /** PaintChannel.tint: colour scaled so that the channel's reference grey in the paint texture gives the colour. */
 export function channelTint(rgb, reference) {
   let out = 0;

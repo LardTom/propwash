@@ -1218,16 +1218,26 @@ button {
 /* ---------- Paint ---------- */
 
 .paint-rows {
+  --chip-w: 30px;
+  --chip-h: 20px;
+  --finish-w: 24px;
+  --chip-gap: 4px;
   display: grid;
   gap: 4px;
 }
 
+@media (pointer: coarse) {
+  .paint-rows {
+    --chip-w: 34px;
+    --chip-h: 28px;
+    --finish-w: 30px;
+  }
+}
+
 .paint-row {
   display: grid;
-  grid-template-columns: 44px minmax(0, 1fr) auto 36px;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 8px;
+  gap: 8px;
+  padding: 8px 10px 12px;
   border-radius: 4px;
   background: var(--panel-2);
 }
@@ -1240,34 +1250,16 @@ button {
   opacity: 0.6;
 }
 
-.paint-row__color {
-  width: 44px;
-  height: 36px;
-  padding: 2px;
-  border: 1px solid var(--border-strong);
-  border-radius: 4px;
-  background: var(--field);
-  cursor: pointer;
-}
-
-.paint-row__color::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-
-.paint-row__color::-webkit-color-swatch {
-  border: 0;
-  border-radius: 2px;
-}
-
-.paint-row__color::-moz-color-swatch {
-  border: 0;
-  border-radius: 2px;
+.paint-row__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 36px;
+  align-items: center;
+  gap: 10px;
 }
 
 .paint-row__label {
   display: grid;
   min-width: 0;
-  cursor: pointer;
 }
 
 .paint-row__name {
@@ -1286,6 +1278,157 @@ button {
 .paint-row__hex {
   color: var(--muted);
   font-size: 0.78rem;
+  text-align: right;
+}
+
+/* Swatches: 16 dyes (8 × 2), then the 5 finishes and the custom colour, drawn like the chips of the paint screen. */
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px 14px;
+}
+
+.swatches__dyes,
+.swatches__finishes {
+  display: grid;
+  gap: var(--chip-gap);
+}
+
+.swatches__dyes {
+  flex: 0 1 auto;
+  grid-template-columns: repeat(8, minmax(0, var(--chip-w)));
+}
+
+.swatches__side {
+  display: grid;
+  gap: var(--chip-gap);
+}
+
+.swatches__finishes {
+  grid-template-columns: repeat(5, var(--finish-w));
+}
+
+.swatch {
+  position: relative;
+  width: 100%;
+  height: var(--chip-h);
+  padding: 0;
+  border: 1px solid #0b0b0b;
+  border-radius: 2px;
+  background: linear-gradient(var(--hi), var(--hi)) top / 100% 2px no-repeat, var(--c);
+  cursor: pointer;
+}
+
+.swatch--finish {
+  background:
+    linear-gradient(var(--hi), var(--hi)) top / 100% 33% no-repeat,
+    linear-gradient(var(--lo), var(--lo)) bottom / 100% 2px no-repeat,
+    var(--c);
+}
+
+.swatch--carbon {
+  background: repeating-conic-gradient(var(--weave) 0 25%, var(--c) 0 50%) 0 0 / 6px 6px;
+}
+
+.swatch:not([aria-checked="true"]):hover {
+  outline: 1px solid rgba(255, 255, 255, 0.63);
+  outline-offset: 1px;
+}
+
+.swatch[aria-checked="true"] {
+  z-index: 1;
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.swatch:focus-visible {
+  z-index: 2;
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+.swatch-custom-wrap {
+  position: relative;
+}
+
+.swatch-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: var(--chip-h);
+  padding: 0 10px 0 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 3px;
+  background: var(--field);
+  color: var(--text-2);
+  font-size: 0.78rem;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.swatch-custom:hover {
+  border-color: var(--accent);
+}
+
+.swatch-custom:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+.swatch-custom[aria-checked="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.swatch-custom__chip {
+  flex: none;
+  align-self: stretch;
+  width: var(--finish-w);
+  margin: -1px 0 -1px -1px;
+  border: 1px solid #0b0b0b;
+  border-radius: 3px 0 0 3px;
+  background: linear-gradient(var(--hi), var(--hi)) top / 100% 2px no-repeat, var(--c);
+}
+
+.swatch-custom__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.swatch-tip {
+  position: fixed;
+  z-index: 60;
+  display: grid;
+  gap: 1px;
+  max-width: 220px;
+  padding: 6px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: #151515;
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.9);
+  pointer-events: none;
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.swatch-tip__name {
+  font-weight: 700;
+}
+
+.swatch-tip__hex {
+  color: var(--faint);
+  font-size: 0.74rem;
+}
+
+.swatch-tip__hint {
+  color: var(--muted);
+  font-size: 0.76rem;
 }
 
 /* ---------- Tune ---------- */

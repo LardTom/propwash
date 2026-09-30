@@ -7,7 +7,7 @@
 //    to the exported status, layers, content, skipped entries, unknown/wrong-kind parts, and re-encode byte-identically
 //    (uncompressed and compressed); the compatibility check and all analysis figures must match the mod's.
 // 2. Presets in the catalog: share code, check and analysis; flight tune defaults of every preset (tune.json#defaults),
-//    normalisation and edits of the tune.
+//    normalisation and edits of the tune; paint swatches round-trip through the share code.
 // 3. Tolerant decoding and error statuses (spelling variants, damaged and hostile codes).
 // 4. If the web export is available (default ../propwash-justmoreparts/release/1.0.0/web-export or JMP_WEB_EXPORT):
 //    the one-part-swapped analysis variants of every preset (analysis/<preset>.json).
@@ -20,6 +20,7 @@ import { createCatalog } from '../assets/js/configurator/data.js';
 import * as share from '../assets/js/configurator/sharecode.js';
 import { STAT_KEYS } from '../assets/js/configurator/analysis.js';
 import { TUNE_PARAMS, sanitizeTuneValue } from '../assets/js/configurator/tuning.js';
+import { PAINT_SWATCHES, swatchOf } from '../assets/js/configurator/paint.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);
@@ -196,6 +197,24 @@ console.log(`Presets: ${presetPass}/${catalog.presets.length} (share code, check
   ok(sanitizeTuneValue('filters.dtermLpf2Hz', 7) === 0 && sanitizeTuneValue('rates.roll.rcRate', 1.234) === 1.23
     && sanitizeTuneValue('pid.tpaMode', 5) === 1, 'editor sanitising');
   console.log(`Tune defaults: ${values} values of ${catalog.presets.length} presets ${failed === before ? 'identical' : 'FAILED'}, normalisation and edits ${failed === before ? 'passed' : 'FAILED'}`);
+}
+
+// 2c. Paint swatches (PaintSwatch): a swatch paints its RGB value, so its code equals the one of the same custom colour
+{
+  const before = failed;
+  ok(PAINT_SWATCHES.length === 21 && PAINT_SWATCHES.filter((s) => s.finish).map((s) => s.key).join() === 'carbon,gunmetal,aluminium,gold,copper',
+    'paint swatches: 16 dyes, then the 5 finishes');
+  const base = catalog.presetContent(catalog.presets[0].id);
+  for (const swatch of PAINT_SWATCHES) {
+    const paint = Object.fromEntries(share.PAINT_SLOTS.map((slot) => [slot, swatch.hex]));
+    const code = share.encode({ ...base, paint });
+    const back = share.decode(code);
+    ok(back.ok && same(back.content.paint, paint), `swatch ${swatch.key}: paint round-trips through the share code`);
+    ok(code === share.encode({ ...base, paint: Object.fromEntries(share.PAINT_SLOTS.map((slot) => [slot, `#${swatch.rgb.toString(16).padStart(6, '0').toUpperCase()}`])) }),
+      `swatch ${swatch.key}: same code as the custom colour`);
+    ok(swatchOf(swatch.hex) === swatch && swatchOf(swatch.rgb) === swatch, `swatch ${swatch.key}: byColor`);
+  }
+  console.log(`Paint swatches: ${PAINT_SWATCHES.length} ${failed === before ? 'round-trip through the share code' : 'FAILED'}`);
 }
 
 // 3. Tolerant decoding and error statuses

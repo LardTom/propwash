@@ -9,7 +9,7 @@ import { FLIGHT_GROUPS } from './tune.js';
 import { STAT_KEYS } from './analysis.js';
 import { batteryFit } from './rules.js';
 import { assemble, PROP_SLOTS } from './assembly.js';
-import { paintDefaults, paintAvailable } from './paint.js';
+import { paintDefaults, paintAvailable, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js';
 import { t, tk, entry, num, lang } from './i18n.js';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
@@ -604,6 +604,7 @@ function checksScroll() {
 // Paint panel
 
 function renderPaint() {
+  hideSwatchTip();
   const panel = $('[data-panel-paint]');
   const slots = PAINT_SLOTS.filter((s) => derived.available.has(s) || state.paint[s]);
   const rows = el('div', { class: 'paint-rows' });
@@ -611,24 +612,20 @@ function renderPaint() {
     const info = catalog.paintSlot(slot);
     const painted = state.paint[slot];
     const value = painted || derived.paintDefaults[slot] || '#808080';
-    const id = `paint-${slot}`;
     const off = !derived.available.has(slot);
-    const input = el('input', {
-      type: 'color', id, class: 'paint-row__color', value,
-      oninput: (e) => setPaint(slot, e.target.value, false),
-      onchange: (e) => setPaint(slot, e.target.value, true),
-    });
-    rows.append(el('div', { class: `paint-row${painted ? ' is-painted' : ''}${off ? ' is-off' : ''}` },
-      input,
-      el('label', { for: id, class: 'paint-row__label' },
-        el('span', { class: 'paint-row__name' }, catalog.paintSlotName(slot, lang())),
-        el('span', { class: 'paint-row__hint' }, off ? t(slot === 'frame' && derived.proceduralFrame ? 'ui.paintHidden' : 'ui.notOnBuild')
-          : localText(info && info.hint, lang()))),
-      el('span', { class: 'paint-row__hex mono' }, value.toUpperCase(), el('span', { class: 'visually-hidden' }, ` (${painted ? t('ui.painted') : t('ui.original')})`)),
-      el('button', {
-        type: 'button', class: 'icon-btn icon-btn--small', title: t('ui.resetSlot'), 'aria-label': `${t('ui.resetSlot')}: ${catalog.paintSlotName(slot, lang())}`,
-        disabled: painted ? null : true, onclick: () => setPaint(slot, null, true),
-      }, useIcon('i-reset'))));
+    const name = catalog.paintSlotName(slot, lang());
+    rows.append(el('div', { class: `paint-row${painted ? ' is-painted' : ''}${off ? ' is-off' : ''}`, 'data-paint-row': slot },
+      el('div', { class: 'paint-row__head' },
+        el('div', { class: 'paint-row__label' },
+          el('span', { class: 'paint-row__name', id: `paint-${slot}-name` }, name),
+          el('span', { class: 'paint-row__hint' }, off ? t(slot === 'frame' && derived.proceduralFrame ? 'ui.paintHidden' : 'ui.notOnBuild')
+            : localText(info && info.hint, lang()))),
+        el('span', { class: 'paint-row__hex mono' }, paintValueText(value, painted), el('span', { class: 'visually-hidden' }, ` (${painted ? t('ui.painted') : t('ui.original')})`)),
+        el('button', {
+          type: 'button', class: 'icon-btn icon-btn--small', title: t('ui.resetSlot'), 'aria-label': `${t('ui.resetSlot')}: ${name}`,
+          disabled: painted ? null : true, onclick: () => setPaint(slot, null, true),
+        }, useIcon('i-reset'))),
+      swatchGroup(slot, name, painted, value)));
   }
   panel.replaceChildren(
     el('p', { class: 'panel-intro' }, t('ui.paintIntro')),
@@ -636,6 +633,115 @@ function renderPaint() {
     el('label', { class: 'check' }, el('input', { type: 'checkbox', checked: state.linkProps || null, onchange: (e) => { state.linkProps = e.target.checked; } }), el('span', null, t('ui.linkProps'))),
     rows,
     el('button', { type: 'button', class: 'btn btn--ghost btn--small', disabled: Object.keys(state.paint).length ? null : true, onclick: () => { state.paint = {}; afterPaint(true); renderPaint(); } }, t('ui.resetPaint')));
+}
+
+/** Colour of a slot as text: swatch name and hex when it is a swatch colour, else the hex. */
+function paintValueText(color, painted) {
+  const swatch = painted ? swatchOf(color) : null;
+  return swatch ? `${t(`swatches.${swatch.key}`)} · ${color.toUpperCase()}` : color.toUpperCase();
+}
+
+/** Chip colours like PaintSwatches.chip: a light top edge on dyes, a light top third and dark bottom on finishes, a weave on carbon. */
+function chipStyle(rgb, swatch) {
+  if (swatch && swatch.key === 'carbon') return `--c:${hexOf(rgb)};--weave:${hexOf(shade(rgb, 1.45))}`;
+  if (swatch && swatch.finish) return `--c:${hexOf(rgb)};--hi:${hexOf(shade(rgb, 1.25))};--lo:${hexOf(shade(rgb, 0.7))}`;
+  return `--c:${hexOf(rgb)};--hi:${hexOf(shade(rgb, 1.2))}`;
+}
+
+/** Swatch grid of one paint slot as a radio group: 16 dyes, 5 finishes and the custom colour (native colour picker). */
+function swatchGroup(slot, name, painted, value) {
+  const current = painted ? swatchOf(painted) : null;
+  const radio = (swatch) => el('button', {
+    type: 'button', role: 'radio', id: `paint-${slot}-${swatch.key}`, tabindex: -1,
+    class: `swatch${swatch.finish ? ' swatch--finish' : ''}${swatch.key === 'carbon' ? ' swatch--carbon' : ''}`,
+    style: chipStyle(swatch.rgb, swatch), 'aria-checked': String(current === swatch),
+    'aria-label': `${t(`swatches.${swatch.key}`)} (${t(swatch.finish ? 'ui.paintFinish' : 'ui.paintDye')})`,
+    dataset: { hex: swatch.hex, name: t(`swatches.${swatch.key}`) },
+    onclick: () => setPaint(slot, swatch.hex, true),
+  });
+  const input = el('input', {
+    type: 'color', class: 'swatch-custom__input', value, tabindex: -1, 'aria-hidden': 'true',
+    oninput: (e) => setPaint(slot, e.target.value, false),
+    onchange: (e) => setPaint(slot, e.target.value, true),
+  });
+  const custom = el('button', {
+    type: 'button', role: 'radio', id: `paint-${slot}-custom`, tabindex: -1, class: 'swatch-custom',
+    'aria-checked': String(!!painted && !current),
+    dataset: { hex: value, name: t('ui.paintCustom'), hint: t('ui.paintCustomHint'), custom: '' },
+    onclick: () => openPicker(input),
+  }, el('span', { class: 'swatch-custom__chip', style: chipStyle(rgbOf(value)), 'aria-hidden': 'true' }), el('span', null, t('ui.paintCustom')));
+  const group = el('div', { class: 'swatches', role: 'radiogroup', 'aria-labelledby': `paint-${slot}-name` },
+    el('div', { class: 'swatches__dyes' }, PAINT_SWATCHES.filter((s) => !s.finish).map(radio)),
+    el('div', { class: 'swatches__side' },
+      el('div', { class: 'swatches__finishes' }, PAINT_SWATCHES.filter((s) => s.finish).map(radio)),
+      el('div', { class: 'swatch-custom-wrap' }, custom, input)));
+  const radios = [...group.querySelectorAll('[role="radio"]')];
+  (radios.find((r) => r.getAttribute('aria-checked') === 'true') || radios[0]).tabIndex = 0;
+  group.addEventListener('keydown', (e) => {
+    const i = radios.indexOf(doc.activeElement);
+    if (i < 0) return;
+    let j = null;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') j = (i + 1) % radios.length;
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') j = (i - 1 + radios.length) % radios.length;
+    else if (e.key === 'Home') j = 0;
+    else if (e.key === 'End') j = radios.length - 1;
+    else return;
+    e.preventDefault();
+    const next = radios[j];
+    radios.forEach((r) => { r.tabIndex = -1; });
+    next.tabIndex = 0;
+    next.focus();
+    if (!('custom' in next.dataset)) setPaint(slot, next.dataset.hex, true);
+  });
+  group.addEventListener('focusin', (e) => {
+    const node = e.target.closest('[role="radio"]');
+    if (node && node.matches(':focus-visible')) showSwatchTip(node);
+  });
+  group.addEventListener('focusout', hideSwatchTip);
+  group.addEventListener('pointerover', (e) => {
+    const node = e.pointerType === 'mouse' && e.target.closest('[role="radio"]');
+    if (node) showSwatchTip(node);
+    else hideSwatchTip();
+  });
+  group.addEventListener('pointerleave', hideSwatchTip);
+  return group;
+}
+
+function openPicker(input) {
+  hideSwatchTip();
+  try {
+    if (input.showPicker) {
+      input.showPicker();
+      return;
+    }
+  } catch {
+    // Falls back to a click, e.g. where showPicker is not allowed.
+  }
+  input.click();
+}
+
+// Small floating tip with the swatch name and hex, above the chip (hover and keyboard focus).
+let swatchTip = null;
+
+function showSwatchTip(node) {
+  if (!swatchTip) {
+    swatchTip = el('div', { class: 'swatch-tip', 'aria-hidden': 'true', hidden: true });
+    doc.body.append(swatchTip);
+  }
+  swatchTip.replaceChildren(el('span', { class: 'swatch-tip__name' }, node.dataset.name), el('span', { class: 'swatch-tip__hex mono' }, node.dataset.hex.toUpperCase()),
+    node.dataset.hint ? el('span', { class: 'swatch-tip__hint' }, node.dataset.hint) : '');
+  swatchTip.hidden = false;
+  const r = node.getBoundingClientRect();
+  const w = swatchTip.offsetWidth;
+  const h = swatchTip.offsetHeight;
+  const left = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), window.innerWidth - w - 8);
+  const top = r.top - h - 8 < 8 ? r.bottom + 8 : r.top - h - 8;
+  swatchTip.style.left = `${left}px`;
+  swatchTip.style.top = `${top}px`;
+}
+
+function hideSwatchTip() {
+  if (swatchTip) swatchTip.hidden = true;
 }
 
 function useIcon(id) {
@@ -656,10 +762,13 @@ function setPaint(slot, color, commit) {
     cancelAnimationFrame(paintFrame);
     paintFrame = requestAnimationFrame(() => viewer && viewer.paint(state.paint));
     for (const s of targets) {
-      const row = $(`#paint-${s}`);
-      if (row && s !== slot) row.value = color;
-      const hex = row && row.parentNode.querySelector('.paint-row__hex');
-      if (hex && color) hex.firstChild.textContent = color.toUpperCase();
+      const row = color && $(`[data-paint-row="${s}"]`);
+      if (!row) continue;
+      const input = $('.swatch-custom__input', row);
+      if (s !== slot) input.value = color;
+      $('.swatch-custom__chip', row).setAttribute('style', chipStyle(rgbOf(color)));
+      $('.swatch-custom', row).dataset.hex = color;
+      $('.paint-row__hex', row).firstChild.textContent = paintValueText(color, true);
     }
     return;
   }
@@ -1555,7 +1664,10 @@ function wireEvents() {
     importPreview(raw ? decodeField(raw).result : null);
     if (lastBanner) banner(lastBanner.message, lastBanner.level, lastBanner.withUndo);
   });
-  window.addEventListener('scroll', hideTip, { passive: true });
+  window.addEventListener('scroll', () => {
+    hideTip();
+    hideSwatchTip();
+  }, { passive: true });
   if (window.ResizeObserver) new ResizeObserver(checksScroll).observe($('[data-checks]'));
   else window.addEventListener('resize', checksScroll);
 }
