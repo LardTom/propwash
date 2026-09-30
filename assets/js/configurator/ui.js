@@ -228,7 +228,7 @@ function facts(p) {
   const d = p.data;
   const g = num(p.basics.mass_g, p.basics.mass_g < 10 ? 1 : 0) + ' g';
   switch (p.category) {
-    case 'frame': return `${d.wheelbase_mm} mm · ${d.props_mm[0] ? `${d.props_mm[0]}–` : '≤ '}${d.props_mm[1]} mm props · ${g}`;
+    case 'frame': return `${d.wheelbase_mm} mm · ${d.props_mm[0] ? `${d.props_mm[0]}–` : '≤ '}${d.props_mm[1]} mm ${t('ui.props')} · ${g}`;
     case 'stack': return `${d.cells[0] === d.cells[1] ? d.cells[0] : `${d.cells[0]}–${d.cells[1]}`}S · ${d.esc_continuous_a} A · ${g}`;
     case 'motor': return `${d.stator} · ${d.kv} KV · ${d.cells[0] === d.cells[1] ? d.cells[0] : `${d.cells[0]}–${d.cells[1]}`}S · ${g}`;
     case 'prop': return `${d.diameter_mm} mm (${num(p.derived.diameter_in, 1)}″) · ${d.blades} ${t('ui.blades')} · ${g}`;
@@ -540,7 +540,7 @@ function statRow(key, analysis, cls) {
   const [, , unit, decimals] = entry(`stats.${key}`);
   const value = analysis ? analysis[key] : NaN;
   return el('div', { class: cls },
-    el('dt', null, cls === 'keystat' ? t(`keyStats.${key}`) : t(`stats.${key}`)),
+    el('dt', null, cls === 'keystat' ? t(`keyStats.${key}`).split('/').flatMap((w, i) => (i ? ['/', el('wbr'), w] : [w])) : t(`stats.${key}`)),
     el('dd', null, el('span', { class: 'stat__value' }, num(value, decimals)), Number.isFinite(value) ? el('span', { class: 'stat__unit' }, ` ${unit}`) : null));
 }
 
@@ -580,6 +580,24 @@ function renderChecks() {
   for (const k of c.warnings) list.append(el('li', { class: 'is-warn' }, catalog.issueText(k, lang())));
   for (const k of flight) list.append(el('li', { class: 'is-warn' }, el('span', { class: 'checks__tag' }, t('ui.flightWarning')), catalog.analysisWarningText(k, lang())));
   box.replaceChildren(el('p', { class: `checks__status is-${level}` }, el('span', { class: 'checks__led', 'aria-hidden': 'true' }), label), list.children.length ? list : '');
+  if (list.children.length) list.addEventListener('scroll', checksScroll, { passive: true });
+  checksScroll();
+}
+
+/** On wide screens the check list scrolls inside the sticky 3D panel: then it takes keyboard focus and fades out
+    at the bottom while there is more below. */
+function checksScroll() {
+  const list = $('[data-checks] .checks__list');
+  if (!list) return;
+  const scrolls = list.scrollHeight > list.clientHeight + 1;
+  list.classList.toggle('has-more', scrolls && list.scrollTop + list.clientHeight < list.scrollHeight - 2);
+  if (scrolls) {
+    list.tabIndex = 0;
+    list.setAttribute('aria-label', t('ui.checksLabel'));
+  } else {
+    list.removeAttribute('tabindex');
+    list.removeAttribute('aria-label');
+  }
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -604,7 +622,8 @@ function renderPaint() {
       input,
       el('label', { for: id, class: 'paint-row__label' },
         el('span', { class: 'paint-row__name' }, catalog.paintSlotName(slot, lang())),
-        el('span', { class: 'paint-row__hint' }, off ? t('ui.notOnBuild') : localText(info && info.hint, lang()))),
+        el('span', { class: 'paint-row__hint' }, off ? t(slot === 'frame' && derived.proceduralFrame ? 'ui.paintHidden' : 'ui.notOnBuild')
+          : localText(info && info.hint, lang()))),
       el('span', { class: 'paint-row__hex mono' }, value.toUpperCase(), el('span', { class: 'visually-hidden' }, ` (${painted ? t('ui.painted') : t('ui.original')})`)),
       el('button', {
         type: 'button', class: 'icon-btn icon-btn--small', title: t('ui.resetSlot'), 'aria-label': `${t('ui.resetSlot')}: ${catalog.paintSlotName(slot, lang())}`,
@@ -651,6 +670,7 @@ function setPaint(slot, color, commit) {
 }
 
 function afterPaint(persist) {
+  syncPreset();
   if (viewer) viewer.paint(state.paint);
   renderShare();
   if (persist) scheduleHash();
@@ -795,6 +815,7 @@ function setTune(stored, focusKey) {
   const before = derived.effective;
   state.tune = stored;
   state.layers.tune = true;
+  syncPreset();
   recompute();
   const after = derived.effective;
   // Rates type and PID source change the layout of the panel; everything else is updated in place.
@@ -1029,7 +1050,7 @@ function renderLayers() {
   for (const [key, checked, enabled, note] of items) {
     box.append(el('label', { class: `check layer${enabled ? '' : ' is-off'}` },
       el('input', {
-        type: 'checkbox', checked: checked || null, disabled: key === 'parts' || !enabled ? true : null,
+        type: 'checkbox', checked: (checked && enabled) || null, disabled: key === 'parts' || !enabled ? true : null,
         onchange: (e) => {
           state.layers[key] = e.target.checked;
           if (key === 'osd') renderOsd();
@@ -1108,6 +1129,18 @@ function scheduleHash() {
 // ---------------------------------------------------------------------------------------------------------------
 // Import
 
+/** What a decoded code brings along: [text, bad] per line (layers first). */
+function importDetails(result) {
+  const layers = result.layers.map((l) => t(`ui.layers.${l}`)).join(', ');
+  const lines = [[t('ui.importLayers', { layers }), false]];
+  if (result.unknownParts.length) lines.push([t('ui.importUnknown', { ids: result.unknownParts.join(', ') }), true]);
+  if (result.wrongKind.length) lines.push([t('ui.wrongKindExplain') + result.wrongKind.join(', '), true]);
+  if (result.renamed.length) lines.push([t('ui.importRenamed', { n: result.renamed.length }), false]);
+  if (result.skipped.length) lines.push([t('ui.importSkipped', { n: result.skipped.length }), false]);
+  return lines;
+}
+
+/** Result under the import field. It always describes what is in the field (links report in the banner). */
 function importPreview(result) {
   const box = $('[data-import-result]');
   if (!result) {
@@ -1118,13 +1151,31 @@ function importPreview(result) {
     box.replaceChildren(el('p', { class: 'import__status is-bad' }, catalog.statusText(result.status, lang())));
     return;
   }
-  const layers = result.layers.map((l) => t(`ui.layers.${l}`)).join(', ');
-  const lines = [el('p', { class: 'import__status is-ok' }, `${catalog.statusText('OK', lang())} · ${t('ui.importLayers', { layers })}`)];
-  if (result.unknownParts.length) lines.push(el('p', { class: 'import__line is-bad' }, t('ui.importUnknown', { ids: result.unknownParts.join(', ') })));
-  if (result.wrongKind.length) lines.push(el('p', { class: 'import__line is-bad' }, t('ui.wrongKindExplain') + result.wrongKind.join(', ')));
-  if (result.renamed.length) lines.push(el('p', { class: 'import__line' }, t('ui.importRenamed', { n: result.renamed.length })));
-  if (result.skipped.length) lines.push(el('p', { class: 'import__line' }, t('ui.importSkipped', { n: result.skipped.length })));
-  box.replaceChildren(...lines);
+  const [[layers], ...rest] = importDetails(result);
+  box.replaceChildren(el('p', { class: 'import__status is-ok' }, `${catalog.statusText('OK', lang())} · ${layers}`),
+    ...rest.map(([text, bad]) => el('p', { class: `import__line${bad ? ' is-bad' : ''}` }, text)));
+}
+
+/** Decoded content of the import field: a code or a whole share link. */
+function decodeField(raw) {
+  const code = raw.includes('#') ? codeFromHash(raw.slice(raw.indexOf('#'))) || raw : raw;
+  return { code, result: catalog.decode(code) };
+}
+
+/** Banner for a build opened from a link: what it brought along, or why it could not be read. The import field
+    shows an unreadable code so it can be fixed there; after a readable link it is emptied, so nothing stale stays. */
+function linkResult(code, result) {
+  const input = $('[data-import]');
+  if (result.ok) {
+    input.value = '';
+    importPreview(null);
+    const warn = result.unknownParts.length || result.wrongKind.length;
+    banner(() => `${t('ui.linkLoaded')} ${importDetails(result).map(([text]) => text).join(' · ')}`, warn ? 'warn' : 'ok', false);
+  } else {
+    input.value = code;
+    importPreview(result);
+    banner(() => t('ui.badLink') + catalog.statusText(result.status, lang()), 'bad', false);
+  }
 }
 
 function applyDecoded(result) {
@@ -1143,12 +1194,16 @@ function applyDecoded(result) {
   state.presetId = null;
 }
 
+let lastBanner = null;
+
+/** Banner above the panel. message is text or a function giving the text (re-rendered on a language switch). */
 function banner(message, level, withUndo) {
   const host = $('[data-banner]');
   host.replaceChildren();
+  lastBanner = message ? { message, level, withUndo } : null;
   if (!message) return;
   host.append(el('p', { class: `banner is-${level}` },
-    el('span', null, message),
+    el('span', null, typeof message === 'function' ? message() : message),
     withUndo && undoSnapshot ? el('button', {
       type: 'button', class: 'banner__btn',
       onclick: () => {
@@ -1171,7 +1226,8 @@ function loadCode(code, source) {
   refreshAll();
   lastHashCode = null;
   scheduleHash();
-  banner(source === 'link' ? t('ui.linkLoaded') : t('ui.importLoaded'), result.unknownParts.length || result.wrongKind.length ? 'warn' : 'ok', source !== 'link');
+  if (source === 'link') linkResult(code, result);
+  else banner(() => t('ui.importLoaded'), result.unknownParts.length || result.wrongKind.length ? 'warn' : 'ok', true);
   return result;
 }
 
@@ -1202,7 +1258,7 @@ function loadPreset(id, announce) {
   state.layers = { ...state.layers, paint: true, tune: true, name: true };
   refreshAll();
   scheduleHash();
-  if (announce) banner(t('ui.presetLoaded', { name: catalog.presetName(id, lang()) }), 'ok', true);
+  if (announce) banner(() => t('ui.presetLoaded', { name: catalog.presetName(id, lang()) }), 'ok', true);
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -1216,11 +1272,31 @@ async function updateViewerAndPaint() {
   if (!ok || token !== showToken) return;
   if (state.tab === 'paint') renderPaint();
   if (viewer) {
-    const name = $('[data-viewer-name]');
-    name.textContent = state.name.trim() || (state.presetId ? catalog.presetName(state.presetId, lang()) : '');
+    viewerName();
     const shown = await viewer.show(state.build, state.paint);
     if (shown && token === showToken) viewerNote(!shown.layout ? t('ui.noFrame') : '');
   }
+}
+
+/** Caption of the 3D view: the drone's name, else the preset it still is. */
+function viewerName() {
+  $('[data-viewer-name]').textContent = state.name.trim() || (state.presetId ? catalog.presetName(state.presetId, lang()) : '');
+}
+
+const canonical = (o) => JSON.stringify(Object.keys(o || {}).sort().map((k) => [k, o[k]]));
+
+/** The page names a preset (select and 3D caption) only while parts, paint and tune still match it exactly. */
+function syncPreset() {
+  if (!state.presetId) return;
+  const c = catalog.presetContent(state.presetId);
+  const same = c && FIELDS.every((f) => c.build[f] === state.build[f])
+    && canonical(c.build.accessories) === canonical(state.build.accessories)
+    && canonical(c.paint) === canonical(state.paint)
+    && canonical(c.tune) === canonical(state.tune);
+  if (same) return;
+  state.presetId = null;
+  $('[data-preset]').value = '';
+  viewerName();
 }
 
 function viewerNote(text) {
@@ -1233,6 +1309,7 @@ function viewerNote(text) {
 
 function setBuild(build, { keepFocus } = {}) {
   state.build = build;
+  syncPreset();
   recompute();
   slotRows();
   picker();
@@ -1343,8 +1420,7 @@ async function startViewer() {
       button.setAttribute('aria-pressed', 'false');
     }
   });
-  const name = $('[data-viewer-name]');
-  name.textContent = state.name.trim() || (state.presetId ? catalog.presetName(state.presetId, lang()) : '');
+  viewerName();
   const shown = await viewer.show(state.build, state.paint);
   if (shown) viewerNote(!shown.layout ? t('ui.noFrame') : '');
 }
@@ -1397,15 +1473,8 @@ async function boot() {
   wireEvents();
   refreshAll();
   if (fromLink) {
-    if (fromLink.ok) {
-      lastHashCode = hashCode;
-      banner(t('ui.linkLoaded'), fromLink.unknownParts.length || fromLink.wrongKind.length ? 'warn' : 'ok', false);
-      importPreview(fromLink);
-    } else {
-      banner(t('ui.badLink') + catalog.statusText(fromLink.status, lang()), 'bad', false);
-      $('[data-import]').value = hashCode;
-      importPreview(fromLink);
-    }
+    if (fromLink.ok) lastHashCode = hashCode;
+    linkResult(hashCode, fromLink);
   }
   startViewer();
 }
@@ -1422,8 +1491,7 @@ function wireEvents() {
   });
   $('[data-name]').addEventListener('input', (e) => {
     state.name = e.target.value;
-    const name = $('[data-viewer-name]');
-    name.textContent = state.name.trim() || (state.presetId ? catalog.presetName(state.presetId, lang()) : '');
+    viewerName();
     renderShare();
     scheduleHash();
   });
@@ -1454,8 +1522,7 @@ function wireEvents() {
       importPreview(null);
       return;
     }
-    const code = raw.includes('#') ? codeFromHash(raw.slice(raw.indexOf('#'))) || raw : raw;
-    const result = catalog.decode(code);
+    const { code, result } = decodeField(raw);
     importPreview(result);
     if (result.ok) {
       let again = null;
@@ -1477,17 +1544,20 @@ function wireEvents() {
     if (!code || code === lastHashCode) return;
     lastHashCode = code;
     const result = loadCode(code, 'link');
-    if (!result.ok) banner(t('ui.badLink') + catalog.statusText(result.status, lang()), 'bad', false);
+    if (!result.ok) linkResult(code, result);
   });
   doc.addEventListener('propwash:lang', () => {
     if (!catalog) return;
     if (viewer) viewer.canvas.setAttribute('aria-label', t('ui.viewerLabel'));
     refreshAll();
     if (state.tab === 'paint') renderPaint();
-    const input2 = $('[data-import]');
-    if (input2.value.trim()) importPreview(catalog.decode(input2.value.trim()));
+    const raw = $('[data-import]').value.trim();
+    importPreview(raw ? decodeField(raw).result : null);
+    if (lastBanner) banner(lastBanner.message, lastBanner.level, lastBanner.withUndo);
   });
   window.addEventListener('scroll', hideTip, { passive: true });
+  if (window.ResizeObserver) new ResizeObserver(checksScroll).observe($('[data-checks]'));
+  else window.addEventListener('resize', checksScroll);
 }
 
 boot();
