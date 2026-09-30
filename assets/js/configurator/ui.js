@@ -6,7 +6,7 @@ import { loadCatalog, localText } from './data.js';
 import { shareLink, codeFromHash, PAINT_SLOTS } from './sharecode.js';
 import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js';
 import { FLIGHT_GROUPS } from './tune.js';
-import { STAT_KEYS, PROPS_IN_VIEW_WARNING } from './analysis.js';
+import { PROPS_IN_VIEW_WARNING } from './analysis.js';
 import { occlusionPercent } from './fpv.js';
 import { batteryFit } from './rules.js';
 import { assemble, PROP_SLOTS } from './assembly.js';
@@ -19,7 +19,13 @@ const DEFAULT_PRESET = 'justmoreparts:deadcat5_6s';
 const FIELDS = ['frame', 'stack', 'motor', 'prop', 'video', 'battery'];
 const SLOT_CATEGORIES = [...FIELDS, 'accessory'];
 const ROLE_ORDER = ['whoop', 'toothpick', 'cinewhoop', 'freestyle', 'race', 'long_range', 'x_class'];
-const KEY_STATS = ['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'hover_flight_time_min', 'top_speed_kmh'];
+const KEY_STATS = ['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'mixed_flight_time_min', 'top_speed_kmh'];
+// Rows of the flight analysis, ordered like the workbench in the game (Propwash 0.4.2): main figures, the four flight
+// times (mixed is the main value), currents, voltages and loads, temperatures.
+const STAT_ROWS = ['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'mixed_flight_time_min', 'aggressive_flight_time_min',
+  'hover_flight_time_min', 'cruise_flight_time_min', 'top_speed_kmh', 'hover_current_a', 'mixed_current_a', 'full_throttle_current_a',
+  'landing_cell_voltage', 'avionics_power_w', 'esc_load_percent', 'battery_load_percent', 'motor_response_ms', 'crash_speed_ms',
+  'motor_temp_minute_c', 'mixed_motor_temp_c', 'props_in_view_percent'];
 const OSD_PRESETS = ['minimal', 'standard', 'full', 'race'];
 const AXES = ['roll', 'pitch', 'yaw'];
 // Which part categories a build issue is about (for the fit badges of the pickers).
@@ -506,7 +512,7 @@ function showTip(node, part) {
       const after = catalog.analyze(swapped(part));
       if (after) {
         const rows = el('dl', { class: 'part-tip__delta' });
-        for (const key of ['mass_grams', 'thrust_to_weight', 'hover_flight_time_min', 'top_speed_kmh']) {
+        for (const key of ['mass_grams', 'thrust_to_weight', 'mixed_flight_time_min', 'top_speed_kmh']) {
           const [, , unit, decimals] = entry(`stats.${key}`);
           const before = derived.analysis[key];
           const value = after[key];
@@ -541,18 +547,25 @@ function hideTip() {
 // ---------------------------------------------------------------------------------------------------------------
 // Stats and checks
 
+function statLabel(key, analysis) {
+  if (key !== 'cruise_flight_time_min') return t(`stats.${key}`);
+  const speed = analysis ? analysis.cruise_speed_kmh : NaN;
+  const [, , unit, decimals] = entry('stats.cruise_speed_kmh');
+  return t(`stats.${key}`, { speed: Number.isFinite(speed) ? `${num(speed, decimals)} ${unit}` : t('ui.noValue') });
+}
+
 function statRow(key, analysis, cls) {
   const [, , unit, decimals] = entry(`stats.${key}`);
   const value = analysis ? analysis[key] : NaN;
   return el('div', { class: cls },
-    el('dt', null, cls === 'keystat' ? t(`keyStats.${key}`).split('/').flatMap((w, i) => (i ? ['/', el('wbr'), w] : [w])) : t(`stats.${key}`)),
+    el('dt', null, cls === 'keystat' ? t(`keyStats.${key}`).split('/').flatMap((w, i) => (i ? ['/', el('wbr'), w] : [w])) : statLabel(key, analysis)),
     el('dd', null, el('span', { class: 'stat__value' }, num(value, decimals)), Number.isFinite(value) ? el('span', { class: 'stat__unit' }, ` ${unit}`) : null));
 }
 
 function renderStats() {
   const a = derived.analysis;
   $('[data-keystats]').replaceChildren(...KEY_STATS.map((k) => statRow(k, a, 'keystat')));
-  $('[data-stats]').replaceChildren(...STAT_KEYS.map((k) => statRow(k, a, 'stat')));
+  $('[data-stats]').replaceChildren(...STAT_ROWS.map((k) => statRow(k, a, 'stat')));
   const note = $('[data-stats-note]');
   note.textContent = a ? '' : t('ui.noAnalysis');
   note.hidden = !!a;
@@ -1669,7 +1682,7 @@ const CARD_H = 900;
 const CARD_STRIP = 236;
 const CARD_PAD = 60;
 const CARD_MARK = 'propwashfpv.com/configurator';
-const CARD_STATS = ['mass_grams', 'thrust_to_weight', 'hover_flight_time_min'];
+const CARD_STATS = ['mass_grams', 'thrust_to_weight', 'mixed_flight_time_min'];
 const SAIRA = '"PW Saira", "Saira", system-ui, sans-serif';
 const MONO = '"PW Mono", ui-monospace, Menlo, Consolas, monospace';
 

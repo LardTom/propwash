@@ -45,7 +45,7 @@ export function newestExport() {
     versions = [];
   }
   versions.sort(compareVersions);
-  return path.join(RELEASES, versions.length ? versions[versions.length - 1] : '1.0.3', 'web-export');
+  return path.join(RELEASES, versions.length ? versions[versions.length - 1] : '1.0.4', 'web-export');
 }
 
 export function exportDir(argv = process.argv.slice(2)) {

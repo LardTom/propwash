@@ -10,7 +10,8 @@
 //    normalisation and edits of the tune; paint swatches and random paint schemes round-trip through the share code.
 // 3. Tolerant decoding and error statuses (spelling variants, damaged and hostile codes).
 // 3b. Report vectors (tools/fixtures/report-vectors.json): codes from bug reports with their expected build, analysis
-//    and FPV camera, e.g. the deadcat whose props the game showed while the configurator said 0.0 %.
+//    and FPV camera, e.g. the deadcat whose props the game showed while the configurator said 0.0 %; analysis_before
+//    keeps the figures before a recalibration (the flight physics part must stay unchanged, the energy part must not).
 // 4. If the web export is available (default: newest ../propwash-justmoreparts/release/<version>/web-export, or
 //    JMP_WEB_EXPORT / --export): the one-part-swapped analysis variants of every preset (analysis/<preset>.json) and the
 //    FPV camera of every preset and variant (camera_view).
@@ -209,7 +210,19 @@ console.log(`Presets: ${presetPass}/${catalog.presets.length} (share code, check
       ok(same(d.layers, v.layers), `${v.name}: layers ${d.layers}`);
       ok(share.encode(d.content) === v.code, `${v.name}: re-encoded byte-identically`);
       if (v.preset) ok(catalog.preset(v.preset) && catalog.preset(v.preset).sharecode === v.code, `${v.name}: is preset ${v.preset}`);
-      compareAnalysis(catalog.analyze(d.content.build), v.analysis, v.name);
+      const analysis = catalog.analyze(d.content.build);
+      compareAnalysis(analysis, v.analysis, v.name);
+      if (v.analysis_before && analysis) {
+        // Recalibrated energy balance (Propwash 0.4.2): the flight physics stays bit-identical, only the energy
+        // figures (flight times, pack currents, motor temperatures) change.
+        for (const key of ['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'top_speed_kmh', 'esc_load_percent',
+          'motor_response_ms', 'crash_speed_ms', 'props_in_view_percent']) {
+          sameNumber(analysis[key], v.analysis_before[key], `${v.name}: ${key} unchanged by the recalibration`);
+        }
+        for (const key of ['hover_flight_time_min', 'cruise_flight_time_min', 'full_throttle_current_a', 'sustained_motor_temp_c']) {
+          ok(Math.abs(analysis[key] - v.analysis_before[key]) > 1e-6, `${v.name}: ${key} recalibrated (${analysis[key]} vs before ${v.analysis_before[key]})`);
+        }
+      }
       const view = catalog.cameraView(d.content.build);
       compareCameraView(view, v.camera_view, v.name);
       if (v.game && view) {

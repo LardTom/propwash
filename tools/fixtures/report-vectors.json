@@ -1,7 +1,7 @@
 [
  {
   "name": "Report 2026-09-30: Deadcat LR 7″ · 8S",
-  "about": "Owner report: the configurator showed 0.0 % props in the camera view, the game showed prop blades at the left and right image edges. The analysis (Propwash 0.4.1) now follows the FPV renderer; Just More Parts 1.0.3 keeps the lens where the owner flew it (z = -78 mm), so the configurator shows the same prop tips at the image edges.",
+  "about": "Owner report: the configurator showed 0.0 % props in the camera view, the game showed prop blades at the left and right image edges. The analysis (Propwash 0.4.1) now follows the FPV renderer; Just More Parts 1.0.3 keeps the lens where the owner flew it (z = -78 mm), so the configurator shows the same prop tips at the image edges. Second report (flight times and part stats a bit off: 24.2 min hovering, 10.5 min cruising, 137.5 A and 124 °C at full throttle for this 7″ 8S long-range build): Propwash 0.4.2 and Just More Parts 1.0.4 calculate the energy balance realistically; analysis holds their figures, analysis_before the old ones. The flight physics stays bit-identical, so weight, thrust/weight, hover throttle, top speed and props in view are unchanged.",
   "code": "PW1-0400E-MG21H-P74QS-QBXJ6-ARB4C-DGQ80-GFEDT-62RVB-BWSK0-QSRED-FKCDB-10856-TCHR6-0VNYC-9H60R-043KG-64VKG-QSM61-FK4RJ-ZCDK6-W0GAC-HMPET-BMC5P-5YV3J-08464-E3KBW-S34C1-G005G-01RV3-MG1YV-ZBF70-FY080-YVQT8-SR",
   "preset": "justmoreparts:lr7_8s",
   "layers": [
@@ -19,6 +19,32 @@
    "accessories": {}
   },
   "analysis": {
+   "mass_grams": 896.9000000000001,
+   "thrust_to_weight": 11.657691876325174,
+   "hover_throttle_percent": 21.736347122910306,
+   "hover_flight_time_min": 19.500487978744534,
+   "cruise_flight_time_min": 11.831646328192111,
+   "mixed_flight_time_min": 8.03952939217446,
+   "aggressive_flight_time_min": 5.743580865598182,
+   "cruise_speed_kmh": 63.00000000002112,
+   "hover_current_a": 5.001811666564954,
+   "cruise_current_a": 8.925216074822933,
+   "mixed_current_a": 13.135097198946644,
+   "landing_cell_voltage": 3.6115136760674167,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 145.47438608030512,
+   "full_throttle_current_a": 140.96235728137754,
+   "esc_load_percent": 52.78676283881359,
+   "battery_load_percent": 64.07379876426252,
+   "motor_response_ms": 22.98397382115879,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 95.24016946776467,
+   "motor_temp_minute_c": 95.24016946776467,
+   "mixed_motor_temp_c": 41.467498918772414,
+   "props_in_view_percent": 2.016540184661153,
+   "warnings": []
+  },
+  "analysis_before": {
    "mass_grams": 896.9000000000001,
    "thrust_to_weight": 11.657691876325174,
    "hover_throttle_percent": 21.736347122910306,

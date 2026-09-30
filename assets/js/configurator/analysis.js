@@ -1,14 +1,17 @@
-// Flight analysis of a build, a port of Propwash 0.4.1 BuildAccess#analyze (BuildStats): airframe derivation,
-// steady operating points of motors and battery, top speed, flight times, motor heating and camera occlusion (the FPV
-// rig of the renderer, fpv.js).
+// Flight analysis of a build, a port of Propwash 0.4.2 BuildAccess#analyze (BuildStats): airframe derivation,
+// steady operating points of motors and battery, top speed, the energy balance of sim.EnergyModel (pack current with
+// drive losses, prop factor and avionics load, flight times for hover, cruise, mixed and aggressive flying down to the
+// landing voltage, motor heating) and camera occlusion (the FPV rig of the renderer, fpv.js).
 // Only the parts of the model that BuildStats needs are ported; every formula keeps the mod's operation order so
 // the numbers match the mod's (the web export's test vectors) to the last digits.
 //
 // analyze(build, catalog) returns null when a part is unknown or an accessory sits in the wrong slot, else
 //   { mass_grams, thrust_to_weight, hover_throttle_percent, hover_flight_time_min, cruise_flight_time_min,
-//     top_speed_kmh, full_throttle_current_a, esc_load_percent, battery_load_percent, motor_response_ms,
-//     crash_speed_ms, sustained_motor_temp_c, props_in_view_percent, warnings }
-// NaN (e.g. hover values of a build that cannot hover) means "no value".
+//     mixed_flight_time_min, aggressive_flight_time_min, cruise_speed_kmh, hover_current_a, cruise_current_a,
+//     mixed_current_a, landing_cell_voltage, avionics_power_w, top_speed_kmh, full_throttle_current_a,
+//     esc_load_percent, battery_load_percent, motor_response_ms, crash_speed_ms, sustained_motor_temp_c,
+//     motor_temp_minute_c, mixed_motor_temp_c, props_in_view_percent, warnings }
+// NaN (e.g. flight times of a build that cannot hover) means "no value".
 
 import { resolveBuild, batteryContinuousCurrent } from './rules.js';
 import { rig as fpvRig, occlusionPercent, cameraView as rigCameraView } from './fpv.js';
@@ -59,6 +62,31 @@ const DUCT_CLEARANCE = 0.003;
 const IDLE_REFERENCE = 0.055;
 const SOC_MIN = -0.1;
 
+// sim.EnergyModel (Propwash 0.4.2): energy balance on top of the unchanged flight physics.
+const AVIONICS_BASE_W = 0.6;
+const DRIVE_LOSS_W = 1.03;
+const DRIVE_LOSS_MASS_EXP = 0.5;
+const DRIVE_LOSS_SPEED_EXP = 1.0;
+const ANALOG_BASE_W = 1.2;
+const ANALOG_PER_RF_W = 4.3;
+const DIGITAL_BASE_W = 4.5;
+const DIGITAL_PER_GRAM_W = 0.1;
+const DIGITAL_PER_RF_W = 2.5;
+const DEFAULT_RF_MW = 200;
+const LOW_RATE_USABLE = 0.87;
+const PUNCH_STEPS = 24;
+const ENERGY_SEGMENTS = 24;
+const IDLE_SOC = 0.5;
+const MINUTE_S = 60.0;
+const PROP_SIZE_MM = [31.0, 51.0, 76.0, 89.0, 102.0, 130.0, 178.0, 254.0, 330.0];
+const PROP_SIZE_FACTOR = [0.84, 0.78, 0.72, 0.67, 0.80, 1.02, 1.0, 0.93, 0.93];
+const BLADE_LOSS = 0.38;
+const BLADE_INTERFERENCE_MM = 45.0;
+const BLADE_INTERFERENCE_FADE_MM = 10.0;
+const WHOOP_SMALL_PROP_M = 0.035;
+const AIRFLOW_COOLING = 0.6;
+const AIRFLOW_REFERENCE_MS = 10.0;
+
 const MOTOR_HEAT_CAPACITY = 0.5;
 const MOTOR_CONDUCTANCE_BASE = 0.075;
 const MOTOR_CONDUCTANCE_PER_OMEGA = 1.5e-4;
@@ -74,6 +102,8 @@ const MOTORS = 4;
 // PartWear.SIM_MOTOR_BY_POSITION: arm position (front left, front right, rear left, rear right) -> motor index.
 const SIM_MOTOR_BY_POSITION = [3, 1, 2, 0];
 const ARM_KEYS = ['front_left', 'front_right', 'rear_left', 'rear_right'];
+/** FrameRole keys; frames without a known role fly like freestyle frames (FrameRole.FREESTYLE). */
+const FRAME_ROLES = Object.freeze(['whoop', 'toothpick', 'cinewhoop', 'freestyle', 'race', 'long_range', 'cinelifter', 'x_class']);
 
 const HINGE_CLEARANCE_MM = 5.0;
 const HULL_MARGIN = 0.003;
@@ -94,6 +124,7 @@ const MAX_TILT = toRadians(89.0);
 const DEFAULT_ANGLE_LIMIT = toRadians(60.0);
 const TOP_SPEED_SOC = 0.8;
 const REFERENCE_AMBIENT_C = 25.0;
+const MOTOR_TEMP_WINDOW_S = 60.0;
 /** BuildWarning.PROPS_IN_VIEW: warning above this share of the FPV image (Propwash 0.4.1). */
 export const PROPS_IN_VIEW_WARNING = 30.0;
 
@@ -295,6 +326,12 @@ function deriveAirframe(parts, catalog) {
   p.fullPackVoltage = bd.cells * chem.full_v;
   p.accessoryPower = accessoryWatts;
   p.auxPower = AUX_BASE_W + AUX_PER_GRAM_W * video.basics.mass_g + p.accessoryPower;
+  p.avionicsPower = AVIONICS_BASE_W + videoPower(video) + p.accessoryPower;
+  p.driveLossHover = driveLossAtHover(motor.basics.mass_g, pd.blades, diameter * 1000.0, kQ * omegaH * omegaH * omegaH);
+  p.propFactor = sizeFactor(diameter * 1000.0);
+  p.usableFraction = effectiveUsableFraction(chem);
+  p.landingCellVoltage = 0.5 * (chem.empty_v + chem.cutoff_v);
+  p.role = FRAME_ROLES.includes(fd.role) ? fd.role : 'freestyle';
   p.escMinCells = sd.cells[0];
   p.escMaxCells = sd.cells[1];
   p.escOvervoltage = bd.cells > sd.cells[1];
@@ -872,37 +909,325 @@ function tiltForSpeed(p, speed, maxTilt) {
   return 0.5 * (lo + hi);
 }
 
-function flightTimeMinutes(p, omega, current) {
-  const pt = newPoint();
-  const capacity = p.capacityMah;
-  const limit = 0.8 * capacity;
-  let used = 0.0;
-  for (let second = 0; second < 360000; second++) {
-    const soc = 1.0 - used / capacity;
-    steadyMotor(p, omega, current, soc, true, 0.0, true, pt);
-    const step = Math.max(pt.batteryCurrent, 1e-6) / 3.6;
-    if (used + step >= limit) return (second + (limit - used) / step) / 60.0;
-    used += step;
+// ---------------------------------------------------------------------------------------------------------------
+// Energy balance (sim.EnergyModel of Propwash 0.4.2): what the pack really delivers on top of the flight physics
+
+// Mix of a flying style per frame role: shares of cruise, punches and idle, and the punch thrust-to-weight.
+function styleMix(p, profile) {
+  const aggressive = profile === 'aggressive';
+  const mix = (cruise, punch, idle, punchThrust) => ({ cruise, punch, idle, punchThrust });
+  switch (p.role) {
+    case 'whoop':
+      return p.propDiameter <= WHOOP_SMALL_PROP_M
+        ? aggressive ? mix(0.46, 0.49, 0.05, 5.0) : mix(0.44, 0.37, 0.19, 5.0)
+        : aggressive ? mix(0.50, 0.40, 0.10, 3.5) : mix(0.75, 0.20, 0.05, 3.5);
+    case 'toothpick':
+      return aggressive ? mix(0.65, 0.23, 0.12, 4.5) : mix(0.80, 0.12, 0.08, 4.0);
+    case 'cinewhoop':
+    case 'cinelifter':
+      return aggressive ? mix(0.75, 0.17, 0.08, 3.5) : mix(0.88, 0.07, 0.05, 2.5);
+    case 'race':
+      return aggressive ? mix(0.50, 0.38, 0.12, 7.0) : mix(0.58, 0.30, 0.12, 6.5);
+    case 'long_range':
+      return aggressive ? mix(0.58, 0.32, 0.10, 5.0) : mix(0.66, 0.26, 0.08, 3.8);
+    case 'x_class':
+      return aggressive ? mix(0.45, 0.45, 0.10, 5.0) : mix(0.58, 0.34, 0.08, 4.2);
+    default:
+      return aggressive ? mix(0.72, 0.14, 0.14, 7.0) : mix(0.80, 0.10, 0.10, 5.5);
   }
-  return 6000.0;
 }
 
-function fullThrottleMotorTemp(p, ambient) {
+function cruiseTopFraction(role) {
+  switch (role) {
+    case 'whoop':
+    case 'long_range':
+      return 0.55;
+    case 'cinewhoop':
+    case 'cinelifter':
+    case 'x_class':
+      return 0.5;
+    case 'toothpick':
+      return 0.45;
+    default:
+      return 0.4;
+  }
+}
+
+// Class-typical cruise speed in m/s.
+function roleCruiseSpeed(role) {
+  switch (role) {
+    case 'whoop':
+      return 18.5 / 3.6;
+    case 'toothpick':
+      return 40.0 / 3.6;
+    case 'cinewhoop':
+    case 'cinelifter':
+      return 30.0 / 3.6;
+    case 'race':
+      return 60.0 / 3.6;
+    case 'long_range':
+      return 63.0 / 3.6;
+    case 'x_class':
+      return 65.0 / 3.6;
+    default:
+      return 55.0 / 3.6;
+  }
+}
+
+// Power draw of the video system: the part's power_w, else estimated from link, VTX power and mass.
+function videoPower(video) {
+  const d = video.data;
+  if (typeof d.power_w === 'number') return d.power_w;
+  const rf = (d.vtx_power_mw > 0 ? d.vtx_power_mw : DEFAULT_RF_MW) / 1000.0;
+  if (d.link === 'digital') return DIGITAL_BASE_W + DIGITAL_PER_GRAM_W * video.basics.mass_g + DIGITAL_PER_RF_W * rf;
+  return ANALOG_BASE_W + ANALOG_PER_RF_W * rf;
+}
+
+// CellChemistry#effectiveUsableFraction: share of the capacity a pilot uses before landing.
+function effectiveUsableFraction(chem) {
+  if (typeof chem.usable_fraction === 'number') return chem.usable_fraction;
+  if (chem.empty_v < 3.25) return 0.88;
+  return chem.full_v >= 4.3 ? 0.85 : 0.8;
+}
+
+// Prop energy factor by diameter (log-interpolated between the reference sizes).
+function sizeFactor(diameterMm) {
+  const d = PROP_SIZE_MM;
+  if (diameterMm <= d[0]) return PROP_SIZE_FACTOR[0];
+  for (let i = 1; i < d.length; i++) {
+    if (diameterMm <= d[i]) {
+      const t = Math.log(diameterMm / d[i - 1]) / Math.log(d[i] / d[i - 1]);
+      return PROP_SIZE_FACTOR[i - 1] + (PROP_SIZE_FACTOR[i] - PROP_SIZE_FACTOR[i - 1]) * t;
+    }
+  }
+  return PROP_SIZE_FACTOR[PROP_SIZE_FACTOR.length - 1];
+}
+
+function bladeLoss(blades, diameterMm) {
+  const small = clamp01((BLADE_INTERFERENCE_MM - diameterMm) / BLADE_INTERFERENCE_FADE_MM);
+  return BLADE_LOSS * Math.max(0, blades - 3) * small;
+}
+
+function driveLossAtHover(motorGrams, blades, diameterMm, shaftPowerHover) {
+  return DRIVE_LOSS_W * Math.pow(Math.max(motorGrams, 0.1), DRIVE_LOSS_MASS_EXP) + bladeLoss(blades, diameterMm) * shaftPowerHover;
+}
+
+function driveLoss(p, omega) {
+  if (!(omega > 0.0)) return 0.0;
+  return p.driveLossHover * Math.pow(omega / p.hoverOmega, DRIVE_LOSS_SPEED_EXP);
+}
+
+function uniformExtraPower(p, omega) {
+  return p.avionicsPower - p.auxPower + MOTORS * driveLoss(p, omega);
+}
+
+// Pack current of an operating point of the flight physics (EnergyModel.packCurrent).
+function packCurrent(p, pt) {
+  const extraPower = uniformExtraPower(p, pt.omega);
+  const v = Math.max(pt.busVoltage, 0.05 * p.fullPackVoltage);
+  const motors = Math.max(0.0, pt.batteryCurrent - p.auxPower / v);
+  return Math.max(0.0, pt.batteryCurrent + (p.propFactor - 1.0) * motors + extraPower / v);
+}
+
+function loadedVoltage(p, soc, current) {
+  const r = internalResistance(p, current, soc) + p.polarizationResistance;
+  return emf(p, soc) - r * current;
+}
+
+function motorHeat(p, pt) {
+  return pt.phaseCurrent * pt.phaseCurrent * p.motorResistance + p.kt * p.idleCurrent * pt.omega;
+}
+
+// Operating points of the flying styles (EnergyModel.Points).
+class EnergyPoints {
+  constructor(p, topSpeed, topTilt) {
+    this.p = p;
+    this.scratch = newPoint();
+    this.pack = 0.0;
+    this.motion = 0.0;
+    this.calm = 0.0;
+    this.heat = 0.0;
+    this.idlePack = NaN;
+    this.idleMotion = 0.0;
+    this.idleHeat = 0.0;
+    if (topSpeed > 0.0 && topTilt > 0.0) {
+      const target = Math.min(roleCruiseSpeed(p.role), cruiseTopFraction(p.role) * topSpeed);
+      const tilt = tiltForSpeed(p, target, topTilt);
+      const speed = speedAtTilt(p, tilt);
+      const omega = levelFlightOmega(p, speed, tilt);
+      this.cruiseOmega = omega;
+      this.cruiseCurrent = airTorque(p, omega, speed * Math.sin(tilt), 1.0) / p.kt + p.idleCurrent;
+      this.cruiseSpeed = speed;
+    } else {
+      this.cruiseOmega = p.hoverOmega;
+      this.cruiseCurrent = hoverCurrent(p);
+      this.cruiseSpeed = 0.0;
+    }
+  }
+
+  hover(soc) {
+    hover(this.p, soc, true, 0.0, true, this.scratch);
+    return packCurrent(this.p, this.scratch);
+  }
+
+  cruise(soc) {
+    steadyMotor(this.p, this.cruiseOmega, this.cruiseCurrent, soc, true, 0.0, true, this.scratch);
+    return packCurrent(this.p, this.scratch);
+  }
+
+  punchPoint(thrustToWeight, soc) {
+    const p = this.p;
+    const t = thrustToWeight * p.massKg * G / MOTORS;
+    const omega = omegaForThrust(p, t, 0.0, 0.0);
+    const current = airTorque(p, omega, 0.0, 1.0) / p.kt + p.idleCurrent;
+    steadyMotor(p, omega, current, soc, true, 0.0, true, this.scratch);
+    if (!this.scratch.feasible) uniformDuty(p, 1.0, soc, true, 0.0, 0.0, this.scratch);
+  }
+
+  // Punches of a Li-Ion-like pack (usable fraction >= 0.87) are limited to its continuous current.
+  punch(thrustToWeight, soc) {
+    const p = this.p;
+    this.punchPoint(thrustToWeight, soc);
+    const current = packCurrent(p, this.scratch);
+    if (p.usableFraction < LOW_RATE_USABLE || current <= p.continuousCurrent) return current;
+    let lo = 1.0;
+    let hi = thrustToWeight;
+    for (let k = 0; k < PUNCH_STEPS; k++) {
+      const mid = 0.5 * (lo + hi);
+      this.punchPoint(mid, soc);
+      if (packCurrent(p, this.scratch) > p.continuousCurrent) hi = mid;
+      else lo = mid;
+    }
+    this.punchPoint(lo, soc);
+    return packCurrent(p, this.scratch);
+  }
+
+  idle(soc) {
+    uniformDuty(this.p, IDLE_REFERENCE, soc, true, 0.0, 0.0, this.scratch);
+    return packCurrent(this.p, this.scratch);
+  }
+
+  add(weight, pack) {
+    this.pack += weight * pack;
+    this.motion += weight * this.scratch.batteryCurrent;
+    this.heat += weight * motorHeat(this.p, this.scratch);
+  }
+
+  evaluate(profile, soc) {
+    this.pack = 0.0;
+    this.motion = 0.0;
+    this.heat = 0.0;
+    if (profile === 'hover') {
+      this.add(1.0, this.hover(soc));
+      this.calm = this.scratch.batteryCurrent;
+    } else if (profile === 'cruise') {
+      this.add(1.0, this.cruise(soc));
+      this.calm = this.scratch.batteryCurrent;
+    } else {
+      const m = styleMix(this.p, profile);
+      if (m.cruise > 0.0) this.add(m.cruise, this.cruise(soc));
+      this.calm = this.scratch.batteryCurrent;
+      if (m.punch > 0.0) this.add(m.punch, this.punch(m.punchThrust, soc));
+      if (m.idle > 0.0) {
+        if (Number.isNaN(this.idlePack)) {
+          this.idlePack = this.idle(IDLE_SOC);
+          this.idleMotion = this.scratch.batteryCurrent;
+          this.idleHeat = motorHeat(this.p, this.scratch);
+        }
+        this.pack += m.idle * this.idlePack;
+        this.motion += m.idle * this.idleMotion;
+        this.heat += m.idle * this.idleHeat;
+      }
+    }
+  }
+
+  // Motor cooling of a flying style, with the airflow of the cruise speed.
+  cooling(profile) {
+    const p = this.p;
+    let omega;
+    if (profile === 'hover') {
+      omega = p.hoverOmega;
+    } else if (profile === 'cruise') {
+      omega = this.cruiseOmega;
+    } else {
+      const m = styleMix(p, profile);
+      omega = m.cruise * this.cruiseOmega + (1.0 - m.cruise) * p.hoverOmega;
+    }
+    const speed = profile === 'hover' ? 0.0 : this.cruiseSpeed;
+    const airflow = 1.0 + AIRFLOW_COOLING * Math.sqrt(speed / AIRFLOW_REFERENCE_MS);
+    return (p.motorCoolingBase + p.motorCoolingPerOmega * omega) * p.motorCoolingScale * airflow;
+  }
+}
+
+const NO_FLIGHT = Object.freeze({ minutes: NaN, averageCurrent: NaN, landingCellVoltage: NaN, motorTempC: NaN });
+
+function reach(start, end, limit) {
+  if (end >= limit) return 1.0;
+  if (start <= limit) return 0.0;
+  return clamp01((start - limit) / Math.max(start - end, 1e-9));
+}
+
+// A flight of one style until the usable capacity is used, the calm-flight voltage reaches the landing voltage or the
+// voltage under the mean load reaches the cutoff (EnergyModel.fly).
+function fly(pts, profile, ambient) {
+  const p = pts.p;
+  const capacity = p.capacityMah;
+  const usable = p.usableFraction * capacity;
+  const step = usable / ENERGY_SEGMENTS;
+  const landing = p.landingCellVoltage * p.cells;
+  const cutoff = p.chemistry.cutoff_v * p.cells;
+  let seconds = 0.0;
+  let used = 0.0;
+  let landed = NaN;
+  let temp = ambient;
+  const cooling = pts.cooling(profile);
+  for (let k = 0; k < ENERGY_SEGMENTS; k++) {
+    const start = 1.0 - used / capacity;
+    const end = 1.0 - (used + step) / capacity;
+    pts.evaluate(profile, 0.5 * (start + end));
+    const current = Math.max(pts.pack, 1e-6);
+    const part = Math.min(reach(loadedVoltage(p, start, pts.calm), loadedVoltage(p, end, pts.calm), landing),
+      reach(loadedVoltage(p, start, pts.motion), loadedVoltage(p, end, pts.motion), cutoff));
+    const dt = part * step * 3.6 / current;
+    const inf = ambient + pts.heat / cooling;
+    temp = inf + (temp - inf) * Math.exp(-dt * cooling / p.motorHeatCapacity);
+    seconds += dt;
+    used += part * step;
+    landed = loadedVoltage(p, 1.0 - used / capacity, pts.motion);
+    if (part < 1.0) break;
+  }
+  if (Number.isNaN(landed)) return NO_FLIGHT;
+  if (!(seconds > 0.0)) return { minutes: 0.0, averageCurrent: pts.pack, landingCellVoltage: landed / p.cells, motorTempC: ambient };
+  return { minutes: seconds / MINUTE_S, averageCurrent: used * 3.6 / seconds, landingCellVoltage: landed / p.cells, motorTempC: temp };
+}
+
+// Motor temperature at full throttle in place: after the time window (60 s) and until the pack is empty.
+function fullThrottleMotorTemp(p, ambient, windowSeconds) {
   const pt = newPoint();
+  const capacity = p.capacityMah;
   let temp = ambient;
   let max = ambient;
+  let minute = NaN;
+  let seconds = 0.0;
+  const step = capacity / HEAT_SEGMENTS;
   for (let k = 0; k < HEAT_SEGMENTS; k++) {
     const soc = 1.0 - (k + 0.5) / HEAT_SEGMENTS;
     uniformDuty(p, 1.0, soc, true, 0.0, 0.0, pt);
-    const seconds = p.capacityMah / HEAT_SEGMENTS * 3.6 / Math.max(pt.batteryCurrent, 1e-3);
-    const power = pt.phaseCurrent * pt.phaseCurrent * p.motorResistance + p.kt * p.idleCurrent * pt.omega;
+    const current = Math.max(packCurrent(p, pt), 1e-3);
+    const dt = step * 3.6 / current;
+    const power = motorHeat(p, pt);
     const g = (p.motorCoolingBase + p.motorCoolingPerOmega * pt.omega) * p.motorCoolingScale;
     const inf = ambient + power / g;
-    temp = inf + (temp - inf) * Math.exp(-seconds * g / p.motorHeatCapacity);
-    if (!Number.isFinite(temp)) return NaN;
+    if (Number.isNaN(minute) && seconds + dt >= windowSeconds) {
+      const partial = inf + (temp - inf) * Math.exp(-(windowSeconds - seconds) * g / p.motorHeatCapacity);
+      minute = Math.max(max, partial);
+    }
+    temp = inf + (temp - inf) * Math.exp(-dt * g / p.motorHeatCapacity);
+    if (!Number.isFinite(temp)) return { minute: NaN, sustained: NaN };
     max = Math.max(max, temp);
+    seconds += dt;
   }
-  return max;
+  return { minute: Number.isNaN(minute) ? max : minute, sustained: max };
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -926,32 +1251,36 @@ function compute(p) {
   if (!canHover) warnings.add('cannot_hover');
   if (tw < 2.0) warnings.add('underpowered');
   if (p.motorTauPhys > 0.06) warnings.add('sluggish_motors');
+  const fullCurrent = packCurrent(p, full);
   const fullCell = full.busVoltage / p.cells;
   if (fullCell < p.chemistry.cutoff_v) warnings.add('heavy_sag');
   if (full.phaseCurrent >= currentLimit(p, full.busVoltage, full.omega) - 1e-9) warnings.add('esc_current_limited');
   if (full.batteryCurrent > 1.3 * p.continuousCurrent) warnings.add('battery_overload');
 
   const hoverPercent = canHover ? 100.0 * hoverStick : NaN;
-  const hoverCurrentA = canHover ? hoverFull.batteryCurrent : NaN;
-  const hoverTime = canHover ? flightTimeMinutes(p, p.hoverOmega, hoverCurrent(p)) : NaN;
+  const hoverCurrentA = canHover ? packCurrent(p, hoverFull) : NaN;
 
   const topTilt = canHover ? topSpeedTilt(p, TOP_SPEED_SOC) : 0.0;
   const topSpeed = topTilt > 0.0 ? speedAtTilt(p, topTilt) : 0.0;
   const angleTilt = Math.min(DEFAULT_ANGLE_LIMIT, topTilt);
   const angleSpeed = angleTilt > 0.0 ? speedAtTilt(p, angleTilt) : 0.0;
 
-  let cruiseTime = hoverTime;
-  if (canHover && topSpeed > 0.0) {
-    const cruiseSpeed = 0.5 * topSpeed;
-    const tilt = tiltForSpeed(p, cruiseSpeed, topTilt);
-    const speed = speedAtTilt(p, tilt);
-    const omega = levelFlightOmega(p, speed, tilt);
-    const axial = speed * Math.sin(tilt);
-    const current = airTorque(p, omega, axial, 1.0) / p.kt + p.idleCurrent;
-    cruiseTime = flightTimeMinutes(p, omega, current);
+  let hoverFlight = NO_FLIGHT;
+  let cruise = NO_FLIGHT;
+  let mixed = NO_FLIGHT;
+  let aggressive = NO_FLIGHT;
+  let cruiseSpeed = NaN;
+  if (canHover) {
+    const points = new EnergyPoints(p, topSpeed, topTilt);
+    hoverFlight = fly(points, 'hover', REFERENCE_AMBIENT_C);
+    cruise = fly(points, 'cruise', REFERENCE_AMBIENT_C);
+    mixed = fly(points, 'mixed', REFERENCE_AMBIENT_C);
+    aggressive = fly(points, 'aggressive', REFERENCE_AMBIENT_C);
+    cruiseSpeed = points.cruiseSpeed * 3.6;
   }
 
-  const motorTemp = fullThrottleMotorTemp(p, REFERENCE_AMBIENT_C);
+  const heat = fullThrottleMotorTemp(p, REFERENCE_AMBIENT_C, MOTOR_TEMP_WINDOW_S);
+  const motorTemp = heat.sustained;
   if (motorTemp > p.motorDerateStartC) warnings.add('motor_thermal');
   const propsInView = occlusionPercent(p.fpv);
   if (propsInView > PROPS_IN_VIEW_WARNING) warnings.add('props_in_view');
@@ -961,21 +1290,30 @@ function compute(p) {
     mass_grams: p.massKg * 1000.0,
     thrust_to_weight: tw,
     hover_throttle_percent: hoverPercent,
-    hover_flight_time_min: hoverTime,
-    cruise_flight_time_min: cruiseTime,
+    hover_flight_time_min: hoverFlight.minutes,
+    cruise_flight_time_min: cruise.minutes,
+    mixed_flight_time_min: mixed.minutes,
+    aggressive_flight_time_min: aggressive.minutes,
+    cruise_speed_kmh: cruiseSpeed,
+    hover_current_a: hoverCurrentA,
+    cruise_current_a: cruise.averageCurrent,
+    mixed_current_a: mixed.averageCurrent,
+    landing_cell_voltage: mixed.landingCellVoltage,
+    avionics_power_w: p.avionicsPower,
     top_speed_kmh: topSpeed * 3.6,
-    full_throttle_current_a: full.batteryCurrent,
+    full_throttle_current_a: fullCurrent,
     esc_load_percent: 100.0 * full.phaseCurrent / p.escCurrentPerMotor,
-    battery_load_percent: 100.0 * full.batteryCurrent / p.continuousCurrent,
+    battery_load_percent: 100.0 * fullCurrent / p.continuousCurrent,
     motor_response_ms: p.motorTauPhys * 1000.0,
     crash_speed_ms: p.impactTolerance,
     sustained_motor_temp_c: motorTemp,
+    motor_temp_minute_c: heat.minute,
+    mixed_motor_temp_c: mixed.motorTempC,
     props_in_view_percent: propsInView,
     warnings: ANALYSIS_WARNINGS.filter((w) => warnings.has(w)),
     // Extra values of the mod's BuildAnalysis that BuildStats does not carry:
     extra: {
       max_thrust_per_motor_g: maxThrust / G * 1000.0,
-      hover_current_a: hoverCurrentA,
       full_throttle_cell_voltage: fullCell,
       top_speed_angle_kmh: angleSpeed * 3.6,
       hover_omega_rad_s: p.hoverOmega,
@@ -1002,10 +1340,12 @@ export function hoverStick(p, soc) {
   return (pt.duty - IDLE_REFERENCE) / (1.0 - IDLE_REFERENCE);
 }
 
-/** The key figures of BuildStats in the mod's order (without warnings). */
+/** The key figures of BuildStats (Propwash 0.4.2, Parts-API 1.2) in the web export's order (without warnings). */
 export const STAT_KEYS = Object.freeze(['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'hover_flight_time_min',
-  'cruise_flight_time_min', 'top_speed_kmh', 'full_throttle_current_a', 'esc_load_percent', 'battery_load_percent',
-  'motor_response_ms', 'crash_speed_ms', 'sustained_motor_temp_c', 'props_in_view_percent']);
+  'cruise_flight_time_min', 'mixed_flight_time_min', 'aggressive_flight_time_min', 'cruise_speed_kmh', 'hover_current_a',
+  'cruise_current_a', 'mixed_current_a', 'landing_cell_voltage', 'avionics_power_w', 'top_speed_kmh', 'full_throttle_current_a',
+  'esc_load_percent', 'battery_load_percent', 'motor_response_ms', 'crash_speed_ms', 'sustained_motor_temp_c',
+  'motor_temp_minute_c', 'mixed_motor_temp_c', 'props_in_view_percent']);
 
 /**
  * FPV camera of a build like the web export's camera_view (BuildAccess#cameraView): lens, uptilt, goggle FOV, the four
