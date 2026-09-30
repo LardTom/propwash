@@ -20,7 +20,7 @@ const FIELDS = ['frame', 'stack', 'motor', 'prop', 'video', 'battery'];
 const SLOT_CATEGORIES = [...FIELDS, 'accessory'];
 const ROLE_ORDER = ['whoop', 'toothpick', 'cinewhoop', 'freestyle', 'race', 'long_range', 'x_class'];
 const KEY_STATS = ['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'mixed_flight_time_min', 'top_speed_kmh'];
-// Rows of the flight analysis, ordered like the workbench in the game (Propwash 0.4.2): main figures, the four flight
+// Rows of the flight analysis, ordered like the workbench in the game (Propwash 0.4.3): main figures, the four flight
 // times (mixed is the main value), currents, voltages and loads, temperatures.
 const STAT_ROWS = ['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'mixed_flight_time_min', 'aggressive_flight_time_min',
   'hover_flight_time_min', 'cruise_flight_time_min', 'top_speed_kmh', 'hover_current_a', 'mixed_current_a', 'full_throttle_current_a',

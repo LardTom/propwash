@@ -12,7 +12,7 @@ This repository contains only the website, no mod source code.
 - `assets/js/main.js` – language switch, section menu, hero feed with pause switch, image switchers, video demo, gallery lightbox
 - `assets/js/configurator/` – the configurator as plain ES modules:
   - core: `data.js` (catalog), `sharecode.js` + `crc32.js` + `inflate.js` + `tune.js` (PW1 share codes),
-    `rules.js` (compatibility), `analysis.js` (flight analysis with the energy balance of Propwash 0.4.2), `fpv.js` (FPV camera rig and props in view),
+    `rules.js` (compatibility), `analysis.js` (flight analysis with the energy balance of Propwash 0.4.3), `fpv.js` (FPV camera rig and props in view),
     `tuning.js` (tune defaults and editing), `index.js`
   - page: `ui.js` (part pickers, paint, tune editor, OSD layer, stats, share code, import), `i18n.js` (texts),
     `assembly.js` (where every part sits on the drone), `paint.js` (paint tints), `viewer.js` (three.js viewer)
@@ -36,7 +36,7 @@ kept in the browser's `localStorage`; the drone built in the configurator lives 
 - part pickers per category with search, a class filter (whoop, toothpick, cinewhoop, freestyle, race, long range,
   X-Class; video by link, accessories by mount), “only parts that fit”, fit badges and tips with pros, cons and what the
   part would change
-- live flight figures like the workbench of Propwash 0.4.2 (weight, thrust-to-weight, hover throttle, top speed and its
+- live flight figures like the workbench of Propwash 0.4.3 (weight, thrust-to-weight, hover throttle, top speed and its
   energy balance: flight times down to the landing voltage for mixed flying of the frame's class as the main value,
   aggressive/racing, hovering and cruising at the class's cruise speed, pack currents, landing voltage under load,
   base load of flight controller and video, motor temperature after 60 s full throttle and after a mixed flight) and
@@ -82,7 +82,7 @@ each one. The first is the 7″ deadcat whose props the game showed at the image
 and the test fails if the configurator ever shows 0 % for it again. The same code carries the second report (flight
 times and part stats a bit off, e.g. 24.2 min hovering and 124 °C at full throttle): `analysis` holds the figures of
 Propwash 0.4.2 and Just More Parts 1.0.4 (19.5 min hovering, 11.8 min cruising, 8.0 min mixed, 5.7 min aggressive,
-95 °C after 60 s full throttle), `analysis_before` the old ones; the test checks that weight, thrust-to-weight, hover
+95 °C after 60 s full throttle; unchanged in Propwash 0.4.3 and Just More Parts 1.0.5), `analysis_before` the old ones; the test checks that weight, thrust-to-weight, hover
 throttle, top speed and props in view stay unchanged (the flight physics is bit-identical) and that the energy figures
 changed.
 

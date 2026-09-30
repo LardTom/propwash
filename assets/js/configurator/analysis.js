@@ -1,4 +1,4 @@
-// Flight analysis of a build, a port of Propwash 0.4.2 BuildAccess#analyze (BuildStats): airframe derivation,
+// Flight analysis of a build, a port of Propwash 0.4.3 BuildAccess#analyze (BuildStats): airframe derivation,
 // steady operating points of motors and battery, top speed, the energy balance of sim.EnergyModel (pack current with
 // drive losses, prop factor and avionics load, flight times for hover, cruise, mixed and aggressive flying down to the
 // landing voltage, motor heating) and camera occlusion (the FPV rig of the renderer, fpv.js).
@@ -62,7 +62,7 @@ const DUCT_CLEARANCE = 0.003;
 const IDLE_REFERENCE = 0.055;
 const SOC_MIN = -0.1;
 
-// sim.EnergyModel (Propwash 0.4.2): energy balance on top of the unchanged flight physics.
+// sim.EnergyModel (Propwash 0.4.3): energy balance on top of the unchanged flight physics.
 const AVIONICS_BASE_W = 0.6;
 const DRIVE_LOSS_W = 1.03;
 const DRIVE_LOSS_MASS_EXP = 0.5;
@@ -74,12 +74,15 @@ const DIGITAL_PER_GRAM_W = 0.1;
 const DIGITAL_PER_RF_W = 2.5;
 const DEFAULT_RF_MW = 200;
 const LOW_RATE_USABLE = 0.87;
+const LOW_RATE_PRACTICAL_C = 6.0;
 const PUNCH_STEPS = 24;
 const ENERGY_SEGMENTS = 24;
 const IDLE_SOC = 0.5;
 const MINUTE_S = 60.0;
 const PROP_SIZE_MM = [31.0, 51.0, 76.0, 89.0, 102.0, 130.0, 178.0, 254.0, 330.0];
 const PROP_SIZE_FACTOR = [0.84, 0.78, 0.72, 0.67, 0.80, 1.02, 1.0, 0.93, 0.93];
+// Prop energy factor at full load (Propwash 0.4.3): small props draw their full-throttle current again.
+const PROP_FULL_FACTOR = [0.84, 1.05, 1.0, 1.0, 1.0, 1.02, 1.0, 0.93, 0.93];
 const BLADE_LOSS = 0.38;
 const BLADE_INTERFERENCE_MM = 45.0;
 const BLADE_INTERFERENCE_FADE_MM = 10.0;
@@ -329,6 +332,7 @@ function deriveAirframe(parts, catalog) {
   p.avionicsPower = AVIONICS_BASE_W + videoPower(video) + p.accessoryPower;
   p.driveLossHover = driveLossAtHover(motor.basics.mass_g, pd.blades, diameter * 1000.0, kQ * omegaH * omegaH * omegaH);
   p.propFactor = sizeFactor(diameter * 1000.0);
+  p.propFullFactor = propFullFactor(diameter * 1000.0);
   p.usableFraction = effectiveUsableFraction(chem);
   p.landingCellVoltage = 0.5 * (chem.empty_v + chem.cutoff_v);
   p.role = FRAME_ROLES.includes(fd.role) ? fd.role : 'freestyle';
@@ -360,6 +364,10 @@ function deriveAirframe(parts, catalog) {
   if (fd.arms_explicit) geometric(p, fd, body);
   else legacy(p, fd, body);
   lens(p, fd);
+  // ParamDerivation: rotor speed at full throttle on a full pack, the end of the load scale of the prop factor.
+  const fullPoint = newPoint();
+  uniformDuty(p, 1.0, 1.0, false, 0.0, 0.0, fullPoint);
+  p.fullLoadOmega = fullPoint.omega;
   p.fpv = fpvRig(parts, p, catalog);
   return p;
 }
@@ -910,7 +918,7 @@ function tiltForSpeed(p, speed, maxTilt) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-// Energy balance (sim.EnergyModel of Propwash 0.4.2): what the pack really delivers on top of the flight physics
+// Energy balance (sim.EnergyModel of Propwash 0.4.3): what the pack really delivers on top of the flight physics
 
 // Mix of a flying style per frame role: shares of cruise, punches and idle, and the punch thrust-to-weight.
 function styleMix(p, profile) {
@@ -920,12 +928,12 @@ function styleMix(p, profile) {
     case 'whoop':
       return p.propDiameter <= WHOOP_SMALL_PROP_M
         ? aggressive ? mix(0.46, 0.49, 0.05, 5.0) : mix(0.44, 0.37, 0.19, 5.0)
-        : aggressive ? mix(0.50, 0.40, 0.10, 3.5) : mix(0.75, 0.20, 0.05, 3.5);
+        : aggressive ? mix(0.50, 0.40, 0.10, 3.0) : mix(0.75, 0.20, 0.05, 3.0);
     case 'toothpick':
       return aggressive ? mix(0.65, 0.23, 0.12, 4.5) : mix(0.80, 0.12, 0.08, 4.0);
     case 'cinewhoop':
     case 'cinelifter':
-      return aggressive ? mix(0.75, 0.17, 0.08, 3.5) : mix(0.88, 0.07, 0.05, 2.5);
+      return aggressive ? mix(0.75, 0.17, 0.08, 3.5) : mix(0.83, 0.12, 0.05, 2.5);
     case 'race':
       return aggressive ? mix(0.50, 0.38, 0.12, 7.0) : mix(0.58, 0.30, 0.12, 6.5);
     case 'long_range':
@@ -992,15 +1000,37 @@ function effectiveUsableFraction(chem) {
 
 // Prop energy factor by diameter (log-interpolated between the reference sizes).
 function sizeFactor(diameterMm) {
+  return interpolate(PROP_SIZE_FACTOR, diameterMm);
+}
+
+function interpolate(table, diameterMm) {
   const d = PROP_SIZE_MM;
-  if (diameterMm <= d[0]) return PROP_SIZE_FACTOR[0];
+  if (diameterMm <= d[0]) return table[0];
   for (let i = 1; i < d.length; i++) {
     if (diameterMm <= d[i]) {
       const t = Math.log(diameterMm / d[i - 1]) / Math.log(d[i] / d[i - 1]);
-      return PROP_SIZE_FACTOR[i - 1] + (PROP_SIZE_FACTOR[i] - PROP_SIZE_FACTOR[i - 1]) * t;
+      return table[i - 1] + (table[i] - table[i - 1]) * t;
     }
   }
-  return PROP_SIZE_FACTOR[PROP_SIZE_FACTOR.length - 1];
+  return table[table.length - 1];
+}
+
+function propFullFactor(diameterMm) {
+  return interpolate(PROP_FULL_FACTOR, diameterMm);
+}
+
+// Load of a motor between hover (0) and full throttle (1), squared (EnergyModel.fullLoad).
+function fullLoad(p, omega) {
+  const hoverSq = p.hoverOmega * p.hoverOmega;
+  const span = p.fullLoadOmega * p.fullLoadOmega - hoverSq;
+  if (!(span > 0.0)) return omega >= p.fullLoadOmega ? 1.0 : 0.0;
+  const x = clamp01((omega * omega - hoverSq) / span);
+  return x * x;
+}
+
+// Prop factor at a load: from the hover factor to the full-load factor (EnergyModel.loadFactor).
+function loadFactor(p, load) {
+  return p.propFactor + (p.propFullFactor - p.propFactor) * load;
 }
 
 function bladeLoss(blades, diameterMm) {
@@ -1026,7 +1056,7 @@ function packCurrent(p, pt) {
   const extraPower = uniformExtraPower(p, pt.omega);
   const v = Math.max(pt.busVoltage, 0.05 * p.fullPackVoltage);
   const motors = Math.max(0.0, pt.batteryCurrent - p.auxPower / v);
-  return Math.max(0.0, pt.batteryCurrent + (p.propFactor - 1.0) * motors + extraPower / v);
+  return Math.max(0.0, pt.batteryCurrent + (loadFactor(p, fullLoad(p, pt.omega)) - 1.0) * motors + extraPower / v);
 }
 
 function loadedVoltage(p, soc, current) {
@@ -1037,6 +1067,9 @@ function loadedVoltage(p, soc, current) {
 function motorHeat(p, pt) {
   return pt.phaseCurrent * pt.phaseCurrent * p.motorResistance + p.kt * p.idleCurrent * pt.omega;
 }
+
+// Flying styles from calm to aggressive (EnergyModel.Profile).
+const PROFILES = Object.freeze(['hover', 'cruise', 'mixed', 'aggressive']);
 
 // Operating points of the flying styles (EnergyModel.Points).
 class EnergyPoints {
@@ -1084,18 +1117,26 @@ class EnergyPoints {
     if (!this.scratch.feasible) uniformDuty(p, 1.0, soc, true, 0.0, 0.0, this.scratch);
   }
 
-  // Punches of a Li-Ion-like pack (usable fraction >= 0.87) are limited to its continuous current.
-  punch(thrustToWeight, soc) {
+  // Current limit of the punches of a Li-Ion-like pack: its continuous current, in mixed flying at most 6 C.
+  punchLimit(profile) {
+    const p = this.p;
+    if (profile === 'mixed') return Math.min(p.continuousCurrent, LOW_RATE_PRACTICAL_C * p.capacityMah / 1000.0);
+    return p.continuousCurrent;
+  }
+
+  // Punches of a Li-Ion-like pack (usable fraction >= 0.87) are limited to the punch limit.
+  punch(thrustToWeight, soc, profile) {
     const p = this.p;
     this.punchPoint(thrustToWeight, soc);
     const current = packCurrent(p, this.scratch);
-    if (p.usableFraction < LOW_RATE_USABLE || current <= p.continuousCurrent) return current;
+    const limit = this.punchLimit(profile);
+    if (p.usableFraction < LOW_RATE_USABLE || current <= limit) return current;
     let lo = 1.0;
     let hi = thrustToWeight;
     for (let k = 0; k < PUNCH_STEPS; k++) {
       const mid = 0.5 * (lo + hi);
       this.punchPoint(mid, soc);
-      if (packCurrent(p, this.scratch) > p.continuousCurrent) hi = mid;
+      if (packCurrent(p, this.scratch) > limit) hi = mid;
       else lo = mid;
     }
     this.punchPoint(lo, soc);
@@ -1113,7 +1154,20 @@ class EnergyPoints {
     this.heat += weight * motorHeat(this.p, this.scratch);
   }
 
+  // A flying style never draws less than the calmer ones (hover, cruise, mixed, aggressive), so the flight times keep
+  // their order (EnergyModel.evaluate).
   evaluate(profile, soc) {
+    this.single(profile, soc);
+    if (profile === 'hover') return;
+    const { pack, motion, calm, heat } = this;
+    this.evaluate(PROFILES[PROFILES.indexOf(profile) - 1], soc);
+    this.pack = Math.max(pack, this.pack);
+    this.motion = Math.max(motion, this.motion);
+    this.calm = Math.max(calm, this.calm);
+    this.heat = Math.max(heat, this.heat);
+  }
+
+  single(profile, soc) {
     this.pack = 0.0;
     this.motion = 0.0;
     this.heat = 0.0;
@@ -1127,7 +1181,7 @@ class EnergyPoints {
       const m = styleMix(this.p, profile);
       if (m.cruise > 0.0) this.add(m.cruise, this.cruise(soc));
       this.calm = this.scratch.batteryCurrent;
-      if (m.punch > 0.0) this.add(m.punch, this.punch(m.punchThrust, soc));
+      if (m.punch > 0.0) this.add(m.punch, this.punch(m.punchThrust, soc, profile));
       if (m.idle > 0.0) {
         if (Number.isNaN(this.idlePack)) {
           this.idlePack = this.idle(IDLE_SOC);
@@ -1340,7 +1394,7 @@ export function hoverStick(p, soc) {
   return (pt.duty - IDLE_REFERENCE) / (1.0 - IDLE_REFERENCE);
 }
 
-/** The key figures of BuildStats (Propwash 0.4.2, Parts-API 1.2) in the web export's order (without warnings). */
+/** The key figures of BuildStats (Propwash 0.4.3, Parts-API 1.2) in the web export's order (without warnings). */
 export const STAT_KEYS = Object.freeze(['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'hover_flight_time_min',
   'cruise_flight_time_min', 'mixed_flight_time_min', 'aggressive_flight_time_min', 'cruise_speed_kmh', 'hover_current_a',
   'cruise_current_a', 'mixed_current_a', 'landing_cell_voltage', 'avionics_power_w', 'top_speed_kmh', 'full_throttle_current_a',
