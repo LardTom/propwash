@@ -53,7 +53,7 @@
    "sustained_motor_temp_c": 93.15040140713042,
    "motor_temp_minute_c": 93.15040140713042,
    "mixed_motor_temp_c": 50.616464893742666,
-   "props_in_view_percent": 5.292123621573374,
+   "props_in_view_percent": 8.057235596398394,
    "warnings": []
   }
  },
@@ -203,7 +203,7 @@
    "sustained_motor_temp_c": 103.50215509603294,
    "motor_temp_minute_c": 85.67136823813027,
    "mixed_motor_temp_c": 63.14959775946388,
-   "props_in_view_percent": 1.6517043806574947,
+   "props_in_view_percent": 2.323858402909941,
    "warnings": []
   }
  },
@@ -309,7 +309,7 @@
    "sustained_motor_temp_c": 93.15040140713042,
    "motor_temp_minute_c": 93.15040140713042,
    "mixed_motor_temp_c": 50.616464893742666,
-   "props_in_view_percent": 5.292123621573374,
+   "props_in_view_percent": 8.057235596398394,
    "warnings": []
   }
  },
@@ -382,7 +382,7 @@
    "sustained_motor_temp_c": 29.823155826216475,
    "motor_temp_minute_c": 29.823155826216475,
    "mixed_motor_temp_c": 27.365724931615492,
-   "props_in_view_percent": 8.784083753582237,
+   "props_in_view_percent": 9.020423761393568,
    "warnings": []
   }
  },
@@ -440,7 +440,7 @@
    "sustained_motor_temp_c": 29.823155826216475,
    "motor_temp_minute_c": 29.823155826216475,
    "mixed_motor_temp_c": 27.365724931615492,
-   "props_in_view_percent": 8.784083753582237,
+   "props_in_view_percent": 9.020423761393568,
    "warnings": []
   }
  },
@@ -499,7 +499,7 @@
    "sustained_motor_temp_c": 102.09859352242808,
    "motor_temp_minute_c": 102.09859352242808,
    "mixed_motor_temp_c": 45.58334645184632,
-   "props_in_view_percent": 20.87097546462457,
+   "props_in_view_percent": 7.2806544654928995,
    "warnings": []
   }
  },
@@ -557,7 +557,7 @@
    "sustained_motor_temp_c": 102.09859352242808,
    "motor_temp_minute_c": 102.09859352242808,
    "mixed_motor_temp_c": 45.58334645184632,
-   "props_in_view_percent": 20.87097546462457,
+   "props_in_view_percent": 7.2806544654928995,
    "warnings": []
   }
  },
@@ -616,7 +616,7 @@
    "sustained_motor_temp_c": 93.0411323165118,
    "motor_temp_minute_c": 93.0411323165118,
    "mixed_motor_temp_c": 50.806384775858575,
-   "props_in_view_percent": 11.725616659429681,
+   "props_in_view_percent": 8.369925988399492,
    "warnings": []
   }
  },
@@ -674,7 +674,7 @@
    "sustained_motor_temp_c": 93.0411323165118,
    "motor_temp_minute_c": 93.0411323165118,
    "mixed_motor_temp_c": 50.806384775858575,
-   "props_in_view_percent": 11.725616659429681,
+   "props_in_view_percent": 8.369925988399492,
    "warnings": []
   }
  },
@@ -733,7 +733,7 @@
    "sustained_motor_temp_c": 94.0906340582086,
    "motor_temp_minute_c": 94.0906340582086,
    "mixed_motor_temp_c": 59.27922051828477,
-   "props_in_view_percent": 0,
+   "props_in_view_percent": 11.19782219264153,
    "warnings": []
   }
  },
@@ -791,7 +791,7 @@
    "sustained_motor_temp_c": 94.0906340582086,
    "motor_temp_minute_c": 94.0906340582086,
    "mixed_motor_temp_c": 59.27922051828477,
-   "props_in_view_percent": 0,
+   "props_in_view_percent": 11.19782219264153,
    "warnings": []
   }
  },
@@ -852,7 +852,7 @@
    "sustained_motor_temp_c": 97.34398350514185,
    "motor_temp_minute_c": 82.30194881690888,
    "mixed_motor_temp_c": 51.54218923714394,
-   "props_in_view_percent": 19.502528655184886,
+   "props_in_view_percent": 9.471130336663856,
    "warnings": [
     "heavy_sag",
     "battery_overload"
@@ -915,7 +915,7 @@
    "sustained_motor_temp_c": 97.34398350514185,
    "motor_temp_minute_c": 82.30194881690888,
    "mixed_motor_temp_c": 51.54218923714394,
-   "props_in_view_percent": 19.502528655184886,
+   "props_in_view_percent": 9.471130336663856,
    "warnings": [
     "heavy_sag",
     "battery_overload"
@@ -1102,7 +1102,7 @@
    "sustained_motor_temp_c": 46.780384908945436,
    "motor_temp_minute_c": 46.780384908945436,
    "mixed_motor_temp_c": 30.54109156733979,
-   "props_in_view_percent": 1.3472857850126072,
+   "props_in_view_percent": 6.200857137805833,
    "warnings": []
   }
  },
@@ -1160,7 +1160,7 @@
    "sustained_motor_temp_c": 46.780384908945436,
    "motor_temp_minute_c": 46.780384908945436,
    "mixed_motor_temp_c": 30.54109156733979,
-   "props_in_view_percent": 1.3472857850126072,
+   "props_in_view_percent": 6.200857137805833,
    "warnings": []
   }
  },
@@ -1223,7 +1223,7 @@
    "sustained_motor_temp_c": 53.30877366858082,
    "motor_temp_minute_c": 53.30877366858082,
    "mixed_motor_temp_c": 34.180666849539136,
-   "props_in_view_percent": 2.4593029870448957,
+   "props_in_view_percent": 3.95547318347614,
    "warnings": []
   }
  },
@@ -1281,7 +1281,7 @@
    "sustained_motor_temp_c": 53.30877366858082,
    "motor_temp_minute_c": 53.30877366858082,
    "mixed_motor_temp_c": 34.180666849539136,
-   "props_in_view_percent": 2.4593029870448957,
+   "props_in_view_percent": 3.95547318347614,
    "warnings": []
   }
  },
@@ -1344,7 +1344,7 @@
    "sustained_motor_temp_c": 58.61166392876973,
    "motor_temp_minute_c": 58.61166392876973,
    "mixed_motor_temp_c": 35.25392828882449,
-   "props_in_view_percent": 11.57676005569595,
+   "props_in_view_percent": 5.430867903251949,
    "warnings": []
   }
  },
@@ -1402,7 +1402,7 @@
    "sustained_motor_temp_c": 58.61166392876973,
    "motor_temp_minute_c": 58.61166392876973,
    "mixed_motor_temp_c": 35.25392828882449,
-   "props_in_view_percent": 11.57676005569595,
+   "props_in_view_percent": 5.430867903251949,
    "warnings": []
   }
  },
@@ -1587,7 +1587,7 @@
    "sustained_motor_temp_c": 68.38754084900441,
    "motor_temp_minute_c": 68.38754084900441,
    "mixed_motor_temp_c": 35.800346605203934,
-   "props_in_view_percent": 17.36136889282736,
+   "props_in_view_percent": 6.81125531051539,
    "warnings": []
   }
  },
@@ -1645,7 +1645,7 @@
    "sustained_motor_temp_c": 68.38754084900441,
    "motor_temp_minute_c": 68.38754084900441,
    "mixed_motor_temp_c": 35.800346605203934,
-   "props_in_view_percent": 17.36136889282736,
+   "props_in_view_percent": 6.81125531051539,
    "warnings": []
   }
  },
@@ -1709,7 +1709,7 @@
    "sustained_motor_temp_c": 82.08566862477898,
    "motor_temp_minute_c": 82.08566862477898,
    "mixed_motor_temp_c": 38.88619868777338,
-   "props_in_view_percent": 19.925604995216123,
+   "props_in_view_percent": 6.8540822630209695,
    "warnings": []
   }
  },
@@ -1767,7 +1767,7 @@
    "sustained_motor_temp_c": 82.08566862477898,
    "motor_temp_minute_c": 82.08566862477898,
    "mixed_motor_temp_c": 38.88619868777338,
-   "props_in_view_percent": 19.925604995216123,
+   "props_in_view_percent": 6.8540822630209695,
    "warnings": []
   }
  },
@@ -1831,7 +1831,7 @@
    "sustained_motor_temp_c": 90.83196867746308,
    "motor_temp_minute_c": 90.83196867746308,
    "mixed_motor_temp_c": 50.72816088046931,
-   "props_in_view_percent": 11.715245829553234,
+   "props_in_view_percent": 7.940767218189463,
    "warnings": []
   }
  },
@@ -1889,7 +1889,7 @@
    "sustained_motor_temp_c": 90.83196867746308,
    "motor_temp_minute_c": 90.83196867746308,
    "mixed_motor_temp_c": 50.72816088046931,
-   "props_in_view_percent": 11.715245829553234,
+   "props_in_view_percent": 7.940767218189463,
    "warnings": []
   }
  },
@@ -1953,7 +1953,7 @@
    "sustained_motor_temp_c": 87.3500912612486,
    "motor_temp_minute_c": 87.3500912612486,
    "mixed_motor_temp_c": 49.985995796345925,
-   "props_in_view_percent": 6.896682396944707,
+   "props_in_view_percent": 3.0314015764638844,
    "warnings": []
   }
  },
@@ -2011,7 +2011,7 @@
    "sustained_motor_temp_c": 87.3500912612486,
    "motor_temp_minute_c": 87.3500912612486,
    "mixed_motor_temp_c": 49.985995796345925,
-   "props_in_view_percent": 6.896682396944707,
+   "props_in_view_percent": 3.0314015764638844,
    "warnings": []
   }
  },
@@ -2197,7 +2197,7 @@
    "sustained_motor_temp_c": 74.5395117378563,
    "motor_temp_minute_c": 74.5395117378563,
    "mixed_motor_temp_c": 52.65299599733644,
-   "props_in_view_percent": 1.9299803478055881,
+   "props_in_view_percent": 9.7666354104117,
    "warnings": []
   }
  },
@@ -2255,7 +2255,7 @@
    "sustained_motor_temp_c": 74.5395117378563,
    "motor_temp_minute_c": 74.5395117378563,
    "mixed_motor_temp_c": 52.65299599733644,
-   "props_in_view_percent": 1.9299803478055881,
+   "props_in_view_percent": 9.7666354104117,
    "warnings": []
   }
  },
@@ -2319,7 +2319,7 @@
    "sustained_motor_temp_c": 95.13902293630142,
    "motor_temp_minute_c": 95.13902293630142,
    "mixed_motor_temp_c": 59.686773864835374,
-   "props_in_view_percent": 0,
+   "props_in_view_percent": 10.234887147571317,
    "warnings": [
     "heavy_sag"
    ]
@@ -2379,7 +2379,7 @@
    "sustained_motor_temp_c": 95.13902293630142,
    "motor_temp_minute_c": 95.13902293630142,
    "mixed_motor_temp_c": 59.686773864835374,
-   "props_in_view_percent": 0,
+   "props_in_view_percent": 10.234887147571317,
    "warnings": [
     "heavy_sag"
    ]
@@ -2568,7 +2568,7 @@
    "sustained_motor_temp_c": 67.62396824156988,
    "motor_temp_minute_c": 67.62396824156988,
    "mixed_motor_temp_c": 38.60574095192094,
-   "props_in_view_percent": 8.932563062020918,
+   "props_in_view_percent": 6.156578974098227,
    "warnings": []
   }
  },
@@ -2628,7 +2628,7 @@
    "sustained_motor_temp_c": 67.62396824156988,
    "motor_temp_minute_c": 67.62396824156988,
    "mixed_motor_temp_c": 38.60574095192094,
-   "props_in_view_percent": 8.932563062020918,
+   "props_in_view_percent": 6.156578974098227,
    "warnings": []
   }
  },
@@ -2692,7 +2692,7 @@
    "sustained_motor_temp_c": 94.35057602828658,
    "motor_temp_minute_c": 92.6784609616416,
    "mixed_motor_temp_c": 50.137394414574494,
-   "props_in_view_percent": 17.944198753130454,
+   "props_in_view_percent": 8.077638218954357,
    "warnings": []
   }
  },
@@ -2750,7 +2750,7 @@
    "sustained_motor_temp_c": 94.35057602828658,
    "motor_temp_minute_c": 92.6784609616416,
    "mixed_motor_temp_c": 50.137394414574494,
-   "props_in_view_percent": 17.944198753130454,
+   "props_in_view_percent": 8.077638218954357,
    "warnings": []
   }
  },
@@ -3070,7 +3070,7 @@
    "sustained_motor_temp_c": 96.01443797379426,
    "motor_temp_minute_c": 92.76631839750429,
    "mixed_motor_temp_c": 44.51506751956393,
-   "props_in_view_percent": 17.109184162795533,
+   "props_in_view_percent": 6.607485224384866,
    "warnings": []
   }
  },
@@ -3130,7 +3130,7 @@
    "sustained_motor_temp_c": 96.01443797379426,
    "motor_temp_minute_c": 92.76631839750429,
    "mixed_motor_temp_c": 44.51506751956393,
-   "props_in_view_percent": 17.109184162795533,
+   "props_in_view_percent": 6.607485224384866,
    "warnings": []
   }
  },
@@ -3194,7 +3194,7 @@
    "sustained_motor_temp_c": 96.92101659424475,
    "motor_temp_minute_c": 91.20943556687195,
    "mixed_motor_temp_c": 49.78353425803664,
-   "props_in_view_percent": 14.062320341762202,
+   "props_in_view_percent": 7.067321109813139,
    "warnings": []
   }
  },
@@ -3252,7 +3252,7 @@
    "sustained_motor_temp_c": 96.92101659424475,
    "motor_temp_minute_c": 91.20943556687195,
    "mixed_motor_temp_c": 49.78353425803664,
-   "props_in_view_percent": 14.062320341762202,
+   "props_in_view_percent": 7.067321109813139,
    "warnings": []
   }
  },
@@ -3316,7 +3316,7 @@
    "sustained_motor_temp_c": 91.35489471925865,
    "motor_temp_minute_c": 74.31071851125807,
    "mixed_motor_temp_c": 59.001968636460205,
-   "props_in_view_percent": 3.478521744877489,
+   "props_in_view_percent": 3.3184215511330373,
    "warnings": []
   }
  },
@@ -3374,7 +3374,7 @@
    "sustained_motor_temp_c": 91.35489471925865,
    "motor_temp_minute_c": 74.31071851125807,
    "mixed_motor_temp_c": 59.001968636460205,
-   "props_in_view_percent": 3.478521744877489,
+   "props_in_view_percent": 3.3184215511330373,
    "warnings": []
   }
  },
@@ -3438,7 +3438,7 @@
    "sustained_motor_temp_c": 103.50215509603294,
    "motor_temp_minute_c": 85.67136823813027,
    "mixed_motor_temp_c": 63.14959775946388,
-   "props_in_view_percent": 1.6517043806574947,
+   "props_in_view_percent": 2.323858402909941,
    "warnings": []
   }
  },
@@ -3496,7 +3496,7 @@
    "sustained_motor_temp_c": 103.50215509603294,
    "motor_temp_minute_c": 85.67136823813027,
    "mixed_motor_temp_c": 63.14959775946388,
-   "props_in_view_percent": 1.6517043806574947,
+   "props_in_view_percent": 2.323858402909941,
    "warnings": []
   }
  },
