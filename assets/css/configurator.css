@@ -488,6 +488,12 @@ button {
   display: none;
 }
 
+/* Nothing to turn or capture: no WebGL (fallback text) or a frame this page does not know. */
+.viewer.is-fallback .viewer__tools,
+.viewer.is-noframe .viewer__tools {
+  display: none;
+}
+
 @media (max-width: 1059px), (max-height: 559px) {
   .viewer.is-camera {
     aspect-ratio: auto;
@@ -1430,6 +1436,17 @@ button {
   color: #d9ad4a;
 }
 
+.part__issue[title] {
+  cursor: help;
+}
+
+.part__issue-more {
+  opacity: 0.8;
+  text-decoration: underline dotted;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+}
+
 /* Floating tip next to a part (pointer and keyboard focus, wide screens) */
 .part-tip {
   position: fixed;
@@ -1550,6 +1567,19 @@ button {
   font-size: 1.08rem;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
+}
+
+/* Phones: two figures per row instead of one long column. */
+@media (max-width: 559px) {
+  .stat {
+    flex-basis: 136px;
+    padding: 8px 10px;
+  }
+  .stat dt {
+    font-size: 0.78rem;
+    hyphens: auto;
+    overflow-wrap: break-word;
+  }
 }
 
 /* ---------- Paint ---------- */
@@ -1831,10 +1861,11 @@ button {
   font-weight: 600;
 }
 
+/* The unit sits inside the field (right edge), so fields with and without a unit end at the same line. */
 .tune__input {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 6px;
   min-width: 0;
 }
 
@@ -1850,10 +1881,26 @@ button {
   font-family: var(--font);
 }
 
+.tune__input.has-unit .field__control {
+  padding-right: 3.4em;
+}
+
 .tune__unit {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  color: var(--faint);
+  font-size: 0.75rem;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.tune__hint {
   flex: none;
   color: var(--faint);
   font-size: 0.75rem;
+  font-weight: 400;
   white-space: nowrap;
 }
 
@@ -1916,6 +1963,10 @@ button {
 
 .tune-table .tune__unit {
   display: none;
+}
+
+.tune-table .tune__input.has-unit .field__control {
+  padding-right: 8px;
 }
 
 .tune-table .icon-btn--small {

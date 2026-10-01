@@ -11,7 +11,7 @@ import { occlusionPercent } from './fpv.js';
 import { batteryFit } from './rules.js';
 import { assemble, PROP_SLOTS } from './assembly.js';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js';
-import { t, tk, entry, num, lang } from './i18n.js';
+import { t, tk, entry, num, lang, NB, glue } from './i18n.js';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
@@ -237,14 +237,14 @@ function fitOf(part) {
 
 function facts(p) {
   const d = p.data;
-  const g = num(p.basics.mass_g, p.basics.mass_g < 10 ? 1 : 0) + ' g';
+  const g = `${num(p.basics.mass_g, p.basics.mass_g < 10 ? 1 : 0)}${NB}g`;
   switch (p.category) {
-    case 'frame': return `${d.wheelbase_mm} mm · ${d.props_mm[0] ? `${d.props_mm[0]}–` : '≤ '}${d.props_mm[1]} mm ${t('ui.props')} · ${g}`;
-    case 'stack': return `${d.cells[0] === d.cells[1] ? d.cells[0] : `${d.cells[0]}–${d.cells[1]}`}S · ${d.esc_continuous_a} A · ${g}`;
-    case 'motor': return `${d.stator} · ${d.kv} KV · ${d.cells[0] === d.cells[1] ? d.cells[0] : `${d.cells[0]}–${d.cells[1]}`}S · ${g}`;
-    case 'prop': return `${d.diameter_mm} mm (${num(p.derived.diameter_in, 1)}″) · ${d.blades} ${t('ui.blades')} · ${g}`;
-    case 'video': return `${t(`roles.${d.link}`)} · ${d.latency_ms} ms · ${d.range_blocks} ${t('ui.blocks')}`;
-    case 'battery': return `${d.cells}S · ${d.capacity_mah} mAh · ${d.c_rating}C · ${g}`;
+    case 'frame': return `${d.wheelbase_mm}${NB}mm · ${d.props_mm[0] ? `${d.props_mm[0]}–` : `≤${NB}`}${d.props_mm[1]}${NB}mm ${t('ui.props')} · ${g}`;
+    case 'stack': return `${d.cells[0] === d.cells[1] ? d.cells[0] : `${d.cells[0]}–${d.cells[1]}`}S · ${d.esc_continuous_a}${NB}A · ${g}`;
+    case 'motor': return `${d.stator} · ${d.kv}${NB}KV · ${d.cells[0] === d.cells[1] ? d.cells[0] : `${d.cells[0]}–${d.cells[1]}`}S · ${g}`;
+    case 'prop': return `${d.diameter_mm}${NB}mm (${num(p.derived.diameter_in, 1)}″) · ${d.blades}${NB}${t('ui.blades')} · ${g}`;
+    case 'video': return `${t(`roles.${d.link}`)} · ${d.latency_ms}${NB}ms · ${d.range_blocks}${NB}${t('ui.blocks')}`;
+    case 'battery': return `${d.cells}S · ${d.capacity_mah}${NB}mAh · ${d.c_rating}C · ${g}`;
     case 'accessory': return `${t(`mounts.${d.slot}`)} · ${g}`;
     default: return g;
   }
@@ -259,17 +259,20 @@ function slotRows() {
   const issues = [...derived.check.problems, ...derived.check.warnings];
   for (const category of SLOT_CATEGORIES) {
     let value;
+    let full;
     let unknown = false;
     if (category === 'accessory') {
       const acc = state.build.accessories || {};
       const names = ['top', 'bottom'].filter((m) => acc[m]).map((m) => (catalog.part(acc[m]) ? catalog.partName(acc[m], lang()) : acc[m]));
       unknown = ['top', 'bottom'].some((m) => acc[m] && !partOf(acc[m], 'accessory'));
       value = names.length ? names.join(' + ') : t('ui.none');
+      full = value;
     } else {
       const id = state.build[category];
       const p = partOf(id, category);
       unknown = !p;
       value = p ? catalog.shortName(id, lang()) : `${t('ui.unknownPart')}: ${id}`;
+      full = p ? catalog.partName(id, lang()) : value;
     }
     const related = issues.filter((k) => (INVOLVED[k] || []).includes(category));
     const bad = unknown || related.some((k) => catalog.issueKind(k) === 'problem');
@@ -277,6 +280,7 @@ function slotRows() {
     box.append(el('button', {
       type: 'button',
       class: `slot${state.category === category ? ' is-active' : ''}${bad ? ' is-bad' : warn ? ' is-warn' : ''}`,
+      title: `${t(`categories.${category}`)}: ${full}`,
       'aria-pressed': String(state.category === category),
       'aria-controls': 'picker',
       dataset: { cat: category },
@@ -334,6 +338,22 @@ function helpBlock(part, compact, noSummary) {
   box.append(list);
   if (!compact && help && help.use.length) box.append(el('ul', { class: 'part-help__use' }, help.use.map((u) => el('li', null, u))));
   return box;
+}
+
+/** First fit issue of a part; further ones are counted by kind ("+2 more problems") and all are listed in the tooltip. */
+function issueLine(issues) {
+  const [first, ...rest] = issues;
+  const line = el('span', { class: 'part__issue' }, catalog.issueText(first, lang()));
+  if (!rest.length) return line;
+  const problems = rest.filter((k) => catalog.issueKind(k) === 'problem').length;
+  const warnings = rest.length - problems;
+  const more = [
+    problems ? (problems === 1 ? t('ui.moreProblemsOne') : t('ui.moreProblems', { n: problems })) : null,
+    warnings ? (warnings === 1 ? t('ui.moreWarningsOne') : t('ui.moreWarnings', { n: warnings })) : null,
+  ].filter(Boolean).join(', ');
+  line.title = [t('ui.moreIssuesHint'), ...issues.map((k) => `• ${catalog.issueText(k, lang())}`)].join('\n');
+  line.append(' ', el('span', { class: 'part__issue-more' }, `(${more})`));
+  return line;
 }
 
 function picker() {
@@ -402,8 +422,7 @@ function picker() {
     el('span', { class: 'part__main' },
       el('span', { class: 'part__name' }, name),
       part ? el('span', { class: 'part__facts' }, facts(part)) : null,
-      fit.issues.length ? el('span', { class: 'part__issue', title: fit.issues.map((k) => catalog.issueText(k, lang())).join('\n') },
-        catalog.issueText(fit.issues[0], lang()) + (fit.issues.length > 1 ? ` (+${fit.issues.length - 1})` : '')) : null),
+      fit.issues.length ? issueLine(fit.issues) : null),
     part ? el('span', { class: `badge badge--${part.builtin ? 'pw' : 'jmp'}`, title: part.builtin ? t('ui.builtinLong') : t('ui.addonLong') },
       part.builtin ? t('ui.builtin') : t('ui.addon')) : null,
     el('span', { class: 'visually-hidden' }, `, ${fitText}`));
@@ -520,7 +539,7 @@ function showTip(node, part) {
           const better = key === 'mass_grams' ? diff < 0 : diff > 0;
           rows.append(el('div', null, el('dt', null, t(`keyStats.${key}`)),
             el('dd', { class: Math.abs(diff) < 10 ** -decimals / 2 ? '' : better ? 'is-up' : 'is-down' },
-              `${num(before, decimals)} → ${num(value, decimals)} ${unit}`)));
+              `${num(before, decimals)} → ${num(value, decimals)}${unitText(unit)}`)));
         }
         tip.append(el('p', { class: 'part-tip__label' }, t('ui.ifSwapped')), rows);
       }
@@ -551,7 +570,12 @@ function statLabel(key, analysis) {
   if (key !== 'cruise_flight_time_min') return t(`stats.${key}`);
   const speed = analysis ? analysis.cruise_speed_kmh : NaN;
   const [, , unit, decimals] = entry('stats.cruise_speed_kmh');
-  return t(`stats.${key}`, { speed: Number.isFinite(speed) ? `${num(speed, decimals)} ${unit}` : t('ui.noValue') });
+  return t(`stats.${key}`, { speed: Number.isFinite(speed) ? `${num(speed, decimals)}${unitText(unit)}` : t('ui.noValue') });
+}
+
+/** Unit after a number: a no-break space before it, none before a ratio (":1"). */
+function unitText(unit) {
+  return unit.startsWith(':') ? unit : `${NB}${unit}`;
 }
 
 function statRow(key, analysis, cls) {
@@ -559,7 +583,7 @@ function statRow(key, analysis, cls) {
   const value = analysis ? analysis[key] : NaN;
   return el('div', { class: cls },
     el('dt', null, cls === 'keystat' ? t(`keyStats.${key}`).split('/').flatMap((w, i) => (i ? ['/', el('wbr'), w] : [w])) : statLabel(key, analysis)),
-    el('dd', null, el('span', { class: 'stat__value' }, num(value, decimals)), Number.isFinite(value) ? el('span', { class: 'stat__unit' }, ` ${unit}`) : null));
+    el('dd', null, el('span', { class: 'stat__value' }, num(value, decimals)), Number.isFinite(value) ? el('span', { class: 'stat__unit' }, unitText(unit)) : null));
 }
 
 function renderStats() {
@@ -955,12 +979,14 @@ function control(key, labelText) {
       value: String(displayOf(key, value)),
     });
   }
-  const unit = p.unit ? el('span', { class: 'tune__unit' }, p.unit + (p.allowOff ? ` · ${t('ui.offHint')}` : '')) : null;
+  const unit = p.unit ? el('span', { class: 'tune__unit', id: `${id}-unit` }, p.unit) : null;
+  if (unit) input.setAttribute('aria-describedby', `${id}-unit`);
   const defText = p.kind === 'enum' ? t(`options.${p.options[Math.round(def)]}`) : p.kind === 'bool' ? t(def >= 0.5 ? 'options.on' : 'options.off')
-    : `${num(displayOf(key, def), p.decimals)}${p.unit ? ` ${p.unit}` : ''}`;
+    : `${num(displayOf(key, def), p.decimals)}${p.unit ? `${NB}${p.unit}` : ''}`;
   return el('div', { class: `tune${changed ? ' is-changed' : ''}`, dataset: { row: key } },
-    el('label', { for: id, class: 'tune__label' }, labelText || tuneLabel(key), changed ? changedMark() : null),
-    el('div', { class: 'tune__input' }, input, unit),
+    el('label', { for: id, class: 'tune__label' }, labelText || tuneLabel(key),
+      p.allowOff ? el('span', { class: 'tune__hint' }, t('ui.offHint')) : null, changed ? changedMark() : null),
+    el('div', { class: `tune__input${unit ? ' has-unit' : ''}` }, input, unit),
     el('button', {
       type: 'button', class: 'icon-btn icon-btn--small tune__reset', disabled: changed ? null : true,
       title: `${t('ui.resetValue')} (${t('ui.defaultValue')}: ${defText})`, 'aria-label': `${t('ui.resetValue')}: ${labelText || tuneLabel(key)} (${defText})`,
@@ -1148,7 +1174,7 @@ function rateGraph(e, actual) {
   const yMax = Math.ceil(top / 200) * 200;
   const X = (x) => pad.l + x * (W - pad.l - pad.r);
   const Y = (v) => H - pad.b - (v / yMax) * (H - pad.t - pad.b);
-  const summary = curves.map((c) => `${t(`axes.${c.axis}`)} ${Math.round(c.max)} °/s`).join(', ');
+  const summary = curves.map((c) => `${t(`axes.${c.axis}`)} ${Math.round(c.max)}${NB}°/s`).join(', ');
   const svg = graphFrame(W, H, `${t('ui.rateGraph')}: ${summary}`, 'data-graph');
   for (let v = 0; v <= yMax; v += yMax / 4) {
     svg.append(svgEl('line', { x1: pad.l, x2: W - pad.r, y1: Y(v), y2: Y(v), class: 'graph__grid' }));
@@ -1158,7 +1184,7 @@ function rateGraph(e, actual) {
   }
   for (const x of [0, 0.5, 1]) {
     const label = svgEl('text', { x: X(x), y: H - 8, class: 'graph__tick', 'text-anchor': x === 0 ? 'start' : x === 1 ? 'end' : 'middle' });
-    label.textContent = `${Math.round(x * 100)} %`;
+    label.textContent = `${Math.round(x * 100)}${NB}%`;
     svg.append(label);
   }
   const dead = e['rates.rcDeadband'];
@@ -1172,7 +1198,7 @@ function rateGraph(e, actual) {
     svg.append(svgEl('path', { d, class: `graph__line graph__line--${i}` }));
   });
   const legend = el('ul', { class: 'graph-legend' }, curves.map((c, i) => el('li', { class: `graph-legend__item graph-legend__item--${i}` },
-    `${t(`axes.${c.axis}`)} `, el('strong', null, `${Math.round(c.max)} °/s`))));
+    `${t(`axes.${c.axis}`)} `, el('strong', null, `${Math.round(c.max)}${NB}°/s`))));
   const wrap = el('figure', { class: 'graph-wrap', 'data-rate-graph': '' }, svg, el('figcaption', null, t('ui.rateGraph')), legend);
   return wrap;
 }
@@ -1524,6 +1550,13 @@ async function updateViewerAndPaint() {
   }
 }
 
+/** Marks the viewer as empty (fallback text or unknown frame): the view buttons are hidden then, they would do nothing. */
+function viewerEmpty(kind) {
+  const box = $('[data-viewer]');
+  box.classList.toggle('is-fallback', kind === 'fallback');
+  box.classList.toggle('is-noframe', kind === 'noframe');
+}
+
 /** Caption of the 3D view: the drone's name, else the preset it still is. */
 function viewerName() {
   $('[data-viewer-name]').textContent = state.name.trim() || (state.presetId ? catalog.presetName(state.presetId, lang()) : '');
@@ -1550,6 +1583,7 @@ function viewerNote(text) {
   if (viewer) {
     note.textContent = text;
     note.hidden = !text;
+    viewerEmpty(text ? 'noframe' : null);
   }
 }
 
@@ -1636,12 +1670,13 @@ async function startViewer() {
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;
+    viewerEmpty('fallback');
     return;
   }
   if (!mod.webglAvailable()) {
     fallback.textContent = t('ui.noWebgl');
     fallback.hidden = false;
-    $('[data-viewer]').classList.add('is-fallback');
+    viewerEmpty('fallback');
     return;
   }
   const paused = root.classList.contains('motion-paused');
@@ -1650,6 +1685,7 @@ async function startViewer() {
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;
+    viewerEmpty('fallback');
     return;
   }
   viewer.canvas.setAttribute('role', 'img');
@@ -1926,6 +1962,20 @@ function toast(message, level) {
 // ---------------------------------------------------------------------------------------------------------------
 // Boot
 
+/** Texts from the web export (names, help, rules) with no-break spaces between numbers and units. */
+function keepUnitsTogether(c) {
+  for (const name of ['partName', 'shortName', 'presetName', 'issueText', 'analysisWarningText']) {
+    const get = c[name];
+    c[name] = (...args) => glue(get(...args));
+  }
+  const help = c.help;
+  c.help = (...args) => {
+    const h = help(...args);
+    return h && { summary: glue(h.summary), what: h.what.map(glue), use: h.use.map(glue) };
+  };
+  return c;
+}
+
 async function boot() {
   const cfg = $('[data-cfg]');
   try {
@@ -1936,7 +1986,7 @@ async function boot() {
         return res.json();
       }),
     ]);
-    catalog = c;
+    catalog = keepUnitsTogether(c);
     render = r;
   } catch {
     $('[data-loading]').textContent = t('ui.loadFailed');

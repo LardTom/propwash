@@ -2,6 +2,16 @@
 
 export const lang = () => (document.documentElement.lang === 'de' ? 'de' : 'en');
 
+/** No-break space: keeps a number and its unit on one line ("4,0 g", "2200 mAh"). */
+export const NB = '\u00A0';
+
+const UNIT_AFTER_SPACE = /(\d) (?=(?:mAh|mm|cm|km\/h|m\/s|ms|min|kHz|Hz|KV|kV|°C|°\/s|°|%|Wh|kg|W|V|A|g|s|m|h|C)(?![\p{L}\d]))/gu;
+
+/** Text with no-break spaces between numbers and their units (texts from the web export, joined figures). */
+export function glue(text) {
+  return typeof text === 'string' ? text.replace(UNIT_AFTER_SPACE, `$1${NB}`) : text;
+}
+
 const TEXT = {
   categories: {
     frame: ['Frame', 'Rahmen'], stack: ['Stack', 'Stack'], motor: ['Motors', 'Motoren'], prop: ['Props', 'Props'],
@@ -38,14 +48,14 @@ const TEXT = {
     battery_load_percent: ['Battery load', 'Akku-Last', '%', 0],
     motor_response_ms: ['Motor response', 'Motor-Ansprechzeit', 'ms', 1],
     crash_speed_ms: ['Survives crashes up to', 'Übersteht Crashs bis', 'm/s', 1],
-    motor_temp_minute_c: ['Motor temperature after 60 s full throttle in place', 'Motortemperatur nach 60 s Vollgas im Stand', '°C', 0],
+    motor_temp_minute_c: ['Motor temperature after 60\u00A0s full throttle in place', 'Motortemperatur nach 60\u00A0s Vollgas im Stand', '°C', 0],
     mixed_motor_temp_c: ['Motor temperature after a mixed flight', 'Motortemperatur nach gemischtem Flug', '°C', 0],
     sustained_motor_temp_c: ['Motor temperature, full throttle in place until the pack is empty', 'Motortemperatur bei Vollgas im Stand bis der Akku leer ist', '°C', 0],
     props_in_view_percent: ['Props in the camera view', 'Props im Kamerabild', '%', 1],
   },
   keyStats: {
     mass_grams: ['Weight', 'Gewicht'], thrust_to_weight: ['Thrust/weight', 'Schub/Gewicht'], hover_throttle_percent: ['Hover throttle', 'Schwebegas'],
-    mixed_flight_time_min: ['Flight time (mixed)', 'Flugzeit gemischt'], top_speed_kmh: ['Top speed', 'Spitze'],
+    mixed_flight_time_min: ['Flight time (mixed)', 'Flugzeit gemischt'], top_speed_kmh: ['Top speed', 'Höchst\u00ADtempo'],
   },
   tune: {
     'rates.type': ['Rates type', 'Rate-Typ'],
@@ -111,6 +121,9 @@ const TEXT = {
     noValue: ['–', '–'],
     flightWarning: ['Flight', 'Flug'],
     problem: ['Problem', 'Problem'], warning: ['Warning', 'Warnung'],
+    moreProblems: ['+{n} more problems', '+{n} weitere Probleme'], moreProblemsOne: ['+1 more problem', '+1 weiteres Problem'],
+    moreWarnings: ['+{n} more warnings', '+{n} weitere Warnungen'], moreWarningsOne: ['+1 more warning', '+1 weitere Warnung'],
+    moreIssuesHint: ['All problems and warnings of this part:', 'Alle Probleme und Warnungen dieses Teils:'],
     checksLabel: ['Problems and warnings', 'Probleme und Warnungen'],
     autoRotate: ['Auto-rotate', 'Drehen'],
     shotCopied: ['Screenshot copied', 'Screenshot in der Zwischenablage'],
@@ -121,9 +134,9 @@ const TEXT = {
     viewerLabel: ['3D model of the drone. Drag to turn, scroll or pinch to zoom; with focus, the arrow keys turn it, + and − zoom, 0 resets the view.', '3D-Modell der Drohne. Ziehen dreht, Scrollen oder zwei Finger zoomen; mit Fokus drehen die Pfeiltasten, + und − zoomen, 0 setzt die Ansicht zurück.'],
     noFrame: ['No 3D view: this page does not know the frame.', 'Keine 3D-Ansicht: Diese Seite kennt den Rahmen nicht.'],
     viewerFailed: ['The 3D view could not be started.', 'Die 3D-Ansicht konnte nicht gestartet werden.'],
-    cameraLabel: ['FPV camera image of the drone as in the game: {percent} % of the image covered by props.', 'FPV-Kamerabild der Drohne wie im Spiel: {percent} % des Bilds von Props verdeckt.'],
+    cameraLabel: ['FPV camera image of the drone as in the game: {percent}\u00A0% of the image covered by props.', 'FPV-Kamerabild der Drohne wie im Spiel: {percent}\u00A0% des Bilds von Props verdeckt.'],
     fpvNoteDefault: ['As in the game: frame uptilt {tilt}°, {link} goggles {fov}°. In FPV the game shows only the props, not the drone itself.', 'Wie im Spiel: Uptilt des Rahmens {tilt}°, Brille {link} {fov}°. Im FPV zeigt das Spiel nur die Props, nicht die Drohne selbst.'],
-    fpvNoteChanged: ['Your own uptilt and FOV. The workbench analysis uses the defaults ({tilt}°, {fov}°): {percent} %.', 'Eigener Uptilt und FOV. Die Analyse der Werkbank rechnet mit den Standardwerten ({tilt}°, {fov}°): {percent} %.'],
+    fpvNoteChanged: ['Your own uptilt and FOV. The workbench analysis uses the defaults ({tilt}°, {fov}°): {percent}\u00A0%.', 'Eigener Uptilt und FOV. Die Analyse der Werkbank rechnet mit den Standardwerten ({tilt}°, {fov}°): {percent}\u00A0%.'],
     fpvNone: ['No camera view while parts are unknown or an accessory sits in the wrong mount.', 'Keine Kameraansicht, solange Teile unbekannt sind oder Zubehör am falschen Halter sitzt.'],
     fpvLink: { analog: ['analog', 'analog'], digital: ['digital', 'digital'], creative: ['creative', 'Kreativ'] },
     procedural: ['This frame has no model; the game and this page draw it from its measurements, and paint does not show on it.', 'Dieser Rahmen hat kein Modell; Spiel und Seite zeichnen ihn aus seinen Maßen, Lack ist darauf nicht zu sehen.'],
@@ -145,7 +158,7 @@ const TEXT = {
     offHint: ['0 = off', '0 = aus'], stick: ['Stick', 'Stick'], rate: ['Rate', 'Rate'], output: ['Output', 'Ausgabe'],
     rateGraph: ['Rate curves: turn rate over stick travel', 'Rate-Kurven: Drehrate über den Stickweg'],
     throttleGraph: ['Throttle curve: motor output over throttle stick', 'Gaskurve: Motorausgabe über den Gas-Stick'],
-    osdIntro: ['The OSD layer is off by default, like in the game. When it is in the code, importing it replaces the OSD layout of the player who imports it.', 'Die OSD-Ebene ist wie im Spiel standardmäßig aus. Steht sie im Code, ersetzt der Import das OSD-Layout von dem, der importiert.'],
+    osdIntro: ['The OSD layer is off by default, like in the game. When it is in the code, importing it replaces the importing player’s own OSD layout.', 'Die OSD-Ebene ist wie im Spiel standardmäßig aus. Steht sie im Code, ersetzt der Import das eigene OSD-Layout.'],
     osdInclude: ['Put an OSD layout into the code', 'OSD-Layout in den Code packen'],
     osdImported: ['Layout from the opened code', 'Layout aus dem geöffneten Code'],
     osdImportedInfo: ['Preset {preset}, {count} elements set individually', 'Preset {preset}, {count} Elemente einzeln eingestellt'],
@@ -169,7 +182,7 @@ const TEXT = {
     importRenamed: ['Renamed parts: {n}', 'Umbenannte Teile: {n}'],
     badLink: ['The link does not contain a readable code: ', 'Der Link enthält keinen lesbaren Code: '],
     mm: ['mm', 'mm'], props: ['props', 'Props'], blades: ['blades', 'Blätter'], blocks: ['blocks', 'Blöcke'], kv: ['KV', 'KV'],
-    massOf: ['{g} g', '{g} g'],
+    massOf: ['{g}\u00A0g', '{g}\u00A0g'],
   },
 };
 
