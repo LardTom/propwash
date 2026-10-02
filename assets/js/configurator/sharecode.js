@@ -1,12 +1,12 @@
 // PW1 share codes: encoder and tolerant decoder, a port of the codec in "Propwash: Just More Parts"
-// (spec: sharecode.md revision 1.1). Uncompressed codes are byte-identical to the mod's; compressed codes too,
+// (spec: sharecode.md revision 1.2). Uncompressed codes are byte-identical to the mod's; compressed codes too,
 // because the vendored deflate is a zlib port (level 9, raw).
 //
 // Content shape used by encode() and returned by decode():
 //   {
 //     build: { frame, stack, motor, prop, video, battery, accessories: { top?, bottom? } },   // part ids
 //     paint: { <slot>: '#rrggbb' } | null,      // encode also accepts 0xRRGGBB numbers
-//     tune:  { <flight key>: number } | null,   // float32 values, keys sorted
+//     tune:  { <flight or camera key>: number } | null,   // float32 values, keys sorted
 //     osd:   { version, json } | null,
 //     name:  string | null,
 //   }
@@ -15,12 +15,12 @@
 
 import { crc32 } from './crc32.js';
 import { inflateRaw } from './inflate.js';
-import { TUNE_KEYS, tuneIndex, isFlightKey } from './tune.js';
+import { TUNE_KEYS, tuneIndex, isSharedKey } from './tune.js';
 import { deflateRaw } from '../../vendor/pako/deflate.js';
 
 export const FORMAT = 'PW1';
 export const PREFIX = 'PW1-';
-export const REVISION = '1.1';
+export const REVISION = '1.2';
 export const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 export const GROUP_LENGTH = 5;
 export const LAYERS = Object.freeze(['parts', 'paint', 'tune', 'osd', 'name']);
@@ -352,7 +352,7 @@ export function hexColor(rgb) {
 
 /**
  * Normalises content like the mod's ShareContent: empty paint and an empty or blank name are dropped, the tune keeps
- * only flight keys (float32 values), the name is stripped. Throws Error for content the mod could not encode.
+ * only flight keys and the camera angle (float32 values), the name is stripped. Throws Error for content the mod could not encode.
  */
 export function normalizeContent(content) {
   if (!content || !content.build) throw new Error('content.build is required');
@@ -392,7 +392,7 @@ export function normalizeContent(content) {
       const value = content.tune[key];
       if (key.length === 0 || key.length > LIMITS.tuneKeyChars) throw new Error(`tune key must have 1-64 characters: ${key}`);
       if (typeof value !== 'number' || !Number.isFinite(Math.fround(value))) throw new Error(`tune value must be finite: ${key}`);
-      if (isFlightKey(key)) tune[key] = Math.fround(value);
+      if (isSharedKey(key)) tune[key] = Math.fround(value);
     }
     if (keys.length > LIMITS.tuneEntries) throw new Error(`at most ${LIMITS.tuneEntries} tune values`);
   }
@@ -486,7 +486,7 @@ function payload(content) {
   if (content.tune) {
     mask |= 4;
     const entries = Object.keys(content.tune)
-      .filter(isFlightKey)
+      .filter(isSharedKey)
       .map((key) => ({ key, index: tuneIndex(key), value: Math.fround(content.tune[key]) }));
     entries.sort((a, b) => {
       const ia = a.index === 0 ? Infinity : a.index;
@@ -631,7 +631,7 @@ function readTune(r, parsed) {
       parsed.skipped.push(`tune_index:${index}`);
       continue;
     }
-    if (!isFlightKey(key)) {
+    if (!isSharedKey(key)) {
       parsed.skipped.push(`tune_key:${key}`);
       continue;
     }

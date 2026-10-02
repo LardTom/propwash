@@ -1,10 +1,13 @@
-// Flight-tune keys and groups, as in the Propwash API (TuneGroup) and the PW1 key table.
+// Tune keys and groups, as in the Propwash API (TuneGroup) and the PW1 key table (revision 1.2).
 
-/** Groups that travel in a share code (TuneGroup.FLIGHT). */
+/** The flight groups of the tune editor (TuneGroup.FLIGHT). */
 export const FLIGHT_GROUPS = Object.freeze(['rates', 'pid', 'feedforward', 'tpa', 'filters', 'throttle']);
 
+/** Groups that travel in a share code (PW1 revision 1.2): the flight groups and the drone's camera angle. */
+export const SHARED_GROUPS = Object.freeze([...FLIGHT_GROUPS, 'camera']);
+
 /** Groups that never travel in a share code. */
-export const NEVER_GROUPS = Object.freeze(['hold', 'camera', 'led', 'vtx', 'other']);
+export const NEVER_GROUPS = Object.freeze(['hold', 'led', 'vtx', 'other']);
 
 /** PW1 tune key table: TUNE_KEYS[k - 1] is the key with table index k (1-based, append only). */
 export const TUNE_KEYS = Object.freeze([
@@ -23,6 +26,7 @@ export const TUNE_KEYS = Object.freeze([
   'pid.tpaMode', 'pid.tpaRatePercent', 'pid.tpaBreakpoint', 'pid.motorIdlePercent', 'pid.throttleMid', 'pid.throttleExpo',
   'pid.throttleLimitType', 'pid.throttleLimitPercent', 'pid.thrustLinearPercent', 'pid.vbatSagCompensationPercent',
   'filters.pidLoop', 'filters.gyroLpfHz', 'filters.dtermLpf1Hz', 'filters.dtermLpf2Hz', 'filters.rcSmoothingHz',
+  'camera.uptiltDeg',
 ]);
 
 const INDEX = new Map(TUNE_KEYS.map((key, i) => [key, i + 1]));
@@ -51,9 +55,14 @@ export function tuneGroup(key) {
   return 'other';
 }
 
-/** True if the key belongs to a flight group (the only keys a share code carries). */
+/** True if the key belongs to a flight group (the tune editor). */
 export function isFlightKey(key) {
   return FLIGHT_GROUPS.includes(tuneGroup(key));
+}
+
+/** True if a share code carries the key: flight groups and the camera angle. */
+export function isSharedKey(key) {
+  return SHARED_GROUPS.includes(tuneGroup(key));
 }
 
 /** Only the flight keys of a tune object, values rounded to float32 like the mod stores them, keys sorted. */
@@ -61,6 +70,15 @@ export function flightOnly(tune) {
   const out = {};
   for (const key of Object.keys(tune || {}).sort()) {
     if (isFlightKey(key)) out[key] = Math.fround(tune[key]);
+  }
+  return out;
+}
+
+/** Only the keys a share code carries (flight groups and camera angle), float32 values, keys sorted. */
+export function sharedOnly(tune) {
+  const out = {};
+  for (const key of Object.keys(tune || {}).sort()) {
+    if (isSharedKey(key)) out[key] = Math.fround(tune[key]);
   }
   return out;
 }

@@ -577,6 +577,27 @@ button {
   accent-color: var(--accent);
 }
 
+.fpv__fov {
+  display: grid;
+  flex: 0 1 150px;
+  gap: 4px;
+  min-width: 0;
+  margin: 0;
+}
+
+.fpv__range {
+  overflow: hidden;
+  color: var(--faint);
+  font-size: 0.7rem;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fpv__head output.is-own {
+  color: var(--accent);
+}
+
 .fpv__options {
   display: flex;
   gap: 6px;

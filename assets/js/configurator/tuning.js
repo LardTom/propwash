@@ -9,6 +9,7 @@
 
 import { airframe, hoverStick } from './analysis.js';
 import { tuneGroup, isFlightKey } from './tune.js';
+import { CAMERA_UPTILT } from './fpv.js';
 
 const AXES = ['roll', 'pitch', 'yaw'];
 const TERMS = ['p', 'i', 'd', 'ff'];
@@ -370,10 +371,18 @@ function normalizeWith(tune, params, base) {
   return out;
 }
 
-/** Stored form of a tune: only values that differ from the build's defaults (TuneMapping.normalize, flight keys). */
+/** The drone's own camera angle travels with the stored tune untouched (TuneMapping keeps camera.uptiltDeg). */
+function keepCamera(out, source) {
+  const value = source ? source[CAMERA_UPTILT] : undefined;
+  if (typeof value === 'number' && Number.isFinite(value)) out[CAMERA_UPTILT] = Math.fround(value);
+  return out;
+}
+
+/** Stored form of a tune: only values that differ from the build's defaults (TuneMapping.normalize, flight keys), plus
+ * the drone's camera angle. */
 export function normalizeTune(tune, build, catalog) {
   const params = paramsOf(build, catalog);
-  return normalizeWith(flightTune(tune), params, fromConfig(toConfig({}, params)));
+  return keepCamera(normalizeWith(flightTune(tune), params, fromConfig(toConfig({}, params))), tune);
 }
 
 /**
@@ -404,5 +413,5 @@ export function applyTuneEdit(stored, edited, build, catalog) {
   if (tuneSourceOf(merged) === PID_SOURCE_MANUAL) {
     for (const key of PID_AXIS_KEYS) if (!(key in merged)) merged[key] = before[key];
   }
-  return normalizeWith(merged, params, fromConfig(toConfig({}, params)));
+  return keepCamera(normalizeWith(merged, params, fromConfig(toConfig({}, params))), stored);
 }

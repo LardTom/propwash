@@ -123,18 +123,19 @@
             <span class="fpv__value"><strong data-fpv-percent>–</strong>&nbsp;%</span>
           </p>
           <label class="fpv__slider">
-            <span class="fpv__head"><span lang="en">Camera uptilt</span><span lang="de">Kamera-Uptilt</span><output data-fpv-tilt-out></output></span>
+            <span class="fpv__head"><span lang="en">Camera angle</span><span lang="de">Kamerawinkel</span><output data-fpv-tilt-out></output></span>
             <input type="range" min="0" max="80" step="1" data-fpv-tilt>
+            <span class="fpv__range" data-fpv-range></span>
           </label>
-          <label class="fpv__slider">
-            <span class="fpv__head"><span lang="en">Goggle FOV</span><span lang="de">Brillen-FOV</span><output data-fpv-fov-out></output></span>
-            <input type="range" min="60" max="160" step="1" data-fpv-fov>
-          </label>
+          <p class="fpv__fov" title="The field of view comes from the camera in the video unit, as on a real drone" data-de-title="Das Sichtfeld kommt von der Kamera im Videomodul, wie bei einer echten Drohne">
+            <span class="fpv__head"><span lang="en">Field of view</span><span lang="de">Sichtfeld</span><output data-fpv-fov-out></output></span>
+            <span class="fpv__range" data-fpv-fov-source></span>
+          </p>
           <div class="fpv__options">
             <button type="button" class="fpv__toggle" aria-pressed="false" data-fpv-mark title="Mark the props: the area the percentage counts" data-de-title="Props markieren: die Fläche, die der Prozentwert zählt"><span lang="en">Mark</span><span lang="de">Markieren</span></button>
             <button type="button" class="fpv__toggle" aria-pressed="false" data-fpv-still title="Props standing still instead of spinning blur discs" data-de-title="Stehende Props statt drehender Unschärfe-Scheiben"><span lang="en">Still</span><span lang="de">Stehend</span></button>
             <button type="button" class="fpv__toggle" aria-pressed="false" data-fpv-frame title="Also draw the drone itself (the game hides it in FPV)" data-de-title="Auch die Drohne selbst zeichnen (das Spiel blendet sie im FPV aus)"><span lang="en">Frame</span><span lang="de">Rahmen</span></button>
-            <button type="button" class="fpv__toggle fpv__reset" data-fpv-reset title="Uptilt and FOV back to the build’s defaults" data-de-title="Uptilt und FOV auf die Standardwerte des Builds"><svg aria-hidden="true" width="16" height="16"><use href="#i-reset"/></svg><span class="visually-hidden"><span lang="en">Reset uptilt and FOV</span><span lang="de">Uptilt und FOV zurücksetzen</span></span></button>
+            <button type="button" class="fpv__toggle fpv__reset" data-fpv-reset title="Camera angle back to the frame’s default" data-de-title="Kamerawinkel auf den Standard des Rahmens"><svg aria-hidden="true" width="16" height="16"><use href="#i-reset"/></svg><span class="visually-hidden"><span lang="en">Reset the camera angle</span><span lang="de">Kamerawinkel zurücksetzen</span></span></button>
           </div>
           <p class="fpv__note" data-fpv-note></p>
         </div>

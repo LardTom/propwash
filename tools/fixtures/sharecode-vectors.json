@@ -53,7 +53,7 @@
    "sustained_motor_temp_c": 93.15040140713042,
    "motor_temp_minute_c": 93.15040140713042,
    "mixed_motor_temp_c": 50.616464893742666,
-   "props_in_view_percent": 8.057235596398394,
+   "props_in_view_percent": 8.234067195103185,
    "warnings": []
   }
  },
@@ -309,7 +309,7 @@
    "sustained_motor_temp_c": 93.15040140713042,
    "motor_temp_minute_c": 93.15040140713042,
    "mixed_motor_temp_c": 50.616464893742666,
-   "props_in_view_percent": 8.057235596398394,
+   "props_in_view_percent": 8.234067195103185,
    "warnings": []
   }
  },
@@ -326,6 +326,68 @@
   "renamed": [],
   "check": null,
   "analysis": null
+ },
+ {
+  "name": "G_camera_angle",
+  "code": "PW1-0400A-FG10S-S62RV-5BWTG-223KE-HGP6T-TZ6CR-022KD-68SK0-DJZ64-W3CC0-10SR3-ACAZ6-DH022-V1DSG-PRVV7-BXS62-RV504-464DK-KBWRK-2C1G0-04041-4R25R-C1B06-GN0X9-4R",
+  "compression": "never",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "propwash:race_5",
+    "stack": "propwash:stack_30",
+    "motor": "propwash:m2306_1860",
+    "prop": "propwash:p51_3b",
+    "video": "propwash:analog_race",
+    "battery": "propwash:b6s_1100",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": {
+    "camera.uptiltDeg": 52,
+    "rates.roll.rcRate": 1.1
+   },
+   "osd": null,
+   "name": null
+  },
+  "skipped": [],
+  "unknown_parts": [],
+  "wrong_kind": [],
+  "renamed": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 430.2,
+   "thrust_to_weight": 13.296952078961858,
+   "hover_throttle_percent": 19.153267158505784,
+   "hover_flight_time_min": 12.110663930006085,
+   "cruise_flight_time_min": 8.583127528936194,
+   "mixed_flight_time_min": 3.1182152885757235,
+   "aggressive_flight_time_min": 2.391226069048234,
+   "cruise_speed_kmh": 59.999999999978925,
+   "hover_current_a": 4.026428842380387,
+   "cruise_current_a": 6.151603808984077,
+   "mixed_current_a": 16.93276285105924,
+   "landing_cell_voltage": 3.525810785468049,
+   "avionics_power_w": 4.1,
+   "top_speed_kmh": 167.53241261214487,
+   "full_throttle_current_a": 124.73940792294513,
+   "esc_load_percent": 53.68863294224873,
+   "battery_load_percent": 94.49955145677662,
+   "motor_response_ms": 15.048604727730035,
+   "crash_speed_ms": 7,
+   "sustained_motor_temp_c": 94.0906340582086,
+   "motor_temp_minute_c": 94.0906340582086,
+   "mixed_motor_temp_c": 59.27922051828477,
+   "props_in_view_percent": 10.965428996855538,
+   "warnings": []
+  }
  },
  {
   "name": "preset:propwash:whoop",
@@ -382,7 +444,7 @@
    "sustained_motor_temp_c": 29.823155826216475,
    "motor_temp_minute_c": 29.823155826216475,
    "mixed_motor_temp_c": 27.365724931615492,
-   "props_in_view_percent": 9.020423761393568,
+   "props_in_view_percent": 9.874682882077364,
    "warnings": []
   }
  },
@@ -440,7 +502,7 @@
    "sustained_motor_temp_c": 29.823155826216475,
    "motor_temp_minute_c": 29.823155826216475,
    "mixed_motor_temp_c": 27.365724931615492,
-   "props_in_view_percent": 9.020423761393568,
+   "props_in_view_percent": 9.874682882077364,
    "warnings": []
   }
  },
@@ -499,7 +561,7 @@
    "sustained_motor_temp_c": 102.09859352242808,
    "motor_temp_minute_c": 102.09859352242808,
    "mixed_motor_temp_c": 45.58334645184632,
-   "props_in_view_percent": 7.2806544654928995,
+   "props_in_view_percent": 5.909954200582882,
    "warnings": []
   }
  },
@@ -557,7 +619,7 @@
    "sustained_motor_temp_c": 102.09859352242808,
    "motor_temp_minute_c": 102.09859352242808,
    "mixed_motor_temp_c": 45.58334645184632,
-   "props_in_view_percent": 7.2806544654928995,
+   "props_in_view_percent": 5.909954200582882,
    "warnings": []
   }
  },
@@ -733,7 +795,7 @@
    "sustained_motor_temp_c": 94.0906340582086,
    "motor_temp_minute_c": 94.0906340582086,
    "mixed_motor_temp_c": 59.27922051828477,
-   "props_in_view_percent": 11.19782219264153,
+   "props_in_view_percent": 10.965428996855538,
    "warnings": []
   }
  },
@@ -791,7 +853,7 @@
    "sustained_motor_temp_c": 94.0906340582086,
    "motor_temp_minute_c": 94.0906340582086,
    "mixed_motor_temp_c": 59.27922051828477,
-   "props_in_view_percent": 11.19782219264153,
+   "props_in_view_percent": 10.965428996855538,
    "warnings": []
   }
  },
@@ -981,7 +1043,7 @@
    "sustained_motor_temp_c": 48.58349712384887,
    "motor_temp_minute_c": 48.58349712384887,
    "mixed_motor_temp_c": 31.8794931330173,
-   "props_in_view_percent": 7.651174216288536,
+   "props_in_view_percent": 8.635711700030033,
    "warnings": []
   }
  },
@@ -1039,7 +1101,7 @@
    "sustained_motor_temp_c": 48.58349712384887,
    "motor_temp_minute_c": 48.58349712384887,
    "mixed_motor_temp_c": 31.8794931330173,
-   "props_in_view_percent": 7.651174216288536,
+   "props_in_view_percent": 8.635711700030033,
    "warnings": []
   }
  },
@@ -1102,7 +1164,7 @@
    "sustained_motor_temp_c": 46.780384908945436,
    "motor_temp_minute_c": 46.780384908945436,
    "mixed_motor_temp_c": 30.54109156733979,
-   "props_in_view_percent": 6.200857137805833,
+   "props_in_view_percent": 6.147561631848717,
    "warnings": []
   }
  },
@@ -1160,7 +1222,7 @@
    "sustained_motor_temp_c": 46.780384908945436,
    "motor_temp_minute_c": 46.780384908945436,
    "mixed_motor_temp_c": 30.54109156733979,
-   "props_in_view_percent": 6.200857137805833,
+   "props_in_view_percent": 6.147561631848717,
    "warnings": []
   }
  },
@@ -1223,7 +1285,7 @@
    "sustained_motor_temp_c": 53.30877366858082,
    "motor_temp_minute_c": 53.30877366858082,
    "mixed_motor_temp_c": 34.180666849539136,
-   "props_in_view_percent": 3.95547318347614,
+   "props_in_view_percent": 4.249510768597062,
    "warnings": []
   }
  },
@@ -1281,7 +1343,7 @@
    "sustained_motor_temp_c": 53.30877366858082,
    "motor_temp_minute_c": 53.30877366858082,
    "mixed_motor_temp_c": 34.180666849539136,
-   "props_in_view_percent": 3.95547318347614,
+   "props_in_view_percent": 4.249510768597062,
    "warnings": []
   }
  },
@@ -1344,7 +1406,7 @@
    "sustained_motor_temp_c": 58.61166392876973,
    "motor_temp_minute_c": 58.61166392876973,
    "mixed_motor_temp_c": 35.25392828882449,
-   "props_in_view_percent": 5.430867903251949,
+   "props_in_view_percent": 5.353545710934741,
    "warnings": []
   }
  },
@@ -1402,7 +1464,7 @@
    "sustained_motor_temp_c": 58.61166392876973,
    "motor_temp_minute_c": 58.61166392876973,
    "mixed_motor_temp_c": 35.25392828882449,
-   "props_in_view_percent": 5.430867903251949,
+   "props_in_view_percent": 5.353545710934741,
    "warnings": []
   }
  },
@@ -1465,7 +1527,7 @@
    "sustained_motor_temp_c": 80.6390481234221,
    "motor_temp_minute_c": 80.6390481234221,
    "mixed_motor_temp_c": 40.66630237864824,
-   "props_in_view_percent": 7.605561949634575,
+   "props_in_view_percent": 6.131723224513548,
    "warnings": []
   }
  },
@@ -1523,7 +1585,7 @@
    "sustained_motor_temp_c": 80.6390481234221,
    "motor_temp_minute_c": 80.6390481234221,
    "mixed_motor_temp_c": 40.66630237864824,
-   "props_in_view_percent": 7.605561949634575,
+   "props_in_view_percent": 6.131723224513548,
    "warnings": []
   }
  },
@@ -1587,7 +1649,7 @@
    "sustained_motor_temp_c": 68.38754084900441,
    "motor_temp_minute_c": 68.38754084900441,
    "mixed_motor_temp_c": 35.800346605203934,
-   "props_in_view_percent": 6.81125531051539,
+   "props_in_view_percent": 6.6664161186646265,
    "warnings": []
   }
  },
@@ -1645,7 +1707,7 @@
    "sustained_motor_temp_c": 68.38754084900441,
    "motor_temp_minute_c": 68.38754084900441,
    "mixed_motor_temp_c": 35.800346605203934,
-   "props_in_view_percent": 6.81125531051539,
+   "props_in_view_percent": 6.6664161186646265,
    "warnings": []
   }
  },
@@ -2197,7 +2259,7 @@
    "sustained_motor_temp_c": 74.5395117378563,
    "motor_temp_minute_c": 74.5395117378563,
    "mixed_motor_temp_c": 52.65299599733644,
-   "props_in_view_percent": 9.7666354104117,
+   "props_in_view_percent": 9.599082860155443,
    "warnings": []
   }
  },
@@ -2255,7 +2317,7 @@
    "sustained_motor_temp_c": 74.5395117378563,
    "motor_temp_minute_c": 74.5395117378563,
    "mixed_motor_temp_c": 52.65299599733644,
-   "props_in_view_percent": 9.7666354104117,
+   "props_in_view_percent": 9.599082860155443,
    "warnings": []
   }
  },
@@ -2319,7 +2381,7 @@
    "sustained_motor_temp_c": 95.13902293630142,
    "motor_temp_minute_c": 95.13902293630142,
    "mixed_motor_temp_c": 59.686773864835374,
-   "props_in_view_percent": 10.234887147571317,
+   "props_in_view_percent": 10.010569106801459,
    "warnings": [
     "heavy_sag"
    ]
@@ -2379,7 +2441,7 @@
    "sustained_motor_temp_c": 95.13902293630142,
    "motor_temp_minute_c": 95.13902293630142,
    "mixed_motor_temp_c": 59.686773864835374,
-   "props_in_view_percent": 10.234887147571317,
+   "props_in_view_percent": 10.010569106801459,
    "warnings": [
     "heavy_sag"
    ]
@@ -2568,7 +2630,7 @@
    "sustained_motor_temp_c": 67.62396824156988,
    "motor_temp_minute_c": 67.62396824156988,
    "mixed_motor_temp_c": 38.60574095192094,
-   "props_in_view_percent": 6.156578974098227,
+   "props_in_view_percent": 6.083360813668831,
    "warnings": []
   }
  },
@@ -2628,7 +2690,7 @@
    "sustained_motor_temp_c": 67.62396824156988,
    "motor_temp_minute_c": 67.62396824156988,
    "mixed_motor_temp_c": 38.60574095192094,
-   "props_in_view_percent": 6.156578974098227,
+   "props_in_view_percent": 6.083360813668831,
    "warnings": []
   }
  },

@@ -3,7 +3,7 @@
 // lighting (two fixed lights, 0.6 diffuse + 0.4 ambient), cutout alpha, nearest-neighbour textures.
 //
 // Camera preview: the FPV image like Propwash 0.4.0 draws it (FpvProps): a 16:9 rectilinear view from the lens with
-// the uptilt and the goggles' horizontal field of view, the own drone hidden except its props, spinning props as
+// the drone's camera angle and the horizontal field of view of the video unit's camera, the own drone hidden except its props, spinning props as
 // translucent blur discs (three bands from the hub to the blade tip) or still blades, over a sky and ground backdrop.
 
 import {
@@ -356,7 +356,7 @@ export function createViewer(container, options) {
   const discMaterial = new ShaderMaterial({ vertexShader: DISC_VERTEX, fragmentShader: DISC_FRAGMENT, transparent: true, depthWrite: false, side: 2 });
   const markMaterial = new ShaderMaterial({ vertexShader: DISC_VERTEX, fragmentShader: MARK_FRAGMENT, transparent: true, depthWrite: false, side: 2 });
 
-  // Camera preview state: on, uptilt and goggle FOV (degrees), spinning (blur discs) or still blades, frame shown,
+  // Camera preview state: on, uptilt and camera FOV (degrees), spinning (blur discs) or still blades, frame shown,
   // discs marked.
   const fpv = { on: false, tilt: 0, fov: 120, spinning: true, frame: false, mark: false };
   const fpvCamera = new PerspectiveCamera(60, FPV_ASPECT, FPV_NEAR_MM, FPV_FAR_MM);
@@ -729,7 +729,7 @@ export function createViewer(container, options) {
       return current;
     },
     /**
-     * Camera preview on or off and its settings: {on, tilt (uptilt °), fov (horizontal goggle FOV °), spinning (blur
+     * Camera preview on or off and its settings: {on, tilt (uptilt °), fov (horizontal camera FOV °), spinning (blur
      * discs, else still blades), frame (draw the drone's own parts, which the game hides), mark (discs in the accent
      * colour: the area the props-in-view share counts)}.
      */

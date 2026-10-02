@@ -54,11 +54,13 @@ kept in the browser's `localStorage`; the drone built in the configurator lives 
   renderer (frame layouts, motor seats, camera tilt, accessory anchors); drag to turn, scroll or pinch to zoom,
   auto-rotate (off with reduced motion or paused animations), keyboard control on the canvas
 - FPV camera preview (switch “3D / FPV camera” in the viewer, or open `configurator/?view=camera#PW1-…`): the image the
-  drone's camera sends, drawn like the game's FPV view (Propwash 0.4.0): 16:9 rectilinear from the lens with the frame's
-  uptilt and the goggles' field of view (analog 120°, digital 130°), the drone itself hidden except its props, spinning
-  props as translucent blur discs in their paint colour, over a sky and grass backdrop; sliders for uptilt (0–80°, as
-  the pilot can set it in the game) and goggle FOV (60–160°) with the live props-in-view share, and toggles to mark the
-  counted disc area, show still blades or draw the frame too
+  drone's camera sends, drawn like the game's FPV view (Propwash 0.4.0): 16:9 rectilinear from the lens with the drone's
+  camera angle and the field of view of the camera in the video unit (`camera_fov_deg`, e.g. analog race 125°, digital
+  lite 104°, HD 130°), the drone itself hidden except its props, spinning props as translucent blur discs in their paint
+  colour, over a sky and grass backdrop; a camera-angle slider limited to the frame's camera mount (e.g. race 15–70°,
+  freestyle 0–50°, as in the drone's service menu in the game) with the live props-in-view share – the angle is stored in
+  the drone's tune and travels in the share code (PW1 revision 1.2) – the camera's field of view read-only, and toggles to
+  mark the counted disc area, show still blades or draw the frame too
 - screenshot menu in the 3D view: “Drone as PNG” (the drone alone, transparent, cropped, up to 1600 px, from the current
   view angle, e.g. as the cover image of a forum post) and “Detail card” (1600 × 900 with name, class, key figures and
   share code); both are copied to the clipboard, or downloaded where the browser can’t copy images

@@ -23,7 +23,7 @@ import { fileURLToPath } from 'node:url';
 import { createCatalog } from '../assets/js/configurator/data.js';
 import * as share from '../assets/js/configurator/sharecode.js';
 import { STAT_KEYS } from '../assets/js/configurator/analysis.js';
-import { occlusionPercent } from '../assets/js/configurator/fpv.js';
+import { occlusionPercent, cameraFov, mountRange, droneUptilt } from '../assets/js/configurator/fpv.js';
 import { TUNE_PARAMS, sanitizeTuneValue } from '../assets/js/configurator/tuning.js';
 import { PAINT_SWATCHES, swatchOf, randomPaint } from '../assets/js/configurator/paint.js';
 import { exportDir } from './build-configurator-data.mjs';
@@ -85,7 +85,7 @@ function compareAnalysis(actual, expected, where) {
   return good;
 }
 
-/** FPV camera against the web export's camera_view (lens, uptilt, goggle FOV, prop discs, props in view). */
+/** FPV camera against the web export's camera_view (lens, uptilt and mount range, camera FOV, prop discs, props in view). */
 function compareCameraView(actual, expected, where) {
   if (!expected) return true;
   if (!ok(actual !== null, `${where}: camera view missing`)) return false;
@@ -95,6 +95,9 @@ function compareCameraView(actual, expected, where) {
   };
   for (let k = 0; k < 3; k++) num(actual.lens_mm[k], expected.lens_mm[k], `lens_mm[${k}]`);
   for (const key of ['uptilt_deg', 'horizontal_fov_deg', 'vertical_fov_deg', 'aspect', 'props_in_view_percent']) num(actual[key], expected[key], key);
+  for (const key of ['uptilt_min_deg', 'uptilt_max_deg']) {
+    if (expected[key] !== undefined) num(actual[key], expected[key], key);
+  }
   good = ok(actual.projection === expected.projection, `${where}.camera_view.projection`) && good;
   good = ok(actual.props.length === expected.props.length, `${where}.camera_view.props length`) && good;
   expected.props.forEach((e, i) => {
@@ -197,6 +200,42 @@ for (const preset of catalog.presets) {
   if (failed === before) presetPass++;
 }
 console.log(`Presets: ${presetPass}/${catalog.presets.length} (share code, check, analysis)`);
+
+// 2b. Camera: field of view from the camera in the video unit, uptilt range of the frame's camera mount (Propwash 0.4.0,
+// FovMath.cameraHorizontalDegrees and CameraMount). The export's ranges must equal the frame-class rule of the port.
+{
+  const before = failed;
+  let frames = 0;
+  let videos = 0;
+  for (const video of catalog.partsIn('video')) {
+    const d = video.data;
+    const expected = Number.isFinite(d.camera_fov_deg) ? Math.min(160, Math.max(60, d.camera_fov_deg)) : d.link === 'digital' ? 130 : 120;
+    ok(cameraFov(video) === expected, `${video.id}: camera FOV ${cameraFov(video)} vs ${expected}`);
+    ok(Number.isFinite(d.camera_fov_deg), `${video.id}: every video unit names its camera FOV`);
+    videos++;
+  }
+  for (const frame of catalog.partsIn('frame')) {
+    const camera = frame.data.camera || {};
+    const range = mountRange(frame);
+    const rule = mountRange({ data: { role: frame.data.role, camera: { tilt_deg: camera.tilt_deg } } });
+    ok(Number.isFinite(camera.tilt_min_deg) && Number.isFinite(camera.tilt_max_deg), `${frame.id}: export names the camera mount range`);
+    ok(range.min === rule.min && range.max === rule.max && range.standard === rule.standard,
+      `${frame.id}: mount range ${range.min}–${range.max} vs frame class ${rule.min}–${rule.max}`);
+    ok(range.min <= range.standard && range.standard <= range.max, `${frame.id}: default uptilt inside the mount`);
+    ok(droneUptilt(range, {}) === range.standard, `${frame.id}: no own angle means the frame default`);
+    ok(droneUptilt(range, { 'camera.uptiltDeg': 200 }) === range.max && droneUptilt(range, { 'camera.uptiltDeg': -5 }) === range.min,
+      `${frame.id}: own angle clamped to the mount`);
+    frames++;
+  }
+  for (const preset of catalog.presets) {
+    const build = catalog.presetBuild(preset.id);
+    const view = catalog.cameraView(build);
+    if (!view) continue;
+    ok(view.horizontal_fov_deg === cameraFov(catalog.part(build.video)), `${preset.id}: preview FOV is the camera's`);
+    ok(view.uptilt_min_deg <= view.uptilt_deg && view.uptilt_deg <= view.uptilt_max_deg, `${preset.id}: uptilt inside the mount`);
+  }
+  console.log(`Camera: ${videos} video units with their FOV, ${frames} frames with their mount range, ${failed === before ? 'all passed' : 'FAILED'}`);
+}
 
 // 3b. Report vectors
 {
@@ -381,9 +420,10 @@ console.log(`Presets: ${presetPass}/${catalog.presets.length} (share code, check
   // -0.0 and non-scalable values travel raw, values stay float32.
   const tuned = catalog.decode(share.encode({ build: vectors[0].decoded.build, tune: { 'pid.roll.p': -0, 'rates.roll.rcRate': 1 / 3 } }));
   ok(Object.is(tuned.content.tune['pid.roll.p'], -0) && tuned.content.tune['rates.roll.rcRate'] === Math.fround(1 / 3), 'raw float32 tune values');
-  // Non-flight keys are dropped on encode.
-  const noVtx = catalog.decode(share.encode({ build: vectors[0].decoded.build, tune: { 'vtx.channel': 3, 'camera.uptiltDeg': 20, 'pid.airmode': 1 } }));
-  ok(same(Object.keys(noVtx.content.tune), ['pid.airmode']), 'only flight keys encoded');
+  // Keys outside the flight groups and the camera angle are dropped on encode; the camera angle travels (PW1 1.2).
+  const noVtx = catalog.decode(share.encode({ build: vectors[0].decoded.build, tune: { 'vtx.channel': 3, 'camera.uptiltDeg': 20, 'led.mode': 2, 'pid.airmode': 1 } }));
+  ok(same(Object.keys(noVtx.content.tune), ['camera.uptiltDeg', 'pid.airmode']), 'only flight keys and the camera angle encoded');
+  ok(noVtx.content.tune['camera.uptiltDeg'] === 20, 'camera angle decoded');
   // Name is stripped, empty name and empty paint are dropped.
   const named = catalog.decode(share.encode({ build: vectors[0].decoded.build, name: '  Hallo Welt  ', paint: {} }));
   ok(named.content.name === 'Hallo Welt' && same(named.layers, ['parts', 'name']), 'name strip, empty paint dropped');

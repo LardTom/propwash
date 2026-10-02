@@ -5,7 +5,7 @@
 import { check as checkBuild } from './rules.js';
 import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js';
 import { encode as encodeCode, decode as decodeCode, hexColor } from './sharecode.js';
-import { flightOnly } from './tune.js';
+import { sharedOnly } from './tune.js';
 import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js';
 
 export const CATALOG_URL = new URL('../../data/configurator/catalog.json', import.meta.url);
@@ -177,7 +177,7 @@ export function createCatalog(json) {
       return {
         build: catalog.presetBuild(presetId),
         paint: Object.keys(p.paint).length ? { ...p.paint } : null,
-        tune: flightOnly(p.tune),
+        tune: sharedOnly(p.tune),
         osd: null,
         name: null,
       };

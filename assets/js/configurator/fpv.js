@@ -7,9 +7,14 @@
 // d = p − lens, camera coordinates (x, y·cos t + z·sin t, −y·sin t + z·cos t), image point x/depth, y'/depth with
 // depth = −z' (rectilinear projection).
 //
-// rig(parts, airframe, catalog) → { lens, tilt, hubs[4], discLift, radius, hubRadius, fov }
+// rig(parts, airframe, catalog) → { lens, tilt, range, hubs[4], discLift, radius, hubRadius, fov }
 // occlusionPercent(rig, tiltDeg?, fovDeg?, aspect?, rows?) → percent of the image covered by the discs
-// cameraView(rig) → the web export's camera_view object (lens_mm, uptilt_deg, horizontal/vertical FOV, aspect, props, percent)
+// cameraView(rig) → the web export's camera_view object (lens_mm, uptilt_deg and its range, horizontal/vertical FOV,
+// aspect, props, percent)
+//
+// The field of view comes from the camera in the video unit (camera_fov_deg, horizontal), as in the game since
+// Propwash 0.4.0 (FovMath.cameraHorizontalDegrees); the uptilt belongs to the drone (tune key camera.uptiltDeg) and stays
+// inside the frame's camera mount (CameraMount.range).
 
 export const SLOTS = 4;
 export const ASPECT = 16.0 / 9.0;
@@ -19,11 +24,17 @@ export const UPTILT_MIN = 0.0;
 export const UPTILT_MAX = 80.0;
 export const FOV_MIN = 60;
 export const FOV_MAX = 160;
+export const CAMERA_UPTILT = 'camera.uptiltDeg';
 const DEFAULT_FOV_DEG = 120.0;
 const MIN_DEPTH_MM = 0.25;
 const DEFAULT_NAMESPACE = 'propwash';
-// FovMath.defaultHorizontalDegrees: the goggles' field of view per video link (Propwash's default settings).
-const GOGGLE_FOV = Object.freeze({ analog: 120, digital: 130, creative: 120 });
+// FovMath.defaultHorizontalDegrees: the field of view of a video unit without camera_fov_deg, per video link.
+const SYSTEM_FOV = Object.freeze({ analog: 120, digital: 130, creative: 120 });
+// CameraMount.roleRange: what the camera mount of a frame class allows (min, max), always widened to the frame default.
+const MOUNT_RANGE = Object.freeze({
+  whoop: [10, 35], toothpick: [10, 40], cinewhoop: [0, 35], freestyle: [0, 50], race: [15, 70], long_range: [0, 40],
+  cinelifter: [0, 30], x_class: [0, 50],
+});
 const ARM_KEYS = ['front_left', 'front_right', 'rear_left', 'rear_right'];
 
 const f32 = Math.fround;
@@ -42,10 +53,32 @@ export function clampUptilt(value) {
   return Math.max(UPTILT_MIN, Math.min(UPTILT_MAX, v));
 }
 
-/** Horizontal FOV of the goggles for a video part (analog 120°, digital 130°). */
-export function goggleFov(video) {
-  const link = video && video.data ? video.data.link : null;
-  return GOGGLE_FOV[link] || GOGGLE_FOV.analog;
+/** FovMath.cameraHorizontalDegrees: the camera's horizontal FOV of a video part, else the default of its link, 60–160°. */
+export function cameraFov(video) {
+  const d = video && video.data ? video.data : {};
+  const fov = finite(d.camera_fov_deg) ? d.camera_fov_deg : SYSTEM_FOV[d.link] || SYSTEM_FOV.analog;
+  return Math.max(FOV_MIN, Math.min(FOV_MAX, fov));
+}
+
+/**
+ * CameraMount.range: the uptilt range of the frame's camera mount { min, max, standard } – from the web export
+ * (frame.data.camera.tilt_min_deg/tilt_max_deg) or, without it, from the frame class like the mod.
+ */
+export function mountRange(frame) {
+  const camera = (frame && frame.data && frame.data.camera) || {};
+  const standard = clampUptilt(camera.tilt_deg);
+  if (finite(camera.tilt_min_deg) && finite(camera.tilt_max_deg)) {
+    return { min: f32(camera.tilt_min_deg), max: f32(camera.tilt_max_deg), standard };
+  }
+  const role = MOUNT_RANGE[frame && frame.data ? frame.data.role : null] || MOUNT_RANGE.freestyle;
+  return { min: Math.min(role[0], standard), max: Math.max(role[1], standard), standard };
+}
+
+/** CameraMount.uptilt: the drone's own uptilt from its tune (camera.uptiltDeg) inside the mount, else the default. */
+export function droneUptilt(range, tune) {
+  const value = tune ? tune[CAMERA_UPTILT] : undefined;
+  if (!finite(value)) return range.standard;
+  return Math.max(range.min, Math.min(range.max, f32(value)));
 }
 
 /** FovMath.verticalFromHorizontal without the float cast (CameraView#verticalFovDeg). */
@@ -129,7 +162,7 @@ function lens(frame, airframe) {
 
 /**
  * The FPV rig of a resolved build ({frame, motor, prop, video, …} catalog parts) and its derived airframe.
- * @returns {{lens: number[], tilt: number, hubs: number[][], discLift: number, radius: number, hubRadius: number, fov: number}}
+ * @returns {{lens: number[], tilt: number, range: {min: number, max: number, standard: number}, hubs: number[][], discLift: number, radius: number, hubRadius: number, fov: number}}
  */
 export function rig(parts, airframe, catalog) {
   const { frame, motor, prop, video } = parts;
@@ -148,14 +181,16 @@ export function rig(parts, airframe, catalog) {
   const height = propHeight(layoutPropHeight, view.seat(motor.id), view.seat(typical.id), motor);
   const hubs = motors.map((m) => [m[0], f32(m[1] + height), m[2]]);
   const radius = prop.data.diameter_mm * 0.5;
+  const range = mountRange(frame);
   return {
     lens: lens(frame, airframe),
-    tilt: clampUptilt(frame.data.camera ? frame.data.camera.tilt_deg : NaN),
+    tilt: range.standard,
+    range,
     hubs,
     discLift: hubHeight(prop) * BLUR_LIFT_FACTOR,
     radius,
     hubRadius: Math.min(hubDiameter(prop) * 0.5, radius),
-    fov: goggleFov(video),
+    fov: cameraFov(video),
   };
 }
 
@@ -268,6 +303,8 @@ export function cameraView(r, percent = occlusionPercent(r)) {
   return {
     lens_mm: r.lens.slice(),
     uptilt_deg: r.tilt,
+    uptilt_min_deg: r.range ? r.range.min : UPTILT_MIN,
+    uptilt_max_deg: r.range ? r.range.max : UPTILT_MAX,
     horizontal_fov_deg: r.fov,
     vertical_fov_deg: verticalFov(r.fov, ASPECT),
     aspect: ASPECT,

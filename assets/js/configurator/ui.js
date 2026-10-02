@@ -7,7 +7,7 @@ import { shareLink, codeFromHash, PAINT_SLOTS } from './sharecode.js';
 import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js';
 import { FLIGHT_GROUPS } from './tune.js';
 import { PROPS_IN_VIEW_WARNING } from './analysis.js';
-import { occlusionPercent } from './fpv.js';
+import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js';
 import { batteryFit } from './rules.js';
 import { assemble, PROP_SLOTS } from './assembly.js';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js';
@@ -82,9 +82,9 @@ const state = {
 };
 
 let derived = { check: null, analysis: null, camera: null, defaults: null, effective: null, assembly: null, paintDefaults: {}, available: new Set() };
-// Camera preview: shown or not, the pilot's uptilt and goggle FOV (null = the build's default), still props, frame drawn,
-// props marked.
-const fpvState = { on: false, tilt: null, fov: null, still: false, frame: false, mark: false, frameId: null };
+// Camera preview: shown or not, still props, frame drawn, props marked. The camera angle is the drone's own (tune key
+// camera.uptiltDeg, travels in the share code), the field of view comes from the camera in the video unit.
+const fpvState = { on: false, still: false, frame: false, mark: false };
 let lastHashCode = null;
 let undoSnapshot = null;
 
@@ -597,22 +597,17 @@ function renderStats() {
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-// Camera preview: props-in-view share for the pilot's uptilt and goggle FOV (the analysis uses the defaults), and the
-// viewer's FPV image. A new frame brings its own default uptilt.
+// Camera preview: props-in-view share for the drone's camera angle (the analysis uses the frame default) and the camera
+// FOV of the video unit, and the viewer's FPV image.
 
 function renderCamera() {
   const view = derived.camera;
-  if (state.build.frame !== fpvState.frameId) {
-    fpvState.frameId = state.build.frame;
-    fpvState.tilt = null;
-  }
   const tiltInput = $('[data-fpv-tilt]');
-  const fovInput = $('[data-fpv-fov]');
   const readout = $('[data-fpv-readout]');
   const note = $('[data-fpv-note]');
+  const own = CAMERA_UPTILT in state.tune;
   tiltInput.disabled = !view;
-  fovInput.disabled = !view;
-  $('[data-fpv-reset]').disabled = !view || (fpvState.tilt === null && fpvState.fov === null);
+  $('[data-fpv-reset]').disabled = !view || !own;
   $('[data-fpv-still]').setAttribute('aria-pressed', String(fpvState.still));
   $('[data-fpv-frame]').setAttribute('aria-pressed', String(fpvState.frame));
   $('[data-fpv-mark]').setAttribute('aria-pressed', String(fpvState.mark));
@@ -620,31 +615,54 @@ function renderCamera() {
     $('[data-fpv-percent]').textContent = t('ui.noValue');
     $('[data-fpv-tilt-out]').textContent = '';
     $('[data-fpv-fov-out]').textContent = '';
+    $('[data-fpv-range]').textContent = '';
+    $('[data-fpv-fov-source]').textContent = '';
     readout.classList.remove('is-warn');
     note.textContent = t('ui.fpvNone');
     if (viewer) viewer.setCamera({ on: fpvState.on });
     cameraLabel(null);
     return;
   }
-  const tilt = fpvState.tilt === null ? view.uptilt_deg : fpvState.tilt;
-  const fov = fpvState.fov === null ? view.horizontal_fov_deg : fpvState.fov;
-  const standard = tilt === view.uptilt_deg && fov === view.horizontal_fov_deg;
+  const range = view.rig.range;
+  const tilt = droneUptilt(range, state.tune);
+  const fov = view.horizontal_fov_deg;
+  const standard = tilt === view.uptilt_deg;
   const percent = standard ? view.props_in_view_percent : occlusionPercent(view.rig, tilt, fov);
+  tiltInput.min = String(range.min);
+  tiltInput.max = String(range.max);
   tiltInput.value = String(tilt);
-  fovInput.value = String(fov);
   tiltInput.setAttribute('aria-valuetext', `${num(tilt, 0)}°`);
-  fovInput.setAttribute('aria-valuetext', `${num(fov, 0)}°`);
   $('[data-fpv-tilt-out]').textContent = `${num(tilt, 0)}°`;
+  $('[data-fpv-tilt-out]').classList.toggle('is-own', !standard);
+  $('[data-fpv-range]').textContent = t('ui.fpvRange', { min: num(range.min, 0), max: num(range.max, 0), standard: num(range.standard, 0) });
   $('[data-fpv-fov-out]').textContent = `${num(fov, 0)}°`;
+  $('[data-fpv-fov-source]').textContent = t('ui.fpvFovSource');
   $('[data-fpv-percent]').textContent = num(percent, 1);
   readout.classList.toggle('is-warn', percent > PROPS_IN_VIEW_WARNING);
   const video = catalog.part(state.build.video);
   const link = t(`ui.fpvLink.${video && video.data.link in (entry('ui.fpvLink') || {}) ? video.data.link : 'analog'}`);
   note.textContent = standard
-    ? t('ui.fpvNoteDefault', { tilt: num(view.uptilt_deg, 0), fov: num(view.horizontal_fov_deg, 0), link })
-    : t('ui.fpvNoteChanged', { tilt: num(view.uptilt_deg, 0), fov: num(view.horizontal_fov_deg, 0), percent: num(view.props_in_view_percent, 1) });
+    ? t('ui.fpvNoteDefault', { tilt: num(view.uptilt_deg, 0), fov: num(fov, 0), link })
+    : t('ui.fpvNoteChanged', { tilt: num(view.uptilt_deg, 0), percent: num(view.props_in_view_percent, 1) });
   if (viewer) viewer.setCamera({ on: fpvState.on, tilt, fov, spinning: !fpvState.still, frame: fpvState.frame, mark: fpvState.mark });
   cameraLabel(percent);
+}
+
+/** Stores the drone's camera angle in its tune like the mod's service menu: only an angle other than the frame default. */
+function setUptilt(degrees) {
+  const view = derived.camera;
+  if (!view) return;
+  const range = view.rig.range;
+  const value = droneUptilt(range, { [CAMERA_UPTILT]: Math.round(degrees) });
+  const tune = { ...state.tune };
+  if (value === range.standard) delete tune[CAMERA_UPTILT];
+  else tune[CAMERA_UPTILT] = value;
+  state.tune = tune;
+  if (CAMERA_UPTILT in tune) state.layers.tune = true;
+  syncPreset();
+  renderCamera();
+  renderShare();
+  scheduleHash();
 }
 
 function cameraLabel(percent) {
@@ -669,12 +687,7 @@ function wireCamera() {
     button.addEventListener('click', () => setViewMode(button.dataset.viewMode));
   }
   $('[data-fpv-tilt]').addEventListener('input', (e) => {
-    fpvState.tilt = Number(e.target.value);
-    renderCamera();
-  });
-  $('[data-fpv-fov]').addEventListener('input', (e) => {
-    fpvState.fov = Number(e.target.value);
-    renderCamera();
+    setUptilt(Number(e.target.value));
   });
   $('[data-fpv-still]').addEventListener('click', () => {
     fpvState.still = !fpvState.still;
@@ -689,9 +702,7 @@ function wireCamera() {
     renderCamera();
   });
   $('[data-fpv-reset]').addEventListener('click', () => {
-    fpvState.tilt = null;
-    fpvState.fov = null;
-    renderCamera();
+    if (derived.camera) setUptilt(derived.camera.rig.range.standard);
     $('[data-fpv-tilt]').focus();
   });
   $('[data-view-modes]').hidden = false;
@@ -1035,9 +1046,9 @@ function renderTune() {
   groups.throttle.insertBefore(throttleGraph(e), groups.throttle.children[1]);
 
   const reset = el('button', {
-    type: 'button', class: 'btn btn--ghost btn--small', 'data-reset-tune': '', disabled: Object.keys(state.tune).length ? null : true,
+    type: 'button', class: 'btn btn--ghost btn--small', 'data-reset-tune': '', disabled: flightKeysOf(state.tune) ? null : true,
     onclick: () => {
-      setTune({});
+      setTune(cameraOnly(state.tune));
       const first = $('[data-panel-tune] [data-key]');
       if (first) first.focus();
     },
@@ -1080,7 +1091,15 @@ function updateTune() {
   const throttle = $('[data-throttle-graph]');
   if (throttle) throttle.replaceWith(throttleGraph(e));
   const all = $('[data-reset-tune]');
-  if (all) all.disabled = !Object.keys(state.tune).length;
+  if (all) all.disabled = !flightKeysOf(state.tune);
+}
+
+function flightKeysOf(tune) {
+  return Object.keys(tune || {}).filter((key) => key !== CAMERA_UPTILT).length;
+}
+
+function cameraOnly(tune) {
+  return tune && CAMERA_UPTILT in tune ? { [CAMERA_UPTILT]: tune[CAMERA_UPTILT] } : {};
 }
 
 function setTune(stored, focusKey) {
@@ -1588,6 +1607,12 @@ function viewerNote(text) {
 }
 
 function setBuild(build, { keepFocus } = {}) {
+  if (build.frame !== state.build.frame && CAMERA_UPTILT in state.tune) {
+    // The camera angle belongs to the frame's camera mount: another frame starts at its own default.
+    const tune = { ...state.tune };
+    delete tune[CAMERA_UPTILT];
+    state.tune = tune;
+  }
   state.build = build;
   syncPreset();
   recompute();
