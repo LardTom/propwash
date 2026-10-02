@@ -444,7 +444,7 @@
    "sustained_motor_temp_c": 29.823155826216475,
    "motor_temp_minute_c": 29.823155826216475,
    "mixed_motor_temp_c": 27.365724931615492,
-   "props_in_view_percent": 9.874682882077364,
+   "props_in_view_percent": 8.81269965587293,
    "warnings": []
   }
  },
@@ -502,7 +502,7 @@
    "sustained_motor_temp_c": 29.823155826216475,
    "motor_temp_minute_c": 29.823155826216475,
    "mixed_motor_temp_c": 27.365724931615492,
-   "props_in_view_percent": 9.874682882077364,
+   "props_in_view_percent": 8.81269965587293,
    "warnings": []
   }
  },
@@ -561,7 +561,7 @@
    "sustained_motor_temp_c": 102.09859352242808,
    "motor_temp_minute_c": 102.09859352242808,
    "mixed_motor_temp_c": 45.58334645184632,
-   "props_in_view_percent": 5.909954200582882,
+   "props_in_view_percent": 6.997833603889635,
    "warnings": []
   }
  },
@@ -619,7 +619,7 @@
    "sustained_motor_temp_c": 102.09859352242808,
    "motor_temp_minute_c": 102.09859352242808,
    "mixed_motor_temp_c": 45.58334645184632,
-   "props_in_view_percent": 5.909954200582882,
+   "props_in_view_percent": 6.997833603889635,
    "warnings": []
   }
  },
@@ -1506,27 +1506,27 @@
   },
   "analysis": {
    "mass_grams": 222.5,
-   "thrust_to_weight": 7.620545471436568,
-   "hover_throttle_percent": 28.035035426566857,
-   "hover_flight_time_min": 13.860157584773308,
-   "cruise_flight_time_min": 12.040091075925014,
-   "mixed_flight_time_min": 8.517465183328891,
-   "aggressive_flight_time_min": 5.755506799471724,
-   "cruise_speed_kmh": 39.999999999965404,
-   "hover_current_a": 2.3966794190477256,
-   "cruise_current_a": 2.9900106048188007,
-   "mixed_current_a": 4.226609586906474,
-   "landing_cell_voltage": 3.5887824328394107,
+   "thrust_to_weight": 8.875752275330353,
+   "hover_throttle_percent": 24.11802191625738,
+   "hover_flight_time_min": 15.091024261015587,
+   "cruise_flight_time_min": 12.892956295551423,
+   "mixed_flight_time_min": 9.427051100022027,
+   "aggressive_flight_time_min": 6.562736765050792,
+   "cruise_speed_kmh": 39.999999999980275,
+   "hover_current_a": 2.2017669672504896,
+   "cruise_current_a": 2.7922222936892616,
+   "mixed_current_a": 3.8187975877118014,
+   "landing_cell_voltage": 3.60193932156773,
    "avionics_power_w": 5.699999999999999,
-   "top_speed_kmh": 109.49522987216032,
-   "full_throttle_current_a": 48.346044636415584,
-   "esc_load_percent": 57.72931581458711,
-   "battery_load_percent": 71.62376983172679,
-   "motor_response_ms": 25.222492961800295,
+   "top_speed_kmh": 114.58020479479181,
+   "full_throttle_current_a": 55.1513152801632,
+   "esc_load_percent": 65.97419652475557,
+   "battery_load_percent": 81.70565226690844,
+   "motor_response_ms": 24.89367788899963,
    "crash_speed_ms": 8,
-   "sustained_motor_temp_c": 80.6390481234221,
-   "motor_temp_minute_c": 80.6390481234221,
-   "mixed_motor_temp_c": 40.66630237864824,
+   "sustained_motor_temp_c": 78.2898495476006,
+   "motor_temp_minute_c": 78.2898495476006,
+   "mixed_motor_temp_c": 37.50106227770168,
    "props_in_view_percent": 6.131723224513548,
    "warnings": []
   }
@@ -1564,27 +1564,27 @@
   },
   "analysis": {
    "mass_grams": 222.5,
-   "thrust_to_weight": 7.620545471436568,
-   "hover_throttle_percent": 28.035035426566857,
-   "hover_flight_time_min": 13.860157584773308,
-   "cruise_flight_time_min": 12.040091075925014,
-   "mixed_flight_time_min": 8.517465183328891,
-   "aggressive_flight_time_min": 5.755506799471724,
-   "cruise_speed_kmh": 39.999999999965404,
-   "hover_current_a": 2.3966794190477256,
-   "cruise_current_a": 2.9900106048188007,
-   "mixed_current_a": 4.226609586906474,
-   "landing_cell_voltage": 3.5887824328394107,
+   "thrust_to_weight": 8.875752275330353,
+   "hover_throttle_percent": 24.11802191625738,
+   "hover_flight_time_min": 15.091024261015587,
+   "cruise_flight_time_min": 12.892956295551423,
+   "mixed_flight_time_min": 9.427051100022027,
+   "aggressive_flight_time_min": 6.562736765050792,
+   "cruise_speed_kmh": 39.999999999980275,
+   "hover_current_a": 2.2017669672504896,
+   "cruise_current_a": 2.7922222936892616,
+   "mixed_current_a": 3.8187975877118014,
+   "landing_cell_voltage": 3.60193932156773,
    "avionics_power_w": 5.699999999999999,
-   "top_speed_kmh": 109.49522987216032,
-   "full_throttle_current_a": 48.346044636415584,
-   "esc_load_percent": 57.72931581458711,
-   "battery_load_percent": 71.62376983172679,
-   "motor_response_ms": 25.222492961800295,
+   "top_speed_kmh": 114.58020479479181,
+   "full_throttle_current_a": 55.1513152801632,
+   "esc_load_percent": 65.97419652475557,
+   "battery_load_percent": 81.70565226690844,
+   "motor_response_ms": 24.89367788899963,
    "crash_speed_ms": 8,
-   "sustained_motor_temp_c": 80.6390481234221,
-   "motor_temp_minute_c": 80.6390481234221,
-   "mixed_motor_temp_c": 40.66630237864824,
+   "sustained_motor_temp_c": 78.2898495476006,
+   "motor_temp_minute_c": 78.2898495476006,
+   "mixed_motor_temp_c": 37.50106227770168,
    "props_in_view_percent": 6.131723224513548,
    "warnings": []
   }
@@ -2259,7 +2259,7 @@
    "sustained_motor_temp_c": 74.5395117378563,
    "motor_temp_minute_c": 74.5395117378563,
    "mixed_motor_temp_c": 52.65299599733644,
-   "props_in_view_percent": 9.599082860155443,
+   "props_in_view_percent": 11.076672475856606,
    "warnings": []
   }
  },
@@ -2317,7 +2317,7 @@
    "sustained_motor_temp_c": 74.5395117378563,
    "motor_temp_minute_c": 74.5395117378563,
    "mixed_motor_temp_c": 52.65299599733644,
-   "props_in_view_percent": 9.599082860155443,
+   "props_in_view_percent": 11.076672475856606,
    "warnings": []
   }
  },
@@ -2381,7 +2381,7 @@
    "sustained_motor_temp_c": 95.13902293630142,
    "motor_temp_minute_c": 95.13902293630142,
    "mixed_motor_temp_c": 59.686773864835374,
-   "props_in_view_percent": 10.010569106801459,
+   "props_in_view_percent": 11.734983445828757,
    "warnings": [
     "heavy_sag"
    ]
@@ -2441,7 +2441,7 @@
    "sustained_motor_temp_c": 95.13902293630142,
    "motor_temp_minute_c": 95.13902293630142,
    "mixed_motor_temp_c": 59.686773864835374,
-   "props_in_view_percent": 10.010569106801459,
+   "props_in_view_percent": 11.734983445828757,
    "warnings": [
     "heavy_sag"
    ]
@@ -3198,7 +3198,7 @@
  },
  {
   "name": "preset:justmoreparts:xclass10_6s",
-  "code": "PW1-040P6-3V3WA-P4HKJ-95GQ8-WDSMC-092GB-J99K7-8WDSP-H2VG1-W8D2A-CKGWW-D1M6M-VRSD1-M69G1-0BHH6-4VRJD-1QH8V-4Q2JC-9RQ4Q-JYECF-GMHJT-CSMP4-KKW8S-N5RGB-HBS9J-E4JSJ-582AG-C1GCB-G6ERQ-P164K-TYQG4-M930C-017D8-BQP",
+  "code": "PW1-040P6-3V3WA-P4HKJ-95GQ8-WDSMC-092GB-J99K7-8WDSP-H2VG1-W8D2A-CKGWW-D1M6M-VRSD1-M69G1-0BHH6-4VRJD-1QH8V-4Q2JC-9RQ4Q-JYECF-GMHJT-CSMP4-KKW8S-N5RGB-HBS9J-E4JSJ-582AG-C1GCB-G6ERM-NJHBV-3Q0R0-128R3-01XD9-11C",
   "compression": "auto",
   "status": "OK",
   "layers": [
@@ -3217,9 +3217,9 @@
     "accessories": {}
    },
    "paint": {
-    "frame": "#4a525d",
-    "tpu": "#c9d1d9",
-    "motors": "#c9d1d9"
+    "frame": "#1b1d20",
+    "tpu": "#3fb950",
+    "motors": "#3fb950"
    },
    "tune": {},
    "osd": null,
@@ -3320,7 +3320,7 @@
  },
  {
   "name": "preset:justmoreparts:xclass12_8s",
-  "code": "PW1-040P7-XV7WA-P4HKJ-95GQ8-WDSMC-892GB-J99K7-8WDSP-H2VG1-WGD1G-99JE3-K9P60-RKF29-M60S6-7R1A6-0TK73-SM6E5-3CJWA-9X7WM-RQ193-5MSK9-C977R-KKHAC-3H4M0-3960T-30C32-W1KP5-XG9HB-YNZC0-8H4C1-G0VJP-7VF0",
+  "code": "PW1-040P7-XV7WA-P4HKJ-95GQ8-WDSMC-892GB-J99K7-8WDSP-H2VG1-WGD1G-99JE3-K9P60-RKF29-M60S6-7R1A6-0TK73-SM6E5-3CJWA-9X7WM-RQ193-5MSK9-C977R-KKHAC-3H4M0-3960T-30C32-W1KP5-5CMAV-WNZC0-8H4C1-G08Q7-Y1E0",
   "compression": "auto",
   "status": "OK",
   "layers": [
@@ -3339,7 +3339,7 @@
     "accessories": {}
    },
    "paint": {
-    "frame": "#4a525d",
+    "frame": "#1b1d20",
     "tpu": "#f778ba",
     "motors": "#f778ba"
    },
@@ -3442,7 +3442,7 @@
  },
  {
   "name": "preset:justmoreparts:xclass13_8s",
-  "code": "PW1-040P6-3V2WA-P4HKJ-95GQ8-WDSMC-R92GB-J99K7-8WDSP-H2VG1-WGD1G-99JE3-K9P60-RKF29-M60S6-041E6-824Q6-0VRMC-JFHS6-4MAJF-SF565-RACSX-6CJB2-9SY4W-MAK0W-9503V-9G60R-30SQ0-CXHF4-3CFZ5-ZDG44-930C0-AS2SE-6W",
+  "code": "PW1-040P6-3V2WA-P4HKJ-95GQ8-WDSMC-R92GB-J99K7-8WDSP-H2VG1-WGD1G-99JE3-K9P60-RKF29-M60S6-041E6-824Q6-0VRMC-JFHS6-4MAJF-SF565-RACSX-6CJB2-9SY4W-MAK0W-9503V-9G60R-30SQ0-CXK9B-42QZ5-ZDG44-930C0-E0EQ0-PM",
   "compression": "auto",
   "status": "OK",
   "layers": [
@@ -3461,7 +3461,7 @@
     "accessories": {}
    },
    "paint": {
-    "frame": "#4a525d",
+    "frame": "#1b1d20",
     "tpu": "#ffd33d",
     "motors": "#ffd33d"
    },
@@ -3564,7 +3564,7 @@
  },
  {
   "name": "preset:justmoreparts:xclass13h_8s",
-  "code": "PW1-040P6-3V4WA-Q4HKJ-95GQ8-WDSMH-V7P04-H85S4-MSKME-6WV8H-DR0H8-C1G91-JE7K9-M60SK-B29P6-0R63R-HA603-4Q60S-RMDJF-H97MZ-JK2W5-4CPK6-D5H4W-Z2EE5-9GE4J-G0D4R-38C1G-CBG6E-RQP16-5ZZVZ-81128-R3020-PB9EX",
+  "code": "PW1-040P6-3V4WA-Q4HKJ-95GQ8-WDSMH-V7P04-H85S4-MSKME-6WV8H-DR0H8-C1G91-JE7K9-M60SK-B29P6-0R63R-HA603-4Q60S-RMDJF-H97MZ-JK2W5-4CPK6-D5H4W-Z2EE5-9GE4J-G0D4R-38C1G-CBG6E-RMNJH-BZQVZ-81128-R300C-0CE6S",
   "compression": "auto",
   "status": "OK",
   "layers": [
@@ -3583,7 +3583,7 @@
     "accessories": {}
    },
    "paint": {
-    "frame": "#4a525d",
+    "frame": "#1b1d20",
     "tpu": "#ff4d4d",
     "motors": "#ff4d4d"
    },
