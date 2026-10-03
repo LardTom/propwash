@@ -1,0 +1,18 @@
+{
+  "world_rules": {
+    "name": "world-rules-tab",
+    "src": "configurator_world_rules.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "receiver_wizard": {
+    "name": "receiver-wizard-check",
+    "src": "receiver_wizard_check.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  }
+}

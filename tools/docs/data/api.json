@@ -1,0 +1,4193 @@
+{
+  "version": "1.4.0",
+  "packages": [
+    {
+      "name": "de.lardtom.propwash.api",
+      "types": [
+        {
+          "name": "ApiVersion",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "int major",
+            "int minor",
+            "int patch"
+          ],
+          "extends": "",
+          "implements": "Comparable<ApiVersion>",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "parse",
+              "static": true,
+              "display": "static ApiVersion parse(String text)"
+            },
+            {
+              "kind": "method",
+              "name": "satisfies",
+              "static": false,
+              "display": "boolean satisfies(ApiVersion required)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/ApiVersion.java"
+        },
+        {
+          "name": "PropwashApi",
+          "kind": "class",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MOD_ID",
+              "static": true,
+              "display": "static final String MOD_ID = \"propwash\""
+            },
+            {
+              "kind": "field",
+              "name": "API_VERSION",
+              "static": true,
+              "display": "static final String API_VERSION = \"1.4.0\""
+            },
+            {
+              "kind": "field",
+              "name": "VERSION",
+              "static": true,
+              "display": "static final ApiVersion VERSION"
+            },
+            {
+              "kind": "method",
+              "name": "isCompatible",
+              "static": true,
+              "display": "static boolean isCompatible(String requiredVersion)"
+            },
+            {
+              "kind": "method",
+              "name": "requireVersion",
+              "static": true,
+              "display": "static void requireVersion(String modId, String requiredVersion)"
+            },
+            {
+              "kind": "method",
+              "name": "parts",
+              "static": true,
+              "display": "static PartRegistry parts()"
+            },
+            {
+              "kind": "method",
+              "name": "partItems",
+              "static": true,
+              "display": "static PartItems partItems()"
+            },
+            {
+              "kind": "method",
+              "name": "builds",
+              "static": true,
+              "display": "static BuildAccess builds()"
+            },
+            {
+              "kind": "method",
+              "name": "creativeTab",
+              "static": true,
+              "display": "static CreativeEntries creativeTab()"
+            },
+            {
+              "kind": "method",
+              "name": "extensionTab",
+              "static": true,
+              "display": "static ExtensionTab extensionTab(String namespace)"
+            },
+            {
+              "kind": "method",
+              "name": "extensionTabs",
+              "static": true,
+              "display": "static List<ExtensionTab> extensionTabs()"
+            },
+            {
+              "kind": "method",
+              "name": "loot",
+              "static": true,
+              "display": "static LootInjections loot()"
+            },
+            {
+              "kind": "method",
+              "name": "text",
+              "static": true,
+              "display": "static Optional<String> text(String languageCode, String key)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/PropwashApi.java"
+        }
+      ]
+    },
+    {
+      "name": "de.lardtom.propwash.api.build",
+      "types": [
+        {
+          "name": "BuildAccess",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "isDrone",
+              "static": false,
+              "display": "boolean isDrone(ItemStack stack)"
+            },
+            {
+              "kind": "method",
+              "name": "read",
+              "static": false,
+              "display": "Optional<DroneData> read(ItemStack stack)"
+            },
+            {
+              "kind": "method",
+              "name": "createDrone",
+              "static": false,
+              "display": "ItemStack createDrone(DroneData data)"
+            },
+            {
+              "kind": "method",
+              "name": "withTune",
+              "static": false,
+              "display": "ItemStack withTune(ItemStack drone, TuneSpec tune)"
+            },
+            {
+              "kind": "method",
+              "name": "withPaint",
+              "static": false,
+              "display": "ItemStack withPaint(ItemStack drone, PaintSpec paint)"
+            },
+            {
+              "kind": "method",
+              "name": "check",
+              "static": false,
+              "display": "BuildCheck check(BuildSpec spec)"
+            },
+            {
+              "kind": "method",
+              "name": "analyze",
+              "static": false,
+              "display": "Optional<BuildStats> analyze(BuildSpec spec)"
+            },
+            {
+              "kind": "method",
+              "name": "cameraView",
+              "static": false,
+              "display": "default Optional<CameraView> cameraView(BuildSpec spec)"
+            },
+            {
+              "kind": "method",
+              "name": "footprintMm",
+              "static": false,
+              "display": "default double footprintMm(BuildSpec spec)"
+            },
+            {
+              "kind": "method",
+              "name": "cameraView",
+              "static": false,
+              "display": "default Optional<CameraView> cameraView(BuildSpec spec, double uptiltDeg)"
+            },
+            {
+              "kind": "method",
+              "name": "uptiltRange",
+              "static": false,
+              "display": "default Optional<CameraView.UptiltRange> uptiltRange(Identifier frame)"
+            },
+            {
+              "kind": "method",
+              "name": "defaultTune",
+              "static": false,
+              "display": "TuneSpec defaultTune(BuildSpec spec)"
+            },
+            {
+              "kind": "method",
+              "name": "presets",
+              "static": false,
+              "display": "List<DronePreset> presets()"
+            },
+            {
+              "kind": "method",
+              "name": "registerPreset",
+              "static": false,
+              "display": "DronePreset registerPreset(DronePreset preset)"
+            },
+            {
+              "kind": "method",
+              "name": "applyImport",
+              "static": false,
+              "display": "ImportResult applyImport(ServerPlayer player, ImportRequest request)"
+            },
+            {
+              "kind": "method",
+              "name": "partCondition",
+              "static": false,
+              "display": "default OptionalDouble partCondition(ItemStack drone, PartKind kind)"
+            },
+            {
+              "kind": "method",
+              "name": "paintCost",
+              "static": false,
+              "display": "default Map<String, Integer> paintCost(ItemStack drone, PaintSpec target)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/BuildAccess.java"
+        },
+        {
+          "name": "BuildCheck",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "BuildSpec spec",
+            "List<Identifier> unknownParts",
+            "List<String> problems",
+            "List<String> warnings"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "known",
+              "static": false,
+              "display": "boolean known()"
+            },
+            {
+              "kind": "method",
+              "name": "buildable",
+              "static": false,
+              "display": "boolean buildable()"
+            },
+            {
+              "kind": "method",
+              "name": "translationKey",
+              "static": true,
+              "display": "static String translationKey(String issue)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/BuildCheck.java"
+        },
+        {
+          "name": "BuildSpec",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Identifier frame",
+            "Identifier stack",
+            "Identifier motor",
+            "Identifier prop",
+            "Identifier video",
+            "Identifier battery",
+            "Map<AccessorySlot, Identifier> accessories"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "of",
+              "static": true,
+              "display": "static BuildSpec of(Identifier frame, Identifier stack, Identifier motor, Identifier prop, Identifier video, Identifier battery)"
+            },
+            {
+              "kind": "method",
+              "name": "part",
+              "static": false,
+              "display": "Identifier part(PartKind kind)"
+            },
+            {
+              "kind": "method",
+              "name": "accessory",
+              "static": false,
+              "display": "Optional<Identifier> accessory(AccessorySlot slot)"
+            },
+            {
+              "kind": "method",
+              "name": "withPart",
+              "static": false,
+              "display": "BuildSpec withPart(PartKind kind, Identifier id)"
+            },
+            {
+              "kind": "method",
+              "name": "withAccessory",
+              "static": false,
+              "display": "BuildSpec withAccessory(AccessorySlot slot, Identifier id)"
+            },
+            {
+              "kind": "method",
+              "name": "withoutAccessory",
+              "static": false,
+              "display": "BuildSpec withoutAccessory(AccessorySlot slot)"
+            },
+            {
+              "kind": "method",
+              "name": "allParts",
+              "static": false,
+              "display": "List<Identifier> allParts()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/BuildSpec.java"
+        },
+        {
+          "name": "BuildStats",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "double massGrams",
+            "double thrustToWeight",
+            "double hoverThrottlePercent",
+            "double hoverFlightTimeMin",
+            "double cruiseFlightTimeMin",
+            "double topSpeedKmh",
+            "double fullThrottleCurrentA",
+            "double escLoadPercent",
+            "double batteryLoadPercent",
+            "double motorResponseMs",
+            "double crashSpeedMs",
+            "double sustainedMotorTempC",
+            "double propsInViewPercent",
+            "List<String> warnings",
+            "double mixedFlightTimeMin",
+            "double aggressiveFlightTimeMin",
+            "double hoverCurrentA",
+            "double cruiseCurrentA",
+            "double mixedCurrentA",
+            "double cruiseSpeedKmh",
+            "double landingCellVoltage",
+            "double avionicsPowerW",
+            "double motorTempMinuteC",
+            "double mixedMotorTempC",
+            "double propwashNoise",
+            "double fullThrottleCellVoltage",
+            "double rollAuthorityRadS2",
+            "double pitchAuthorityRadS2",
+            "double yawAuthorityRadS2"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "WARNINGS",
+              "static": true,
+              "display": "static final List<String> WARNINGS"
+            },
+            {
+              "kind": "constructor",
+              "name": "BuildStats",
+              "static": false,
+              "display": "BuildStats(double massGrams, double thrustToWeight, double hoverThrottlePercent, double hoverFlightTimeMin, double cruiseFlightTimeMin, double topSpeedKmh, double fullThrottleCurrentA, double escLoadPercent, double batteryLoadPercent, double motorResponseMs, double crashSpeedMs, double sustainedMotorTempC, double propsInViewPercent, List<String> warnings, double mixedFlightTimeMin, double aggressiveFlightTimeMin, double hoverCurrentA, double cruiseCurrentA, double mixedCurrentA, double cruiseSpeedKmh, double landingCellVoltage, double avionicsPowerW, double motorTempMinuteC, double mixedMotorTempC)"
+            },
+            {
+              "kind": "constructor",
+              "name": "BuildStats",
+              "static": false,
+              "display": "BuildStats(double massGrams, double thrustToWeight, double hoverThrottlePercent, double hoverFlightTimeMin, double cruiseFlightTimeMin, double topSpeedKmh, double fullThrottleCurrentA, double escLoadPercent, double batteryLoadPercent, double motorResponseMs, double crashSpeedMs, double sustainedMotorTempC, double propsInViewPercent, List<String> warnings)"
+            },
+            {
+              "kind": "method",
+              "name": "warningTranslationKey",
+              "static": true,
+              "display": "static String warningTranslationKey(String warning)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/BuildStats.java"
+        },
+        {
+          "name": "CameraView",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Vec3Mm lensMm",
+            "double uptiltDeg",
+            "double horizontalFovDeg",
+            "double aspect",
+            "List<PropDisc> props",
+            "double propsInViewPercent",
+            "UptiltRange uptiltRange"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "constructor",
+              "name": "CameraView",
+              "static": false,
+              "display": "CameraView(Vec3Mm lensMm, double uptiltDeg, double horizontalFovDeg, double aspect, List<PropDisc> props, double propsInViewPercent)"
+            },
+            {
+              "kind": "method",
+              "name": "verticalFovDeg",
+              "static": false,
+              "display": "double verticalFovDeg()"
+            },
+            {
+              "kind": "method",
+              "name": "uptiltMinDeg",
+              "static": false,
+              "display": "double uptiltMinDeg()"
+            },
+            {
+              "kind": "method",
+              "name": "uptiltMaxDeg",
+              "static": false,
+              "display": "double uptiltMaxDeg()"
+            },
+            {
+              "kind": "method",
+              "name": "defaultUptiltDeg",
+              "static": false,
+              "display": "double defaultUptiltDeg()"
+            }
+          ],
+          "types": [
+            {
+              "name": "UptiltRange",
+              "kind": "record",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [
+                "double minDeg",
+                "double maxDeg",
+                "double defaultDeg"
+              ],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "unrestricted",
+                  "static": true,
+                  "display": "static UptiltRange unrestricted(double defaultDeg)"
+                },
+                {
+                  "kind": "method",
+                  "name": "clamp",
+                  "static": false,
+                  "display": "double clamp(double degrees)"
+                },
+                {
+                  "kind": "method",
+                  "name": "contains",
+                  "static": false,
+                  "display": "boolean contains(double degrees)"
+                }
+              ],
+              "types": []
+            },
+            {
+              "name": "PropDisc",
+              "kind": "record",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [
+                "Vec3Mm centerMm",
+                "double radiusMm",
+                "double hubRadiusMm"
+              ],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/CameraView.java"
+        },
+        {
+          "name": "DroneData",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "BuildSpec build",
+            "PaintSpec paint",
+            "TuneSpec tune",
+            "Optional<String> name"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MAX_NAME_LENGTH",
+              "static": true,
+              "display": "static final int MAX_NAME_LENGTH = 48"
+            },
+            {
+              "kind": "method",
+              "name": "of",
+              "static": true,
+              "display": "static DroneData of(BuildSpec build)"
+            },
+            {
+              "kind": "method",
+              "name": "withBuild",
+              "static": false,
+              "display": "DroneData withBuild(BuildSpec value)"
+            },
+            {
+              "kind": "method",
+              "name": "withPaint",
+              "static": false,
+              "display": "DroneData withPaint(PaintSpec value)"
+            },
+            {
+              "kind": "method",
+              "name": "withTune",
+              "static": false,
+              "display": "DroneData withTune(TuneSpec value)"
+            },
+            {
+              "kind": "method",
+              "name": "withName",
+              "static": false,
+              "display": "DroneData withName(String value)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/DroneData.java"
+        },
+        {
+          "name": "DronePreset",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Identifier id",
+            "DroneData data",
+            "boolean creativeListed"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "of",
+              "static": true,
+              "display": "static DronePreset of(Identifier id, DroneData data)"
+            },
+            {
+              "kind": "method",
+              "name": "translationKey",
+              "static": false,
+              "display": "String translationKey()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/DronePreset.java"
+        },
+        {
+          "name": "ImportLayer",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "PARTS"
+            },
+            {
+              "name": "PAINT"
+            },
+            {
+              "name": "TUNE"
+            },
+            {
+              "name": "NAME"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "translationKey",
+              "static": false,
+              "display": "String translationKey()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/ImportLayer.java"
+        },
+        {
+          "name": "ImportRequest",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "DroneData data",
+            "Set<ImportLayer> layers",
+            "Set<TuneGroup> tuneGroups",
+            "ImportTarget target"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "wholeBuild",
+              "static": true,
+              "display": "static ImportRequest wholeBuild(DroneData data)"
+            },
+            {
+              "kind": "method",
+              "name": "tuneOnHeldDrone",
+              "static": true,
+              "display": "static ImportRequest tuneOnHeldDrone(DroneData data)"
+            },
+            {
+              "kind": "method",
+              "name": "paintOnHeldDrone",
+              "static": true,
+              "display": "static ImportRequest paintOnHeldDrone(DroneData data)"
+            },
+            {
+              "kind": "method",
+              "name": "onHeldDrone",
+              "static": true,
+              "display": "static ImportRequest onHeldDrone(DroneData data, Set<ImportLayer> layers)"
+            },
+            {
+              "kind": "method",
+              "name": "createDrone",
+              "static": true,
+              "display": "static ImportRequest createDrone(DroneData data)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/ImportRequest.java"
+        },
+        {
+          "name": "ImportResult",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "ImportStatus status",
+            "Set<ImportLayer> applied",
+            "List<Identifier> missingParts",
+            "Map<String, Integer> missingDyes"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "of",
+              "static": true,
+              "display": "static ImportResult of(ImportStatus status)"
+            },
+            {
+              "kind": "method",
+              "name": "applied",
+              "static": true,
+              "display": "static ImportResult applied(Set<ImportLayer> layers)"
+            },
+            {
+              "kind": "method",
+              "name": "missingParts",
+              "static": true,
+              "display": "static ImportResult missingParts(List<Identifier> parts)"
+            },
+            {
+              "kind": "method",
+              "name": "missingDyes",
+              "static": true,
+              "display": "static ImportResult missingDyes(Map<String, Integer> dyes)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/ImportResult.java"
+        },
+        {
+          "name": "ImportStatus",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "APPLIED"
+            },
+            {
+              "name": "UNCHANGED"
+            },
+            {
+              "name": "UNKNOWN_PARTS"
+            },
+            {
+              "name": "MISSING_PARTS"
+            },
+            {
+              "name": "MISSING_DYES"
+            },
+            {
+              "name": "NO_TARGET"
+            },
+            {
+              "name": "NOT_ALLOWED"
+            },
+            {
+              "name": "INVALID"
+            },
+            {
+              "name": "BUSY"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "success",
+              "static": false,
+              "display": "boolean success()"
+            },
+            {
+              "kind": "method",
+              "name": "translationKey",
+              "static": false,
+              "display": "String translationKey()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/ImportStatus.java"
+        },
+        {
+          "name": "ImportTarget",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "WORKBENCH"
+            },
+            {
+              "name": "HELD_DRONE"
+            },
+            {
+              "name": "NEW_DRONE"
+            }
+          ],
+          "members": [],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/ImportTarget.java"
+        },
+        {
+          "name": "PaintSpec",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Map<String, Integer> colors"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "SLOTS",
+              "static": true,
+              "display": "static final List<String> SLOTS"
+            },
+            {
+              "kind": "field",
+              "name": "DEFAULT",
+              "static": true,
+              "display": "static final PaintSpec DEFAULT"
+            },
+            {
+              "kind": "method",
+              "name": "isDefault",
+              "static": false,
+              "display": "boolean isDefault()"
+            },
+            {
+              "kind": "method",
+              "name": "color",
+              "static": false,
+              "display": "Optional<Integer> color(String slot)"
+            },
+            {
+              "kind": "method",
+              "name": "with",
+              "static": false,
+              "display": "PaintSpec with(String slot, int rgb)"
+            },
+            {
+              "kind": "method",
+              "name": "without",
+              "static": false,
+              "display": "PaintSpec without(String slot)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/PaintSpec.java"
+        },
+        {
+          "name": "TuneGroup",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "RATES"
+            },
+            {
+              "name": "PID"
+            },
+            {
+              "name": "FEEDFORWARD"
+            },
+            {
+              "name": "TPA"
+            },
+            {
+              "name": "FILTERS"
+            },
+            {
+              "name": "THROTTLE"
+            },
+            {
+              "name": "HOLD"
+            },
+            {
+              "name": "CAMERA"
+            },
+            {
+              "name": "LED"
+            },
+            {
+              "name": "VTX"
+            },
+            {
+              "name": "OTHER"
+            }
+          ],
+          "members": [
+            {
+              "kind": "field",
+              "name": "FLIGHT",
+              "static": true,
+              "display": "static final Set<TuneGroup> FLIGHT"
+            },
+            {
+              "kind": "method",
+              "name": "translationKey",
+              "static": false,
+              "display": "String translationKey()"
+            },
+            {
+              "kind": "method",
+              "name": "of",
+              "static": true,
+              "display": "static TuneGroup of(String key)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/TuneGroup.java"
+        },
+        {
+          "name": "TuneSpec",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Map<String, Float> values"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MAX_ENTRIES",
+              "static": true,
+              "display": "static final int MAX_ENTRIES = 256"
+            },
+            {
+              "kind": "field",
+              "name": "EMPTY",
+              "static": true,
+              "display": "static final TuneSpec EMPTY"
+            },
+            {
+              "kind": "field",
+              "name": "CAMERA_UPTILT",
+              "static": true,
+              "display": "static final String CAMERA_UPTILT = \"camera.uptiltDeg\""
+            },
+            {
+              "kind": "method",
+              "name": "only",
+              "static": false,
+              "display": "TuneSpec only(Collection<TuneGroup> groups)"
+            },
+            {
+              "kind": "method",
+              "name": "without",
+              "static": false,
+              "display": "TuneSpec without(Collection<TuneGroup> groups)"
+            },
+            {
+              "kind": "method",
+              "name": "overlay",
+              "static": false,
+              "display": "TuneSpec overlay(TuneSpec imported, Collection<TuneGroup> groups)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/build/TuneSpec.java"
+        }
+      ]
+    },
+    {
+      "name": "de.lardtom.propwash.api.client",
+      "types": [
+        {
+          "name": "ClientTune",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "available",
+              "static": false,
+              "display": "boolean available()"
+            },
+            {
+              "kind": "method",
+              "name": "current",
+              "static": false,
+              "display": "TuneSpec current()"
+            },
+            {
+              "kind": "method",
+              "name": "defaults",
+              "static": false,
+              "display": "TuneSpec defaults()"
+            },
+            {
+              "kind": "method",
+              "name": "apply",
+              "static": false,
+              "display": "boolean apply(TuneSpec tune)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/ClientTune.java"
+        },
+        {
+          "name": "FlightSchoolScenes",
+          "kind": "class",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "DRONE_BUILD",
+              "static": true,
+              "display": "static final String DRONE_BUILD = \"propwash:drone_build\""
+            },
+            {
+              "kind": "field",
+              "name": "BIND",
+              "static": true,
+              "display": "static final String BIND = \"propwash:bind\""
+            },
+            {
+              "kind": "field",
+              "name": "FPV_LOS",
+              "static": true,
+              "display": "static final String FPV_LOS = \"propwash:fpv_los\""
+            },
+            {
+              "kind": "field",
+              "name": "BATTERY",
+              "static": true,
+              "display": "static final String BATTERY = \"propwash:battery\""
+            },
+            {
+              "kind": "field",
+              "name": "RACE",
+              "static": true,
+              "display": "static final String RACE = \"propwash:race\""
+            },
+            {
+              "kind": "field",
+              "name": "VIDEO",
+              "static": true,
+              "display": "static final String VIDEO = \"propwash:video\""
+            },
+            {
+              "kind": "field",
+              "name": "ACTION_CAM",
+              "static": true,
+              "display": "static final String ACTION_CAM = \"propwash:action_cam\""
+            },
+            {
+              "kind": "field",
+              "name": "CONFIGURATOR",
+              "static": true,
+              "display": "static final String CONFIGURATOR = \"propwash:configurator\""
+            },
+            {
+              "kind": "field",
+              "name": "RESCUE",
+              "static": true,
+              "display": "static final String RESCUE = \"propwash:rescue\""
+            },
+            {
+              "kind": "field",
+              "name": "HOLD",
+              "static": true,
+              "display": "static final String HOLD = \"propwash:hold\""
+            },
+            {
+              "kind": "field",
+              "name": "RECOVERY",
+              "static": true,
+              "display": "static final String RECOVERY = \"propwash:recovery\""
+            },
+            {
+              "kind": "field",
+              "name": "REPAIR",
+              "static": true,
+              "display": "static final String REPAIR = \"propwash:repair\""
+            },
+            {
+              "kind": "field",
+              "name": "SURVIVAL",
+              "static": true,
+              "display": "static final String SURVIVAL = \"propwash:survival\""
+            },
+            {
+              "kind": "field",
+              "name": "ALL",
+              "static": true,
+              "display": "static final List<String> ALL"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/FlightSchoolScenes.java"
+        },
+        {
+          "name": "OsdLayoutAccess",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "current",
+              "static": false,
+              "display": "OsdLayoutSpec current()"
+            },
+            {
+              "kind": "method",
+              "name": "defaults",
+              "static": false,
+              "display": "OsdLayoutSpec defaults()"
+            },
+            {
+              "kind": "method",
+              "name": "apply",
+              "static": false,
+              "display": "boolean apply(OsdLayoutSpec layout)"
+            },
+            {
+              "kind": "method",
+              "name": "validate",
+              "static": false,
+              "display": "default boolean validate(OsdLayoutSpec layout)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/OsdLayoutAccess.java"
+        },
+        {
+          "name": "OsdLayoutSpec",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "int version",
+            "String json"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "CURRENT_VERSION",
+              "static": true,
+              "display": "static final int CURRENT_VERSION = 1"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_JSON_LENGTH",
+              "static": true,
+              "display": "static final int MAX_JSON_LENGTH = 8192"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/OsdLayoutSpec.java"
+        },
+        {
+          "name": "PropwashClientApi",
+          "kind": "class",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "registerConfigTab",
+              "static": true,
+              "display": "static void registerConfigTab(Supplier<? extends ConfigTab> factory)"
+            },
+            {
+              "kind": "method",
+              "name": "openConfigTab",
+              "static": true,
+              "display": "static boolean openConfigTab(String tabId, @Nullable Screen parent)"
+            },
+            {
+              "kind": "method",
+              "name": "registerWorkbenchExtension",
+              "static": true,
+              "display": "static void registerWorkbenchExtension(WorkbenchExtension extension)"
+            },
+            {
+              "kind": "method",
+              "name": "workbenchExtensions",
+              "static": true,
+              "display": "static List<WorkbenchExtension> workbenchExtensions()"
+            },
+            {
+              "kind": "method",
+              "name": "registerFlightSchoolScene",
+              "static": true,
+              "display": "static void registerFlightSchoolScene(Supplier<Scene> scene)"
+            },
+            {
+              "kind": "method",
+              "name": "registerFlightSchoolScene",
+              "static": true,
+              "display": "static void registerFlightSchoolScene(Supplier<Scene> scene, BooleanSupplier visible)"
+            },
+            {
+              "kind": "method",
+              "name": "flightSchoolDrone",
+              "static": true,
+              "display": "static ActorSpec.Drone flightSchoolDrone(BuildSpec build, boolean assembled, float scale)"
+            },
+            {
+              "kind": "method",
+              "name": "openFlightSchoolScene",
+              "static": true,
+              "display": "static boolean openFlightSchoolScene(String sceneId, @Nullable Screen parent)"
+            },
+            {
+              "kind": "method",
+              "name": "linkFlightSchoolItems",
+              "static": true,
+              "display": "static void linkFlightSchoolItems(String sceneId, String... itemIds)"
+            },
+            {
+              "kind": "method",
+              "name": "linkFlightSchoolParts",
+              "static": true,
+              "display": "static void linkFlightSchoolParts(String sceneId, String namespace, PartKind... kinds)"
+            },
+            {
+              "kind": "method",
+              "name": "flightSchoolScenes",
+              "static": true,
+              "display": "static List<String> flightSchoolScenes(ItemStack stack)"
+            },
+            {
+              "kind": "method",
+              "name": "openFlightSchool",
+              "static": true,
+              "display": "static boolean openFlightSchool(ItemStack stack, @Nullable Screen parent)"
+            },
+            {
+              "kind": "method",
+              "name": "osd",
+              "static": true,
+              "display": "static OsdLayoutAccess osd()"
+            },
+            {
+              "kind": "method",
+              "name": "tune",
+              "static": true,
+              "display": "static ClientTune tune()"
+            },
+            {
+              "kind": "method",
+              "name": "heldDrone",
+              "static": true,
+              "display": "static Optional<DroneData> heldDrone()"
+            },
+            {
+              "kind": "method",
+              "name": "sendImport",
+              "static": true,
+              "display": "static CompletableFuture<ImportResult> sendImport(ImportRequest request)"
+            },
+            {
+              "kind": "method",
+              "name": "sendCreateDrone",
+              "static": true,
+              "display": "static CompletableFuture<ImportResult> sendCreateDrone(DroneData data)"
+            },
+            {
+              "kind": "method",
+              "name": "forceShiftHelp",
+              "static": true,
+              "display": "static void forceShiftHelp(@Nullable Boolean shown)"
+            },
+            {
+              "kind": "method",
+              "name": "renderPreview",
+              "static": true,
+              "display": "static void renderPreview(GuiGraphicsExtractor graphics, DroneData drone, int x0, int y0, int x1, int y1, float yawDegrees)"
+            },
+            {
+              "kind": "method",
+              "name": "renderPreview",
+              "static": true,
+              "display": "static void renderPreview(GuiGraphicsExtractor graphics, DroneData drone, int x0, int y0, int x1, int y1, float yawDegrees, float pixelsPerMillimetre)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/PropwashClientApi.java"
+        },
+        {
+          "name": "WorkbenchContext",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "BUTTON_PADDING",
+              "static": false,
+              "display": "int BUTTON_PADDING = 14"
+            },
+            {
+              "kind": "field",
+              "name": "BUTTON_GAP",
+              "static": false,
+              "display": "int BUTTON_GAP = 3"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_BUTTON_WIDTH",
+              "static": false,
+              "display": "int MAX_BUTTON_WIDTH = 80"
+            },
+            {
+              "kind": "field",
+              "name": "ICON_BUTTON_SIZE",
+              "static": false,
+              "display": "int ICON_BUTTON_SIZE = 13"
+            },
+            {
+              "kind": "method",
+              "name": "screen",
+              "static": false,
+              "display": "Screen screen()"
+            },
+            {
+              "kind": "method",
+              "name": "containerId",
+              "static": false,
+              "display": "int containerId()"
+            },
+            {
+              "kind": "method",
+              "name": "creative",
+              "static": false,
+              "display": "boolean creative()"
+            },
+            {
+              "kind": "method",
+              "name": "slot",
+              "static": false,
+              "display": "Optional<Identifier> slot(PartKind kind, int position)"
+            },
+            {
+              "kind": "method",
+              "name": "result",
+              "static": false,
+              "display": "Optional<DroneData> result()"
+            },
+            {
+              "kind": "method",
+              "name": "addButton",
+              "static": false,
+              "display": "void addButton(Component label, Component tooltip, Runnable onPress)"
+            },
+            {
+              "kind": "method",
+              "name": "addButton",
+              "static": false,
+              "display": "default void addButton(Component label, Component shortLabel, Component tooltip, Runnable onPress)"
+            },
+            {
+              "kind": "method",
+              "name": "addIconButton",
+              "static": false,
+              "display": "default void addIconButton(Identifier sprite, Component tooltip, Runnable onPress)"
+            },
+            {
+              "kind": "method",
+              "name": "headerSpace",
+              "static": false,
+              "display": "default int headerSpace()"
+            },
+            {
+              "kind": "method",
+              "name": "buttonWidth",
+              "static": false,
+              "display": "default int buttonWidth(Component label)"
+            },
+            {
+              "kind": "method",
+              "name": "missingParts",
+              "static": false,
+              "display": "default List<Identifier> missingParts(DroneData data)"
+            },
+            {
+              "kind": "method",
+              "name": "openChild",
+              "static": false,
+              "display": "void openChild(Function<Screen, Screen> factory)"
+            },
+            {
+              "kind": "method",
+              "name": "importIntoWorkbench",
+              "static": false,
+              "display": "CompletableFuture<ImportResult> importIntoWorkbench(DroneData data, Set<ImportLayer> layers, Set<TuneGroup> tuneGroups)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/WorkbenchContext.java"
+        },
+        {
+          "name": "WorkbenchExtension",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "id",
+              "static": false,
+              "display": "Identifier id()"
+            },
+            {
+              "kind": "method",
+              "name": "order",
+              "static": false,
+              "display": "default int order()"
+            },
+            {
+              "kind": "method",
+              "name": "init",
+              "static": false,
+              "display": "void init(WorkbenchContext context)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/WorkbenchExtension.java"
+        }
+      ]
+    },
+    {
+      "name": "de.lardtom.propwash.api.event",
+      "types": [
+        {
+          "name": "PropwashEvent",
+          "kind": "class",
+          "modifiers": [],
+          "typeParams": "<T>",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "constructor",
+              "name": "PropwashEvent",
+              "static": false,
+              "display": "PropwashEvent(String name)"
+            },
+            {
+              "kind": "method",
+              "name": "register",
+              "static": false,
+              "display": "void register(T listener)"
+            },
+            {
+              "kind": "method",
+              "name": "hasListeners",
+              "static": false,
+              "display": "boolean hasListeners()"
+            },
+            {
+              "kind": "method",
+              "name": "fire",
+              "static": false,
+              "display": "void fire(Consumer<? super T> action)"
+            },
+            {
+              "kind": "method",
+              "name": "name",
+              "static": false,
+              "display": "String name()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/event/PropwashEvent.java"
+        },
+        {
+          "name": "PropwashEvents",
+          "kind": "class",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "PART_REGISTERED",
+              "static": true,
+              "display": "static final PropwashEvent<PartRegistered> PART_REGISTERED"
+            },
+            {
+              "kind": "field",
+              "name": "REGISTRY_FROZEN",
+              "static": true,
+              "display": "static final PropwashEvent<RegistryFrozen> REGISTRY_FROZEN"
+            },
+            {
+              "kind": "field",
+              "name": "DRONE_ASSEMBLED",
+              "static": true,
+              "display": "static final PropwashEvent<DroneAssembled> DRONE_ASSEMBLED"
+            },
+            {
+              "kind": "field",
+              "name": "DRONE_DISASSEMBLED",
+              "static": true,
+              "display": "static final PropwashEvent<DroneDisassembled> DRONE_DISASSEMBLED"
+            },
+            {
+              "kind": "field",
+              "name": "BUILD_IMPORTED",
+              "static": true,
+              "display": "static final PropwashEvent<BuildImported> BUILD_IMPORTED"
+            },
+            {
+              "kind": "field",
+              "name": "ESC_BURNED",
+              "static": true,
+              "display": "static final PropwashEvent<EscBurned> ESC_BURNED"
+            }
+          ],
+          "types": [
+            {
+              "name": "PartRegistered",
+              "kind": "interface",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "onPartRegistered",
+                  "static": false,
+                  "display": "void onPartRegistered(PartDefinition definition)"
+                }
+              ],
+              "types": []
+            },
+            {
+              "name": "RegistryFrozen",
+              "kind": "interface",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "onRegistryFrozen",
+                  "static": false,
+                  "display": "void onRegistryFrozen(PartRegistry registry)"
+                }
+              ],
+              "types": []
+            },
+            {
+              "name": "DroneAssembled",
+              "kind": "interface",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "onDroneAssembled",
+                  "static": false,
+                  "display": "void onDroneAssembled(ServerPlayer player, ItemStack drone, DroneData data)"
+                }
+              ],
+              "types": []
+            },
+            {
+              "name": "DroneDisassembled",
+              "kind": "interface",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "onDroneDisassembled",
+                  "static": false,
+                  "display": "void onDroneDisassembled(ServerPlayer player, DroneData data)"
+                }
+              ],
+              "types": []
+            },
+            {
+              "name": "BuildImported",
+              "kind": "interface",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "onBuildImported",
+                  "static": false,
+                  "display": "void onBuildImported(ServerPlayer player, ImportRequest request, ImportResult result)"
+                }
+              ],
+              "types": []
+            },
+            {
+              "name": "EscBurned",
+              "kind": "interface",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "onEscBurned",
+                  "static": false,
+                  "display": "void onEscBurned(ServerPlayer player, ItemStack drone, DroneData data, int cells)"
+                }
+              ],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/event/PropwashEvents.java"
+        }
+      ]
+    },
+    {
+      "name": "de.lardtom.propwash.api.part",
+      "types": [
+        {
+          "name": "AccessoryDefinition",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Identifier id",
+            "PartBasics basics",
+            "AccessorySlot slot",
+            "double widthMm",
+            "double heightMm",
+            "double depthMm",
+            "double flightBatteryWatts",
+            "double frontalAreaM2",
+            "int ledCount",
+            "Optional<ActionCamDefinition> actionCam",
+            "double lensXMm",
+            "double lensLengthMm"
+          ],
+          "extends": "",
+          "implements": "PartDefinition",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "kind",
+              "static": false,
+              "display": "PartKind kind()"
+            },
+            {
+              "kind": "method",
+              "name": "builder",
+              "static": true,
+              "display": "static Builder builder(Identifier id)"
+            }
+          ],
+          "types": [
+            {
+              "name": "Builder",
+              "kind": "class",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "basics",
+                  "static": false,
+                  "display": "Builder basics(PartBasics value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "mass",
+                  "static": false,
+                  "display": "Builder mass(double grams)"
+                },
+                {
+                  "kind": "method",
+                  "name": "slot",
+                  "static": false,
+                  "display": "Builder slot(AccessorySlot value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "size",
+                  "static": false,
+                  "display": "Builder size(double widthMm, double heightMm, double depthMm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "flightBatteryWatts",
+                  "static": false,
+                  "display": "Builder flightBatteryWatts(double value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "frontalArea",
+                  "static": false,
+                  "display": "Builder frontalArea(double m2)"
+                },
+                {
+                  "kind": "method",
+                  "name": "leds",
+                  "static": false,
+                  "display": "Builder leds(int count)"
+                },
+                {
+                  "kind": "method",
+                  "name": "actionCam",
+                  "static": false,
+                  "display": "Builder actionCam(ActionCamDefinition value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "lens",
+                  "static": false,
+                  "display": "Builder lens(double xMm, double lengthMm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "build",
+                  "static": false,
+                  "display": "AccessoryDefinition build()"
+                }
+              ],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/AccessoryDefinition.java"
+        },
+        {
+          "name": "AccessorySlot",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "TOP",
+              "key": "top"
+            },
+            {
+              "name": "BOTTOM",
+              "key": "bottom"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "key",
+              "static": false,
+              "display": "String key()"
+            },
+            {
+              "kind": "method",
+              "name": "byKey",
+              "static": true,
+              "display": "static Optional<AccessorySlot> byKey(String key)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/AccessorySlot.java"
+        },
+        {
+          "name": "ActionCamDefinition",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "int maxHeight",
+            "int maxFps",
+            "boolean stabilization",
+            "boolean horizonLevelling",
+            "double ownBatteryWh",
+            "double recordWatts",
+            "double maxRecordWatts",
+            "double fovDegrees",
+            "double imageQuality",
+            "double lowLightNoise",
+            "double sensorInches"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/ActionCamDefinition.java"
+        },
+        {
+          "name": "AirframeGeometry",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "List<MotorArm> arms",
+            "boolean batteryOnTop",
+            "double batteryPlateMm",
+            "double electronicsMm",
+            "Optional<Vec3Mm> cameraMm",
+            "double cameraTiltDeg",
+            "Vec3Mm frameCenterOfMassMm",
+            "MassSplit massSplit",
+            "Map<AccessorySlot, AnchorSpec> accessoryAnchors"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MIN_CAMERA_TILT",
+              "static": true,
+              "display": "static final double MIN_CAMERA_TILT = 0.0"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_CAMERA_TILT",
+              "static": true,
+              "display": "static final double MAX_CAMERA_TILT = 80.0"
+            },
+            {
+              "kind": "field",
+              "name": "DEFAULT_CAMERA_TILT",
+              "static": true,
+              "display": "static final double DEFAULT_CAMERA_TILT = 20.0"
+            },
+            {
+              "kind": "method",
+              "name": "hasExplicitArms",
+              "static": false,
+              "display": "boolean hasExplicitArms()"
+            },
+            {
+              "kind": "method",
+              "name": "armsOrTrueX",
+              "static": false,
+              "display": "List<MotorArm> armsOrTrueX(int wheelbaseMm)"
+            },
+            {
+              "kind": "method",
+              "name": "defaultBatteryOnTop",
+              "static": true,
+              "display": "static boolean defaultBatteryOnTop(int wheelbaseMm)"
+            },
+            {
+              "kind": "method",
+              "name": "defaultBatteryPlateMm",
+              "static": true,
+              "display": "static double defaultBatteryPlateMm(int wheelbaseMm)"
+            },
+            {
+              "kind": "method",
+              "name": "defaultElectronicsMm",
+              "static": true,
+              "display": "static double defaultElectronicsMm(int wheelbaseMm)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/AirframeGeometry.java"
+        },
+        {
+          "name": "AnchorSpec",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "double x",
+            "double y",
+            "double z",
+            "double tiltDeg",
+            "double lengthMm"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MIN_TILT",
+              "static": true,
+              "display": "static final double MIN_TILT = -45.0"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_TILT",
+              "static": true,
+              "display": "static final double MAX_TILT = 90.0"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/AnchorSpec.java"
+        },
+        {
+          "name": "BatteryDefinition",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Identifier id",
+            "PartBasics basics",
+            "int cells",
+            "int capacityMah",
+            "double cellResistanceOhm",
+            "int cRating",
+            "Identifier chemistry",
+            "Optional<PackSize> packSize",
+            "String connector"
+          ],
+          "extends": "",
+          "implements": "PartDefinition",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MAX_CELLS",
+              "static": true,
+              "display": "static final int MAX_CELLS = 12"
+            },
+            {
+              "kind": "field",
+              "name": "LIPO",
+              "static": true,
+              "display": "static final Identifier LIPO"
+            },
+            {
+              "kind": "field",
+              "name": "LIHV",
+              "static": true,
+              "display": "static final Identifier LIHV"
+            },
+            {
+              "kind": "field",
+              "name": "LION",
+              "static": true,
+              "display": "static final Identifier LION"
+            },
+            {
+              "kind": "method",
+              "name": "kind",
+              "static": false,
+              "display": "PartKind kind()"
+            },
+            {
+              "kind": "method",
+              "name": "maxContinuousCurrent",
+              "static": false,
+              "display": "double maxContinuousCurrent()"
+            },
+            {
+              "kind": "method",
+              "name": "builder",
+              "static": true,
+              "display": "static Builder builder(Identifier id)"
+            }
+          ],
+          "types": [
+            {
+              "name": "Builder",
+              "kind": "class",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "basics",
+                  "static": false,
+                  "display": "Builder basics(PartBasics value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "mass",
+                  "static": false,
+                  "display": "Builder mass(double grams)"
+                },
+                {
+                  "kind": "method",
+                  "name": "cells",
+                  "static": false,
+                  "display": "Builder cells(int value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "capacity",
+                  "static": false,
+                  "display": "Builder capacity(int mah)"
+                },
+                {
+                  "kind": "method",
+                  "name": "cellResistance",
+                  "static": false,
+                  "display": "Builder cellResistance(double ohm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "cRating",
+                  "static": false,
+                  "display": "Builder cRating(int value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "chemistry",
+                  "static": false,
+                  "display": "Builder chemistry(Identifier value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "packSize",
+                  "static": false,
+                  "display": "Builder packSize(PackSize value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "connector",
+                  "static": false,
+                  "display": "Builder connector(String value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "build",
+                  "static": false,
+                  "display": "BatteryDefinition build()"
+                }
+              ],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/BatteryDefinition.java"
+        },
+        {
+          "name": "BatteryFitRule",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "int minCells",
+            "int maxCells",
+            "double maxMassGrams",
+            "int preferredMinCells",
+            "int preferredMinCapacityMah"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/BatteryFitRule.java"
+        },
+        {
+          "name": "CellChemistry",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Identifier id",
+            "double fullCellVoltage",
+            "double nominalCellVoltage",
+            "double emptyCellVoltage",
+            "double cutoffCellVoltage",
+            "double storageCellVoltage",
+            "double densityGramsPerCm3",
+            "List<Double> ocvShape",
+            "OptionalDouble usableFraction"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "SOC_GRID",
+              "static": true,
+              "display": "static final List<Double> SOC_GRID"
+            },
+            {
+              "kind": "constructor",
+              "name": "CellChemistry",
+              "static": false,
+              "display": "CellChemistry(Identifier id, double fullCellVoltage, double nominalCellVoltage, double emptyCellVoltage, double cutoffCellVoltage, double storageCellVoltage, double densityGramsPerCm3, List<Double> ocvShape)"
+            },
+            {
+              "kind": "method",
+              "name": "landingCellVoltage",
+              "static": false,
+              "display": "double landingCellVoltage()"
+            },
+            {
+              "kind": "method",
+              "name": "effectiveUsableFraction",
+              "static": false,
+              "display": "double effectiveUsableFraction()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/CellChemistry.java"
+        },
+        {
+          "name": "DuctSpec",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "OptionalDouble thrustGain",
+            "OptionalDouble clearanceMm",
+            "OptionalDouble translationalLiftGain",
+            "OptionalDouble washLoss",
+            "OptionalDouble washNoise",
+            "OptionalDouble restitution",
+            "OptionalDouble friction"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "STANDARD",
+              "static": true,
+              "display": "static final DuctSpec STANDARD"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/DuctSpec.java"
+        },
+        {
+          "name": "FrameAero",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "double frontalAreaM2",
+            "double dragCoefficient",
+            "OptionalDouble sideAreaM2",
+            "OptionalDouble topAreaM2"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "of",
+              "static": true,
+              "display": "static FrameAero of(double frontalAreaM2, double dragCoefficient)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/FrameAero.java"
+        },
+        {
+          "name": "FrameDefinition",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Identifier id",
+            "PartBasics basics",
+            "FrameRole role",
+            "FrameShape shape",
+            "int wheelbaseMm",
+            "int minPropMm",
+            "int maxPropMm",
+            "Set<Identifier> motorMounts",
+            "Set<Identifier> stackMounts",
+            "Set<AccessorySlot> accessoryMounts",
+            "AirframeGeometry geometry",
+            "FrameAero aero",
+            "Optional<DuctSpec> duct",
+            "double impactTolerance",
+            "BatteryFitRule batteryFit"
+          ],
+          "extends": "",
+          "implements": "PartDefinition",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MAX_PROP_MM",
+              "static": true,
+              "display": "static final int MAX_PROP_MM = 400"
+            },
+            {
+              "kind": "method",
+              "name": "kind",
+              "static": false,
+              "display": "PartKind kind()"
+            },
+            {
+              "kind": "method",
+              "name": "ducted",
+              "static": false,
+              "display": "boolean ducted()"
+            },
+            {
+              "kind": "method",
+              "name": "nominalPropInches",
+              "static": false,
+              "display": "double nominalPropInches()"
+            },
+            {
+              "kind": "method",
+              "name": "builder",
+              "static": true,
+              "display": "static Builder builder(Identifier id)"
+            }
+          ],
+          "types": [
+            {
+              "name": "Builder",
+              "kind": "class",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "basics",
+                  "static": false,
+                  "display": "Builder basics(PartBasics value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "mass",
+                  "static": false,
+                  "display": "Builder mass(double grams)"
+                },
+                {
+                  "kind": "method",
+                  "name": "role",
+                  "static": false,
+                  "display": "Builder role(FrameRole value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "shape",
+                  "static": false,
+                  "display": "Builder shape(FrameShape value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "wheelbase",
+                  "static": false,
+                  "display": "Builder wheelbase(int mm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "props",
+                  "static": false,
+                  "display": "Builder props(int minMm, int maxMm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "maxProp",
+                  "static": false,
+                  "display": "Builder maxProp(int mm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "motorMount",
+                  "static": false,
+                  "display": "Builder motorMount(Identifier... mounts)"
+                },
+                {
+                  "kind": "method",
+                  "name": "stackMount",
+                  "static": false,
+                  "display": "Builder stackMount(Identifier... mounts)"
+                },
+                {
+                  "kind": "method",
+                  "name": "accessoryMount",
+                  "static": false,
+                  "display": "Builder accessoryMount(AccessorySlot... slots)"
+                },
+                {
+                  "kind": "method",
+                  "name": "arms",
+                  "static": false,
+                  "display": "Builder arms(List<MotorArm> value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "battery",
+                  "static": false,
+                  "display": "Builder battery(boolean onTop, double plateMm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "electronics",
+                  "static": false,
+                  "display": "Builder electronics(double mm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "camera",
+                  "static": false,
+                  "display": "Builder camera(Vec3Mm positionMm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "cameraTilt",
+                  "static": false,
+                  "display": "Builder cameraTilt(double degrees)"
+                },
+                {
+                  "kind": "method",
+                  "name": "centerOfMass",
+                  "static": false,
+                  "display": "Builder centerOfMass(Vec3Mm positionMm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "massSplit",
+                  "static": false,
+                  "display": "Builder massSplit(MassSplit value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "anchor",
+                  "static": false,
+                  "display": "Builder anchor(AccessorySlot slot, AnchorSpec anchor)"
+                },
+                {
+                  "kind": "method",
+                  "name": "aero",
+                  "static": false,
+                  "display": "Builder aero(double frontalAreaM2, double dragCoefficient)"
+                },
+                {
+                  "kind": "method",
+                  "name": "sideArea",
+                  "static": false,
+                  "display": "Builder sideArea(double m2)"
+                },
+                {
+                  "kind": "method",
+                  "name": "topArea",
+                  "static": false,
+                  "display": "Builder topArea(double m2)"
+                },
+                {
+                  "kind": "method",
+                  "name": "duct",
+                  "static": false,
+                  "display": "Builder duct(DuctSpec value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "impactTolerance",
+                  "static": false,
+                  "display": "Builder impactTolerance(double metersPerSecond)"
+                },
+                {
+                  "kind": "method",
+                  "name": "batteryFit",
+                  "static": false,
+                  "display": "Builder batteryFit(BatteryFitRule value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "build",
+                  "static": false,
+                  "display": "FrameDefinition build()"
+                }
+              ],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/FrameDefinition.java"
+        },
+        {
+          "name": "FrameRole",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "WHOOP",
+              "key": "whoop"
+            },
+            {
+              "name": "TOOTHPICK",
+              "key": "toothpick"
+            },
+            {
+              "name": "CINEWHOOP",
+              "key": "cinewhoop"
+            },
+            {
+              "name": "FREESTYLE",
+              "key": "freestyle"
+            },
+            {
+              "name": "RACE",
+              "key": "race"
+            },
+            {
+              "name": "LONG_RANGE",
+              "key": "long_range"
+            },
+            {
+              "name": "CINELIFTER",
+              "key": "cinelifter"
+            },
+            {
+              "name": "X_CLASS",
+              "key": "x_class"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "key",
+              "static": false,
+              "display": "String key()"
+            },
+            {
+              "kind": "method",
+              "name": "tricksByDefault",
+              "static": false,
+              "display": "boolean tricksByDefault()"
+            },
+            {
+              "kind": "method",
+              "name": "byKey",
+              "static": true,
+              "display": "static Optional<FrameRole> byKey(String key)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/FrameRole.java"
+        },
+        {
+          "name": "FrameShape",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "TRUE_X",
+              "key": "true_x"
+            },
+            {
+              "name": "STRETCHED_X",
+              "key": "stretched_x"
+            },
+            {
+              "name": "SQUASHED_X",
+              "key": "squashed_x"
+            },
+            {
+              "name": "DEADCAT",
+              "key": "deadcat"
+            },
+            {
+              "name": "H_FRAME",
+              "key": "h_frame"
+            },
+            {
+              "name": "CUSTOM",
+              "key": "custom"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "key",
+              "static": false,
+              "display": "String key()"
+            },
+            {
+              "kind": "method",
+              "name": "byKey",
+              "static": true,
+              "display": "static Optional<FrameShape> byKey(String key)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/FrameShape.java"
+        },
+        {
+          "name": "MassSplit",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "double arms",
+            "double plate",
+            "double duct"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "OPEN",
+              "static": true,
+              "display": "static final MassSplit OPEN"
+            },
+            {
+              "kind": "field",
+              "name": "DUCTED",
+              "static": true,
+              "display": "static final MassSplit DUCTED"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/MassSplit.java"
+        },
+        {
+          "name": "MotorArm",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Vec3Mm position",
+            "Spin spin"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "FRONT_LEFT",
+              "static": true,
+              "display": "static final int FRONT_LEFT = 0"
+            },
+            {
+              "kind": "field",
+              "name": "FRONT_RIGHT",
+              "static": true,
+              "display": "static final int FRONT_RIGHT = 1"
+            },
+            {
+              "kind": "field",
+              "name": "REAR_LEFT",
+              "static": true,
+              "display": "static final int REAR_LEFT = 2"
+            },
+            {
+              "kind": "field",
+              "name": "REAR_RIGHT",
+              "static": true,
+              "display": "static final int REAR_RIGHT = 3"
+            },
+            {
+              "kind": "field",
+              "name": "COUNT",
+              "static": true,
+              "display": "static final int COUNT = 4"
+            },
+            {
+              "kind": "field",
+              "name": "PROPS_IN",
+              "static": true,
+              "display": "static final List<Spin> PROPS_IN"
+            },
+            {
+              "kind": "method",
+              "name": "of",
+              "static": true,
+              "display": "static MotorArm of(double xMm, double yMm, double zMm, Spin spin)"
+            },
+            {
+              "kind": "method",
+              "name": "trueX",
+              "static": true,
+              "display": "static List<MotorArm> trueX(int wheelbaseMm, double yMm)"
+            }
+          ],
+          "types": [
+            {
+              "name": "Spin",
+              "kind": "enum",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [
+                {
+                  "name": "CW",
+                  "key": "cw"
+                },
+                {
+                  "name": "CCW",
+                  "key": "ccw"
+                }
+              ],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "key",
+                  "static": false,
+                  "display": "String key()"
+                }
+              ],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/MotorArm.java"
+        },
+        {
+          "name": "MotorDefinition",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Identifier id",
+            "PartBasics basics",
+            "String statorLabel",
+            "double statorDiameterMm",
+            "double statorHeightMm",
+            "int kv",
+            "Identifier mount",
+            "double maxCurrentAmps",
+            "double resistanceOhm",
+            "int minCells",
+            "int maxCells",
+            "Identifier propMount",
+            "MotorThermal thermal"
+          ],
+          "extends": "",
+          "implements": "PartDefinition",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "kind",
+              "static": false,
+              "display": "PartKind kind()"
+            },
+            {
+              "kind": "method",
+              "name": "parseStatorLabel",
+              "static": true,
+              "display": "static double[] parseStatorLabel(String label)"
+            },
+            {
+              "kind": "method",
+              "name": "builder",
+              "static": true,
+              "display": "static Builder builder(Identifier id)"
+            }
+          ],
+          "types": [
+            {
+              "name": "Builder",
+              "kind": "class",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "basics",
+                  "static": false,
+                  "display": "Builder basics(PartBasics value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "mass",
+                  "static": false,
+                  "display": "Builder mass(double grams)"
+                },
+                {
+                  "kind": "method",
+                  "name": "stator",
+                  "static": false,
+                  "display": "Builder stator(String label)"
+                },
+                {
+                  "kind": "method",
+                  "name": "statorSize",
+                  "static": false,
+                  "display": "Builder statorSize(double diameterMm, double heightMm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "kv",
+                  "static": false,
+                  "display": "Builder kv(int value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "mount",
+                  "static": false,
+                  "display": "Builder mount(Identifier value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "maxCurrent",
+                  "static": false,
+                  "display": "Builder maxCurrent(double amps)"
+                },
+                {
+                  "kind": "method",
+                  "name": "resistance",
+                  "static": false,
+                  "display": "Builder resistance(double ohm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "cells",
+                  "static": false,
+                  "display": "Builder cells(int min, int max)"
+                },
+                {
+                  "kind": "method",
+                  "name": "propMount",
+                  "static": false,
+                  "display": "Builder propMount(Identifier value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "thermal",
+                  "static": false,
+                  "display": "Builder thermal(MotorThermal value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "build",
+                  "static": false,
+                  "display": "MotorDefinition build()"
+                }
+              ],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/MotorDefinition.java"
+        },
+        {
+          "name": "MotorThermal",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "OptionalDouble heatCapacityJPerK",
+            "OptionalDouble coolingWPerK",
+            "OptionalDouble coolingWPerKPerRadS",
+            "double derateStartC",
+            "double maxTempC",
+            "double wearPerSecondAtMax"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "DEFAULT",
+              "static": true,
+              "display": "static final MotorThermal DEFAULT"
+            },
+            {
+              "kind": "method",
+              "name": "limits",
+              "static": true,
+              "display": "static MotorThermal limits(double derateStartC, double maxTempC)"
+            },
+            {
+              "kind": "method",
+              "name": "builder",
+              "static": true,
+              "display": "static Builder builder()"
+            }
+          ],
+          "types": [
+            {
+              "name": "Builder",
+              "kind": "class",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "heatCapacity",
+                  "static": false,
+                  "display": "Builder heatCapacity(double joulePerKelvin)"
+                },
+                {
+                  "kind": "method",
+                  "name": "cooling",
+                  "static": false,
+                  "display": "Builder cooling(double wattPerKelvin)"
+                },
+                {
+                  "kind": "method",
+                  "name": "coolingPerRadS",
+                  "static": false,
+                  "display": "Builder coolingPerRadS(double wattPerKelvinPerRadS)"
+                },
+                {
+                  "kind": "method",
+                  "name": "limits",
+                  "static": false,
+                  "display": "Builder limits(double derateStartC, double maxTempC)"
+                },
+                {
+                  "kind": "method",
+                  "name": "wearAtMax",
+                  "static": false,
+                  "display": "Builder wearAtMax(double perSecond)"
+                },
+                {
+                  "kind": "method",
+                  "name": "build",
+                  "static": false,
+                  "display": "MotorThermal build()"
+                }
+              ],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/MotorThermal.java"
+        },
+        {
+          "name": "Mounts",
+          "kind": "class",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MOTOR_M08",
+              "static": true,
+              "display": "static final Identifier MOTOR_M08"
+            },
+            {
+              "kind": "field",
+              "name": "MOTOR_M14",
+              "static": true,
+              "display": "static final Identifier MOTOR_M14"
+            },
+            {
+              "kind": "field",
+              "name": "MOTOR_M22",
+              "static": true,
+              "display": "static final Identifier MOTOR_M22"
+            },
+            {
+              "kind": "field",
+              "name": "MOTOR_M28",
+              "static": true,
+              "display": "static final Identifier MOTOR_M28"
+            },
+            {
+              "kind": "field",
+              "name": "STACK_WHOOP_AIO",
+              "static": true,
+              "display": "static final Identifier STACK_WHOOP_AIO"
+            },
+            {
+              "kind": "field",
+              "name": "STACK_S20",
+              "static": true,
+              "display": "static final Identifier STACK_S20"
+            },
+            {
+              "kind": "field",
+              "name": "STACK_S30",
+              "static": true,
+              "display": "static final Identifier STACK_S30"
+            },
+            {
+              "kind": "field",
+              "name": "PROP_UNIVERSAL",
+              "static": true,
+              "display": "static final Identifier PROP_UNIVERSAL"
+            },
+            {
+              "kind": "method",
+              "name": "propFits",
+              "static": true,
+              "display": "static boolean propFits(Identifier motorPropMount, Identifier propMount)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/Mounts.java"
+        },
+        {
+          "name": "PackSize",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "double lengthMm",
+            "double widthMm",
+            "double heightMm"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/PackSize.java"
+        },
+        {
+          "name": "PartBasics",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "double massGrams",
+            "int stackSize",
+            "int sortOrder",
+            "boolean creativeListed",
+            "double durability",
+            "Optional<RecycleYield> recycle",
+            "PartVisual visual",
+            "Optional<Rarity> rarity"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "DEFAULT_SORT_ORDER",
+              "static": true,
+              "display": "static final int DEFAULT_SORT_ORDER = 1000"
+            },
+            {
+              "kind": "constructor",
+              "name": "PartBasics",
+              "static": false,
+              "display": "PartBasics(double massGrams, int stackSize, int sortOrder, boolean creativeListed, double durability, Optional<RecycleYield> recycle, PartVisual visual)"
+            },
+            {
+              "kind": "method",
+              "name": "of",
+              "static": true,
+              "display": "static PartBasics of(double massGrams)"
+            },
+            {
+              "kind": "method",
+              "name": "withMass",
+              "static": true,
+              "display": "static PartBasics withMass(PartBasics base, double massGrams)"
+            },
+            {
+              "kind": "method",
+              "name": "withStackSize",
+              "static": false,
+              "display": "PartBasics withStackSize(int value)"
+            },
+            {
+              "kind": "method",
+              "name": "withSortOrder",
+              "static": false,
+              "display": "PartBasics withSortOrder(int value)"
+            },
+            {
+              "kind": "method",
+              "name": "withCreativeListed",
+              "static": false,
+              "display": "PartBasics withCreativeListed(boolean value)"
+            },
+            {
+              "kind": "method",
+              "name": "withDurability",
+              "static": false,
+              "display": "PartBasics withDurability(double value)"
+            },
+            {
+              "kind": "method",
+              "name": "withRecycle",
+              "static": false,
+              "display": "PartBasics withRecycle(RecycleYield value)"
+            },
+            {
+              "kind": "method",
+              "name": "withVisual",
+              "static": false,
+              "display": "PartBasics withVisual(PartVisual value)"
+            },
+            {
+              "kind": "method",
+              "name": "withRarity",
+              "static": false,
+              "display": "PartBasics withRarity(Rarity value)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/PartBasics.java"
+        },
+        {
+          "name": "PartDefinition",
+          "kind": "interface",
+          "modifiers": [
+            "sealed"
+          ],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "FrameDefinition, StackDefinition, MotorDefinition, PropDefinition, BatteryDefinition, VideoDefinition, AccessoryDefinition",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "id",
+              "static": false,
+              "display": "Identifier id()"
+            },
+            {
+              "kind": "method",
+              "name": "kind",
+              "static": false,
+              "display": "PartKind kind()"
+            },
+            {
+              "kind": "method",
+              "name": "basics",
+              "static": false,
+              "display": "PartBasics basics()"
+            },
+            {
+              "kind": "method",
+              "name": "massGrams",
+              "static": false,
+              "display": "default double massGrams()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/PartDefinition.java"
+        },
+        {
+          "name": "PartKind",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "FRAME",
+              "key": "frame"
+            },
+            {
+              "name": "STACK",
+              "key": "stack"
+            },
+            {
+              "name": "MOTOR",
+              "key": "motor"
+            },
+            {
+              "name": "PROP",
+              "key": "prop"
+            },
+            {
+              "name": "VIDEO",
+              "key": "video"
+            },
+            {
+              "name": "BATTERY",
+              "key": "battery"
+            },
+            {
+              "name": "ACCESSORY",
+              "key": "accessory"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "key",
+              "static": false,
+              "display": "String key()"
+            },
+            {
+              "kind": "method",
+              "name": "requiredCount",
+              "static": false,
+              "display": "int requiredCount()"
+            },
+            {
+              "kind": "method",
+              "name": "slotCount",
+              "static": false,
+              "display": "int slotCount()"
+            },
+            {
+              "kind": "method",
+              "name": "byKey",
+              "static": true,
+              "display": "static Optional<PartKind> byKey(String key)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/PartKind.java"
+        },
+        {
+          "name": "PartRegistry",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "register",
+              "static": false,
+              "display": "<D extends PartDefinition> D register(D definition)"
+            },
+            {
+              "kind": "method",
+              "name": "registerChemistry",
+              "static": false,
+              "display": "CellChemistry registerChemistry(CellChemistry chemistry)"
+            },
+            {
+              "kind": "method",
+              "name": "loadBundled",
+              "static": false,
+              "display": "int loadBundled(String modId)"
+            },
+            {
+              "kind": "method",
+              "name": "get",
+              "static": false,
+              "display": "Optional<PartDefinition> get(Identifier id)"
+            },
+            {
+              "kind": "method",
+              "name": "get",
+              "static": false,
+              "display": "<D extends PartDefinition> Optional<D> get(Class<D> type, Identifier id)"
+            },
+            {
+              "kind": "method",
+              "name": "all",
+              "static": false,
+              "display": "List<PartDefinition> all()"
+            },
+            {
+              "kind": "method",
+              "name": "all",
+              "static": false,
+              "display": "List<PartDefinition> all(PartKind kind)"
+            },
+            {
+              "kind": "method",
+              "name": "chemistry",
+              "static": false,
+              "display": "Optional<CellChemistry> chemistry(Identifier id)"
+            },
+            {
+              "kind": "method",
+              "name": "chemistries",
+              "static": false,
+              "display": "List<CellChemistry> chemistries()"
+            },
+            {
+              "kind": "method",
+              "name": "isBuiltin",
+              "static": false,
+              "display": "boolean isBuiltin(Identifier id)"
+            },
+            {
+              "kind": "method",
+              "name": "isFrozen",
+              "static": false,
+              "display": "boolean isFrozen()"
+            },
+            {
+              "kind": "method",
+              "name": "fingerprint",
+              "static": false,
+              "display": "String fingerprint()"
+            },
+            {
+              "kind": "method",
+              "name": "toJson",
+              "static": false,
+              "display": "default JsonObject toJson(PartDefinition definition)"
+            },
+            {
+              "kind": "method",
+              "name": "toJson",
+              "static": false,
+              "display": "default JsonObject toJson(CellChemistry chemistry)"
+            },
+            {
+              "kind": "method",
+              "name": "fromJson",
+              "static": false,
+              "display": "default PartDefinition fromJson(PartKind kind, Identifier id, JsonObject json)"
+            },
+            {
+              "kind": "method",
+              "name": "chemistryFromJson",
+              "static": false,
+              "display": "default CellChemistry chemistryFromJson(Identifier id, JsonObject json)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/PartRegistry.java"
+        },
+        {
+          "name": "PartVisual",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "OptionalInt accentRgb",
+            "Optional<Identifier> renderModel"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "NONE",
+              "static": true,
+              "display": "static final PartVisual NONE"
+            },
+            {
+              "kind": "method",
+              "name": "accent",
+              "static": true,
+              "display": "static PartVisual accent(int rgb)"
+            },
+            {
+              "kind": "method",
+              "name": "withRenderModel",
+              "static": false,
+              "display": "PartVisual withRenderModel(Identifier model)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/PartVisual.java"
+        },
+        {
+          "name": "PropDefinition",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Identifier id",
+            "PartBasics basics",
+            "int diameterMm",
+            "double pitchInch",
+            "int blades",
+            "double thrustCoefficient",
+            "double powerCoefficient",
+            "PropMaterial material",
+            "double stiffness",
+            "Identifier mount"
+          ],
+          "extends": "",
+          "implements": "PartDefinition",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "kind",
+              "static": false,
+              "display": "PartKind kind()"
+            },
+            {
+              "kind": "method",
+              "name": "diameterInches",
+              "static": false,
+              "display": "double diameterInches()"
+            },
+            {
+              "kind": "method",
+              "name": "builder",
+              "static": true,
+              "display": "static Builder builder(Identifier id)"
+            }
+          ],
+          "types": [
+            {
+              "name": "Builder",
+              "kind": "class",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "basics",
+                  "static": false,
+                  "display": "Builder basics(PartBasics value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "mass",
+                  "static": false,
+                  "display": "Builder mass(double grams)"
+                },
+                {
+                  "kind": "method",
+                  "name": "durability",
+                  "static": false,
+                  "display": "Builder durability(double value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "size",
+                  "static": false,
+                  "display": "Builder size(int diameterMm, double pitchInch, int blades)"
+                },
+                {
+                  "kind": "method",
+                  "name": "coefficients",
+                  "static": false,
+                  "display": "Builder coefficients(double thrust, double power)"
+                },
+                {
+                  "kind": "method",
+                  "name": "material",
+                  "static": false,
+                  "display": "Builder material(PropMaterial value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "stiffness",
+                  "static": false,
+                  "display": "Builder stiffness(double value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "mount",
+                  "static": false,
+                  "display": "Builder mount(Identifier value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "build",
+                  "static": false,
+                  "display": "PropDefinition build()"
+                }
+              ],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/PropDefinition.java"
+        },
+        {
+          "name": "PropMaterial",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "POLYCARBONATE",
+              "key": "polycarbonate"
+            },
+            {
+              "name": "GLASS_FIBER_NYLON",
+              "key": "glass_fiber_nylon"
+            },
+            {
+              "name": "CARBON_FIBER_NYLON",
+              "key": "carbon_fiber_nylon"
+            },
+            {
+              "name": "CARBON",
+              "key": "carbon"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "key",
+              "static": false,
+              "display": "String key()"
+            },
+            {
+              "kind": "method",
+              "name": "defaultStiffness",
+              "static": false,
+              "display": "double defaultStiffness()"
+            },
+            {
+              "kind": "method",
+              "name": "defaultDurability",
+              "static": false,
+              "display": "double defaultDurability()"
+            },
+            {
+              "kind": "method",
+              "name": "byKey",
+              "static": true,
+              "display": "static Optional<PropMaterial> byKey(String key)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/PropMaterial.java"
+        },
+        {
+          "name": "RecycleYield",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Identifier item",
+            "int count"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "NONE",
+              "static": true,
+              "display": "static final RecycleYield NONE"
+            },
+            {
+              "kind": "method",
+              "name": "none",
+              "static": false,
+              "display": "boolean none()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/RecycleYield.java"
+        },
+        {
+          "name": "StackDefinition",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Identifier id",
+            "PartBasics basics",
+            "Identifier mount",
+            "double escContinuousAmps",
+            "int minCells",
+            "int maxCells",
+            "boolean allInOne",
+            "OptionalDouble escBurstAmps",
+            "OptionalDouble escResistanceOhm",
+            "OptionalDouble brownoutVoltage",
+            "OptionalDouble boardSizeMm"
+          ],
+          "extends": "",
+          "implements": "PartDefinition",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "kind",
+              "static": false,
+              "display": "PartKind kind()"
+            },
+            {
+              "kind": "method",
+              "name": "builder",
+              "static": true,
+              "display": "static Builder builder(Identifier id)"
+            }
+          ],
+          "types": [
+            {
+              "name": "Builder",
+              "kind": "class",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "basics",
+                  "static": false,
+                  "display": "Builder basics(PartBasics value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "mass",
+                  "static": false,
+                  "display": "Builder mass(double grams)"
+                },
+                {
+                  "kind": "method",
+                  "name": "mount",
+                  "static": false,
+                  "display": "Builder mount(Identifier value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "escContinuous",
+                  "static": false,
+                  "display": "Builder escContinuous(double amps)"
+                },
+                {
+                  "kind": "method",
+                  "name": "cells",
+                  "static": false,
+                  "display": "Builder cells(int min, int max)"
+                },
+                {
+                  "kind": "method",
+                  "name": "allInOne",
+                  "static": false,
+                  "display": "Builder allInOne(boolean value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "escBurst",
+                  "static": false,
+                  "display": "Builder escBurst(double amps)"
+                },
+                {
+                  "kind": "method",
+                  "name": "escResistance",
+                  "static": false,
+                  "display": "Builder escResistance(double ohm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "brownout",
+                  "static": false,
+                  "display": "Builder brownout(double volts)"
+                },
+                {
+                  "kind": "method",
+                  "name": "boardSize",
+                  "static": false,
+                  "display": "Builder boardSize(double mm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "build",
+                  "static": false,
+                  "display": "StackDefinition build()"
+                }
+              ],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/StackDefinition.java"
+        },
+        {
+          "name": "Vec3Mm",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "double x",
+            "double y",
+            "double z"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "ZERO",
+              "static": true,
+              "display": "static final Vec3Mm ZERO"
+            },
+            {
+              "kind": "method",
+              "name": "horizontalDistance",
+              "static": false,
+              "display": "double horizontalDistance()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/Vec3Mm.java"
+        },
+        {
+          "name": "VideoDefinition",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Identifier id",
+            "PartBasics basics",
+            "VideoLink link",
+            "int latencyMs",
+            "int rangeBlocks",
+            "double imageQuality",
+            "double cameraWidthMm",
+            "OptionalDouble cameraFovDeg",
+            "int vtxPowerMw",
+            "OptionalDouble powerW"
+          ],
+          "extends": "",
+          "implements": "PartDefinition",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "constructor",
+              "name": "VideoDefinition",
+              "static": false,
+              "display": "VideoDefinition(Identifier id, PartBasics basics, VideoLink link, int latencyMs, int rangeBlocks, double imageQuality, double cameraWidthMm, OptionalDouble cameraFovDeg, int vtxPowerMw)"
+            },
+            {
+              "kind": "method",
+              "name": "kind",
+              "static": false,
+              "display": "PartKind kind()"
+            },
+            {
+              "kind": "method",
+              "name": "builder",
+              "static": true,
+              "display": "static Builder builder(Identifier id)"
+            }
+          ],
+          "types": [
+            {
+              "name": "Builder",
+              "kind": "class",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "basics",
+                  "static": false,
+                  "display": "Builder basics(PartBasics value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "mass",
+                  "static": false,
+                  "display": "Builder mass(double grams)"
+                },
+                {
+                  "kind": "method",
+                  "name": "link",
+                  "static": false,
+                  "display": "Builder link(VideoLink value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "latency",
+                  "static": false,
+                  "display": "Builder latency(int ms)"
+                },
+                {
+                  "kind": "method",
+                  "name": "range",
+                  "static": false,
+                  "display": "Builder range(int blocks)"
+                },
+                {
+                  "kind": "method",
+                  "name": "imageQuality",
+                  "static": false,
+                  "display": "Builder imageQuality(double value)"
+                },
+                {
+                  "kind": "method",
+                  "name": "cameraWidth",
+                  "static": false,
+                  "display": "Builder cameraWidth(double mm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "cameraFov",
+                  "static": false,
+                  "display": "Builder cameraFov(double degrees)"
+                },
+                {
+                  "kind": "method",
+                  "name": "vtxPower",
+                  "static": false,
+                  "display": "Builder vtxPower(int milliwatts)"
+                },
+                {
+                  "kind": "method",
+                  "name": "powerWatts",
+                  "static": false,
+                  "display": "Builder powerWatts(double watts)"
+                },
+                {
+                  "kind": "method",
+                  "name": "build",
+                  "static": false,
+                  "display": "VideoDefinition build()"
+                }
+              ],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/VideoDefinition.java"
+        },
+        {
+          "name": "VideoLink",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "ANALOG",
+              "key": "analog"
+            },
+            {
+              "name": "DIGITAL",
+              "key": "digital"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "key",
+              "static": false,
+              "display": "String key()"
+            },
+            {
+              "kind": "method",
+              "name": "byKey",
+              "static": true,
+              "display": "static Optional<VideoLink> byKey(String key)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/VideoLink.java"
+        }
+      ]
+    },
+    {
+      "name": "de.lardtom.propwash.api.registry",
+      "types": [
+        {
+          "name": "CreativeEntries",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "add",
+              "static": false,
+              "display": "void add(Supplier<? extends Collection<ItemStack>> entries)"
+            },
+            {
+              "kind": "method",
+              "name": "collect",
+              "static": false,
+              "display": "List<ItemStack> collect()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/registry/CreativeEntries.java"
+        },
+        {
+          "name": "ExtensionTab",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "CreativeEntries",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "TITLE_KEY",
+              "static": false,
+              "display": "String TITLE_KEY = \"itemGroup.propwash.extension\""
+            },
+            {
+              "kind": "method",
+              "name": "namespace",
+              "static": false,
+              "display": "String namespace()"
+            },
+            {
+              "kind": "method",
+              "name": "tabId",
+              "static": false,
+              "display": "Identifier tabId()"
+            },
+            {
+              "kind": "method",
+              "name": "nameKey",
+              "static": false,
+              "display": "default String nameKey()"
+            },
+            {
+              "kind": "method",
+              "name": "icon",
+              "static": false,
+              "display": "ExtensionTab icon(Supplier<ItemStack> icon)"
+            },
+            {
+              "kind": "method",
+              "name": "icon",
+              "static": false,
+              "display": "ExtensionTab icon(Identifier itemId)"
+            },
+            {
+              "kind": "method",
+              "name": "order",
+              "static": false,
+              "display": "ExtensionTab order(TabSection... sections)"
+            },
+            {
+              "kind": "method",
+              "name": "sections",
+              "static": false,
+              "display": "List<TabSection> sections()"
+            },
+            {
+              "kind": "method",
+              "name": "registered",
+              "static": false,
+              "display": "boolean registered()"
+            },
+            {
+              "kind": "method",
+              "name": "iconStack",
+              "static": false,
+              "display": "ItemStack iconStack()"
+            },
+            {
+              "kind": "method",
+              "name": "contents",
+              "static": false,
+              "display": "List<ItemStack> contents()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/registry/ExtensionTab.java"
+        },
+        {
+          "name": "LootInjections",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "inject",
+              "static": false,
+              "display": "void inject(ResourceKey<LootTable> target, ResourceKey<LootTable> addonTable)"
+            },
+            {
+              "kind": "method",
+              "name": "tablesFor",
+              "static": false,
+              "display": "List<ResourceKey<LootTable>> tablesFor(ResourceKey<LootTable> target)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/registry/LootInjections.java"
+        },
+        {
+          "name": "PartItems",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "registerItems",
+              "static": false,
+              "display": "int registerItems(String namespace)"
+            },
+            {
+              "kind": "method",
+              "name": "registerItem",
+              "static": false,
+              "display": "void registerItem(Identifier partId, UnaryOperator<Item.Properties> properties)"
+            },
+            {
+              "kind": "method",
+              "name": "item",
+              "static": false,
+              "display": "Optional<Item> item(Identifier partId)"
+            },
+            {
+              "kind": "method",
+              "name": "partOf",
+              "static": false,
+              "display": "Optional<Identifier> partOf(ItemStack stack)"
+            },
+            {
+              "kind": "method",
+              "name": "stack",
+              "static": false,
+              "display": "ItemStack stack(Identifier partId)"
+            },
+            {
+              "kind": "method",
+              "name": "stack",
+              "static": false,
+              "display": "default ItemStack stack(Identifier partId, float charge)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/registry/PartItems.java"
+        },
+        {
+          "name": "TabSection",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "PRESETS"
+            },
+            {
+              "name": "FRAMES"
+            },
+            {
+              "name": "STACKS"
+            },
+            {
+              "name": "MOTORS"
+            },
+            {
+              "name": "PROPS"
+            },
+            {
+              "name": "VIDEO"
+            },
+            {
+              "name": "BATTERIES"
+            },
+            {
+              "name": "ACCESSORIES"
+            },
+            {
+              "name": "ENTRIES"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "kind",
+              "static": false,
+              "display": "Optional<PartKind> kind()"
+            },
+            {
+              "kind": "method",
+              "name": "of",
+              "static": true,
+              "display": "static Optional<TabSection> of(PartKind kind)"
+            },
+            {
+              "kind": "method",
+              "name": "defaults",
+              "static": true,
+              "display": "static List<TabSection> defaults()"
+            },
+            {
+              "kind": "method",
+              "name": "complete",
+              "static": true,
+              "display": "static List<TabSection> complete(List<TabSection> wanted)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/registry/TabSection.java"
+        }
+      ]
+    }
+  ],
+  "external": [
+    {
+      "name": "de.lardtom.propwash.guide.scene.ActorSpec",
+      "usedBy": [
+        "client.PropwashClientApi"
+      ]
+    },
+    {
+      "name": "de.lardtom.propwash.guide.scene.Scene",
+      "usedBy": [
+        "client.PropwashClientApi"
+      ]
+    },
+    {
+      "name": "de.lardtom.propwash.ui.client.config.ConfigTab",
+      "usedBy": [
+        "client.PropwashClientApi"
+      ]
+    }
+  ]
+}

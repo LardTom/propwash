@@ -1,0 +1,119 @@
+{
+  "file": "config/propwash/server.json",
+  "fields": [
+    {
+      "name": "pilotPermissionLevel",
+      "type": "int",
+      "default": 0,
+      "min": 0,
+      "max": 4
+    },
+    {
+      "name": "allowUnlimitedRange",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "unlimitedRangePermissionLevel",
+      "type": "int",
+      "default": 0,
+      "min": 0,
+      "max": 4
+    },
+    {
+      "name": "maxPilotDistance",
+      "type": "double",
+      "default": 160,
+      "min": 16,
+      "max": 1000000
+    },
+    {
+      "name": "maxDroneSpeed",
+      "type": "double",
+      "default": 100,
+      "min": 0,
+      "max": 10000
+    },
+    {
+      "name": "droneViewDistance",
+      "type": "int",
+      "default": 12,
+      "min": 2,
+      "max": 32
+    },
+    {
+      "name": "maxStreamedChunks",
+      "type": "int",
+      "default": 4096,
+      "min": null,
+      "max": 1000000
+    },
+    {
+      "name": "chunkChecksPerTick",
+      "type": "int",
+      "default": 48,
+      "min": 1,
+      "max": 1024
+    },
+    {
+      "name": "onlyGeneratedChunks",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "generateChunksPermissionLevel",
+      "type": "int",
+      "default": 0,
+      "min": 0,
+      "max": 5
+    },
+    {
+      "name": "hostGeneratesChunks",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "allowPilotingInSpawnProtection",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "batteryChargeSeconds",
+      "type": "double",
+      "default": 90,
+      "min": 10,
+      "max": 3600
+    },
+    {
+      "name": "batteryChargeCapacityExponent",
+      "type": "double",
+      "default": 0.5,
+      "min": 0,
+      "max": 1
+    },
+    {
+      "name": "batteryChargeMinSeconds",
+      "type": "double",
+      "default": 20,
+      "min": 1,
+      "max": 3600
+    },
+    {
+      "name": "redstoneChargeMultiplier",
+      "type": "double",
+      "default": 2,
+      "min": 1,
+      "max": 10
+    },
+    {
+      "name": "worldCourses",
+      "type": "boolean",
+      "default": true
+    },
+    {
+      "name": "allowSpectating",
+      "type": "boolean",
+      "default": true
+    }
+  ]
+}

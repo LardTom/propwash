@@ -1,0 +1,537 @@
+{
+  "format": 1,
+  "keys": {
+    "chemistry": [
+      "cutoff_v",
+      "density_g_cm3",
+      "empty_v",
+      "full_v",
+      "nominal_v",
+      "ocv_shape",
+      "storage_v",
+      "usable_fraction"
+    ],
+    "common": [
+      "accent",
+      "count",
+      "creative",
+      "durability",
+      "format",
+      "item",
+      "mass_g",
+      "rarity",
+      "recycle",
+      "render_model",
+      "sort",
+      "stack_size",
+      "visual"
+    ],
+    "frame": [
+      "accessory_anchors",
+      "accessory_mounts",
+      "aero",
+      "arms",
+      "battery",
+      "battery_fit",
+      "camera",
+      "cells",
+      "center_of_mass_mm",
+      "clearance_mm",
+      "drag_coefficient",
+      "duct",
+      "electronics_mm",
+      "friction",
+      "frontal_area_m2",
+      "impact_tolerance",
+      "length_mm",
+      "mass_split",
+      "max_mass_g",
+      "max_prop_mm",
+      "motor_mounts",
+      "on_top",
+      "plate",
+      "plate_mm",
+      "pos",
+      "preferred_min_capacity_mah",
+      "preferred_min_cells",
+      "props_mm",
+      "restitution",
+      "role",
+      "shape",
+      "side_area_m2",
+      "spin",
+      "stack_mounts",
+      "thrust_gain",
+      "tilt_deg",
+      "top_area_m2",
+      "translational_lift_gain",
+      "wash_loss",
+      "wash_noise",
+      "wheelbase_mm"
+    ],
+    "stack": [
+      "all_in_one",
+      "board_size_mm",
+      "brownout_v",
+      "cells",
+      "esc_burst_a",
+      "esc_continuous_a",
+      "esc_resistance_ohm",
+      "mount"
+    ],
+    "motor": [
+      "cells",
+      "cooling_w_per_k",
+      "cooling_w_per_k_per_rad_s",
+      "derate_start_c",
+      "heat_capacity_j_per_k",
+      "kv",
+      "max_current_a",
+      "max_temp_c",
+      "mount",
+      "prop_mount",
+      "resistance_ohm",
+      "stator",
+      "stator_mm",
+      "thermal",
+      "wear_per_s_at_max"
+    ],
+    "prop": [
+      "blades",
+      "cp",
+      "ct",
+      "diameter_mm",
+      "material",
+      "mount",
+      "pitch_in",
+      "stiffness"
+    ],
+    "battery": [
+      "c_rating",
+      "capacity_mah",
+      "cell_resistance_ohm",
+      "cells",
+      "chemistry",
+      "connector",
+      "pack_mm"
+    ],
+    "video": [
+      "camera_fov_deg",
+      "camera_width_mm",
+      "image_quality",
+      "latency_ms",
+      "link",
+      "power_w",
+      "range_blocks",
+      "vtx_power_mw"
+    ],
+    "accessory": [
+      "action_cam",
+      "flight_battery_w",
+      "fov_deg",
+      "frontal_area_m2",
+      "horizon_levelling",
+      "image_quality",
+      "leds",
+      "length_mm",
+      "lens",
+      "low_light_noise",
+      "max_fps",
+      "max_height",
+      "max_record_w",
+      "own_battery_wh",
+      "record_w",
+      "sensor_in",
+      "size_mm",
+      "slot",
+      "stabilization",
+      "x_mm"
+    ]
+  },
+  "armKeys": [
+    "front_left",
+    "front_right",
+    "rear_left",
+    "rear_right"
+  ],
+  "enums": {
+    "kind": [
+      "frame",
+      "stack",
+      "motor",
+      "prop",
+      "video",
+      "battery",
+      "accessory"
+    ],
+    "role": [
+      "whoop",
+      "toothpick",
+      "cinewhoop",
+      "freestyle",
+      "race",
+      "long_range",
+      "cinelifter",
+      "x_class"
+    ],
+    "shape": [
+      "true_x",
+      "stretched_x",
+      "squashed_x",
+      "deadcat",
+      "h_frame",
+      "custom"
+    ],
+    "material": [
+      "polycarbonate",
+      "glass_fiber_nylon",
+      "carbon_fiber_nylon",
+      "carbon"
+    ],
+    "link": [
+      "analog",
+      "digital"
+    ],
+    "slot": [
+      "top",
+      "bottom"
+    ],
+    "spin": [
+      "cw",
+      "ccw"
+    ]
+  },
+  "rarities": [
+    "common",
+    "uncommon",
+    "rare",
+    "epic"
+  ],
+  "mounts": [
+    {
+      "constant": "MOTOR_M08",
+      "id": "propwash:m08",
+      "kind": "motor"
+    },
+    {
+      "constant": "MOTOR_M14",
+      "id": "propwash:m14",
+      "kind": "motor"
+    },
+    {
+      "constant": "MOTOR_M22",
+      "id": "propwash:m22",
+      "kind": "motor"
+    },
+    {
+      "constant": "MOTOR_M28",
+      "id": "propwash:m28",
+      "kind": "motor"
+    },
+    {
+      "constant": "STACK_WHOOP_AIO",
+      "id": "propwash:whoop_aio",
+      "kind": "stack"
+    },
+    {
+      "constant": "STACK_S20",
+      "id": "propwash:s20",
+      "kind": "stack"
+    },
+    {
+      "constant": "STACK_S30",
+      "id": "propwash:s30",
+      "kind": "stack"
+    },
+    {
+      "constant": "PROP_UNIVERSAL",
+      "id": "propwash:universal",
+      "kind": "prop"
+    }
+  ],
+  "builtin": {
+    "frame": [
+      {
+        "id": "propwash:whoop_65",
+        "name": {
+          "en": "65 mm Whoop Frame",
+          "de": "65-mm-Whoop-Rahmen"
+        }
+      },
+      {
+        "id": "propwash:cinewhoop_3",
+        "name": {
+          "en": "3″ Cinewhoop Frame",
+          "de": "3-Zoll-Cinewhoop-Rahmen"
+        }
+      },
+      {
+        "id": "propwash:freestyle_5",
+        "name": {
+          "en": "5″ Freestyle Frame",
+          "de": "5-Zoll-Freestyle-Rahmen"
+        }
+      },
+      {
+        "id": "propwash:race_5",
+        "name": {
+          "en": "5″ Race Frame",
+          "de": "5-Zoll-Race-Rahmen"
+        }
+      },
+      {
+        "id": "propwash:long_range_7",
+        "name": {
+          "en": "7″ Long Range Frame",
+          "de": "7-Zoll-Long-Range-Rahmen"
+        }
+      }
+    ],
+    "stack": [
+      {
+        "id": "propwash:aio_whoop",
+        "name": {
+          "en": "Whoop AIO Board (1–2S, 5 A)",
+          "de": "Whoop-AIO-Board (1–2S, 5 A)"
+        }
+      },
+      {
+        "id": "propwash:aio_20",
+        "name": {
+          "en": "20×20 AIO Board (2–6S, 25 A)",
+          "de": "20×20-AIO-Board (2–6S, 25 A)"
+        }
+      },
+      {
+        "id": "propwash:stack_30",
+        "name": {
+          "en": "30×30 FC/ESC Stack (3–6S, 55 A)",
+          "de": "30×30-FC/ESC-Stack (3–6S, 55 A)"
+        }
+      }
+    ],
+    "motor": [
+      {
+        "id": "propwash:m0802_22000",
+        "name": {
+          "en": "0802 Motor, 22000 KV",
+          "de": "0802-Motor, 22000 KV"
+        }
+      },
+      {
+        "id": "propwash:m1404_4600",
+        "name": {
+          "en": "1404 Motor, 4600 KV",
+          "de": "1404-Motor, 4600 KV"
+        }
+      },
+      {
+        "id": "propwash:m2004_3000",
+        "name": {
+          "en": "2004 Motor, 3000 KV",
+          "de": "2004-Motor, 3000 KV"
+        }
+      },
+      {
+        "id": "propwash:m2207_1750",
+        "name": {
+          "en": "2207 Motor, 1750 KV",
+          "de": "2207-Motor, 1750 KV"
+        }
+      },
+      {
+        "id": "propwash:m2306_1860",
+        "name": {
+          "en": "2306.5 Motor, 1860 KV",
+          "de": "2306,5-Motor, 1860 KV"
+        }
+      },
+      {
+        "id": "propwash:m2807_1300",
+        "name": {
+          "en": "2807 Motor, 1300 KV",
+          "de": "2807-Motor, 1300 KV"
+        }
+      }
+    ],
+    "prop": [
+      {
+        "id": "propwash:p31_4b",
+        "name": {
+          "en": "31 mm Propeller (4-blade, 1.2″ pitch, PC)",
+          "de": "31-mm-Propeller (4 Blätter, 1,2″ Steigung, PC)"
+        }
+      },
+      {
+        "id": "propwash:p31_3b",
+        "name": {
+          "en": "31 mm Propeller (3-blade, 1.4″ pitch, PC)",
+          "de": "31-mm-Propeller (3 Blätter, 1,4″ Steigung, PC)"
+        }
+      },
+      {
+        "id": "propwash:p3_3b",
+        "name": {
+          "en": "3″ Propeller (3-blade, 3.0″ pitch, PC)",
+          "de": "3-Zoll-Propeller (3 Blätter, 3,0″ Steigung, PC)"
+        }
+      },
+      {
+        "id": "propwash:p51_3b",
+        "name": {
+          "en": "5.1″ Propeller (3-blade, 4.6″ pitch, PC)",
+          "de": "5,1-Zoll-Propeller (3 Blätter, 4,6″ Steigung, PC)"
+        }
+      },
+      {
+        "id": "propwash:p7_2b",
+        "name": {
+          "en": "7″ Propeller (2-blade, 3.5″ pitch, PC)",
+          "de": "7-Zoll-Propeller (2 Blätter, 3,5″ Steigung, PC)"
+        }
+      }
+    ],
+    "video": [
+      {
+        "id": "propwash:analog_nano",
+        "name": {
+          "en": "Analog Nano Camera + VTX",
+          "de": "Analoge Nano-Kamera mit Sender"
+        }
+      },
+      {
+        "id": "propwash:analog_race",
+        "name": {
+          "en": "Analog Race Camera + VTX",
+          "de": "Analoge Race-Kamera mit Sender"
+        }
+      },
+      {
+        "id": "propwash:digital_lite",
+        "name": {
+          "en": "Digital Video System (Lite)",
+          "de": "Digitales Videosystem (Lite)"
+        }
+      },
+      {
+        "id": "propwash:digital_hd",
+        "name": {
+          "en": "Digital HD Video System",
+          "de": "Digitales HD-Videosystem"
+        }
+      }
+    ],
+    "battery": [
+      {
+        "id": "propwash:b1s_300_hv",
+        "name": {
+          "en": "1S 300 mAh Battery (LiHV)",
+          "de": "1S-Akku 300 mAh (LiHV)"
+        }
+      },
+      {
+        "id": "propwash:b4s_650",
+        "name": {
+          "en": "4S 650 mAh Battery",
+          "de": "4S-Akku 650 mAh"
+        }
+      },
+      {
+        "id": "propwash:b6s_1100",
+        "name": {
+          "en": "6S 1100 mAh Battery",
+          "de": "6S-Akku 1100 mAh"
+        }
+      },
+      {
+        "id": "propwash:b6s_1300",
+        "name": {
+          "en": "6S 1300 mAh Battery",
+          "de": "6S-Akku 1300 mAh"
+        }
+      },
+      {
+        "id": "propwash:b6s_4000_lion",
+        "name": {
+          "en": "6S 4000 mAh Battery (Li-Ion)",
+          "de": "6S-Akku 4000 mAh (Li-Ion)"
+        }
+      }
+    ],
+    "accessory": [
+      {
+        "id": "propwash:led_strip",
+        "name": {
+          "en": "LED Strip",
+          "de": "LED-Streifen"
+        }
+      },
+      {
+        "id": "propwash:action_cam_light",
+        "name": {
+          "en": "Action Cam (Light)",
+          "de": "Action-Cam (Light)"
+        }
+      },
+      {
+        "id": "propwash:action_cam_heavy",
+        "name": {
+          "en": "Action Cam (Heavy)",
+          "de": "Action-Cam (Heavy)"
+        }
+      }
+    ],
+    "chemistry": [
+      {
+        "id": "propwash:lihv",
+        "name": null
+      },
+      {
+        "id": "propwash:lion",
+        "name": null
+      },
+      {
+        "id": "propwash:lipo",
+        "name": null
+      }
+    ]
+  },
+  "examples": {
+    "frame": {
+      "id": "propwash:freestyle_5",
+      "json": "{\n  \"format\": 1,\n  \"mass_g\": 125.0,\n  \"role\": \"freestyle\",\n  \"shape\": \"true_x\",\n  \"wheelbase_mm\": 225,\n  \"max_prop_mm\": 130,\n  \"motor_mounts\": [\"propwash:m22\"],\n  \"stack_mounts\": [\"propwash:s30\"],\n  \"accessory_mounts\": [\"top\", \"bottom\"],\n  \"battery\": {\"on_top\": true, \"plate_mm\": 30.0},\n  \"electronics_mm\": 12.0,\n  \"camera\": {\"pos\": [0.0, 17.2, -58.8], \"tilt_deg\": 28.0},\n  \"accessory_anchors\": {\n    \"top\": {\"pos\": [0.0, 34.7, -69.0], \"tilt_deg\": 22.0, \"length_mm\": 0.0},\n    \"bottom\": {\"pos\": [0.0, -3.0, -56.0], \"tilt_deg\": 30.0, \"length_mm\": 34.0}\n  },\n  \"aero\": {\"frontal_area_m2\": 0.012, \"drag_coefficient\": 0.9},\n  \"impact_tolerance\": 8.0,\n  \"battery_fit\": {\"cells\": [4, 6], \"max_mass_g\": 230.0, \"preferred_min_cells\": 6, \"preferred_min_capacity_mah\": 0},\n  \"sort\": 2\n}"
+    },
+    "stack": {
+      "id": "propwash:stack_30",
+      "json": "{\n  \"format\": 1,\n  \"mass_g\": 18.0,\n  \"mount\": \"propwash:s30\",\n  \"esc_continuous_a\": 55.0,\n  \"cells\": [3, 6],\n  \"all_in_one\": false,\n  \"sort\": 2\n}"
+    },
+    "motor": {
+      "id": "propwash:m2207_1750",
+      "json": "{\n  \"format\": 1,\n  \"mass_g\": 33.0,\n  \"stator\": \"2207\",\n  \"kv\": 1750,\n  \"mount\": \"propwash:m22\",\n  \"max_current_a\": 45.0,\n  \"resistance_ohm\": 0.055,\n  \"cells\": [6, 6],\n  \"sort\": 3,\n  \"visual\": {\"accent\": \"#e8b622\"}\n}"
+    },
+    "prop": {
+      "id": "propwash:p51_3b",
+      "json": "{\n  \"format\": 1,\n  \"mass_g\": 4.3,\n  \"diameter_mm\": 130,\n  \"pitch_in\": 4.6,\n  \"blades\": 3,\n  \"ct\": 0.12,\n  \"cp\": 0.06,\n  \"material\": \"polycarbonate\",\n  \"sort\": 3,\n  \"visual\": {\"accent\": \"#ff7a1a\"}\n}"
+    },
+    "video": {
+      "id": "propwash:analog_race",
+      "json": "{\n  \"format\": 1,\n  \"mass_g\": 8.0,\n  \"link\": \"analog\",\n  \"latency_ms\": 12,\n  \"range_blocks\": 380,\n  \"image_quality\": 0.65,\n  \"camera_width_mm\": 19.0,\n  \"camera_fov_deg\": 125.0,\n  \"power_w\": 3.5,\n  \"sort\": 1\n}"
+    },
+    "battery": {
+      "id": "propwash:b6s_1300",
+      "json": "{\n  \"format\": 1,\n  \"mass_g\": 210.0,\n  \"cells\": 6,\n  \"capacity_mah\": 1300,\n  \"cell_resistance_ohm\": 0.0055,\n  \"c_rating\": 120,\n  \"chemistry\": \"propwash:lipo\",\n  \"sort\": 3,\n  \"visual\": {\"accent\": \"#2f6fd6\"}\n}"
+    },
+    "accessory": {
+      "id": "propwash:action_cam_light",
+      "json": "{\n  \"format\": 1,\n  \"mass_g\": 42.0,\n  \"slot\": \"top\",\n  \"size_mm\": [46.0, 30.0, 26.0],\n  \"flight_battery_w\": 4.0,\n  \"frontal_area_m2\": 0.0014,\n  \"lens\": {\"x_mm\": 0.0, \"length_mm\": 7.0},\n  \"action_cam\": {\n    \"max_height\": 1080,\n    \"max_fps\": 60,\n    \"stabilization\": false,\n    \"horizon_levelling\": false,\n    \"own_battery_wh\": 0.0,\n    \"record_w\": 4.0,\n    \"max_record_w\": 4.0,\n    \"fov_deg\": 150.0,\n    \"image_quality\": 0.8,\n    \"low_light_noise\": 0.55,\n    \"sensor_in\": \"1/2.8\"\n  },\n  \"sort\": 1\n}"
+    },
+    "chemistry": {
+      "id": "propwash:lipo",
+      "json": "{\n  \"format\": 1,\n  \"full_v\": 4.2,\n  \"nominal_v\": 3.7,\n  \"empty_v\": 3.5,\n  \"cutoff_v\": 3.3,\n  \"storage_v\": 3.8,\n  \"density_g_cm3\": 2.0,\n  \"usable_fraction\": 0.8,\n  \"ocv_shape\": [0.0, 0.13, 0.2, 0.29, 0.34, 0.39, 0.43, 0.49, 0.57, 0.69, 0.83, 1.0]\n}"
+    },
+    "addon_frame": {
+      "id": "propwash_example:deadcat_5",
+      "json": "{\n  \"format\": 1,\n  \"mass_g\": 118.0,\n  \"creative\": false,\n  \"role\": \"freestyle\",\n  \"shape\": \"deadcat\",\n  \"wheelbase_mm\": 230,\n  \"max_prop_mm\": 130,\n  \"motor_mounts\": [\"propwash:m22\"],\n  \"stack_mounts\": [\"propwash:s30\", \"propwash:s20\"],\n  \"accessory_mounts\": [\"top\", \"bottom\"],\n  \"arms\": {\n    \"front_left\": {\"pos\": [-95.0, 0.0, -60.0], \"spin\": \"cw\"},\n    \"front_right\": {\"pos\": [95.0, 0.0, -60.0], \"spin\": \"ccw\"},\n    \"rear_left\": {\"pos\": [-80.0, 0.0, 80.0], \"spin\": \"ccw\"},\n    \"rear_right\": {\"pos\": [80.0, 0.0, 80.0], \"spin\": \"cw\"}\n  },\n  \"battery\": {\"on_top\": true, \"plate_mm\": 30.0},\n  \"electronics_mm\": 12.0,\n  \"camera\": {\"pos\": [0.0, 14.0, -100.0], \"tilt_deg\": 30.0},\n  \"center_of_mass_mm\": [0.0, 0.0, 6.0],\n  \"aero\": {\"frontal_area_m2\": 0.012, \"drag_coefficient\": 0.9},\n  \"impact_tolerance\": 8.0,\n  \"battery_fit\": {\"cells\": [4, 6], \"max_mass_g\": 260.0, \"preferred_min_cells\": 6, \"preferred_min_capacity_mah\": 0}\n}"
+    }
+  }
+}

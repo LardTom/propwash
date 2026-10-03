@@ -1,0 +1,374 @@
+{
+  "keys": [
+    {
+      "name": "kb_throttle_up",
+      "key": null,
+      "flightStick": true,
+      "title": {
+        "en": "Keyboard flight: throttle up",
+        "de": "Tastaturflug: Gas geben"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "kb_throttle_down",
+      "key": null,
+      "flightStick": true,
+      "title": {
+        "en": "Keyboard flight: throttle down",
+        "de": "Tastaturflug: Gas wegnehmen"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "kb_yaw_left",
+      "key": null,
+      "flightStick": true,
+      "title": {
+        "en": "Keyboard flight: yaw left",
+        "de": "Tastaturflug: Gieren links"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "kb_yaw_right",
+      "key": null,
+      "flightStick": true,
+      "title": {
+        "en": "Keyboard flight: yaw right",
+        "de": "Tastaturflug: Gieren rechts"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "kb_pitch_forward",
+      "key": "↑",
+      "flightStick": true,
+      "title": {
+        "en": "Keyboard flight: nose down (forward)",
+        "de": "Tastaturflug: Nase runter (vorwärts)"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "kb_pitch_back",
+      "key": "↓",
+      "flightStick": true,
+      "title": {
+        "en": "Keyboard flight: nose up (back)",
+        "de": "Tastaturflug: Nase hoch (rückwärts)"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "kb_roll_left",
+      "key": "←",
+      "flightStick": true,
+      "title": {
+        "en": "Keyboard flight: roll left",
+        "de": "Tastaturflug: Rollen links"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "kb_roll_right",
+      "key": "→",
+      "flightStick": true,
+      "title": {
+        "en": "Keyboard flight: roll right",
+        "de": "Tastaturflug: Rollen rechts"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "drone_arm",
+      "key": "Z",
+      "flightStick": false,
+      "title": {
+        "en": "Arm / disarm",
+        "de": "Scharf schalten / entschärfen"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "drone_flight_mode",
+      "key": "R",
+      "flightStick": false,
+      "title": {
+        "en": "Cycle flight mode (Acro/Angle/Horizon)",
+        "de": "Flugmodus wechseln"
+      },
+      "sharedWith": [
+        "gate_rotate"
+      ]
+    },
+    {
+      "name": "drone_mode_acro",
+      "key": "Numpad 1",
+      "flightStick": false,
+      "title": {
+        "en": "Flight mode: Acro",
+        "de": "Flugmodus: Acro"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "drone_mode_angle",
+      "key": "Numpad 2",
+      "flightStick": false,
+      "title": {
+        "en": "Flight mode: Angle",
+        "de": "Flugmodus: Angle"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "drone_mode_horizon",
+      "key": "Numpad 3",
+      "flightStick": false,
+      "title": {
+        "en": "Flight mode: Horizon",
+        "de": "Flugmodus: Horizon"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "drone_alt_hold",
+      "key": "Numpad 4",
+      "flightStick": false,
+      "title": {
+        "en": "Altitude hold (ALTHOLD)",
+        "de": "Höhe halten (ALTHOLD)"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "drone_pos_hold",
+      "key": "Numpad 5",
+      "flightStick": false,
+      "title": {
+        "en": "Position hold (POSHOLD)",
+        "de": "Position halten (POSHOLD)"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "drone_flip_upright",
+      "key": "U",
+      "flightStick": false,
+      "title": {
+        "en": "Flip upright",
+        "de": "Aufrichten"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "drone_exit",
+      "key": "Y",
+      "flightStick": false,
+      "title": {
+        "en": "Stop FPV flight",
+        "de": "FPV-Flug beenden"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "beeper",
+      "key": ".",
+      "flightStick": false,
+      "title": {
+        "en": "Locator beeper",
+        "de": "Suchpiepser"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "drone_leds",
+      "key": "F8",
+      "flightStick": false,
+      "title": {
+        "en": "LEDs on/off",
+        "de": "LEDs an/aus"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "receiver_wizard",
+      "key": null,
+      "flightStick": false,
+      "title": {
+        "en": "Open receiver wizard",
+        "de": "Empfänger-Assistent öffnen"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "rescue",
+      "key": "J",
+      "flightStick": false,
+      "title": {
+        "en": "GPS rescue",
+        "de": "GPS Rescue"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "set_home",
+      "key": ",",
+      "flightStick": false,
+      "title": {
+        "en": "Set home point",
+        "de": "Homepoint setzen"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "race_restart",
+      "key": "Backspace",
+      "flightStick": false,
+      "title": {
+        "en": "Restart race",
+        "de": "Rennen neu starten"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "configurator",
+      "key": "K",
+      "flightStick": false,
+      "title": {
+        "en": "Open configurator",
+        "de": "Konfigurator öffnen"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "flight_school",
+      "key": "M",
+      "flightStick": false,
+      "title": {
+        "en": "Flight school (hold over item)",
+        "de": "Flugschule (über Item halten)"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "action_cam_record",
+      "key": "F9",
+      "flightStick": false,
+      "title": {
+        "en": "Action cam recording",
+        "de": "Action-Cam-Aufnahme"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "video_spectate",
+      "key": "F7",
+      "flightStick": false,
+      "title": {
+        "en": "Spectate: next video channel",
+        "de": "Zuschauen: nächster Videokanal"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "gate_rotate",
+      "key": "R",
+      "flightStick": false,
+      "title": {
+        "en": "Rotate gate (sneak: change mount)",
+        "de": "Gate drehen (Schleichen: Lage)"
+      },
+      "sharedWith": [
+        "drone_flight_mode"
+      ]
+    }
+  ],
+  "switches": [
+    {
+      "name": "arm",
+      "title": {
+        "en": "Arm / disarm",
+        "de": "Scharf schalten / entschärfen"
+      }
+    },
+    {
+      "name": "angle",
+      "title": {
+        "en": "Angle mode",
+        "de": "Angle-Modus"
+      }
+    },
+    {
+      "name": "horizon",
+      "title": {
+        "en": "Horizon mode",
+        "de": "Horizon-Modus"
+      }
+    },
+    {
+      "name": "rescue",
+      "title": {
+        "en": "GPS rescue",
+        "de": "GPS Rescue"
+      }
+    },
+    {
+      "name": "flip_over",
+      "title": {
+        "en": "Flip upright",
+        "de": "Aufrichten"
+      }
+    },
+    {
+      "name": "set_home",
+      "title": {
+        "en": "Set home point",
+        "de": "Homepoint setzen"
+      }
+    },
+    {
+      "name": "beeper",
+      "title": {
+        "en": "Locator beeper",
+        "de": "Suchpiepser"
+      }
+    },
+    {
+      "name": "race_restart",
+      "title": {
+        "en": "Restart race",
+        "de": "Rennen neu starten"
+      }
+    },
+    {
+      "name": "record",
+      "title": {
+        "en": "Action cam recording",
+        "de": "Action-Cam-Aufnahme"
+      }
+    },
+    {
+      "name": "leds_off",
+      "title": {
+        "en": "LEDs off",
+        "de": "LEDs aus"
+      }
+    },
+    {
+      "name": "alt_hold",
+      "title": {
+        "en": "Altitude hold (ALTHOLD)",
+        "de": "Höhe halten (ALTHOLD)"
+      }
+    },
+    {
+      "name": "pos_hold",
+      "title": {
+        "en": "Position hold (POSHOLD)",
+        "de": "Position halten (POSHOLD)"
+      }
+    }
+  ]
+}
