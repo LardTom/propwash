@@ -146,8 +146,10 @@ The explanations are written in `tools/docs/pages/*.mjs` (English and German sid
 checks that the pages match the renderer, that every API type, part field, server setting and event has its
 explanation (and none is left for something that is gone), that the API history covers the current API version, that
 every example command is valid, and on every page: unique ids, working anchors and local links, English and German in
-pairs, balanced tags, real umlauts in German, and no personal names or local paths. When a release adds something, the
-test names the file and the entry to write.
+pairs, balanced tags, real umlauts in German, and no local paths or terms from the local denylist. When a release adds
+something, the test names the file and the entry to write. The denylist is not part of this repository: the test reads
+the same local file as the mod's public export (`PROPWASH_EXPORT_DENYLIST`, otherwise
+`~/.config/propwash/public-export-denylist.txt`, one term per line) and fails without it.
 
 The header navigation of the docs pages is copied from `index.html`: after adding or renaming a menu item there, run
 `node tools/build-docs.mjs --render-only` (`test-docs.mjs` fails until then). The license note of the API page is

@@ -95,8 +95,8 @@ export default function gamerulesPage(ctx) {
   ];
 
   const how = section('how', toc[0].title, `
-${P('World rules are Minecraft game rules of the world. They apply to every player in it, are saved with the world and reach every client from the server. With all rules at their defaults, drones fly exactly as before.',
-    'Welt-Regeln sind Minecraft-Spielregeln der Welt. Sie gelten für alle Spieler darin, werden mit der Welt gespeichert und erreichen jeden Client vom Server. Stehen alle Regeln auf Standard, fliegen Drohnen genau wie bisher.')}
+${P('World rules are Minecraft game rules of the world. They apply to every player in it, are saved with the world and reach every client from the server. With all rules at their defaults the flight model is exactly the same as in 0.4; the one difference is that drones now hit mobs and players (<em>Drones hit mobs and players</em>, on by default).',
+    'Welt-Regeln sind Minecraft-Spielregeln der Welt. Sie gelten für alle Spieler darin, werden mit der Welt gespeichert und erreichen jeden Client vom Server. Stehen alle Regeln auf Standard, rechnet das Flugmodell genau wie in 0.4; anders ist nur, dass Drohnen jetzt Lebewesen treffen (<em>Drohnen treffen Lebewesen</em>, Standard an).')}
 ${figure(ctx.prefix, ctx.images.world_rules, { en: 'The World rules tab in the Propwash configurator: physics, wind and weather, battery and crash rules with sliders and switches', de: 'Der Tab „Welt-Regeln“ im Propwash-Konfigurator: Physik, Wind und Wetter, Akku und Absturz mit Reglern und Schaltern' }, { en: 'Configurator (<kbd>K</kbd>) → <em>World rules</em>. Hover a rule for its explanation, default, range and command.', de: 'Konfigurator (<kbd>K</kbd>) → <em>Welt-Regeln</em>. Mit der Maus über einer Regel stehen Erklärung, Standard, Bereich und Befehl.' })}
 ${h3('how-change', 'Who can change them', 'Wer sie ändern darf')}
 ${list([
@@ -148,7 +148,7 @@ ${note('Back to normal: right-click a rule in the tab for its default, or use th
     ['The personal <em>Simulation</em> tab is gone; its physics options are world rules now. Old values in <code>config/propwash/drone.json</code> are ignored and removed on the next save.', 'Der persönliche Tab <em>Simulation</em> ist weg, seine Physik-Optionen sind jetzt Welt-Regeln. Alte Werte in <code>config/propwash/drone.json</code> werden ignoriert und beim nächsten Speichern entfernt.'],
     ['The server setting <code>partWear</code> in <code>server.json</code> is replaced by <code>/gamerule propwash:crash_damage false</code>.', 'Die Server-Einstellung <code>partWear</code> in <code>server.json</code> ersetzt <code>/gamerule propwash:crash_damage false</code>.'],
     ['Creative goggles no longer unlock physics options. They keep their free radio range and their own video settings.', 'Die Kreativ-Brille schaltet keine Physik-Optionen mehr frei. Sie behält ihre freie Funkreichweite und ihre eigenen Video-Einstellungen.'],
-    ['Existing worlds get every rule with its default when they are loaded.', 'Bestehende Welten bekommen beim Laden jede Regel mit ihrem Standardwert.'],
+    ['Existing worlds get every rule with its default when they are loaded. Drones then fly as in 0.4 but bounce off mobs and players; <code>/gamerule propwash:drone_hits_entities false</code> lets them fly through as before.', 'Bestehende Welten bekommen beim Laden jede Regel mit ihrem Standardwert. Drohnen fliegen dann wie in 0.4, prallen aber an Lebewesen ab; mit <code>/gamerule propwash:drone_hits_entities false</code> fliegen sie wie früher hindurch.'],
     ['Personal settings stay personal: controls, OSD, FPV display and graphics.', 'Persönlich bleibt, was persönlich ist: Steuerung, OSD, FPV-Anzeige und Grafik.'],
   ]));
 
