@@ -144,7 +144,9 @@ every example command is valid, and on every page: unique ids, working anchors a
 pairs, balanced tags, real umlauts in German, and no personal names or local paths. When a release adds something, the
 test names the file and the entry to write.
 
-The license note of the API page is `LICENSE_NOTE` in `tools/docs/pages/api.mjs`.
+The header navigation of the docs pages is copied from `index.html`: after adding or renaming a menu item there, run
+`node tools/build-docs.mjs --render-only` (`test-docs.mjs` fails until then). The license note of the API page is
+`LICENSE_NOTE` in `tools/docs/pages/api.mjs`.
 
 ## Preview
 
