@@ -25,6 +25,132 @@
       },
       "groups": [
         {
+          "version": "0.5.0",
+          "title": {
+            "en": "Learn, race, explore",
+            "de": "Lernen, fliegen, entdecken"
+          },
+          "items": [
+            {
+              "id": "flight-training",
+              "icon": "school",
+              "status": "done",
+              "title": {
+                "en": "Flight training",
+                "de": "Flugtraining"
+              },
+              "text": {
+                "en": "20 lessons you fly yourself – with stars, best times and a course right where your drone sits.",
+                "de": "20 Lektionen zum Selberfliegen – mit Sternen, Bestzeiten und einem Kurs direkt an deiner Drohne."
+              }
+            },
+            {
+              "id": "world-rules",
+              "icon": "globe",
+              "status": "done",
+              "title": {
+                "en": "World rules",
+                "de": "Welt-Regeln"
+              },
+              "text": {
+                "en": "Gravity, battery life, wind and more as game rules for everyone, with their own screen in the game.",
+                "de": "Schwerkraft, Akkulaufzeit, Wind und mehr als Spielregeln für alle, mit eigenem Bildschirm im Spiel."
+              }
+            },
+            {
+              "id": "tricks",
+              "icon": "flip",
+              "status": "done",
+              "title": {
+                "en": "Better tricks & combos",
+                "de": "Bessere Tricks & Kombos"
+              },
+              "text": {
+                "en": "26 tricks, detection that understands real flying, and chains for tricks flown back to back.",
+                "de": "26 Tricks, eine Erkennung, die echtes Fliegen versteht, und Ketten für Tricks am Stück."
+              }
+            },
+            {
+              "id": "flashback-cam",
+              "icon": "replay",
+              "status": "done",
+              "title": {
+                "en": "Flashback action cam",
+                "de": "Flashback-Action-Cam"
+              },
+              "text": {
+                "en": "Records your flight as a camera path for the Flashback replay mod – one scene per flight.",
+                "de": "Zeichnet deinen Flug als Kamerapfad für die Replay-Mod Flashback auf – eine Szene je Flug."
+              }
+            },
+            {
+              "id": "bandos",
+              "icon": "bando",
+              "status": "done",
+              "title": {
+                "en": "Bando spots",
+                "de": "Bandos in der Welt"
+              },
+              "text": {
+                "en": "Abandoned barns, factories, piers and mine heads in your world – made for freestyle lines.",
+                "de": "Verlassene Scheunen, Fabriken, Stege und Förderanlagen in deiner Welt – wie gemacht für Freestyle-Lines."
+              }
+            },
+            {
+              "id": "drone-hits",
+              "icon": "impact",
+              "status": "done",
+              "title": {
+                "en": "Drones hit mobs and players",
+                "de": "Drohnen treffen Mobs und Spieler"
+              },
+              "text": {
+                "en": "A flying drone bounces off mobs and players and hurts them by the force of the impact.",
+                "de": "Eine fliegende Drohne prallt an Mobs und Spielern ab und verletzt sie je nach Wucht."
+              }
+            },
+            {
+              "id": "gripper",
+              "icon": "gripper",
+              "status": "done",
+              "title": {
+                "en": "Gripper",
+                "de": "Greifer"
+              },
+              "text": {
+                "en": "A claw for your drone: pick up items while you hover low and drop them where you want.",
+                "de": "Eine Klaue für deine Drohne: Items im Tiefflug aufsammeln und abwerfen, wo du willst."
+              }
+            },
+            {
+              "id": "docs",
+              "icon": "book",
+              "status": "done",
+              "title": {
+                "en": "Docs on propwashfpv.com",
+                "de": "Doku auf propwashfpv.com"
+              },
+              "text": {
+                "en": "Guides and lookups for parts, settings and rules at propwashfpv.com/docs.",
+                "de": "Anleitungen und Nachschlagen zu Teilen, Einstellungen und Regeln unter propwashfpv.com/docs."
+              }
+            },
+            {
+              "id": "source-available",
+              "icon": "code",
+              "status": "done",
+              "title": {
+                "en": "Source code goes public",
+                "de": "Quellcode wird öffentlich"
+              },
+              "text": {
+                "en": "Anyone can read the code: the mod under PolyForm Shield, the add-on API under MIT.",
+                "de": "Alle können den Code lesen: die Mod unter PolyForm Shield, die Add-on-API unter MIT."
+              }
+            }
+          ]
+        },
+        {
           "version": "0.4.0",
           "title": {
             "en": "Parts API & add-ons",
@@ -169,146 +295,6 @@
       },
       "groups": [
         {
-          "version": "0.5.0",
-          "title": {
-            "en": "Learn, race, explore",
-            "de": "Lernen, fliegen, entdecken"
-          },
-          "items": [
-            {
-              "id": "flight-training",
-              "icon": "school",
-              "status": "progress",
-              "title": {
-                "en": "Interactive Flight School",
-                "de": "Interaktive Flugschule"
-              },
-              "text": {
-                "en": "Fly the lessons yourself – with stars, best times and a course right where your drone sits.",
-                "de": "Flieg die Lektionen selbst – mit Sternen, Bestzeiten und einem Kurs direkt an deiner Drohne."
-              }
-            },
-            {
-              "id": "world-rules",
-              "icon": "globe",
-              "status": "progress",
-              "title": {
-                "en": "World rules",
-                "de": "Welt-Regeln"
-              },
-              "text": {
-                "en": "Gravity, battery life, wind and more as game rules for everyone, with their own screen in the game.",
-                "de": "Schwerkraft, Akkulaufzeit, Wind und mehr als Spielregeln für alle, mit eigenem Bildschirm im Spiel."
-              }
-            },
-            {
-              "id": "tricks",
-              "icon": "flip",
-              "status": "progress",
-              "title": {
-                "en": "Better tricks & combos",
-                "de": "Bessere Tricks & Kombos"
-              },
-              "text": {
-                "en": "Trick detection that understands real flying, new tricks, and combos for tricks flown back to back.",
-                "de": "Trick-Erkennung, die echtes Fliegen versteht, neue Tricks und Kombos für Tricks am Stück."
-              }
-            },
-            {
-              "id": "flashback-cam",
-              "icon": "replay",
-              "status": "progress",
-              "title": {
-                "en": "Flashback action cam",
-                "de": "Flashback-Action-Cam"
-              },
-              "text": {
-                "en": "Works with the Flashback replay mod: replay and film your flights from the drone's camera.",
-                "de": "Zusammen mit der Replay-Mod Flashback: Flüge aus der Drohnenkamera nachträglich ansehen und filmen."
-              }
-            },
-            {
-              "id": "bandos",
-              "icon": "bando",
-              "status": "progress",
-              "title": {
-                "en": "Bando spots",
-                "de": "Bandos in der Welt"
-              },
-              "text": {
-                "en": "Abandoned buildings to discover in your world – made for freestyle lines.",
-                "de": "Verlassene Gebäude in deiner Welt entdecken – wie gemacht für Freestyle-Lines."
-              }
-            },
-            {
-              "id": "drone-hits",
-              "icon": "impact",
-              "status": "progress",
-              "title": {
-                "en": "Drones hit mobs and players",
-                "de": "Drohnen treffen Mobs und Spieler"
-              },
-              "text": {
-                "en": "A flying drone bounces off mobs and players and hurts them by the force of the impact.",
-                "de": "Eine fliegende Drohne prallt an Mobs und Spielern ab und verletzt sie je nach Wucht."
-              }
-            },
-            {
-              "id": "gripper",
-              "icon": "gripper",
-              "status": "progress",
-              "title": {
-                "en": "Gripper",
-                "de": "Greifer"
-              },
-              "text": {
-                "en": "A claw for your drone: pick up items while you hover low and drop them where you want.",
-                "de": "Eine Klaue für deine Drohne: Items im Tiefflug aufsammeln und abwerfen, wo du willst."
-              }
-            },
-            {
-              "id": "docs",
-              "icon": "book",
-              "status": "progress",
-              "title": {
-                "en": "Docs on propwashfpv.com",
-                "de": "Doku auf propwashfpv.com"
-              },
-              "text": {
-                "en": "Guides and lookups for parts, settings and rules at propwashfpv.com/docs.",
-                "de": "Anleitungen und Nachschlagen zu Teilen, Einstellungen und Regeln unter propwashfpv.com/docs."
-              }
-            },
-            {
-              "id": "source-available",
-              "icon": "code",
-              "status": "progress",
-              "title": {
-                "en": "Source code goes public",
-                "de": "Quellcode wird öffentlich"
-              },
-              "text": {
-                "en": "Anyone can read the code: the mod under PolyForm Shield, the add-on API under MIT.",
-                "de": "Alle können den Code lesen: die Mod unter PolyForm Shield, die Add-on-API unter MIT."
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "next",
-      "icon": "arrow",
-      "label": {
-        "en": "Next",
-        "de": "Als Nächstes"
-      },
-      "title": {
-        "en": "In the coming weeks",
-        "de": "In den kommenden Wochen"
-      },
-      "groups": [
-        {
           "version": "0.5.1",
           "title": {
             "en": "Bug fixes",
@@ -329,7 +315,21 @@
               }
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "icon": "arrow",
+      "label": {
+        "en": "Next",
+        "de": "Als Nächstes"
+      },
+      "title": {
+        "en": "In the coming weeks",
+        "de": "In den kommenden Wochen"
+      },
+      "groups": [
         {
           "title": {
             "en": "For more Minecraft versions",
