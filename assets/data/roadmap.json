@@ -1,0 +1,456 @@
+{
+  "schema": 1,
+  "horizons": [
+    {
+      "id": "released",
+      "icon": "flag",
+      "label": {
+        "en": "Released",
+        "de": "Erschienen"
+      },
+      "title": {
+        "en": "Out now",
+        "de": "Schon da"
+      },
+      "intro": {
+        "en": "Everything here is in the current version – download it and fly.",
+        "de": "Alles hier steckt in der aktuellen Version – runterladen und losfliegen."
+      },
+      "link": {
+        "href": "https://www.curseforge.com/minecraft/mc-mods/propwash-fpv",
+        "label": {
+          "en": "Download on CurseForge",
+          "de": "Download auf CurseForge"
+        }
+      },
+      "groups": [
+        {
+          "version": "0.4.0",
+          "title": {
+            "en": "Parts API & add-ons",
+            "de": "Parts-API & Add-ons"
+          },
+          "items": [
+            {
+              "id": "parts-api",
+              "icon": "puzzle",
+              "status": "done",
+              "title": {
+                "en": "Parts from add-ons",
+                "de": "Teile aus Add-ons"
+              },
+              "text": {
+                "en": "Other mods can add frames, motors, props, batteries and more – the first add-on is Just More Parts.",
+                "de": "Andere Mods können Rahmen, Motoren, Props, Akkus und mehr beisteuern – das erste Add-on ist Just More Parts."
+              }
+            },
+            {
+              "id": "flight-times",
+              "icon": "battery",
+              "status": "done",
+              "title": {
+                "en": "Realistic flight times & battery",
+                "de": "Realistische Flugzeiten & Akku"
+              },
+              "text": {
+                "en": "Packs run empty like real ones, and the workbench shows how long your drone flies.",
+                "de": "Akkus leeren sich wie echte, und die Werkbank zeigt, wie lange deine Drohne fliegt."
+              }
+            },
+            {
+              "id": "props-in-view",
+              "icon": "prop",
+              "status": "done",
+              "title": {
+                "en": "Props in the FPV view",
+                "de": "Props im FPV-Bild"
+              },
+              "text": {
+                "en": "Your props show where a real camera would see them – spinning ones as a soft blur.",
+                "de": "Deine Props sind dort zu sehen, wo eine echte Kamera sie sähe – drehende als weicher Schleier."
+              }
+            },
+            {
+              "id": "gate-mounts",
+              "icon": "gate",
+              "status": "done",
+              "title": {
+                "en": "Gates on walls and ceilings",
+                "de": "Gates an Wand und Decke"
+              },
+              "text": {
+                "en": "Dive gates, side gates and windows: place any gate on a floor, wall or ceiling.",
+                "de": "Tauchtore, seitliche Gates und Fenster: jedes Gate auf Boden, Wand oder Decke."
+              }
+            },
+            {
+              "id": "item-frames",
+              "icon": "frame",
+              "status": "done",
+              "title": {
+                "en": "Drones in item frames",
+                "de": "Drohnen im Rahmen"
+              },
+              "text": {
+                "en": "Hang drones, frames and props on the wall like a trophy, or show them off on shelves.",
+                "de": "Drohnen, Rahmen und Props hängen wie eine Trophäe an der Wand oder stehen im Regal."
+              }
+            },
+            {
+              "id": "camera-fov",
+              "icon": "fov",
+              "status": "done",
+              "title": {
+                "en": "Field of view from the camera",
+                "de": "Sichtfeld von der Kamera"
+              },
+              "text": {
+                "en": "Your FPV field of view comes from the camera in the video unit, like on a real quad.",
+                "de": "Dein FPV-Sichtfeld kommt von der Kamera im Videomodul, wie bei einem echten Quad."
+              }
+            },
+            {
+              "id": "camera-angle",
+              "icon": "tilt",
+              "status": "done",
+              "title": {
+                "en": "Camera angle per drone",
+                "de": "Kamerawinkel pro Drohne"
+              },
+              "text": {
+                "en": "Every drone keeps its own camera angle, set in its service menu.",
+                "de": "Jede Drohne behält ihren eigenen Kamerawinkel, eingestellt in ihrer Wartung."
+              }
+            },
+            {
+              "id": "gravity",
+              "icon": "gravity",
+              "status": "done",
+              "title": {
+                "en": "Gravity slider",
+                "de": "Schwerkraft-Regler"
+              },
+              "text": {
+                "en": "Make drones feel lighter or heavier – it becomes a world rule in 0.5.0.",
+                "de": "Drohnen leichter oder schwerer fliegen lassen – wird in 0.5.0 zur Welt-Regel."
+              }
+            },
+            {
+              "id": "fixes-040",
+              "icon": "wrench",
+              "status": "done",
+              "title": {
+                "en": "Lots of fixes",
+                "de": "Viele Fehler behoben"
+              },
+              "text": {
+                "en": "Crashed drones fall properly, no more OSD stutter, clearer battery warnings and more.",
+                "de": "Abgestürzte Drohnen fallen richtig, kein Ruckeln mehr durchs OSD, klarere Akku-Warnungen und mehr."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "now",
+      "icon": "prop",
+      "label": {
+        "en": "Now",
+        "de": "Jetzt"
+      },
+      "title": {
+        "en": "In the next release",
+        "de": "Im nächsten Update"
+      },
+      "intro": {
+        "en": "Being built and tested right now for the next update.",
+        "de": "Wird gerade für das nächste Update gebaut und getestet."
+      },
+      "groups": [
+        {
+          "version": "0.5.0",
+          "title": {
+            "en": "Learn, race, explore",
+            "de": "Lernen, fliegen, entdecken"
+          },
+          "items": [
+            {
+              "id": "flight-training",
+              "icon": "school",
+              "status": "progress",
+              "title": {
+                "en": "Interactive Flight School",
+                "de": "Interaktive Flugschule"
+              },
+              "text": {
+                "en": "Fly the lessons yourself – with stars, best times and a course right where your drone sits.",
+                "de": "Flieg die Lektionen selbst – mit Sternen, Bestzeiten und einem Kurs direkt an deiner Drohne."
+              }
+            },
+            {
+              "id": "world-rules",
+              "icon": "globe",
+              "status": "progress",
+              "title": {
+                "en": "World rules",
+                "de": "Welt-Regeln"
+              },
+              "text": {
+                "en": "Gravity, battery life, wind and more as game rules for everyone, with their own screen in the game.",
+                "de": "Schwerkraft, Akkulaufzeit, Wind und mehr als Spielregeln für alle, mit eigenem Bildschirm im Spiel."
+              }
+            },
+            {
+              "id": "tricks",
+              "icon": "flip",
+              "status": "progress",
+              "title": {
+                "en": "Better tricks & combos",
+                "de": "Bessere Tricks & Kombos"
+              },
+              "text": {
+                "en": "Trick detection that understands real flying, new tricks, and combos for tricks flown back to back.",
+                "de": "Trick-Erkennung, die echtes Fliegen versteht, neue Tricks und Kombos für Tricks am Stück."
+              }
+            },
+            {
+              "id": "flashback-cam",
+              "icon": "replay",
+              "status": "progress",
+              "title": {
+                "en": "Flashback action cam",
+                "de": "Flashback-Action-Cam"
+              },
+              "text": {
+                "en": "Works with the Flashback replay mod: replay and film your flights from the drone's camera.",
+                "de": "Zusammen mit der Replay-Mod Flashback: Flüge aus der Drohnenkamera nachträglich ansehen und filmen."
+              }
+            },
+            {
+              "id": "bandos",
+              "icon": "bando",
+              "status": "progress",
+              "title": {
+                "en": "Bando spots",
+                "de": "Bandos in der Welt"
+              },
+              "text": {
+                "en": "Abandoned buildings to discover in your world – made for freestyle lines.",
+                "de": "Verlassene Gebäude in deiner Welt entdecken – wie gemacht für Freestyle-Lines."
+              }
+            },
+            {
+              "id": "drone-hits",
+              "icon": "impact",
+              "status": "progress",
+              "title": {
+                "en": "Drones hit mobs and players",
+                "de": "Drohnen treffen Mobs und Spieler"
+              },
+              "text": {
+                "en": "A flying drone bounces off mobs and players and hurts them by the force of the impact.",
+                "de": "Eine fliegende Drohne prallt an Mobs und Spielern ab und verletzt sie je nach Wucht."
+              }
+            },
+            {
+              "id": "gripper",
+              "icon": "gripper",
+              "status": "progress",
+              "title": {
+                "en": "Gripper",
+                "de": "Greifer"
+              },
+              "text": {
+                "en": "A claw for your drone: pick up items while you hover low and drop them where you want.",
+                "de": "Eine Klaue für deine Drohne: Items im Tiefflug aufsammeln und abwerfen, wo du willst."
+              }
+            },
+            {
+              "id": "docs",
+              "icon": "book",
+              "status": "progress",
+              "title": {
+                "en": "Docs on propwashfpv.com",
+                "de": "Doku auf propwashfpv.com"
+              },
+              "text": {
+                "en": "Guides and lookups for parts, settings and rules at propwashfpv.com/docs.",
+                "de": "Anleitungen und Nachschlagen zu Teilen, Einstellungen und Regeln unter propwashfpv.com/docs."
+              }
+            },
+            {
+              "id": "source-available",
+              "icon": "code",
+              "status": "progress",
+              "title": {
+                "en": "Source code goes public",
+                "de": "Quellcode wird öffentlich"
+              },
+              "text": {
+                "en": "Anyone can read the code: the mod under PolyForm Shield, the add-on API under MIT.",
+                "de": "Alle können den Code lesen: die Mod unter PolyForm Shield, die Add-on-API unter MIT."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "icon": "arrow",
+      "label": {
+        "en": "Next",
+        "de": "Als Nächstes"
+      },
+      "title": {
+        "en": "In the coming weeks",
+        "de": "In den kommenden Wochen"
+      },
+      "groups": [
+        {
+          "version": "0.5.1",
+          "title": {
+            "en": "Bug fixes",
+            "de": "Fehlerbehebungen"
+          },
+          "items": [
+            {
+              "id": "fixes-051",
+              "icon": "bug",
+              "status": "planned",
+              "title": {
+                "en": "Bug fix release",
+                "de": "Bugfix-Update"
+              },
+              "text": {
+                "en": "Fixes for what you find and report after 0.5.0.",
+                "de": "Korrekturen für das, was du nach 0.5.0 findest und meldest."
+              }
+            }
+          ]
+        },
+        {
+          "title": {
+            "en": "For more Minecraft versions",
+            "de": "Für weitere Minecraft-Versionen"
+          },
+          "items": [
+            {
+              "id": "port-1-21-1",
+              "icon": "port",
+              "status": "planned",
+              "title": {
+                "en": "Minecraft 1.21.1",
+                "de": "Minecraft 1.21.1"
+              },
+              "text": {
+                "en": "A one-time port of a stable 0.5 version for Fabric and NeoForge, without the add-on API.",
+                "de": "Einmalige Portierung einer stabilen 0.5-Version für Fabric und NeoForge, ohne Add-on-API."
+              }
+            },
+            {
+              "id": "port-26-2",
+              "icon": "port",
+              "status": "planned",
+              "title": {
+                "en": "Minecraft 26.2",
+                "de": "Minecraft 26.2"
+              },
+              "text": {
+                "en": "The same one-time port for 26.2, also for Fabric and NeoForge and without the add-on API.",
+                "de": "Dieselbe einmalige Portierung für 26.2, ebenfalls für Fabric und NeoForge und ohne Add-on-API."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "later",
+      "icon": "compass",
+      "label": {
+        "en": "Later",
+        "de": "Später"
+      },
+      "title": {
+        "en": "In the coming months",
+        "de": "In den kommenden Monaten"
+      },
+      "groups": [
+        {
+          "items": [
+            {
+              "id": "cinematic-drones",
+              "icon": "cinema",
+              "status": "planned",
+              "title": {
+                "en": "Cinematic Drones add-on",
+                "de": "Add-on Cinematic Drones"
+              },
+              "text": {
+                "en": "A GPS camera drone for smooth shots: waypoints, orbits around a point, follow-me and a gimbal.",
+                "de": "Eine GPS-Kameradrohne für ruhige Aufnahmen: Wegpunkte, Kreisflug um einen Punkt, Follow-me und Gimbal."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ideas",
+      "icon": "bulb",
+      "label": {
+        "en": "Ideas",
+        "de": "Ideen"
+      },
+      "title": {
+        "en": "Being considered",
+        "de": "In Überlegung"
+      },
+      "intro": {
+        "en": "Not promised yet. If you want one of these – or something else – say so on the Discord.",
+        "de": "Noch nicht versprochen. Wenn du dir etwas davon wünschst – oder etwas ganz anderes –, sag es auf dem Discord."
+      },
+      "groups": [
+        {
+          "items": [
+            {
+              "id": "forge",
+              "icon": "anvil",
+              "status": "idea",
+              "title": {
+                "en": "Forge support",
+                "de": "Forge-Unterstützung"
+              },
+              "text": {
+                "en": "A Forge version, if enough players ask for it.",
+                "de": "Eine Forge-Version, wenn genug Spieler danach fragen."
+              }
+            },
+            {
+              "id": "community",
+              "icon": "chat",
+              "status": "idea",
+              "title": {
+                "en": "Your idea",
+                "de": "Deine Idee"
+              },
+              "text": {
+                "en": "More ideas come from the community – share yours on the Discord.",
+                "de": "Weitere Ideen kommen aus der Community – teil deine auf dem Discord."
+              },
+              "link": {
+                "href": "https://discord.gg/bNhkSXYSgZ",
+                "label": {
+                  "en": "Join the Discord",
+                  "de": "Discord beitreten"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

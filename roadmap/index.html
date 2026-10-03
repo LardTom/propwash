@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="Roadmap – Propwash FPV" data-title-de="Roadmap – Propwash FPV" data-description-en="What’s out, what’s being built right now and what comes next for Propwash FPV, the FPV drone mod for Minecraft – with rough horizons instead of fixed dates." data-description-de="Was es schon gibt, woran gerade gebaut wird und was als Nächstes kommt: die Roadmap von Propwash FPV, der FPV-Drohnen-Mod für Minecraft – mit groben Zeitangaben statt fester Termine.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roadmap – Propwash FPV</title>
+<meta name="description" content="What’s out, what’s being built right now and what comes next for Propwash FPV, the FPV drone mod for Minecraft – with rough horizons instead of fixed dates.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="Roadmap – Propwash FPV">
+<meta property="og:description" content="What’s out, what’s being built right now and what comes next for Propwash FPV – with rough horizons instead of fixed dates.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="FPV view through the goggles in Propwash FPV: flying towards the checkered start/finish gate with the Betaflight-style OSD">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Roadmap – Propwash FPV">
+<meta name="twitter:description" content="What’s out, what’s being built right now and what comes next for Propwash FPV – with rough horizons instead of fixed dates.">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/roadmap.css">
+<link rel="modulepreload" href="../assets/js/roadmap/data.js">
+<link rel="preload" href="../assets/data/roadmap.json" as="fetch" type="application/json" crossorigin>
+<script>
+(function () {
+  var d = document.documentElement, lang = null;
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="rm-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+  <symbol id="ri-check" viewBox="0 0 16 16"><path d="M3.2 8.6 6.4 11.8 12.8 4.6"/></symbol>
+  <symbol id="ri-circle" viewBox="0 0 16 16"><circle cx="8" cy="8" r="4.6"/></symbol>
+  <symbol id="ri-spark" viewBox="0 0 16 16"><path d="M8 2.6c.5 2.8 2.1 4.4 5 5-2.9.6-4.5 2.2-5 5-.5-2.8-2.1-4.4-5-5 2.9-.6 4.5-2.2 5-5z"/></symbol>
+  <symbol id="ri-arrow-right" viewBox="0 0 16 16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5"/></symbol>
+  <symbol id="ri-arrow-down" viewBox="0 0 16 16"><path d="M8 3v10M3.5 8.5 8 13l4.5-4.5"/></symbol>
+  <symbol id="ri-chevron" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></symbol>
+  <symbol id="ri-flag" viewBox="0 0 16 16"><path d="M3.5 14.5V1.8"/><path d="M3.5 2.6h9.6v6.6H3.5"/><path fill="currentColor" stroke="none" d="M3.5 2.6h3.2v3.3H3.5zM9.9 2.6h3.2v3.3H9.9zM6.7 5.9h3.2v3.3H6.7z"/></symbol>
+  <symbol id="ri-prop" viewBox="0 0 16 16"><circle cx="8" cy="8" r="1.5"/><path d="M8 6.5C7 4.9 7.1 2.8 8.3 1.6c1.3.9 1.4 3.2-.3 4.9z"/><path d="M8 6.5C7 4.9 7.1 2.8 8.3 1.6c1.3.9 1.4 3.2-.3 4.9z" transform="rotate(120 8 8)"/><path d="M8 6.5C7 4.9 7.1 2.8 8.3 1.6c1.3.9 1.4 3.2-.3 4.9z" transform="rotate(240 8 8)"/></symbol>
+  <symbol id="ri-arrow" viewBox="0 0 16 16"><path d="M5.5 8h8M10.5 4.5 14 8l-3.5 3.5"/><path d="M1.8 5.2h2.4M1.8 10.8h2.4M2.6 8h1"/></symbol>
+  <symbol id="ri-compass" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.3"/><path d="M10.8 5.2 9.1 9.1 5.2 10.8 6.9 6.9z"/></symbol>
+  <symbol id="ri-bulb" viewBox="0 0 16 16"><path d="M5.9 11.1c0-1.5-2.1-2.5-2.1-5a4.2 4.2 0 0 1 8.4 0c0 2.5-2.1 3.5-2.1 5z"/><path d="M6.2 13.1h3.6M6.9 14.9h2.2"/></symbol>
+  <symbol id="ri-puzzle" viewBox="0 0 16 16"><path d="M2.4 4.6h3a1.6 1.6 0 1 1 3.2 0h3v3a1.6 1.6 0 1 1 0 3.2v3.1H2.4z"/></symbol>
+  <symbol id="ri-battery" viewBox="0 0 16 16"><rect x="1.8" y="4.6" width="11" height="6.8" rx="1.2"/><path d="M14.4 6.7v2.6"/><path fill="currentColor" stroke="none" d="M3.6 6.4h4.6v3.2H3.6z"/></symbol>
+  <symbol id="ri-gate" viewBox="0 0 16 16"><path d="M2.6 14V3h10.8v11"/><path d="M5.2 14V5.6h5.6V14"/><path d="M1 14h14"/></symbol>
+  <symbol id="ri-frame" viewBox="0 0 16 16"><rect x="2" y="2" width="12" height="12" rx="1"/><rect x="4.4" y="4.4" width="7.2" height="7.2"/><path d="M6.3 6.3l3.4 3.4M9.7 6.3 6.3 9.7"/></symbol>
+  <symbol id="ri-fov" viewBox="0 0 16 16"><path d="M2.6 8 13.6 3M2.6 8l11 5"/><path d="M10.9 4.2a9.6 9.6 0 0 1 0 7.6"/><circle fill="currentColor" stroke="none" cx="2.6" cy="8" r="1.4"/></symbol>
+  <symbol id="ri-tilt" viewBox="0 0 16 16"><g transform="translate(0 -1) rotate(-28 7 9)"><rect x="2" y="6.4" width="7.4" height="5.2" rx="1.1"/><path d="M9.4 8 13 6.4v5.2L9.4 10"/></g><path d="M1.4 14.4h13.2" stroke-dasharray="1.6 1.8"/></symbol>
+  <symbol id="ri-gravity" viewBox="0 0 16 16"><path d="M8 1.8v8.6M4.5 7 8 10.5 11.5 7"/><path d="M2.4 13.6h11.2"/></symbol>
+  <symbol id="ri-wrench" viewBox="0 0 16 16"><path d="M13.6 4.6a3.5 3.5 0 0 1-4.7 4l-5 5a1.35 1.35 0 0 1-1.9-1.9l5-5a3.5 3.5 0 0 1 4-4.7L9.2 3.8l.4 2 2 .4z"/></symbol>
+  <symbol id="ri-school" viewBox="0 0 16 16"><path d="M1.4 6.2 8 3l6.6 3.2L8 9.4z"/><path d="M4.2 7.6v3.2c1.9 1.6 5.7 1.6 7.6 0V7.6"/><path d="M14.6 6.2v4.2"/></symbol>
+  <symbol id="ri-globe" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.2"/><path d="M1.8 8h12.4M8 1.8c-2.4 2.4-2.4 10 0 12.4M8 1.8c2.4 2.4 2.4 10 0 12.4"/></symbol>
+  <symbol id="ri-flip" viewBox="0 0 16 16"><path d="M2.4 12.2a5.6 5.6 0 0 1 11.2 0"/><path d="M11.2 10.6l2.4 1.6 1.6-2.4"/><path d="M6.6 5.2l2.8 2.8M9.4 5.2 6.6 8"/></symbol>
+  <symbol id="ri-replay" viewBox="0 0 16 16"><path d="M3.1 5.1A5.6 5.6 0 1 1 2.4 8"/><path d="M2.6 2.2v3h3"/><path fill="currentColor" stroke="none" d="M6.6 5.3v5.4L10.9 8z"/></symbol>
+  <symbol id="ri-bando" viewBox="0 0 16 16"><path d="M2.2 14V6.4L8 2.6l5.8 3.8V14"/><path d="M1 14h14"/><path d="M6.5 14v-3.6h3V14"/><path d="M4.5 8.2h1.6M9.9 8.2h1.6"/><path d="M11.6 4.8l-1 1.4 1 1"/></symbol>
+  <symbol id="ri-impact" viewBox="0 0 16 16"><path d="M8 1.6l1.4 3.8 3.9-1.3-2 3.5 3.4 2.1-4 .5.4 4L8 11.6l-3.1 2.6.4-4-4-.5 3.4-2.1-2-3.5 3.9 1.3z"/></symbol>
+  <symbol id="ri-gripper" viewBox="0 0 16 16"><path d="M8 1.4v3.4"/><circle cx="8" cy="6.2" r="1.4"/><path d="M6.8 7C5 8.2 4.4 10.6 5.4 12.8l1.3-.5"/><path d="M9.2 7c1.8 1.2 2.4 3.6 1.4 5.8l-1.3-.5"/><path d="M8 7.6v3.6"/></symbol>
+  <symbol id="ri-book" viewBox="0 0 16 16"><path d="M8 4.3C6.5 3.1 4.3 2.8 2 3.2v9.6c2.3-.4 4.5-.1 6 1.1 1.5-1.2 3.7-1.5 6-1.1V3.2c-2.3-.4-4.5-.1-6 1.1z"/><path d="M8 4.3v9.6"/></symbol>
+  <symbol id="ri-code" viewBox="0 0 16 16"><path d="M5.4 4.4 1.8 8l3.6 3.6M10.6 4.4 14.2 8l-3.6 3.6M9.2 2.8 6.8 13.2"/></symbol>
+  <symbol id="ri-bug" viewBox="0 0 16 16"><rect x="5.2" y="5" width="5.6" height="8.4" rx="2.8"/><path d="M8 7.6v5.6"/><path d="M5.2 8.8H2.4M13.6 8.8h-2.8M5.4 11.8l-2.2 1.5M10.6 11.8l2.2 1.5M5.6 6 3.8 4.3M10.4 6l1.8-1.7M6.4 3.2 7 4.4M9.6 3.2 9 4.4"/></symbol>
+  <symbol id="ri-port" viewBox="0 0 16 16"><path d="M13.6 5H3.4M6 2.4 3.4 5 6 7.6M2.4 11h10.2M10 8.4l2.6 2.6-2.6 2.6"/></symbol>
+  <symbol id="ri-cinema" viewBox="0 0 16 16"><path d="M1.6 3.4h12.8"/><path d="M4.4 1.8v3.2M11.6 1.8v3.2"/><path d="M8 3.4v2.8"/><rect x="4.6" y="6.2" width="6.8" height="5.6" rx="1.2"/><circle cx="8" cy="9" r="1.5"/><path d="M5.2 14.4h5.6"/></symbol>
+  <symbol id="ri-anvil" viewBox="0 0 16 16"><path d="M2.2 4.6H11c.2 1.7 1.3 2.7 3 2.9v.6h-3.1L9.6 10.2H6.4L5 8.1H4.3C3 8.1 2.3 6.9 2.2 4.6z"/><path d="M6.4 10.2 5.6 13.4h4.8l-.8-3.2"/><path d="M4 13.4h8"/></symbol>
+  <symbol id="ri-chat" viewBox="0 0 16 16"><path d="M2.4 3.2h11.2v7.6H7.4l-3 2.6v-2.6h-2z"/><path d="M5.4 7h.1M8 7h.1M10.6 7h.1" stroke-width="2.2"/></symbol>
+</svg>
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="de">Zum Inhalt springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
+      <a href="../#how"><span lang="en">How it works</span><span lang="de">So geht’s</span></a>
+      <a href="../#flight"><span lang="en">Flight</span><span lang="de">Flug</span></a>
+      <a href="../#video">Video</a>
+      <a href="../#racing"><span lang="en">Racing</span><span lang="de">Rennen</span></a>
+      <a href="../#gallery"><span lang="en">Screenshots</span><span lang="de">Bilder</span></a>
+      <a href="../#faq">FAQ</a>
+      <a href="../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+      <a href="../docs/"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a href="./" aria-current="page">Roadmap</a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="16" height="16"><use href="#i-discord"/></svg> Discord</a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="rm-hero" id="top" aria-labelledby="rm-title">
+    <div class="wrap rm-hero__grid">
+      <div class="rm-hero__copy">
+        <p class="kicker">Roadmap</p>
+        <h1 id="rm-title" class="rm-hero__title"><span lang="en">Where Propwash flies next</span><span lang="de">Wohin Propwash als Nächstes fliegt</span></h1>
+        <p class="rm-hero__lead" lang="en">What’s out, what’s being built right now and what comes after&nbsp;– with rough horizons instead of fixed dates. Plans can change, and the Discord is where you can have your say.</p>
+        <p class="rm-hero__lead" lang="de">Was es schon gibt, woran gerade gebaut wird und was danach kommt&nbsp;– mit groben Zeitangaben statt fester Termine. Pläne können sich ändern, und auf dem Discord redest du mit.</p>
+        <ul class="rm-tally" role="list" data-rm-tally hidden></ul>
+        <nav class="rm-jump" aria-label="Roadmap sections" data-de-aria-label="Abschnitte der Roadmap" data-rm-jump hidden></nav>
+      </div>
+      <aside class="rm-now" aria-label="Next release" data-de-aria-label="Nächstes Release" data-rm-current hidden></aside>
+    </div>
+  </section>
+
+  <div class="rm-root" data-rm-root>
+    <div class="wrap">
+      <p class="rm-status needs-js" role="status" data-rm-status><span lang="en">Loading the roadmap …</span><span lang="de">Roadmap wird geladen …</span></p>
+      <noscript>
+        <p class="rm-status is-error"><span lang="en">The roadmap needs JavaScript. News about the next releases is also posted on the <a href="https://discord.gg/bNhkSXYSgZ" rel="noopener">Discord</a>.</span><span lang="de">Die Roadmap braucht JavaScript. Neuigkeiten zu den nächsten Releases gibt es auch auf dem <a href="https://discord.gg/bNhkSXYSgZ" rel="noopener">Discord</a>.</span></p>
+      </noscript>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a> · <a href="./">Roadmap</a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p lang="en">Propwash FPV is an original mod. It is not affiliated with Betaflight, EdgeTX, OpenTX or any drone manufacturer.</p>
+      <p lang="de">Propwash FPV ist eine eigenständige Mod und steht in keiner Verbindung zu Betaflight, EdgeTX, OpenTX oder einem Drohnenhersteller.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice and whether you paused the animations are kept in your browser. Fonts: <a href="../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (both SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl und ob du die Animationen angehalten hast, bleiben in deinem Browser. Schriften: <a href="../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (beide SIL Open Font License), direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js" defer></script>
+<script type="module" src="../assets/js/roadmap/view.js"></script>
+</body>
+</html>
