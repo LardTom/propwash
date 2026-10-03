@@ -120,6 +120,7 @@ export const FIELDS = {
     f('material', TEXT, OPT, t('<code>polycarbonate</code>'), t('Material: {material}. Sets the default stiffness and durability.', 'Material: {material}. Bestimmt Standard-Steifigkeit und -Haltbarkeit.')),
     f('stiffness', NUM, OPT, t('by material', 'je Material'), t('Stiffness, above 0 and at most 10; stiffer props shake less in the downwash.', 'Steifigkeit, über 0 und höchstens 10; steifere Props rütteln weniger im Abwind.')),
     f('mount', ID, OPT, t('<code>propwash:universal</code>'), t('Prop mount.', 'Prop-Aufnahme.')),
+    f('reverse_thrust', NUM, OPT, t('0.55 (normal prop)', '0,55 (normaler Prop)'), t('Thrust when the motor spins backwards in 3D mode, as a share of the forward thrust at the same speed, 0.2 to 1.0. Normal cambered props manage about half; symmetric 3D props give about 1.0.', 'Schub, wenn der Motor im 3D-Modus rückwärts dreht, als Anteil des Vorwärtsschubs bei gleicher Drehzahl, 0,2 bis 1,0. Normale, gewölbte Props schaffen etwa die Hälfte; symmetrische 3D-Props geben etwa 1,0 an.')),
   ],
   video: [
     f('link', TEXT, REQ, null, t('Video system: {link}.', 'Videosystem: {link}.')),

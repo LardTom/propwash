@@ -153,6 +153,16 @@
       "sharedWith": []
     },
     {
+      "name": "drone_mode_3d",
+      "key": "Numpad 6",
+      "flightStick": false,
+      "title": {
+        "en": "3D mode on/off",
+        "de": "3D-Modus an/aus"
+      },
+      "sharedWith": []
+    },
+    {
       "name": "drone_flip_upright",
       "key": "U",
       "flightStick": false,
@@ -385,6 +395,13 @@
       "title": {
         "en": "Drop cargo",
         "de": "Fracht abwerfen"
+      }
+    },
+    {
+      "name": "mode_3d",
+      "title": {
+        "en": "3D mode",
+        "de": "3D-Modus"
       }
     }
   ]
