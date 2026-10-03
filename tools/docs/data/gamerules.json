@@ -42,6 +42,13 @@
         "de": "Video und Funk",
         "en": "Video and radio"
       }
+    },
+    {
+      "id": "gameplay",
+      "title": {
+        "de": "Spiel",
+        "en": "Gameplay"
+      }
     }
   ],
   "rules": [
@@ -384,6 +391,24 @@
         }
       },
       "example": "/gamerule propwash:max_video_channels 1"
+    },
+    {
+      "id": "propwash:drone_hits_entities",
+      "name": "drone_hits_entities",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": true,
+      "changes_physics": false,
+      "title": {
+        "de": "Drohnen treffen Lebewesen",
+        "en": "Drones hit mobs and players"
+      },
+      "description": {
+        "de": "Fliegende Drohnen prallen an Tieren, Monstern und Spielern ab und verletzen sie je nach Wucht (Masse × Tempo, höchstens 5 Herzen). Spieler nur mit PvP. Aus: Drohnen fliegen durch Lebewesen hindurch.",
+        "en": "Flying drones bounce off animals, monsters and players and hurt them by the force of the impact (mass × speed, at most 5 hearts). Players only with PvP. Off: drones fly through living things."
+      },
+      "example": "/gamerule propwash:drone_hits_entities false"
     }
   ]
 }

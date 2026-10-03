@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js" data-title-en="Add-on API – Propwash FPV docs" data-title-de="Add-on-API – Propwash-FPV-Doku" data-description-en="Build add-ons for Propwash FPV: new drone parts in Java or JSON, presets, creative tabs, workbench buttons, configurator tabs, Flight School scenes and events. API 1.4.0." data-description-de="Add-ons für Propwash FPV bauen: neue Drohnenteile in Java oder JSON, Presets, Kreativ-Tabs, Werkbank-Knöpfe, Konfigurator-Tabs, Flugschul-Szenen und Events. API 1.4.0.">
+<html lang="en" class="no-js" data-title-en="Add-on API – Propwash FPV docs" data-title-de="Add-on-API – Propwash-FPV-Doku" data-description-en="Build add-ons for Propwash FPV: new drone parts in Java or JSON, presets, creative tabs, workbench buttons, configurator tabs, Flight School scenes and events. API 1.5.0." data-description-de="Add-ons für Propwash FPV bauen: neue Drohnenteile in Java oder JSON, Presets, Kreativ-Tabs, Werkbank-Knöpfe, Konfigurator-Tabs, Flugschul-Szenen und Events. API 1.5.0.">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Add-on API – Propwash FPV docs</title>
-<meta name="description" content="Build add-ons for Propwash FPV: new drone parts in Java or JSON, presets, creative tabs, workbench buttons, configurator tabs, Flight School scenes and events. API 1.4.0.">
+<meta name="description" content="Build add-ons for Propwash FPV: new drone parts in Java or JSON, presets, creative tabs, workbench buttons, configurator tabs, Flight School scenes and events. API 1.5.0.">
 <meta name="theme-color" content="#1A1A1A">
 <meta name="color-scheme" content="dark">
 <meta name="referrer" content="no-referrer">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Propwash FPV">
 <meta property="og:title" content="Add-on API – Propwash FPV docs">
-<meta property="og:description" content="Build add-ons for Propwash FPV: new drone parts in Java or JSON, presets, creative tabs, workbench buttons, configurator tabs, Flight School scenes and events. API 1.4.0.">
+<meta property="og:description" content="Build add-ons for Propwash FPV: new drone parts in Java or JSON, presets, creative tabs, workbench buttons, configurator tabs, Flight School scenes and events. API 1.5.0.">
 <meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
@@ -56,6 +56,7 @@
       <a href="../../#faq">FAQ</a>
       <a href="../../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
       <a href="../../docs/" aria-current="page"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a href="../../roadmap/">Roadmap</a>
       <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a>
     </nav>
     <div class="social">
@@ -74,11 +75,11 @@
 <main id="main">
   <header class="docs-hero">
     <div class="wrap docs-hero__inner">
-      <p class="kicker"><span lang="en">Docs · For mod authors · API 1.4.0</span><span lang="de">Doku · Für Mod-Autoren · API 1.4.0</span></p>
+      <p class="kicker"><span lang="en">Docs · For mod authors · API 1.5.0</span><span lang="de">Doku · Für Mod-Autoren · API 1.5.0</span></p>
       <h1 class="docs-title"><span lang="en">Add-on API</span><span lang="de">Add-on-API</span></h1>
       <p lang="en" class="docs-lead">Extend Propwash FPV from your own mod without changing Propwash: new parts of every category, presets, a creative tab, buttons in the workbench, configurator tabs, Flight School scenes and a share-code system.</p>
 <p lang="de" class="docs-lead">Propwash FPV aus dem eigenen Mod erweitern, ohne Propwash zu ändern: neue Teile jeder Kategorie, Presets, ein Kreativ-Tab, Knöpfe in der Werkbank, Konfigurator-Tabs, Flugschul-Szenen und ein Sharecode-System.</p>
-      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.4.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 9</p>
+      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 10</p>
     </div>
   </header>
   <div class="wrap docs">
@@ -103,7 +104,7 @@
 <p lang="en">An add-on is a normal Fabric or NeoForge mod that depends on Propwash and talks to it only through the package <code>de.lardtom.propwash.api</code>. It never changes Propwash itself, and built-in parts, saves and flight behaviour stay exactly as they are. <em>Propwash: Just More Parts</em> is built this way.</p>
 <p lang="de">Ein Add-on ist ein normaler Fabric- oder NeoForge-Mod, der von Propwash abhängt und nur über das Paket <code>de.lardtom.propwash.api</code> mit ihm spricht. Propwash selbst ändert es nie; eingebaute Teile, Speicherstände und Flugverhalten bleiben genau, wie sie sind. <em>Propwash: Just More Parts</em> ist so gebaut.</p>
 <div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
-<thead><tr><th scope="col"><span lang="en">Possible with API 1.4.0</span><span lang="de">Möglich mit API 1.4.0</span></th><th scope="col"><span lang="en">Not (yet) possible</span><span lang="de">(Noch) nicht möglich</span></th></tr></thead>
+<thead><tr><th scope="col"><span lang="en">Possible with API 1.5.0</span><span lang="de">Möglich mit API 1.5.0</span></th><th scope="col"><span lang="en">Not (yet) possible</span><span lang="de">(Noch) nicht möglich</span></th></tr></thead>
 <tbody>
 <tr><td><span lang="en">Frames, stacks, motors, props, batteries, video units and accessories, in Java or JSON</span><span lang="de">Rahmen, Stacks, Motoren, Props, Akkus, Videomodule und Zubehör, in Java oder JSON</span></td><td><span lang="en">other motor counts than four (hexa, octo)</span><span lang="de">andere Motorzahlen als vier (Hexa, Okto)</span></td></tr>
 <tr><td><span lang="en">own arm geometry, camera position, centre of mass, ducts, drag, battery rules per frame</span><span lang="de">eigene Arm-Geometrie, Kameraposition, Schwerpunkt, Ducts, Luftwiderstand, Akku-Regeln je Rahmen</span></td><td><span lang="en">new video systems or goggles (only <code>analog</code> and <code>digital</code>)</span><span lang="de">neue Videosysteme oder Brillen (nur <code>analog</code> und <code>digital</code>)</span></td></tr>
@@ -159,8 +160,8 @@ ordering = &quot;AFTER&quot;
 side = &quot;BOTH&quot;</code></pre>
 </figure>
 <h3 id="setup-version" class="docs-h3"><a class="docs-anchor" href="#setup-version" aria-hidden="true" tabindex="-1">#</a><span lang="en">Checking the API version</span><span lang="de">API-Version prüfen</span></h3>
-<p lang="en">The API has its own version (<code>PropwashApi.API_VERSION</code>, SemVer), independent of the mod version: Propwash 0.5.0 ships <strong>1.4.0</strong>. When your mod starts, require the major version and the smallest minor version whose features you need, and test for newer ones before using them:</p>
-<p lang="de">Die API hat eine eigene Version (<code>PropwashApi.API_VERSION</code>, SemVer), unabhängig von der Mod-Version: Propwash 0.5.0 bringt <strong>1.4.0</strong>. Beim Start die Hauptversion und die kleinste Nebenversion verlangen, deren Funktionen das Add-on braucht, und neuere vor dem Benutzen abfragen:</p>
+<p lang="en">The API has its own version (<code>PropwashApi.API_VERSION</code>, SemVer), independent of the mod version: Propwash 0.5.0 ships <strong>1.5.0</strong>. When your mod starts, require the major version and the smallest minor version whose features you need, and test for newer ones before using them:</p>
+<p lang="de">Die API hat eine eigene Version (<code>PropwashApi.API_VERSION</code>, SemVer), unabhängig von der Mod-Version: Propwash 0.5.0 bringt <strong>1.5.0</strong>. Beim Start die Hauptversion und die kleinste Nebenversion verlangen, deren Funktionen das Add-on braucht, und neuere vor dem Benutzen abfragen:</p>
 <figure class="docs-code" data-code>
 <figcaption class="docs-code__bar"><span class="docs-code__lang">Java</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
 <pre><code><span class="tk-t">PropwashApi</span>.requireVersion(<span class="tk-s">&quot;examplemod&quot;</span>, <span class="tk-s">&quot;1.1&quot;</span>);
@@ -194,7 +195,7 @@ side = &quot;BOTH&quot;</code></pre>
     <span class="tk-k">public</span> <span class="tk-k">static</span> <span class="tk-k">final</span> <span class="tk-t">String</span> <span class="tk-t">MOD_ID</span> = <span class="tk-s">&quot;examplemod&quot;</span>;
 
     <span class="tk-k">public</span> <span class="tk-k">static</span> <span class="tk-k">void</span> init() {
-        <span class="tk-t">PropwashApi</span>.requireVersion(<span class="tk-t">MOD_ID</span>, <span class="tk-s">&quot;1.4&quot;</span>);
+        <span class="tk-t">PropwashApi</span>.requireVersion(<span class="tk-t">MOD_ID</span>, <span class="tk-s">&quot;1.5&quot;</span>);
         <span class="tk-t">ExampleParts</span>.register();
         <span class="tk-t">PropwashApi</span>.parts().loadBundled(<span class="tk-t">MOD_ID</span>);
         <span class="tk-t">PropwashApi</span>.partItems().registerItems(<span class="tk-t">MOD_ID</span>);
@@ -432,10 +433,11 @@ side = &quot;BOTH&quot;</code></pre>
 <tr><th scope="row"><code>1.2</code></th><td><span lang="en">A creative tab per add-on (<code>PropwashApi.extensionTab(ns)</code>), <code>power_w</code> and <code>usable_fraction</code> for the energy model, all flight times in <code>BuildStats</code>.</span><span lang="de">Ein Kreativ-Tab je Add-on (<code>PropwashApi.extensionTab(ns)</code>), <code>power_w</code> und <code>usable_fraction</code> für das Energiemodell, alle Flugzeiten in <code>BuildStats</code>.</span></td></tr>
 <tr><th scope="row"><code>1.3</code></th><td><span lang="en">Flight School links for items of any namespace (<code>linkFlightSchoolItems</code>, <code>linkFlightSchoolParts</code>, <code>FlightSchoolScenes</code>).</span><span lang="de">Flugschul-Verknüpfungen für Items jedes Namensraums (<code>linkFlightSchoolItems</code>, <code>linkFlightSchoolParts</code>, <code>FlightSchoolScenes</code>).</span></td></tr>
 <tr><th scope="row"><code>1.4</code></th><td><span lang="en">Chest loot without loader code (<code>PropwashApi.loot()</code>), rarity in JSON, more analysis figures, <code>ESC_BURNED</code>, part condition and paint cost, batteries with partial charge, the <code>NAME</code> import layer and new drones from the client, Propwash’s own JSON codec, language texts on the server, workbench header space and icon buttons, camera field of view from <code>camera_fov_deg</code> and the uptilt range of the camera mount.</span><span lang="de">Truhen-Beute ohne Loader-Code (<code>PropwashApi.loot()</code>), Seltenheit im JSON, mehr Analysewerte, <code>ESC_BURNED</code>, Teilezustand und Lackkosten, Akkus mit Teilladung, Import-Ebene <code>NAME</code> und neue Drohnen vom Client, Propwashs eigener JSON-Codec, Sprachtexte auf dem Server, Platz im Werkbank-Kopf und Symbol-Knöpfe, Kamera-Sichtfeld aus <code>camera_fov_deg</code> und der Uptilt-Bereich des Kamerahalters.</span></td></tr>
+<tr><th scope="row"><code>1.5</code></th><td><span lang="en">Two new built-in Flight School lessons for item links: <code>FlightSchoolScenes.TRICKS</code> (freestyle tricks, after <code>RACE</code>) and <code>FlightSchoolScenes.GRIPPER</code> (gripper, after <code>ACTION_CAM</code>), both in <code>FlightSchoolScenes.ALL</code>.</span><span lang="de">Zwei neue eingebaute Flugschul-Lektionen für Item-Verknüpfungen: <code>FlightSchoolScenes.TRICKS</code> (Freestyle-Tricks, nach <code>RACE</code>) und <code>FlightSchoolScenes.GRIPPER</code> (Greifer, nach <code>ACTION_CAM</code>), beide in <code>FlightSchoolScenes.ALL</code>.</span></td></tr>
 </tbody>
 </table></div>
-<p lang="en">Propwash 0.5.0 ships API 1.4.0 and network protocol 9.</p>
-<p lang="de">Propwash 0.5.0 bringt API 1.4.0 und Netzwerkprotokoll 9.</p>
+<p lang="en">Propwash 0.5.0 ships API 1.5.0 and network protocol 10.</p>
+<p lang="de">Propwash 0.5.0 bringt API 1.5.0 und Netzwerkprotokoll 10.</p>
 
 </section>
 <section class="docs-section" aria-labelledby="multiplayer">

@@ -56,6 +56,7 @@
       <a href="../../#faq">FAQ</a>
       <a href="../../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
       <a href="../../docs/" aria-current="page"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a href="../../roadmap/">Roadmap</a>
       <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a>
     </nav>
     <div class="social">
@@ -78,7 +79,7 @@
       <h1 class="docs-title"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></h1>
       <p lang="en" class="docs-lead">Every drone part can be a JSON file in an add-on, exactly like Propwash’s own parts. This page lists every field Propwash 0.5.0 reads.</p>
 <p lang="de" class="docs-lead">Jedes Drohnenteil kann eine JSON-Datei in einem Add-on sein, genau wie Propwashs eigene Teile. Diese Seite nennt jedes Feld, das Propwash 0.5.0 liest.</p>
-      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.4.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 9</p>
+      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 10</p>
     </div>
   </header>
   <div class="wrap docs">
@@ -108,7 +109,7 @@
 <li><span lang="en">Categories are the folder names: <code>frame</code>, <code>stack</code>, <code>motor</code>, <code>prop</code>, <code>video</code>, <code>battery</code>, <code>accessory</code>, <code>chemistry</code>. Sub-folders and other folder names are errors.</span><span lang="de">Kategorien sind die Ordnernamen: <code>frame</code>, <code>stack</code>, <code>motor</code>, <code>prop</code>, <code>video</code>, <code>battery</code>, <code>accessory</code>, <code>chemistry</code>. Unterordner und andere Ordnernamen sind Fehler.</span></li>
 <li><span lang="en">The id is <code>&lt;namespace&gt;:&lt;file name without .json&gt;</code>; the path may only contain <code>[a-z0-9_.-]</code> and must be unique across all categories.</span><span lang="de">Die Id ist <code>&lt;namensraum&gt;:&lt;dateiname ohne .json&gt;</code>; der Pfad darf nur <code>[a-z0-9_.-]</code> enthalten und muss über alle Kategorien eindeutig sein.</span></li>
 <li><span lang="en">Files are loaded only by <code>PropwashApi.parts().loadBundled(modId)</code> from the add-on’s own jar, in the order chemistry → frame → stack → motor → prop → video → battery → accessory, alphabetically within a folder. Not from world data packs, no <code>/reload</code>.</span><span lang="de">Geladen werden die Dateien nur von <code>PropwashApi.parts().loadBundled(modId)</code> aus dem eigenen Jar des Add-ons, in der Reihenfolge chemistry → frame → stack → motor → prop → video → battery → accessory, innerhalb eines Ordners alphabetisch. Nicht aus Welt-Datenpaketen, kein <code>/reload</code>.</span></li>
-<li><span lang="en">Propwash’s own 34 built-in parts and chemistries are files in exactly this format.</span><span lang="de">Propwashs eigene 34 eingebaute Teile und Zellchemien sind Dateien in genau diesem Format.</span></li>
+<li><span lang="en">Propwash’s own 36 built-in parts and chemistries are files in exactly this format.</span><span lang="de">Propwashs eigene 36 eingebaute Teile und Zellchemien sind Dateien in genau diesem Format.</span></li>
 </ul>
 
 </section>
@@ -524,7 +525,7 @@
 <tr><th scope="row"><code>prop</code></th><td><code title="31 mm Propeller (4-blade, 1.2″ pitch, PC)">propwash:p31_4b</code> <code title="31 mm Propeller (3-blade, 1.4″ pitch, PC)">propwash:p31_3b</code> <code title="3″ Propeller (3-blade, 3.0″ pitch, PC)">propwash:p3_3b</code> <code title="5.1″ Propeller (3-blade, 4.6″ pitch, PC)">propwash:p51_3b</code> <code title="7″ Propeller (2-blade, 3.5″ pitch, PC)">propwash:p7_2b</code></td></tr>
 <tr><th scope="row"><code>video</code></th><td><code title="Analog Nano Camera + VTX">propwash:analog_nano</code> <code title="Analog Race Camera + VTX">propwash:analog_race</code> <code title="Digital Video System (Lite)">propwash:digital_lite</code> <code title="Digital HD Video System">propwash:digital_hd</code></td></tr>
 <tr><th scope="row"><code>battery</code></th><td><code title="1S 300 mAh Battery (LiHV)">propwash:b1s_300_hv</code> <code title="4S 650 mAh Battery">propwash:b4s_650</code> <code title="6S 1100 mAh Battery">propwash:b6s_1100</code> <code title="6S 1300 mAh Battery">propwash:b6s_1300</code> <code title="6S 4000 mAh Battery (Li-Ion)">propwash:b6s_4000_lion</code></td></tr>
-<tr><th scope="row"><code>accessory</code></th><td><code title="LED Strip">propwash:led_strip</code> <code title="Action Cam (Light)">propwash:action_cam_light</code> <code title="Action Cam (Heavy)">propwash:action_cam_heavy</code></td></tr>
+<tr><th scope="row"><code>accessory</code></th><td><code title="LED Strip">propwash:led_strip</code> <code title="Action Cam (Light)">propwash:action_cam_light</code> <code title="Action Cam (Heavy)">propwash:action_cam_heavy</code> <code title="Action Cam (Flashback)">propwash:action_cam_flashback</code> <code title="Gripper">propwash:gripper</code></td></tr>
 <tr><th scope="row"><code>chemistry</code></th><td><code title="">propwash:lihv</code> <code title="">propwash:lion</code> <code title="">propwash:lipo</code></td></tr>
 </tbody>
 </table></div>

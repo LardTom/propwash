@@ -1,5 +1,5 @@
 {
-  "version": "1.4.0",
+  "version": "1.5.0",
   "packages": [
     {
       "name": "de.lardtom.propwash.api",
@@ -56,7 +56,7 @@
               "kind": "field",
               "name": "API_VERSION",
               "static": true,
-              "display": "static final String API_VERSION = \"1.4.0\""
+              "display": "static final String API_VERSION = \"1.5.0\""
             },
             {
               "kind": "field",
@@ -1083,6 +1083,12 @@
             },
             {
               "kind": "field",
+              "name": "TRICKS",
+              "static": true,
+              "display": "static final String TRICKS = \"propwash:tricks\""
+            },
+            {
+              "kind": "field",
               "name": "VIDEO",
               "static": true,
               "display": "static final String VIDEO = \"propwash:video\""
@@ -1092,6 +1098,12 @@
               "name": "ACTION_CAM",
               "static": true,
               "display": "static final String ACTION_CAM = \"propwash:action_cam\""
+            },
+            {
+              "kind": "field",
+              "name": "GRIPPER",
+              "static": true,
+              "display": "static final String GRIPPER = \"propwash:gripper\""
             },
             {
               "kind": "field",

@@ -479,6 +479,20 @@
           "en": "Action Cam (Heavy)",
           "de": "Action-Cam (Heavy)"
         }
+      },
+      {
+        "id": "propwash:action_cam_flashback",
+        "name": {
+          "en": "Action Cam (Flashback)",
+          "de": "Action-Cam (Flashback)"
+        }
+      },
+      {
+        "id": "propwash:gripper",
+        "name": {
+          "en": "Gripper",
+          "de": "Greifer"
+        }
       }
     ],
     "chemistry": [

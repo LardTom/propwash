@@ -283,6 +283,16 @@
       "sharedWith": [
         "drone_flight_mode"
       ]
+    },
+    {
+      "name": "drone_cargo_drop",
+      "key": "Enter",
+      "flightStick": false,
+      "title": {
+        "en": "Cargo drop (open gripper)",
+        "de": "Greifer öffnen (Fracht abwerfen)"
+      },
+      "sharedWith": []
     }
   ],
   "switches": [
@@ -368,6 +378,13 @@
       "title": {
         "en": "Position hold (POSHOLD)",
         "de": "Position halten (POSHOLD)"
+      }
+    },
+    {
+      "name": "cargo_drop",
+      "title": {
+        "en": "Drop cargo",
+        "de": "Fracht abwerfen"
       }
     }
   ]

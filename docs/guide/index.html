@@ -56,6 +56,7 @@
       <a href="../../#faq">FAQ</a>
       <a href="../../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
       <a href="../../docs/" aria-current="page"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a href="../../roadmap/">Roadmap</a>
       <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a>
     </nav>
     <div class="social">
@@ -78,7 +79,7 @@
       <h1 class="docs-title"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></h1>
       <p lang="en" class="docs-lead">From the parts bin to your first FPV flight, setting up your radio and what server owners need to know.</p>
 <p lang="de" class="docs-lead">Von der Teilekiste zum ersten FPV-Flug, die Funke einrichten und was Server-Betreiber wissen müssen.</p>
-      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.4.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 9</p>
+      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 10</p>
     </div>
   </header>
   <div class="wrap docs">
@@ -163,6 +164,7 @@
 <li><span lang="en">LEDs off</span><span lang="de">LEDs aus</span></li>
 <li><span lang="en">Altitude hold (ALTHOLD)</span><span lang="de">Höhe halten (ALTHOLD)</span></li>
 <li><span lang="en">Position hold (POSHOLD)</span><span lang="de">Position halten (POSHOLD)</span></li>
+<li><span lang="en">Drop cargo</span><span lang="de">Fracht abwerfen</span></li>
 </ul>
 <h3 id="radio-gamepad" class="docs-h3"><a class="docs-anchor" href="#radio-gamepad" aria-hidden="true" tabindex="-1">#</a><span lang="en">Gamepad and keyboard</span><span lang="de">Gamepad und Tastatur</span></h3>
 <ul>
@@ -209,6 +211,7 @@
 <tr><th scope="row"><span lang="en">Open receiver wizard</span><span lang="de">Empfänger-Assistent öffnen</span></th><td><span class="docs-muted"><span lang="en">not bound</span><span lang="de">nicht belegt</span></span></td></tr>
 <tr><th scope="row"><span lang="en">GPS rescue</span><span lang="de">GPS Rescue</span></th><td><kbd>J</kbd></td></tr>
 <tr><th scope="row"><span lang="en">Set home point</span><span lang="de">Homepoint setzen</span></th><td><kbd>,</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Cargo drop (open gripper)</span><span lang="de">Greifer öffnen (Fracht abwerfen)</span></th><td><kbd>Enter</kbd></td></tr>
 </tbody>
 </table></div>
 <h3 id="controls-more" class="docs-h3"><a class="docs-anchor" href="#controls-more" aria-hidden="true" tabindex="-1">#</a><span lang="en">Everything else</span><span lang="de">Alles andere</span></h3>
@@ -240,8 +243,8 @@
 <section class="docs-section" aria-labelledby="servers">
 <h2 id="servers" class="docs-h2"><a class="docs-anchor" href="#servers" aria-hidden="true" tabindex="-1">#</a><span lang="en">For server owners</span><span lang="de">Für Server-Betreiber</span></h2>
 
-<p lang="en">Install Propwash on the server and on every client. Client and server need the same network protocol (Propwash 0.5.0: protocol 9); a mismatch is reported with both versions when you connect.</p>
-<p lang="de">Propwash gehört auf den Server und auf jeden Client. Client und Server brauchen dasselbe Netzwerkprotokoll (Propwash 0.5.0: Protokoll 9); passt es nicht, nennt die Meldung beim Verbinden beide Versionen.</p>
+<p lang="en">Install Propwash on the server and on every client. Client and server need the same network protocol (Propwash 0.5.0: protocol 10); a mismatch is reported with both versions when you connect.</p>
+<p lang="de">Propwash gehört auf den Server und auf jeden Client. Client und Server brauchen dasselbe Netzwerkprotokoll (Propwash 0.5.0: Protokoll 10); passt es nicht, nennt die Meldung beim Verbinden beide Versionen.</p>
 <h3 id="servers-rules" class="docs-h3"><a class="docs-anchor" href="#servers-rules" aria-hidden="true" tabindex="-1">#</a><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></h3>
 <p lang="en">Physics, wind, battery life, crash damage, video range and video channels are <a href="../../docs/gamerules/">world rules</a>: gamerules that apply to every player in the world. Operators change them in the configurator tab <em>World rules</em> or with <code>/gamerule propwash:&lt;rule&gt; &lt;value&gt;</code>; everyone else sees them read-only in the same tab.</p>
 <p lang="de">Physik, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Videokanäle sind <a href="../../docs/gamerules/">Welt-Regeln</a>: Gamerules, die für alle Spieler der Welt gelten. Operatoren ändern sie im Konfigurator-Tab <em>Welt-Regeln</em> oder mit <code>/gamerule propwash:&lt;regel&gt; &lt;wert&gt;</code>; alle anderen sehen sie im selben Tab nur lesend.</p>
