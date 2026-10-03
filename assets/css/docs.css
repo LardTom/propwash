@@ -253,6 +253,15 @@ html[lang="de"] .docs-body :not(p) + p[lang="en"] + p[lang="de"] {
   margin-top: 0;
 }
 
+html[lang="de"] .docs-body :is(ul, ol) + p[lang="en"] + p[lang="de"] {
+  margin-top: 14px;
+}
+
+.docs-body code,
+.docs-body pre {
+  font-variant-ligatures: none;
+}
+
 .docs-body ul,
 .docs-body ol {
   margin: 14px 0 0;
