@@ -11,7 +11,7 @@
 // 2. Images (--images): converts the in-game screenshots the pages use from <dir>/docs/screenshots to WebP
 //    (assets/img/docs/, 800 and 1600 px wide, needs cwebp).
 // 3. Render: writes docs/**/index.html (and docs/gamerules/gamerules.json) from tools/docs/data and the texts in
-//    tools/docs/pages/. Rendering only needs the data files, so the pages can be rebuilt without a Propwash checkout.
+//    tools/docs/pages/; the header navigation is the one of index.html (rebuild after changing it there). Rendering only needs the data files, so the pages can be rebuilt without a Propwash checkout.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -103,14 +103,14 @@ function buildImages(propwash) {
   return out;
 }
 
-export function renderAll(data) {
+export function renderAll(data, nav = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8')) {
   const files = {};
   const meta = `Propwash ${data.meta.propwash} · Minecraft ${data.meta.minecraft} · Fabric &amp; NeoForge · API ${data.meta.api} · ${L('protocol', 'Protokoll')} ${data.meta.protocol}`;
   for (const p of PAGES) {
     const depth = p.path.split('/').filter(Boolean).length;
     const prefix = '../'.repeat(depth);
     const built = BUILDERS[p.id]({ data, prefix, images: data.images });
-    files[`${p.path}index.html`] = page({ ...built, id: p.id, prefix, meta });
+    files[`${p.path}index.html`] = page({ ...built, id: p.id, prefix, meta, nav });
     for (const [name, content] of Object.entries(built.extraFiles || {})) files[`${p.path}${name}`] = content;
   }
   return files;

@@ -168,7 +168,16 @@ ${items}
 </nav>`;
 }
 
-export function page({ id, prefix, title, description, kicker, heading, lead, toc, body, meta }) {
+export function siteNav(prefix, nav) {
+  const match = nav.match(/^[ \t]*<nav class="site-nav"[\s\S]*?<\/nav>/m);
+  if (!match) throw new Error('index.html: <nav class="site-nav"> nicht gefunden');
+  if (!/href="docs\/"/.test(match[0])) throw new Error('index.html: Navigation ohne Link auf docs/');
+  return match[0]
+    .replace(/href="([^"]*)"/g, (all, href) => (/^(https?:|mailto:)/.test(href) ? all : `href="${prefix}${href}"`))
+    .replace(`href="${prefix}docs/"`, `href="${prefix}docs/" aria-current="page"`);
+}
+
+export function page({ id, prefix, title, description, kicker, heading, lead, toc, body, meta, nav }) {
   const t = (x) => esc(x);
   return `<!DOCTYPE html>
 <html lang="en" class="no-js" data-title-en="${t(title.en)}" data-title-de="${t(title.de)}" data-description-en="${t(description.en)}" data-description-de="${t(description.de)}">
@@ -219,17 +228,7 @@ export function page({ id, prefix, title, description, kicker, heading, lead, to
       <img src="${prefix}assets/img/logo-96.webp" width="36" height="36" alt="">
       <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
     </a>
-    <nav class="site-nav" id="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
-      <a href="${prefix}#how"><span lang="en">How it works</span><span lang="de">So geht’s</span></a>
-      <a href="${prefix}#flight"><span lang="en">Flight</span><span lang="de">Flug</span></a>
-      <a href="${prefix}#video">Video</a>
-      <a href="${prefix}#racing"><span lang="en">Racing</span><span lang="de">Rennen</span></a>
-      <a href="${prefix}#gallery"><span lang="en">Screenshots</span><span lang="de">Bilder</span></a>
-      <a href="${prefix}#faq">FAQ</a>
-      <a href="${prefix}configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
-      <a href="${prefix}docs/" aria-current="page"><span lang="en">Docs</span><span lang="de">Doku</span></a>
-      <a class="site-nav__social" href="${DISCORD}" target="_blank" rel="noopener"><svg aria-hidden="true" width="16" height="16"><use href="#i-discord"/></svg> Discord</a>
-    </nav>
+${siteNav(prefix, nav)}
     <div class="social">
       <a class="social__link" href="${DISCORD}" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
     </div>
