@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="Parts format (JSON) – Propwash FPV docs" data-title-de="Teile-Format (JSON) – Propwash-FPV-Doku" data-description-en="The JSON format of Propwash FPV drone parts: frames, stacks, motors, props, video units, batteries, accessories and cell chemistries, with every field, type and default." data-description-de="Das JSON-Format der Drohnenteile von Propwash FPV: Rahmen, Stacks, Motoren, Props, Videomodule, Akkus, Zubehör und Zellchemien, mit jedem Feld, Typ und Standardwert.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parts format (JSON) – Propwash FPV docs</title>
+<meta name="description" content="The JSON format of Propwash FPV drone parts: frames, stacks, motors, props, video units, batteries, accessories and cell chemistries, with every field, type and default.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="Parts format (JSON) – Propwash FPV docs">
+<meta property="og:description" content="The JSON format of Propwash FPV drone parts: frames, stacks, motors, props, video units, batteries, accessories and cell chemistries, with every field, type and default.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="../../assets/css/docs.css">
+<script>
+(function () {
+  var d = document.documentElement, lang = null;
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="docs-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+</svg>
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="de">Zum Inhalt springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
+      <a href="../../#how"><span lang="en">How it works</span><span lang="de">So geht’s</span></a>
+      <a href="../../#flight"><span lang="en">Flight</span><span lang="de">Flug</span></a>
+      <a href="../../#video">Video</a>
+      <a href="../../#racing"><span lang="en">Racing</span><span lang="de">Rennen</span></a>
+      <a href="../../#gallery"><span lang="en">Screenshots</span><span lang="de">Bilder</span></a>
+      <a href="../../#faq">FAQ</a>
+      <a href="../../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+      <a href="../../docs/" aria-current="page"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="16" height="16"><use href="#i-discord"/></svg> Discord</a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <header class="docs-hero">
+    <div class="wrap docs-hero__inner">
+      <p class="kicker"><span lang="en">Docs · For mod authors · Format 1</span><span lang="de">Doku · Für Mod-Autoren · Format 1</span></p>
+      <h1 class="docs-title"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></h1>
+      <p lang="en" class="docs-lead">Every drone part can be a JSON file in an add-on, exactly like Propwash’s own parts. This page lists every field Propwash 0.5.0 reads.</p>
+<p lang="de" class="docs-lead">Jedes Drohnenteil kann eine JSON-Datei in einem Add-on sein, genau wie Propwashs eigene Teile. Diese Seite nennt jedes Feld, das Propwash 0.5.0 liest.</p>
+      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.4.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 9</p>
+    </div>
+  </header>
+  <div class="wrap docs">
+    <nav class="docs-menu" aria-label="Documentation" data-de-aria-label="Dokumentation">
+<details class="docs-menu__fold" data-docs-menu open>
+<summary class="docs-menu__summary"><span lang="en">Docs menu</span><span lang="de">Doku-Menü</span></summary>
+<ol class="docs-menu__list">
+<li class="docs-menu__item"><a href="../../docs/"><span lang="en">Overview</span><span lang="de">Übersicht</span></a></li>
+<li class="docs-menu__item"><a href="../../docs/guide/"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></a></li>
+<li class="docs-menu__item"><a href="../../docs/gamerules/"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></a></li>
+<li class="docs-menu__item"><a href="../../docs/api/"><span lang="en">Add-on API</span><span lang="de">Add-on-API</span></a></li>
+<li class="docs-menu__item docs-menu__item--sub"><a href="../../docs/api/reference/"><span lang="en">API reference</span><span lang="de">API-Referenz</span></a></li>
+<li class="docs-menu__item is-current"><a href="../../docs/parts-format/" aria-current="page"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></a>
+<ol class="docs-menu__toc"><li><a href="#files"><span lang="en">Files and loading</span><span lang="de">Dateien und Laden</span></a></li><li><a href="#conventions"><span lang="en">Conventions</span><span lang="de">Konventionen</span></a></li><li><a href="#common"><span lang="en">Fields of every part</span><span lang="de">Felder jedes Teils</span></a></li><li><a href="#frame"><span lang="en">Frame</span><span lang="de">Rahmen</span></a></li><li><a href="#stack"><span lang="en">Stack (flight controller and ESC)</span><span lang="de">Stack (Flight-Controller und ESC)</span></a></li><li><a href="#motor">Motor</a></li><li><a href="#prop">Propeller</a></li><li><a href="#video"><span lang="en">Video unit</span><span lang="de">Videomodul</span></a></li><li><a href="#battery"><span lang="en">Battery</span><span lang="de">Akku</span></a></li><li><a href="#accessory"><span lang="en">Accessory</span><span lang="de">Zubehör</span></a></li><li><a href="#chemistry"><span lang="en">Cell chemistry</span><span lang="de">Zellchemie</span></a></li><li><a href="#builtin"><span lang="en">Built-in ids</span><span lang="de">Eingebaute Ids</span></a></li><li><a href="#example-addon"><span lang="en">Example with own arms</span><span lang="de">Beispiel mit eigenen Armen</span></a></li><li><a href="#errors"><span lang="en">Errors and warnings</span><span lang="de">Fehler und Warnungen</span></a></li></ol></li>
+</ol>
+</details>
+</nav>
+    <article class="docs-body">
+<section class="docs-section" aria-labelledby="files">
+<h2 id="files" class="docs-h2"><a class="docs-anchor" href="#files" aria-hidden="true" tabindex="-1">#</a><span lang="en">Files and loading</span><span lang="de">Dateien und Laden</span></h2>
+
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang"><span lang="en">Path</span><span lang="de">Pfad</span></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>src/main/resources/data/&lt;namespace&gt;/propwash_parts/&lt;category&gt;/&lt;path&gt;.json</code></pre>
+</figure>
+<ul>
+<li><span lang="en">Categories are the folder names: <code>frame</code>, <code>stack</code>, <code>motor</code>, <code>prop</code>, <code>video</code>, <code>battery</code>, <code>accessory</code>, <code>chemistry</code>. Sub-folders and other folder names are errors.</span><span lang="de">Kategorien sind die Ordnernamen: <code>frame</code>, <code>stack</code>, <code>motor</code>, <code>prop</code>, <code>video</code>, <code>battery</code>, <code>accessory</code>, <code>chemistry</code>. Unterordner und andere Ordnernamen sind Fehler.</span></li>
+<li><span lang="en">The id is <code>&lt;namespace&gt;:&lt;file name without .json&gt;</code>; the path may only contain <code>[a-z0-9_.-]</code> and must be unique across all categories.</span><span lang="de">Die Id ist <code>&lt;namensraum&gt;:&lt;dateiname ohne .json&gt;</code>; der Pfad darf nur <code>[a-z0-9_.-]</code> enthalten und muss über alle Kategorien eindeutig sein.</span></li>
+<li><span lang="en">Files are loaded only by <code>PropwashApi.parts().loadBundled(modId)</code> from the add-on’s own jar, in the order chemistry → frame → stack → motor → prop → video → battery → accessory, alphabetically within a folder. Not from world data packs, no <code>/reload</code>.</span><span lang="de">Geladen werden die Dateien nur von <code>PropwashApi.parts().loadBundled(modId)</code> aus dem eigenen Jar des Add-ons, in der Reihenfolge chemistry → frame → stack → motor → prop → video → battery → accessory, innerhalb eines Ordners alphabetisch. Nicht aus Welt-Datenpaketen, kein <code>/reload</code>.</span></li>
+<li><span lang="en">Propwash’s own 34 built-in parts and chemistries are files in exactly this format.</span><span lang="de">Propwashs eigene 34 eingebaute Teile und Zellchemien sind Dateien in genau diesem Format.</span></li>
+</ul>
+
+</section>
+<section class="docs-section" aria-labelledby="conventions">
+<h2 id="conventions" class="docs-h2"><a class="docs-anchor" href="#conventions" aria-hidden="true" tabindex="-1">#</a><span lang="en">Conventions</span><span lang="de">Konventionen</span></h2>
+<ul>
+<li><span lang="en">Ids without a namespace (<code>"m22"</code>, <code>"lipo"</code>) mean <code>propwash:…</code>. Always write other namespaces in full.</span><span lang="de">Ids ohne Namensraum (<code>"m22"</code>, <code>"lipo"</code>) meinen <code>propwash:…</code>. Andere Namensräume immer voll schreiben.</span></li>
+<li><span lang="en">Numbers are JSON numbers; integers must not have decimals (<code>"kv": 1750</code>, not <code>1750.5</code>).</span><span lang="de">Zahlen sind JSON-Zahlen; ganze Zahlen dürfen keine Nachkommastellen haben (<code>"kv": 1750</code>, nicht <code>1750.5</code>).</span></li>
+<li><span lang="en"><code>[min, max]</code> ranges may also be a single number for <code>cells</code> (<code>"cells": 6</code> = <code>[6, 6]</code>).</span><span lang="de"><code>[min, max]</code>-Bereiche dürfen bei <code>cells</code> auch eine einzelne Zahl sein (<code>"cells": 6</code> = <code>[6, 6]</code>).</span></li>
+<li><span lang="en">Positions are <code>[x, y, z]</code> in millimetres: origin in the middle of the frame at the height of the stack plate, +X right, +Y up, −Z forward.</span><span lang="de">Positionen sind <code>[x, y, z]</code> in Millimetern: Ursprung in der Rahmenmitte auf Höhe der Stack-Auflage, +X rechts, +Y oben, −Z vorn.</span></li>
+<li><span lang="en"><code>"format": 1</code> is optional. New optional fields can come with minor API versions; the format number only rises for incompatible changes.</span><span lang="de"><code>"format": 1</code> ist optional. Neue optionale Felder können mit Nebenversionen der API kommen; die Formatnummer steigt nur bei inkompatiblen Änderungen.</span></li>
+</ul>
+</section>
+<section class="docs-section" aria-labelledby="common">
+<h2 id="common" class="docs-h2"><a class="docs-anchor" href="#common" aria-hidden="true" tabindex="-1">#</a><span lang="en">Fields of every part</span><span lang="de">Felder jedes Teils</span></h2>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--fields">
+<thead><tr><th scope="col"><span lang="en">Field</span><span lang="de">Feld</span></th><th scope="col"><span lang="en">Type</span><span lang="de">Typ</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Meaning</span><span lang="de">Bedeutung</span></th></tr></thead>
+<tbody>
+<tr class="docs-field docs-field--d0" id="common-format"><th scope="row"><code>format</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td>1</td><td><span lang="en">File format. Optional; a higher number than this Propwash knows stops loading with “update Propwash”.</span><span lang="de">Dateiformat. Optional; eine höhere Nummer, als dieses Propwash kennt, bricht das Laden mit „Propwash aktualisieren“ ab.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="common-mass_g"><th scope="row"><code>mass_g</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Mass in grams, above 0 and at most 20000.</span><span lang="de">Masse in Gramm, über 0 und höchstens 20000.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="common-stack_size"><th scope="row"><code>stack_size</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span lang="en">0 = by category (props 64, others 16)</span><span lang="de">0 = je Kategorie (Props 64, sonst 16)</span></td><td><span lang="en">Item stack size, 1–99.</span><span lang="de">Stapelgröße des Items, 1–99.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="common-sort"><th scope="row"><code>sort</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td>1000</td><td><span lang="en">Order in lists and the creative tab.</span><span lang="de">Reihenfolge in Listen und im Kreativ-Tab.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="common-creative"><th scope="row"><code>creative</code></th><td><span lang="en">boolean</span><span lang="de">bool</span></td><td>true</td><td><span lang="en">Listed in the add-on’s creative tab.</span><span lang="de">Im Kreativ-Tab des Add-ons gelistet.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="common-durability"><th scope="row"><code>durability</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">1.0 (props: material)</span><span lang="de">1,0 (Props: Material)</span></td><td><span lang="en">Divides the wear a crash causes; 2.0 wears half as fast.</span><span lang="de">Teilt die Abnutzung durch einen Absturz; 2,0 nutzt halb so schnell ab.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="common-recycle"><th scope="row"><code>recycle</code></th><td><span lang="en"><code>"none"</code> or object</span><span lang="de"><code>"none"</code> oder Objekt</span></td><td><span lang="en">by category</span><span lang="de">je Kategorie</span></td><td><span lang="en">What the salvage slot gives for a broken part.</span><span lang="de">Was das Zerlegen-Feld für ein kaputtes Teil gibt.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="common-recycle-item"><th scope="row"><code>recycle.item</code></th><td><span lang="en">id</span><span lang="de">Id</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Item id, for example <code>propwash:copper_coil</code>.</span><span lang="de">Item-Id, zum Beispiel <code>propwash:copper_coil</code>.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="common-recycle-count"><th scope="row"><code>recycle.count</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td>1</td><td><span lang="en">How many.</span><span lang="de">Wie viele.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="common-rarity"><th scope="row"><code>rarity</code></th><td><span lang="en">text</span><span lang="de">Text</span></td><td>–</td><td><span lang="en">Colour of the item name: <code>common</code>, <code>uncommon</code>, <code>rare</code>, <code>epic</code>.</span><span lang="de">Farbe des Item-Namens: <code>common</code>, <code>uncommon</code>, <code>rare</code>, <code>epic</code>.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="common-visual"><th scope="row"><code>visual</code></th><td><span lang="en">object</span><span lang="de">Objekt</span></td><td>–</td><td><span lang="en">Look of the part.</span><span lang="de">Aussehen des Teils.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="common-visual-accent"><th scope="row"><code>visual.accent</code></th><td><code>"#rrggbb"</code></td><td>–</td><td><span lang="en">Accent colour (battery wrap, procedural shape).</span><span lang="de">Akzentfarbe (Akkuhülle, prozedurale Form).</span></td></tr>
+<tr class="docs-field docs-field--d1" id="common-visual-render_model"><th scope="row"><code>visual.render_model</code></th><td><span lang="en">id</span><span lang="de">Id</span></td><td>–</td><td><span lang="en">Use another drone model, for example a built-in one.</span><span lang="de">Ein anderes Drohnen-Modell benutzen, zum Beispiel ein eingebautes.</span></td></tr>
+</tbody>
+</table></div>
+</section>
+<section class="docs-section" aria-labelledby="frame">
+<h2 id="frame" class="docs-h2"><a class="docs-anchor" href="#frame" aria-hidden="true" tabindex="-1">#</a><span lang="en">Frame <code>frame</code></span><span lang="de">Rahmen <code>frame</code></span></h2>
+
+<p lang="en">Folder <code>propwash_parts/frame/</code>, plus the <a href="#common">fields of every part</a>.</p>
+<p lang="de">Ordner <code>propwash_parts/frame/</code>, dazu die <a href="#common">Felder jedes Teils</a>.</p>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--fields">
+<thead><tr><th scope="col"><span lang="en">Field</span><span lang="de">Feld</span></th><th scope="col"><span lang="en">Type</span><span lang="de">Typ</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Meaning</span><span lang="de">Bedeutung</span></th></tr></thead>
+<tbody>
+<tr class="docs-field docs-field--d0" id="frame-role"><th scope="row"><code>role</code></th><td><span lang="en">text</span><span lang="de">Text</span></td><td><code>freestyle</code></td><td><span lang="en">Frame class: <code>whoop</code>, <code>toothpick</code>, <code>cinewhoop</code>, <code>freestyle</code>, <code>race</code>, <code>long_range</code>, <code>cinelifter</code>, <code>x_class</code>.</span><span lang="de">Rahmenklasse: <code>whoop</code>, <code>toothpick</code>, <code>cinewhoop</code>, <code>freestyle</code>, <code>race</code>, <code>long_range</code>, <code>cinelifter</code>, <code>x_class</code>.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-shape"><th scope="row"><code>shape</code></th><td><span lang="en">text</span><span lang="de">Text</span></td><td><code>true_x</code></td><td><span lang="en">Shape: <code>true_x</code>, <code>stretched_x</code>, <code>squashed_x</code>, <code>deadcat</code>, <code>h_frame</code>, <code>custom</code>.</span><span lang="de">Form: <code>true_x</code>, <code>stretched_x</code>, <code>squashed_x</code>, <code>deadcat</code>, <code>h_frame</code>, <code>custom</code>.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-wheelbase_mm"><th scope="row"><code>wheelbase_mm</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Diagonal motor-to-motor distance, 20–2000.</span><span lang="de">Diagonaler Abstand Motor zu Motor, 20–2000.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-max_prop_mm"><th scope="row"><code>max_prop_mm</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">one of two</span><span lang="de">eins von zwei</span></span></td><td><span lang="en">Largest prop diameter, at most 400. Either this or <code>props_mm</code>.</span><span lang="de">Größter Prop-Durchmesser, höchstens 400. Entweder das oder <code>props_mm</code>.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-props_mm"><th scope="row"><code>props_mm</code></th><td><code>[min, max]</code></td><td><span class="docs-badge docs-badge--req"><span lang="en">one of two</span><span lang="de">eins von zwei</span></span></td><td><span lang="en">Smallest and largest prop diameter, instead of <code>max_prop_mm</code>.</span><span lang="de">Kleinster und größter Prop-Durchmesser, statt <code>max_prop_mm</code>.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-motor_mounts"><th scope="row"><code>motor_mounts</code></th><td><span lang="en">list of ids</span><span lang="de">Liste von Ids</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Motor mounts the frame takes (one id is also fine).</span><span lang="de">Motor-Halterungen, die der Rahmen nimmt (eine einzelne Id geht auch).</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-stack_mounts"><th scope="row"><code>stack_mounts</code></th><td><span lang="en">list of ids</span><span lang="de">Liste von Ids</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Stack mounts the frame takes.</span><span lang="de">Stack-Halterungen, die der Rahmen nimmt.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-accessory_mounts"><th scope="row"><code>accessory_mounts</code></th><td><span lang="en">list</span><span lang="de">Liste</span></td><td><span lang="en">empty</span><span lang="de">leer</span></td><td><span lang="en">Accessory mounts: <code>top</code>, <code>bottom</code>.</span><span lang="de">Zubehör-Halterungen: <code>top</code>, <code>bottom</code>.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-arms"><th scope="row"><code>arms</code></th><td><span lang="en">object</span><span lang="de">Objekt</span></td><td><span lang="en">true X from the wheelbase</span><span lang="de">True-X aus dem Radstand</span></td><td><span lang="en">Own arm geometry with the keys <code>front_left</code>, <code>front_right</code>, <code>rear_left</code>, <code>rear_right</code>.</span><span lang="de">Eigene Arm-Geometrie mit den Schlüsseln <code>front_left</code>, <code>front_right</code>, <code>rear_left</code>, <code>rear_right</code>.</span></td></tr>
+<tr class="docs-field docs-field--d2" id="frame-arms-arm-pos"><th scope="row"><code>arms.&lt;arm&gt;.pos</code></th><td><code>[x, y, z]</code> mm</td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Motor position.</span><span lang="de">Motorposition.</span></td></tr>
+<tr class="docs-field docs-field--d2" id="frame-arms-arm-spin"><th scope="row"><code>arms.&lt;arm&gt;.spin</code></th><td><span lang="en">text</span><span lang="de">Text</span></td><td><span lang="en">props in</span><span lang="de">Props nach innen</span></td><td><span lang="en">Spin direction: <code>cw</code>, <code>ccw</code>.</span><span lang="de">Drehrichtung: <code>cw</code>, <code>ccw</code>.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-battery"><th scope="row"><code>battery</code></th><td><span lang="en">object</span><span lang="de">Objekt</span></td><td>–</td><td><span lang="en">Where the battery sits.</span><span lang="de">Wo der Akku sitzt.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-battery-on_top"><th scope="row"><code>battery.on_top</code></th><td><span lang="en">boolean</span><span lang="de">bool</span></td><td><span lang="en">wheelbase ≥ 100</span><span lang="de">Radstand ≥ 100</span></td><td><span lang="en">Battery on top of the frame.</span><span lang="de">Akku oben auf dem Rahmen.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-battery-plate_mm"><th scope="row"><code>battery.plate_mm</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">on top 0.13 × wheelbase, below −0.05 × wheelbase</span><span lang="de">oben 0,13 × Radstand, unten −0,05 × Radstand</span></td><td><span lang="en">Height of the battery plate.</span><span lang="de">Höhe der Akku-Auflage.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-electronics_mm"><th scope="row"><code>electronics_mm</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">0.05 × wheelbase</span><span lang="de">0,05 × Radstand</span></td><td><span lang="en">Height of the electronics.</span><span lang="de">Höhe der Elektronik.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-camera"><th scope="row"><code>camera</code></th><td><span lang="en">object</span><span lang="de">Objekt</span></td><td>–</td><td><span lang="en">FPV camera. Every frame should set the position.</span><span lang="de">FPV-Kamera. Jeder Rahmen sollte die Position setzen.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-camera-pos"><th scope="row"><code>camera.pos</code></th><td><code>[x, y, z]</code> mm</td><td><span lang="en">15 mm above the centre of mass</span><span lang="de">15 mm über dem Schwerpunkt</span></td><td><span lang="en">Lens position; decides how much of the props shows in the FPV picture.</span><span lang="de">Objektivlage; bestimmt, wie viel von den Props im FPV-Bild zu sehen ist.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-camera-tilt_deg"><th scope="row"><code>camera.tilt_deg</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td>20</td><td><span lang="en">Default camera angle, 0–80°.</span><span lang="de">Standard-Kamerawinkel, 0–80°.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-center_of_mass_mm"><th scope="row"><code>center_of_mass_mm</code></th><td><code>[x, y, z]</code> mm</td><td><code>[0, 0, 0]</code></td><td><span lang="en">Centre of mass of the frame.</span><span lang="de">Schwerpunkt des Rahmens.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-mass_split"><th scope="row"><code>mass_split</code></th><td><span lang="en">object</span><span lang="de">Objekt</span></td><td><span lang="en">open 0.6 / 0.4 / 0, ducted 0.2 / 0.3 / 0.5</span><span lang="de">offen 0,6 / 0,4 / 0, geduckt 0,2 / 0,3 / 0,5</span></td><td><span lang="en">How the mass divides; the parts add up to 1.</span><span lang="de">Wie sich die Masse verteilt; die Anteile ergeben zusammen 1.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-mass_split-arms"><th scope="row"><code>mass_split.arms</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Share of the arms.</span><span lang="de">Anteil der Arme.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-mass_split-plate"><th scope="row"><code>mass_split.plate</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Share of the plate.</span><span lang="de">Anteil der Platte.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-mass_split-duct"><th scope="row"><code>mass_split.duct</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td>0</td><td><span lang="en">Share of the duct.</span><span lang="de">Anteil des Ducts.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-accessory_anchors"><th scope="row"><code>accessory_anchors</code></th><td><span lang="en">object</span><span lang="de">Objekt</span></td><td><span lang="en">formula from the frame</span><span lang="de">Formel aus dem Rahmen</span></td><td><span lang="en">Where accessories sit, per mount (<code>top</code>, <code>bottom</code>).</span><span lang="de">Wo Zubehör sitzt, je Halterung (<code>top</code>, <code>bottom</code>).</span></td></tr>
+<tr class="docs-field docs-field--d2" id="frame-accessory_anchors-slot-pos"><th scope="row"><code>accessory_anchors.&lt;slot&gt;.pos</code></th><td><code>[x, y, z]</code> mm</td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td>Position.</td></tr>
+<tr class="docs-field docs-field--d2" id="frame-accessory_anchors-slot-tilt_deg"><th scope="row"><code>accessory_anchors.&lt;slot&gt;.tilt_deg</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td>0</td><td><span lang="en">Tilt.</span><span lang="de">Neigung.</span></td></tr>
+<tr class="docs-field docs-field--d2" id="frame-accessory_anchors-slot-length_mm"><th scope="row"><code>accessory_anchors.&lt;slot&gt;.length_mm</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td>0</td><td><span lang="en">Length of the mount.</span><span lang="de">Länge der Halterung.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-aero"><th scope="row"><code>aero</code></th><td><span lang="en">object</span><span lang="de">Objekt</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Aerodynamics.</span><span lang="de">Aerodynamik.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-aero-frontal_area_m2"><th scope="row"><code>aero.frontal_area_m2</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Frontal area in m².</span><span lang="de">Stirnfläche in m².</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-aero-drag_coefficient"><th scope="row"><code>aero.drag_coefficient</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Drag coefficient.</span><span lang="de">Widerstandsbeiwert.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-aero-side_area_m2"><th scope="row"><code>aero.side_area_m2</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">from the frontal area</span><span lang="de">aus der Stirnfläche</span></td><td><span lang="en">Side area.</span><span lang="de">Seitenfläche.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-aero-top_area_m2"><th scope="row"><code>aero.top_area_m2</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">from the frontal area</span><span lang="de">aus der Stirnfläche</span></td><td><span lang="en">Top area.</span><span lang="de">Draufsichtfläche.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-duct"><th scope="row"><code>duct</code></th><td><span lang="en"><code>true</code> or object</span><span lang="de"><code>true</code> oder Objekt</span></td><td><span lang="en">open props</span><span lang="de">offene Props</span></td><td><span lang="en">Ducted frame. <code>true</code> or <code>{}</code> uses the standard duct; single values below override it.</span><span lang="de">Geduckter Rahmen. <code>true</code> oder <code>{}</code> nimmt den Standard-Duct; einzelne Werte darunter überschreiben ihn.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-duct-thrust_gain"><th scope="row"><code>duct.thrust_gain</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">standard</span><span lang="de">Standard</span></td><td><span lang="en">Extra static thrust of the duct.</span><span lang="de">Zusätzlicher Standschub des Ducts.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-duct-clearance_mm"><th scope="row"><code>duct.clearance_mm</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">standard</span><span lang="de">Standard</span></td><td><span lang="en">Gap between blade tip and duct.</span><span lang="de">Spalt zwischen Blattspitze und Duct.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-duct-translational_lift_gain"><th scope="row"><code>duct.translational_lift_gain</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">standard</span><span lang="de">Standard</span></td><td><span lang="en">Lift gain in forward flight.</span><span lang="de">Auftriebsgewinn im Vorwärtsflug.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-duct-wash_loss"><th scope="row"><code>duct.wash_loss</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">standard</span><span lang="de">Standard</span></td><td><span lang="en">Thrust lost in the own downwash.</span><span lang="de">Schubverlust im eigenen Abwind.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-duct-wash_noise"><th scope="row"><code>duct.wash_noise</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">standard</span><span lang="de">Standard</span></td><td><span lang="en">Shaking in the own downwash.</span><span lang="de">Rütteln im eigenen Abwind.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-duct-restitution"><th scope="row"><code>duct.restitution</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">standard</span><span lang="de">Standard</span></td><td><span lang="en">Bounce on impact.</span><span lang="de">Abprallen beim Aufprall.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-duct-friction"><th scope="row"><code>duct.friction</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">standard</span><span lang="de">Standard</span></td><td><span lang="en">Friction when touching blocks.</span><span lang="de">Reibung an Blöcken.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-impact_tolerance"><th scope="row"><code>impact_tolerance</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">8.0</span><span lang="de">8,0</span></td><td><span lang="en">Impact speed in m/s that counts as a crash, above 0 and at most 100.</span><span lang="de">Aufprallgeschwindigkeit in m/s, ab der ein Absturz zählt, über 0 und höchstens 100.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="frame-battery_fit"><th scope="row"><code>battery_fit</code></th><td><span lang="en">object</span><span lang="de">Objekt</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Which batteries fit.</span><span lang="de">Welche Akkus passen.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-battery_fit-cells"><th scope="row"><code>battery_fit.cells</code></th><td><code>[min, max]</code></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Cell range (a single number means exactly that many).</span><span lang="de">Zellbereich (eine einzelne Zahl heißt genau so viele).</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-battery_fit-max_mass_g"><th scope="row"><code>battery_fit.max_mass_g</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Heaviest battery.</span><span lang="de">Schwerster Akku.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-battery_fit-preferred_min_cells"><th scope="row"><code>battery_fit.preferred_min_cells</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span lang="en">smallest cell count</span><span lang="de">kleinste Zellzahl</span></td><td><span lang="en">Cells of the preferred battery (shown in the workbench).</span><span lang="de">Zellen des bevorzugten Akkus (Anzeige in der Werkbank).</span></td></tr>
+<tr class="docs-field docs-field--d1" id="frame-battery_fit-preferred_min_capacity_mah"><th scope="row"><code>battery_fit.preferred_min_capacity_mah</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td>0</td><td><span lang="en">Capacity of the preferred battery.</span><span lang="de">Kapazität des bevorzugten Akkus.</span></td></tr>
+</tbody>
+</table></div>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">JSON</span><span class="docs-code__caption"><span lang="en">built-in <code>propwash:freestyle_5</code></span><span lang="de">eingebaut: <code>propwash:freestyle_5</code></span></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>{
+  <span class="tk-p">&quot;format&quot;</span>: <span class="tk-n">1</span>,
+  <span class="tk-p">&quot;mass_g&quot;</span>: <span class="tk-n">125.0</span>,
+  <span class="tk-p">&quot;role&quot;</span>: <span class="tk-s">&quot;freestyle&quot;</span>,
+  <span class="tk-p">&quot;shape&quot;</span>: <span class="tk-s">&quot;true_x&quot;</span>,
+  <span class="tk-p">&quot;wheelbase_mm&quot;</span>: <span class="tk-n">225</span>,
+  <span class="tk-p">&quot;max_prop_mm&quot;</span>: <span class="tk-n">130</span>,
+  <span class="tk-p">&quot;motor_mounts&quot;</span>: [<span class="tk-s">&quot;propwash:m22&quot;</span>],
+  <span class="tk-p">&quot;stack_mounts&quot;</span>: [<span class="tk-s">&quot;propwash:s30&quot;</span>],
+  <span class="tk-p">&quot;accessory_mounts&quot;</span>: [<span class="tk-s">&quot;top&quot;</span>, <span class="tk-s">&quot;bottom&quot;</span>],
+  <span class="tk-p">&quot;battery&quot;</span>: {<span class="tk-p">&quot;on_top&quot;</span>: <span class="tk-k">true</span>, <span class="tk-p">&quot;plate_mm&quot;</span>: <span class="tk-n">30.0</span>},
+  <span class="tk-p">&quot;electronics_mm&quot;</span>: <span class="tk-n">12.0</span>,
+  <span class="tk-p">&quot;camera&quot;</span>: {<span class="tk-p">&quot;pos&quot;</span>: [<span class="tk-n">0.0</span>, <span class="tk-n">17.2</span>, <span class="tk-n">-58.8</span>], <span class="tk-p">&quot;tilt_deg&quot;</span>: <span class="tk-n">28.0</span>},
+  <span class="tk-p">&quot;accessory_anchors&quot;</span>: {
+    <span class="tk-p">&quot;top&quot;</span>: {<span class="tk-p">&quot;pos&quot;</span>: [<span class="tk-n">0.0</span>, <span class="tk-n">34.7</span>, <span class="tk-n">-69.0</span>], <span class="tk-p">&quot;tilt_deg&quot;</span>: <span class="tk-n">22.0</span>, <span class="tk-p">&quot;length_mm&quot;</span>: <span class="tk-n">0.0</span>},
+    <span class="tk-p">&quot;bottom&quot;</span>: {<span class="tk-p">&quot;pos&quot;</span>: [<span class="tk-n">0.0</span>, <span class="tk-n">-3.0</span>, <span class="tk-n">-56.0</span>], <span class="tk-p">&quot;tilt_deg&quot;</span>: <span class="tk-n">30.0</span>, <span class="tk-p">&quot;length_mm&quot;</span>: <span class="tk-n">34.0</span>}
+  },
+  <span class="tk-p">&quot;aero&quot;</span>: {<span class="tk-p">&quot;frontal_area_m2&quot;</span>: <span class="tk-n">0.012</span>, <span class="tk-p">&quot;drag_coefficient&quot;</span>: <span class="tk-n">0.9</span>},
+  <span class="tk-p">&quot;impact_tolerance&quot;</span>: <span class="tk-n">8.0</span>,
+  <span class="tk-p">&quot;battery_fit&quot;</span>: {<span class="tk-p">&quot;cells&quot;</span>: [<span class="tk-n">4</span>, <span class="tk-n">6</span>], <span class="tk-p">&quot;max_mass_g&quot;</span>: <span class="tk-n">230.0</span>, <span class="tk-p">&quot;preferred_min_cells&quot;</span>: <span class="tk-n">6</span>, <span class="tk-p">&quot;preferred_min_capacity_mah&quot;</span>: <span class="tk-n">0</span>},
+  <span class="tk-p">&quot;sort&quot;</span>: <span class="tk-n">2</span>
+}</code></pre>
+</figure>
+
+</section>
+<section class="docs-section" aria-labelledby="stack">
+<h2 id="stack" class="docs-h2"><a class="docs-anchor" href="#stack" aria-hidden="true" tabindex="-1">#</a><span lang="en">Stack (flight controller and ESC) <code>stack</code></span><span lang="de">Stack (Flight-Controller und ESC) <code>stack</code></span></h2>
+
+<p lang="en">Folder <code>propwash_parts/stack/</code>, plus the <a href="#common">fields of every part</a>.</p>
+<p lang="de">Ordner <code>propwash_parts/stack/</code>, dazu die <a href="#common">Felder jedes Teils</a>.</p>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--fields">
+<thead><tr><th scope="col"><span lang="en">Field</span><span lang="de">Feld</span></th><th scope="col"><span lang="en">Type</span><span lang="de">Typ</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Meaning</span><span lang="de">Bedeutung</span></th></tr></thead>
+<tbody>
+<tr class="docs-field docs-field--d0" id="stack-mount"><th scope="row"><code>mount</code></th><td><span lang="en">id</span><span lang="de">Id</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Stack mount, for example <code>propwash:whoop_aio</code>, <code>propwash:s20</code>, <code>propwash:s30</code>.</span><span lang="de">Stack-Halterung, zum Beispiel <code>propwash:whoop_aio</code>, <code>propwash:s20</code>, <code>propwash:s30</code>.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="stack-esc_continuous_a"><th scope="row"><code>esc_continuous_a</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Continuous ESC current in A, at most 500.</span><span lang="de">Dauerstrom des ESC in A, höchstens 500.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="stack-cells"><th scope="row"><code>cells</code></th><td><code>[min, max]</code></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Cell range, 1–16.</span><span lang="de">Zellbereich, 1–16.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="stack-all_in_one"><th scope="row"><code>all_in_one</code></th><td><span lang="en">boolean</span><span lang="de">bool</span></td><td>false</td><td><span lang="en">Flight controller and ESC on one board.</span><span lang="de">Flight-Controller und ESC auf einer Platine.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="stack-esc_burst_a"><th scope="row"><code>esc_burst_a</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">derived</span><span lang="de">abgeleitet</span></td><td><span lang="en">Burst current, at least the continuous current.</span><span lang="de">Spitzenstrom, mindestens der Dauerstrom.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="stack-esc_resistance_ohm"><th scope="row"><code>esc_resistance_ohm</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">derived</span><span lang="de">abgeleitet</span></td><td><span lang="en">ESC resistance.</span><span lang="de">Widerstand des ESC.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="stack-brownout_v"><th scope="row"><code>brownout_v</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">derived</span><span lang="de">abgeleitet</span></td><td><span lang="en">Voltage at which the flight controller resets.</span><span lang="de">Spannung, bei der der Flight-Controller neu startet.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="stack-board_size_mm"><th scope="row"><code>board_size_mm</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">derived</span><span lang="de">abgeleitet</span></td><td><span lang="en">Board size, 10–120.</span><span lang="de">Platinengröße, 10–120.</span></td></tr>
+</tbody>
+</table></div>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">JSON</span><span class="docs-code__caption"><span lang="en">built-in <code>propwash:stack_30</code></span><span lang="de">eingebaut: <code>propwash:stack_30</code></span></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>{
+  <span class="tk-p">&quot;format&quot;</span>: <span class="tk-n">1</span>,
+  <span class="tk-p">&quot;mass_g&quot;</span>: <span class="tk-n">18.0</span>,
+  <span class="tk-p">&quot;mount&quot;</span>: <span class="tk-s">&quot;propwash:s30&quot;</span>,
+  <span class="tk-p">&quot;esc_continuous_a&quot;</span>: <span class="tk-n">55.0</span>,
+  <span class="tk-p">&quot;cells&quot;</span>: [<span class="tk-n">3</span>, <span class="tk-n">6</span>],
+  <span class="tk-p">&quot;all_in_one&quot;</span>: <span class="tk-k">false</span>,
+  <span class="tk-p">&quot;sort&quot;</span>: <span class="tk-n">2</span>
+}</code></pre>
+</figure>
+
+</section>
+<section class="docs-section" aria-labelledby="motor">
+<h2 id="motor" class="docs-h2"><a class="docs-anchor" href="#motor" aria-hidden="true" tabindex="-1">#</a>Motor <code>motor</code></h2>
+
+<p lang="en">Folder <code>propwash_parts/motor/</code>, plus the <a href="#common">fields of every part</a>.</p>
+<p lang="de">Ordner <code>propwash_parts/motor/</code>, dazu die <a href="#common">Felder jedes Teils</a>.</p>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--fields">
+<thead><tr><th scope="col"><span lang="en">Field</span><span lang="de">Feld</span></th><th scope="col"><span lang="en">Type</span><span lang="de">Typ</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Meaning</span><span lang="de">Bedeutung</span></th></tr></thead>
+<tbody>
+<tr class="docs-field docs-field--d0" id="motor-stator"><th scope="row"><code>stator</code></th><td><span lang="en">text</span><span lang="de">Text</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Stator label such as <code>"2207"</code> or <code>"2306.5"</code>.</span><span lang="de">Stator-Bezeichnung wie <code>"2207"</code> oder <code>"2306.5"</code>.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="motor-stator_mm"><th scope="row"><code>stator_mm</code></th><td><code>[d, h]</code></td><td><span lang="en">from <code>stator</code></span><span lang="de">aus <code>stator</code></span></td><td><span lang="en">Stator diameter and height when the label does not say it (first two digits diameter, rest height).</span><span lang="de">Statordurchmesser und -höhe, wenn die Bezeichnung es nicht sagt (erste zwei Ziffern Durchmesser, Rest Höhe).</span></td></tr>
+<tr class="docs-field docs-field--d0" id="motor-kv"><th scope="row"><code>kv</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td>KV, 50–100000.</td></tr>
+<tr class="docs-field docs-field--d0" id="motor-mount"><th scope="row"><code>mount</code></th><td><span lang="en">id</span><span lang="de">Id</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Motor mount, for example <code>propwash:m08</code>, <code>propwash:m14</code>, <code>propwash:m22</code>, <code>propwash:m28</code>.</span><span lang="de">Motor-Halterung, zum Beispiel <code>propwash:m08</code>, <code>propwash:m14</code>, <code>propwash:m22</code>, <code>propwash:m28</code>.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="motor-max_current_a"><th scope="row"><code>max_current_a</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Maximum current in A, at most 500.</span><span lang="de">Höchststrom in A, höchstens 500.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="motor-resistance_ohm"><th scope="row"><code>resistance_ohm</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Winding resistance, below 10.</span><span lang="de">Wicklungswiderstand, unter 10.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="motor-cells"><th scope="row"><code>cells</code></th><td><code>[min, max]</code></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Cell range, 1–16.</span><span lang="de">Zellbereich, 1–16.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="motor-prop_mount"><th scope="row"><code>prop_mount</code></th><td><span lang="en">id</span><span lang="de">Id</span></td><td><code>propwash:universal</code></td><td><span lang="en">Prop mount; <code>universal</code> fits every prop.</span><span lang="de">Prop-Aufnahme; <code>universal</code> passt zu jedem Prop.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="motor-thermal"><th scope="row"><code>thermal</code></th><td><span lang="en">object</span><span lang="de">Objekt</span></td><td><span lang="en">defaults below</span><span lang="de">Standards darunter</span></td><td><span lang="en">Heat model.</span><span lang="de">Hitzemodell.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="motor-thermal-heat_capacity_j_per_k"><th scope="row"><code>thermal.heat_capacity_j_per_k</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">from the mass</span><span lang="de">aus der Masse</span></td><td><span lang="en">Heat capacity in J/K.</span><span lang="de">Wärmekapazität in J/K.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="motor-thermal-cooling_w_per_k"><th scope="row"><code>thermal.cooling_w_per_k</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">from the mass</span><span lang="de">aus der Masse</span></td><td><span lang="en">Cooling at standstill in W/K.</span><span lang="de">Kühlung im Stand in W/K.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="motor-thermal-cooling_w_per_k_per_rad_s"><th scope="row"><code>thermal.cooling_w_per_k_per_rad_s</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">from the mass</span><span lang="de">aus der Masse</span></td><td><span lang="en">Extra cooling per rad/s of rotation.</span><span lang="de">Zusätzliche Kühlung je rad/s Drehzahl.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="motor-thermal-derate_start_c"><th scope="row"><code>thermal.derate_start_c</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td>130</td><td><span lang="en">Throttling starts at this temperature in °C (from 40).</span><span lang="de">Ab dieser Temperatur in °C wird gedrosselt (ab 40).</span></td></tr>
+<tr class="docs-field docs-field--d1" id="motor-thermal-max_temp_c"><th scope="row"><code>thermal.max_temp_c</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td>150</td><td><span lang="en">Maximum temperature in °C (at most 300).</span><span lang="de">Höchsttemperatur in °C (höchstens 300).</span></td></tr>
+<tr class="docs-field docs-field--d1" id="motor-thermal-wear_per_s_at_max"><th scope="row"><code>thermal.wear_per_s_at_max</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">0.002</span><span lang="de">0,002</span></td><td><span lang="en">Wear per second at the maximum temperature, 0–1.</span><span lang="de">Verschleiß je Sekunde bei Höchsttemperatur, 0–1.</span></td></tr>
+</tbody>
+</table></div>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">JSON</span><span class="docs-code__caption"><span lang="en">built-in <code>propwash:m2207_1750</code></span><span lang="de">eingebaut: <code>propwash:m2207_1750</code></span></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>{
+  <span class="tk-p">&quot;format&quot;</span>: <span class="tk-n">1</span>,
+  <span class="tk-p">&quot;mass_g&quot;</span>: <span class="tk-n">33.0</span>,
+  <span class="tk-p">&quot;stator&quot;</span>: <span class="tk-s">&quot;2207&quot;</span>,
+  <span class="tk-p">&quot;kv&quot;</span>: <span class="tk-n">1750</span>,
+  <span class="tk-p">&quot;mount&quot;</span>: <span class="tk-s">&quot;propwash:m22&quot;</span>,
+  <span class="tk-p">&quot;max_current_a&quot;</span>: <span class="tk-n">45.0</span>,
+  <span class="tk-p">&quot;resistance_ohm&quot;</span>: <span class="tk-n">0.055</span>,
+  <span class="tk-p">&quot;cells&quot;</span>: [<span class="tk-n">6</span>, <span class="tk-n">6</span>],
+  <span class="tk-p">&quot;sort&quot;</span>: <span class="tk-n">3</span>,
+  <span class="tk-p">&quot;visual&quot;</span>: {<span class="tk-p">&quot;accent&quot;</span>: <span class="tk-s">&quot;#e8b622&quot;</span>}
+}</code></pre>
+</figure>
+
+</section>
+<section class="docs-section" aria-labelledby="prop">
+<h2 id="prop" class="docs-h2"><a class="docs-anchor" href="#prop" aria-hidden="true" tabindex="-1">#</a>Propeller <code>prop</code></h2>
+
+<p lang="en">Folder <code>propwash_parts/prop/</code>, plus the <a href="#common">fields of every part</a>.</p>
+<p lang="de">Ordner <code>propwash_parts/prop/</code>, dazu die <a href="#common">Felder jedes Teils</a>.</p>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--fields">
+<thead><tr><th scope="col"><span lang="en">Field</span><span lang="de">Feld</span></th><th scope="col"><span lang="en">Type</span><span lang="de">Typ</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Meaning</span><span lang="de">Bedeutung</span></th></tr></thead>
+<tbody>
+<tr class="docs-field docs-field--d0" id="prop-diameter_mm"><th scope="row"><code>diameter_mm</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Diameter, 10–400.</span><span lang="de">Durchmesser, 10–400.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="prop-pitch_in"><th scope="row"><code>pitch_in</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Pitch in inches, above 0 and at most 12.</span><span lang="de">Steigung in Zoll, über 0 und höchstens 12.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="prop-blades"><th scope="row"><code>blades</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Number of blades, 2–8.</span><span lang="de">Blattzahl, 2–8.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="prop-ct"><th scope="row"><code>ct</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Thrust coefficient, between 0 and 1.</span><span lang="de">Schubbeiwert, zwischen 0 und 1.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="prop-cp"><th scope="row"><code>cp</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Power coefficient, between 0 and 1.</span><span lang="de">Leistungsbeiwert, zwischen 0 und 1.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="prop-material"><th scope="row"><code>material</code></th><td><span lang="en">text</span><span lang="de">Text</span></td><td><code>polycarbonate</code></td><td><span lang="en">Material: <code>polycarbonate</code>, <code>glass_fiber_nylon</code>, <code>carbon_fiber_nylon</code>, <code>carbon</code>. Sets the default stiffness and durability.</span><span lang="de">Material: <code>polycarbonate</code>, <code>glass_fiber_nylon</code>, <code>carbon_fiber_nylon</code>, <code>carbon</code>. Bestimmt Standard-Steifigkeit und -Haltbarkeit.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="prop-stiffness"><th scope="row"><code>stiffness</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">by material</span><span lang="de">je Material</span></td><td><span lang="en">Stiffness, above 0 and at most 10; stiffer props shake less in the downwash.</span><span lang="de">Steifigkeit, über 0 und höchstens 10; steifere Props rütteln weniger im Abwind.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="prop-mount"><th scope="row"><code>mount</code></th><td><span lang="en">id</span><span lang="de">Id</span></td><td><code>propwash:universal</code></td><td><span lang="en">Prop mount.</span><span lang="de">Prop-Aufnahme.</span></td></tr>
+</tbody>
+</table></div>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">JSON</span><span class="docs-code__caption"><span lang="en">built-in <code>propwash:p51_3b</code></span><span lang="de">eingebaut: <code>propwash:p51_3b</code></span></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>{
+  <span class="tk-p">&quot;format&quot;</span>: <span class="tk-n">1</span>,
+  <span class="tk-p">&quot;mass_g&quot;</span>: <span class="tk-n">4.3</span>,
+  <span class="tk-p">&quot;diameter_mm&quot;</span>: <span class="tk-n">130</span>,
+  <span class="tk-p">&quot;pitch_in&quot;</span>: <span class="tk-n">4.6</span>,
+  <span class="tk-p">&quot;blades&quot;</span>: <span class="tk-n">3</span>,
+  <span class="tk-p">&quot;ct&quot;</span>: <span class="tk-n">0.12</span>,
+  <span class="tk-p">&quot;cp&quot;</span>: <span class="tk-n">0.06</span>,
+  <span class="tk-p">&quot;material&quot;</span>: <span class="tk-s">&quot;polycarbonate&quot;</span>,
+  <span class="tk-p">&quot;sort&quot;</span>: <span class="tk-n">3</span>,
+  <span class="tk-p">&quot;visual&quot;</span>: {<span class="tk-p">&quot;accent&quot;</span>: <span class="tk-s">&quot;#ff7a1a&quot;</span>}
+}</code></pre>
+</figure>
+
+</section>
+<section class="docs-section" aria-labelledby="video">
+<h2 id="video" class="docs-h2"><a class="docs-anchor" href="#video" aria-hidden="true" tabindex="-1">#</a><span lang="en">Video unit <code>video</code></span><span lang="de">Videomodul <code>video</code></span></h2>
+
+<p lang="en">Folder <code>propwash_parts/video/</code>, plus the <a href="#common">fields of every part</a>.</p>
+<p lang="de">Ordner <code>propwash_parts/video/</code>, dazu die <a href="#common">Felder jedes Teils</a>.</p>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--fields">
+<thead><tr><th scope="col"><span lang="en">Field</span><span lang="de">Feld</span></th><th scope="col"><span lang="en">Type</span><span lang="de">Typ</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Meaning</span><span lang="de">Bedeutung</span></th></tr></thead>
+<tbody>
+<tr class="docs-field docs-field--d0" id="video-link"><th scope="row"><code>link</code></th><td><span lang="en">text</span><span lang="de">Text</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Video system: <code>analog</code>, <code>digital</code>.</span><span lang="de">Videosystem: <code>analog</code>, <code>digital</code>.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="video-latency_ms"><th scope="row"><code>latency_ms</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Latency in ms, 1–500.</span><span lang="de">Latenz in ms, 1–500.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="video-range_blocks"><th scope="row"><code>range_blocks</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Range in blocks, 16–20000.</span><span lang="de">Reichweite in Blöcken, 16–20000.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="video-image_quality"><th scope="row"><code>image_quality</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Image quality, above 0 and at most 1.</span><span lang="de">Bildqualität, über 0 und höchstens 1.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="video-camera_width_mm"><th scope="row"><code>camera_width_mm</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td>19</td><td><span lang="en">Camera width, 8–40.</span><span lang="de">Kamerabreite, 8–40.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="video-camera_fov_deg"><th scope="row"><code>camera_fov_deg</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td>analog 120, digital 130</td><td><span lang="en">Horizontal field of view of the camera, 60–180; it is the FPV field of view in the game.</span><span lang="de">Horizontales Sichtfeld der Kamera, 60–180; es ist das FPV-Sichtfeld im Spiel.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="video-vtx_power_mw"><th scope="row"><code>vtx_power_mw</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td>0</td><td><span lang="en">Transmitter power in mW, 0–10000 (information only).</span><span lang="de">Sendeleistung in mW, 0–10000 (nur zur Information).</span></td></tr>
+<tr class="docs-field docs-field--d0" id="video-power_w"><th scope="row"><code>power_w</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">from system, mass and power</span><span lang="de">aus System, Masse und Leistung</span></td><td><span lang="en">Power draw of the video system in W for the energy balance, 0.1–60.</span><span lang="de">Leistungsaufnahme des Videosystems in W für die Energiebilanz, 0,1–60.</span></td></tr>
+</tbody>
+</table></div>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">JSON</span><span class="docs-code__caption"><span lang="en">built-in <code>propwash:analog_race</code></span><span lang="de">eingebaut: <code>propwash:analog_race</code></span></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>{
+  <span class="tk-p">&quot;format&quot;</span>: <span class="tk-n">1</span>,
+  <span class="tk-p">&quot;mass_g&quot;</span>: <span class="tk-n">8.0</span>,
+  <span class="tk-p">&quot;link&quot;</span>: <span class="tk-s">&quot;analog&quot;</span>,
+  <span class="tk-p">&quot;latency_ms&quot;</span>: <span class="tk-n">12</span>,
+  <span class="tk-p">&quot;range_blocks&quot;</span>: <span class="tk-n">380</span>,
+  <span class="tk-p">&quot;image_quality&quot;</span>: <span class="tk-n">0.65</span>,
+  <span class="tk-p">&quot;camera_width_mm&quot;</span>: <span class="tk-n">19.0</span>,
+  <span class="tk-p">&quot;camera_fov_deg&quot;</span>: <span class="tk-n">125.0</span>,
+  <span class="tk-p">&quot;power_w&quot;</span>: <span class="tk-n">3.5</span>,
+  <span class="tk-p">&quot;sort&quot;</span>: <span class="tk-n">1</span>
+}</code></pre>
+</figure>
+
+</section>
+<section class="docs-section" aria-labelledby="battery">
+<h2 id="battery" class="docs-h2"><a class="docs-anchor" href="#battery" aria-hidden="true" tabindex="-1">#</a><span lang="en">Battery <code>battery</code></span><span lang="de">Akku <code>battery</code></span></h2>
+
+<p lang="en">Folder <code>propwash_parts/battery/</code>, plus the <a href="#common">fields of every part</a>.</p>
+<p lang="de">Ordner <code>propwash_parts/battery/</code>, dazu die <a href="#common">Felder jedes Teils</a>.</p>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--fields">
+<thead><tr><th scope="col"><span lang="en">Field</span><span lang="de">Feld</span></th><th scope="col"><span lang="en">Type</span><span lang="de">Typ</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Meaning</span><span lang="de">Bedeutung</span></th></tr></thead>
+<tbody>
+<tr class="docs-field docs-field--d0" id="battery-cells"><th scope="row"><code>cells</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Cells in series, 1–12.</span><span lang="de">Zellen in Reihe, 1–12.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="battery-capacity_mah"><th scope="row"><code>capacity_mah</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Capacity in mAh, 50–50000.</span><span lang="de">Kapazität in mAh, 50–50000.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="battery-cell_resistance_ohm"><th scope="row"><code>cell_resistance_ohm</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Internal resistance per cell, below 1.</span><span lang="de">Innenwiderstand je Zelle, unter 1.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="battery-c_rating"><th scope="row"><code>c_rating</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">C rating, 1–300.</span><span lang="de">C-Rate, 1–300.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="battery-chemistry"><th scope="row"><code>chemistry</code></th><td><span lang="en">id</span><span lang="de">Id</span></td><td><code>propwash:lipo</code></td><td><span lang="en">Cell chemistry: <code>propwash:lihv</code>, <code>propwash:lion</code>, <code>propwash:lipo</code> or an own one.</span><span lang="de">Zellchemie: <code>propwash:lihv</code>, <code>propwash:lion</code>, <code>propwash:lipo</code> oder eine eigene.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="battery-pack_mm"><th scope="row"><code>pack_mm</code></th><td><span lang="en"><code>[l, w, h]</code></span><span lang="de"><code>[l, b, h]</code></span></td><td><span lang="en">from mass and density</span><span lang="de">aus Masse und Dichte</span></td><td><span lang="en">Pack size.</span><span lang="de">Maße des Akkus.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="battery-connector"><th scope="row"><code>connector</code></th><td><span lang="en">text</span><span lang="de">Text</span></td><td><span lang="en">empty</span><span lang="de">leer</span></td><td><span lang="en">Connector name, up to 16 characters.</span><span lang="de">Steckername, bis 16 Zeichen.</span></td></tr>
+</tbody>
+</table></div>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">JSON</span><span class="docs-code__caption"><span lang="en">built-in <code>propwash:b6s_1300</code></span><span lang="de">eingebaut: <code>propwash:b6s_1300</code></span></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>{
+  <span class="tk-p">&quot;format&quot;</span>: <span class="tk-n">1</span>,
+  <span class="tk-p">&quot;mass_g&quot;</span>: <span class="tk-n">210.0</span>,
+  <span class="tk-p">&quot;cells&quot;</span>: <span class="tk-n">6</span>,
+  <span class="tk-p">&quot;capacity_mah&quot;</span>: <span class="tk-n">1300</span>,
+  <span class="tk-p">&quot;cell_resistance_ohm&quot;</span>: <span class="tk-n">0.0055</span>,
+  <span class="tk-p">&quot;c_rating&quot;</span>: <span class="tk-n">120</span>,
+  <span class="tk-p">&quot;chemistry&quot;</span>: <span class="tk-s">&quot;propwash:lipo&quot;</span>,
+  <span class="tk-p">&quot;sort&quot;</span>: <span class="tk-n">3</span>,
+  <span class="tk-p">&quot;visual&quot;</span>: {<span class="tk-p">&quot;accent&quot;</span>: <span class="tk-s">&quot;#2f6fd6&quot;</span>}
+}</code></pre>
+</figure>
+
+</section>
+<section class="docs-section" aria-labelledby="accessory">
+<h2 id="accessory" class="docs-h2"><a class="docs-anchor" href="#accessory" aria-hidden="true" tabindex="-1">#</a><span lang="en">Accessory <code>accessory</code></span><span lang="de">Zubehör <code>accessory</code></span></h2>
+
+<p lang="en">Folder <code>propwash_parts/accessory/</code>, plus the <a href="#common">fields of every part</a>.</p>
+<p lang="de">Ordner <code>propwash_parts/accessory/</code>, dazu die <a href="#common">Felder jedes Teils</a>.</p>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--fields">
+<thead><tr><th scope="col"><span lang="en">Field</span><span lang="de">Feld</span></th><th scope="col"><span lang="en">Type</span><span lang="de">Typ</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Meaning</span><span lang="de">Bedeutung</span></th></tr></thead>
+<tbody>
+<tr class="docs-field docs-field--d0" id="accessory-slot"><th scope="row"><code>slot</code></th><td><span lang="en">text</span><span lang="de">Text</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Mount: <code>top</code>, <code>bottom</code>.</span><span lang="de">Halterung: <code>top</code>, <code>bottom</code>.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="accessory-size_mm"><th scope="row"><code>size_mm</code></th><td><span lang="en"><code>[w, h, d]</code></span><span lang="de"><code>[b, h, t]</code></span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Size, each above 0 and at most 500.</span><span lang="de">Maße, je über 0 und höchstens 500.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="accessory-flight_battery_w"><th scope="row"><code>flight_battery_w</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td>0</td><td><span lang="en">Power taken from the flight battery in W, at most 200.</span><span lang="de">Leistung aus dem Flugakku in W, höchstens 200.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="accessory-frontal_area_m2"><th scope="row"><code>frontal_area_m2</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td>0</td><td><span lang="en">Extra frontal area, at most 0.5.</span><span lang="de">Zusätzliche Stirnfläche, höchstens 0,5.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="accessory-leds"><th scope="row"><code>leds</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td>0</td><td><span lang="en">Number of LEDs, 0–64.</span><span lang="de">Anzahl LEDs, 0–64.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="accessory-lens"><th scope="row"><code>lens</code></th><td><span lang="en">object</span><span lang="de">Objekt</span></td><td>–</td><td><span lang="en">Lens of a camera accessory.</span><span lang="de">Objektiv eines Kamera-Zubehörs.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="accessory-lens-x_mm"><th scope="row"><code>lens.x_mm</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td>0</td><td><span lang="en">Side offset of the lens.</span><span lang="de">Seitlicher Versatz des Objektivs.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="accessory-lens-length_mm"><th scope="row"><code>lens.length_mm</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td>0</td><td><span lang="en">Lens length, 0–100.</span><span lang="de">Objektivlänge, 0–100.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="accessory-action_cam"><th scope="row"><code>action_cam</code></th><td><span lang="en">object</span><span lang="de">Objekt</span></td><td>–</td><td><span lang="en">Makes the accessory an action cam (top mount only).</span><span lang="de">Macht das Zubehör zur Action-Cam (nur obere Halterung).</span></td></tr>
+<tr class="docs-field docs-field--d1" id="accessory-action_cam-max_height"><th scope="row"><code>action_cam.max_height</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Highest recording height in pixels (1080, 1440 …).</span><span lang="de">Höchste Aufnahmehöhe in Pixeln (1080, 1440 …).</span></td></tr>
+<tr class="docs-field docs-field--d1" id="accessory-action_cam-max_fps"><th scope="row"><code>action_cam.max_fps</code></th><td><span lang="en">integer</span><span lang="de">ganze Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Highest frame rate.</span><span lang="de">Höchste Bildrate.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="accessory-action_cam-stabilization"><th scope="row"><code>action_cam.stabilization</code></th><td><span lang="en">boolean</span><span lang="de">bool</span></td><td>false</td><td><span lang="en">Image stabilisation.</span><span lang="de">Bildstabilisierung.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="accessory-action_cam-horizon_levelling"><th scope="row"><code>action_cam.horizon_levelling</code></th><td><span lang="en">boolean</span><span lang="de">bool</span></td><td>false</td><td><span lang="en">Keeps the horizon level.</span><span lang="de">Hält den Horizont gerade.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="accessory-action_cam-own_battery_wh"><th scope="row"><code>action_cam.own_battery_wh</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td>0</td><td><span lang="en">Own battery in Wh; 0 = runs from the flight battery.</span><span lang="de">Eigener Akku in Wh; 0 = läuft am Flugakku.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="accessory-action_cam-record_w"><th scope="row"><code>action_cam.record_w</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Power while recording in W.</span><span lang="de">Leistung beim Aufnehmen in W.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="accessory-action_cam-max_record_w"><th scope="row"><code>action_cam.max_record_w</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><code>record_w</code></td><td><span lang="en">Power at the highest setting.</span><span lang="de">Leistung bei der höchsten Einstellung.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="accessory-action_cam-fov_deg"><th scope="row"><code>action_cam.fov_deg</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Field of view.</span><span lang="de">Sichtfeld.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="accessory-action_cam-image_quality"><th scope="row"><code>action_cam.image_quality</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Image quality.</span><span lang="de">Bildqualität.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="accessory-action_cam-low_light_noise"><th scope="row"><code>action_cam.low_light_noise</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Noise in the dark.</span><span lang="de">Rauschen im Dunkeln.</span></td></tr>
+<tr class="docs-field docs-field--d1" id="accessory-action_cam-sensor_in"><th scope="row"><code>action_cam.sensor_in</code></th><td><span lang="en">number or <code>"1/2.8"</code></span><span lang="de">Zahl oder <code>"1/2.8"</code></span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Sensor size in inches.</span><span lang="de">Sensorgröße in Zoll.</span></td></tr>
+</tbody>
+</table></div>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">JSON</span><span class="docs-code__caption"><span lang="en">built-in <code>propwash:action_cam_light</code></span><span lang="de">eingebaut: <code>propwash:action_cam_light</code></span></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>{
+  <span class="tk-p">&quot;format&quot;</span>: <span class="tk-n">1</span>,
+  <span class="tk-p">&quot;mass_g&quot;</span>: <span class="tk-n">42.0</span>,
+  <span class="tk-p">&quot;slot&quot;</span>: <span class="tk-s">&quot;top&quot;</span>,
+  <span class="tk-p">&quot;size_mm&quot;</span>: [<span class="tk-n">46.0</span>, <span class="tk-n">30.0</span>, <span class="tk-n">26.0</span>],
+  <span class="tk-p">&quot;flight_battery_w&quot;</span>: <span class="tk-n">4.0</span>,
+  <span class="tk-p">&quot;frontal_area_m2&quot;</span>: <span class="tk-n">0.0014</span>,
+  <span class="tk-p">&quot;lens&quot;</span>: {<span class="tk-p">&quot;x_mm&quot;</span>: <span class="tk-n">0.0</span>, <span class="tk-p">&quot;length_mm&quot;</span>: <span class="tk-n">7.0</span>},
+  <span class="tk-p">&quot;action_cam&quot;</span>: {
+    <span class="tk-p">&quot;max_height&quot;</span>: <span class="tk-n">1080</span>,
+    <span class="tk-p">&quot;max_fps&quot;</span>: <span class="tk-n">60</span>,
+    <span class="tk-p">&quot;stabilization&quot;</span>: <span class="tk-k">false</span>,
+    <span class="tk-p">&quot;horizon_levelling&quot;</span>: <span class="tk-k">false</span>,
+    <span class="tk-p">&quot;own_battery_wh&quot;</span>: <span class="tk-n">0.0</span>,
+    <span class="tk-p">&quot;record_w&quot;</span>: <span class="tk-n">4.0</span>,
+    <span class="tk-p">&quot;max_record_w&quot;</span>: <span class="tk-n">4.0</span>,
+    <span class="tk-p">&quot;fov_deg&quot;</span>: <span class="tk-n">150.0</span>,
+    <span class="tk-p">&quot;image_quality&quot;</span>: <span class="tk-n">0.8</span>,
+    <span class="tk-p">&quot;low_light_noise&quot;</span>: <span class="tk-n">0.55</span>,
+    <span class="tk-p">&quot;sensor_in&quot;</span>: <span class="tk-s">&quot;1/2.8&quot;</span>
+  },
+  <span class="tk-p">&quot;sort&quot;</span>: <span class="tk-n">1</span>
+}</code></pre>
+</figure>
+
+</section>
+<section class="docs-section" aria-labelledby="chemistry">
+<h2 id="chemistry" class="docs-h2"><a class="docs-anchor" href="#chemistry" aria-hidden="true" tabindex="-1">#</a><span lang="en">Cell chemistry <code>chemistry</code></span><span lang="de">Zellchemie <code>chemistry</code></span></h2>
+
+<p lang="en">Chemistries are not parts and have no common fields; batteries refer to them by id. Register or load them before the batteries that use them.</p>
+<p lang="de">Zellchemien sind keine Teile und haben keine gemeinsamen Felder; Akkus verweisen per Id auf sie. Vor den Akkus anmelden oder laden, die sie benutzen.</p>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--fields">
+<thead><tr><th scope="col"><span lang="en">Field</span><span lang="de">Feld</span></th><th scope="col"><span lang="en">Type</span><span lang="de">Typ</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Meaning</span><span lang="de">Bedeutung</span></th></tr></thead>
+<tbody>
+<tr class="docs-field docs-field--d0" id="chemistry-full_v"><th scope="row"><code>full_v</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Cell voltage when full.</span><span lang="de">Zellspannung voll geladen.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="chemistry-nominal_v"><th scope="row"><code>nominal_v</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Nominal cell voltage.</span><span lang="de">Nennspannung der Zelle.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="chemistry-empty_v"><th scope="row"><code>empty_v</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Cell voltage when empty.</span><span lang="de">Zellspannung leer.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="chemistry-cutoff_v"><th scope="row"><code>cutoff_v</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Cut-off voltage, at most the empty voltage.</span><span lang="de">Abschaltspannung, höchstens die Leerspannung.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="chemistry-storage_v"><th scope="row"><code>storage_v</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Storage voltage, between empty and full.</span><span lang="de">Lagerspannung, zwischen leer und voll.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="chemistry-density_g_cm3"><th scope="row"><code>density_g_cm3</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Density in g/cm³ (for the pack size).</span><span lang="de">Dichte in g/cm³ (für die Akkumaße).</span></td></tr>
+<tr class="docs-field docs-field--d0" id="chemistry-ocv_shape"><th scope="row"><code>ocv_shape</code></th><td><span lang="en">12 numbers</span><span lang="de">12 Zahlen</span></td><td><span class="docs-badge docs-badge--req"><span lang="en">required</span><span lang="de">Pflicht</span></span></td><td><span lang="en">Open-circuit voltage curve: 12 values from 0 to 1, rising, at charge 0, 0.05, 0.1, 0.2 … 1.0.</span><span lang="de">Leerlaufspannungskurve: 12 Werte von 0 bis 1, steigend, bei Ladung 0, 0,05, 0,1, 0,2 … 1,0.</span></td></tr>
+<tr class="docs-field docs-field--d0" id="chemistry-usable_fraction"><th scope="row"><code>usable_fraction</code></th><td><span lang="en">number</span><span lang="de">Zahl</span></td><td><span lang="en">0.88 / 0.85 / 0.80 by voltages</span><span lang="de">0,88 / 0,85 / 0,80 nach Spannungen</span></td><td><span lang="en">Usable share of the capacity down to the landing voltage, 0.5–1.</span><span lang="de">Nutzbarer Anteil der Kapazität bis zur Landespannung, 0,5–1.</span></td></tr>
+</tbody>
+</table></div>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">JSON</span><span class="docs-code__caption"><span lang="en">built-in <code>propwash:lipo</code></span><span lang="de">eingebaut: <code>propwash:lipo</code></span></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>{
+  <span class="tk-p">&quot;format&quot;</span>: <span class="tk-n">1</span>,
+  <span class="tk-p">&quot;full_v&quot;</span>: <span class="tk-n">4.2</span>,
+  <span class="tk-p">&quot;nominal_v&quot;</span>: <span class="tk-n">3.7</span>,
+  <span class="tk-p">&quot;empty_v&quot;</span>: <span class="tk-n">3.5</span>,
+  <span class="tk-p">&quot;cutoff_v&quot;</span>: <span class="tk-n">3.3</span>,
+  <span class="tk-p">&quot;storage_v&quot;</span>: <span class="tk-n">3.8</span>,
+  <span class="tk-p">&quot;density_g_cm3&quot;</span>: <span class="tk-n">2.0</span>,
+  <span class="tk-p">&quot;usable_fraction&quot;</span>: <span class="tk-n">0.8</span>,
+  <span class="tk-p">&quot;ocv_shape&quot;</span>: [<span class="tk-n">0.0</span>, <span class="tk-n">0.13</span>, <span class="tk-n">0.2</span>, <span class="tk-n">0.29</span>, <span class="tk-n">0.34</span>, <span class="tk-n">0.39</span>, <span class="tk-n">0.43</span>, <span class="tk-n">0.49</span>, <span class="tk-n">0.57</span>, <span class="tk-n">0.69</span>, <span class="tk-n">0.83</span>, <span class="tk-n">1.0</span>]
+}</code></pre>
+</figure>
+
+</section>
+<section class="docs-section" aria-labelledby="builtin">
+<h2 id="builtin" class="docs-h2"><a class="docs-anchor" href="#builtin" aria-hidden="true" tabindex="-1">#</a><span lang="en">Built-in ids</span><span lang="de">Eingebaute Ids</span></h2>
+
+<p lang="en">Mounts of the built-in parts, to make own parts fit them:</p>
+<p lang="de">Halterungen der eingebauten Teile, damit eigene Teile dazu passen:</p>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col"><span lang="en">Mount</span><span lang="de">Halterung</span></th><th scope="col">Id</th></tr></thead>
+<tbody>
+<tr><th scope="row"><code>Mounts.MOTOR_M08</code></th><td><code>propwash:m08</code></td></tr>
+<tr><th scope="row"><code>Mounts.MOTOR_M14</code></th><td><code>propwash:m14</code></td></tr>
+<tr><th scope="row"><code>Mounts.MOTOR_M22</code></th><td><code>propwash:m22</code></td></tr>
+<tr><th scope="row"><code>Mounts.MOTOR_M28</code></th><td><code>propwash:m28</code></td></tr>
+<tr><th scope="row"><code>Mounts.STACK_WHOOP_AIO</code></th><td><code>propwash:whoop_aio</code></td></tr>
+<tr><th scope="row"><code>Mounts.STACK_S20</code></th><td><code>propwash:s20</code></td></tr>
+<tr><th scope="row"><code>Mounts.STACK_S30</code></th><td><code>propwash:s30</code></td></tr>
+<tr><th scope="row"><code>Mounts.PROP_UNIVERSAL</code></th><td><code>propwash:universal</code></td></tr>
+</tbody>
+</table></div>
+<p lang="en">Built-in parts and chemistries, for presets that mix them with own parts:</p>
+<p lang="de">Eingebaute Teile und Zellchemien, für Presets, die sie mit eigenen Teilen mischen:</p>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--ids">
+<thead><tr><th scope="col"><span lang="en">Category</span><span lang="de">Kategorie</span></th><th scope="col">Ids</th></tr></thead>
+<tbody>
+<tr><th scope="row"><code>frame</code></th><td><code title="65 mm Whoop Frame">propwash:whoop_65</code> <code title="3″ Cinewhoop Frame">propwash:cinewhoop_3</code> <code title="5″ Freestyle Frame">propwash:freestyle_5</code> <code title="5″ Race Frame">propwash:race_5</code> <code title="7″ Long Range Frame">propwash:long_range_7</code></td></tr>
+<tr><th scope="row"><code>stack</code></th><td><code title="Whoop AIO Board (1–2S, 5 A)">propwash:aio_whoop</code> <code title="20×20 AIO Board (2–6S, 25 A)">propwash:aio_20</code> <code title="30×30 FC/ESC Stack (3–6S, 55 A)">propwash:stack_30</code></td></tr>
+<tr><th scope="row"><code>motor</code></th><td><code title="0802 Motor, 22000 KV">propwash:m0802_22000</code> <code title="1404 Motor, 4600 KV">propwash:m1404_4600</code> <code title="2004 Motor, 3000 KV">propwash:m2004_3000</code> <code title="2207 Motor, 1750 KV">propwash:m2207_1750</code> <code title="2306.5 Motor, 1860 KV">propwash:m2306_1860</code> <code title="2807 Motor, 1300 KV">propwash:m2807_1300</code></td></tr>
+<tr><th scope="row"><code>prop</code></th><td><code title="31 mm Propeller (4-blade, 1.2″ pitch, PC)">propwash:p31_4b</code> <code title="31 mm Propeller (3-blade, 1.4″ pitch, PC)">propwash:p31_3b</code> <code title="3″ Propeller (3-blade, 3.0″ pitch, PC)">propwash:p3_3b</code> <code title="5.1″ Propeller (3-blade, 4.6″ pitch, PC)">propwash:p51_3b</code> <code title="7″ Propeller (2-blade, 3.5″ pitch, PC)">propwash:p7_2b</code></td></tr>
+<tr><th scope="row"><code>video</code></th><td><code title="Analog Nano Camera + VTX">propwash:analog_nano</code> <code title="Analog Race Camera + VTX">propwash:analog_race</code> <code title="Digital Video System (Lite)">propwash:digital_lite</code> <code title="Digital HD Video System">propwash:digital_hd</code></td></tr>
+<tr><th scope="row"><code>battery</code></th><td><code title="1S 300 mAh Battery (LiHV)">propwash:b1s_300_hv</code> <code title="4S 650 mAh Battery">propwash:b4s_650</code> <code title="6S 1100 mAh Battery">propwash:b6s_1100</code> <code title="6S 1300 mAh Battery">propwash:b6s_1300</code> <code title="6S 4000 mAh Battery (Li-Ion)">propwash:b6s_4000_lion</code></td></tr>
+<tr><th scope="row"><code>accessory</code></th><td><code title="LED Strip">propwash:led_strip</code> <code title="Action Cam (Light)">propwash:action_cam_light</code> <code title="Action Cam (Heavy)">propwash:action_cam_heavy</code></td></tr>
+<tr><th scope="row"><code>chemistry</code></th><td><code title="">propwash:lihv</code> <code title="">propwash:lion</code> <code title="">propwash:lipo</code></td></tr>
+</tbody>
+</table></div>
+
+</section>
+<section class="docs-section" aria-labelledby="example-addon">
+<h2 id="example-addon" class="docs-h2"><a class="docs-anchor" href="#example-addon" aria-hidden="true" tabindex="-1">#</a><span lang="en">Example with own arms</span><span lang="de">Beispiel mit eigenen Armen</span></h2>
+
+<p lang="en">A deadcat frame from the example add-on: own arm positions and spin directions, the camera far enough in front of the front props, both accessory mounts. <code>"creative": false</code> keeps it out of the creative tab; leave it out for your own parts.</p>
+<p lang="de">Ein Deadcat-Rahmen aus dem Beispiel-Add-on: eigene Armpositionen und Drehrichtungen, die Kamera weit genug vor den Vorderprops, beide Zubehör-Halterungen. <code>"creative": false</code> hält ihn aus dem Kreativ-Tab; bei eigenen Teilen einfach weglassen.</p>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">JSON</span><span class="docs-code__caption"><code>propwash_example:deadcat_5</code></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>{
+  <span class="tk-p">&quot;format&quot;</span>: <span class="tk-n">1</span>,
+  <span class="tk-p">&quot;mass_g&quot;</span>: <span class="tk-n">118.0</span>,
+  <span class="tk-p">&quot;creative&quot;</span>: <span class="tk-k">false</span>,
+  <span class="tk-p">&quot;role&quot;</span>: <span class="tk-s">&quot;freestyle&quot;</span>,
+  <span class="tk-p">&quot;shape&quot;</span>: <span class="tk-s">&quot;deadcat&quot;</span>,
+  <span class="tk-p">&quot;wheelbase_mm&quot;</span>: <span class="tk-n">230</span>,
+  <span class="tk-p">&quot;max_prop_mm&quot;</span>: <span class="tk-n">130</span>,
+  <span class="tk-p">&quot;motor_mounts&quot;</span>: [<span class="tk-s">&quot;propwash:m22&quot;</span>],
+  <span class="tk-p">&quot;stack_mounts&quot;</span>: [<span class="tk-s">&quot;propwash:s30&quot;</span>, <span class="tk-s">&quot;propwash:s20&quot;</span>],
+  <span class="tk-p">&quot;accessory_mounts&quot;</span>: [<span class="tk-s">&quot;top&quot;</span>, <span class="tk-s">&quot;bottom&quot;</span>],
+  <span class="tk-p">&quot;arms&quot;</span>: {
+    <span class="tk-p">&quot;front_left&quot;</span>: {<span class="tk-p">&quot;pos&quot;</span>: [<span class="tk-n">-95.0</span>, <span class="tk-n">0.0</span>, <span class="tk-n">-60.0</span>], <span class="tk-p">&quot;spin&quot;</span>: <span class="tk-s">&quot;cw&quot;</span>},
+    <span class="tk-p">&quot;front_right&quot;</span>: {<span class="tk-p">&quot;pos&quot;</span>: [<span class="tk-n">95.0</span>, <span class="tk-n">0.0</span>, <span class="tk-n">-60.0</span>], <span class="tk-p">&quot;spin&quot;</span>: <span class="tk-s">&quot;ccw&quot;</span>},
+    <span class="tk-p">&quot;rear_left&quot;</span>: {<span class="tk-p">&quot;pos&quot;</span>: [<span class="tk-n">-80.0</span>, <span class="tk-n">0.0</span>, <span class="tk-n">80.0</span>], <span class="tk-p">&quot;spin&quot;</span>: <span class="tk-s">&quot;ccw&quot;</span>},
+    <span class="tk-p">&quot;rear_right&quot;</span>: {<span class="tk-p">&quot;pos&quot;</span>: [<span class="tk-n">80.0</span>, <span class="tk-n">0.0</span>, <span class="tk-n">80.0</span>], <span class="tk-p">&quot;spin&quot;</span>: <span class="tk-s">&quot;cw&quot;</span>}
+  },
+  <span class="tk-p">&quot;battery&quot;</span>: {<span class="tk-p">&quot;on_top&quot;</span>: <span class="tk-k">true</span>, <span class="tk-p">&quot;plate_mm&quot;</span>: <span class="tk-n">30.0</span>},
+  <span class="tk-p">&quot;electronics_mm&quot;</span>: <span class="tk-n">12.0</span>,
+  <span class="tk-p">&quot;camera&quot;</span>: {<span class="tk-p">&quot;pos&quot;</span>: [<span class="tk-n">0.0</span>, <span class="tk-n">14.0</span>, <span class="tk-n">-100.0</span>], <span class="tk-p">&quot;tilt_deg&quot;</span>: <span class="tk-n">30.0</span>},
+  <span class="tk-p">&quot;center_of_mass_mm&quot;</span>: [<span class="tk-n">0.0</span>, <span class="tk-n">0.0</span>, <span class="tk-n">6.0</span>],
+  <span class="tk-p">&quot;aero&quot;</span>: {<span class="tk-p">&quot;frontal_area_m2&quot;</span>: <span class="tk-n">0.012</span>, <span class="tk-p">&quot;drag_coefficient&quot;</span>: <span class="tk-n">0.9</span>},
+  <span class="tk-p">&quot;impact_tolerance&quot;</span>: <span class="tk-n">8.0</span>,
+  <span class="tk-p">&quot;battery_fit&quot;</span>: {<span class="tk-p">&quot;cells&quot;</span>: [<span class="tk-n">4</span>, <span class="tk-n">6</span>], <span class="tk-p">&quot;max_mass_g&quot;</span>: <span class="tk-n">260.0</span>, <span class="tk-p">&quot;preferred_min_cells&quot;</span>: <span class="tk-n">6</span>, <span class="tk-p">&quot;preferred_min_capacity_mah&quot;</span>: <span class="tk-n">0</span>}
+}</code></pre>
+</figure>
+
+</section>
+<section class="docs-section" aria-labelledby="errors">
+<h2 id="errors" class="docs-h2"><a class="docs-anchor" href="#errors" aria-hidden="true" tabindex="-1">#</a><span lang="en">Errors and warnings</span><span lang="de">Fehler und Warnungen</span></h2>
+
+<ul>
+<li><span lang="en">Propwash first reads <strong>all</strong> files. If any has an error, <code>loadBundled</code> throws one exception listing every error as <em>file – field: message</em> and registers nothing.</span><span lang="de">Propwash liest zuerst <strong>alle</strong> Dateien. Hat eine einen Fehler, wirft <code>loadBundled</code> eine Ausnahme mit jedem Fehler als <em>Datei – Feld: Meldung</em> und meldet nichts an.</span></li>
+<li><span lang="en">Unknown fields are not errors: they are logged as a warning and ignored, so a file written for a newer Propwash still loads.</span><span lang="de">Unbekannte Felder sind keine Fehler: Sie landen als Warnung im Log und werden ignoriert, damit eine Datei für ein neueres Propwash trotzdem lädt.</span></li>
+<li><span lang="en"><code>PropwashEvents.PART_REGISTERED</code> fires for every part (not for chemistries).</span><span lang="de"><code>PropwashEvents.PART_REGISTERED</code> feuert für jedes Teil (nicht für Zellchemien).</span></li>
+</ul>
+<div class="docs-note docs-note--info"><p lang="en">Check a file without starting the game: <code>PropwashApi.parts().fromJson(kind, id, json)</code> throws an <code>IllegalArgumentException</code> naming the field. The <a href="../../configurator/">online configurator</a> reads Just More Parts in this format too.</p>
+<p lang="de">Eine Datei ohne Spielstart prüfen: <code>PropwashApi.parts().fromJson(kind, id, json)</code> wirft eine <code>IllegalArgumentException</code>, die das Feld nennt. Der <a href="../../configurator/">Online-Konfigurator</a> liest Just More Parts ebenfalls in diesem Format.</p></div>
+
+</section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice is kept in your browser. These pages are generated from the Propwash source code of each release. Fonts: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl bleibt in deinem Browser. Diese Seiten entstehen bei jeder Version aus dem Quellcode von Propwash. Schriften: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js" defer></script>
+<script src="../../assets/js/docs.js" defer></script>
+</body>
+</html>

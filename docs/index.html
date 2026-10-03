@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="Docs – Propwash FPV" data-title-de="Doku – Propwash FPV" data-description-en="Official documentation of Propwash FPV 0.5.0: player guide, world rules (gamerules), add-on API with reference and the JSON parts format." data-description-de="Offizielle Dokumentation von Propwash FPV 0.5.0: Spielerhandbuch, Welt-Regeln (Gamerules), Add-on-API mit Referenz und das JSON-Teile-Format.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docs – Propwash FPV</title>
+<meta name="description" content="Official documentation of Propwash FPV 0.5.0: player guide, world rules (gamerules), add-on API with reference and the JSON parts format.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="Docs – Propwash FPV">
+<meta property="og:description" content="Official documentation of Propwash FPV 0.5.0: player guide, world rules (gamerules), add-on API with reference and the JSON parts format.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/docs.css">
+<script>
+(function () {
+  var d = document.documentElement, lang = null;
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="docs-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+</svg>
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="de">Zum Inhalt springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
+      <a href="../#how"><span lang="en">How it works</span><span lang="de">So geht’s</span></a>
+      <a href="../#flight"><span lang="en">Flight</span><span lang="de">Flug</span></a>
+      <a href="../#video">Video</a>
+      <a href="../#racing"><span lang="en">Racing</span><span lang="de">Rennen</span></a>
+      <a href="../#gallery"><span lang="en">Screenshots</span><span lang="de">Bilder</span></a>
+      <a href="../#faq">FAQ</a>
+      <a href="../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+      <a href="../docs/" aria-current="page"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="16" height="16"><use href="#i-discord"/></svg> Discord</a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <header class="docs-hero">
+    <div class="wrap docs-hero__inner">
+      <p class="kicker"><span lang="en">Propwash FPV 0.5.0 · Docs</span><span lang="de">Propwash FPV 0.5.0 · Doku</span></p>
+      <h1 class="docs-title"><span lang="en">Documentation</span><span lang="de">Dokumentation</span></h1>
+      <p lang="en" class="docs-lead">Everything about Propwash FPV in one place: how your first drone gets into the air, the world rules for server owners, and the add-on API with its data format for mod authors.</p>
+<p lang="de" class="docs-lead">Alles über Propwash FPV an einem Ort: wie deine erste Drohne in die Luft kommt, die Welt-Regeln für Server-Betreiber und die Add-on-API samt Datenformat für Mod-Autoren.</p>
+      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.4.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 9</p>
+    </div>
+  </header>
+  <div class="wrap docs">
+    <nav class="docs-menu" aria-label="Documentation" data-de-aria-label="Dokumentation">
+<details class="docs-menu__fold" data-docs-menu open>
+<summary class="docs-menu__summary"><span lang="en">Docs menu</span><span lang="de">Doku-Menü</span></summary>
+<ol class="docs-menu__list">
+<li class="docs-menu__item is-current"><a href="../docs/" aria-current="page"><span lang="en">Overview</span><span lang="de">Übersicht</span></a>
+<ol class="docs-menu__toc"><li><a href="#sections"><span lang="en">What is here</span><span lang="de">Was hier steht</span></a></li><li><a href="#made"><span lang="en">How these pages are made</span><span lang="de">Wie diese Seiten entstehen</span></a></li></ol></li>
+<li class="docs-menu__item"><a href="../docs/guide/"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></a></li>
+<li class="docs-menu__item"><a href="../docs/gamerules/"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></a></li>
+<li class="docs-menu__item"><a href="../docs/api/"><span lang="en">Add-on API</span><span lang="de">Add-on-API</span></a></li>
+<li class="docs-menu__item docs-menu__item--sub"><a href="../docs/api/reference/"><span lang="en">API reference</span><span lang="de">API-Referenz</span></a></li>
+<li class="docs-menu__item"><a href="../docs/parts-format/"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></a></li>
+</ol>
+</details>
+</nav>
+    <article class="docs-body">
+<section class="docs-section" aria-labelledby="sections">
+<h2 id="sections" class="docs-h2"><a class="docs-anchor" href="#sections" aria-hidden="true" tabindex="-1">#</a><span lang="en">What is here</span><span lang="de">Was hier steht</span></h2>
+<div class="docs-cards">
+<a class="docs-card" href="../docs/guide/">
+<span class="docs-card__who"><span lang="en">Players</span><span lang="de">Spieler</span></span>
+<span class="docs-card__title"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></span>
+<span class="docs-card__text"><span lang="en">First flight, binding radio and goggles, radio and gamepad setup, all 28 keys and what server owners need.</span><span lang="de">Erster Flug, Funke und Brille binden, Funke und Gamepad einrichten, alle 28 Tasten und was Server-Betreiber brauchen.</span></span>
+</a>
+<a class="docs-card" href="../docs/gamerules/">
+<span class="docs-card__who"><span lang="en">Players and server owners</span><span lang="de">Spieler und Server-Betreiber</span></span>
+<span class="docs-card__title"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></span>
+<span class="docs-card__text"><span lang="en">All 16 gamerules: gravity, wind, battery life, crash damage, video range and channels, with commands and recipes.</span><span lang="de">Alle 16 Gamerules: Schwerkraft, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Kanäle, mit Befehlen und Rezepten.</span></span>
+</a>
+<a class="docs-card" href="../docs/api/">
+<span class="docs-card__who"><span lang="en">Mod authors</span><span lang="de">Mod-Autoren</span></span>
+<span class="docs-card__title"><span lang="en">Add-on API</span><span lang="de">Add-on-API</span></span>
+<span class="docs-card__text"><span lang="en">Add parts, presets, creative tabs, workbench buttons, configurator tabs and Flight School scenes from your own mod.</span><span lang="de">Teile, Presets, Kreativ-Tabs, Werkbank-Knöpfe, Konfigurator-Tabs und Flugschul-Szenen aus dem eigenen Mod hinzufügen.</span></span>
+</a>
+<a class="docs-card" href="../docs/api/reference/">
+<span class="docs-card__who"><span lang="en">Mod authors</span><span lang="de">Mod-Autoren</span></span>
+<span class="docs-card__title"><span lang="en">API reference</span><span lang="de">API-Referenz</span></span>
+<span class="docs-card__text"><span lang="en">All 62 public types of API 1.4.0 with every component and method.</span><span lang="de">Alle 62 öffentlichen Typen der API 1.4.0 mit jeder Komponente und Methode.</span></span>
+</a>
+<a class="docs-card" href="../docs/parts-format/">
+<span class="docs-card__who"><span lang="en">Mod and data pack authors</span><span lang="de">Mod- und Daten-Autoren</span></span>
+<span class="docs-card__title"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></span>
+<span class="docs-card__text"><span lang="en">Every field of frames, stacks, motors, props, video units, batteries, accessories and chemistries (format 1).</span><span lang="de">Jedes Feld von Rahmen, Stacks, Motoren, Props, Videomodulen, Akkus, Zubehör und Zellchemien (Format 1).</span></span>
+</a>
+</div>
+<p lang="en">In the game itself, the Flight School explains every item: hold <kbd>M</kbd> over it in your inventory, or press <kbd>M</kbd> in the world for all lessons. Hold <kbd>Shift</kbd> for detailed tooltips.</p>
+<p lang="de">Im Spiel selbst erklärt die Flugschule jedes Item: <kbd>M</kbd> darüber im Inventar halten oder in der Welt drücken für alle Lektionen. <kbd>Shift</kbd> zeigt ausführliche Tooltips.</p>
+</section>
+<section class="docs-section" aria-labelledby="made">
+<h2 id="made" class="docs-h2"><a class="docs-anchor" href="#made" aria-hidden="true" tabindex="-1">#</a><span lang="en">How these pages are made</span><span lang="de">Wie diese Seiten entstehen</span></h2>
+
+<p lang="en">These pages describe <strong>Propwash FPV 0.5.0</strong> for Minecraft 26.3 (Fabric and NeoForge), API 1.4.0, network protocol 9. They are generated from the source code of that release and refreshed with every new version:</p>
+<p lang="de">Diese Seiten beschreiben <strong>Propwash FPV 0.5.0</strong> für Minecraft 26.3 (Fabric und NeoForge), API 1.4.0, Netzwerkprotokoll 9. Sie entstehen aus dem Quellcode dieser Version und werden mit jeder neuen Version erneuert:</p>
+<ul>
+<li><span lang="en">the world rules from the game’s own rule catalogue, with the same texts as in the game,</span><span lang="de">die Welt-Regeln aus dem Regel-Katalog des Spiels, mit denselben Texten wie im Spiel,</span></li>
+<li><span lang="en">the keys and switch functions from the key defaults and language files,</span><span lang="de">die Tasten und Schalter-Funktionen aus den Standardbelegungen und Sprachdateien,</span></li>
+<li><span lang="en">the API reference from the API sources, and the parts format checked against the part reader,</span><span lang="de">die API-Referenz aus den API-Quellen und das Teile-Format geprüft gegen den Teile-Leser,</span></li>
+<li><span lang="en">the server.json settings with their defaults and limits from the server configuration.</span><span lang="de">die server.json-Einstellungen mit Standards und Grenzen aus der Server-Konfiguration.</span></li>
+</ul>
+<p lang="en">The explanations around them are written by hand. Found something wrong? Tell us on <a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener">Discord</a>.</p>
+<p lang="de">Die Erklärungen drumherum sind von Hand geschrieben. Etwas falsch gefunden? Sag es uns auf <a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener">Discord</a>.</p>
+
+</section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice is kept in your browser. These pages are generated from the Propwash source code of each release. Fonts: <a href="../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl bleibt in deinem Browser. Diese Seiten entstehen bei jeder Version aus dem Quellcode von Propwash. Schriften: <a href="../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js" defer></script>
+<script src="../assets/js/docs.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="Add-on API – Propwash FPV docs" data-title-de="Add-on-API – Propwash-FPV-Doku" data-description-en="Build add-ons for Propwash FPV: new drone parts in Java or JSON, presets, creative tabs, workbench buttons, configurator tabs, Flight School scenes and events. API 1.4.0." data-description-de="Add-ons für Propwash FPV bauen: neue Drohnenteile in Java oder JSON, Presets, Kreativ-Tabs, Werkbank-Knöpfe, Konfigurator-Tabs, Flugschul-Szenen und Events. API 1.4.0.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add-on API – Propwash FPV docs</title>
+<meta name="description" content="Build add-ons for Propwash FPV: new drone parts in Java or JSON, presets, creative tabs, workbench buttons, configurator tabs, Flight School scenes and events. API 1.4.0.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="Add-on API – Propwash FPV docs">
+<meta property="og:description" content="Build add-ons for Propwash FPV: new drone parts in Java or JSON, presets, creative tabs, workbench buttons, configurator tabs, Flight School scenes and events. API 1.4.0.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="../../assets/css/docs.css">
+<script>
+(function () {
+  var d = document.documentElement, lang = null;
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="docs-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+</svg>
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="de">Zum Inhalt springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
+      <a href="../../#how"><span lang="en">How it works</span><span lang="de">So geht’s</span></a>
+      <a href="../../#flight"><span lang="en">Flight</span><span lang="de">Flug</span></a>
+      <a href="../../#video">Video</a>
+      <a href="../../#racing"><span lang="en">Racing</span><span lang="de">Rennen</span></a>
+      <a href="../../#gallery"><span lang="en">Screenshots</span><span lang="de">Bilder</span></a>
+      <a href="../../#faq">FAQ</a>
+      <a href="../../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+      <a href="../../docs/" aria-current="page"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="16" height="16"><use href="#i-discord"/></svg> Discord</a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <header class="docs-hero">
+    <div class="wrap docs-hero__inner">
+      <p class="kicker"><span lang="en">Docs · For mod authors · API 1.4.0</span><span lang="de">Doku · Für Mod-Autoren · API 1.4.0</span></p>
+      <h1 class="docs-title"><span lang="en">Add-on API</span><span lang="de">Add-on-API</span></h1>
+      <p lang="en" class="docs-lead">Extend Propwash FPV from your own mod without changing Propwash: new parts of every category, presets, a creative tab, buttons in the workbench, configurator tabs, Flight School scenes and a share-code system.</p>
+<p lang="de" class="docs-lead">Propwash FPV aus dem eigenen Mod erweitern, ohne Propwash zu ändern: neue Teile jeder Kategorie, Presets, ein Kreativ-Tab, Knöpfe in der Werkbank, Konfigurator-Tabs, Flugschul-Szenen und ein Sharecode-System.</p>
+      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.4.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 9</p>
+    </div>
+  </header>
+  <div class="wrap docs">
+    <nav class="docs-menu" aria-label="Documentation" data-de-aria-label="Dokumentation">
+<details class="docs-menu__fold" data-docs-menu open>
+<summary class="docs-menu__summary"><span lang="en">Docs menu</span><span lang="de">Doku-Menü</span></summary>
+<ol class="docs-menu__list">
+<li class="docs-menu__item"><a href="../../docs/"><span lang="en">Overview</span><span lang="de">Übersicht</span></a></li>
+<li class="docs-menu__item"><a href="../../docs/guide/"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></a></li>
+<li class="docs-menu__item"><a href="../../docs/gamerules/"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></a></li>
+<li class="docs-menu__item is-current"><a href="../../docs/api/" aria-current="page"><span lang="en">Add-on API</span><span lang="de">Add-on-API</span></a>
+<ol class="docs-menu__toc"><li><a href="#what"><span lang="en">What add-ons can do</span><span lang="de">Was Add-ons können</span></a></li><li><a href="#setup"><span lang="en">Project setup</span><span lang="de">Projekt aufsetzen</span></a></li><li><a href="#lifecycle"><span lang="en">Entry points</span><span lang="de">Einstiegspunkte</span></a></li><li><a href="#parts"><span lang="en">Parts</span><span lang="de">Bauteile</span></a></li><li><a href="#items"><span lang="en">Items, assets, texts</span><span lang="de">Items, Assets, Texte</span></a></li><li><a href="#presets"><span lang="en">Presets and creative tab</span><span lang="de">Presets und Kreativ-Tab</span></a></li><li><a href="#builds"><span lang="en">Builds and import</span><span lang="de">Baupläne und Import</span></a></li><li><a href="#client"><span lang="en">Client extensions</span><span lang="de">Client-Erweiterungen</span></a></li><li><a href="#events">Events</a></li><li><a href="#versions"><span lang="en">Stability and versions</span><span lang="de">Stabilität und Versionen</span></a></li><li><a href="#multiplayer"><span lang="en">Multiplayer</span><span lang="de">Mehrspieler</span></a></li><li><a href="#example"><span lang="en">Example add-on</span><span lang="de">Beispiel-Add-on</span></a></li><li><a href="#checklist"><span lang="en">Checklist</span><span lang="de">Checkliste</span></a></li><li><a href="#license"><span lang="en">License</span><span lang="de">Lizenz</span></a></li></ol></li>
+<li class="docs-menu__item docs-menu__item--sub"><a href="../../docs/api/reference/"><span lang="en">API reference</span><span lang="de">API-Referenz</span></a></li>
+<li class="docs-menu__item"><a href="../../docs/parts-format/"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></a></li>
+</ol>
+</details>
+</nav>
+    <article class="docs-body">
+<section class="docs-section" aria-labelledby="what">
+<h2 id="what" class="docs-h2"><a class="docs-anchor" href="#what" aria-hidden="true" tabindex="-1">#</a><span lang="en">What add-ons can do</span><span lang="de">Was Add-ons können</span></h2>
+
+<p lang="en">An add-on is a normal Fabric or NeoForge mod that depends on Propwash and talks to it only through the package <code>de.lardtom.propwash.api</code>. It never changes Propwash itself, and built-in parts, saves and flight behaviour stay exactly as they are. <em>Propwash: Just More Parts</em> is built this way.</p>
+<p lang="de">Ein Add-on ist ein normaler Fabric- oder NeoForge-Mod, der von Propwash abhängt und nur über das Paket <code>de.lardtom.propwash.api</code> mit ihm spricht. Propwash selbst ändert es nie; eingebaute Teile, Speicherstände und Flugverhalten bleiben genau, wie sie sind. <em>Propwash: Just More Parts</em> ist so gebaut.</p>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col"><span lang="en">Possible with API 1.4.0</span><span lang="de">Möglich mit API 1.4.0</span></th><th scope="col"><span lang="en">Not (yet) possible</span><span lang="de">(Noch) nicht möglich</span></th></tr></thead>
+<tbody>
+<tr><td><span lang="en">Frames, stacks, motors, props, batteries, video units and accessories, in Java or JSON</span><span lang="de">Rahmen, Stacks, Motoren, Props, Akkus, Videomodule und Zubehör, in Java oder JSON</span></td><td><span lang="en">other motor counts than four (hexa, octo)</span><span lang="de">andere Motorzahlen als vier (Hexa, Okto)</span></td></tr>
+<tr><td><span lang="en">own arm geometry, camera position, centre of mass, ducts, drag, battery rules per frame</span><span lang="de">eigene Arm-Geometrie, Kameraposition, Schwerpunkt, Ducts, Luftwiderstand, Akku-Regeln je Rahmen</span></td><td><span lang="en">new video systems or goggles (only <code>analog</code> and <code>digital</code>)</span><span lang="de">neue Videosysteme oder Brillen (nur <code>analog</code> und <code>digital</code>)</span></td></tr>
+<tr><td><span lang="en">new motor and stack mounts, prop mounts, cell chemistries up to 12S</span><span lang="de">neue Motor- und Stack-Halterungen, Prop-Aufnahmen, Zellchemien bis 12S</span></td><td><span lang="en">parts from world data packs or <code>/reload</code></span><span lang="de">Teile aus Welt-Datenpaketen oder per <code>/reload</code></span></td></tr>
+<tr><td><span lang="en">items, tooltips, workbench, analysis, flight model, rendering and saving come for free</span><span lang="de">Items, Tooltips, Werkbank, Analyse, Flugmodell, Rendering und Speichern gibt es geschenkt</span></td><td><span lang="en">new OSD elements, paint slots or accessory mounts</span><span lang="de">neue OSD-Elemente, Lack-Plätze oder Zubehör-Halterungen</span></td></tr>
+<tr><td><span lang="en">presets and an own creative tab right after the Propwash tab</span><span lang="de">Presets und ein eigener Kreativ-Tab direkt hinter dem Propwash-Tab</span></td><td><span lang="en">own item classes for parts (Propwash provides the part items)</span><span lang="de">eigene Item-Klassen für Teile (Propwash stellt die Teil-Items)</span></td></tr>
+<tr><td><span lang="en">reading builds, creating drone items, setting tune and paint, a server-checked import</span><span lang="de">Baupläne lesen, Drohnen-Items erzeugen, Tuning und Lack setzen, ein vom Server geprüfter Import</span></td><td><span lang="en">changing or removing built-in parts</span><span lang="de">eingebaute Teile ändern oder entfernen</span></td></tr>
+<tr><td><span lang="en">workbench buttons, child screens, configurator tabs, Flight School scenes, events, chest loot</span><span lang="de">Werkbank-Knöpfe, Kind-Fenster, Konfigurator-Tabs, Flugschul-Szenen, Events, Truhen-Beute</span></td><td>&nbsp;</td></tr>
+</tbody>
+</table></div>
+
+</section>
+<section class="docs-section" aria-labelledby="setup">
+<h2 id="setup" class="docs-h2"><a class="docs-anchor" href="#setup" aria-hidden="true" tabindex="-1">#</a><span lang="en">Project setup</span><span lang="de">Projekt aufsetzen</span></h2>
+
+<h3 id="setup-gradle" class="docs-h3"><a class="docs-anchor" href="#setup-gradle" aria-hidden="true" tabindex="-1">#</a>Gradle</h3>
+<p lang="en">Propwash publishes three Maven artifacts (group <code>de.lardtom</code>, each with sources and Javadoc): <code>propwash-common-26.3</code> with the whole API in Mojang names, and the loader jars <code>propwash-fabric-26.3</code> and <code>propwash-neoforge-26.3</code>. Minecraft 26.3 is not obfuscated, so no remapping is involved. From the Modrinth Maven:</p>
+<p lang="de">Propwash veröffentlicht drei Maven-Artefakte (Gruppe <code>de.lardtom</code>, je mit Quellen und Javadoc): <code>propwash-common-26.3</code> mit der ganzen API in Mojang-Namen und die Loader-Jars <code>propwash-fabric-26.3</code> und <code>propwash-neoforge-26.3</code>. Minecraft 26.3 ist nicht obfuskiert, es wird also nichts umbenannt. Über das Modrinth-Maven:</p>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Gradle</span><span class="docs-code__caption"><span lang="en"><code>compileOnly</code> in <code>common</code>, <code>implementation</code> in the loader module</span><span lang="de"><code>compileOnly</code> in <code>common</code>, <code>implementation</code> im Loader-Modul</span></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>repositories {
+    exclusiveContent {
+        forRepository { maven { url = <span class="tk-s">'https://api.modrinth.com/maven'</span> } }
+        filter { includeGroup <span class="tk-s">'maven.modrinth'</span> }
+    }
+}
+
+dependencies {
+    compileOnly <span class="tk-s">'maven.modrinth:propwash-fpv:0.5.0+neoforge'</span>
+    implementation <span class="tk-s">'maven.modrinth:propwash-fpv:0.5.0+fabric'</span>
+    implementation <span class="tk-s">'maven.modrinth:propwash-fpv:0.5.0+neoforge'</span>
+}</code></pre>
+</figure>
+<p lang="en">The variants carry the attribute <code>io.github.mcgradleconventions.loader</code> (<code>common</code>, <code>fabric</code>, <code>neoforge</code>) like the MultiLoader template, so an add-on built from that template picks the right one.</p>
+<p lang="de">Die Varianten tragen das Attribut <code>io.github.mcgradleconventions.loader</code> (<code>common</code>, <code>fabric</code>, <code>neoforge</code>) wie im MultiLoader-Template; ein Add-on aus diesem Template bekommt damit von selbst die passende.</p>
+<h3 id="setup-metadata" class="docs-h3"><a class="docs-anchor" href="#setup-metadata" aria-hidden="true" tabindex="-1">#</a><span lang="en">Dependency in the loader metadata</span><span lang="de">Abhängigkeit in den Loader-Metadaten</span></h3>
+<p lang="en">Propwash has to run on client <em>and</em> server, and so does the add-on: the part lists are compared when a player connects.</p>
+<p lang="de">Propwash muss auf Client <em>und</em> Server laufen, das Add-on ebenso: Beim Verbinden werden die Teile-Listen verglichen.</p>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">JSON</span><span class="docs-code__caption"><code>fabric.mod.json</code></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code><span class="tk-p">&quot;depends&quot;</span>: {
+  <span class="tk-p">&quot;minecraft&quot;</span>: <span class="tk-s">&quot;~26.3&quot;</span>,
+  <span class="tk-p">&quot;propwash&quot;</span>: <span class="tk-s">&quot;&gt;=0.5.0&quot;</span>
+}</code></pre>
+</figure>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">TOML</span><span class="docs-code__caption"><code>neoforge.mods.toml</code></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>[[dependencies.examplemod]]
+modId = &quot;propwash&quot;
+type = &quot;required&quot;
+versionRange = &quot;[0.5.0,)&quot;
+ordering = &quot;AFTER&quot;
+side = &quot;BOTH&quot;</code></pre>
+</figure>
+<h3 id="setup-version" class="docs-h3"><a class="docs-anchor" href="#setup-version" aria-hidden="true" tabindex="-1">#</a><span lang="en">Checking the API version</span><span lang="de">API-Version prüfen</span></h3>
+<p lang="en">The API has its own version (<code>PropwashApi.API_VERSION</code>, SemVer), independent of the mod version: Propwash 0.5.0 ships <strong>1.4.0</strong>. When your mod starts, require the major version and the smallest minor version whose features you need, and test for newer ones before using them:</p>
+<p lang="de">Die API hat eine eigene Version (<code>PropwashApi.API_VERSION</code>, SemVer), unabhängig von der Mod-Version: Propwash 0.5.0 bringt <strong>1.4.0</strong>. Beim Start die Hauptversion und die kleinste Nebenversion verlangen, deren Funktionen das Add-on braucht, und neuere vor dem Benutzen abfragen:</p>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Java</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code><span class="tk-t">PropwashApi</span>.requireVersion(<span class="tk-s">&quot;examplemod&quot;</span>, <span class="tk-s">&quot;1.1&quot;</span>);
+<span class="tk-k">if</span> (<span class="tk-t">PropwashApi</span>.isCompatible(<span class="tk-s">&quot;1.4&quot;</span>)) {
+    <span class="tk-t">PropwashApi</span>.loot().inject(dungeon, ownTable);
+}</code></pre>
+</figure>
+<p lang="en"><code>requireVersion</code> throws an <code>IllegalStateException</code> with a clear message when Propwash is too old or has a different major version.</p>
+<p lang="de"><code>requireVersion</code> wirft eine <code>IllegalStateException</code> mit klarer Meldung, wenn Propwash zu alt ist oder eine andere Hauptversion hat.</p>
+
+</section>
+<section class="docs-section" aria-labelledby="lifecycle">
+<h2 id="lifecycle" class="docs-h2"><a class="docs-anchor" href="#lifecycle" aria-hidden="true" tabindex="-1">#</a><span lang="en">Entry points</span><span lang="de">Einstiegspunkte</span></h2>
+
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col">Phase</th><th scope="col"><span lang="en">When</span><span lang="de">Wann</span></th><th scope="col"><span lang="en">Allowed</span><span lang="de">Erlaubt</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><span lang="en">Open</span><span lang="de">Offen</span></th><td><span lang="en">Fabric <code>ModInitializer#onInitialize</code>, NeoForge <code>@Mod</code> constructor (both sides)</span><span lang="de">Fabric <code>ModInitializer#onInitialize</code>, NeoForge-<code>@Mod</code>-Konstruktor (beide Seiten)</span></td><td><span lang="en">registering parts, chemistries, items, presets, the creative tab, loot and event listeners</span><span lang="de">Teile, Zellchemien, Items, Presets, Kreativ-Tab, Beute und Event-Listener anmelden</span></td></tr>
+<tr><th scope="row"><span lang="en">Client init</span><span lang="de">Client-Init</span></th><td>Fabric <code>ClientModInitializer</code>, NeoForge <code>@Mod(dist = Dist.CLIENT)</code></td><td><span lang="en"><code>PropwashClientApi.register…</code>: workbench, configurator tabs, Flight School</span><span lang="de"><code>PropwashClientApi.register…</code>: Werkbank, Konfigurator-Tabs, Flugschule</span></td></tr>
+<tr><th scope="row"><span lang="en">Frozen</span><span lang="de">Eingefroren</span></th><td><span lang="en">after all initialisation (event <code>REGISTRY_FROZEN</code>)</span><span lang="de">nach allen Initialisierungen (Event <code>REGISTRY_FROZEN</code>)</span></td><td><span lang="en">read only; <code>register</code> throws <code>IllegalStateException</code></span><span lang="de">nur lesen; <code>register</code> wirft <code>IllegalStateException</code></span></td></tr>
+</tbody>
+</table></div>
+<ul>
+<li><span lang="en">Mod order does not matter: every call of the open phase works before, during and after Propwash’s own initialisation.</span><span lang="de">Die Reihenfolge der Mods ist egal: Jeder Aufruf der offenen Phase funktioniert vor, während und nach Propwashs eigener Initialisierung.</span></li>
+<li><span lang="en">Always register parts in the <strong>common</strong> init, never only on the client, or the server disconnects players.</span><span lang="de">Teile immer in der <strong>gemeinsamen</strong> Init anmelden, nie nur auf dem Client, sonst trennt der Server die Spieler.</span></li>
+<li><span lang="en">On NeoForge the constructors run on a worker thread: do not touch anything that needs a running world or client there.</span><span lang="de">Unter NeoForge laufen die Konstruktoren auf einem Worker-Thread: dort nichts anfassen, was eine laufende Welt oder einen Client braucht.</span></li>
+</ul>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Java</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code><span class="tk-k">public</span> <span class="tk-k">final</span> <span class="tk-k">class</span> <span class="tk-t">ExampleMod</span> {
+    <span class="tk-k">public</span> <span class="tk-k">static</span> <span class="tk-k">final</span> <span class="tk-t">String</span> <span class="tk-t">MOD_ID</span> = <span class="tk-s">&quot;examplemod&quot;</span>;
+
+    <span class="tk-k">public</span> <span class="tk-k">static</span> <span class="tk-k">void</span> init() {
+        <span class="tk-t">PropwashApi</span>.requireVersion(<span class="tk-t">MOD_ID</span>, <span class="tk-s">&quot;1.4&quot;</span>);
+        <span class="tk-t">ExampleParts</span>.register();
+        <span class="tk-t">PropwashApi</span>.parts().loadBundled(<span class="tk-t">MOD_ID</span>);
+        <span class="tk-t">PropwashApi</span>.partItems().registerItems(<span class="tk-t">MOD_ID</span>);
+        <span class="tk-t">PropwashApi</span>.builds().registerPreset(<span class="tk-t">DronePreset</span>.of(id(<span class="tk-s">&quot;lr8s&quot;</span>), <span class="tk-t">ExamplePresets</span>.longRange8s()));
+        <span class="tk-t">PropwashApi</span>.extensionTab(<span class="tk-t">MOD_ID</span>).icon(id(<span class="tk-s">&quot;deadcat_5&quot;</span>))
+                .order(<span class="tk-t">TabSection</span>.<span class="tk-t">PRESETS</span>, <span class="tk-t">TabSection</span>.<span class="tk-t">FRAMES</span>, <span class="tk-t">TabSection</span>.<span class="tk-t">MOTORS</span>, <span class="tk-t">TabSection</span>.<span class="tk-t">PROPS</span>);
+        <span class="tk-t">PropwashEvents</span>.<span class="tk-t">BUILD_IMPORTED</span>.register((player, request, result) -&gt; <span class="tk-t">ExampleStats</span>.count(result));
+    }
+
+    <span class="tk-k">public</span> <span class="tk-k">static</span> <span class="tk-k">void</span> initClient() {
+        <span class="tk-t">PropwashClientApi</span>.registerWorkbenchExtension(<span class="tk-k">new</span> <span class="tk-t">ShareCodeButton</span>());
+        <span class="tk-t">PropwashClientApi</span>.registerConfigTab(<span class="tk-t">ShareCodeTab</span>::<span class="tk-k">new</span>);
+        <span class="tk-t">PropwashClientApi</span>.registerFlightSchoolScene(<span class="tk-t">FrameShapesScene</span>::create);
+    }
+
+    <span class="tk-k">public</span> <span class="tk-k">static</span> <span class="tk-t">Identifier</span> id(<span class="tk-t">String</span> path) {
+        <span class="tk-k">return</span> <span class="tk-t">Identifier</span>.fromNamespaceAndPath(<span class="tk-t">MOD_ID</span>, path);
+    }
+}</code></pre>
+</figure>
+
+</section>
+<section class="docs-section" aria-labelledby="parts">
+<h2 id="parts" class="docs-h2"><a class="docs-anchor" href="#parts" aria-hidden="true" tabindex="-1">#</a><span lang="en">Parts</span><span lang="de">Bauteile</span></h2>
+
+<p lang="en">Every category has a definition record in <code>api.part</code> with a builder. Build definitions (<code>…Definition</code>, <code>AirframeGeometry</code>, <code>FrameAero</code>) only through their builders or <code>with…</code> methods; their constructors gain fields in minor versions. Small value records such as <code>Vec3Mm</code>, <code>BatteryFitRule</code>, <code>PackSize</code> or <code>CellChemistry</code> may be created with <code>new</code>. Every record checks its values and throws <code>IllegalArgumentException</code> naming the id.</p>
+<p lang="de">Jede Kategorie hat einen Definitions-Record in <code>api.part</code> mit Builder. Definitionen (<code>…Definition</code>, <code>AirframeGeometry</code>, <code>FrameAero</code>) nur über Builder oder <code>with…</code>-Methoden bauen; ihre Konstruktoren bekommen in Nebenversionen neue Felder. Kleine Wertrecords wie <code>Vec3Mm</code>, <code>BatteryFitRule</code>, <code>PackSize</code> oder <code>CellChemistry</code> dürfen mit <code>new</code> entstehen. Jeder Record prüft seine Werte und wirft <code>IllegalArgumentException</code> mit der Id.</p>
+<p lang="en">Coordinates are millimetres with the origin in the middle of the frame at the height of the stack plate: +X right, +Y up, <strong>−Z forward</strong> (the nose). Arms are always listed front left, front right, rear left, rear right.</p>
+<p lang="de">Koordinaten sind Millimeter mit dem Ursprung in der Rahmenmitte auf Höhe der Stack-Auflage: +X rechts, +Y oben, <strong>−Z vorn</strong> (die Nase). Arme stehen immer in der Reihenfolge vorne links, vorne rechts, hinten links, hinten rechts.</p>
+<h3 id="parts-java" class="docs-h3"><a class="docs-anchor" href="#parts-java" aria-hidden="true" tabindex="-1">#</a>In Java</h3>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Java</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code><span class="tk-t">PropwashApi</span>.parts().register(<span class="tk-t">MotorDefinition</span>.builder(id(<span class="tk-s">&quot;m2806_1300&quot;</span>))
+        .mass(<span class="tk-n">52.0</span>).stator(<span class="tk-s">&quot;2806.5&quot;</span>).kv(<span class="tk-n">1300</span>).mount(<span class="tk-t">Mounts</span>.<span class="tk-t">MOTOR_M28</span>)
+        .maxCurrent(<span class="tk-n">48.0</span>).resistance(<span class="tk-n">0.062</span>).cells(<span class="tk-n">6</span>, <span class="tk-n">8</span>)
+        .thermal(<span class="tk-t">MotorThermal</span>.limits(<span class="tk-n">135.0</span>, <span class="tk-n">155.0</span>))
+        .build());
+
+<span class="tk-t">PropwashApi</span>.parts().register(<span class="tk-t">PropDefinition</span>.builder(id(<span class="tk-s">&quot;p13_7_2b_carbon&quot;</span>))
+        .mass(<span class="tk-n">28.0</span>).size(<span class="tk-n">330</span>, <span class="tk-n">7.0</span>, <span class="tk-n">2</span>).coefficients(<span class="tk-n">0.095</span>, <span class="tk-n">0.042</span>)
+        .material(<span class="tk-t">PropMaterial</span>.<span class="tk-t">CARBON</span>)
+        .build());
+
+<span class="tk-t">PropwashApi</span>.parts().register(<span class="tk-t">FrameDefinition</span>.builder(id(<span class="tk-s">&quot;deadcat_5&quot;</span>))
+        .mass(<span class="tk-n">118.0</span>).role(<span class="tk-t">FrameRole</span>.<span class="tk-t">FREESTYLE</span>).shape(<span class="tk-t">FrameShape</span>.<span class="tk-t">DEADCAT</span>)
+        .wheelbase(<span class="tk-n">230</span>).maxProp(<span class="tk-n">130</span>)
+        .motorMount(<span class="tk-t">Mounts</span>.<span class="tk-t">MOTOR_M22</span>).stackMount(<span class="tk-t">Mounts</span>.<span class="tk-t">STACK_S30</span>, <span class="tk-t">Mounts</span>.<span class="tk-t">STACK_S20</span>)
+        .accessoryMount(<span class="tk-t">AccessorySlot</span>.<span class="tk-t">TOP</span>, <span class="tk-t">AccessorySlot</span>.<span class="tk-t">BOTTOM</span>)
+        .arms(<span class="tk-t">List</span>.of(<span class="tk-t">MotorArm</span>.of(-<span class="tk-n">95</span>, <span class="tk-n">0</span>, -<span class="tk-n">60</span>, <span class="tk-t">MotorArm</span>.<span class="tk-t">Spin</span>.<span class="tk-t">CW</span>), <span class="tk-t">MotorArm</span>.of(<span class="tk-n">95</span>, <span class="tk-n">0</span>, -<span class="tk-n">60</span>, <span class="tk-t">MotorArm</span>.<span class="tk-t">Spin</span>.<span class="tk-t">CCW</span>),
+                <span class="tk-t">MotorArm</span>.of(-<span class="tk-n">80</span>, <span class="tk-n">0</span>, <span class="tk-n">80</span>, <span class="tk-t">MotorArm</span>.<span class="tk-t">Spin</span>.<span class="tk-t">CCW</span>), <span class="tk-t">MotorArm</span>.of(<span class="tk-n">80</span>, <span class="tk-n">0</span>, <span class="tk-n">80</span>, <span class="tk-t">MotorArm</span>.<span class="tk-t">Spin</span>.<span class="tk-t">CW</span>)))
+        .battery(<span class="tk-k">true</span>, <span class="tk-n">30.0</span>).electronics(<span class="tk-n">12.0</span>)
+        .camera(<span class="tk-k">new</span> <span class="tk-t">Vec3Mm</span>(<span class="tk-n">0.0</span>, <span class="tk-n">14.0</span>, -<span class="tk-n">100.0</span>)).cameraTilt(<span class="tk-n">30.0</span>)
+        .aero(<span class="tk-n">0.012</span>, <span class="tk-n">0.9</span>).impactTolerance(<span class="tk-n">8.0</span>)
+        .batteryFit(<span class="tk-k">new</span> <span class="tk-t">BatteryFitRule</span>(<span class="tk-n">4</span>, <span class="tk-n">6</span>, <span class="tk-n">260.0</span>, <span class="tk-n">6</span>, <span class="tk-n">0</span>))
+        .build());</code></pre>
+</figure>
+<ul>
+<li><span lang="en">Stator sizes come from the label (first two digits diameter, the rest height) or from <code>statorSize(d, h)</code>. A new mount is just a new id; frames that fit name the same id in <code>motorMount(…)</code>.</span><span lang="de">Statormaße kommen aus der Bezeichnung (erste zwei Ziffern Durchmesser, Rest Höhe) oder aus <code>statorSize(d, h)</code>. Eine neue Halterung ist einfach eine neue Id; passende Rahmen nennen dieselbe Id in <code>motorMount(…)</code>.</span></li>
+<li><span lang="en">Without <code>arms</code>, Propwash builds a true X from the wheelbase. With <code>arms</code>, mixer, lever arms, inertia, hull and hitbox follow from the geometry.</span><span lang="de">Ohne <code>arms</code> rechnet Propwash einen True-X aus dem Radstand. Mit <code>arms</code> entstehen Mixer, Hebelarme, Trägheit, Hülle und Hitbox aus der Geometrie.</span></li>
+<li><span lang="en">Every frame should set <code>camera</code> with a position: the lens usually sits 1–5 mm below the prop plane on X frames. Check the result with <code>PropwashApi.builds().analyze(spec)</code> (props in view) or <code>cameraView(spec)</code>.</span><span lang="de">Jeder Rahmen sollte <code>camera</code> mit Position setzen: Das Objektiv sitzt bei X-Rahmen meist 1–5 mm unter der Propebene. Prüfen mit <code>PropwashApi.builds().analyze(spec)</code> (Props im Bild) oder <code>cameraView(spec)</code>.</span></li>
+<li><span lang="en">Register cell chemistries (<code>registerChemistry</code>) before the batteries that use them.</span><span lang="de">Zellchemien (<code>registerChemistry</code>) vor den Akkus anmelden, die sie benutzen.</span></li>
+</ul>
+<h3 id="parts-json" class="docs-h3"><a class="docs-anchor" href="#parts-json" aria-hidden="true" tabindex="-1">#</a><span lang="en">As JSON</span><span lang="de">Als JSON</span></h3>
+<p lang="en">The same parts can be data files in the add-on’s own resources, <code>data/&lt;namespace&gt;/propwash_parts/&lt;category&gt;/&lt;path&gt;.json</code>, loaded by <code>PropwashApi.parts().loadBundled(modId)</code>. All fields, types and defaults are on the page <a href="../../docs/parts-format/">Parts format (JSON)</a>. Tools can use Propwash’s own codec: <code>parts().toJson(definition)</code> and <code>parts().fromJson(kind, id, json)</code>.</p>
+<p lang="de">Dieselben Teile können Datendateien in den eigenen Ressourcen des Add-ons sein, <code>data/&lt;namensraum&gt;/propwash_parts/&lt;kategorie&gt;/&lt;pfad&gt;.json</code>, geladen mit <code>PropwashApi.parts().loadBundled(modId)</code>. Alle Felder, Typen und Standards stehen auf der Seite <a href="../../docs/parts-format/">Teile-Format (JSON)</a>. Werkzeuge können Propwashs eigenen Codec benutzen: <code>parts().toJson(definition)</code> und <code>parts().fromJson(kind, id, json)</code>.</p>
+<h3 id="parts-checks" class="docs-h3"><a class="docs-anchor" href="#parts-checks" aria-hidden="true" tabindex="-1">#</a><span lang="en">What Propwash checks</span><span lang="de">Was Propwash prüft</span></h3>
+<p lang="en">Not buildable (problems): <code>missing_part</code>, <code>motor_mount</code>, <code>prop_too_large</code>, <code>prop_too_small</code>, <code>prop_mount</code>, <code>stack_mount</code>, <code>battery_frame</code>, <code>accessory_mount</code>. Warnings: <code>motor_overvoltage</code>, <code>motor_undervoltage</code>, <code>stack_voltage</code>, <code>esc_undersized</code>, <code>battery_weak</code>, <code>battery_undersized</code>. Texts: <code>propwash.build.issue.&lt;key&gt;</code>.</p>
+<p lang="de">Nicht baubar (Probleme): <code>missing_part</code>, <code>motor_mount</code>, <code>prop_too_large</code>, <code>prop_too_small</code>, <code>prop_mount</code>, <code>stack_mount</code>, <code>battery_frame</code>, <code>accessory_mount</code>. Warnungen: <code>motor_overvoltage</code>, <code>motor_undervoltage</code>, <code>stack_voltage</code>, <code>esc_undersized</code>, <code>battery_weak</code>, <code>battery_undersized</code>. Texte: <code>propwash.build.issue.&lt;schlüssel&gt;</code>.</p>
+
+</section>
+<section class="docs-section" aria-labelledby="items">
+<h2 id="items" class="docs-h2"><a class="docs-anchor" href="#items" aria-hidden="true" tabindex="-1">#</a><span lang="en">Items, assets, texts</span><span lang="de">Items, Assets, Texte</span></h2>
+
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Java</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code><span class="tk-k">int</span> count = <span class="tk-t">PropwashApi</span>.partItems().registerItems(<span class="tk-s">&quot;examplemod&quot;</span>);
+<span class="tk-t">PropwashApi</span>.partItems().registerItem(id(<span class="tk-s">&quot;xclass_13&quot;</span>), p -&gt; p.rarity(<span class="tk-t">Rarity</span>.<span class="tk-t">RARE</span>));</code></pre>
+</figure>
+<ul>
+<li><span lang="en">The item has <strong>the same id as the part</strong>. Propwash provides the item class (batteries with charge), stack size, Shift tooltips, wear bar, recycling, workbench slots and the Flight School link.</span><span lang="de">Das Item hat <strong>dieselbe Id wie das Teil</strong>. Propwash liefert die Item-Klasse (Akkus mit Ladestand), Stapelgröße, Shift-Tooltips, Verschleißbalken, Recycling, Werkbank-Slots und die Flugschul-Zuordnung.</span></li>
+<li><span lang="en">Register individually configured parts before <code>registerItems</code>. Look-ups: <code>item(id)</code>, <code>stack(id)</code>, <code>stack(id, charge)</code> for batteries, <code>partOf(stack)</code>.</span><span lang="de">Einzeln eingestellte Teile vor <code>registerItems</code> anmelden. Nachschlagen: <code>item(id)</code>, <code>stack(id)</code>, <code>stack(id, charge)</code> für Akkus, <code>partOf(stack)</code>.</span></li>
+<li><span lang="en">Without own models Propwash draws every part procedurally from its definition. For the inventory icon the special renderer <code>propwash:part</code> is enough; category base models <code>propwash:item/part_base/&lt;category&gt;</code> give add-on parts the same size as built-in ones in hand, on the ground and in item frames.</span><span lang="de">Ohne eigene Modelle zeichnet Propwash jedes Teil prozedural aus seiner Definition. Für das Inventar-Symbol reicht der Sonder-Renderer <code>propwash:part</code>; die Kategorie-Basismodelle <code>propwash:item/part_base/&lt;kategorie&gt;</code> geben Add-on-Teilen dieselbe Größe wie eingebauten in der Hand, am Boden und im Item-Rahmen.</span></li>
+</ul>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">JSON</span><span class="docs-code__caption"><code>assets/examplemod/items/m2806_1300.json</code></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>{<span class="tk-p">&quot;model&quot;</span>: {<span class="tk-p">&quot;type&quot;</span>: <span class="tk-s">&quot;minecraft:special&quot;</span>, <span class="tk-p">&quot;base&quot;</span>: <span class="tk-s">&quot;propwash:item/part_base/motor&quot;</span>, <span class="tk-p">&quot;model&quot;</span>: {<span class="tk-p">&quot;type&quot;</span>: <span class="tk-s">&quot;propwash:part&quot;</span>}}}</code></pre>
+</figure>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col"><span lang="en">Purpose</span><span lang="de">Zweck</span></th><th scope="col"><span lang="en">Language key</span><span lang="de">Sprachschlüssel</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><span lang="en">Part name (required)</span><span lang="de">Teilname (Pflicht)</span></th><td><code>part.&lt;ns&gt;.&lt;path&gt;</code></td></tr>
+<tr><th scope="row"><span lang="en">Shift help</span><span lang="de">Shift-Hilfe</span></th><td><code>&lt;ns&gt;.help.&lt;path&gt;.summary, .what.1…8, .use.1…8</code></td></tr>
+<tr><th scope="row"><span lang="en">Short frame name (class, leaderboard)</span><span lang="de">Rahmen-Kurzname (Klasse, Bestenliste)</span></th><td><code>&lt;ns&gt;.frame_short.&lt;path&gt;</code></td></tr>
+<tr><th scope="row"><span lang="en">Mounts</span><span lang="de">Halterungen</span></th><td><code>&lt;ns&gt;.mount.motor.&lt;path&gt;, .mount.stack.&lt;path&gt;, .mount.prop.&lt;path&gt;</code></td></tr>
+<tr><th scope="row"><span lang="en">Cell chemistry</span><span lang="de">Zellchemie</span></th><td><code>&lt;ns&gt;.chemistry.&lt;path&gt;</code></td></tr>
+<tr><th scope="row">Preset</th><td><code>&lt;ns&gt;.preset.&lt;path&gt;</code></td></tr>
+<tr><th scope="row"><span lang="en">Name of the own creative tab</span><span lang="de">Name des eigenen Kreativ-Tabs</span></th><td><code>itemGroup.&lt;ns&gt;</code></td></tr>
+<tr><th scope="row"><span lang="en">Flight School scene</span><span lang="de">Flugschul-Szene</span></th><td><code>&lt;ns&gt;.guide.scene.&lt;name&gt;.title, .description, .step.&lt;step&gt;.title/text</code></td></tr>
+</tbody>
+</table></div>
+<p lang="en">Recipes are normal vanilla recipes of the add-on; the intermediate items <code>propwash:carbon_plate</code>, <code>copper_coil</code>, <code>circuit_board</code>, <code>lipo_cell</code> and <code>hd_chip</code> are stable ingredients. The tags <code>#propwash:parts</code> and <code>#propwash:parts/&lt;category&gt;</code> can be extended with <code>"replace": false</code>. Own chest loot goes into any vanilla table with <code>PropwashApi.loot().inject(target, addonTable)</code>, on both loaders.</p>
+<p lang="de">Rezepte sind normale Vanilla-Rezepte des Add-ons; die Zwischenteile <code>propwash:carbon_plate</code>, <code>copper_coil</code>, <code>circuit_board</code>, <code>lipo_cell</code> und <code>hd_chip</code> sind stabile Zutaten. Die Tags <code>#propwash:parts</code> und <code>#propwash:parts/&lt;kategorie&gt;</code> lassen sich mit <code>"replace": false</code> ergänzen. Eigene Truhen-Beute hängt <code>PropwashApi.loot().inject(ziel, addonTabelle)</code> in jede Vanilla-Tabelle, auf beiden Loadern.</p>
+
+</section>
+<section class="docs-section" aria-labelledby="presets">
+<h2 id="presets" class="docs-h2"><a class="docs-anchor" href="#presets" aria-hidden="true" tabindex="-1">#</a><span lang="en">Presets and creative tab</span><span lang="de">Presets und Kreativ-Tab</span></h2>
+
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Java</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code><span class="tk-t">DroneData</span> longRange = <span class="tk-k">new</span> <span class="tk-t">DroneData</span>(
+        <span class="tk-t">BuildSpec</span>.of(id(<span class="tk-s">&quot;lr_8&quot;</span>), id(<span class="tk-s">&quot;stack_30_8s&quot;</span>), id(<span class="tk-s">&quot;m2806_1300&quot;</span>), <span class="tk-t">Identifier</span>.fromNamespaceAndPath(<span class="tk-s">&quot;propwash&quot;</span>, <span class="tk-s">&quot;p7_2b&quot;</span>),
+                <span class="tk-t">Identifier</span>.fromNamespaceAndPath(<span class="tk-s">&quot;propwash&quot;</span>, <span class="tk-s">&quot;digital_hd&quot;</span>), id(<span class="tk-s">&quot;b8s_4500_lion&quot;</span>)),
+        <span class="tk-t">PaintSpec</span>.<span class="tk-t">DEFAULT</span>.with(<span class="tk-s">&quot;frame&quot;</span>, 0x1B1D22), <span class="tk-t">TuneSpec</span>.<span class="tk-t">EMPTY</span>, <span class="tk-t">Optional</span>.of(<span class="tk-s">&quot;LR 8S&quot;</span>));
+<span class="tk-t">PropwashApi</span>.builds().registerPreset(<span class="tk-t">DronePreset</span>.of(id(<span class="tk-s">&quot;lr8s&quot;</span>), longRange));
+
+<span class="tk-t">PropwashApi</span>.extensionTab(<span class="tk-s">&quot;examplemod&quot;</span>)
+        .icon(id(<span class="tk-s">&quot;deadcat_5&quot;</span>))
+        .order(<span class="tk-t">TabSection</span>.<span class="tk-t">PRESETS</span>, <span class="tk-t">TabSection</span>.<span class="tk-t">FRAMES</span>, <span class="tk-t">TabSection</span>.<span class="tk-t">MOTORS</span>, <span class="tk-t">TabSection</span>.<span class="tk-t">PROPS</span>)
+        .add(() -&gt; <span class="tk-t">List</span>.of(<span class="tk-t">PropwashApi</span>.builds().createDrone(longRange.withName(<span class="tk-s">&quot;LR 8S Race&quot;</span>))));</code></pre>
+</figure>
+<ul>
+<li><span lang="en">Every add-on gets its own creative tab right after the Propwash tab, titled “Propwash: &lt;name&gt;” with the name from <code>itemGroup.&lt;ns&gt;</code>. Part items and listed presets of the namespace go there, not into the Propwash tab.</span><span lang="de">Jedes Add-on bekommt einen eigenen Kreativ-Tab direkt hinter dem Propwash-Tab, Titel „Propwash: &lt;Name&gt;“ mit dem Namen aus <code>itemGroup.&lt;ns&gt;</code>. Teil-Items und gelistete Presets des Namensraums landen dort, nicht im Propwash-Tab.</span></li>
+<li><span lang="en"><code>order(…)</code> sorts the sections; sections you do not name follow in the default order. An empty tab is hidden by Minecraft.</span><span lang="de"><code>order(…)</code> sortiert die Abschnitte; nicht genannte folgen in der Standard-Reihenfolge. Einen leeren Tab blendet Minecraft aus.</span></li>
+</ul>
+
+</section>
+<section class="docs-section" aria-labelledby="builds">
+<h2 id="builds" class="docs-h2"><a class="docs-anchor" href="#builds" aria-hidden="true" tabindex="-1">#</a><span lang="en">Builds and import</span><span lang="de">Baupläne und Import</span></h2>
+
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col"><span lang="en">Type</span><span lang="de">Typ</span></th><th scope="col"><span lang="en">Content</span><span lang="de">Inhalt</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><code>BuildSpec</code></th><td><span lang="en">ids of frame, stack, motor (×4), prop (×4), video, battery and the accessory per slot</span><span lang="de">Ids von Rahmen, Stack, Motor (×4), Prop (×4), Video, Akku und Zubehör je Platz</span></td></tr>
+<tr><th scope="row"><code>PaintSpec</code></th><td><span lang="en">RGB per paint slot: <code>frame</code>, <code>tpu</code>, <code>motors</code>, <code>prop_fl</code> … <code>prop_rr</code>, <code>stack</code>, <code>battery</code>, <code>camera</code>, <code>antenna</code>, <code>accessories</code></span><span lang="de">RGB je Lack-Platz: <code>frame</code>, <code>tpu</code>, <code>motors</code>, <code>prop_fl</code> … <code>prop_rr</code>, <code>stack</code>, <code>battery</code>, <code>camera</code>, <code>antenna</code>, <code>accessories</code></span></td></tr>
+<tr><th scope="row"><code>TuneSpec</code></th><td><span lang="en">key → value like in the flight controller (at most 256 entries)</span><span lang="de">Schlüssel → Wert wie im Flight-Controller (höchstens 256 Einträge)</span></td></tr>
+<tr><th scope="row"><code>DroneData</code></th><td><span lang="en"><code>BuildSpec</code> + <code>PaintSpec</code> + <code>TuneSpec</code> + name (up to 48 characters)</span><span lang="de"><code>BuildSpec</code> + <code>PaintSpec</code> + <code>TuneSpec</code> + Name (bis 48 Zeichen)</span></td></tr>
+</tbody>
+</table></div>
+<p lang="en"><code>PropwashApi.builds()</code> reads drone items (<code>read</code>), creates them (<code>createDrone</code>, <code>withTune</code>, <code>withPaint</code>), checks and analyses builds (<code>check</code>, <code>analyze</code> with the same figures as the workbench, <code>cameraView</code>, <code>defaultTune</code>) and runs imports on the server (<code>applyImport</code>). Battery charge, wear, bindings and switch assignments are never part of a <code>DroneData</code>.</p>
+<p lang="de"><code>PropwashApi.builds()</code> liest Drohnen-Items (<code>read</code>), erzeugt sie (<code>createDrone</code>, <code>withTune</code>, <code>withPaint</code>), prüft und analysiert Baupläne (<code>check</code>, <code>analyze</code> mit denselben Werten wie die Werkbank, <code>cameraView</code>, <code>defaultTune</code>) und führt Importe auf dem Server aus (<code>applyImport</code>). Akkustand, Verschleiß, Bindungen und Schalterbelegung gehören nie zu einer <code>DroneData</code>.</p>
+<h3 id="builds-import" class="docs-h3"><a class="docs-anchor" href="#builds-import" aria-hidden="true" tabindex="-1">#</a><span lang="en">Import: the server decides</span><span lang="de">Import: Der Server entscheidet</span></h3>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Java</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>context.importIntoWorkbench(data, <span class="tk-t">EnumSet</span>.allOf(<span class="tk-t">ImportLayer</span>.<span class="tk-k">class</span>), <span class="tk-t">TuneGroup</span>.<span class="tk-t">FLIGHT</span>).thenAccept(<span class="tk-k">this</span>::show);
+<span class="tk-t">PropwashClientApi</span>.sendImport(<span class="tk-t">ImportRequest</span>.tuneOnHeldDrone(data)).thenAccept(<span class="tk-k">this</span>::show);
+<span class="tk-t">PropwashClientApi</span>.sendImport(<span class="tk-t">ImportRequest</span>.paintOnHeldDrone(data)).thenAccept(<span class="tk-k">this</span>::show);
+<span class="tk-t">PropwashClientApi</span>.sendCreateDrone(data).thenAccept(<span class="tk-k">this</span>::show);</code></pre>
+</figure>
+<p lang="en">The client sends a request; the server checks size and rate (at most two requests per second and player), the target, unknown parts and the game mode, applies the layers in the order parts → paint → tune → name and answers with an <code>ImportResult</code>. In survival, parts come from the inventory and paint costs dyes, as in the game.</p>
+<p lang="de">Der Client schickt eine Anfrage; der Server prüft Größe und Rate (höchstens zwei Anfragen pro Sekunde und Spieler), das Ziel, unbekannte Teile und den Spielmodus, wendet die Ebenen in der Reihenfolge Teile → Lack → Tuning → Name an und antwortet mit einem <code>ImportResult</code>. Im Überlebensmodus kommen Teile aus dem Inventar und Lack kostet Farbstoffe, wie im Spiel.</p>
+<p lang="en">Statuses: <code>APPLIED</code>, <code>UNCHANGED</code>, <code>UNKNOWN_PARTS</code>, <code>MISSING_PARTS</code>, <code>MISSING_DYES</code>, <code>NO_TARGET</code>, <code>NOT_ALLOWED</code>, <code>INVALID</code>, <code>BUSY</code>; show them with <code>Component.translatable(result.status().translationKey())</code>.</p>
+<p lang="de">Status: <code>APPLIED</code>, <code>UNCHANGED</code>, <code>UNKNOWN_PARTS</code>, <code>MISSING_PARTS</code>, <code>MISSING_DYES</code>, <code>NO_TARGET</code>, <code>NOT_ALLOWED</code>, <code>INVALID</code>, <code>BUSY</code>; anzeigen mit <code>Component.translatable(result.status().translationKey())</code>.</p>
+<div class="docs-note docs-note--info"><p lang="en">Share codes live in the add-on: Propwash provides the data, the check and the server-checked import. Never put the video channel (<code>TuneGroup.VTX</code>), switch assignments, battery charge or bindings into a code.</p>
+<p lang="de">Sharecodes leben im Add-on: Propwash liefert Daten, Prüfung und den vom Server geprüften Import. Nie den Videokanal (<code>TuneGroup.VTX</code>), Schalterbelegung, Akkustand oder Bindungen in einen Code schreiben.</p></div>
+
+</section>
+<section class="docs-section" aria-labelledby="client">
+<h2 id="client" class="docs-h2"><a class="docs-anchor" href="#client" aria-hidden="true" tabindex="-1">#</a><span lang="en">Client extensions</span><span lang="de">Client-Erweiterungen</span></h2>
+
+<h3 id="client-workbench" class="docs-h3"><a class="docs-anchor" href="#client-workbench" aria-hidden="true" tabindex="-1">#</a><span lang="en">Workbench buttons</span><span lang="de">Werkbank-Knöpfe</span></h3>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Java</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code><span class="tk-k">public</span> <span class="tk-k">final</span> <span class="tk-k">class</span> <span class="tk-t">ShareCodeButton</span> <span class="tk-k">implements</span> <span class="tk-t">WorkbenchExtension</span> {
+    <span class="tk-a">@Override</span>
+    <span class="tk-k">public</span> <span class="tk-t">Identifier</span> id() {
+        <span class="tk-k">return</span> <span class="tk-t">ExampleMod</span>.id(<span class="tk-s">&quot;share_code&quot;</span>);
+    }
+
+    <span class="tk-a">@Override</span>
+    <span class="tk-k">public</span> <span class="tk-k">void</span> init(<span class="tk-t">WorkbenchContext</span> context) {
+        context.addButton(<span class="tk-t">Component</span>.translatable(<span class="tk-s">&quot;examplemod.workbench.code&quot;</span>),
+                <span class="tk-t">Component</span>.translatable(<span class="tk-s">&quot;examplemod.workbench.code.tooltip&quot;</span>),
+                () -&gt; context.openChild(parent -&gt; <span class="tk-k">new</span> <span class="tk-t">ShareCodeScreen</span>(parent, context)));
+    }
+}</code></pre>
+</figure>
+<p lang="en"><code>init</code> runs every time the workbench screen is built. Up to two buttons sit left of <em>Paint</em>, more go behind “⋯”; <code>headerSpace()</code>, short labels and 13 × 13 px icon buttons help with long texts. <code>WorkbenchContext</code> gives the slots, the finished drone (<code>result()</code>), <code>missingParts(data)</code> and the import into the workbench.</p>
+<p lang="de"><code>init</code> läuft bei jedem Aufbau des Werkbank-Screens. Bis zu zwei Knöpfe stehen links neben <em>Lackierung</em>, weitere hinter „⋯“; <code>headerSpace()</code>, Kurzbeschriftungen und Symbol-Knöpfe mit 13 × 13 px helfen bei langen Texten. <code>WorkbenchContext</code> liefert die Slots, die fertige Drohne (<code>result()</code>), <code>missingParts(data)</code> und den Import in die Werkbank.</p>
+<h3 id="client-tabs" class="docs-h3"><a class="docs-anchor" href="#client-tabs" aria-hidden="true" tabindex="-1">#</a><span lang="en">Configurator tabs</span><span lang="de">Konfigurator-Tabs</span></h3>
+<p lang="en"><code>PropwashClientApi.registerConfigTab(ShareCodeTab::new)</code>. A tab extends <code>ui.client.config.ConfigTab</code>: an id with namespace, its own <code>order()</code> from 1000, widgets in <code>build()</code>, drawing in <code>extract(…)</code>, <code>save()</code> and <code>discard()</code>. <code>openConfigTab(id, parent)</code> opens the configurator right on it.</p>
+<p lang="de"><code>PropwashClientApi.registerConfigTab(ShareCodeTab::new)</code>. Ein Tab erweitert <code>ui.client.config.ConfigTab</code>: Id mit Namensraum, eigene <code>order()</code> ab 1000, Widgets in <code>build()</code>, Zeichnen in <code>extract(…)</code>, <code>save()</code> und <code>discard()</code>. <code>openConfigTab(id, parent)</code> öffnet den Konfigurator direkt darauf.</p>
+<h3 id="client-school" class="docs-h3"><a class="docs-anchor" href="#client-school" aria-hidden="true" tabindex="-1">#</a><span lang="en">Flight School scenes</span><span lang="de">Flugschul-Szenen</span></h3>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Java</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code><span class="tk-t">PropwashClientApi</span>.registerFlightSchoolScene(<span class="tk-t">FrameShapesScene</span>::create);
+<span class="tk-t">PropwashClientApi</span>.linkFlightSchoolParts(<span class="tk-s">&quot;examplemod:frames&quot;</span>, <span class="tk-s">&quot;examplemod&quot;</span>, <span class="tk-t">PartKind</span>.<span class="tk-t">FRAME</span>);
+<span class="tk-t">PropwashClientApi</span>.linkFlightSchoolParts(<span class="tk-t">FlightSchoolScenes</span>.<span class="tk-t">REPAIR</span>, <span class="tk-s">&quot;examplemod&quot;</span>, <span class="tk-t">PartKind</span>.<span class="tk-t">MOTOR</span>);</code></pre>
+</figure>
+<p lang="en">Add-on scenes need an id in the add-on’s namespace and use the scene builder in <code>guide.scene</code>. Holding the Flight School key over an item opens its scenes; add-on batteries, video units, stacks and props get the matching Propwash scene automatically.</p>
+<p lang="de">Add-on-Szenen brauchen eine Id im Namensraum des Add-ons und benutzen den Szenen-Baukasten in <code>guide.scene</code>. Die Flugschul-Taste über einem Item öffnet seine Szenen; Akkus, Videomodule, Stacks und Props von Add-ons bekommen die passende Propwash-Szene von selbst.</p>
+<h3 id="client-theme" class="docs-h3"><a class="docs-anchor" href="#client-theme" aria-hidden="true" tabindex="-1">#</a>Theme</h3>
+<p lang="en">Every screen that hooks into Propwash uses the Propwash theme: <code>ThemedScreen</code>, <code>ThemeDraw</code>, <code>ThemeText</code>, <code>Palette</code>, <code>Metrics</code>, <code>FlatButton</code>, <code>ScrollPanel</code>, <code>StepSlider</code> and <code>TextField</code>. These classes are released for add-ons and only ever get additions.</p>
+<p lang="de">Jedes Fenster, das sich in Propwash einklinkt, benutzt das Propwash-Theme: <code>ThemedScreen</code>, <code>ThemeDraw</code>, <code>ThemeText</code>, <code>Palette</code>, <code>Metrics</code>, <code>FlatButton</code>, <code>ScrollPanel</code>, <code>StepSlider</code> und <code>TextField</code>. Diese Klassen sind für Add-ons freigegeben und werden nur ergänzt.</p>
+
+</section>
+<section class="docs-section" aria-labelledby="events">
+<h2 id="events" class="docs-h2"><a class="docs-anchor" href="#events" aria-hidden="true" tabindex="-1">#</a>Events</h2>
+
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col"><span lang="en">Event and listener</span><span lang="de">Event und Listener</span></th><th scope="col">Thread</th><th scope="col"><span lang="en">When</span><span lang="de">Wann</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><code>PART_REGISTERED</code><br><code class="docs-sig">onPartRegistered(PartDefinition definition)</code></th><td><span lang="en">init thread of the registering mod</span><span lang="de">Init-Thread des anmeldenden Mods</span></td><td><span lang="en">after every part an add-on registers (Java or JSON)</span><span lang="de">nach jedem Teil, das ein Add-on anmeldet (Java oder JSON)</span></td></tr>
+<tr><th scope="row"><code>REGISTRY_FROZEN</code><br><code class="docs-sig">onRegistryFrozen(PartRegistry registry)</code></th><td><span lang="en">init or main thread</span><span lang="de">Init- oder Hauptthread</span></td><td><span lang="en">exactly once, when the part registry freezes</span><span lang="de">genau einmal, wenn das Teile-Register einfriert</span></td></tr>
+<tr><th scope="row"><code>DRONE_ASSEMBLED</code><br><code class="docs-sig">onDroneAssembled(ServerPlayer player, ItemStack drone, DroneData data)</code></th><td><span lang="en">server</span><span lang="de">Server</span></td><td><span lang="en">a drone was taken out of the workbench output</span><span lang="de">eine Drohne wurde aus dem Werkbank-Ausgang genommen</span></td></tr>
+<tr><th scope="row"><code>DRONE_DISASSEMBLED</code><br><code class="docs-sig">onDroneDisassembled(ServerPlayer player, DroneData data)</code></th><td><span lang="en">server</span><span lang="de">Server</span></td><td><span lang="en">a drone was taken apart in the workbench</span><span lang="de">eine Drohne wurde in der Werkbank zerlegt</span></td></tr>
+<tr><th scope="row"><code>BUILD_IMPORTED</code><br><code class="docs-sig">onBuildImported(ServerPlayer player, ImportRequest request, ImportResult result)</code></th><td><span lang="en">server</span><span lang="de">Server</span></td><td><span lang="en">after every import request, also rejected ones</span><span lang="de">nach jeder Import-Anfrage, auch abgelehnten</span></td></tr>
+<tr><th scope="row"><code>ESC_BURNED</code><br><code class="docs-sig">onEscBurned(ServerPlayer player, ItemStack drone, DroneData data, int cells)</code></th><td><span lang="en">server</span><span lang="de">Server</span></td><td><span lang="en">the ESC of a flown drone burned out because the battery has more cells than the stack takes (only with crash damage on)</span><span lang="de">der ESC einer geflogenen Drohne ist durchgebrannt, weil der Akku mehr Zellen hat, als der Stack verträgt (nur mit Crash-Schaden an)</span></td></tr>
+</tbody>
+</table></div>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Java</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code><span class="tk-t">PropwashEvents</span>.<span class="tk-t">DRONE_ASSEMBLED</span>.register((player, drone, data) -&gt;
+        <span class="tk-t">ExampleStats</span>.built(player, data.build()));</code></pre>
+</figure>
+<p lang="en">Register listeners in the open phase. <code>fire</code> is internal.</p>
+<p lang="de">Listener in der offenen Phase anmelden. <code>fire</code> ist intern.</p>
+
+</section>
+<section class="docs-section" aria-labelledby="versions">
+<h2 id="versions" class="docs-h2"><a class="docs-anchor" href="#versions" aria-hidden="true" tabindex="-1">#</a><span lang="en">Stability and versions</span><span lang="de">Stabilität und Versionen</span></h2>
+
+<ul>
+<li><span lang="en"><strong>SemVer:</strong> the major version changes with every incompatible change, the minor version with additions, the patch version with fixes.</span><span lang="de"><strong>SemVer:</strong> Die Hauptversion steigt bei jeder inkompatiblen Änderung, die Nebenversion bei Ergänzungen, der Patch bei Fehlerbehebungen.</span></li>
+<li><span lang="en"><strong>Stable:</strong> <code>api.*</code> plus the released internal types <code>ConfigTab</code>, <code>ConfigTabHost</code>, <code>StepSlider</code>, <code>Palette</code>, <code>Metrics</code>, <code>ThemeText</code>, <code>ThemeDraw</code>, <code>ThemedWidgets</code>, <code>ThemedScreen</code>, <code>FlatButton</code>, <code>ScrollPanel</code>, <code>TextField</code> and <code>guide.scene.*</code>. Everything else is internal and may change in any version.</span><span lang="de"><strong>Stabil:</strong> <code>api.*</code> und die freigegebenen internen Typen <code>ConfigTab</code>, <code>ConfigTabHost</code>, <code>StepSlider</code>, <code>Palette</code>, <code>Metrics</code>, <code>ThemeText</code>, <code>ThemeDraw</code>, <code>ThemedWidgets</code>, <code>ThemedScreen</code>, <code>FlatButton</code>, <code>ScrollPanel</code>, <code>TextField</code> und <code>guide.scene.*</code>. Alles andere ist intern und darf sich in jeder Version ändern.</span></li>
+<li><span lang="en"><strong>Records:</strong> definitions only through builders; value records keep their canonical constructor (a new component comes with an extra constructor).</span><span lang="de"><strong>Records:</strong> Definitionen nur über Builder; Wertrecords behalten ihren kanonischen Konstruktor (eine neue Komponente kommt mit einem zusätzlichen Konstruktor).</span></li>
+<li><span lang="en"><strong>Enums</strong> get new constants at the end in minor versions, so always <code>switch</code> with a <code>default</code>. <strong>Interfaces</strong> only get new methods with a default implementation.</span><span lang="de"><strong>Enums</strong> bekommen in Nebenversionen neue Konstanten am Ende, also <code>switch</code> immer mit <code>default</code>. <strong>Interfaces</strong> bekommen neue Methoden nur mit Default-Implementierung.</span></li>
+<li><span lang="en">JSON <code>"format": 1</code> gains new optional fields in minor versions. Anything deprecated is announced at least one minor version ahead and only removed in the next major version.</span><span lang="de">JSON <code>"format": 1</code> bekommt in Nebenversionen neue optionale Felder. Veraltetes wird mindestens eine Nebenversion vorher angekündigt und erst in der nächsten Hauptversion entfernt.</span></li>
+</ul>
+<h3 id="versions-history" class="docs-h3"><a class="docs-anchor" href="#versions-history" aria-hidden="true" tabindex="-1">#</a><span lang="en">API versions</span><span lang="de">API-Versionen</span></h3>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col">API</th><th scope="col"><span lang="en">Added</span><span lang="de">Neu</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><code>1.0</code></th><td><span lang="en">Parts in Java or JSON, items, presets, builds, paint, tune groups, OSD layouts, server-checked import, events, workbench buttons with child screens, configurator tabs, Flight School scenes.</span><span lang="de">Teile in Java oder JSON, Items, Presets, Baupläne, Lack, Tuning-Gruppen, OSD-Layouts, vom Server geprüfter Import, Events, Werkbank-Knöpfe mit Unterfenstern, Konfigurator-Tabs, Flugschul-Szenen.</span></td></tr>
+<tr><th scope="row"><code>1.1</code></th><td><span lang="en"><code>BuildAccess#cameraView(spec)</code>: the FPV camera and prop discs as Propwash draws them.</span><span lang="de"><code>BuildAccess#cameraView(spec)</code>: FPV-Kamera und Prop-Scheiben, wie Propwash sie zeichnet.</span></td></tr>
+<tr><th scope="row"><code>1.2</code></th><td><span lang="en">A creative tab per add-on (<code>PropwashApi.extensionTab(ns)</code>), <code>power_w</code> and <code>usable_fraction</code> for the energy model, all flight times in <code>BuildStats</code>.</span><span lang="de">Ein Kreativ-Tab je Add-on (<code>PropwashApi.extensionTab(ns)</code>), <code>power_w</code> und <code>usable_fraction</code> für das Energiemodell, alle Flugzeiten in <code>BuildStats</code>.</span></td></tr>
+<tr><th scope="row"><code>1.3</code></th><td><span lang="en">Flight School links for items of any namespace (<code>linkFlightSchoolItems</code>, <code>linkFlightSchoolParts</code>, <code>FlightSchoolScenes</code>).</span><span lang="de">Flugschul-Verknüpfungen für Items jedes Namensraums (<code>linkFlightSchoolItems</code>, <code>linkFlightSchoolParts</code>, <code>FlightSchoolScenes</code>).</span></td></tr>
+<tr><th scope="row"><code>1.4</code></th><td><span lang="en">Chest loot without loader code (<code>PropwashApi.loot()</code>), rarity in JSON, more analysis figures, <code>ESC_BURNED</code>, part condition and paint cost, batteries with partial charge, the <code>NAME</code> import layer and new drones from the client, Propwash’s own JSON codec, language texts on the server, workbench header space and icon buttons, camera field of view from <code>camera_fov_deg</code> and the uptilt range of the camera mount.</span><span lang="de">Truhen-Beute ohne Loader-Code (<code>PropwashApi.loot()</code>), Seltenheit im JSON, mehr Analysewerte, <code>ESC_BURNED</code>, Teilezustand und Lackkosten, Akkus mit Teilladung, Import-Ebene <code>NAME</code> und neue Drohnen vom Client, Propwashs eigener JSON-Codec, Sprachtexte auf dem Server, Platz im Werkbank-Kopf und Symbol-Knöpfe, Kamera-Sichtfeld aus <code>camera_fov_deg</code> und der Uptilt-Bereich des Kamerahalters.</span></td></tr>
+</tbody>
+</table></div>
+<p lang="en">Propwash 0.5.0 ships API 1.4.0 and network protocol 9.</p>
+<p lang="de">Propwash 0.5.0 bringt API 1.4.0 und Netzwerkprotokoll 9.</p>
+
+</section>
+<section class="docs-section" aria-labelledby="multiplayer">
+<h2 id="multiplayer" class="docs-h2"><a class="docs-anchor" href="#multiplayer" aria-hidden="true" tabindex="-1">#</a><span lang="en">Multiplayer</span><span lang="de">Mehrspieler</span></h2>
+<ul>
+<li><span lang="en">When a player connects, Propwash compares the part lists of server and client (ids and a short hash per definition). If they differ, the server disconnects with a message naming the missing or different parts: the flight model runs on the client and has to see the same data.</span><span lang="de">Beim Verbinden vergleicht Propwash die Teile-Listen von Server und Client (Ids und ein kurzer Hash je Definition). Weichen sie ab, trennt der Server mit einer Meldung, welche Teile fehlen oder andere Werte haben: Das Flugmodell läuft auf dem Client und muss dieselben Daten sehen.</span></li>
+<li><span lang="en">If an add-on is removed from a world, drones with its parts survive: Propwash keeps the unknown id in a placeholder part (not armable, tooltip “Unknown part”). When the add-on comes back, the drone is complete again.</span><span lang="de">Wird ein Add-on aus einer Welt entfernt, bleiben Drohnen mit seinen Teilen erhalten: Propwash behält die unbekannte Id in einem Platzhalter (nicht scharfschaltbar, Tooltip „Unbekanntes Bauteil“). Kommt das Add-on zurück, ist die Drohne wieder vollständig.</span></li>
+</ul>
+</section>
+<section class="docs-section" aria-labelledby="example">
+<h2 id="example" class="docs-h2"><a class="docs-anchor" href="#example" aria-hidden="true" tabindex="-1">#</a><span lang="en">Example add-on</span><span lang="de">Beispiel-Add-on</span></h2>
+
+<p lang="en">Propwash is tested against a complete example add-on in the namespace <code>propwash_example</code> that uses <strong>only the API</strong>: version check, events, three parts in Java (2806.5 motor, 13″ carbon prop, stretched-X race frame with its own arms), five parts and a cell chemistry in JSON, items, a preset, its own creative tab, a workbench button with a child screen (preview, part check, import), a configurator tab (OSD layout via the clipboard, rates on the held drone) and a Flight School scene linked to its frames.</p>
+<p lang="de">Propwash wird gegen ein vollständiges Beispiel-Add-on im Namensraum <code>propwash_example</code> geprüft, das <strong>nur die API</strong> benutzt: Versionsprüfung, Events, drei Teile in Java (Motor 2806,5, 13″-Carbon-Prop, Stretched-X-Race-Rahmen mit eigenen Armen), fünf Teile und eine Zellchemie in JSON, Items, ein Preset, ein eigener Kreativ-Tab, ein Werkbank-Knopf mit Kind-Fenster (Vorschau, Teile-Check, Import), ein Konfigurator-Tab (OSD-Layout über die Zwischenablage, Rates auf die gehaltene Drohne) und eine Flugschul-Szene, die mit seinen Rahmen verknüpft ist.</p>
+<p lang="en">Its deadcat frame as JSON is shown on the <a href="../../docs/parts-format/#example-addon">parts format page</a>. <em>Propwash: Just More Parts</em> is the first real add-on built the same way.</p>
+<p lang="de">Sein Deadcat-Rahmen als JSON steht auf der <a href="../../docs/parts-format/#example-addon">Seite zum Teile-Format</a>. <em>Propwash: Just More Parts</em> ist das erste echte Add-on, das genauso gebaut ist.</p>
+
+</section>
+<section class="docs-section" aria-labelledby="checklist">
+<h2 id="checklist" class="docs-h2"><a class="docs-anchor" href="#checklist" aria-hidden="true" tabindex="-1">#</a><span lang="en">Checklist</span><span lang="de">Checkliste</span></h2>
+
+<ul>
+<li><span lang="en"><code>requireVersion</code> at start-up, dependency <code>propwash &gt;= 0.5.0</code> in both loader metadata files, <code>side = "BOTH"</code>.</span><span lang="de"><code>requireVersion</code> beim Start, Abhängigkeit <code>propwash &gt;= 0.5.0</code> in beiden Loader-Metadaten, <code>side = "BOTH"</code>.</span></li>
+<li><span lang="en">Parts and items in the <strong>common</strong> init, client extensions in the client init.</span><span lang="de">Teile und Items in der <strong>gemeinsamen</strong> Init, Client-Erweiterungen in der Client-Init.</span></li>
+<li><span lang="en">Every id: path only <code>[a-z0-9_.-]</code>, unique across all categories, namespace not <code>propwash</code>.</span><span lang="de">Jede Id: Pfad nur <code>[a-z0-9_.-]</code>, eindeutig über alle Kategorien, Namensraum nicht <code>propwash</code>.</span></li>
+<li><span lang="en">An item icon <code>assets/&lt;ns&gt;/items/&lt;path&gt;.json</code> and a name <code>part.&lt;ns&gt;.&lt;path&gt;</code> for every part, in English and German.</span><span lang="de">Ein Item-Symbol <code>assets/&lt;ns&gt;/items/&lt;pfad&gt;.json</code> und ein Name <code>part.&lt;ns&gt;.&lt;pfad&gt;</code> für jedes Teil, auf Englisch und Deutsch.</span></li>
+<li><span lang="en">New mounts appear on at least one frame <em>and</em> one part (otherwise Propwash warns when the registry freezes).</span><span lang="de">Neue Halterungen tauchen bei mindestens einem Rahmen <em>und</em> einem Teil auf (sonst warnt Propwash beim Einfrieren).</span></li>
+</ul>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col"><span lang="en">Message or behaviour</span><span lang="de">Meldung oder Verhalten</span></th><th scope="col"><span lang="en">Cause</span><span lang="de">Ursache</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><code>IllegalStateException … Propwash-API …</code></th><td><span lang="en">Propwash too old or a new major version</span><span lang="de">Propwash zu alt oder neue Hauptversion</span></td></tr>
+<tr><th scope="row"><span lang="en"><code>IllegalStateException</code> on <code>register</code></span><span lang="de"><code>IllegalStateException</code> beim <code>register</code></span></th><td><span lang="en">registered after the registry froze (for example from an event or the client init)</span><span lang="de">nach dem Einfrieren angemeldet (zum Beispiel aus einem Event oder der Client-Init)</span></td></tr>
+<tr><th scope="row"><span lang="en">Start-up stops with a list of JSON files</span><span lang="de">Start bricht mit einer Liste von JSON-Dateien ab</span></th><td><span lang="en">a required field is missing or a value is invalid; the message names file and field</span><span lang="de">Pflichtfeld fehlt oder Wert ungültig; die Meldung nennt Datei und Feld</span></td></tr>
+<tr><th scope="row"><span lang="en">Disconnected: parts differ</span><span lang="de">Verbindung getrennt: Teile weichen ab</span></th><td><span lang="en">the add-on is missing on one side or has other values</span><span lang="de">Add-on fehlt auf einer Seite oder hat andere Werte</span></td></tr>
+<tr><th scope="row"><span lang="en">Part missing in the workbench</span><span lang="de">Teil fehlt in der Werkbank</span></th><td><span lang="en">no item registered (<code>registerItems</code> forgotten)</span><span lang="de">kein Item angemeldet (<code>registerItems</code> vergessen)</span></td></tr>
+<tr><th scope="row"><span lang="en">Import returns <code>NO_TARGET</code></span><span lang="de">Import liefert <code>NO_TARGET</code></span></th><td><span lang="en">workbench not open or no drone in the main hand</span><span lang="de">Werkbank nicht offen oder keine Drohne in der Haupthand</span></td></tr>
+<tr><th scope="row"><span lang="en">Import returns <code>BUSY</code></span><span lang="de">Import liefert <code>BUSY</code></span></th><td><span lang="en">more than two requests per second</span><span lang="de">mehr als zwei Anfragen pro Sekunde</span></td></tr>
+</tbody>
+</table></div>
+
+</section>
+<section class="docs-section" aria-labelledby="license">
+<h2 id="license" class="docs-h2"><a class="docs-anchor" href="#license" aria-hidden="true" tabindex="-1">#</a><span lang="en">License</span><span lang="de">Lizenz</span></h2>
+<p lang="en">Licensing of the API, the example add-on and these docs is published with the release. Until then, check the license file that comes with the Propwash download before you copy code from these pages.</p>
+<p lang="de">Die Lizenz für die API, das Beispiel-Add-on und diese Doku erscheint mit der Veröffentlichung. Bis dahin vor dem Übernehmen von Code aus diesen Seiten die Lizenzdatei im Propwash-Download prüfen.</p>
+</section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice is kept in your browser. These pages are generated from the Propwash source code of each release. Fonts: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl bleibt in deinem Browser. Diese Seiten entstehen bei jeder Version aus dem Quellcode von Propwash. Schriften: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js" defer></script>
+<script src="../../assets/js/docs.js" defer></script>
+</body>
+</html>
