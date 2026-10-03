@@ -480,6 +480,84 @@ html[lang="de"] .docs-body :is(ul, ol) + p[lang="en"] + p[lang="de"] {
   min-width: 7em;
 }
 
+/* Phones: one card per rule instead of a table that needs sideways scrolling. */
+@media (max-width: 639px) {
+  .docs-table--rules {
+    min-width: 0;
+  }
+
+  .docs-table--rules thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .docs-table--rules tbody,
+  .docs-table--rules tbody tr,
+  .docs-table--rules tbody th,
+  .docs-table--rules tbody td {
+    display: block;
+  }
+
+  .docs-table--rules tbody tr {
+    padding: 6px 0 10px;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .docs-table--rules tbody tr:last-child {
+    border-bottom: 0;
+  }
+
+  .docs-table--rules tbody th,
+  .docs-table--rules tbody td {
+    padding: 6px 14px;
+    border-bottom: 0;
+  }
+
+  .docs-table--rules th:first-child {
+    min-width: 0;
+  }
+
+  .docs-table--rules td:nth-child(2),
+  .docs-table--rules td:nth-child(3) {
+    display: inline-block;
+    min-width: 0;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-right: 4px;
+  }
+
+  .docs-table--rules td:nth-child(2)::before,
+  .docs-table--rules td:nth-child(3)::before {
+    margin-right: 6px;
+    color: var(--muted);
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  html[lang="en"] .docs-table--rules td:nth-child(2)::before {
+    content: "Default";
+  }
+
+  html[lang="de"] .docs-table--rules td:nth-child(2)::before {
+    content: "Standard";
+  }
+
+  html[lang="en"] .docs-table--rules td:nth-child(3)::before {
+    content: "Values";
+  }
+
+  html[lang="de"] .docs-table--rules td:nth-child(3)::before {
+    content: "Werte";
+  }
+}
+
 .docs-rule__title {
   margin-right: 6px;
 }
