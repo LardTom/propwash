@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="Player guide – Propwash FPV docs" data-title-de="Spielerhandbuch – Propwash-FPV-Doku" data-description-en="Your first FPV flight in Propwash FPV: building and binding a drone, setting up an RC radio or gamepad, all default keys, flight modes and the server side." data-description-de="Dein erster FPV-Flug in Propwash FPV: Drohne bauen und binden, Funke oder Gamepad einrichten, alle Standardtasten, Flugmodi und die Server-Seite.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Player guide – Propwash FPV docs</title>
+<meta name="description" content="Your first FPV flight in Propwash FPV: building and binding a drone, setting up an RC radio or gamepad, all default keys, flight modes and the server side.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="Player guide – Propwash FPV docs">
+<meta property="og:description" content="Your first FPV flight in Propwash FPV: building and binding a drone, setting up an RC radio or gamepad, all default keys, flight modes and the server side.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="../../assets/css/docs.css">
+<script>
+(function () {
+  var d = document.documentElement, lang = null;
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="docs-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+</svg>
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="de">Zum Inhalt springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
+      <a href="../../#how"><span lang="en">How it works</span><span lang="de">So geht’s</span></a>
+      <a href="../../#flight"><span lang="en">Flight</span><span lang="de">Flug</span></a>
+      <a href="../../#video">Video</a>
+      <a href="../../#racing"><span lang="en">Racing</span><span lang="de">Rennen</span></a>
+      <a href="../../#gallery"><span lang="en">Screenshots</span><span lang="de">Bilder</span></a>
+      <a href="../../#faq">FAQ</a>
+      <a href="../../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+      <a href="../../docs/" aria-current="page"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <header class="docs-hero">
+    <div class="wrap docs-hero__inner">
+      <p class="kicker"><span lang="en">Docs · For players</span><span lang="de">Doku · Für Spieler</span></p>
+      <h1 class="docs-title"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></h1>
+      <p lang="en" class="docs-lead">From the parts bin to your first FPV flight, setting up your radio and what server owners need to know.</p>
+<p lang="de" class="docs-lead">Von der Teilekiste zum ersten FPV-Flug, die Funke einrichten und was Server-Betreiber wissen müssen.</p>
+      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.4.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 9</p>
+    </div>
+  </header>
+  <div class="wrap docs">
+    <nav class="docs-menu" aria-label="Documentation" data-de-aria-label="Dokumentation">
+<details class="docs-menu__fold" data-docs-menu open>
+<summary class="docs-menu__summary"><span lang="en">Docs menu</span><span lang="de">Doku-Menü</span></summary>
+<ol class="docs-menu__list">
+<li class="docs-menu__item"><a href="../../docs/"><span lang="en">Overview</span><span lang="de">Übersicht</span></a></li>
+<li class="docs-menu__item is-current"><a href="../../docs/guide/" aria-current="page"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></a>
+<ol class="docs-menu__toc"><li><a href="#start"><span lang="en">Before you start</span><span lang="de">Bevor es losgeht</span></a></li><li><a href="#first-flight"><span lang="en">First flight</span><span lang="de">Erster Flug</span></a></li><li><a href="#radio"><span lang="en">Radio, gamepad, keyboard</span><span lang="de">Funke, Gamepad, Tastatur</span></a></li><li><a href="#controls"><span lang="en">Keys</span><span lang="de">Tasten</span></a></li><li><a href="#modes"><span lang="en">Flight modes and tuning</span><span lang="de">Flugmodi und Tuning</span></a></li><li><a href="#servers"><span lang="en">For server owners</span><span lang="de">Für Server-Betreiber</span></a></li><li><a href="#help"><span lang="en">Help</span><span lang="de">Hilfe</span></a></li></ol></li>
+<li class="docs-menu__item"><a href="../../docs/gamerules/"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></a></li>
+<li class="docs-menu__item"><a href="../../docs/api/"><span lang="en">Add-on API</span><span lang="de">Add-on-API</span></a></li>
+<li class="docs-menu__item docs-menu__item--sub"><a href="../../docs/api/reference/"><span lang="en">API reference</span><span lang="de">API-Referenz</span></a></li>
+<li class="docs-menu__item"><a href="../../docs/parts-format/"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></a></li>
+</ol>
+</details>
+</nav>
+    <article class="docs-body">
+<section class="docs-section" aria-labelledby="start">
+<h2 id="start" class="docs-h2"><a class="docs-anchor" href="#start" aria-hidden="true" tabindex="-1">#</a><span lang="en">Before you start</span><span lang="de">Bevor es losgeht</span></h2>
+
+<ul>
+<li><span lang="en">Propwash FPV 0.5.0 runs on Minecraft 26.3 with <strong>Fabric</strong> (with Fabric API) or <strong>NeoForge</strong>. Download it from <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> or <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a>.</span><span lang="de">Propwash FPV 0.5.0 läuft auf Minecraft 26.3 mit <strong>Fabric</strong> (mit Fabric API) oder <strong>NeoForge</strong>. Herunterladen auf <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> oder <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a>.</span></li>
+<li><span lang="en">On a server, Propwash goes on the server <em>and</em> on every client. Add-ons such as Just More Parts also go on both sides.</span><span lang="de">Auf einem Server gehört Propwash auf den Server <em>und</em> auf jeden Client. Add-ons wie Just More Parts ebenfalls auf beide Seiten.</span></li>
+<li><span lang="en">In creative mode the <em>Propwash FPV</em> tab has five ready-to-fly drones (Whoop, Cinewhoop, Freestyle, Racer, Long Range) and every part. In survival you craft the parts or find them in chests.</span><span lang="de">Im Kreativmodus hat der Tab <em>Propwash FPV</em> fünf flugfertige Drohnen (Whoop, Cinewhoop, Freestyle, Racer, Long Range) und alle Teile. Im Überlebensmodus stellst du die Teile her oder findest sie in Truhen.</span></li>
+<li><span lang="en">A real RC radio is the best way to fly, but a gamepad or the keyboard work too.</span><span lang="de">Am besten fliegt es sich mit einer echten Funke, ein Gamepad oder die Tastatur gehen aber auch.</span></li>
+</ul>
+
+</section>
+<section class="docs-section" aria-labelledby="first-flight">
+<h2 id="first-flight" class="docs-h2"><a class="docs-anchor" href="#first-flight" aria-hidden="true" tabindex="-1">#</a><span lang="en">First flight</span><span lang="de">Erster Flug</span></h2>
+
+<ol class="docs-steps">
+<li><span lang="en"><strong>Build a drone.</strong> Place a <em>Drone Workbench</em> and right-click it. Frame in the middle, flight controller stack above it, four motors, four propellers, the video unit at the nose and a battery that fits the frame. The panel on the right shows weight, thrust-to-weight, hover throttle, top speed, flight time and any problems. Take the finished drone out on the right.</span><span lang="de"><strong>Drohne bauen.</strong> Eine <em>Drohnen-Werkbank</em> aufstellen und rechtsklicken. Rahmen in die Mitte, Flight-Controller-Stack darüber, vier Motoren, vier Propeller, das Videomodul an die Nase und ein Akku, der zum Rahmen passt. Rechts stehen Gewicht, Schub-Gewicht-Verhältnis, Schwebegas, Höchstgeschwindigkeit, Flugzeit und Probleme. Die fertige Drohne rechts herausnehmen.</span></li>
+<li><span lang="en"><strong>Place it.</strong> Right-click a block with the drone.</span><span lang="de"><strong>Hinstellen.</strong> Mit der Drohne einen Block rechtsklicken.</span></li>
+<li><span lang="en"><strong>Bind the radio.</strong> Hold the <em>FPV Remote</em> and right-click the drone.</span><span lang="de"><strong>Funke binden.</strong> Die <em>FPV-Funke</em> halten und die Drohne rechtsklicken.</span></li>
+<li><span lang="en"><strong>Bind the goggles.</strong> Hold the goggles and right-click the drone. They only bind if they receive the drone’s video system: analog goggles for analog video, digital goggles for digital video, creative goggles for both.</span><span lang="de"><strong>Brille binden.</strong> Die Brille halten und die Drohne rechtsklicken. Sie bindet nur, wenn sie das Videosystem der Drohne empfängt: analoge Brille für analoges Video, digitale für digitales, die Kreativ-Brille für beides.</span></li>
+<li><span lang="en"><strong>Put the goggles on</strong> (head slot, or right-click into the air with them).</span><span lang="de"><strong>Brille aufsetzen</strong> (Kopf-Slot, oder damit in die Luft rechtsklicken).</span></li>
+<li><span lang="en"><strong>Take off.</strong> Hold the bound radio and right-click into the air. With bound, matching goggles on your head you fly <strong>FPV</strong> through the drone’s camera; otherwise you fly <strong>line of sight</strong>, with your view turning towards the drone and a small radio display for battery, signal and flight mode.</span><span lang="de"><strong>Abheben.</strong> Die gebundene Funke halten und in die Luft rechtsklicken. Mit passender, gebundener Brille auf dem Kopf fliegst du <strong>FPV</strong> durch die Kamera der Drohne, sonst <strong>auf Sicht</strong>: Dein Blick folgt der Drohne, eine kleine Funkanzeige zeigt Akku, Signal und Flugmodus.</span></li>
+<li><span lang="en"><strong>Arm and fly.</strong> Arm with the arm switch or <kbd>Z</kbd>. Arming only works with the drone level and the throttle down. While you fly, walking is locked and you keep holding the radio.</span><span lang="de"><strong>Scharfschalten und fliegen.</strong> Mit dem Arm-Schalter oder <kbd>Z</kbd> scharfschalten. Das geht nur, wenn die Drohne gerade steht und das Gas unten ist. Während des Flugs kannst du nicht laufen und hältst die Funke weiter in der Hand.</span></li>
+<li><span lang="en"><strong>Stop.</strong> Land, disarm, then right-click with the radio again or press <kbd>Y</kbd>. The drone stays bound.</span><span lang="de"><strong>Aufhören.</strong> Landen, entschärfen, dann mit der Funke erneut rechtsklicken oder <kbd>Y</kbd> drücken. Die Drohne bleibt gebunden.</span></li>
+</ol>
+<figure class="docs-figure">
+<div class="shot"><img src="../../assets/img/workbench-freestyle-800.webp" srcset="../../assets/img/workbench-freestyle-800.webp 800w, ../../assets/img/workbench-freestyle-1600.webp 1600w" sizes="(min-width: 1100px) 760px, 100vw" width="800" height="450" loading="lazy" decoding="async" alt="The Drone Workbench with a 5-inch freestyle drone, its 3D preview and the build analysis" data-de-alt="Die Drohnen-Werkbank mit einer 5-Zoll-Freestyle-Drohne, 3D-Vorschau und Build-Analyse"></div>
+<figcaption><span lang="en">The workbench checks every build: red problems stop it, yellow warnings explain what will feel off.</span><span lang="de">Die Werkbank prüft jeden Bau: Rote Probleme verhindern ihn, gelbe Warnungen erklären, was sich komisch anfühlen wird.</span></figcaption>
+</figure>
+<div class="docs-note docs-note--info"><p lang="en">With an empty hand, right-clicking a drone picks it up; battery, tune and bindings stay with it. Sneak + right-click opens the service menu for the battery, props and camera angle. Hold <kbd>M</kbd> over any Propwash item in your inventory for its Flight School lesson and <kbd>Shift</kbd> for a detailed tooltip.</p>
+<p lang="de">Mit leerer Hand hebt ein Rechtsklick die Drohne auf; Akku, Tuning und Bindungen bleiben dran. Schleichen + Rechtsklick öffnet das Wartungsmenü für Akku, Props und Kamerawinkel. <kbd>M</kbd> über einem Propwash-Item im Inventar halten öffnet seine Flugschul-Lektion, <kbd>Shift</kbd> zeigt einen ausführlichen Tooltip.</p></div>
+
+</section>
+<section class="docs-section" aria-labelledby="radio">
+<h2 id="radio" class="docs-h2"><a class="docs-anchor" href="#radio" aria-hidden="true" tabindex="-1">#</a><span lang="en">Radio, gamepad, keyboard</span><span lang="de">Funke, Gamepad, Tastatur</span></h2>
+
+<h3 id="radio-edgetx" class="docs-h3"><a class="docs-anchor" href="#radio-edgetx" aria-hidden="true" tabindex="-1">#</a><span lang="en">EdgeTX and OpenTX radios</span><span lang="de">EdgeTX- und OpenTX-Funken</span></h3>
+<p lang="en">Connect the radio by USB and choose <strong>USB Joystick (HID)</strong> on the radio. Propwash detects it on its own and starts with channel order AETR, AUX1 = arm, AUX2 = flight mode (low Acro, middle Horizon, high Angle), AUX3 = beeper, AUX4 = rescue and full-travel throttle.</p>
+<p lang="de">Die Funke per USB anschließen und an der Funke <strong>USB Joystick (HID)</strong> wählen. Propwash erkennt sie selbst und startet mit der Kanalreihenfolge AETR, AUX1 = Scharfschalten, AUX2 = Flugmodus (unten Acro, Mitte Horizon, oben Angle), AUX3 = Piepser, AUX4 = Rescue und Gas über den vollen Weg.</p>
+<h3 id="radio-wizard" class="docs-h3"><a class="docs-anchor" href="#radio-wizard" aria-hidden="true" tabindex="-1">#</a><span lang="en">Setting up a new device</span><span lang="de">Ein neues Gerät einrichten</span></h3>
+<p lang="en">The first time a radio or gamepad shows up, Propwash asks whether to set it up now (never mid-flight): <em>Set up</em>, <em>Later</em> or <em>Never for this device</em>. The receiver wizard (configurator <kbd>K</kbd> → <em>Receiver</em> → <em>Receiver wizard…</em>) then walks you through four steps:</p>
+<p lang="de">Taucht eine Funke oder ein Gamepad zum ersten Mal auf, fragt Propwash, ob es jetzt eingerichtet werden soll (nie mitten im Flug): <em>Einrichten</em>, <em>Später</em> oder <em>Nie für dieses Gerät</em>. Der Empfänger-Assistent (Konfigurator <kbd>K</kbd> → <em>Empfänger</em> → <em>Empfänger-Assistent…</em>) führt dann durch vier Schritte:</p>
+<ol>
+<li><span lang="en"><strong>Device:</strong> pick the radio, a gamepad or the keyboard.</span><span lang="de"><strong>Gerät:</strong> Funke, Gamepad oder Tastatur wählen.</span></li>
+<li><span lang="en"><strong>Channels:</strong> move each stick when asked. For the throttle: push it fully up first, then pull it fully down and hold it there; where it rested before does not matter. A check page shows every channel live; <em>Inv.</em> flips one that moves the wrong way.</span><span lang="de"><strong>Kanäle:</strong> jeden Knüppel bewegen, wenn danach gefragt wird. Beim Gas: zuerst ganz nach oben schieben, dann ganz nach unten ziehen und dort halten; wo es vorher stand, spielt keine Rolle. Eine Prüfseite zeigt jeden Kanal live; <em>Inv.</em> dreht einen, der falsch herum läuft.</span></li>
+<li><span lang="en"><strong>Calibrate:</strong> sticks centred, then every end stop.</span><span lang="de"><strong>Kalibrieren:</strong> Knüppel in die Mitte, dann alle Endanschläge.</span></li>
+<li><span lang="en"><strong>Switches:</strong> click <em>Assign</em> and flip the switch you want for a function.</span><span lang="de"><strong>Schalter:</strong> <em>Zuweisen</em> klicken und den gewünschten Schalter umlegen.</span></li>
+</ol>
+<figure class="docs-figure">
+<div class="shot"><img src="../../assets/img/docs/receiver-wizard-check-800.webp" srcset="../../assets/img/docs/receiver-wizard-check-800.webp 800w, ../../assets/img/docs/receiver-wizard-check-1600.webp 1600w" sizes="(min-width: 1100px) 760px, 100vw" width="800" height="450" loading="lazy" decoding="async" alt="The receiver wizard checking channels: roll, pitch and yaw at 1500, throttle at 2000, inverted throttle detected, raw axes on the right" data-de-alt="Der Empfänger-Assistent prüft die Kanäle: Roll, Nick und Gier bei 1500, Gas bei 2000, invertiertes Gas erkannt, rohe Achsen rechts"></div>
+<figcaption><span lang="en">The check page of the receiver wizard: throttle down must read 1000, up 2000.</span><span lang="de">Die Prüfseite des Empfänger-Assistenten: Gas unten muss 1000 zeigen, oben 2000.</span></figcaption>
+</figure>
+<p lang="en">Once set up, a device reconnects silently with its profile. Switch functions can also be assigned by hand in the <em>Modes</em> tab, to any AUX range (900–2100 µs) or button, inverted, held or as a toggle:</p>
+<p lang="de">Einmal eingerichtet, verbindet sich ein Gerät später still mit seinem Profil. Schalter-Funktionen lassen sich auch von Hand im Tab <em>Modi</em> belegen, auf jeden AUX-Bereich (900–2100 µs) oder Knopf, invertiert, gehalten oder als Umschalter:</p>
+<ul class="docs-inline-list">
+<li><span lang="en">Arm / disarm</span><span lang="de">Scharf schalten / entschärfen</span></li>
+<li><span lang="en">Angle mode</span><span lang="de">Angle-Modus</span></li>
+<li><span lang="en">Horizon mode</span><span lang="de">Horizon-Modus</span></li>
+<li><span lang="en">GPS rescue</span><span lang="de">GPS Rescue</span></li>
+<li><span lang="en">Flip upright</span><span lang="de">Aufrichten</span></li>
+<li><span lang="en">Set home point</span><span lang="de">Homepoint setzen</span></li>
+<li><span lang="en">Locator beeper</span><span lang="de">Suchpiepser</span></li>
+<li><span lang="en">Restart race</span><span lang="de">Rennen neu starten</span></li>
+<li><span lang="en">Action cam recording</span><span lang="de">Action-Cam-Aufnahme</span></li>
+<li><span lang="en">LEDs off</span><span lang="de">LEDs aus</span></li>
+<li><span lang="en">Altitude hold (ALTHOLD)</span><span lang="de">Höhe halten (ALTHOLD)</span></li>
+<li><span lang="en">Position hold (POSHOLD)</span><span lang="de">Position halten (POSHOLD)</span></li>
+</ul>
+<h3 id="radio-gamepad" class="docs-h3"><a class="docs-anchor" href="#radio-gamepad" aria-hidden="true" tabindex="-1">#</a><span lang="en">Gamepad and keyboard</span><span lang="de">Gamepad und Tastatur</span></h3>
+<ul>
+<li><span lang="en"><strong>Gamepads</strong> are detected with a Mode 2 layout: throttle and yaw on the left stick. The throttle starts in <em>Upper half</em> mode (centred stick = no throttle); <em>Incremental</em> holds the throttle like cruise control.</span><span lang="de"><strong>Gamepads</strong> werden mit Mode-2-Belegung erkannt: Gas und Gier auf dem linken Stick. Das Gas startet im Modus <em>Obere Hälfte</em> (Stick in der Mitte = kein Gas); <em>Schrittweise</em> hält das Gas wie ein Tempomat.</span></li>
+<li><span lang="en"><strong>Keyboard</strong> flight is the fallback without a radio or gamepad and starts in Angle mode. The device list also has <em>Keyboard</em> to fly with the keyboard even when a controller is connected.</span><span lang="de"><strong>Tastatur</strong>-Flug ist der Rückfall ohne Funke oder Gamepad und startet im Angle-Modus. In der Geräteliste steht auch <em>Tastatur</em>, um trotz angeschlossenem Controller mit der Tastatur zu fliegen.</span></li>
+<li><span lang="en"><strong>macOS:</strong> Propwash finds radios such as the Radiomaster Pocket without Apple’s GameController framework. A pure MFi gamepad that only works through that framework needs <em>Apple GameController</em> under <em>Receiver → Advanced (macOS)</em>.</span><span lang="de"><strong>macOS:</strong> Propwash findet Funken wie die Radiomaster Pocket ohne Apples GameController-Framework. Ein reines MFi-Gamepad, das nur darüber funktioniert, braucht <em>Apples GameController</em> unter <em>Empfänger → Erweitert (macOS)</em>.</span></li>
+</ul>
+
+</section>
+<section class="docs-section" aria-labelledby="controls">
+<h2 id="controls" class="docs-h2"><a class="docs-anchor" href="#controls" aria-hidden="true" tabindex="-1">#</a><span lang="en">Keys</span><span lang="de">Tasten</span></h2>
+
+<p lang="en">Every function has its own key. Change them in the configurator’s <em>Keys</em> tab or under <em>Options → Controls → Key Binds → Propwash FPV</em>. The defaults are key positions on a US layout; the game shows them with your keyboard’s labels (on a German keyboard the arm key shows as <kbd>Y</kbd> and the stop key as <kbd>Z</kbd>).</p>
+<p lang="de">Jede Funktion hat ihre eigene Taste. Ändern im Konfigurator-Tab <em>Tasten</em> oder unter <em>Optionen → Steuerung → Tastenbelegung → Propwash FPV</em>. Die Standards sind Tastenpositionen auf einer US-Tastatur; das Spiel zeigt sie mit den Beschriftungen deiner Tastatur (auf einer deutschen Tastatur heißt die Arm-Taste <kbd>Y</kbd> und die Stopp-Taste <kbd>Z</kbd>).</p>
+<h3 id="controls-keyboard" class="docs-h3"><a class="docs-anchor" href="#controls-keyboard" aria-hidden="true" tabindex="-1">#</a><span lang="en">Keyboard flight</span><span lang="de">Tastatur-Flug</span></h3>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col"><span lang="en">Action</span><span lang="de">Aktion</span></th><th scope="col"><span lang="en">Default key</span><span lang="de">Standardtaste</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><span lang="en">Keyboard flight: throttle up</span><span lang="de">Tastaturflug: Gas geben</span></th><td><span class="docs-muted"><span lang="en">until bound:</span><span lang="de">bis belegt:</span></span> <kbd>W</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Keyboard flight: throttle down</span><span lang="de">Tastaturflug: Gas wegnehmen</span></th><td><span class="docs-muted"><span lang="en">until bound:</span><span lang="de">bis belegt:</span></span> <kbd>S</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Keyboard flight: yaw left</span><span lang="de">Tastaturflug: Gieren links</span></th><td><span class="docs-muted"><span lang="en">until bound:</span><span lang="de">bis belegt:</span></span> <kbd>A</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Keyboard flight: yaw right</span><span lang="de">Tastaturflug: Gieren rechts</span></th><td><span class="docs-muted"><span lang="en">until bound:</span><span lang="de">bis belegt:</span></span> <kbd>D</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Keyboard flight: nose down (forward)</span><span lang="de">Tastaturflug: Nase runter (vorwärts)</span></th><td><kbd>↑</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Keyboard flight: nose up (back)</span><span lang="de">Tastaturflug: Nase hoch (rückwärts)</span></th><td><kbd>↓</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Keyboard flight: roll left</span><span lang="de">Tastaturflug: Rollen links</span></th><td><kbd>←</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Keyboard flight: roll right</span><span lang="de">Tastaturflug: Rollen rechts</span></th><td><kbd>→</kbd></td></tr>
+</tbody>
+</table></div>
+<h3 id="controls-drone" class="docs-h3"><a class="docs-anchor" href="#controls-drone" aria-hidden="true" tabindex="-1">#</a><span lang="en">Drone</span><span lang="de">Drohne</span></h3>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col"><span lang="en">Action</span><span lang="de">Aktion</span></th><th scope="col"><span lang="en">Default key</span><span lang="de">Standardtaste</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><span lang="en">Arm / disarm</span><span lang="de">Scharf schalten / entschärfen</span></th><td><kbd>Z</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Cycle flight mode (Acro/Angle/Horizon) <span class="docs-muted">(shared on purpose)</span></span><span lang="de">Flugmodus wechseln <span class="docs-muted">(bewusst geteilt)</span></span></th><td><kbd>R</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Flight mode: Acro</span><span lang="de">Flugmodus: Acro</span></th><td><kbd>Numpad 1</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Flight mode: Angle</span><span lang="de">Flugmodus: Angle</span></th><td><kbd>Numpad 2</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Flight mode: Horizon</span><span lang="de">Flugmodus: Horizon</span></th><td><kbd>Numpad 3</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Altitude hold (ALTHOLD)</span><span lang="de">Höhe halten (ALTHOLD)</span></th><td><kbd>Numpad 4</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Position hold (POSHOLD)</span><span lang="de">Position halten (POSHOLD)</span></th><td><kbd>Numpad 5</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Flip upright</span><span lang="de">Aufrichten</span></th><td><kbd>U</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Stop FPV flight</span><span lang="de">FPV-Flug beenden</span></th><td><kbd>Y</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Locator beeper</span><span lang="de">Suchpiepser</span></th><td><kbd>.</kbd></td></tr>
+<tr><th scope="row"><span lang="en">LEDs on/off</span><span lang="de">LEDs an/aus</span></th><td><kbd>F8</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Open receiver wizard</span><span lang="de">Empfänger-Assistent öffnen</span></th><td><span class="docs-muted"><span lang="en">not bound</span><span lang="de">nicht belegt</span></span></td></tr>
+<tr><th scope="row"><span lang="en">GPS rescue</span><span lang="de">GPS Rescue</span></th><td><kbd>J</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Set home point</span><span lang="de">Homepoint setzen</span></th><td><kbd>,</kbd></td></tr>
+</tbody>
+</table></div>
+<h3 id="controls-more" class="docs-h3"><a class="docs-anchor" href="#controls-more" aria-hidden="true" tabindex="-1">#</a><span lang="en">Everything else</span><span lang="de">Alles andere</span></h3>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col"><span lang="en">Action</span><span lang="de">Aktion</span></th><th scope="col"><span lang="en">Default key</span><span lang="de">Standardtaste</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><span lang="en">Restart race</span><span lang="de">Rennen neu starten</span></th><td><kbd>Backspace</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Open configurator</span><span lang="de">Konfigurator öffnen</span></th><td><kbd>K</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Flight school (hold over item)</span><span lang="de">Flugschule (über Item halten)</span></th><td><kbd>M</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Action cam recording</span><span lang="de">Action-Cam-Aufnahme</span></th><td><kbd>F9</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Spectate: next video channel</span><span lang="de">Zuschauen: nächster Videokanal</span></th><td><kbd>F7</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Rotate gate (sneak: change mount) <span class="docs-muted">(shared on purpose)</span></span><span lang="de">Gate drehen (Schleichen: Lage) <span class="docs-muted">(bewusst geteilt)</span></span></th><td><kbd>R</kbd></td></tr>
+</tbody>
+</table></div>
+<div class="docs-note docs-note--info"><p lang="en">Right-clicking with the radio also ends a flight. The rotate-gate key shares <kbd>R</kbd> with the flight mode on purpose: one works only with a gate in hand, the other only while flying.</p>
+<p lang="de">Rechtsklick mit der Funke beendet ebenfalls einen Flug. Die Taste „Gate drehen“ teilt sich <kbd>R</kbd> absichtlich mit dem Flugmodus: Die eine wirkt nur mit einem Gate in der Hand, die andere nur im Flug.</p></div>
+
+</section>
+<section class="docs-section" aria-labelledby="modes">
+<h2 id="modes" class="docs-h2"><a class="docs-anchor" href="#modes" aria-hidden="true" tabindex="-1">#</a><span lang="en">Flight modes and tuning</span><span lang="de">Flugmodi und Tuning</span></h2>
+
+<ul>
+<li><span lang="en"><strong>Acro</strong> (rate mode) holds the angle you leave it at, like a real freestyle or racing quad. <strong>Angle</strong> levels itself and limits the tilt. <strong>Horizon</strong> levels near the centre and flips at full stick.</span><span lang="de"><strong>Acro</strong> (Rate-Modus) hält den Winkel, in dem du sie lässt, wie ein echter Freestyle- oder Race-Quad. <strong>Angle</strong> richtet sich selbst gerade und begrenzt die Neigung. <strong>Horizon</strong> richtet sich in der Mitte gerade und flippt bei vollem Ausschlag.</span></li>
+<li><span lang="en"><strong>ALTHOLD</strong> and <strong>POSHOLD</strong> hold height and position on simulated barometer, GPS and compass, so they never hold perfectly. Without a GPS fix POSHOLD only holds the height.</span><span lang="de"><strong>ALTHOLD</strong> und <strong>POSHOLD</strong> halten Höhe und Position mit simuliertem Barometer, GPS und Kompass, also nie perfekt. Ohne GPS-Fix hält POSHOLD nur die Höhe.</span></li>
+<li><span lang="en">Rates, PID, filters and the throttle curve are set in the configurator tabs <em>Rates</em> and <em>PID Tuning</em> and saved to the drone you fly or hold. The <a href="../../configurator/">online configurator</a> uses the same defaults.</span><span lang="de">Rates, PID, Filter und Gaskurve stellst du in den Konfigurator-Tabs <em>Rates</em> und <em>PID-Tuning</em> ein; sie werden auf der Drohne gespeichert, die du fliegst oder hältst. Der <a href="../../configurator/">Online-Konfigurator</a> nutzt dieselben Standards.</span></li>
+</ul>
+
+</section>
+<section class="docs-section" aria-labelledby="servers">
+<h2 id="servers" class="docs-h2"><a class="docs-anchor" href="#servers" aria-hidden="true" tabindex="-1">#</a><span lang="en">For server owners</span><span lang="de">Für Server-Betreiber</span></h2>
+
+<p lang="en">Install Propwash on the server and on every client. Client and server need the same network protocol (Propwash 0.5.0: protocol 9); a mismatch is reported with both versions when you connect.</p>
+<p lang="de">Propwash gehört auf den Server und auf jeden Client. Client und Server brauchen dasselbe Netzwerkprotokoll (Propwash 0.5.0: Protokoll 9); passt es nicht, nennt die Meldung beim Verbinden beide Versionen.</p>
+<h3 id="servers-rules" class="docs-h3"><a class="docs-anchor" href="#servers-rules" aria-hidden="true" tabindex="-1">#</a><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></h3>
+<p lang="en">Physics, wind, battery life, crash damage, video range and video channels are <a href="../../docs/gamerules/">world rules</a>: gamerules that apply to every player in the world. Operators change them in the configurator tab <em>World rules</em> or with <code>/gamerule propwash:&lt;rule&gt; &lt;value&gt;</code>; everyone else sees them read-only in the same tab.</p>
+<p lang="de">Physik, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Videokanäle sind <a href="../../docs/gamerules/">Welt-Regeln</a>: Gamerules, die für alle Spieler der Welt gelten. Operatoren ändern sie im Konfigurator-Tab <em>Welt-Regeln</em> oder mit <code>/gamerule propwash:&lt;regel&gt; &lt;wert&gt;</code>; alle anderen sehen sie im selben Tab nur lesend.</p>
+<h3 id="servers-config" class="docs-h3"><a class="docs-anchor" href="#servers-config" aria-hidden="true" tabindex="-1">#</a>server.json</h3>
+<p lang="en">Rights, limits and server technology stay in <code>config/propwash/server.json</code>. <code>/propwash reload</code> reads the file again without a restart.</p>
+<p lang="de">Rechte, Grenzen und Server-Technik bleiben in <code>config/propwash/server.json</code>. <code>/propwash reload</code> liest die Datei ohne Neustart neu ein.</p>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--server">
+<thead><tr><th scope="col"><span lang="en">Setting</span><span lang="de">Einstellung</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Range</span><span lang="de">Bereich</span></th><th scope="col"><span lang="en">What it does</span><span lang="de">Wirkung</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><code>pilotPermissionLevel</code></th><td>0</td><td><span class="nowrap">0–4</span></td><td><span lang="en">Permission level a player needs to fly a drone. 0 = everyone, 2 = operators.</span><span lang="de">Rechtestufe, die ein Spieler zum Fliegen braucht. 0 = alle, 2 = Operatoren.</span></td></tr>
+<tr><th scope="row"><code>allowUnlimitedRange</code></th><td><code>true</code></td><td>–</td><td><span lang="en">Allows flying without the distance limit below (for players with the next permission level). The radio and video range of the drone still applies.</span><span lang="de">Erlaubt Fliegen ohne die Entfernungsgrenze darunter (für Spieler mit der nächsten Rechtestufe). Die Funk- und Videoreichweite der Drohne gilt weiter.</span></td></tr>
+<tr><th scope="row"><code>unlimitedRangePermissionLevel</code></th><td>0</td><td><span class="nowrap">0–4</span></td><td><span lang="en">Permission level for flying without the distance limit.</span><span lang="de">Rechtestufe für Fliegen ohne Entfernungsgrenze.</span></td></tr>
+<tr><th scope="row"><code>maxPilotDistance</code></th><td>160</td><td><span class="nowrap">16–1000000</span></td><td><span lang="en">Largest distance between pilot and drone in blocks when the range is limited; further away, the flight ends.</span><span lang="de">Größte Entfernung zwischen Pilot und Drohne in Blöcken, wenn die Reichweite begrenzt ist; weiter weg endet der Flug.</span></td></tr>
+<tr><th scope="row"><code>maxDroneSpeed</code></th><td>100</td><td><span class="nowrap">0–10000</span></td><td><span lang="en">Speed limit in blocks per second for checking drone movement; faster movement packets are rejected. 0 = no limit.</span><span lang="de">Tempolimit in Blöcken pro Sekunde für die Prüfung der Drohnenbewegung; schnellere Bewegungspakete werden verworfen. 0 = ohne Grenze.</span></td></tr>
+<tr><th scope="row"><code>droneViewDistance</code></th><td>12</td><td><span class="nowrap">2–32</span></td><td><span lang="en">View distance around the drone in chunks (at most the player’s and the server’s own view distance).</span><span lang="de">Sichtweite um die Drohne in Chunks (höchstens die Sichtweite des Spielers und des Servers).</span></td></tr>
+<tr><th scope="row"><code>maxStreamedChunks</code></th><td>4096</td><td><span class="nowrap">≤ 1000000</span></td><td><span lang="en">Chunk budget shared by all drones on the server.</span><span lang="de">Chunk-Budget, das sich alle Drohnen auf dem Server teilen.</span></td></tr>
+<tr><th scope="row"><code>chunkChecksPerTick</code></th><td>48</td><td><span class="nowrap">1–1024</span></td><td><span lang="en">How many chunks the server checks per tick while streaming around drones.</span><span lang="de">Wie viele Chunks der Server pro Tick prüft, während er um Drohnen herum lädt.</span></td></tr>
+<tr><th scope="row"><code>onlyGeneratedChunks</code></th><td><code>true</code></td><td>–</td><td><span lang="en">Together with the next two settings: who may generate new terrain with a drone. Off = every drone generates terrain.</span><span lang="de">Zusammen mit den nächsten beiden Einstellungen: wer mit einer Drohne neues Gelände erzeugen darf. Aus = jede Drohne erzeugt Gelände.</span></td></tr>
+<tr><th scope="row"><code>generateChunksPermissionLevel</code></th><td>0</td><td><span class="nowrap">0–5</span></td><td><span lang="en">Permission level for generating new terrain: 0 = everyone (default), 2 = operators, 5 = nobody. Others only fly over terrain that already exists.</span><span lang="de">Rechtestufe für neues Gelände: 0 = alle (Standard), 2 = Operatoren, 5 = niemand. Alle anderen fliegen nur über schon erzeugtem Gelände.</span></td></tr>
+<tr><th scope="row"><code>hostGeneratesChunks</code></th><td><code>true</code></td><td>–</td><td><span lang="en">The host of a singleplayer or LAN world always generates terrain.</span><span lang="de">Der Host einer Einzelspieler- oder LAN-Welt erzeugt immer Gelände.</span></td></tr>
+<tr><th scope="row"><code>allowPilotingInSpawnProtection</code></th><td><code>true</code></td><td>–</td><td><span lang="en">Allows flying inside the spawn protection.</span><span lang="de">Erlaubt Fliegen im Spawnschutz.</span></td></tr>
+<tr><th scope="row"><code>batteryChargeSeconds</code></th><td>90</td><td><span class="nowrap">10–3600</span></td><td><span lang="en">Seconds the charger needs for a full 1300 mAh pack.</span><span lang="de">Sekunden, die das Ladegerät für einen vollen 1300-mAh-Akku braucht.</span></td></tr>
+<tr><th scope="row"><code>batteryChargeCapacityExponent</code></th><td><span lang="en">0.5</span><span lang="de">0,5</span></td><td><span class="nowrap">0–1</span></td><td><span lang="en">How charge time grows with capacity: time × (mAh ÷ 1300) to the power of this value.</span><span lang="de">Wie die Ladezeit mit der Kapazität wächst: Zeit × (mAh ÷ 1300) hoch diesen Wert.</span></td></tr>
+<tr><th scope="row"><code>batteryChargeMinSeconds</code></th><td>20</td><td><span class="nowrap">1–3600</span></td><td><span lang="en">Shortest charge time for a full pack.</span><span lang="de">Kürzeste Ladezeit für einen vollen Akku.</span></td></tr>
+<tr><th scope="row"><code>redstoneChargeMultiplier</code></th><td>2</td><td><span class="nowrap">1–10</span></td><td><span lang="en">A charger powered by redstone charges this many times faster.</span><span lang="de">Ein Ladegerät mit Redstone-Signal lädt so viel schneller.</span></td></tr>
+<tr><th scope="row"><code>worldCourses</code></th><td><code>true</code></td><td>–</td><td><span lang="en">Ready-made race courses appear in newly generated terrain.</span><span lang="de">Fertige Rennkurse erscheinen in neu erzeugtem Gelände.</span></td></tr>
+<tr><th scope="row"><code>allowSpectating</code></th><td><code>true</code></td><td>–</td><td><span lang="en">Players with goggles may watch other pilots’ video channels.</span><span lang="de">Spieler mit Brille dürfen die Videokanäle anderer Piloten ansehen.</span></td></tr>
+</tbody>
+</table></div>
+<h3 id="servers-commands" class="docs-h3"><a class="docs-anchor" href="#servers-commands" aria-hidden="true" tabindex="-1">#</a><span lang="en">Commands</span><span lang="de">Befehle</span></h3>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col"><span lang="en">Command</span><span lang="de">Befehl</span></th><th scope="col"><span lang="en">What it does</span><span lang="de">Wirkung</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><code>/propwash rules</code></th><td><span lang="en">Lists the server settings and all world rules.</span><span lang="de">Listet Server-Einstellungen und alle Welt-Regeln.</span></td></tr>
+<tr><th scope="row"><code>/propwash range [player]</code></th><td><span lang="en">Shows range, view distance and chunk streaming of a pilot.</span><span lang="de">Zeigt Reichweite, Sichtweite und Chunk-Laden eines Piloten.</span></td></tr>
+<tr><th scope="row"><code>/propwash pilots</code></th><td><span lang="en">Lists everyone who is flying.</span><span lang="de">Listet alle, die gerade fliegen.</span></td></tr>
+<tr><th scope="row"><code>/propwash reload</code></th><td><span lang="en">Reloads server.json (operators).</span><span lang="de">Lädt server.json neu (Operatoren).</span></td></tr>
+<tr><th scope="row"><code>/propwash race courses | leaderboard | laps | reset | delete | archive</code></th><td><span lang="en">Race courses and leaderboards.</span><span lang="de">Rennkurse und Bestenlisten.</span></td></tr>
+</tbody>
+</table></div>
+
+</section>
+<section class="docs-section" aria-labelledby="help">
+<h2 id="help" class="docs-h2"><a class="docs-anchor" href="#help" aria-hidden="true" tabindex="-1">#</a><span lang="en">Help</span><span lang="de">Hilfe</span></h2>
+<ul>
+<li><span lang="en"><strong>Flight School:</strong> press <kbd>M</kbd> in the world for all lessons, or hold it over an item in your inventory for the matching one. Animated 3D lessons cover building, binding, batteries, racing, video, the configurator, rescue, hold modes, crashes, repairs and survival.</span><span lang="de"><strong>Flugschule:</strong> <kbd>M</kbd> in der Welt öffnet alle Lektionen, über einem Item im Inventar gehalten die passende. Animierte 3D-Lektionen erklären Bauen, Binden, Akkus, Rennen, Video, Konfigurator, Rescue, Halte-Modi, Abstürze, Reparaturen und Überleben.</span></li>
+<li><span lang="en"><strong>Tooltips:</strong> hold <kbd>Shift</kbd> over any Propwash item.</span><span lang="de"><strong>Tooltips:</strong> <kbd>Shift</kbd> über einem Propwash-Item halten.</span></li>
+<li><span lang="en"><strong>Questions and bug reports:</strong> the <a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener">Propwash Discord</a>.</span><span lang="de"><strong>Fragen und Fehlermeldungen:</strong> der <a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener">Propwash-Discord</a>.</span></li>
+</ul>
+</section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice is kept in your browser. These pages are generated from the Propwash source code of each release. Fonts: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl bleibt in deinem Browser. Diese Seiten entstehen bei jeder Version aus dem Quellcode von Propwash. Schriften: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js" defer></script>
+<script src="../../assets/js/docs.js" defer></script>
+</body>
+</html>

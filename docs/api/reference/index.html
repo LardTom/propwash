@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="API reference 1.4.0 – Propwash FPV docs" data-title-de="API-Referenz 1.4.0 – Propwash-FPV-Doku" data-description-en="Every public type, record component and method of the Propwash FPV add-on API 1.4.0, generated from the source code." data-description-de="Jeder öffentliche Typ, jede Record-Komponente und Methode der Add-on-API 1.4.0 von Propwash FPV, aus dem Quellcode erzeugt.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API reference 1.4.0 – Propwash FPV docs</title>
+<meta name="description" content="Every public type, record component and method of the Propwash FPV add-on API 1.4.0, generated from the source code.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="API reference 1.4.0 – Propwash FPV docs">
+<meta property="og:description" content="Every public type, record component and method of the Propwash FPV add-on API 1.4.0, generated from the source code.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../../../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../../../assets/css/style.css">
+<link rel="stylesheet" href="../../../assets/css/docs.css">
+<script>
+(function () {
+  var d = document.documentElement, lang = null;
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="docs-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+</svg>
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="de">Zum Inhalt springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../../../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../../../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
+      <a href="../../../#how"><span lang="en">How it works</span><span lang="de">So geht’s</span></a>
+      <a href="../../../#flight"><span lang="en">Flight</span><span lang="de">Flug</span></a>
+      <a href="../../../#video">Video</a>
+      <a href="../../../#racing"><span lang="en">Racing</span><span lang="de">Rennen</span></a>
+      <a href="../../../#gallery"><span lang="en">Screenshots</span><span lang="de">Bilder</span></a>
+      <a href="../../../#faq">FAQ</a>
+      <a href="../../../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+      <a href="../../../docs/" aria-current="page"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <header class="docs-hero">
+    <div class="wrap docs-hero__inner">
+      <p class="kicker"><span lang="en">Docs · For mod authors · API 1.4.0</span><span lang="de">Doku · Für Mod-Autoren · API 1.4.0</span></p>
+      <h1 class="docs-title"><span lang="en">API reference</span><span lang="de">API-Referenz</span></h1>
+      <p lang="en" class="docs-lead">Every type and member of the public API at a glance, generated from the Propwash source code of this release.</p>
+<p lang="de" class="docs-lead">Jeder Typ und jedes Mitglied der öffentlichen API auf einen Blick, aus dem Propwash-Quellcode dieser Version erzeugt.</p>
+      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.4.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 9</p>
+    </div>
+  </header>
+  <div class="wrap docs">
+    <nav class="docs-menu" aria-label="Documentation" data-de-aria-label="Dokumentation">
+<details class="docs-menu__fold" data-docs-menu open>
+<summary class="docs-menu__summary"><span lang="en">Docs menu</span><span lang="de">Doku-Menü</span></summary>
+<ol class="docs-menu__list">
+<li class="docs-menu__item"><a href="../../../docs/"><span lang="en">Overview</span><span lang="de">Übersicht</span></a></li>
+<li class="docs-menu__item"><a href="../../../docs/guide/"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></a></li>
+<li class="docs-menu__item"><a href="../../../docs/gamerules/"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></a></li>
+<li class="docs-menu__item"><a href="../../../docs/api/"><span lang="en">Add-on API</span><span lang="de">Add-on-API</span></a></li>
+<li class="docs-menu__item is-current docs-menu__item--sub"><a href="../../../docs/api/reference/" aria-current="page"><span lang="en">API reference</span><span lang="de">API-Referenz</span></a>
+<ol class="docs-menu__toc"><li><a href="#api-package">api</a></li><li><a href="#api-build-package">api.build</a></li><li><a href="#api-client-package">api.client</a></li><li><a href="#api-event-package">api.event</a></li><li><a href="#api-part-package">api.part</a></li><li><a href="#api-registry-package">api.registry</a></li><li><a href="#outside"><span lang="en">Types from outside</span><span lang="de">Typen von außerhalb</span></a></li></ol></li>
+<li class="docs-menu__item"><a href="../../../docs/parts-format/"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></a></li>
+</ol>
+</details>
+</nav>
+    <article class="docs-body">
+<p lang="en">All 62 public types of the package <code>de.lardtom.propwash.api</code> in Propwash 0.5.0 (API 1.4.0), read from the source code. Public members only; how to use them is in the <a href="../">add-on guide</a>. The Maven artifacts also carry sources and Javadoc for your IDE.</p>
+<p lang="de">Alle 62 öffentlichen Typen des Pakets <code>de.lardtom.propwash.api</code> in Propwash 0.5.0 (API 1.4.0), aus dem Quellcode gelesen. Nur öffentliche Mitglieder; wie man sie benutzt, steht im <a href="../">Add-on-Handbuch</a>. Die Maven-Artefakte bringen auch Quellen und Javadoc für die IDE mit.</p>
+<nav class="docs-api__index" aria-label="Types" data-de-aria-label="Typen">
+<p><strong><code>api</code></strong> <a href="#api-apiversion"><code>ApiVersion</code></a> <a href="#api-propwashapi"><code>PropwashApi</code></a></p>
+<p><strong><code>api.build</code></strong> <a href="#api-build-buildaccess"><code>BuildAccess</code></a> <a href="#api-build-buildcheck"><code>BuildCheck</code></a> <a href="#api-build-buildspec"><code>BuildSpec</code></a> <a href="#api-build-buildstats"><code>BuildStats</code></a> <a href="#api-build-cameraview"><code>CameraView</code></a> <a href="#api-build-dronedata"><code>DroneData</code></a> <a href="#api-build-dronepreset"><code>DronePreset</code></a> <a href="#api-build-importlayer"><code>ImportLayer</code></a> <a href="#api-build-importrequest"><code>ImportRequest</code></a> <a href="#api-build-importresult"><code>ImportResult</code></a> <a href="#api-build-importstatus"><code>ImportStatus</code></a> <a href="#api-build-importtarget"><code>ImportTarget</code></a> <a href="#api-build-paintspec"><code>PaintSpec</code></a> <a href="#api-build-tunegroup"><code>TuneGroup</code></a> <a href="#api-build-tunespec"><code>TuneSpec</code></a></p>
+<p><strong><code>api.client</code></strong> <a href="#api-client-clienttune"><code>ClientTune</code></a> <a href="#api-client-flightschoolscenes"><code>FlightSchoolScenes</code></a> <a href="#api-client-osdlayoutaccess"><code>OsdLayoutAccess</code></a> <a href="#api-client-osdlayoutspec"><code>OsdLayoutSpec</code></a> <a href="#api-client-propwashclientapi"><code>PropwashClientApi</code></a> <a href="#api-client-workbenchcontext"><code>WorkbenchContext</code></a> <a href="#api-client-workbenchextension"><code>WorkbenchExtension</code></a></p>
+<p><strong><code>api.event</code></strong> <a href="#api-event-propwashevent"><code>PropwashEvent</code></a> <a href="#api-event-propwashevents"><code>PropwashEvents</code></a></p>
+<p><strong><code>api.part</code></strong> <a href="#api-part-accessorydefinition"><code>AccessoryDefinition</code></a> <a href="#api-part-accessoryslot"><code>AccessorySlot</code></a> <a href="#api-part-actioncamdefinition"><code>ActionCamDefinition</code></a> <a href="#api-part-airframegeometry"><code>AirframeGeometry</code></a> <a href="#api-part-anchorspec"><code>AnchorSpec</code></a> <a href="#api-part-batterydefinition"><code>BatteryDefinition</code></a> <a href="#api-part-batteryfitrule"><code>BatteryFitRule</code></a> <a href="#api-part-cellchemistry"><code>CellChemistry</code></a> <a href="#api-part-ductspec"><code>DuctSpec</code></a> <a href="#api-part-frameaero"><code>FrameAero</code></a> <a href="#api-part-framedefinition"><code>FrameDefinition</code></a> <a href="#api-part-framerole"><code>FrameRole</code></a> <a href="#api-part-frameshape"><code>FrameShape</code></a> <a href="#api-part-masssplit"><code>MassSplit</code></a> <a href="#api-part-motorarm"><code>MotorArm</code></a> <a href="#api-part-motordefinition"><code>MotorDefinition</code></a> <a href="#api-part-motorthermal"><code>MotorThermal</code></a> <a href="#api-part-mounts"><code>Mounts</code></a> <a href="#api-part-packsize"><code>PackSize</code></a> <a href="#api-part-partbasics"><code>PartBasics</code></a> <a href="#api-part-partdefinition"><code>PartDefinition</code></a> <a href="#api-part-partkind"><code>PartKind</code></a> <a href="#api-part-partregistry"><code>PartRegistry</code></a> <a href="#api-part-partvisual"><code>PartVisual</code></a> <a href="#api-part-propdefinition"><code>PropDefinition</code></a> <a href="#api-part-propmaterial"><code>PropMaterial</code></a> <a href="#api-part-recycleyield"><code>RecycleYield</code></a> <a href="#api-part-stackdefinition"><code>StackDefinition</code></a> <a href="#api-part-vec3mm"><code>Vec3Mm</code></a> <a href="#api-part-videodefinition"><code>VideoDefinition</code></a> <a href="#api-part-videolink"><code>VideoLink</code></a></p>
+<p><strong><code>api.registry</code></strong> <a href="#api-registry-creativeentries"><code>CreativeEntries</code></a> <a href="#api-registry-extensiontab"><code>ExtensionTab</code></a> <a href="#api-registry-lootinjections"><code>LootInjections</code></a> <a href="#api-registry-partitems"><code>PartItems</code></a> <a href="#api-registry-tabsection"><code>TabSection</code></a></p>
+</nav>
+<section class="docs-section" aria-labelledby="api-package">
+<h2 id="api-package" class="docs-h2"><a class="docs-anchor" href="#api-package" aria-hidden="true" tabindex="-1">#</a>api</h2>
+<article class="docs-api">
+<h3 id="api-apiversion" class="docs-api__name"><a class="docs-anchor" href="#api-apiversion" aria-hidden="true" tabindex="-1">#</a><code>ApiVersion</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">A parsed API version (major.minor.patch) and the compatibility rule: same major version, at least the required minor version.</p>
+<p lang="de" class="docs-api__desc">Eine gelesene API-Version (Haupt.Neben.Patch) und die Verträglichkeitsregel: gleiche Hauptversion, mindestens die verlangte Nebenversion.</p>
+<pre class="docs-api__sig"><code>record ApiVersion(int major, int minor, int patch) implements Comparable&lt;ApiVersion&gt;</code></pre>
+<ul class="docs-api__members"><li><code>static ApiVersion parse(String text)</code></li><li><code>boolean satisfies(ApiVersion required)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-propwashapi" class="docs-api__name"><a class="docs-anchor" href="#api-propwashapi" aria-hidden="true" tabindex="-1">#</a><code>PropwashApi</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></h3>
+<p lang="en" class="docs-api__desc">Entry point of the API: version, part registry, part items, builds, creative tab, loot and language texts.</p>
+<p lang="de" class="docs-api__desc">Einstieg in die API: Version, Teile-Register, Teil-Items, Baupläne, Kreativ-Tab, Beute und Sprachtexte.</p>
+<pre class="docs-api__sig"><code>class PropwashApi</code></pre>
+<ul class="docs-api__members"><li><code>static final String MOD_ID = &quot;propwash&quot;</code></li><li><code>static final String API_VERSION = &quot;1.4.0&quot;</code></li><li><code>static final ApiVersion VERSION</code></li><li><code>static boolean isCompatible(String requiredVersion)</code></li><li><code>static void requireVersion(String modId, String requiredVersion)</code></li><li><code>static PartRegistry parts()</code></li><li><code>static PartItems partItems()</code></li><li><code>static BuildAccess builds()</code></li><li><code>static CreativeEntries creativeTab()</code></li><li><code>static ExtensionTab extensionTab(String namespace)</code></li><li><code>static List&lt;ExtensionTab&gt; extensionTabs()</code></li><li><code>static LootInjections loot()</code></li><li><code>static Optional&lt;String&gt; text(String languageCode, String key)</code></li></ul>
+
+</article>
+</section>
+<section class="docs-section" aria-labelledby="api-build-package">
+<h2 id="api-build-package" class="docs-h2"><a class="docs-anchor" href="#api-build-package" aria-hidden="true" tabindex="-1">#</a>api.build</h2>
+<article class="docs-api">
+<h3 id="api-build-buildaccess" class="docs-api__name"><a class="docs-anchor" href="#api-build-buildaccess" aria-hidden="true" tabindex="-1">#</a><code>BuildAccess</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Reads and creates drone items, checks and analyses builds, gives the FPV camera, default tune and presets, and runs imports on the server.</p>
+<p lang="de" class="docs-api__desc">Liest und erzeugt Drohnen-Items, prüft und analysiert Baupläne, liefert FPV-Kamera, Standard-Tuning und Presets und führt Importe auf dem Server aus.</p>
+<pre class="docs-api__sig"><code>interface BuildAccess</code></pre>
+<ul class="docs-api__members"><li><code>boolean isDrone(ItemStack stack)</code></li><li><code>Optional&lt;DroneData&gt; read(ItemStack stack)</code></li><li><code>ItemStack createDrone(DroneData data)</code></li><li><code>ItemStack withTune(ItemStack drone, TuneSpec tune)</code></li><li><code>ItemStack withPaint(ItemStack drone, PaintSpec paint)</code></li><li><code>BuildCheck check(BuildSpec spec)</code></li><li><code>Optional&lt;BuildStats&gt; analyze(BuildSpec spec)</code></li><li><code>default Optional&lt;CameraView&gt; cameraView(BuildSpec spec)</code></li><li><code>default double footprintMm(BuildSpec spec)</code></li><li><code>default Optional&lt;CameraView&gt; cameraView(BuildSpec spec, double uptiltDeg)</code></li><li><code>default Optional&lt;CameraView.UptiltRange&gt; uptiltRange(Identifier frame)</code></li><li><code>TuneSpec defaultTune(BuildSpec spec)</code></li><li><code>List&lt;DronePreset&gt; presets()</code></li><li><code>DronePreset registerPreset(DronePreset preset)</code></li><li><code>ImportResult applyImport(ServerPlayer player, ImportRequest request)</code></li><li><code>default OptionalDouble partCondition(ItemStack drone, PartKind kind)</code></li><li><code>default Map&lt;String, Integer&gt; paintCost(ItemStack drone, PaintSpec target)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-build-buildcheck" class="docs-api__name"><a class="docs-anchor" href="#api-build-buildcheck" aria-hidden="true" tabindex="-1">#</a><code>BuildCheck</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Result of a build check: unknown parts, problems that stop the build and warnings.</p>
+<p lang="de" class="docs-api__desc">Ergebnis einer Bau-Prüfung: unbekannte Teile, Probleme, die den Bau verhindern, und Warnungen.</p>
+<pre class="docs-api__sig"><code>record BuildCheck(BuildSpec spec, List&lt;Identifier&gt; unknownParts, List&lt;String&gt; problems, List&lt;String&gt; warnings)</code></pre>
+<ul class="docs-api__members"><li><code>static String translationKey(String issue)</code></li><li><code>boolean known()</code></li><li><code>boolean buildable()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-build-buildspec" class="docs-api__name"><a class="docs-anchor" href="#api-build-buildspec" aria-hidden="true" tabindex="-1">#</a><code>BuildSpec</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">The parts of a drone as ids: frame, stack, motor, prop, video, battery and accessories per slot.</p>
+<p lang="de" class="docs-api__desc">Die Teile einer Drohne als Ids: Rahmen, Stack, Motor, Prop, Video, Akku und Zubehör je Platz.</p>
+<pre class="docs-api__sig"><code>record BuildSpec(Identifier frame, Identifier stack, Identifier motor, Identifier prop, Identifier video, Identifier battery, Map&lt;AccessorySlot, Identifier&gt; accessories)</code></pre>
+<ul class="docs-api__members"><li><code>static BuildSpec of(Identifier frame, Identifier stack, Identifier motor, Identifier prop, Identifier video, Identifier battery)</code></li><li><code>Identifier part(PartKind kind)</code></li><li><code>Optional&lt;Identifier&gt; accessory(AccessorySlot slot)</code></li><li><code>BuildSpec withPart(PartKind kind, Identifier id)</code></li><li><code>BuildSpec withAccessory(AccessorySlot slot, Identifier id)</code></li><li><code>BuildSpec withoutAccessory(AccessorySlot slot)</code></li><li><code>List&lt;Identifier&gt; allParts()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-build-buildstats" class="docs-api__name"><a class="docs-anchor" href="#api-build-buildstats" aria-hidden="true" tabindex="-1">#</a><code>BuildStats</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">The figures of the workbench analysis: weight, thrust-to-weight, hover throttle, flight times, currents, temperatures, props in view and warnings.</p>
+<p lang="de" class="docs-api__desc">Die Werte der Werkbank-Analyse: Gewicht, Schub-Gewicht, Schwebegas, Flugzeiten, Ströme, Temperaturen, Props im Bild und Warnungen.</p>
+<pre class="docs-api__sig"><code>record BuildStats(double massGrams, double thrustToWeight, double hoverThrottlePercent, double hoverFlightTimeMin, double cruiseFlightTimeMin, double topSpeedKmh, double fullThrottleCurrentA, double escLoadPercent, double batteryLoadPercent, double motorResponseMs, double crashSpeedMs, double sustainedMotorTempC, double propsInViewPercent, List&lt;String&gt; warnings, double mixedFlightTimeMin, double aggressiveFlightTimeMin, double hoverCurrentA, double cruiseCurrentA, double mixedCurrentA, double cruiseSpeedKmh, double landingCellVoltage, double avionicsPowerW, double motorTempMinuteC, double mixedMotorTempC, double propwashNoise, double fullThrottleCellVoltage, double rollAuthorityRadS2, double pitchAuthorityRadS2, double yawAuthorityRadS2)</code></pre>
+<ul class="docs-api__members"><li><code>static final List&lt;String&gt; WARNINGS</code></li><li><code>BuildStats(double massGrams, double thrustToWeight, double hoverThrottlePercent, double hoverFlightTimeMin, double cruiseFlightTimeMin, double topSpeedKmh, double fullThrottleCurrentA, double escLoadPercent, double batteryLoadPercent, double motorResponseMs, double crashSpeedMs, double sustainedMotorTempC, double propsInViewPercent, List&lt;String&gt; warnings, double mixedFlightTimeMin, double aggressiveFlightTimeMin, double hoverCurrentA, double cruiseCurrentA, double mixedCurrentA, double cruiseSpeedKmh, double landingCellVoltage, double avionicsPowerW, double motorTempMinuteC, double mixedMotorTempC)</code></li><li><code>BuildStats(double massGrams, double thrustToWeight, double hoverThrottlePercent, double hoverFlightTimeMin, double cruiseFlightTimeMin, double topSpeedKmh, double fullThrottleCurrentA, double escLoadPercent, double batteryLoadPercent, double motorResponseMs, double crashSpeedMs, double sustainedMotorTempC, double propsInViewPercent, List&lt;String&gt; warnings)</code></li><li><code>static String warningTranslationKey(String warning)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-build-cameraview" class="docs-api__name"><a class="docs-anchor" href="#api-build-cameraview" aria-hidden="true" tabindex="-1">#</a><code>CameraView</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">The FPV camera as Propwash draws it: lens position, uptilt and its range, field of view and the four prop discs.</p>
+<p lang="de" class="docs-api__desc">Die FPV-Kamera, wie Propwash sie zeichnet: Objektivlage, Uptilt und sein Bereich, Sichtfeld und die vier Prop-Scheiben.</p>
+<pre class="docs-api__sig"><code>record CameraView(Vec3Mm lensMm, double uptiltDeg, double horizontalFovDeg, double aspect, List&lt;PropDisc&gt; props, double propsInViewPercent, UptiltRange uptiltRange)</code></pre>
+<ul class="docs-api__members"><li><code>CameraView(Vec3Mm lensMm, double uptiltDeg, double horizontalFovDeg, double aspect, List&lt;PropDisc&gt; props, double propsInViewPercent)</code></li><li><code>double verticalFovDeg()</code></li><li><code>double uptiltMinDeg()</code></li><li><code>double uptiltMaxDeg()</code></li><li><code>double defaultUptiltDeg()</code></li></ul>
+<details class="docs-api__nested">
+<summary><code>CameraView.UptiltRange</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></summary>
+<div id="api-build-cameraview-uptiltrange" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>record UptiltRange(double minDeg, double maxDeg, double defaultDeg)</code></pre>
+<ul class="docs-api__members"><li><code>static UptiltRange unrestricted(double defaultDeg)</code></li><li><code>double clamp(double degrees)</code></li><li><code>boolean contains(double degrees)</code></li></ul>
+
+</div>
+</details>
+<details class="docs-api__nested">
+<summary><code>CameraView.PropDisc</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></summary>
+<div id="api-build-cameraview-propdisc" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>record PropDisc(Vec3Mm centerMm, double radiusMm, double hubRadiusMm)</code></pre>
+
+
+</div>
+</details>
+</article>
+<article class="docs-api">
+<h3 id="api-build-dronedata" class="docs-api__name"><a class="docs-anchor" href="#api-build-dronedata" aria-hidden="true" tabindex="-1">#</a><code>DroneData</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Everything a share code carries: build, paint, tune and name.</p>
+<p lang="de" class="docs-api__desc">Alles, was ein Sharecode trägt: Bauplan, Lack, Tuning und Name.</p>
+<pre class="docs-api__sig"><code>record DroneData(BuildSpec build, PaintSpec paint, TuneSpec tune, Optional&lt;String&gt; name)</code></pre>
+<ul class="docs-api__members"><li><code>static final int MAX_NAME_LENGTH = 48</code></li><li><code>static DroneData of(BuildSpec build)</code></li><li><code>DroneData withBuild(BuildSpec value)</code></li><li><code>DroneData withPaint(PaintSpec value)</code></li><li><code>DroneData withTune(TuneSpec value)</code></li><li><code>DroneData withName(String value)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-build-dronepreset" class="docs-api__name"><a class="docs-anchor" href="#api-build-dronepreset" aria-hidden="true" tabindex="-1">#</a><code>DronePreset</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">A named ready-made drone shown in the creative tab and recognised in the workbench.</p>
+<p lang="de" class="docs-api__desc">Eine benannte fertige Drohne, die im Kreativ-Tab steht und in der Werkbank erkannt wird.</p>
+<pre class="docs-api__sig"><code>record DronePreset(Identifier id, DroneData data, boolean creativeListed)</code></pre>
+<ul class="docs-api__members"><li><code>static DronePreset of(Identifier id, DroneData data)</code></li><li><code>String translationKey()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-build-importlayer" class="docs-api__name"><a class="docs-anchor" href="#api-build-importlayer" aria-hidden="true" tabindex="-1">#</a><code>ImportLayer</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
+<p lang="en" class="docs-api__desc">What an import applies: parts, paint, tune, name.</p>
+<p lang="de" class="docs-api__desc">Was ein Import übernimmt: Teile, Lack, Tuning, Name.</p>
+<pre class="docs-api__sig"><code>enum ImportLayer</code></pre>
+<ul class="docs-api__constants"><li><code>PARTS</code></li><li><code>PAINT</code></li><li><code>TUNE</code></li><li><code>NAME</code></li></ul>
+<ul class="docs-api__members"><li><code>String translationKey()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-build-importrequest" class="docs-api__name"><a class="docs-anchor" href="#api-build-importrequest" aria-hidden="true" tabindex="-1">#</a><code>ImportRequest</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">An import request with its layers, tune groups and target; factories for the usual cases.</p>
+<p lang="de" class="docs-api__desc">Eine Import-Anfrage mit Ebenen, Tuning-Gruppen und Ziel; Fabriken für die üblichen Fälle.</p>
+<pre class="docs-api__sig"><code>record ImportRequest(DroneData data, Set&lt;ImportLayer&gt; layers, Set&lt;TuneGroup&gt; tuneGroups, ImportTarget target)</code></pre>
+<ul class="docs-api__members"><li><code>static ImportRequest wholeBuild(DroneData data)</code></li><li><code>static ImportRequest tuneOnHeldDrone(DroneData data)</code></li><li><code>static ImportRequest paintOnHeldDrone(DroneData data)</code></li><li><code>static ImportRequest onHeldDrone(DroneData data, Set&lt;ImportLayer&gt; layers)</code></li><li><code>static ImportRequest createDrone(DroneData data)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-build-importresult" class="docs-api__name"><a class="docs-anchor" href="#api-build-importresult" aria-hidden="true" tabindex="-1">#</a><code>ImportResult</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">The server’s answer to an import: status, applied layers, missing parts and dyes.</p>
+<p lang="de" class="docs-api__desc">Die Antwort des Servers auf einen Import: Status, übernommene Ebenen, fehlende Teile und Farbstoffe.</p>
+<pre class="docs-api__sig"><code>record ImportResult(ImportStatus status, Set&lt;ImportLayer&gt; applied, List&lt;Identifier&gt; missingParts, Map&lt;String, Integer&gt; missingDyes)</code></pre>
+<ul class="docs-api__members"><li><code>static ImportResult of(ImportStatus status)</code></li><li><code>static ImportResult applied(Set&lt;ImportLayer&gt; layers)</code></li><li><code>static ImportResult missingParts(List&lt;Identifier&gt; parts)</code></li><li><code>static ImportResult missingDyes(Map&lt;String, Integer&gt; dyes)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-build-importstatus" class="docs-api__name"><a class="docs-anchor" href="#api-build-importstatus" aria-hidden="true" tabindex="-1">#</a><code>ImportStatus</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
+<p lang="en" class="docs-api__desc">Outcome of an import, each with a translation key.</p>
+<p lang="de" class="docs-api__desc">Ausgang eines Imports, jeweils mit Sprachschlüssel.</p>
+<pre class="docs-api__sig"><code>enum ImportStatus</code></pre>
+<ul class="docs-api__constants"><li><code>APPLIED</code></li><li><code>UNCHANGED</code></li><li><code>UNKNOWN_PARTS</code></li><li><code>MISSING_PARTS</code></li><li><code>MISSING_DYES</code></li><li><code>NO_TARGET</code></li><li><code>NOT_ALLOWED</code></li><li><code>INVALID</code></li><li><code>BUSY</code></li></ul>
+<ul class="docs-api__members"><li><code>boolean success()</code></li><li><code>String translationKey()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-build-importtarget" class="docs-api__name"><a class="docs-anchor" href="#api-build-importtarget" aria-hidden="true" tabindex="-1">#</a><code>ImportTarget</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
+<p lang="en" class="docs-api__desc">Where an import goes: workbench, held drone or a new drone.</p>
+<p lang="de" class="docs-api__desc">Wohin ein Import geht: Werkbank, gehaltene Drohne oder neue Drohne.</p>
+<pre class="docs-api__sig"><code>enum ImportTarget</code></pre>
+<ul class="docs-api__constants"><li><code>WORKBENCH</code></li><li><code>HELD_DRONE</code></li><li><code>NEW_DRONE</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-build-paintspec" class="docs-api__name"><a class="docs-anchor" href="#api-build-paintspec" aria-hidden="true" tabindex="-1">#</a><code>PaintSpec</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">RGB colour per paint slot; missing slots keep the original colour.</p>
+<p lang="de" class="docs-api__desc">RGB-Farbe je Lack-Platz; fehlende Plätze behalten die Originalfarbe.</p>
+<pre class="docs-api__sig"><code>record PaintSpec(Map&lt;String, Integer&gt; colors)</code></pre>
+<ul class="docs-api__members"><li><code>static final List&lt;String&gt; SLOTS</code></li><li><code>static final PaintSpec DEFAULT</code></li><li><code>boolean isDefault()</code></li><li><code>Optional&lt;Integer&gt; color(String slot)</code></li><li><code>PaintSpec with(String slot, int rgb)</code></li><li><code>PaintSpec without(String slot)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-build-tunegroup" class="docs-api__name"><a class="docs-anchor" href="#api-build-tunegroup" aria-hidden="true" tabindex="-1">#</a><code>TuneGroup</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
+<p lang="en" class="docs-api__desc">Groups of tune keys (rates, PID, filters, camera, LED, VTX …) for partial imports.</p>
+<p lang="de" class="docs-api__desc">Gruppen von Tuning-Schlüsseln (Rates, PID, Filter, Kamera, LED, VTX …) für Teil-Importe.</p>
+<pre class="docs-api__sig"><code>enum TuneGroup</code></pre>
+<ul class="docs-api__constants"><li><code>RATES</code></li><li><code>PID</code></li><li><code>FEEDFORWARD</code></li><li><code>TPA</code></li><li><code>FILTERS</code></li><li><code>THROTTLE</code></li><li><code>HOLD</code></li><li><code>CAMERA</code></li><li><code>LED</code></li><li><code>VTX</code></li><li><code>OTHER</code></li></ul>
+<ul class="docs-api__members"><li><code>static final Set&lt;TuneGroup&gt; FLIGHT</code></li><li><code>static TuneGroup of(String key)</code></li><li><code>String translationKey()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-build-tunespec" class="docs-api__name"><a class="docs-anchor" href="#api-build-tunespec" aria-hidden="true" tabindex="-1">#</a><code>TuneSpec</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Tune values by key, like in the flight controller; missing keys mean the default.</p>
+<p lang="de" class="docs-api__desc">Tuning-Werte je Schlüssel wie im Flight-Controller; fehlende Schlüssel bedeuten Standard.</p>
+<pre class="docs-api__sig"><code>record TuneSpec(Map&lt;String, Float&gt; values)</code></pre>
+<ul class="docs-api__members"><li><code>static final int MAX_ENTRIES = 256</code></li><li><code>static final TuneSpec EMPTY</code></li><li><code>static final String CAMERA_UPTILT = &quot;camera.uptiltDeg&quot;</code></li><li><code>TuneSpec only(Collection&lt;TuneGroup&gt; groups)</code></li><li><code>TuneSpec without(Collection&lt;TuneGroup&gt; groups)</code></li><li><code>TuneSpec overlay(TuneSpec imported, Collection&lt;TuneGroup&gt; groups)</code></li></ul>
+
+</article>
+</section>
+<section class="docs-section" aria-labelledby="api-client-package">
+<h2 id="api-client-package" class="docs-h2"><a class="docs-anchor" href="#api-client-package" aria-hidden="true" tabindex="-1">#</a>api.client</h2>
+<article class="docs-api">
+<h3 id="api-client-clienttune" class="docs-api__name"><a class="docs-anchor" href="#api-client-clienttune" aria-hidden="true" tabindex="-1">#</a><code>ClientTune</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Reads and applies the tune of the drone the player flies or holds (client only).</p>
+<p lang="de" class="docs-api__desc">Liest und setzt das Tuning der Drohne, die der Spieler fliegt oder hält (nur Client).</p>
+<pre class="docs-api__sig"><code>interface ClientTune</code></pre>
+<ul class="docs-api__members"><li><code>boolean available()</code></li><li><code>TuneSpec current()</code></li><li><code>TuneSpec defaults()</code></li><li><code>boolean apply(TuneSpec tune)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-client-flightschoolscenes" class="docs-api__name"><a class="docs-anchor" href="#api-client-flightschoolscenes" aria-hidden="true" tabindex="-1">#</a><code>FlightSchoolScenes</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></h3>
+<p lang="en" class="docs-api__desc">Ids of all built-in Flight School scenes, in display order.</p>
+<p lang="de" class="docs-api__desc">Ids aller eingebauten Flugschul-Szenen in Anzeigereihenfolge.</p>
+<pre class="docs-api__sig"><code>class FlightSchoolScenes</code></pre>
+<ul class="docs-api__members"><li><code>static final String DRONE_BUILD = &quot;propwash:drone_build&quot;</code></li><li><code>static final String BIND = &quot;propwash:bind&quot;</code></li><li><code>static final String FPV_LOS = &quot;propwash:fpv_los&quot;</code></li><li><code>static final String BATTERY = &quot;propwash:battery&quot;</code></li><li><code>static final String RACE = &quot;propwash:race&quot;</code></li><li><code>static final String VIDEO = &quot;propwash:video&quot;</code></li><li><code>static final String ACTION_CAM = &quot;propwash:action_cam&quot;</code></li><li><code>static final String CONFIGURATOR = &quot;propwash:configurator&quot;</code></li><li><code>static final String RESCUE = &quot;propwash:rescue&quot;</code></li><li><code>static final String HOLD = &quot;propwash:hold&quot;</code></li><li><code>static final String RECOVERY = &quot;propwash:recovery&quot;</code></li><li><code>static final String REPAIR = &quot;propwash:repair&quot;</code></li><li><code>static final String SURVIVAL = &quot;propwash:survival&quot;</code></li><li><code>static final List&lt;String&gt; ALL</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-client-osdlayoutaccess" class="docs-api__name"><a class="docs-anchor" href="#api-client-osdlayoutaccess" aria-hidden="true" tabindex="-1">#</a><code>OsdLayoutAccess</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Reads, checks and applies the player’s OSD layout (client only).</p>
+<p lang="de" class="docs-api__desc">Liest, prüft und setzt das OSD-Layout des Spielers (nur Client).</p>
+<pre class="docs-api__sig"><code>interface OsdLayoutAccess</code></pre>
+<ul class="docs-api__members"><li><code>OsdLayoutSpec current()</code></li><li><code>OsdLayoutSpec defaults()</code></li><li><code>boolean apply(OsdLayoutSpec layout)</code></li><li><code>default boolean validate(OsdLayoutSpec layout)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-client-osdlayoutspec" class="docs-api__name"><a class="docs-anchor" href="#api-client-osdlayoutspec" aria-hidden="true" tabindex="-1">#</a><code>OsdLayoutSpec</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">An OSD layout as versioned JSON.</p>
+<p lang="de" class="docs-api__desc">Ein OSD-Layout als versioniertes JSON.</p>
+<pre class="docs-api__sig"><code>record OsdLayoutSpec(int version, String json)</code></pre>
+<ul class="docs-api__members"><li><code>static final int CURRENT_VERSION = 1</code></li><li><code>static final int MAX_JSON_LENGTH = 8192</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-client-propwashclientapi" class="docs-api__name"><a class="docs-anchor" href="#api-client-propwashclientapi" aria-hidden="true" tabindex="-1">#</a><code>PropwashClientApi</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></h3>
+<p lang="en" class="docs-api__desc">Client entry point: configurator tabs, workbench extensions, Flight School scenes and links, OSD, tune, imports and the drone preview.</p>
+<p lang="de" class="docs-api__desc">Client-Einstieg: Konfigurator-Tabs, Werkbank-Erweiterungen, Flugschul-Szenen und -Verknüpfungen, OSD, Tuning, Importe und die Drohnen-Vorschau.</p>
+<pre class="docs-api__sig"><code>class PropwashClientApi</code></pre>
+<ul class="docs-api__members"><li><code>static void registerConfigTab(Supplier&lt;? extends ConfigTab&gt; factory)</code></li><li><code>static boolean openConfigTab(String tabId, @Nullable Screen parent)</code></li><li><code>static void registerWorkbenchExtension(WorkbenchExtension extension)</code></li><li><code>static List&lt;WorkbenchExtension&gt; workbenchExtensions()</code></li><li><code>static void registerFlightSchoolScene(Supplier&lt;Scene&gt; scene)</code></li><li><code>static void registerFlightSchoolScene(Supplier&lt;Scene&gt; scene, BooleanSupplier visible)</code></li><li><code>static ActorSpec.Drone flightSchoolDrone(BuildSpec build, boolean assembled, float scale)</code></li><li><code>static boolean openFlightSchoolScene(String sceneId, @Nullable Screen parent)</code></li><li><code>static void linkFlightSchoolItems(String sceneId, String... itemIds)</code></li><li><code>static void linkFlightSchoolParts(String sceneId, String namespace, PartKind... kinds)</code></li><li><code>static List&lt;String&gt; flightSchoolScenes(ItemStack stack)</code></li><li><code>static boolean openFlightSchool(ItemStack stack, @Nullable Screen parent)</code></li><li><code>static OsdLayoutAccess osd()</code></li><li><code>static ClientTune tune()</code></li><li><code>static Optional&lt;DroneData&gt; heldDrone()</code></li><li><code>static CompletableFuture&lt;ImportResult&gt; sendImport(ImportRequest request)</code></li><li><code>static CompletableFuture&lt;ImportResult&gt; sendCreateDrone(DroneData data)</code></li><li><code>static void forceShiftHelp(@Nullable Boolean shown)</code></li><li><code>static void renderPreview(GuiGraphicsExtractor graphics, DroneData drone, int x0, int y0, int x1, int y1, float yawDegrees)</code></li><li><code>static void renderPreview(GuiGraphicsExtractor graphics, DroneData drone, int x0, int y0, int x1, int y1, float yawDegrees, float pixelsPerMillimetre)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-client-workbenchcontext" class="docs-api__name"><a class="docs-anchor" href="#api-client-workbenchcontext" aria-hidden="true" tabindex="-1">#</a><code>WorkbenchContext</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">What a workbench extension sees and can do: slots, result, buttons, child screens, import.</p>
+<p lang="de" class="docs-api__desc">Was eine Werkbank-Erweiterung sieht und kann: Slots, Ergebnis, Knöpfe, Kind-Fenster, Import.</p>
+<pre class="docs-api__sig"><code>interface WorkbenchContext</code></pre>
+<ul class="docs-api__members"><li><code>int BUTTON_PADDING = 14</code></li><li><code>int BUTTON_GAP = 3</code></li><li><code>int MAX_BUTTON_WIDTH = 80</code></li><li><code>int ICON_BUTTON_SIZE = 13</code></li><li><code>Screen screen()</code></li><li><code>int containerId()</code></li><li><code>boolean creative()</code></li><li><code>Optional&lt;Identifier&gt; slot(PartKind kind, int position)</code></li><li><code>Optional&lt;DroneData&gt; result()</code></li><li><code>void addButton(Component label, Component tooltip, Runnable onPress)</code></li><li><code>default void addButton(Component label, Component shortLabel, Component tooltip, Runnable onPress)</code></li><li><code>default void addIconButton(Identifier sprite, Component tooltip, Runnable onPress)</code></li><li><code>default int headerSpace()</code></li><li><code>default int buttonWidth(Component label)</code></li><li><code>default List&lt;Identifier&gt; missingParts(DroneData data)</code></li><li><code>void openChild(Function&lt;Screen, Screen&gt; factory)</code></li><li><code>CompletableFuture&lt;ImportResult&gt; importIntoWorkbench(DroneData data, Set&lt;ImportLayer&gt; layers, Set&lt;TuneGroup&gt; tuneGroups)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-client-workbenchextension" class="docs-api__name"><a class="docs-anchor" href="#api-client-workbenchextension" aria-hidden="true" tabindex="-1">#</a><code>WorkbenchExtension</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Adds buttons to the drone workbench.</p>
+<p lang="de" class="docs-api__desc">Fügt der Drohnen-Werkbank Knöpfe hinzu.</p>
+<pre class="docs-api__sig"><code>interface WorkbenchExtension</code></pre>
+<ul class="docs-api__members"><li><code>Identifier id()</code></li><li><code>default int order()</code></li><li><code>void init(WorkbenchContext context)</code></li></ul>
+
+</article>
+</section>
+<section class="docs-section" aria-labelledby="api-event-package">
+<h2 id="api-event-package" class="docs-h2"><a class="docs-anchor" href="#api-event-package" aria-hidden="true" tabindex="-1">#</a>api.event</h2>
+<article class="docs-api">
+<h3 id="api-event-propwashevent" class="docs-api__name"><a class="docs-anchor" href="#api-event-propwashevent" aria-hidden="true" tabindex="-1">#</a><code>PropwashEvent</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></h3>
+<p lang="en" class="docs-api__desc">An event with listeners; register in the open phase.</p>
+<p lang="de" class="docs-api__desc">Ein Event mit Listenern; Anmeldung in der offenen Phase.</p>
+<pre class="docs-api__sig"><code>class PropwashEvent&lt;T&gt;</code></pre>
+<ul class="docs-api__members"><li><code>PropwashEvent(String name)</code></li><li><code>void register(T listener)</code></li><li><code>boolean hasListeners()</code></li><li><code>void fire(Consumer&lt;? super T&gt; action)</code></li><li><code>String name()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-event-propwashevents" class="docs-api__name"><a class="docs-anchor" href="#api-event-propwashevents" aria-hidden="true" tabindex="-1">#</a><code>PropwashEvents</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></h3>
+<p lang="en" class="docs-api__desc">All events of the API and their listener interfaces.</p>
+<p lang="de" class="docs-api__desc">Alle Events der API und ihre Listener-Interfaces.</p>
+<pre class="docs-api__sig"><code>class PropwashEvents</code></pre>
+<ul class="docs-api__members"><li><code>static final PropwashEvent&lt;PartRegistered&gt; PART_REGISTERED</code></li><li><code>static final PropwashEvent&lt;RegistryFrozen&gt; REGISTRY_FROZEN</code></li><li><code>static final PropwashEvent&lt;DroneAssembled&gt; DRONE_ASSEMBLED</code></li><li><code>static final PropwashEvent&lt;DroneDisassembled&gt; DRONE_DISASSEMBLED</code></li><li><code>static final PropwashEvent&lt;BuildImported&gt; BUILD_IMPORTED</code></li><li><code>static final PropwashEvent&lt;EscBurned&gt; ESC_BURNED</code></li></ul>
+<details class="docs-api__nested">
+<summary><code>PropwashEvents.PartRegistered</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></summary>
+<div id="api-event-propwashevents-partregistered" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>interface PartRegistered</code></pre>
+<ul class="docs-api__members"><li><code>void onPartRegistered(PartDefinition definition)</code></li></ul>
+
+</div>
+</details>
+<details class="docs-api__nested">
+<summary><code>PropwashEvents.RegistryFrozen</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></summary>
+<div id="api-event-propwashevents-registryfrozen" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>interface RegistryFrozen</code></pre>
+<ul class="docs-api__members"><li><code>void onRegistryFrozen(PartRegistry registry)</code></li></ul>
+
+</div>
+</details>
+<details class="docs-api__nested">
+<summary><code>PropwashEvents.DroneAssembled</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></summary>
+<div id="api-event-propwashevents-droneassembled" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>interface DroneAssembled</code></pre>
+<ul class="docs-api__members"><li><code>void onDroneAssembled(ServerPlayer player, ItemStack drone, DroneData data)</code></li></ul>
+
+</div>
+</details>
+<details class="docs-api__nested">
+<summary><code>PropwashEvents.DroneDisassembled</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></summary>
+<div id="api-event-propwashevents-dronedisassembled" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>interface DroneDisassembled</code></pre>
+<ul class="docs-api__members"><li><code>void onDroneDisassembled(ServerPlayer player, DroneData data)</code></li></ul>
+
+</div>
+</details>
+<details class="docs-api__nested">
+<summary><code>PropwashEvents.BuildImported</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></summary>
+<div id="api-event-propwashevents-buildimported" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>interface BuildImported</code></pre>
+<ul class="docs-api__members"><li><code>void onBuildImported(ServerPlayer player, ImportRequest request, ImportResult result)</code></li></ul>
+
+</div>
+</details>
+<details class="docs-api__nested">
+<summary><code>PropwashEvents.EscBurned</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></summary>
+<div id="api-event-propwashevents-escburned" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>interface EscBurned</code></pre>
+<ul class="docs-api__members"><li><code>void onEscBurned(ServerPlayer player, ItemStack drone, DroneData data, int cells)</code></li></ul>
+
+</div>
+</details>
+</article>
+</section>
+<section class="docs-section" aria-labelledby="api-part-package">
+<h2 id="api-part-package" class="docs-h2"><a class="docs-anchor" href="#api-part-package" aria-hidden="true" tabindex="-1">#</a>api.part</h2>
+<article class="docs-api">
+<h3 id="api-part-accessorydefinition" class="docs-api__name"><a class="docs-anchor" href="#api-part-accessorydefinition" aria-hidden="true" tabindex="-1">#</a><code>AccessoryDefinition</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">An accessory for the top or bottom mount: size, power draw, LEDs, lens, optional action cam.</p>
+<p lang="de" class="docs-api__desc">Ein Zubehörteil für die obere oder untere Halterung: Maße, Leistungsaufnahme, LEDs, Objektiv, optional Action-Cam.</p>
+<pre class="docs-api__sig"><code>record AccessoryDefinition(Identifier id, PartBasics basics, AccessorySlot slot, double widthMm, double heightMm, double depthMm, double flightBatteryWatts, double frontalAreaM2, int ledCount, Optional&lt;ActionCamDefinition&gt; actionCam, double lensXMm, double lensLengthMm) implements PartDefinition</code></pre>
+<ul class="docs-api__members"><li><code>static Builder builder(Identifier id)</code></li><li><code>PartKind kind()</code></li></ul>
+<details class="docs-api__nested">
+<summary><code>AccessoryDefinition.Builder</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></summary>
+<div id="api-part-accessorydefinition-builder" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>class Builder</code></pre>
+<ul class="docs-api__members"><li><code>Builder basics(PartBasics value)</code></li><li><code>Builder mass(double grams)</code></li><li><code>Builder slot(AccessorySlot value)</code></li><li><code>Builder size(double widthMm, double heightMm, double depthMm)</code></li><li><code>Builder flightBatteryWatts(double value)</code></li><li><code>Builder frontalArea(double m2)</code></li><li><code>Builder leds(int count)</code></li><li><code>Builder actionCam(ActionCamDefinition value)</code></li><li><code>Builder lens(double xMm, double lengthMm)</code></li><li><code>AccessoryDefinition build()</code></li></ul>
+
+</div>
+</details>
+</article>
+<article class="docs-api">
+<h3 id="api-part-accessoryslot" class="docs-api__name"><a class="docs-anchor" href="#api-part-accessoryslot" aria-hidden="true" tabindex="-1">#</a><code>AccessorySlot</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
+<p lang="en" class="docs-api__desc">Accessory mounts: top and bottom.</p>
+<p lang="de" class="docs-api__desc">Zubehör-Halterungen: oben und unten.</p>
+<pre class="docs-api__sig"><code>enum AccessorySlot</code></pre>
+<ul class="docs-api__constants"><li><code>TOP</code> <span class="docs-muted">&quot;top&quot;</span></li><li><code>BOTTOM</code> <span class="docs-muted">&quot;bottom&quot;</span></li></ul>
+<ul class="docs-api__members"><li><code>static Optional&lt;AccessorySlot&gt; byKey(String key)</code></li><li><code>String key()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-actioncamdefinition" class="docs-api__name"><a class="docs-anchor" href="#api-part-actioncamdefinition" aria-hidden="true" tabindex="-1">#</a><code>ActionCamDefinition</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Recording capabilities of an action cam: resolution, frame rate, stabilisation, own battery, power, image.</p>
+<p lang="de" class="docs-api__desc">Aufnahmefähigkeiten einer Action-Cam: Auflösung, Bildrate, Stabilisierung, eigener Akku, Leistung, Bild.</p>
+<pre class="docs-api__sig"><code>record ActionCamDefinition(int maxHeight, int maxFps, boolean stabilization, boolean horizonLevelling, double ownBatteryWh, double recordWatts, double maxRecordWatts, double fovDegrees, double imageQuality, double lowLightNoise, double sensorInches)</code></pre>
+
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-airframegeometry" class="docs-api__name"><a class="docs-anchor" href="#api-part-airframegeometry" aria-hidden="true" tabindex="-1">#</a><code>AirframeGeometry</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Arm positions and spin, battery position, camera, centre of mass, mass split and accessory anchors of a frame.</p>
+<p lang="de" class="docs-api__desc">Armpositionen und Drehrichtung, Akkulage, Kamera, Schwerpunkt, Massenverteilung und Zubehör-Anker eines Rahmens.</p>
+<pre class="docs-api__sig"><code>record AirframeGeometry(List&lt;MotorArm&gt; arms, boolean batteryOnTop, double batteryPlateMm, double electronicsMm, Optional&lt;Vec3Mm&gt; cameraMm, double cameraTiltDeg, Vec3Mm frameCenterOfMassMm, MassSplit massSplit, Map&lt;AccessorySlot, AnchorSpec&gt; accessoryAnchors)</code></pre>
+<ul class="docs-api__members"><li><code>static final double MIN_CAMERA_TILT = 0.0</code></li><li><code>static final double MAX_CAMERA_TILT = 80.0</code></li><li><code>static final double DEFAULT_CAMERA_TILT = 20.0</code></li><li><code>static boolean defaultBatteryOnTop(int wheelbaseMm)</code></li><li><code>static double defaultBatteryPlateMm(int wheelbaseMm)</code></li><li><code>static double defaultElectronicsMm(int wheelbaseMm)</code></li><li><code>boolean hasExplicitArms()</code></li><li><code>List&lt;MotorArm&gt; armsOrTrueX(int wheelbaseMm)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-anchorspec" class="docs-api__name"><a class="docs-anchor" href="#api-part-anchorspec" aria-hidden="true" tabindex="-1">#</a><code>AnchorSpec</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Where an accessory sits on a frame: position, tilt, length.</p>
+<p lang="de" class="docs-api__desc">Wo ein Zubehörteil am Rahmen sitzt: Position, Neigung, Länge.</p>
+<pre class="docs-api__sig"><code>record AnchorSpec(double x, double y, double z, double tiltDeg, double lengthMm)</code></pre>
+<ul class="docs-api__members"><li><code>static final double MIN_TILT = -45.0</code></li><li><code>static final double MAX_TILT = 90.0</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-batterydefinition" class="docs-api__name"><a class="docs-anchor" href="#api-part-batterydefinition" aria-hidden="true" tabindex="-1">#</a><code>BatteryDefinition</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">A battery pack: cells, capacity, internal resistance, C rating, chemistry, size, connector.</p>
+<p lang="de" class="docs-api__desc">Ein Akku: Zellen, Kapazität, Innenwiderstand, C-Rate, Chemie, Maße, Stecker.</p>
+<pre class="docs-api__sig"><code>record BatteryDefinition(Identifier id, PartBasics basics, int cells, int capacityMah, double cellResistanceOhm, int cRating, Identifier chemistry, Optional&lt;PackSize&gt; packSize, String connector) implements PartDefinition</code></pre>
+<ul class="docs-api__members"><li><code>static final int MAX_CELLS = 12</code></li><li><code>static final Identifier LIPO</code></li><li><code>static final Identifier LIHV</code></li><li><code>static final Identifier LION</code></li><li><code>static Builder builder(Identifier id)</code></li><li><code>PartKind kind()</code></li><li><code>double maxContinuousCurrent()</code></li></ul>
+<details class="docs-api__nested">
+<summary><code>BatteryDefinition.Builder</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></summary>
+<div id="api-part-batterydefinition-builder" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>class Builder</code></pre>
+<ul class="docs-api__members"><li><code>Builder basics(PartBasics value)</code></li><li><code>Builder mass(double grams)</code></li><li><code>Builder cells(int value)</code></li><li><code>Builder capacity(int mah)</code></li><li><code>Builder cellResistance(double ohm)</code></li><li><code>Builder cRating(int value)</code></li><li><code>Builder chemistry(Identifier value)</code></li><li><code>Builder packSize(PackSize value)</code></li><li><code>Builder connector(String value)</code></li><li><code>BatteryDefinition build()</code></li></ul>
+
+</div>
+</details>
+</article>
+<article class="docs-api">
+<h3 id="api-part-batteryfitrule" class="docs-api__name"><a class="docs-anchor" href="#api-part-batteryfitrule" aria-hidden="true" tabindex="-1">#</a><code>BatteryFitRule</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Which batteries a frame takes: cell range, maximum mass and the preferred pack.</p>
+<p lang="de" class="docs-api__desc">Welche Akkus ein Rahmen nimmt: Zellbereich, Höchstmasse und der bevorzugte Akku.</p>
+<pre class="docs-api__sig"><code>record BatteryFitRule(int minCells, int maxCells, double maxMassGrams, int preferredMinCells, int preferredMinCapacityMah)</code></pre>
+
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-cellchemistry" class="docs-api__name"><a class="docs-anchor" href="#api-part-cellchemistry" aria-hidden="true" tabindex="-1">#</a><code>CellChemistry</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">A cell chemistry: voltages, density, open-circuit voltage curve and usable fraction.</p>
+<p lang="de" class="docs-api__desc">Eine Zellchemie: Spannungen, Dichte, Leerlaufspannungskurve und nutzbarer Anteil.</p>
+<pre class="docs-api__sig"><code>record CellChemistry(Identifier id, double fullCellVoltage, double nominalCellVoltage, double emptyCellVoltage, double cutoffCellVoltage, double storageCellVoltage, double densityGramsPerCm3, List&lt;Double&gt; ocvShape, OptionalDouble usableFraction)</code></pre>
+<ul class="docs-api__members"><li><code>static final List&lt;Double&gt; SOC_GRID</code></li><li><code>CellChemistry(Identifier id, double fullCellVoltage, double nominalCellVoltage, double emptyCellVoltage, double cutoffCellVoltage, double storageCellVoltage, double densityGramsPerCm3, List&lt;Double&gt; ocvShape)</code></li><li><code>double landingCellVoltage()</code></li><li><code>double effectiveUsableFraction()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-ductspec" class="docs-api__name"><a class="docs-anchor" href="#api-part-ductspec" aria-hidden="true" tabindex="-1">#</a><code>DuctSpec</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Duct values of a ducted frame; empty values use the standard duct.</p>
+<p lang="de" class="docs-api__desc">Duct-Werte eines geduckten Rahmens; leere Werte nehmen den Standard-Duct.</p>
+<pre class="docs-api__sig"><code>record DuctSpec(OptionalDouble thrustGain, OptionalDouble clearanceMm, OptionalDouble translationalLiftGain, OptionalDouble washLoss, OptionalDouble washNoise, OptionalDouble restitution, OptionalDouble friction)</code></pre>
+<ul class="docs-api__members"><li><code>static final DuctSpec STANDARD</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-frameaero" class="docs-api__name"><a class="docs-anchor" href="#api-part-frameaero" aria-hidden="true" tabindex="-1">#</a><code>FrameAero</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Frontal area, drag coefficient and optional side and top areas of a frame.</p>
+<p lang="de" class="docs-api__desc">Stirnfläche, Widerstandsbeiwert und optional Seiten- und Draufsichtfläche eines Rahmens.</p>
+<pre class="docs-api__sig"><code>record FrameAero(double frontalAreaM2, double dragCoefficient, OptionalDouble sideAreaM2, OptionalDouble topAreaM2)</code></pre>
+<ul class="docs-api__members"><li><code>static FrameAero of(double frontalAreaM2, double dragCoefficient)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-framedefinition" class="docs-api__name"><a class="docs-anchor" href="#api-part-framedefinition" aria-hidden="true" tabindex="-1">#</a><code>FrameDefinition</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">A frame: class, shape, wheelbase, prop sizes, mounts, geometry, aerodynamics and battery rule.</p>
+<p lang="de" class="docs-api__desc">Ein Rahmen: Klasse, Form, Radstand, Prop-Größen, Halterungen, Geometrie, Aerodynamik und Akku-Regel.</p>
+<pre class="docs-api__sig"><code>record FrameDefinition(Identifier id, PartBasics basics, FrameRole role, FrameShape shape, int wheelbaseMm, int minPropMm, int maxPropMm, Set&lt;Identifier&gt; motorMounts, Set&lt;Identifier&gt; stackMounts, Set&lt;AccessorySlot&gt; accessoryMounts, AirframeGeometry geometry, FrameAero aero, Optional&lt;DuctSpec&gt; duct, double impactTolerance, BatteryFitRule batteryFit) implements PartDefinition</code></pre>
+<ul class="docs-api__members"><li><code>static final int MAX_PROP_MM = 400</code></li><li><code>static Builder builder(Identifier id)</code></li><li><code>PartKind kind()</code></li><li><code>boolean ducted()</code></li><li><code>double nominalPropInches()</code></li></ul>
+<details class="docs-api__nested">
+<summary><code>FrameDefinition.Builder</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></summary>
+<div id="api-part-framedefinition-builder" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>class Builder</code></pre>
+<ul class="docs-api__members"><li><code>Builder basics(PartBasics value)</code></li><li><code>Builder mass(double grams)</code></li><li><code>Builder role(FrameRole value)</code></li><li><code>Builder shape(FrameShape value)</code></li><li><code>Builder wheelbase(int mm)</code></li><li><code>Builder props(int minMm, int maxMm)</code></li><li><code>Builder maxProp(int mm)</code></li><li><code>Builder motorMount(Identifier... mounts)</code></li><li><code>Builder stackMount(Identifier... mounts)</code></li><li><code>Builder accessoryMount(AccessorySlot... slots)</code></li><li><code>Builder arms(List&lt;MotorArm&gt; value)</code></li><li><code>Builder battery(boolean onTop, double plateMm)</code></li><li><code>Builder electronics(double mm)</code></li><li><code>Builder camera(Vec3Mm positionMm)</code></li><li><code>Builder cameraTilt(double degrees)</code></li><li><code>Builder centerOfMass(Vec3Mm positionMm)</code></li><li><code>Builder massSplit(MassSplit value)</code></li><li><code>Builder anchor(AccessorySlot slot, AnchorSpec anchor)</code></li><li><code>Builder aero(double frontalAreaM2, double dragCoefficient)</code></li><li><code>Builder sideArea(double m2)</code></li><li><code>Builder topArea(double m2)</code></li><li><code>Builder duct(DuctSpec value)</code></li><li><code>Builder impactTolerance(double metersPerSecond)</code></li><li><code>Builder batteryFit(BatteryFitRule value)</code></li><li><code>FrameDefinition build()</code></li></ul>
+
+</div>
+</details>
+</article>
+<article class="docs-api">
+<h3 id="api-part-framerole" class="docs-api__name"><a class="docs-anchor" href="#api-part-framerole" aria-hidden="true" tabindex="-1">#</a><code>FrameRole</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
+<p lang="en" class="docs-api__desc">Frame classes, from whoop to X-Class; the key is the JSON value.</p>
+<p lang="de" class="docs-api__desc">Rahmenklassen vom Whoop bis X-Class; der Schlüssel ist der JSON-Wert.</p>
+<pre class="docs-api__sig"><code>enum FrameRole</code></pre>
+<ul class="docs-api__constants"><li><code>WHOOP</code> <span class="docs-muted">&quot;whoop&quot;</span></li><li><code>TOOTHPICK</code> <span class="docs-muted">&quot;toothpick&quot;</span></li><li><code>CINEWHOOP</code> <span class="docs-muted">&quot;cinewhoop&quot;</span></li><li><code>FREESTYLE</code> <span class="docs-muted">&quot;freestyle&quot;</span></li><li><code>RACE</code> <span class="docs-muted">&quot;race&quot;</span></li><li><code>LONG_RANGE</code> <span class="docs-muted">&quot;long_range&quot;</span></li><li><code>CINELIFTER</code> <span class="docs-muted">&quot;cinelifter&quot;</span></li><li><code>X_CLASS</code> <span class="docs-muted">&quot;x_class&quot;</span></li></ul>
+<ul class="docs-api__members"><li><code>static Optional&lt;FrameRole&gt; byKey(String key)</code></li><li><code>String key()</code></li><li><code>boolean tricksByDefault()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-frameshape" class="docs-api__name"><a class="docs-anchor" href="#api-part-frameshape" aria-hidden="true" tabindex="-1">#</a><code>FrameShape</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
+<p lang="en" class="docs-api__desc">Frame shapes; the key is the JSON value.</p>
+<p lang="de" class="docs-api__desc">Rahmenformen; der Schlüssel ist der JSON-Wert.</p>
+<pre class="docs-api__sig"><code>enum FrameShape</code></pre>
+<ul class="docs-api__constants"><li><code>TRUE_X</code> <span class="docs-muted">&quot;true_x&quot;</span></li><li><code>STRETCHED_X</code> <span class="docs-muted">&quot;stretched_x&quot;</span></li><li><code>SQUASHED_X</code> <span class="docs-muted">&quot;squashed_x&quot;</span></li><li><code>DEADCAT</code> <span class="docs-muted">&quot;deadcat&quot;</span></li><li><code>H_FRAME</code> <span class="docs-muted">&quot;h_frame&quot;</span></li><li><code>CUSTOM</code> <span class="docs-muted">&quot;custom&quot;</span></li></ul>
+<ul class="docs-api__members"><li><code>static Optional&lt;FrameShape&gt; byKey(String key)</code></li><li><code>String key()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-masssplit" class="docs-api__name"><a class="docs-anchor" href="#api-part-masssplit" aria-hidden="true" tabindex="-1">#</a><code>MassSplit</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">How a frame’s mass divides into arms, plate and duct.</p>
+<p lang="de" class="docs-api__desc">Wie sich die Masse eines Rahmens auf Arme, Platte und Duct verteilt.</p>
+<pre class="docs-api__sig"><code>record MassSplit(double arms, double plate, double duct)</code></pre>
+<ul class="docs-api__members"><li><code>static final MassSplit OPEN</code></li><li><code>static final MassSplit DUCTED</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-motorarm" class="docs-api__name"><a class="docs-anchor" href="#api-part-motorarm" aria-hidden="true" tabindex="-1">#</a><code>MotorArm</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">One motor position with its spin direction.</p>
+<p lang="de" class="docs-api__desc">Eine Motorposition mit Drehrichtung.</p>
+<pre class="docs-api__sig"><code>record MotorArm(Vec3Mm position, Spin spin)</code></pre>
+<ul class="docs-api__members"><li><code>static final int FRONT_LEFT = 0</code></li><li><code>static final int FRONT_RIGHT = 1</code></li><li><code>static final int REAR_LEFT = 2</code></li><li><code>static final int REAR_RIGHT = 3</code></li><li><code>static final int COUNT = 4</code></li><li><code>static final List&lt;Spin&gt; PROPS_IN</code></li><li><code>static MotorArm of(double xMm, double yMm, double zMm, Spin spin)</code></li><li><code>static List&lt;MotorArm&gt; trueX(int wheelbaseMm, double yMm)</code></li></ul>
+<details class="docs-api__nested">
+<summary><code>MotorArm.Spin</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></summary>
+<div id="api-part-motorarm-spin" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>enum Spin</code></pre>
+<ul class="docs-api__constants"><li><code>CW</code> <span class="docs-muted">&quot;cw&quot;</span></li><li><code>CCW</code> <span class="docs-muted">&quot;ccw&quot;</span></li></ul>
+<ul class="docs-api__members"><li><code>String key()</code></li></ul>
+
+</div>
+</details>
+</article>
+<article class="docs-api">
+<h3 id="api-part-motordefinition" class="docs-api__name"><a class="docs-anchor" href="#api-part-motordefinition" aria-hidden="true" tabindex="-1">#</a><code>MotorDefinition</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">A motor: stator, KV, mount, current, winding resistance, cells, prop mount and heat limits.</p>
+<p lang="de" class="docs-api__desc">Ein Motor: Stator, KV, Halterung, Strom, Wicklungswiderstand, Zellen, Prop-Aufnahme und Hitzegrenzen.</p>
+<pre class="docs-api__sig"><code>record MotorDefinition(Identifier id, PartBasics basics, String statorLabel, double statorDiameterMm, double statorHeightMm, int kv, Identifier mount, double maxCurrentAmps, double resistanceOhm, int minCells, int maxCells, Identifier propMount, MotorThermal thermal) implements PartDefinition</code></pre>
+<ul class="docs-api__members"><li><code>static double[] parseStatorLabel(String label)</code></li><li><code>static Builder builder(Identifier id)</code></li><li><code>PartKind kind()</code></li></ul>
+<details class="docs-api__nested">
+<summary><code>MotorDefinition.Builder</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></summary>
+<div id="api-part-motordefinition-builder" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>class Builder</code></pre>
+<ul class="docs-api__members"><li><code>Builder basics(PartBasics value)</code></li><li><code>Builder mass(double grams)</code></li><li><code>Builder stator(String label)</code></li><li><code>Builder statorSize(double diameterMm, double heightMm)</code></li><li><code>Builder kv(int value)</code></li><li><code>Builder mount(Identifier value)</code></li><li><code>Builder maxCurrent(double amps)</code></li><li><code>Builder resistance(double ohm)</code></li><li><code>Builder cells(int min, int max)</code></li><li><code>Builder propMount(Identifier value)</code></li><li><code>Builder thermal(MotorThermal value)</code></li><li><code>MotorDefinition build()</code></li></ul>
+
+</div>
+</details>
+</article>
+<article class="docs-api">
+<h3 id="api-part-motorthermal" class="docs-api__name"><a class="docs-anchor" href="#api-part-motorthermal" aria-hidden="true" tabindex="-1">#</a><code>MotorThermal</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Heat values of a motor: capacity, cooling, throttling start, maximum and wear.</p>
+<p lang="de" class="docs-api__desc">Hitzewerte eines Motors: Wärmekapazität, Kühlung, Beginn der Drosselung, Maximum und Verschleiß.</p>
+<pre class="docs-api__sig"><code>record MotorThermal(OptionalDouble heatCapacityJPerK, OptionalDouble coolingWPerK, OptionalDouble coolingWPerKPerRadS, double derateStartC, double maxTempC, double wearPerSecondAtMax)</code></pre>
+<ul class="docs-api__members"><li><code>static final MotorThermal DEFAULT</code></li><li><code>static MotorThermal limits(double derateStartC, double maxTempC)</code></li><li><code>static Builder builder()</code></li></ul>
+<details class="docs-api__nested">
+<summary><code>MotorThermal.Builder</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></summary>
+<div id="api-part-motorthermal-builder" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>class Builder</code></pre>
+<ul class="docs-api__members"><li><code>Builder heatCapacity(double joulePerKelvin)</code></li><li><code>Builder cooling(double wattPerKelvin)</code></li><li><code>Builder coolingPerRadS(double wattPerKelvinPerRadS)</code></li><li><code>Builder limits(double derateStartC, double maxTempC)</code></li><li><code>Builder wearAtMax(double perSecond)</code></li><li><code>MotorThermal build()</code></li></ul>
+
+</div>
+</details>
+</article>
+<article class="docs-api">
+<h3 id="api-part-mounts" class="docs-api__name"><a class="docs-anchor" href="#api-part-mounts" aria-hidden="true" tabindex="-1">#</a><code>Mounts</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></h3>
+<p lang="en" class="docs-api__desc">Ids of the built-in motor, stack and prop mounts.</p>
+<p lang="de" class="docs-api__desc">Ids der eingebauten Motor-, Stack- und Prop-Halterungen.</p>
+<pre class="docs-api__sig"><code>class Mounts</code></pre>
+<ul class="docs-api__members"><li><code>static final Identifier MOTOR_M08</code></li><li><code>static final Identifier MOTOR_M14</code></li><li><code>static final Identifier MOTOR_M22</code></li><li><code>static final Identifier MOTOR_M28</code></li><li><code>static final Identifier STACK_WHOOP_AIO</code></li><li><code>static final Identifier STACK_S20</code></li><li><code>static final Identifier STACK_S30</code></li><li><code>static final Identifier PROP_UNIVERSAL</code></li><li><code>static boolean propFits(Identifier motorPropMount, Identifier propMount)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-packsize" class="docs-api__name"><a class="docs-anchor" href="#api-part-packsize" aria-hidden="true" tabindex="-1">#</a><code>PackSize</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Battery pack dimensions in millimetres.</p>
+<p lang="de" class="docs-api__desc">Akkumaße in Millimetern.</p>
+<pre class="docs-api__sig"><code>record PackSize(double lengthMm, double widthMm, double heightMm)</code></pre>
+
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-partbasics" class="docs-api__name"><a class="docs-anchor" href="#api-part-partbasics" aria-hidden="true" tabindex="-1">#</a><code>PartBasics</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Data every part has: mass, stack size, sort order, creative listing, durability, recycling, look and rarity.</p>
+<p lang="de" class="docs-api__desc">Daten, die jedes Teil hat: Masse, Stapelgröße, Sortierung, Kreativ-Liste, Haltbarkeit, Recycling, Aussehen und Seltenheit.</p>
+<pre class="docs-api__sig"><code>record PartBasics(double massGrams, int stackSize, int sortOrder, boolean creativeListed, double durability, Optional&lt;RecycleYield&gt; recycle, PartVisual visual, Optional&lt;Rarity&gt; rarity)</code></pre>
+<ul class="docs-api__members"><li><code>static final int DEFAULT_SORT_ORDER = 1000</code></li><li><code>PartBasics(double massGrams, int stackSize, int sortOrder, boolean creativeListed, double durability, Optional&lt;RecycleYield&gt; recycle, PartVisual visual)</code></li><li><code>static PartBasics of(double massGrams)</code></li><li><code>static PartBasics withMass(PartBasics base, double massGrams)</code></li><li><code>PartBasics withStackSize(int value)</code></li><li><code>PartBasics withSortOrder(int value)</code></li><li><code>PartBasics withCreativeListed(boolean value)</code></li><li><code>PartBasics withDurability(double value)</code></li><li><code>PartBasics withRecycle(RecycleYield value)</code></li><li><code>PartBasics withVisual(PartVisual value)</code></li><li><code>PartBasics withRarity(Rarity value)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-partdefinition" class="docs-api__name"><a class="docs-anchor" href="#api-part-partdefinition" aria-hidden="true" tabindex="-1">#</a><code>PartDefinition</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Common interface of all part definitions.</p>
+<p lang="de" class="docs-api__desc">Gemeinsames Interface aller Teil-Definitionen.</p>
+<pre class="docs-api__sig"><code>sealed interface PartDefinition permits FrameDefinition, StackDefinition, MotorDefinition, PropDefinition, BatteryDefinition, VideoDefinition, AccessoryDefinition</code></pre>
+<ul class="docs-api__members"><li><code>Identifier id()</code></li><li><code>PartKind kind()</code></li><li><code>PartBasics basics()</code></li><li><code>default double massGrams()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-partkind" class="docs-api__name"><a class="docs-anchor" href="#api-part-partkind" aria-hidden="true" tabindex="-1">#</a><code>PartKind</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
+<p lang="en" class="docs-api__desc">Part categories; the key is the folder name of JSON parts.</p>
+<p lang="de" class="docs-api__desc">Teil-Kategorien; der Schlüssel ist der Ordnername der JSON-Teile.</p>
+<pre class="docs-api__sig"><code>enum PartKind</code></pre>
+<ul class="docs-api__constants"><li><code>FRAME</code> <span class="docs-muted">&quot;frame&quot;</span></li><li><code>STACK</code> <span class="docs-muted">&quot;stack&quot;</span></li><li><code>MOTOR</code> <span class="docs-muted">&quot;motor&quot;</span></li><li><code>PROP</code> <span class="docs-muted">&quot;prop&quot;</span></li><li><code>VIDEO</code> <span class="docs-muted">&quot;video&quot;</span></li><li><code>BATTERY</code> <span class="docs-muted">&quot;battery&quot;</span></li><li><code>ACCESSORY</code> <span class="docs-muted">&quot;accessory&quot;</span></li></ul>
+<ul class="docs-api__members"><li><code>static Optional&lt;PartKind&gt; byKey(String key)</code></li><li><code>String key()</code></li><li><code>int requiredCount()</code></li><li><code>int slotCount()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-partregistry" class="docs-api__name"><a class="docs-anchor" href="#api-part-partregistry" aria-hidden="true" tabindex="-1">#</a><code>PartRegistry</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Registers and looks up parts and chemistries, loads JSON parts and converts them to and from JSON.</p>
+<p lang="de" class="docs-api__desc">Meldet Teile und Zellchemien an, schlägt sie nach, lädt JSON-Teile und wandelt sie in JSON und zurück.</p>
+<pre class="docs-api__sig"><code>interface PartRegistry</code></pre>
+<ul class="docs-api__members"><li><code>&lt;D extends PartDefinition&gt; D register(D definition)</code></li><li><code>CellChemistry registerChemistry(CellChemistry chemistry)</code></li><li><code>int loadBundled(String modId)</code></li><li><code>Optional&lt;PartDefinition&gt; get(Identifier id)</code></li><li><code>&lt;D extends PartDefinition&gt; Optional&lt;D&gt; get(Class&lt;D&gt; type, Identifier id)</code></li><li><code>List&lt;PartDefinition&gt; all()</code></li><li><code>List&lt;PartDefinition&gt; all(PartKind kind)</code></li><li><code>Optional&lt;CellChemistry&gt; chemistry(Identifier id)</code></li><li><code>List&lt;CellChemistry&gt; chemistries()</code></li><li><code>boolean isBuiltin(Identifier id)</code></li><li><code>boolean isFrozen()</code></li><li><code>String fingerprint()</code></li><li><code>default JsonObject toJson(PartDefinition definition)</code></li><li><code>default JsonObject toJson(CellChemistry chemistry)</code></li><li><code>default PartDefinition fromJson(PartKind kind, Identifier id, JsonObject json)</code></li><li><code>default CellChemistry chemistryFromJson(Identifier id, JsonObject json)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-partvisual" class="docs-api__name"><a class="docs-anchor" href="#api-part-partvisual" aria-hidden="true" tabindex="-1">#</a><code>PartVisual</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Accent colour and an alternative drone model of a part.</p>
+<p lang="de" class="docs-api__desc">Akzentfarbe und ein anderes Drohnen-Modell eines Teils.</p>
+<pre class="docs-api__sig"><code>record PartVisual(OptionalInt accentRgb, Optional&lt;Identifier&gt; renderModel)</code></pre>
+<ul class="docs-api__members"><li><code>static final PartVisual NONE</code></li><li><code>static PartVisual accent(int rgb)</code></li><li><code>PartVisual withRenderModel(Identifier model)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-propdefinition" class="docs-api__name"><a class="docs-anchor" href="#api-part-propdefinition" aria-hidden="true" tabindex="-1">#</a><code>PropDefinition</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">A propeller: diameter, pitch, blades, thrust and power coefficients, material, stiffness, mount.</p>
+<p lang="de" class="docs-api__desc">Ein Propeller: Durchmesser, Steigung, Blätter, Schub- und Leistungsbeiwert, Material, Steifigkeit, Aufnahme.</p>
+<pre class="docs-api__sig"><code>record PropDefinition(Identifier id, PartBasics basics, int diameterMm, double pitchInch, int blades, double thrustCoefficient, double powerCoefficient, PropMaterial material, double stiffness, Identifier mount) implements PartDefinition</code></pre>
+<ul class="docs-api__members"><li><code>static Builder builder(Identifier id)</code></li><li><code>PartKind kind()</code></li><li><code>double diameterInches()</code></li></ul>
+<details class="docs-api__nested">
+<summary><code>PropDefinition.Builder</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></summary>
+<div id="api-part-propdefinition-builder" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>class Builder</code></pre>
+<ul class="docs-api__members"><li><code>Builder basics(PartBasics value)</code></li><li><code>Builder mass(double grams)</code></li><li><code>Builder durability(double value)</code></li><li><code>Builder size(int diameterMm, double pitchInch, int blades)</code></li><li><code>Builder coefficients(double thrust, double power)</code></li><li><code>Builder material(PropMaterial value)</code></li><li><code>Builder stiffness(double value)</code></li><li><code>Builder mount(Identifier value)</code></li><li><code>PropDefinition build()</code></li></ul>
+
+</div>
+</details>
+</article>
+<article class="docs-api">
+<h3 id="api-part-propmaterial" class="docs-api__name"><a class="docs-anchor" href="#api-part-propmaterial" aria-hidden="true" tabindex="-1">#</a><code>PropMaterial</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
+<p lang="en" class="docs-api__desc">Prop materials with their default stiffness and durability; the key is the JSON value.</p>
+<p lang="de" class="docs-api__desc">Prop-Materialien mit Standard-Steifigkeit und -Haltbarkeit; der Schlüssel ist der JSON-Wert.</p>
+<pre class="docs-api__sig"><code>enum PropMaterial</code></pre>
+<ul class="docs-api__constants"><li><code>POLYCARBONATE</code> <span class="docs-muted">&quot;polycarbonate&quot;</span></li><li><code>GLASS_FIBER_NYLON</code> <span class="docs-muted">&quot;glass_fiber_nylon&quot;</span></li><li><code>CARBON_FIBER_NYLON</code> <span class="docs-muted">&quot;carbon_fiber_nylon&quot;</span></li><li><code>CARBON</code> <span class="docs-muted">&quot;carbon&quot;</span></li></ul>
+<ul class="docs-api__members"><li><code>static Optional&lt;PropMaterial&gt; byKey(String key)</code></li><li><code>String key()</code></li><li><code>double defaultStiffness()</code></li><li><code>double defaultDurability()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-recycleyield" class="docs-api__name"><a class="docs-anchor" href="#api-part-recycleyield" aria-hidden="true" tabindex="-1">#</a><code>RecycleYield</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">What the salvage slot gives back for a broken part.</p>
+<p lang="de" class="docs-api__desc">Was das Zerlegen-Feld für ein kaputtes Teil zurückgibt.</p>
+<pre class="docs-api__sig"><code>record RecycleYield(Identifier item, int count)</code></pre>
+<ul class="docs-api__members"><li><code>static final RecycleYield NONE</code></li><li><code>boolean none()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-stackdefinition" class="docs-api__name"><a class="docs-anchor" href="#api-part-stackdefinition" aria-hidden="true" tabindex="-1">#</a><code>StackDefinition</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">A flight controller and ESC stack: mount, current, cells, all-in-one.</p>
+<p lang="de" class="docs-api__desc">Ein Flight-Controller- und ESC-Stack: Halterung, Strom, Zellen, All-in-One.</p>
+<pre class="docs-api__sig"><code>record StackDefinition(Identifier id, PartBasics basics, Identifier mount, double escContinuousAmps, int minCells, int maxCells, boolean allInOne, OptionalDouble escBurstAmps, OptionalDouble escResistanceOhm, OptionalDouble brownoutVoltage, OptionalDouble boardSizeMm) implements PartDefinition</code></pre>
+<ul class="docs-api__members"><li><code>static Builder builder(Identifier id)</code></li><li><code>PartKind kind()</code></li></ul>
+<details class="docs-api__nested">
+<summary><code>StackDefinition.Builder</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></summary>
+<div id="api-part-stackdefinition-builder" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>class Builder</code></pre>
+<ul class="docs-api__members"><li><code>Builder basics(PartBasics value)</code></li><li><code>Builder mass(double grams)</code></li><li><code>Builder mount(Identifier value)</code></li><li><code>Builder escContinuous(double amps)</code></li><li><code>Builder cells(int min, int max)</code></li><li><code>Builder allInOne(boolean value)</code></li><li><code>Builder escBurst(double amps)</code></li><li><code>Builder escResistance(double ohm)</code></li><li><code>Builder brownout(double volts)</code></li><li><code>Builder boardSize(double mm)</code></li><li><code>StackDefinition build()</code></li></ul>
+
+</div>
+</details>
+</article>
+<article class="docs-api">
+<h3 id="api-part-vec3mm" class="docs-api__name"><a class="docs-anchor" href="#api-part-vec3mm" aria-hidden="true" tabindex="-1">#</a><code>Vec3Mm</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">A position in frame millimetres (+X right, +Y up, −Z forward).</p>
+<p lang="de" class="docs-api__desc">Eine Position in Rahmen-Millimetern (+X rechts, +Y oben, −Z vorn).</p>
+<pre class="docs-api__sig"><code>record Vec3Mm(double x, double y, double z)</code></pre>
+<ul class="docs-api__members"><li><code>static final Vec3Mm ZERO</code></li><li><code>double horizontalDistance()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-part-videodefinition" class="docs-api__name"><a class="docs-anchor" href="#api-part-videodefinition" aria-hidden="true" tabindex="-1">#</a><code>VideoDefinition</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">A video unit: analog or digital, latency, range, image quality, camera width and field of view, VTX power, power draw.</p>
+<p lang="de" class="docs-api__desc">Ein Videomodul: analog oder digital, Latenz, Reichweite, Bildqualität, Kamerabreite und Sichtfeld, VTX-Leistung, Leistungsaufnahme.</p>
+<pre class="docs-api__sig"><code>record VideoDefinition(Identifier id, PartBasics basics, VideoLink link, int latencyMs, int rangeBlocks, double imageQuality, double cameraWidthMm, OptionalDouble cameraFovDeg, int vtxPowerMw, OptionalDouble powerW) implements PartDefinition</code></pre>
+<ul class="docs-api__members"><li><code>VideoDefinition(Identifier id, PartBasics basics, VideoLink link, int latencyMs, int rangeBlocks, double imageQuality, double cameraWidthMm, OptionalDouble cameraFovDeg, int vtxPowerMw)</code></li><li><code>static Builder builder(Identifier id)</code></li><li><code>PartKind kind()</code></li></ul>
+<details class="docs-api__nested">
+<summary><code>VideoDefinition.Builder</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></summary>
+<div id="api-part-videodefinition-builder" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>class Builder</code></pre>
+<ul class="docs-api__members"><li><code>Builder basics(PartBasics value)</code></li><li><code>Builder mass(double grams)</code></li><li><code>Builder link(VideoLink value)</code></li><li><code>Builder latency(int ms)</code></li><li><code>Builder range(int blocks)</code></li><li><code>Builder imageQuality(double value)</code></li><li><code>Builder cameraWidth(double mm)</code></li><li><code>Builder cameraFov(double degrees)</code></li><li><code>Builder vtxPower(int milliwatts)</code></li><li><code>Builder powerWatts(double watts)</code></li><li><code>VideoDefinition build()</code></li></ul>
+
+</div>
+</details>
+</article>
+<article class="docs-api">
+<h3 id="api-part-videolink" class="docs-api__name"><a class="docs-anchor" href="#api-part-videolink" aria-hidden="true" tabindex="-1">#</a><code>VideoLink</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
+<p lang="en" class="docs-api__desc">Video systems: analog and digital.</p>
+<p lang="de" class="docs-api__desc">Videosysteme: analog und digital.</p>
+<pre class="docs-api__sig"><code>enum VideoLink</code></pre>
+<ul class="docs-api__constants"><li><code>ANALOG</code> <span class="docs-muted">&quot;analog&quot;</span></li><li><code>DIGITAL</code> <span class="docs-muted">&quot;digital&quot;</span></li></ul>
+<ul class="docs-api__members"><li><code>static Optional&lt;VideoLink&gt; byKey(String key)</code></li><li><code>String key()</code></li></ul>
+
+</article>
+</section>
+<section class="docs-section" aria-labelledby="api-registry-package">
+<h2 id="api-registry-package" class="docs-h2"><a class="docs-anchor" href="#api-registry-package" aria-hidden="true" tabindex="-1">#</a>api.registry</h2>
+<article class="docs-api">
+<h3 id="api-registry-creativeentries" class="docs-api__name"><a class="docs-anchor" href="#api-registry-creativeentries" aria-hidden="true" tabindex="-1">#</a><code>CreativeEntries</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Extra item stacks for a creative tab.</p>
+<p lang="de" class="docs-api__desc">Zusätzliche Item-Stapel für einen Kreativ-Tab.</p>
+<pre class="docs-api__sig"><code>interface CreativeEntries</code></pre>
+<ul class="docs-api__members"><li><code>void add(Supplier&lt;? extends Collection&lt;ItemStack&gt;&gt; entries)</code></li><li><code>List&lt;ItemStack&gt; collect()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-registry-extensiontab" class="docs-api__name"><a class="docs-anchor" href="#api-registry-extensiontab" aria-hidden="true" tabindex="-1">#</a><code>ExtensionTab</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">The own creative tab of an add-on: icon, section order and extra entries.</p>
+<p lang="de" class="docs-api__desc">Der eigene Kreativ-Tab eines Add-ons: Symbol, Reihenfolge der Abschnitte und zusätzliche Einträge.</p>
+<pre class="docs-api__sig"><code>interface ExtensionTab extends CreativeEntries</code></pre>
+<ul class="docs-api__members"><li><code>String TITLE_KEY = &quot;itemGroup.propwash.extension&quot;</code></li><li><code>String namespace()</code></li><li><code>Identifier tabId()</code></li><li><code>default String nameKey()</code></li><li><code>ExtensionTab icon(Supplier&lt;ItemStack&gt; icon)</code></li><li><code>ExtensionTab icon(Identifier itemId)</code></li><li><code>ExtensionTab order(TabSection... sections)</code></li><li><code>List&lt;TabSection&gt; sections()</code></li><li><code>boolean registered()</code></li><li><code>ItemStack iconStack()</code></li><li><code>List&lt;ItemStack&gt; contents()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-registry-lootinjections" class="docs-api__name"><a class="docs-anchor" href="#api-registry-lootinjections" aria-hidden="true" tabindex="-1">#</a><code>LootInjections</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Hooks an add-on loot table into any loot table, on both loaders.</p>
+<p lang="de" class="docs-api__desc">Hängt eine Beutetabelle des Add-ons in jede Beutetabelle, auf beiden Loadern.</p>
+<pre class="docs-api__sig"><code>interface LootInjections</code></pre>
+<ul class="docs-api__members"><li><code>void inject(ResourceKey&lt;LootTable&gt; target, ResourceKey&lt;LootTable&gt; addonTable)</code></li><li><code>List&lt;ResourceKey&lt;LootTable&gt;&gt; tablesFor(ResourceKey&lt;LootTable&gt; target)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-registry-partitems" class="docs-api__name"><a class="docs-anchor" href="#api-registry-partitems" aria-hidden="true" tabindex="-1">#</a><code>PartItems</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Registers items for parts and looks them up.</p>
+<p lang="de" class="docs-api__desc">Meldet Items für Teile an und schlägt sie nach.</p>
+<pre class="docs-api__sig"><code>interface PartItems</code></pre>
+<ul class="docs-api__members"><li><code>int registerItems(String namespace)</code></li><li><code>void registerItem(Identifier partId, UnaryOperator&lt;Item.Properties&gt; properties)</code></li><li><code>Optional&lt;Item&gt; item(Identifier partId)</code></li><li><code>Optional&lt;Identifier&gt; partOf(ItemStack stack)</code></li><li><code>ItemStack stack(Identifier partId)</code></li><li><code>default ItemStack stack(Identifier partId, float charge)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-registry-tabsection" class="docs-api__name"><a class="docs-anchor" href="#api-registry-tabsection" aria-hidden="true" tabindex="-1">#</a><code>TabSection</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
+<p lang="en" class="docs-api__desc">Sections of an add-on creative tab.</p>
+<p lang="de" class="docs-api__desc">Abschnitte eines Add-on-Kreativ-Tabs.</p>
+<pre class="docs-api__sig"><code>enum TabSection</code></pre>
+<ul class="docs-api__constants"><li><code>PRESETS</code></li><li><code>FRAMES</code></li><li><code>STACKS</code></li><li><code>MOTORS</code></li><li><code>PROPS</code></li><li><code>VIDEO</code></li><li><code>BATTERIES</code></li><li><code>ACCESSORIES</code></li><li><code>ENTRIES</code></li></ul>
+<ul class="docs-api__members"><li><code>static Optional&lt;TabSection&gt; of(PartKind kind)</code></li><li><code>static List&lt;TabSection&gt; defaults()</code></li><li><code>static List&lt;TabSection&gt; complete(List&lt;TabSection&gt; wanted)</code></li><li><code>Optional&lt;PartKind&gt; kind()</code></li></ul>
+
+</article>
+</section>
+<section class="docs-section" aria-labelledby="outside">
+<h2 id="outside" class="docs-h2"><a class="docs-anchor" href="#outside" aria-hidden="true" tabindex="-1">#</a><span lang="en">Types from outside</span><span lang="de">Typen von außerhalb</span></h2>
+
+<p lang="en">These types live outside the API package but appear in its signatures. They are released for add-ons and only get additions (see <a href="../#versions">stability</a>).</p>
+<p lang="de">Diese Typen liegen außerhalb des API-Pakets, kommen aber in seinen Signaturen vor. Sie sind für Add-ons freigegeben und werden nur ergänzt (siehe <a href="../#versions">Stabilität</a>).</p>
+<ul class="docs-api__members"><li><code>de.lardtom.propwash.guide.scene.ActorSpec</code> <span class="docs-muted"><span lang="en">used by</span><span lang="de">benutzt von</span> <code>client.PropwashClientApi</code></span></li><li><code>de.lardtom.propwash.guide.scene.Scene</code> <span class="docs-muted"><span lang="en">used by</span><span lang="de">benutzt von</span> <code>client.PropwashClientApi</code></span></li><li><code>de.lardtom.propwash.ui.client.config.ConfigTab</code> <span class="docs-muted"><span lang="en">used by</span><span lang="de">benutzt von</span> <code>client.PropwashClientApi</code></span></li></ul>
+<div class="docs-note docs-note--info"><p lang="en">Everything else outside <code>de.lardtom.propwash.api</code> is internal and may change in any version.</p>
+<p lang="de">Alles andere außerhalb von <code>de.lardtom.propwash.api</code> ist intern und darf sich in jeder Version ändern.</p></div>
+
+</section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../../../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice is kept in your browser. These pages are generated from the Propwash source code of each release. Fonts: <a href="../../../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl bleibt in deinem Browser. Diese Seiten entstehen bei jeder Version aus dem Quellcode von Propwash. Schriften: <a href="../../../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<script src="../../../assets/js/main.js" defer></script>
+<script src="../../../assets/js/docs.js" defer></script>
+</body>
+</html>

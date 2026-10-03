@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="World rules (gamerules) – Propwash FPV docs" data-title-de="Welt-Regeln (Gamerules) – Propwash-FPV-Doku" data-description-en="All 16 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands." data-description-de="Alle 16 Welt-Regeln (Gamerules) von Propwash FPV für Einzelspieler und Server: Schwerkraft, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Kanäle, mit Standardwerten, Bereichen und Befehlen.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>World rules (gamerules) – Propwash FPV docs</title>
+<meta name="description" content="All 16 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="World rules (gamerules) – Propwash FPV docs">
+<meta property="og:description" content="All 16 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="../../assets/css/docs.css">
+<script>
+(function () {
+  var d = document.documentElement, lang = null;
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="docs-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+</svg>
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="de">Zum Inhalt springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
+      <a href="../../#how"><span lang="en">How it works</span><span lang="de">So geht’s</span></a>
+      <a href="../../#flight"><span lang="en">Flight</span><span lang="de">Flug</span></a>
+      <a href="../../#video">Video</a>
+      <a href="../../#racing"><span lang="en">Racing</span><span lang="de">Rennen</span></a>
+      <a href="../../#gallery"><span lang="en">Screenshots</span><span lang="de">Bilder</span></a>
+      <a href="../../#faq">FAQ</a>
+      <a href="../../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+      <a href="../../docs/" aria-current="page"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <header class="docs-hero">
+    <div class="wrap docs-hero__inner">
+      <p class="kicker"><span lang="en">Docs · For players and server owners</span><span lang="de">Doku · Für Spieler und Server-Betreiber</span></p>
+      <h1 class="docs-title"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></h1>
+      <p lang="en" class="docs-lead">16 gamerules decide how drones behave in a world: physics, wind, battery life, crash damage, video range and how many pilots may be on air. They apply to everyone in the world.</p>
+<p lang="de" class="docs-lead">16 Gamerules bestimmen, wie sich Drohnen in einer Welt verhalten: Physik, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und wie viele Piloten gleichzeitig fliegen. Sie gelten für alle in der Welt.</p>
+      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.4.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 9</p>
+    </div>
+  </header>
+  <div class="wrap docs">
+    <nav class="docs-menu" aria-label="Documentation" data-de-aria-label="Dokumentation">
+<details class="docs-menu__fold" data-docs-menu open>
+<summary class="docs-menu__summary"><span lang="en">Docs menu</span><span lang="de">Doku-Menü</span></summary>
+<ol class="docs-menu__list">
+<li class="docs-menu__item"><a href="../../docs/"><span lang="en">Overview</span><span lang="de">Übersicht</span></a></li>
+<li class="docs-menu__item"><a href="../../docs/guide/"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></a></li>
+<li class="docs-menu__item is-current"><a href="../../docs/gamerules/" aria-current="page"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></a>
+<ol class="docs-menu__toc"><li><a href="#how"><span lang="en">How they work</span><span lang="de">So funktionieren sie</span></a></li><li><a href="#group-physics"><span lang="en">Physics</span><span lang="de">Physik</span></a></li><li><a href="#group-weather"><span lang="en">Wind and weather</span><span lang="de">Wind und Wetter</span></a></li><li><a href="#group-battery"><span lang="en">Battery</span><span lang="de">Akku</span></a></li><li><a href="#group-crash"><span lang="en">Crashes and damage</span><span lang="de">Absturz und Schaden</span></a></li><li><a href="#group-video"><span lang="en">Video and radio</span><span lang="de">Video und Funk</span></a></li><li><a href="#recipes"><span lang="en">Recipes for server owners</span><span lang="de">Rezepte für Server-Betreiber</span></a></li><li><a href="#from-04"><span lang="en">Coming from 0.4</span><span lang="de">Umstieg von 0.4</span></a></li><li><a href="#data"><span lang="en">As data</span><span lang="de">Als Daten</span></a></li></ol></li>
+<li class="docs-menu__item"><a href="../../docs/api/"><span lang="en">Add-on API</span><span lang="de">Add-on-API</span></a></li>
+<li class="docs-menu__item docs-menu__item--sub"><a href="../../docs/api/reference/"><span lang="en">API reference</span><span lang="de">API-Referenz</span></a></li>
+<li class="docs-menu__item"><a href="../../docs/parts-format/"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></a></li>
+</ol>
+</details>
+</nav>
+    <article class="docs-body">
+<section class="docs-section" aria-labelledby="how">
+<h2 id="how" class="docs-h2"><a class="docs-anchor" href="#how" aria-hidden="true" tabindex="-1">#</a><span lang="en">How they work</span><span lang="de">So funktionieren sie</span></h2>
+
+<p lang="en">World rules are Minecraft game rules of the world. They apply to every player in it, are saved with the world and reach every client from the server. With all rules at their defaults, drones fly exactly as before.</p>
+<p lang="de">Welt-Regeln sind Minecraft-Spielregeln der Welt. Sie gelten für alle Spieler darin, werden mit der Welt gespeichert und erreichen jeden Client vom Server. Stehen alle Regeln auf Standard, fliegen Drohnen genau wie bisher.</p>
+<figure class="docs-figure">
+<div class="shot"><img src="../../assets/img/docs/world-rules-tab-800.webp" srcset="../../assets/img/docs/world-rules-tab-800.webp 800w, ../../assets/img/docs/world-rules-tab-1600.webp 1600w" sizes="(min-width: 1100px) 760px, 100vw" width="800" height="450" loading="lazy" decoding="async" alt="The World rules tab in the Propwash configurator: physics, wind and weather, battery and crash rules with sliders and switches" data-de-alt="Der Tab „Welt-Regeln“ im Propwash-Konfigurator: Physik, Wind und Wetter, Akku und Absturz mit Reglern und Schaltern"></div>
+<figcaption><span lang="en">Configurator (<kbd>K</kbd>) → <em>World rules</em>. Hover a rule for its explanation, default, range and command.</span><span lang="de">Konfigurator (<kbd>K</kbd>) → <em>Welt-Regeln</em>. Mit der Maus über einer Regel stehen Erklärung, Standard, Bereich und Befehl.</span></figcaption>
+</figure>
+<h3 id="how-change" class="docs-h3"><a class="docs-anchor" href="#how-change" aria-hidden="true" tabindex="-1">#</a><span lang="en">Who can change them</span><span lang="de">Wer sie ändern darf</span></h3>
+<ul>
+<li><span lang="en"><strong>Singleplayer and LAN host:</strong> always, in the configurator tab <em>World rules</em>, even in a world without cheats.</span><span lang="de"><strong>Einzelspieler und LAN-Host:</strong> immer, im Konfigurator-Tab <em>Welt-Regeln</em>, auch in einer Welt ohne Cheats.</span></li>
+<li><span lang="en"><strong>Servers:</strong> operators (permission level 2), in the same tab or with <code>/gamerule</code>.</span><span lang="de"><strong>Server:</strong> Operatoren (Rechtestufe 2), im selben Tab oder mit <code>/gamerule</code>.</span></li>
+<li><span lang="en"><strong>Everyone else</strong> sees the same tab as a read-only list with every explanation, so nobody has to guess what applies.</span><span lang="de"><strong>Alle anderen</strong> sehen denselben Tab als lesbare Liste mit allen Erklärungen und müssen nicht raten, was gilt.</span></li>
+<li><span lang="en">Every change made in the tab shows up for all players as a grey chat line naming who changed which rule.</span><span lang="de">Jede Änderung aus dem Tab sehen alle Spieler als graue Chatzeile, die nennt, wer welche Regel geändert hat.</span></li>
+</ul>
+<h3 id="how-commands" class="docs-h3"><a class="docs-anchor" href="#how-commands" aria-hidden="true" tabindex="-1">#</a><span lang="en">Commands</span><span lang="de">Befehle</span></h3>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Chat</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>/gamerule propwash:&lt;rule&gt; &lt;value&gt;
+/gamerule propwash:wind
+/propwash rules</code></pre>
+</figure>
+<p lang="en"><code>/gamerule</code> without a value shows the current one. <code>/propwash rules</code> lists the server settings and all world rules at once. When you create a world, the rules are also in Minecraft’s <em>Game Rules</em> screen under the category <em>Propwash FPV</em>.</p>
+<p lang="de"><code>/gamerule</code> ohne Wert zeigt den aktuellen. <code>/propwash rules</code> listet Server-Einstellungen und alle Welt-Regeln auf einmal. Beim Anlegen einer Welt stehen die Regeln auch in Minecrafts Fenster <em>Spielregeln</em> unter der Kategorie <em>Propwash FPV</em>.</p>
+<h3 id="how-leaderboards" class="docs-h3"><a class="docs-anchor" href="#how-leaderboards" aria-hidden="true" tabindex="-1">#</a><span lang="en">Leaderboards</span><span lang="de">Bestenlisten</span></h3>
+<p lang="en">Rules marked <span class="docs-badge docs-badge--physics">physics</span> change how drones fly (11 of 16). As soon as one of them differs from its default, flights no longer count for leaderboards and server records, so records stay comparable. The server checks this itself.</p>
+<p lang="de">Regeln mit <span class="docs-badge docs-badge--physics">Physik</span> ändern, wie Drohnen fliegen (11 von 16). Sobald eine davon vom Standard abweicht, zählen Flüge nicht mehr für Bestenlisten und Server-Rekorde, damit Rekorde vergleichbar bleiben. Das prüft der Server selbst.</p>
+
+</section>
+<section class="docs-section" aria-labelledby="group-physics">
+<h2 id="group-physics" class="docs-h2"><a class="docs-anchor" href="#group-physics" aria-hidden="true" tabindex="-1">#</a><span lang="en">Physics</span><span lang="de">Physik</span></h2>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--rules">
+<thead><tr><th scope="col"><span lang="en">Rule</span><span lang="de">Regel</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Values</span><span lang="de">Werte</span></th><th scope="col"><span lang="en">What it does</span><span lang="de">Wirkung</span></th></tr></thead>
+<tbody>
+<tr id="rule-gravity_scale"><th scope="row"><span class="docs-rule__title"><span lang="en">Gravity</span><span lang="de">Schwerkraft</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>gravity_scale</code></th><td>100 %</td><td>80–150 %</td><td><p lang="en">Gravity for drones in percent of Earth's gravity, 100 is 9.81 m/s². Higher: drones fall faster and need more throttle to hover. The workbench and overview always calculate with real Earth gravity.</p>
+<p lang="de">Schwerkraft für Drohnen in Prozent der Erdschwerkraft, 100 entspricht 9,81 m/s². Mehr: Drohnen fallen schneller und brauchen mehr Gas zum Schweben. Werkbank und Übersicht rechnen immer mit der echten Erdschwerkraft.</p><p class="docs-rule__example"><code>/gamerule propwash:gravity_scale 105</code></p></td></tr>
+<tr id="rule-prop_wash"><th scope="row"><span class="docs-rule__title"><span lang="en">Prop wash</span><span lang="de">Prop-Wash</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>prop_wash</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">Turbulence when a drone descends through its own downwash.</p>
+<p lang="de">Turbulenzen, wenn eine Drohne durch ihren eigenen Abwind sinkt.</p><p class="docs-rule__example"><code>/gamerule propwash:prop_wash false</code></p></td></tr>
+<tr id="rule-ground_effect"><th scope="row"><span class="docs-rule__title"><span lang="en">Ground effect</span><span lang="de">Bodeneffekt</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>ground_effect</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">Extra lift close to the ground.</p>
+<p lang="de">Mehr Auftrieb dicht über dem Boden.</p><p class="docs-rule__example"><code>/gamerule propwash:ground_effect false</code></p></td></tr>
+<tr id="rule-hardware_limits"><th scope="row"><span class="docs-rule__title"><span lang="en">Hardware limits</span><span lang="de">Hardware-Grenzen</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>hardware_limits</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">On: hot motors throttle back and wear out, and an ESC burns out on arming when the battery has more cells than it allows. Off: no thermal throttling, no heat wear, no burnt ESC.</p>
+<p lang="de">An: Heiße Motoren drosseln die Leistung und nutzen sich ab, ein ESC brennt beim Scharfschalten durch, wenn der Akku mehr Zellen hat als erlaubt. Aus: keine Hitzedrosselung, kein Hitzeverschleiß, kein durchgebrannter ESC.</p><p class="docs-rule__example"><code>/gamerule propwash:hardware_limits false</code></p></td></tr>
+</tbody>
+</table></div>
+</section>
+<section class="docs-section" aria-labelledby="group-weather">
+<h2 id="group-weather" class="docs-h2"><a class="docs-anchor" href="#group-weather" aria-hidden="true" tabindex="-1">#</a><span lang="en">Wind and weather</span><span lang="de">Wind und Wetter</span></h2>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--rules">
+<thead><tr><th scope="col"><span lang="en">Rule</span><span lang="de">Regel</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Values</span><span lang="de">Werte</span></th><th scope="col"><span lang="en">What it does</span><span lang="de">Wirkung</span></th></tr></thead>
+<tbody>
+<tr id="rule-wind"><th scope="row"><span class="docs-rule__title">Wind</span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>wind</code></th><td>1 (Mild)</td><td><span lang="en"><code>0</code> Off, <code>1</code> Mild, <code>2</code> Windy, <code>3</code> Storm</span><span lang="de"><code>0</code> Aus, <code>1</code> Mild, <code>2</code> Windig, <code>3</code> Sturm</span></td><td><p lang="en">Strength of wind and gusts. Off: calm. Mild: wind depends on weather and height, almost calm under a roof (default). Windy: twice as strong. Storm: three times as strong – in a thunderstorm small drones can barely fly against it.</p>
+<p lang="de">Stärke von Wind und Böen. Aus: windstill. Mild: Wind je nach Wetter und Höhe, unter Dächern fast still (Standard). Windig: doppelt so stark. Sturm: dreimal so stark – bei Gewitter kommen kleine Drohnen kaum noch dagegen an.</p><p class="docs-rule__example"><code>/gamerule propwash:wind 2</code></p></td></tr>
+<tr id="rule-turbulence"><th scope="row"><span class="docs-rule__title"><span lang="en">Turbulence</span><span lang="de">Turbulenz</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>turbulence</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">Rough air: gusts and the shaking in the drone's own downwash. Off: the wind blows steadily.</p>
+<p lang="de">Unruhige Luft: Böen und das Rütteln im eigenen Abwind. Aus: Der Wind weht gleichmäßig.</p><p class="docs-rule__example"><code>/gamerule propwash:turbulence false</code></p></td></tr>
+</tbody>
+</table></div>
+</section>
+<section class="docs-section" aria-labelledby="group-battery">
+<h2 id="group-battery" class="docs-h2"><a class="docs-anchor" href="#group-battery" aria-hidden="true" tabindex="-1">#</a><span lang="en">Battery</span><span lang="de">Akku</span></h2>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--rules">
+<thead><tr><th scope="col"><span lang="en">Rule</span><span lang="de">Regel</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Values</span><span lang="de">Werte</span></th><th scope="col"><span lang="en">What it does</span><span lang="de">Wirkung</span></th></tr></thead>
+<tbody>
+<tr id="rule-battery_scale"><th scope="row"><span class="docs-rule__title"><span lang="en">Battery life</span><span lang="de">Akkulaufzeit</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>battery_scale</code></th><td>100 %</td><td><span lang="en">0–1000 %; <code>0</code> = infinite</span><span lang="de">0–1000 %; <code>0</code> = unendlich</span></td><td><p lang="en">How long a battery lasts, in percent: 200 twice as long, 50 half as long, 0 infinite (the battery does not drain while flying). The mAh drawn in the OSD count along.</p>
+<p lang="de">Wie lange ein Akku hält, in Prozent: 200 doppelt so lange, 50 halb so lange, 0 unendlich (der Akku entlädt sich beim Fliegen nicht). Die verbrauchten mAh im OSD zählen mit.</p><p class="docs-rule__example"><code>/gamerule propwash:battery_scale 110</code></p></td></tr>
+<tr id="rule-battery_sag"><th scope="row"><span class="docs-rule__title"><span lang="en">Voltage sag</span><span lang="de">Spannungseinbruch</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>battery_sag</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">On: battery voltage falls as the pack drains, so the drone gets weaker towards the end. Off: resting voltage stays at full charge. Load sag from the internal resistance stays either way.</p>
+<p lang="de">An: Die Akkuspannung sinkt mit der Ladung, die Drohne wird gegen Ende des Akkus träger. Aus: Die Ruhespannung bleibt auf vollem Akku. Der Einbruch unter Last durch den Innenwiderstand bleibt in beiden Fällen.</p><p class="docs-rule__example"><code>/gamerule propwash:battery_sag false</code></p></td></tr>
+</tbody>
+</table></div>
+</section>
+<section class="docs-section" aria-labelledby="group-crash">
+<h2 id="group-crash" class="docs-h2"><a class="docs-anchor" href="#group-crash" aria-hidden="true" tabindex="-1">#</a><span lang="en">Crashes and damage</span><span lang="de">Absturz und Schaden</span></h2>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--rules">
+<thead><tr><th scope="col"><span lang="en">Rule</span><span lang="de">Regel</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Values</span><span lang="de">Werte</span></th><th scope="col"><span lang="en">What it does</span><span lang="de">Wirkung</span></th></tr></thead>
+<tbody>
+<tr id="rule-crash_damage"><th scope="row"><span class="docs-rule__title"><span lang="en">Crash damage</span><span lang="de">Crash-Schaden</span></span><br><code class="docs-rule__id">propwash:<wbr>crash_damage</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">Crashes wear the parts down: props first, motors, camera and frame much later. Also covers heat wear and burnt ESCs. Off: parts never wear.</p>
+<p lang="de">Abstürze nutzen die Bauteile ab: Props zuerst, Motoren, Kamera und Rahmen viel später. Gilt auch für Hitzeverschleiß und durchgebrannte ESCs. Aus: Teile nutzen sich nie ab.</p><p class="docs-rule__example"><code>/gamerule propwash:crash_damage false</code></p></td></tr>
+<tr id="rule-crash_damage_scale"><th scope="row"><span class="docs-rule__title"><span lang="en">Damage strength</span><span lang="de">Schadensstärke</span></span><br><code class="docs-rule__id">propwash:<wbr>crash_damage_scale</code></th><td>100 %</td><td>25–300 %</td><td><p lang="en">How much crashes wear the parts, in percent; 100 is normal. Only with crash damage on.</p>
+<p lang="de">Wie stark Abstürze die Teile abnutzen, in Prozent; 100 ist normal. Wirkt nur mit eingeschaltetem Crash-Schaden.</p><p class="docs-rule__example"><code>/gamerule propwash:crash_damage_scale 105</code></p></td></tr>
+<tr id="rule-crash_tolerance"><th scope="row"><span class="docs-rule__title"><span lang="en">Crash tolerance</span><span lang="de">Crash-Toleranz</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>crash_tolerance</code></th><td>100 %</td><td>50–400 %</td><td><p lang="en">The impact speed from which a hit counts as a crash, in percent; 100 is normal, higher is more forgiving.</p>
+<p lang="de">Ab welcher Aufprallgeschwindigkeit ein Aufprall als Absturz zählt, in Prozent; 100 ist normal, höher ist nachsichtiger.</p><p class="docs-rule__example"><code>/gamerule propwash:crash_tolerance 105</code></p></td></tr>
+<tr id="rule-crash_disarm"><th scope="row"><span class="docs-rule__title"><span lang="en">Crash disarm</span><span lang="de">Absturz entschärft</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>crash_disarm</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">After a hard impact the flight controller shuts the motors off.</p>
+<p lang="de">Nach einem harten Aufprall schaltet der Flugcontroller die Motoren ab.</p><p class="docs-rule__example"><code>/gamerule propwash:crash_disarm false</code></p></td></tr>
+<tr id="rule-prop_strikes"><th scope="row"><span class="docs-rule__title"><span lang="en">Prop strikes</span><span lang="de">Propellertreffer</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>prop_strikes</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">A prop clipping an obstacle slows its motor and sends the drone tumbling.</p>
+<p lang="de">Streift ein Propeller ein Hindernis, bremst der Motor ab und die Drohne gerät ins Taumeln.</p><p class="docs-rule__example"><code>/gamerule propwash:prop_strikes false</code></p></td></tr>
+</tbody>
+</table></div>
+</section>
+<section class="docs-section" aria-labelledby="group-video">
+<h2 id="group-video" class="docs-h2"><a class="docs-anchor" href="#group-video" aria-hidden="true" tabindex="-1">#</a><span lang="en">Video and radio</span><span lang="de">Video und Funk</span></h2>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table docs-table--rules">
+<thead><tr><th scope="col"><span lang="en">Rule</span><span lang="de">Regel</span></th><th scope="col"><span lang="en">Default</span><span lang="de">Standard</span></th><th scope="col"><span lang="en">Values</span><span lang="de">Werte</span></th><th scope="col"><span lang="en">What it does</span><span lang="de">Wirkung</span></th></tr></thead>
+<tbody>
+<tr id="rule-infinite_range_analog"><th scope="row"><span class="docs-rule__title"><span lang="en">Infinite range (analog)</span><span lang="de">Unendliche Reichweite analog</span></span><br><code class="docs-rule__id">propwash:<wbr>infinite_range_analog</code></th><td><span lang="en">Off</span><span lang="de">Aus</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">Drones with analog video: picture and radio link never drop – neither with distance nor behind obstacles. The server's distance limit still applies.</p>
+<p lang="de">Drohnen mit analogem Video: Bild und Funk reißen nie ab – weder durch Entfernung noch durch Hindernisse. Die Entfernungsgrenze des Servers gilt weiter.</p><p class="docs-rule__example"><code>/gamerule propwash:infinite_range_analog true</code></p></td></tr>
+<tr id="rule-infinite_range_digital"><th scope="row"><span class="docs-rule__title"><span lang="en">Infinite range (digital)</span><span lang="de">Unendliche Reichweite digital</span></span><br><code class="docs-rule__id">propwash:<wbr>infinite_range_digital</code></th><td><span lang="en">Off</span><span lang="de">Aus</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">Drones with digital video: picture and radio link never drop – neither with distance nor behind obstacles. The server's distance limit still applies.</p>
+<p lang="de">Drohnen mit digitalem Video: Bild und Funk reißen nie ab – weder durch Entfernung noch durch Hindernisse. Die Entfernungsgrenze des Servers gilt weiter.</p><p class="docs-rule__example"><code>/gamerule propwash:infinite_range_digital true</code></p></td></tr>
+<tr id="rule-max_video_channels"><th scope="row"><span class="docs-rule__title"><span lang="en">Video channels</span><span lang="de">Videokanäle</span></span><br><code class="docs-rule__id">propwash:<wbr>max_video_channels</code></th><td><span lang="en">0 (Unlimited)</span><span lang="de">0 (Unbegrenzt)</span></td><td><span lang="en">0–64; <code>0</code> = unlimited</span><span lang="de">0–64; <code>0</code> = unbegrenzt</span></td><td><p lang="en">How many video transmitters may be on air at the same time – like the frequency board at a race. When every channel is taken, no further drone can take off until a pilot lands. Pilots already in the air keep flying. 0 = unlimited.</p>
+<p lang="de">Wie viele Videosender gleichzeitig funken dürfen – wie die Kanaltafel am Rennplatz. Sind alle Kanäle belegt, startet keine weitere Drohne, bis ein Pilot landet. Wer schon fliegt, fliegt weiter. 0 = unbegrenzt.</p><p class="docs-rule__example"><code>/gamerule propwash:max_video_channels 1</code></p></td></tr>
+</tbody>
+</table></div>
+</section>
+<section class="docs-section" aria-labelledby="recipes">
+<h2 id="recipes" class="docs-h2"><a class="docs-anchor" href="#recipes" aria-hidden="true" tabindex="-1">#</a><span lang="en">Recipes for server owners</span><span lang="de">Rezepte für Server-Betreiber</span></h2>
+
+<p lang="en">A few combinations that work well. Type them in the chat as an operator or change the same rules in the tab.</p>
+<p lang="de">Ein paar Kombinationen, die gut funktionieren. Als Operator in den Chat tippen oder dieselben Regeln im Tab ändern.</p>
+<div class="docs-recipes">
+<div class="docs-card docs-card--plain" id="recipe-relaxed">
+<h3 class="docs-card__title"><span lang="en">Relaxed building server</span><span lang="de">Entspannter Bau-Server</span></h3>
+<p lang="en">Crashes cost nothing and batteries last twice as long. Battery life counts as physics, so flights on this server do not go into the leaderboards.</p>
+<p lang="de">Abstürze kosten nichts, Akkus halten doppelt so lange. Die Akkulaufzeit zählt zur Physik, Flüge auf diesem Server landen also nicht in den Bestenlisten.</p>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Chat</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>/gamerule propwash:crash_damage false
+/gamerule propwash:battery_scale 200</code></pre>
+</figure>
+</div>
+<div class="docs-card docs-card--plain" id="recipe-race-night">
+<h3 class="docs-card__title"><span lang="en">Race night</span><span lang="de">Rennabend</span></h3>
+<p lang="en">At most eight pilots on air at once, like the eight channels of a real race heat, and crashes do not wear the parts, so nobody swaps props between heats. Both rules leave the physics alone: laps still count for the leaderboard.</p>
+<p lang="de">Höchstens acht Piloten gleichzeitig in der Luft, wie die acht Kanäle eines echten Rennlaufs, und Abstürze nutzen keine Teile ab, damit niemand zwischen den Läufen Props tauscht. Beide Regeln lassen die Physik in Ruhe: Runden zählen weiter für die Bestenliste.</p>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Chat</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>/gamerule propwash:max_video_channels 8
+/gamerule propwash:crash_damage false</code></pre>
+</figure>
+</div>
+<div class="docs-card docs-card--plain" id="recipe-long-range">
+<h3 class="docs-card__title"><span lang="en">Exploring the world</span><span lang="de">Die Welt erkunden</span></h3>
+<p lang="en">Digital drones never lose picture or radio link and batteries last five times as long. The distance limit in server.json still applies.</p>
+<p lang="de">Digitale Drohnen verlieren nie Bild und Funk, Akkus halten fünfmal so lange. Die Entfernungsgrenze aus server.json gilt weiter.</p>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Chat</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>/gamerule propwash:infinite_range_digital true
+/gamerule propwash:battery_scale 500</code></pre>
+</figure>
+</div>
+<div class="docs-card docs-card--plain" id="recipe-hardcore">
+<h3 class="docs-card__title">Hardcore</h3>
+<p lang="en">Storm-strength wind, crashes count earlier and wear the parts twice as fast. Wind and crash tolerance change the physics, so these flights stay off the leaderboards.</p>
+<p lang="de">Wind in Sturmstärke, Abstürze zählen früher und nutzen die Teile doppelt so schnell ab. Wind und Crash-Toleranz ändern die Physik, diese Flüge bleiben also aus den Bestenlisten.</p>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Chat</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>/gamerule propwash:wind 3
+/gamerule propwash:crash_tolerance 75
+/gamerule propwash:crash_damage_scale 200</code></pre>
+</figure>
+</div>
+</div>
+<div class="docs-note docs-note--info"><p lang="en">Back to normal: right-click a rule in the tab for its default, or use the tab’s Defaults button for all of them.</p>
+<p lang="de">Zurück zum Normalzustand: Rechtsklick auf eine Regel im Tab setzt ihren Standard, der Knopf „Standard“ alle.</p></div>
+
+</section>
+<section class="docs-section" aria-labelledby="from-04">
+<h2 id="from-04" class="docs-h2"><a class="docs-anchor" href="#from-04" aria-hidden="true" tabindex="-1">#</a><span lang="en">Coming from 0.4</span><span lang="de">Umstieg von 0.4</span></h2>
+<ul>
+<li><span lang="en">The personal <em>Simulation</em> tab is gone; its physics options are world rules now. Old values in <code>config/propwash/drone.json</code> are ignored and removed on the next save.</span><span lang="de">Der persönliche Tab <em>Simulation</em> ist weg, seine Physik-Optionen sind jetzt Welt-Regeln. Alte Werte in <code>config/propwash/drone.json</code> werden ignoriert und beim nächsten Speichern entfernt.</span></li>
+<li><span lang="en">The server setting <code>partWear</code> in <code>server.json</code> is replaced by <code>/gamerule propwash:crash_damage false</code>.</span><span lang="de">Die Server-Einstellung <code>partWear</code> in <code>server.json</code> ersetzt <code>/gamerule propwash:crash_damage false</code>.</span></li>
+<li><span lang="en">Creative goggles no longer unlock physics options. They keep their free radio range and their own video settings.</span><span lang="de">Die Kreativ-Brille schaltet keine Physik-Optionen mehr frei. Sie behält ihre freie Funkreichweite und ihre eigenen Video-Einstellungen.</span></li>
+<li><span lang="en">Existing worlds get every rule with its default when they are loaded.</span><span lang="de">Bestehende Welten bekommen beim Laden jede Regel mit ihrem Standardwert.</span></li>
+<li><span lang="en">Personal settings stay personal: controls, OSD, FPV display and graphics.</span><span lang="de">Persönlich bleibt, was persönlich ist: Steuerung, OSD, FPV-Anzeige und Grafik.</span></li>
+</ul>
+</section>
+<section class="docs-section" aria-labelledby="data">
+<h2 id="data" class="docs-h2"><a class="docs-anchor" href="#data" aria-hidden="true" tabindex="-1">#</a><span lang="en">As data</span><span lang="de">Als Daten</span></h2>
+
+<p lang="en">This page is generated from the rule catalogue of Propwash 0.5.0. The same list as JSON (id, type, default, range, group, texts in English and German, example command) is <a href="gamerules.json" download>gamerules.json</a>, for server panels and tools.</p>
+<p lang="de">Diese Seite entsteht aus dem Regel-Katalog von Propwash 0.5.0. Dieselbe Liste als JSON (Id, Typ, Standard, Bereich, Gruppe, Texte auf Englisch und Deutsch, Beispielbefehl) ist <a href="gamerules.json" download>gamerules.json</a>, für Server-Panels und Werkzeuge.</p>
+
+</section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice is kept in your browser. These pages are generated from the Propwash source code of each release. Fonts: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl bleibt in deinem Browser. Diese Seiten entstehen bei jeder Version aus dem Quellcode von Propwash. Schriften: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js" defer></script>
+<script src="../../assets/js/docs.js" defer></script>
+</body>
+</html>
