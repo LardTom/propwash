@@ -11,7 +11,8 @@ This repository contains only the website, no mod source code.
 - `assets/css/style.css` – styles of both pages; `assets/css/configurator.css` – configurator only
 - `assets/js/main.js` – language switch, section menu, hero feed with pause switch, image switchers, video demo, gallery lightbox
 - `assets/js/configurator/` – the configurator as plain ES modules:
-  - core: `data.js` (catalog), `sharecode.js` + `crc32.js` + `inflate.js` + `tune.js` (PW1 share codes),
+  - core: `data.js` (catalog), `sharecode.js` (PW1 share codes and the entry point; `SHARE_FORMAT` chooses what new
+    codes use), `sharecode2.js` + `sharecode2-tables.js` (the shorter PW2 codes), `crc32.js`, `inflate.js`, `tune.js`,
     `rules.js` (compatibility), `analysis.js` (flight analysis with the energy balance of Propwash 0.4.0), `fpv.js` (FPV camera rig and props in view),
     `tuning.js` (tune defaults and editing), `index.js`
   - page: `ui.js` (part pickers, paint, tune editor, OSD layer, stats, share code, import), `i18n.js` (texts),
@@ -27,7 +28,7 @@ This repository contains only the website, no mod source code.
 
 No build step, no external requests, no cookies, no tracking. The chosen language and the hero's pause switch are
 kept in the browser's `localStorage`; the drone built in the configurator lives only in the page address
-(`configurator/#PW1-…`).
+(`configurator/#PW2…` or `#PW1-…`).
 
 ## Drone configurator
 

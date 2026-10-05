@@ -1,6 +1,7 @@
-// PW1 share codes: encoder and tolerant decoder, a port of the codec in "Propwash: Just More Parts"
-// (spec: sharecode.md revision 1.2). Uncompressed codes are byte-identical to the mod's; compressed codes too,
-// because the vendored deflate is a zlib port (level 9, raw).
+// Share codes: PW1 encoder and tolerant decoder, a port of the codec in "Propwash: Just More Parts"
+// (spec: sharecode.md, PW1 revision 1.2), and the entry point for the shorter PW2 codes (sharecode2.js, revision 2.0).
+// Decoding reads both formats; SHARE_FORMAT chooses what encode() writes. Uncompressed PW1 codes are byte-identical
+// to the mod's; compressed codes too, because the vendored deflate is a zlib port (level 9, raw).
 //
 // Content shape used by encode() and returned by decode():
 //   {
@@ -17,6 +18,13 @@ import { crc32 } from './crc32.js';
 import { inflateRaw } from './inflate.js';
 import { TUNE_KEYS, tuneIndex, isSharedKey } from './tune.js';
 import { deflateRaw } from '../../vendor/pako/deflate.js';
+import { encodePw2, parsePw2, PW2_FORMAT } from './sharecode2.js';
+
+/**
+ * Format of new codes: 'PW1' or 'PW2'. Decoding always reads both. Switch to 'PW2' once Just More Parts with PW2
+ * is out (the mod writes PW2 from then on, older versions only read PW1).
+ */
+export const SHARE_FORMAT = 'PW1';
 
 export const FORMAT = 'PW1';
 export const PREFIX = 'PW1-';
@@ -72,7 +80,7 @@ export function javaStrip(text) {
 }
 
 // String#getBytes(UTF_8): unpaired surrogates become '?'.
-function utf8Encode(text) {
+export function utf8Encode(text) {
   const out = [];
   for (let i = 0; i < text.length; i++) {
     let c = text.charCodeAt(i);
@@ -192,7 +200,7 @@ class Writer {
   }
 }
 
-class Fail {
+export class Fail {
   constructor(status) {
     this.status = status;
   }
@@ -521,13 +529,16 @@ function payload(content) {
 }
 
 /**
- * Encodes content as a PW1 share code.
+ * Encodes content as a share code in SHARE_FORMAT (or the given format).
  * @param {object} content see the shape at the top of this file (normalised first)
- * @param {{compression?: 'auto' | 'never' | 'always'}} [options]
- * @returns {string} 'PW1-XXXXX-…'
+ * @param {{format?: 'PW1' | 'PW2', compression?: 'auto' | 'never' | 'always'}} [options] compression only applies
+ *   to PW1 (PW2 deflates the OSD layout by itself when that is shorter)
+ * @returns {string} 'PW2…' or 'PW1-XXXXX-…'
  */
-export function encode(content, { compression = 'auto' } = {}) {
+export function encode(content, { format = SHARE_FORMAT, compression = 'auto' } = {}) {
   const normal = normalizeContent(content);
+  if (format === PW2_FORMAT) return encodePw2(normal);
+  if (format !== FORMAT) throw new Error(`unknown share code format: ${format}`);
   const data = payload(normal);
   let stored = data;
   let flags = 0;
@@ -700,10 +711,12 @@ function decodeChecked(code, lookup, aliases) {
   if (code == null) return failed('EMPTY');
   const input = String(code);
   if (input.length > HARD_INPUT_LIMIT) return failed('TOO_LONG');
-  const s = input.replace(INPUT_SPACE, '').toUpperCase();
+  const compact = input.replace(INPUT_SPACE, '');
+  const s = compact.toUpperCase();
   if (!s) return failed('EMPTY');
   if (s.length > LIMITS.inputChars) return failed('TOO_LONG');
-  if (!s.startsWith(FORMAT)) return failed('INVALID_PREFIX');
+  if (s.startsWith(PW2_FORMAT)) return finish(parsePw2(compact.slice(PW2_FORMAT.length).replace(/-/g, '')), lookup, aliases);
+  if (!s.startsWith(FORMAT)) return failed(newerFormat(s) ? 'UNSUPPORTED_VERSION' : 'INVALID_PREFIX');
   const frame = base32Decode(s.slice(FORMAT.length).replace(/-/g, ''));
   if (frame.length > LIMITS.frameBytes) return failed('TOO_LARGE');
   if (frame.length < LIMITS.minFrameBytes) return failed('TRUNCATED');
@@ -720,6 +733,12 @@ function decodeChecked(code, lookup, aliases) {
     return failed('TOO_LARGE');
   }
   return parse(data, lookup, aliases);
+}
+
+// 'PW3…' and later: a code from a newer version.
+function newerFormat(upper) {
+  const m = /^PW([0-9]{1,3})/.exec(upper);
+  return !!m && Number(m[1]) > 2;
 }
 
 function parse(data, lookup, aliases) {
@@ -739,6 +758,11 @@ function parse(data, lookup, aliases) {
     if (!block.atEnd()) throw new Fail('CORRUPT');
   }
   if (!reader.atEnd()) throw new Fail('CORRUPT');
+  return finish(parsed, lookup, aliases);
+}
+
+// Aliases, unknown and wrong-kind parts and the result object, shared by PW1 and PW2 (ShareCodec.finish).
+function finish(parsed, lookup, aliases) {
   if (!parsed.parts) throw new Fail('CORRUPT');
 
   const renamed = new Map();
@@ -805,13 +829,18 @@ function parse(data, lookup, aliases) {
 // ---------------------------------------------------------------------------------------------------------------
 // Links
 
-/** Share link for a code: '<page>#PW1-…'. */
+/** Format of a code: 'PW2' for codes starting with PW2, otherwise 'PW1'. */
+export function formatOf(code) {
+  return /^\s*pw2/i.test(String(code)) ? PW2_FORMAT : FORMAT;
+}
+
+/** Share link for a code: '<page>#PW2…' or '<page>#PW1-…'. */
 export function shareLink(code, pageUrl) {
   const base = String(pageUrl).split('#')[0];
   return `${base}#${code}`;
 }
 
-/** The code in a location hash ('#PW1-…', also URL-encoded or lower case), or null. */
+/** The code in a location hash ('#PW2…' or '#PW1-…', also URL-encoded; PW1 also in lower case), or null. */
 export function codeFromHash(hash) {
   if (!hash) return null;
   let text = String(hash).replace(/^#/, '');
@@ -821,5 +850,5 @@ export function codeFromHash(hash) {
     return null;
   }
   text = text.trim();
-  return /^pw1/i.test(text) ? text : null;
+  return /^pw[12]/i.test(text) ? text : null;
 }
