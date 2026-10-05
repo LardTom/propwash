@@ -64,7 +64,7 @@ check(page.includes('src="../assets/js/roadmap/view.js"'), 'roadmap/index.html l
 check(page.includes('href="../assets/css/roadmap.css"'), 'roadmap/index.html loads assets/css/roadmap.css');
 check(page.includes('href="../assets/data/roadmap.json"'), 'roadmap/index.html preloads assets/data/roadmap.json');
 check(/data-rm-root/.test(page) && /data-rm-current/.test(page) && /data-rm-tally/.test(page) && /data-rm-jump/.test(page), 'roadmap/index.html has the render targets');
-for (const [file, href] of [['index.html', 'roadmap/'], ['configurator/index.html', '../roadmap/'], ['roadmap/index.html', './']]) {
+for (const [file, href] of [['index.html', 'roadmap/'], ['configurator/index.html', '../roadmap/'], ['roadmap/index.html', './'], ['changelog/index.html', '../roadmap/']]) {
   const nav = /<nav class="site-nav"[\s\S]*?<\/nav>/.exec(read(file))?.[0] || '';
   check(nav.includes(`href="${href}"`), `${file}: main navigation links to the roadmap (${href})`);
 }

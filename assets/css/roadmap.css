@@ -572,6 +572,10 @@
   text-transform: uppercase;
 }
 
+.rm-older__foot {
+  margin-top: clamp(14px, 1.6vw, 18px);
+}
+
 .rm-group--older[open] .rm-group__more .ri {
   transform: rotate(180deg);
 }

@@ -168,7 +168,8 @@ function group(groupData, horizon, g) {
         groupData.version && groupData.title ? el('span', { class: 'rm-older__title' }, bi(groupData.title)) : null,
         el('span', { class: 'rm-older__count' }, bi(ringSummary(count))),
         el('span', { class: 'rm-group__more' }, bi(UI.older), icon('chevron', 14))),
-      grid);
+      grid,
+      groupData.link ? el('div', { class: 'rm-older__foot' }, linkButton(groupData.link, 'btn btn--ghost rm-group__link')) : null);
   }
   return el('article', { class: cls, 'aria-labelledby': headingId, 'data-span': span }, headed ? groupHead(groupData, headingId) : null, grid);
 }
