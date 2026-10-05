@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="Changelog – Propwash FPV" data-title-de="Changelog – Propwash FPV" data-description-en="Every release of Propwash FPV and its add-on Just More Parts, point by point: highlights, new features, improvements, fixes and compatibility." data-description-de="Jede Version von Propwash FPV und dem Add-on Just More Parts, Punkt für Punkt: Highlights, Neues, Verbesserungen, Fehlerbehebungen und Kompatibilität.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Changelog – Propwash FPV</title>
+<meta name="description" content="Every release of Propwash FPV and its add-on Just More Parts, point by point: highlights, new features, improvements, fixes and compatibility.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="Changelog – Propwash FPV">
+<meta property="og:description" content="Every release of Propwash FPV and Just More Parts, point by point.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="FPV view through the goggles in Propwash FPV: flying towards the checkered start/finish gate with the Betaflight-style OSD">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Changelog – Propwash FPV">
+<meta name="twitter:description" content="Every release of Propwash FPV and Just More Parts, point by point.">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/css/style.css">
+<link rel="stylesheet" href="../assets/css/changelog.css">
+<link rel="modulepreload" href="../assets/js/changelog/data.js">
+<link rel="preload" href="../assets/data/changelog.json" as="fetch" type="application/json" crossorigin>
+<script>
+(function () {
+  var d = document.documentElement, lang = null;
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="cl-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+  <symbol id="ri-check" viewBox="0 0 16 16"><path d="M3.2 8.6 6.4 11.8 12.8 4.6"/></symbol>
+  <symbol id="ri-spark" viewBox="0 0 16 16"><path d="M8 2.6c.5 2.8 2.1 4.4 5 5-2.9.6-4.5 2.2-5 5-.5-2.8-2.1-4.4-5-5 2.9-.6 4.5-2.2 5-5z"/></symbol>
+  <symbol id="ri-chevron" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></symbol>
+  <symbol id="ri-arrow-down" viewBox="0 0 16 16"><path d="M8 3v10M3.5 8.5 8 13l4.5-4.5"/></symbol>
+  <symbol id="ri-arrow-right" viewBox="0 0 16 16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5"/></symbol>
+  <symbol id="ri-prop" viewBox="0 0 16 16"><circle cx="8" cy="8" r="1.5"/><path d="M8 6.5C7 4.9 7.1 2.8 8.3 1.6c1.3.9 1.4 3.2-.3 4.9z"/><path d="M8 6.5C7 4.9 7.1 2.8 8.3 1.6c1.3.9 1.4 3.2-.3 4.9z" transform="rotate(120 8 8)"/><path d="M8 6.5C7 4.9 7.1 2.8 8.3 1.6c1.3.9 1.4 3.2-.3 4.9z" transform="rotate(240 8 8)"/></symbol>
+  <symbol id="ri-puzzle" viewBox="0 0 16 16"><path d="M2.4 4.6h3a1.6 1.6 0 1 1 3.2 0h3v3a1.6 1.6 0 1 1 0 3.2v3.1H2.4z"/></symbol>
+  <symbol id="ri-plus" viewBox="0 0 16 16"><path d="M8 2.8v10.4M2.8 8h10.4"/></symbol>
+  <symbol id="ri-up" viewBox="0 0 16 16"><path d="M1.8 12.2 6 8l2.8 2.8 5.2-5.2"/><path d="M10.4 5.6H14V9.2"/></symbol>
+  <symbol id="ri-bug" viewBox="0 0 16 16"><rect x="5.2" y="5" width="5.6" height="8.4" rx="2.8"/><path d="M8 7.6v5.6"/><path d="M5.2 8.8H2.4M13.6 8.8h-2.8M5.4 11.8l-2.2 1.5M10.6 11.8l2.2 1.5M5.6 6 3.8 4.3M10.4 6l1.8-1.7M6.4 3.2 7 4.4M9.6 3.2 9 4.4"/></symbol>
+  <symbol id="ri-port" viewBox="0 0 16 16"><path d="M13.6 5H3.4M6 2.4 3.4 5 6 7.6M2.4 11h10.2M10 8.4l2.6 2.6-2.6 2.6"/></symbol>
+  <symbol id="ri-alert" viewBox="0 0 16 16"><path d="M8 2.2 14.6 13.6H1.4z"/><path d="M8 6.4v3.4"/><path d="M8 11.8v.2" stroke-width="2"/></symbol>
+  <symbol id="ri-link" viewBox="0 0 16 16"><path d="M6.9 9.1a2.6 2.6 0 0 0 3.7 0l2.5-2.5a2.6 2.6 0 0 0-3.7-3.7l-1 1"/><path d="M9.1 6.9a2.6 2.6 0 0 0-3.7 0L2.9 9.4a2.6 2.6 0 0 0 3.7 3.7l1-1"/></symbol>
+  <symbol id="ri-list" viewBox="0 0 16 16"><path d="M5.6 4h8M5.6 8h8M5.6 12h8"/><path d="M2.4 4h.2M2.4 8h.2M2.4 12h.2" stroke-width="2.2"/></symbol>
+</svg>
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="de">Zum Inhalt springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
+      <a href="../#how"><span lang="en">How it works</span><span lang="de">So geht’s</span></a>
+      <a href="../#flight"><span lang="en">Flight</span><span lang="de">Flug</span></a>
+      <a href="../#video">Video</a>
+      <a href="../#racing"><span lang="en">Racing</span><span lang="de">Rennen</span></a>
+      <a href="../#gallery"><span lang="en">Screenshots</span><span lang="de">Bilder</span></a>
+      <a href="../#faq">FAQ</a>
+      <a href="../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+      <a href="../docs/"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a href="../roadmap/">Roadmap</a>
+      <a href="./" aria-current="page">Changelog</a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="16" height="16"><use href="#i-discord"/></svg> Discord</a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="cl-hero" id="top" aria-labelledby="cl-title">
+    <div class="wrap cl-hero__grid">
+      <div class="cl-hero__copy">
+        <p class="kicker">Changelog</p>
+        <h1 id="cl-title" class="cl-hero__title"><span lang="en">Every release, point by point</span><span lang="de">Jede Version, Punkt für Punkt</span></h1>
+        <p class="cl-hero__lead" lang="en">What changed in Propwash FPV and its add-on Just More Parts&nbsp;– new features, improvements, fixes and what to know before you update. Newest first.</p>
+        <p class="cl-hero__lead" lang="de">Was sich in Propwash FPV und im Add-on Just More Parts geändert hat&nbsp;– Neues, Verbesserungen, Fehlerbehebungen und was du vor dem Update wissen solltest. Das Neueste zuerst.</p>
+        <ul class="cl-tally" role="list" data-cl-tally hidden></ul>
+      </div>
+      <aside class="cl-latest" aria-label="Latest releases" data-de-aria-label="Neueste Versionen" data-cl-latest hidden></aside>
+    </div>
+  </section>
+
+  <div class="cl-root" data-cl-root>
+    <div class="wrap">
+      <p class="cl-status needs-js" role="status" data-cl-status><span lang="en">Loading the changelog …</span><span lang="de">Changelog wird geladen …</span></p>
+      <noscript>
+        <p class="cl-status is-error"><span lang="en">The changelog needs JavaScript. The notes of every release are also on <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" rel="noopener">CurseForge</a> and <a href="https://modrinth.com/mod/propwash-fpv" rel="noopener">Modrinth</a>.</span><span lang="de">Der Changelog braucht JavaScript. Die Hinweise zu jeder Version stehen auch auf <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" rel="noopener">CurseForge</a> und <a href="https://modrinth.com/mod/propwash-fpv" rel="noopener">Modrinth</a>.</span></p>
+      </noscript>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a> · <a href="../roadmap/">Roadmap</a> · <a href="./">Changelog</a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p lang="en">Propwash FPV is an original mod. It is not affiliated with Betaflight, EdgeTX, OpenTX or any drone manufacturer.</p>
+      <p lang="de">Propwash FPV ist eine eigenständige Mod und steht in keiner Verbindung zu Betaflight, EdgeTX, OpenTX oder einem Drohnenhersteller.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice and whether you paused the animations are kept in your browser. This page is generated from the changelogs of each release. Fonts: <a href="../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (both SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl und ob du die Animationen angehalten hast, bleiben in deinem Browser. Diese Seite entsteht aus den Changelogs jeder Version. Schriften: <a href="../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (beide SIL Open Font License), direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js" defer></script>
+<script type="module" src="../assets/js/changelog/view.js"></script>
+</body>
+</html>
