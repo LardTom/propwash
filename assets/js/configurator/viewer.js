@@ -774,7 +774,7 @@ export function createViewer(container, options) {
       const shadowVisible = shadow.visible;
       shadow.visible = false;
       renderer.setPixelRatio(1);
-      const draw = (w, h) => {
+      const drawShot = (w, h) => {
         renderer.setSize(w, h, false);
         renderer.render(scene, shot);
         const out = document.createElement('canvas');
@@ -786,7 +786,7 @@ export function createViewer(container, options) {
       let out = null;
       try {
         const probeSize = 640;
-        const probe = draw(probeSize, probeSize);
+        const probe = drawShot(probeSize, probeSize);
         const data = probe.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, probeSize, probeSize).data;
         let x0 = probeSize;
         let y0 = probeSize;
@@ -812,7 +812,7 @@ export function createViewer(container, options) {
           const w = Math.max(1, Math.round(width * full));
           const h = Math.max(1, Math.round(height * full));
           shot.setViewOffset(full, full, left * full, top * full, w, h);
-          out = draw(w, h);
+          out = drawShot(w, h);
         }
       } finally {
         shadow.visible = shadowVisible;
