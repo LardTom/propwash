@@ -3,9 +3,10 @@
 //
 //   node tools/test-configurator.mjs [--export <web-export dir>] [--quiet]
 //
-// 1. PW1 test vectors (tools/fixtures/sharecode-vectors.json, copied from the web export): every vector must decode
-//    to the exported status, layers, content, skipped entries, unknown/wrong-kind parts, and re-encode byte-identically
-//    (uncompressed and compressed); the compatibility check and all analysis figures must match the mod's.
+// 1. PW1 and PW2 test vectors (tools/fixtures/sharecode-vectors.json, copied from the web export): every vector must
+//    decode to the exported status, layers, content, skipped entries, unknown/wrong-kind parts, and re-encode
+//    byte-identically in its format (PW1 uncompressed and compressed); the compatibility check and all analysis
+//    figures must match the mod's. PW1 content re-encoded as PW2 must decode to the same content.
 // 2. Presets in the catalog: share code, check and analysis; flight tune defaults of every preset (tune.json#defaults),
 //    normalisation and edits of the tune; paint swatches and random paint schemes round-trip through the share code.
 // 3. Tolerant decoding and error statuses (spelling variants, damaged and hostile codes).
@@ -22,6 +23,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createCatalog } from '../assets/js/configurator/data.js';
 import * as share from '../assets/js/configurator/sharecode.js';
+import * as pw2 from '../assets/js/configurator/sharecode2.js';
+import { PW2_PARTS, PW2_COLORS, PW2_OSD_DICTIONARY } from '../assets/js/configurator/sharecode2-tables.js';
 import { STAT_KEYS } from '../assets/js/configurator/analysis.js';
 import { occlusionPercent, cameraFov, mountRange, droneUptilt } from '../assets/js/configurator/fpv.js';
 import { TUNE_PARAMS, sanitizeTuneValue } from '../assets/js/configurator/tuning.js';
@@ -136,7 +139,7 @@ function compareContent(actual, expected, where) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-console.log(`Catalog: ${catalog.parts.length} parts, ${catalog.presets.length} presets (${catalog.source.generator}, PW1 ${catalog.source.sharecode.revision})`);
+console.log(`Catalog: ${catalog.parts.length} parts, ${catalog.presets.length} presets (${catalog.source.generator}, PW1 ${catalog.source.sharecode.revision}, PW2 ${pw2.PW2_REVISION}, new codes ${share.SHARE_FORMAT})`);
 
 // 1. Test vectors
 let vectorPass = 0;
@@ -154,10 +157,25 @@ for (const v of vectors) {
   ok(same(d.renamed, v.renamed), `${v.name}: renamed`);
   compareContent(d.content, v.decoded, v.name);
 
-  if (d.ok) {
+  const format = v.format || 'PW1';
+  if (d.ok && format === 'PW2') {
+    // PW2: every vector without skipped entries comes out byte-identical; the hand-crafted E at least round-trips.
+    const again = share.encode(d.content, { format: 'PW2' });
+    if (v.skipped.length === 0) {
+      byteTotal++;
+      if (ok(again === v.code, `${v.name}: re-encoded ${again} vs ${v.code}`)) byteIdentical++;
+    }
+    compareContent(catalog.decode(again).content, v.decoded, `${v.name} (round trip)`);
+    if (v.skipped.length === 0) {
+      compareContent(catalog.decode(share.encode(d.content, { format: 'PW1' })).content, v.decoded, `${v.name} (as PW1)`);
+    }
+    // Tolerant input: blanks, line breaks, a dash after the prefix, lower-case prefix.
+    const body = v.code.slice(3).replace(/(.{17})/g, '$1\n ');
+    compareContent(catalog.decode(`  pw2-${body}\t`).content, v.decoded, `${v.name} (tolerant input)`);
+  } else if (d.ok) {
     // Encoding: every vector except the hand-crafted E (it carries entries a PW1 encoder never writes) must come
     // out byte-identical in its compression mode; E must at least survive a round trip.
-    const again = share.encode(d.content, { compression: v.compression });
+    const again = share.encode(d.content, { format: 'PW1', compression: v.compression });
     if (v.skipped.length === 0) {
       byteTotal++;
       if (ok(again === v.code, `${v.name}: re-encoded ${again} vs ${v.code}`)) byteIdentical++;
@@ -165,9 +183,13 @@ for (const v of vectors) {
     const round = catalog.decode(again);
     compareContent(round.content, v.decoded, `${v.name} (round trip)`);
     for (const mode of ['never', 'always', 'auto']) {
-      const code = share.encode(d.content, { compression: mode });
+      const code = share.encode(d.content, { format: 'PW1', compression: mode });
       compareContent(catalog.decode(code).content, v.decoded, `${v.name} (${mode})`);
     }
+    // Same content as a PW2 code (shorter, same content).
+    const short = share.encode(d.content, { format: 'PW2' });
+    compareContent(catalog.decode(short).content, v.decoded, `${v.name} (as PW2)`);
+    if (v.skipped.length === 0) ok(short.length * 2 < v.code.length, `${v.name}: PW2 ${short.length} vs PW1 ${v.code.length} characters`);
     // Tolerant input: lower case, blanks and line breaks, no dashes, O/I/L look-alikes.
     const body = v.code.slice(share.PREFIX.length).toLowerCase().replace(/-/g, ' ').replace(/(.{17})/g, '$1\n ')
       .replace(/0/g, 'o').replace(/1/g, 'l');
@@ -194,7 +216,8 @@ let presetPass = 0;
 for (const preset of catalog.presets) {
   const before = failed;
   const content = catalog.presetContent(preset.id);
-  ok(share.encode(content) === preset.sharecode, `preset ${preset.id}: share code`);
+  ok(share.encode(content, { format: share.formatOf(preset.sharecode) }) === preset.sharecode, `preset ${preset.id}: share code`);
+  compareContent(catalog.decode(share.encode(content, { format: 'PW2' })).content, catalog.decode(preset.sharecode).content, `preset ${preset.id}: PW2`);
   compareCheck(catalog.check(content.build), preset.check, `preset ${preset.id}`);
   compareAnalysis(catalog.analyze(content.build), preset.analysis, `preset ${preset.id}`);
   if (failed === before) presetPass++;
@@ -247,8 +270,11 @@ console.log(`Presets: ${presetPass}/${catalog.presets.length} (share code, check
     if (d.ok) {
       ok(same(d.content.build, v.build), `${v.name}: build ${JSON.stringify(d.content.build)}`);
       ok(same(d.layers, v.layers), `${v.name}: layers ${d.layers}`);
-      ok(share.encode(d.content) === v.code, `${v.name}: re-encoded byte-identically`);
-      if (v.preset) ok(catalog.preset(v.preset) && catalog.preset(v.preset).sharecode === v.code, `${v.name}: is preset ${v.preset}`);
+      ok(share.encode(d.content, { format: share.formatOf(v.code) }) === v.code, `${v.name}: re-encoded byte-identically`);
+      if (v.preset) {
+        ok(catalog.preset(v.preset) && share.encode(catalog.presetContent(v.preset), { format: share.formatOf(v.code) }) === v.code,
+          `${v.name}: is preset ${v.preset}`);
+      }
       const analysis = catalog.analyze(d.content.build);
       compareAnalysis(analysis, v.analysis, v.name);
       if (v.analysis_before && analysis) {
@@ -407,13 +433,17 @@ console.log(`Presets: ${presetPass}/${catalog.presets.length} (share code, check
   }
   // Compressed payload that inflates past 16384 bytes.
   const big = { build: vectors[0].decoded.build, name: 'x', osd: { version: 1, json: 'a'.repeat(8192) } };
-  ok(catalog.decode(share.encode(big, { compression: 'always' })).status === 'OK', 'large OSD round trip');
+  ok(catalog.decode(share.encode(big, { format: 'PW1', compression: 'always' })).status === 'OK', 'large OSD round trip');
+  ok(catalog.decode(share.encode(big, { format: 'PW2' })).status === 'OK', 'large OSD round trip (PW2)');
   // Unknown namespace number is kept when re-encoding.
-  const foreign = share.encode({ build: { ...vectors[0].decoded.build, frame: '?7:mystery_frame' } }, { compression: 'never' });
+  const foreign = share.encode({ build: { ...vectors[0].decoded.build, frame: '?7:mystery_frame' } }, { format: 'PW1', compression: 'never' });
   const fd = catalog.decode(foreign);
   ok(fd.ok && fd.content.build.frame === '?7:mystery_frame' && same(fd.skipped, ['namespace:7']) && same(fd.unknownParts, ['?7:mystery_frame']),
     'unknown namespace number');
-  ok(share.encode(fd.content, { compression: 'never' }) === foreign, 'unknown namespace re-encoded identically');
+  ok(share.encode(fd.content, { format: 'PW1', compression: 'never' }) === foreign, 'unknown namespace re-encoded identically');
+  const foreign2 = catalog.decode(share.encode(fd.content, { format: 'PW2' }));
+  ok(foreign2.ok && foreign2.content.build.frame === '?7:mystery_frame' && same(foreign2.unknownParts, ['?7:mystery_frame']),
+    'unknown namespace carried by PW2');
   // Wrong kind: a motor id in the frame field.
   const wrong = catalog.decode(share.encode({ build: { ...vectors[0].decoded.build, frame: 'propwash:m2207_1750' } }));
   ok(same(wrong.wrongKind, ['propwash:m2207_1750']) && wrong.unknownParts.length === 0, 'wrong kind reported');
@@ -427,6 +457,34 @@ console.log(`Presets: ${presetPass}/${catalog.presets.length} (share code, check
   // Name is stripped, empty name and empty paint are dropped.
   const named = catalog.decode(share.encode({ build: vectors[0].decoded.build, name: '  Hallo Welt  ', paint: {} }));
   ok(named.content.name === 'Hallo Welt' && same(named.layers, ['parts', 'name']), 'name strip, empty paint dropped');
+  // PW2 edge cases.
+  const p2 = vectors.find((v) => v.name === 'PW2_A_parts_only');
+  if (ok(p2, 'PW2 vector A in the fixtures')) {
+    expectStatus(p2.code, 'OK', 'PW2 vector A');
+    expectStatus(`PW2-${p2.code.slice(3)}`, 'OK', 'PW2 with a dash');
+    expectStatus(`PW3${p2.code.slice(3)}`, 'UNSUPPORTED_VERSION', 'PW3');
+    expectStatus('pw9-abc', 'UNSUPPORTED_VERSION', 'PW9');
+    expectStatus(`PWX${p2.code.slice(3)}`, 'INVALID_PREFIX', 'PWX');
+    expectStatus(`${p2.code.slice(0, 8)}_${p2.code.slice(9)}`, 'BAD_CHARACTER', 'underscore in PW2');
+    expectStatus('PW2', 'TRUNCATED', 'PW2 alone');
+    expectStatus('PW20000', 'TRUNCATED', 'PW2 symbol count without byte length');
+    expectStatus(`PW2${'z'.repeat(pw2.symbolsFor(5))}`, 'CORRUPT', 'PW2 number too large');
+    expectStatus(`PW2${'0'.repeat(pw2.symbolsFor(2501))}`, 'TOO_LARGE', 'PW2 frame over 2500 bytes');
+    ok(catalog.decode(p2.code.toLowerCase()).status !== 'OK', 'PW2 is case-sensitive');
+    ok(share.codeFromHash('#' + p2.code) === p2.code, 'PW2 share link hash');
+  }
+  // Unknown part numbers of a newer table stay and travel on.
+  const marker = { build: { ...vectors[0].decoded.build, frame: `?frame.${PW2_PARTS.frame.length + 9}` } };
+  const md = catalog.decode(share.encode(marker, { format: 'PW2' }));
+  ok(md.ok && md.content.build.frame === marker.build.frame && same(md.unknownParts, [marker.build.frame])
+    && same(md.skipped, [`part_index:frame.${PW2_PARTS.frame.length + 9}`]), 'unknown PW2 part number');
+  let threw = false;
+  try {
+    share.encode({ build: { ...vectors[0].decoded.build, frame: '?frame.3' } }, { format: 'PW2' });
+  } catch {
+    threw = true;
+  }
+  ok(threw, 'PW2 refuses a marker for a known part number');
   // Share links.
   ok(share.codeFromHash('#' + encodeURIComponent(a.code)) === a.code && share.codeFromHash('#foo') === null, 'share link hash');
   ok(share.shareLink(a.code, 'https://example.org/propwash/configurator/#old') === `https://example.org/propwash/configurator/#${a.code}`, 'share link');
@@ -445,6 +503,25 @@ function crcOf(bytes) {
 // 4. Analysis variants from the web export (optional)
 {
   const dir = exportDir(argv);
+  const specFile = path.join(dir, 'sharecode', 'spec.json');
+  if (fs.existsSync(specFile)) {
+    const spec = JSON.parse(fs.readFileSync(specFile, 'utf8')).pw2;
+    if (spec) {
+      const before = failed;
+      ok(spec.format === 'PW2' && spec.prefix === pw2.PW2_PREFIX && spec.revision === pw2.PW2_REVISION, 'PW2 spec: format, prefix, revision');
+      ok(spec.alphabet === pw2.BASE62 && spec.text_alphabet === pw2.TEXT_ALPHABET, 'PW2 spec: alphabets');
+      ok(same(spec.params, { part: pw2.PW2_PARAMS.part, color: pw2.PW2_PARAMS.color, paint_slots: pw2.PW2_PARAMS.paintSlots,
+        tune_count: pw2.PW2_PARAMS.tuneCount, tune_gap: pw2.PW2_PARAMS.tuneGap, value: pw2.PW2_PARAMS.value, text: pw2.PW2_PARAMS.text,
+        osd_bytes: pw2.PW2_PARAMS.osdBytes, extension_bits: pw2.PW2_PARAMS.extensionBits }), 'PW2 spec: Exp-Golomb parameters');
+      ok(same(spec.parts, PW2_PARTS), 'PW2 spec: part tables');
+      ok(same(spec.colors, PW2_COLORS.map((c) => '#' + c.toString(16).padStart(6, '0'))), 'PW2 spec: colour table');
+      ok(same(spec.tune_keys, pw2.PW2_TUNE_KEYS), 'PW2 spec: tune keys');
+      ok(same([...new TextEncoder().encode(spec.osd_dictionary)], [...PW2_OSD_DICTIONARY]), 'PW2 spec: OSD dictionary');
+      console.log(`PW2 tables against the web export: ${failed === before ? 'identical' : 'FAILED'}`);
+    } else {
+      console.log('PW2 tables: web export without PW2 (older export), skipped');
+    }
+  }
   const analysisDir = path.join(dir, 'analysis');
   if (fs.existsSync(analysisDir)) {
     const before = failed;

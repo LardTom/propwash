@@ -1,4 +1,4 @@
-// Raw DEFLATE decoder (RFC 1951, no zlib header) for PW1 share codes.
+// Raw DEFLATE decoder (RFC 1951, no zlib header) for share codes (PW1 frames, PW2 OSD layouts with a preset dictionary).
 //
 // Behaves like the mod's use of java.util.zip.Inflater(nowrap = true): the input gets one extra zero byte, the
 // output is capped, a stream that needs more input, carries data after its end or contains an invalid block is
@@ -110,10 +110,19 @@ class BitReader {
 }
 
 class Output {
-  constructor(limit) {
+  constructor(limit, dictionary) {
     this.limit = limit;
     this.buf = new Uint8Array(Math.min(limit + 1, 4096));
     this.length = 0;
+    this.dictionary = dictionary;
+  }
+
+  // Byte d positions back: from the output, before that from the end of the preset dictionary.
+  back(d) {
+    if (d <= this.length) return this.buf[this.length - d];
+    const at = this.dictionary.length - (d - this.length);
+    if (at < 0) throw corrupt();
+    return this.dictionary[at];
   }
 
   push(byte) {
@@ -141,8 +150,8 @@ function inflateCodes(br, out, lit, dist) {
       const ds = br.decode(dist);
       if (ds >= 30) throw corrupt();
       const d = DIST_BASE[ds] + br.bits(DIST_EXTRA[ds]);
-      if (d > out.length) throw corrupt();
-      for (let k = 0; k < len; k++) out.push(out.buf[out.length - d]);
+      if (d > out.length + out.dictionary.length) throw corrupt();
+      for (let k = 0; k < len; k++) out.push(out.back(d));
     }
   }
 }
@@ -186,13 +195,14 @@ function dynamicTables(br) {
  * Inflates a raw DEFLATE stream.
  * @param {Uint8Array} data compressed bytes
  * @param {number} limit maximum output size
+ * @param {Uint8Array} [dictionary] preset dictionary (zlib inflateSetDictionary; at most 32 KiB, used by PW2)
  * @returns {{bytes: Uint8Array} | {status: 'CORRUPT' | 'TOO_LARGE'}}
  */
-export function inflateRaw(data, limit) {
+export function inflateRaw(data, limit, dictionary = new Uint8Array(0)) {
   const input = new Uint8Array(data.length + 1);
   input.set(data);
   const br = new BitReader(input);
-  const out = new Output(limit);
+  const out = new Output(limit, dictionary);
   try {
     let last = 0;
     while (!last) {
