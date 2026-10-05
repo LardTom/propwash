@@ -61,9 +61,11 @@ kept in the browser's `localStorage`; the drone built in the configurator lives 
   freestyle 0–50°, as in the drone's service menu in the game) with the live props-in-view share – the angle is stored in
   the drone's tune and travels in the share code (PW1 revision 1.2) – the camera's field of view read-only, and toggles to
   mark the counted disc area, show still blades or draw the frame too
-- screenshot menu in the 3D view: “Drone as PNG” (the drone alone, transparent, cropped, up to 1600 px, from the current
-  view angle, e.g. as the cover image of a forum post) and “Detail card” (1600 × 900 with name, class, key figures and
-  share code); both are copied to the clipboard, or downloaded where the browser can’t copy images
+- screenshot menu in the 3D view: “Drone as PNG” (the drone alone, transparent, cropped, up to 1600 px, e.g. as the cover
+  image of a forum post) and “Detail card” (1600 × 900 with name, class, key figures and share code); both are copied to
+  the clipboard, or downloaded where the browser can’t copy images. Both always show the drone from the same angle,
+  whatever the 3D view shows: from the front right and above (`SHOT_AZIMUTH` 34.75° from the nose towards the right
+  side, `SHOT_ELEVATION` 27.75° in `viewer.js`), nose to the lower right, all four props in sight
 
 ### Updating the data
 

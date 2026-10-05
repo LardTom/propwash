@@ -76,6 +76,11 @@ const PROP_DEFAULT_COLOR = 0xe4e4ea;
 const FPV_NEAR_MM = 0.25;
 const FPV_FAR_MM = 8000;
 const FPV_ALTITUDE_M = 2.5;
+// Fixed view of the picture export in the drone's own frame, whatever the preview shows: azimuth from the nose (−z)
+// towards the right side (+x) and elevation above the drone's plane, in degrees: from the front right and above, the
+// nose to the lower right, the rear to the upper left, all four props in sight.
+const SHOT_AZIMUTH = 34.75;
+const SHOT_ELEVATION = 27.75;
 
 const DISC_VERTEX = /* glsl */ `
 attribute vec4 rgba;
@@ -753,19 +758,22 @@ export function createViewer(container, options) {
     },
     autoRotate: () => controls.autoRotate,
     /**
-     * The drone alone on a transparent 2D canvas, from the current view direction, cropped to the drone plus pad
-     * (share of its longer side) and as large as fits into maxWidth × maxHeight. Null when nothing is drawn.
+     * The drone alone on a transparent 2D canvas, always from the same view of the drone (SHOT_AZIMUTH,
+     * SHOT_ELEVATION in its own frame, not the preview's), cropped to the drone plus pad (share of its longer side)
+     * and as large as fits into maxWidth × maxHeight. Null when nothing is drawn.
      */
     snapshot({ maxWidth = 1600, maxHeight = 1600, pad = 0.05 } = {}) {
       const box = new Box3().setFromObject(droneGroup);
       if (box.isEmpty()) return null;
       const sphere = box.getBoundingSphere(new Sphere());
-      const shot = camera.clone();
-      const dir = camera.position.clone().sub(controls.target).normalize();
-      const distance = Math.max(camera.position.distanceTo(controls.target), (sphere.radius / Math.sin((shot.fov * DEG) / 2)) * 1.02);
-      shot.position.copy(sphere.center).add(dir.multiplyScalar(distance));
+      const shot = new PerspectiveCamera(camera.fov, 1, 1, 2);
+      const flat = Math.cos(SHOT_ELEVATION * DEG);
+      const dir = new Vector3(Math.sin(SHOT_AZIMUTH * DEG) * flat, Math.sin(SHOT_ELEVATION * DEG), -Math.cos(SHOT_AZIMUTH * DEG) * flat)
+        .transformDirection(droneGroup.matrixWorld);
+      const distance = (sphere.radius / Math.sin((shot.fov * DEG) / 2)) * 1.02;
+      shot.up.set(0, 1, 0).transformDirection(droneGroup.matrixWorld);
+      shot.position.copy(sphere.center).addScaledVector(dir, distance);
       shot.lookAt(sphere.center);
-      shot.aspect = 1;
       shot.near = Math.max(0.5, distance - sphere.radius * 1.5);
       shot.far = distance + sphere.radius * 1.5;
       shot.updateProjectionMatrix();
