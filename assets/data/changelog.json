@@ -82,16 +82,24 @@
                   "de": "Gates frei drehen und frei groß: *Gate einstellen* (Schleichen + Rechtsklick) setzt Gieren, Nicken und Rollen und jede Öffnung von 1 × 1 bis 16 × 16 Blöcken, und Drohnen prallen an schrägen Gates im echten Winkel ab."
                 },
                 {
+                  "en": "*Adjust gate* works right in the game: walk and look around while the mouse wheel changes the values and the gate moves live; `Enter` applies, `Esc` cancels and holding `Alt` frees the mouse – for gates, flags, slalom poles, dive cubes and freeform gates alike.",
+                  "de": "*Gate einstellen* läuft direkt im Spiel: Du läufst und schaust dich um, während das Mausrad die Werte ändert und das Gate sich sofort mitbewegt; `Enter` übernimmt, `Esc` bricht ab und `Alt` gedrückt halten gibt die Maus frei – für Gates, Flaggen, Slalomstangen, Tauchwürfel und Freiform-Gates gleichermaßen."
+                },
+                {
                   "en": "Gripper for the bottom mount: picks up items while you hover low, carries up to 400 g and drops them with `Enter` or a radio switch.",
                   "de": "Greifer für den unteren Halter: sammelt Items auf, während du tief schwebst, trägt bis zu 400 g und wirft sie mit `Enter` oder einem Schalter an der Funke ab."
+                },
+                {
+                  "en": "Repair damaged props like tools: two damaged props of the same kind in the crafting grid or a grindstone become one, with both conditions added up plus 5 % – add-on props too.",
+                  "de": "Beschädigte Props reparieren wie Werkzeug: Zwei beschädigte Props derselben Sorte werden im Crafting-Raster oder im Schleifstein zu einem, mit beiden Zuständen zusammen plus 5 % – auch Props aus Add-ons."
                 },
                 {
                   "en": "Action Cam (Flashback): records your flight as a camera path for the replay mod Flashback, one ready-to-render scene per flight.",
                   "de": "Action-Cam (Flashback): zeichnet deinen Flug als Kamerapfad für die Replay-Mod Flashback auf, eine fertig renderbare Szene je Flug."
                 },
                 {
-                  "en": "Bandos: rare abandoned barns, factories, piers, oil rigs and mine heads to fly through, some with a chest of used parts – find one with `/locate structure #propwash:bandos`.",
-                  "de": "Bandos: seltene verlassene Scheunen, Fabriken, Stege, Ölplattformen und Förderanlagen zum Durchfliegen, manche mit einer Truhe gebrauchter Teile – finde einen mit `/locate structure #propwash:bandos`."
+                  "en": "Bandos: rare abandoned barns, factories, piers, oil rigs and mine heads to fly through, built into the terrain even on slopes, some with a chest of used parts – find one with `/locate structure #propwash:bandos`.",
+                  "de": "Bandos: seltene verlassene Scheunen, Fabriken, Stege, Ölplattformen und Förderanlagen zum Durchfliegen, auch am Hang fest ins Gelände gebaut, manche mit einer Truhe gebrauchter Teile – finde einen mit `/locate structure #propwash:bandos`."
                 },
                 {
                   "en": "Creative Flight Controller (creative mode only): fits every frame and opens the *Drone Editor* – set masses, motors, props, battery, drag and camera freely, keep your own templates and share them as a code.",
