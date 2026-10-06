@@ -22,5 +22,13 @@
     "height": 1080,
     "small": 800,
     "large": 1600
+  },
+  "signal_repeater": {
+    "name": "signal-repeater",
+    "src": "signal_repeater_mounts_day.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
   }
 }

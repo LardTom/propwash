@@ -34,6 +34,7 @@ export const IMAGES = {
   world_rules: { src: 'configurator_world_rules.png', name: 'world-rules-tab' },
   receiver_wizard: { src: 'receiver_wizard_check.png', name: 'receiver-wizard-check' },
   freeform_gate: { src: 'freeform_gate_cave.png', name: 'freeform-gate-cave' },
+  signal_repeater: { src: 'signal_repeater_mounts_day.png', name: 'signal-repeater' },
 };
 const SIZES = [800, 1600];
 

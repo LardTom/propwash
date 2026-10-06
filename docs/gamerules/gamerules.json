@@ -393,6 +393,33 @@
       "example": "/gamerule propwash:max_video_channels 1"
     },
     {
+      "id": "propwash:signal_repeaters",
+      "name": "signal_repeaters",
+      "group": "video",
+      "type": "integer",
+      "display": "number",
+      "default": 4,
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "changes_physics": false,
+      "title": {
+        "de": "Signal-Repeater je Verbindung",
+        "en": "Signal repeaters per link"
+      },
+      "description": {
+        "de": "Wie viele Signal-Repeater Bild und Funk zwischen Pilot und Drohne hintereinander weiterreichen dürfen (höchstens 4). Jeder Repeater reicht 128 Blöcke weit, das Signal läuft durch Wände und Decken wie sonst auch; Runden über Repeater zählen für Bestenlisten. 0 = Repeater aus.",
+        "en": "How many signal repeaters may pass video and control on between pilot and drone in a row (at most 4). Each repeater reaches 128 blocks, and the signal goes through walls and ceilings just as it otherwise would; laps flown over repeaters count for leaderboards. 0 = repeaters off."
+      },
+      "values": {
+        "0": {
+          "de": "Aus",
+          "en": "Off"
+        }
+      },
+      "example": "/gamerule propwash:signal_repeaters 0"
+    },
+    {
       "id": "propwash:drone_hits_entities",
       "name": "drone_hits_entities",
       "group": "gameplay",
@@ -515,6 +542,7 @@
         "infinite_range_analog": false,
         "infinite_range_digital": false,
         "max_video_channels": 0,
+        "signal_repeaters": 4,
         "drone_hits_entities": true,
         "allow_3d_mode": true,
         "part_compatibility": true,
@@ -552,6 +580,7 @@
         "infinite_range_analog": false,
         "infinite_range_digital": false,
         "max_video_channels": 0,
+        "signal_repeaters": 4,
         "drone_hits_entities": true,
         "allow_3d_mode": true,
         "part_compatibility": true,
@@ -595,6 +624,7 @@
         "infinite_range_analog": true,
         "infinite_range_digital": true,
         "max_video_channels": 0,
+        "signal_repeaters": 4,
         "drone_hits_entities": false,
         "allow_3d_mode": true,
         "part_compatibility": false,
