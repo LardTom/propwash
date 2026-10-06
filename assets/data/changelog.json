@@ -74,6 +74,10 @@
                   "de": "Flaggen, Slalomstangen und Tauchwürfel für Rennkurse: Sie gehören wie Gates zum Kurs, zählen nur richtig geflogen und funktionieren mit Ideallinie, Splits, Geistern und Bestenlisten."
                 },
                 {
+                  "en": "Freeform gate: right-click the edge of a hallway, cave mouth, window or shaft and the opening itself becomes a race gate – no frame, just a glowing outline along the blocks, any shape up to 20 × 20 blocks (world rule *Freeform gate: largest opening*).",
+                  "de": "Freiform-Gate: Rechtsklick auf den Rand eines Gangs, Höhleneingangs, Fensters oder Schachts, und die Öffnung selbst wird zum Renn-Gate – kein Rahmen, nur ein Leuchtumriss an den Blöcken, jede Form bis 20 × 20 Blöcke (Welt-Regel *Freiform-Gate: größte Öffnung*)."
+                },
+                {
                   "en": "Gates turn and scale freely: *Adjust gate* (sneak + right-click) sets yaw, pitch and roll and any opening from 1 × 1 to 16 × 16 blocks, and drones bounce off angled gates at the real angle.",
                   "de": "Gates frei drehen und frei groß: *Gate einstellen* (Schleichen + Rechtsklick) setzt Gieren, Nicken und Rollen und jede Öffnung von 1 × 1 bis 16 × 16 Blöcken, und Drohnen prallen an schrägen Gates im echten Winkel ab."
                 },
@@ -161,6 +165,10 @@
                 {
                   "en": "Flight School *Swapping and charging batteries* shows that the frame refuses a pack that is too heavy – the charger charges every pack, Li-Ion included.",
                   "de": "Flugschule *Akku tauschen und laden* zeigt, dass der Rahmen einen zu schweren Akku ablehnt – das Ladegerät lädt jeden Akku, auch Li-Ion."
+                },
+                {
+                  "en": "With shader packs your own drone casts its real shadow when you fly low, and *Shadow* in the *Display* tab also switches off the shader shadows of drones.",
+                  "de": "Mit Shaderpacks wirft deine eigene Drohne im Tiefflug ihren echten Schatten, und *Schatten* im Tab *Darstellung* schaltet auch die Shader-Schatten der Drohnen ab."
                 }
               ]
             },
@@ -190,6 +198,10 @@
                 {
                   "en": "At night with the LEDs on, the FPV view no longer turns black on some graphics cards (Intel UHD): Propwash switches to a simpler lighting by itself, and *LED lighting in FPV view* in the *Video* tab turns it off just for you.",
                   "de": "Nachts mit eingeschalteten LEDs wird das FPV-Bild auf manchen Grafikkarten (Intel UHD) nicht mehr schwarz: Propwash schaltet selbst auf eine einfachere Ausleuchtung um, und *LED-Ausleuchtung* im Tab *Video* schaltet sie nur für dich ab."
+                },
+                {
+                  "en": "With shader packs (Iris, e.g. Complementary) a dark, wing-shaped shadow no longer covers the FPV view over water and ground, and the GPS rescue home marker is visible in FPV again.",
+                  "de": "Mit Shaderpacks (Iris, z. B. Complementary) liegt über Wasser und Boden kein dunkler, flügelförmiger Schatten mehr im FPV-Bild, und die Heimatmarke von GPS Rescue ist im FPV wieder zu sehen."
                 }
               ]
             },

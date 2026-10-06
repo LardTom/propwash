@@ -117,6 +117,19 @@
               }
             },
             {
+              "id": "freeform-gates",
+              "icon": "gate",
+              "status": "done",
+              "title": {
+                "en": "Freeform gates",
+                "de": "Freiform-Gates"
+              },
+              "text": {
+                "en": "Turn hallways, cave mouths, windows and shafts into race gates – the blocks are the frame, any shape up to 20 × 20 blocks.",
+                "de": "Gänge, Höhleneingänge, Fenster und Schächte werden zu Renn-Gates – die Blöcke sind der Rahmen, jede Form bis 20 × 20 Blöcke."
+              }
+            },
+            {
               "id": "flashback-cam",
               "icon": "replay",
               "status": "done",
