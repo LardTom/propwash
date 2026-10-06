@@ -260,6 +260,19 @@
               }
             },
             {
+              "id": "settings-search",
+              "icon": "search",
+              "status": "done",
+              "title": {
+                "en": "Settings search & your own presets",
+                "de": "Einstellungssuche und eigene Presets"
+              },
+              "text": {
+                "en": "Find any setting with Ctrl+F, type numbers straight into the fields and keep your rates and PID tuning as presets you can share.",
+                "de": "Jede Einstellung mit Strg+F finden, Zahlen direkt in die Felder tippen und Rates und PID-Tuning als teilbare Presets merken."
+              }
+            },
+            {
               "id": "docs",
               "icon": "book",
               "status": "done",
