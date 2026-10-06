@@ -112,8 +112,8 @@
                 "de": "Gates in jedem Winkel"
               },
               "text": {
-                "en": "Turn gates freely and size them from 1 × 1 to 16 × 16 blocks – drones bounce off at the real angle.",
-                "de": "Gates frei drehen und von 1 × 1 bis 16 × 16 Blöcke groß machen – Drohnen prallen im echten Winkel ab."
+                "en": "Turn gates freely and size them from 1 × 1 to 16 × 16 blocks right in the game – drones bounce off at the real angle.",
+                "de": "Gates direkt im Spiel frei drehen und von 1 × 1 bis 16 × 16 Blöcke groß machen – Drohnen prallen im echten Winkel ab."
               }
             },
             {
@@ -244,6 +244,19 @@
               "text": {
                 "en": "Turn off Parts must fit and put 13″ props on a whoop – it flies with the real data of its parts.",
                 "de": "Schalte „Teile müssen zusammenpassen“ aus und bau 13″-Props an einen Whoop – er fliegt mit den echten Daten seiner Teile."
+              }
+            },
+            {
+              "id": "prop-repair",
+              "icon": "prop",
+              "status": "done",
+              "title": {
+                "en": "Repair props",
+                "de": "Props reparieren"
+              },
+              "text": {
+                "en": "Craft two damaged props into one or use a grindstone – both conditions add up, plus 5 %.",
+                "de": "Zwei beschädigte Props zu einem craften oder im Schleifstein verbinden – beide Zustände zählen zusammen, plus 5 %."
               }
             },
             {
