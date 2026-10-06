@@ -168,8 +168,8 @@
               "kind": "fixed",
               "items": [
                 {
-                  "en": "Receiver wizard: the throttle is no longer stored the wrong way round when you move it down, up and rest at the top – if in doubt, the wizard asks.",
-                  "de": "Empfänger-Assistent: Das Gas wird nicht mehr verkehrt herum gespeichert, wenn du es nach unten, dann nach oben bewegst und oben stehen lässt – im Zweifel fragt der Assistent nach."
+                  "en": "Receiver wizard: the throttle is no longer stored the wrong way round when you move it down, up and rest at the top – if in doubt, the wizard asks, so an inverted radio gets one question on first setup.",
+                  "de": "Empfänger-Assistent: Das Gas wird nicht mehr verkehrt herum gespeichert, wenn du es nach unten, dann nach oben bewegst und oben stehen lässt – im Zweifel fragt der Assistent nach, eine invertierte Funke deshalb einmal beim ersten Einrichten."
                 },
                 {
                   "en": "Tricks flown back to back no longer cancel each other out, and flying fast at a steep angle no longer stops trick detection.",
@@ -180,8 +180,8 @@
                   "de": "Flugmodi: `R` und die Tasten für Acro, Angle und Horizon schalten immer, auch neben einem Modusschalter an der Funke, und der Tab *Modi* zeigt den Modus, den du wirklich fliegst."
                 },
                 {
-                  "en": "Holding `R` or another toggle key such as arm or LEDs no longer triggers it several times.",
-                  "de": "Gehaltenes `R` oder eine andere Umschalt-Taste wie Scharf schalten oder LEDs löst nicht mehr mehrfach aus."
+                  "en": "Holding `R` or another toggle key such as arm, LEDs, GPS rescue or recording no longer triggers it several times.",
+                  "de": "Gehaltenes `R` oder eine andere Umschalt-Taste wie Scharf schalten, LEDs, GPS Rescue oder Aufnahme löst nicht mehr mehrfach aus."
                 },
                 {
                   "en": "The service menu no longer fits props that are too small for the frame or don't fit the motor shaft (only possible with add-on parts).",
@@ -201,8 +201,8 @@
                   "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · auf Client und Server nötig; Netzwerkprotokoll 11, deshalb müssen Client und Server beide 0.5.0 nutzen."
                 },
                 {
-                  "en": "Worlds, drones, gates, courses and leaderboards from 0.4.0 load unchanged. With the default world rules the flight model is exactly as in 0.4.0 except for the 65 mm whoop, but drones now hit mobs and players – turn off *Drones hit mobs and players* to fly through them. The personal *Simulation* settings and the server setting `partWear` are now world rules.",
-                  "de": "Welten, Drohnen, Gates, Kurse und Bestenlisten aus 0.4.0 laden unverändert. Mit den Standard-Welt-Regeln rechnet das Flugmodell genau wie in 0.4.0 bis auf den 65-mm-Whoop, aber Drohnen treffen jetzt Mobs und Spieler – schalte *Drohnen treffen Lebewesen* aus, um durch sie hindurchzufliegen. Die persönlichen Einstellungen unter *Simulation* und die Server-Einstellung `partWear` sind jetzt Welt-Regeln."
+                  "en": "Worlds, drones, gates, courses and leaderboards from 0.4.0 load unchanged. With the default world rules the flight model is exactly as in 0.4.0 except for the 65 mm whoop, but drones now hit mobs and players – turn off *Drones hit mobs and players* to fly through them. The personal *Simulation* settings are now world rules – set them again in the *World rules* tab; a server with `partWear` off in `server.json` keeps *Crash damage* off.",
+                  "de": "Welten, Drohnen, Gates, Kurse und Bestenlisten aus 0.4.0 laden unverändert. Mit den Standard-Welt-Regeln rechnet das Flugmodell genau wie in 0.4.0 bis auf den 65-mm-Whoop, aber Drohnen treffen jetzt Mobs und Spieler – schalte *Drohnen treffen Lebewesen* aus, um durch sie hindurchzufliegen. Die persönlichen Einstellungen unter *Simulation* sind jetzt Welt-Regeln – stell sie im Tab *Welt-Regeln* neu ein; ein Server mit `partWear` aus in `server.json` behält *Crash-Schaden* aus."
                 },
                 {
                   "en": "Parts API 1.5.0: add-ons made for 1.4 keep working; the matching *Propwash: Just More Parts* is 1.1.0. Flashback is optional (Fabric only, not included).",

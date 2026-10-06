@@ -423,8 +423,8 @@
         "en": "3D mode allowed"
       },
       "description": {
-        "de": "Piloten dürfen den 3D-Modus benutzen (umkehrbare Motoren, Gasmitte = Nullschub), wenn sie ihn für sich freigeschaltet haben. Aus: Der Modus bleibt für alle aus, etwa auf Rennservern, auf denen niemand mit Umkehrschub bremsen soll.",
-        "en": "Pilots may use 3D mode (reversible motors, throttle center = zero thrust) once they have unlocked it for themselves. Off: the mode stays off for everyone, for example on race servers where nobody should brake with reverse thrust."
+        "de": "Piloten dürfen den 3D-Modus benutzen (umkehrbare Motoren, Gasmitte = Nullschub), wenn sie ihn für sich freigeschaltet haben. Aus: Propwash lässt ihn niemanden einschalten, etwa auf Rennservern, auf denen niemand mit Umkehrschub bremsen soll. Wie das Flugmodell setzt das Spiel jedes Piloten die Regel um.",
+        "en": "Pilots may use 3D mode (reversible motors, throttle center = zero thrust) once they have unlocked it for themselves. Off: Propwash doesn't let anyone switch it on, for example on race servers where nobody should brake with reverse thrust. Like the flight model, the rule is applied by each pilot's game."
       },
       "example": "/gamerule propwash:allow_3d_mode false"
     },
@@ -509,8 +509,8 @@
         "en": "Training"
       },
       "description": {
-        "de": "Üben ohne Folgen: Drohne und Akku halten ewig, das Flugverhalten bleibt wie bei Realistisch – auch der milde Wind.",
-        "en": "Practice without consequences: drone and battery last forever, the handling stays as in Realistic – mild wind included."
+        "de": "Üben ohne Folgen: kein Verschleiß und keine Propellertreffer, der Akku wird nie leer und bricht nicht ein, Motoren überhitzen nicht – die Drohne behält die volle Leistung. Wind und Luft bleiben wie bei Realistisch.",
+        "en": "Practice without consequences: no wear and no prop strikes, the battery never runs empty or sags and motors never overheat – the drone keeps its full power. Wind and air stay as in Realistic."
       },
       "changes_physics": true,
       "values": {
