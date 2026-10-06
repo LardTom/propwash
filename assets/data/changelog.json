@@ -1,0 +1,1135 @@
+{
+  "schema": 1,
+  "products": [
+    {
+      "id": "propwash",
+      "name": "Propwash FPV",
+      "short": "Propwash",
+      "tagline": {
+        "en": "The FPV drone mod for Minecraft",
+        "de": "Die FPV-Drohnen-Mod für Minecraft"
+      },
+      "source": {
+        "ref": "v0.5.0"
+      },
+      "releases": [
+        {
+          "version": "0.5.0",
+          "id": "propwash-0.5.0",
+          "title": {
+            "en": "World rules, flight training, freestyle tricks, gripper and bandos",
+            "de": "Welt-Regeln, Flugtraining, Freestyle-Tricks, Greifer und Bandos"
+          },
+          "sections": [
+            {
+              "kind": "highlights",
+              "items": [
+                {
+                  "en": "**Flight training:** 20 hands-on lessons in five chapters – from hovering to gates, flips and a final exam – flown with your own drone through a holographic course, with stars and best times.",
+                  "de": "**Flugtraining:** 20 Lektionen zum Selberfliegen in fünf Kapiteln – vom Schweben über Gates und Flips bis zur Abschlussprüfung –, geflogen mit deiner eigenen Drohne durch einen holografischen Kurs, mit Sternen und Bestzeiten."
+                },
+                {
+                  "en": "**World rules:** gravity, battery life, wind, crash damage, range and more are game rules for the whole world, with their own *World rules* tab in the configurator.",
+                  "de": "**Welt-Regeln:** Schwerkraft, Akkulaufzeit, Wind, Crash-Schaden, Reichweite und mehr sind Spielregeln für die ganze Welt, mit eigenem Tab *Welt-Regeln* im Konfigurator."
+                },
+                {
+                  "en": "**Freestyle tricks that understand real flying:** 26 tricks such as the Juicy Flick, Rubik's Cube and McTwist are recognized even when sloppy, fast or flown straight into each other.",
+                  "de": "**Freestyle-Tricks, die echtes Fliegen verstehen:** 26 Tricks wie Juicy Flick, Rubik's Cube und McTwist werden erkannt, auch wenn sie unsauber, schnell oder direkt hintereinander geflogen sind."
+                }
+              ]
+            },
+            {
+              "kind": "new",
+              "items": [
+                {
+                  "en": "Flight training in the Flight School or with `M` while flying: basics, forward flight, racing, freestyle and advanced lessons in FPV or line of sight; only you see the course, so it works in survival and on servers.",
+                  "de": "Flugtraining in der Flugschule oder mit `M` im Flug: Grundlagen, Vorwärtsflug, Rennen, Freestyle und Fortgeschrittene, in FPV oder auf Sicht; den Kurs siehst nur du, deshalb klappt es auch im Überlebensmodus und auf Servern."
+                },
+                {
+                  "en": "*World rules* tab with an explanation for every rule: the host and operators change them, everyone else sees what applies – also with `/gamerule` and when you create a world.",
+                  "de": "Tab *Welt-Regeln* mit einer Erklärung zu jeder Regel: Der Host und Operatoren ändern sie, alle anderen sehen, was gilt – auch mit `/gamerule` und beim Erstellen einer Welt."
+                },
+                {
+                  "en": "World rules for gravity, battery life (0 = infinite), wind, turbulence, prop wash, ground effect, voltage sag, hardware limits, crash damage, crash tolerance, prop strikes, infinite range per video system and a video channel limit.",
+                  "de": "Welt-Regeln für Schwerkraft, Akkulaufzeit (0 = unendlich), Wind, Turbulenz, Prop-Wash, Bodeneffekt, Spannungseinbruch, Hardware-Grenzen, Crash-Schaden, Crash-Toleranz, Propellertreffer, unendliche Reichweite je Videosystem und eine Grenze für Videokanäle."
+                },
+                {
+                  "en": "Drones hit mobs and players: they bounce off and hurt them by the force of the impact, up to five hearts and players only with PvP (world rule *Drones hit mobs and players*).",
+                  "de": "Drohnen treffen Mobs und Spieler: Sie prallen ab und verletzen sie je nach Wucht des Aufpralls um bis zu fünf Herzen, Spieler nur mit PvP (Welt-Regel *Drohnen treffen Lebewesen*)."
+                },
+                {
+                  "en": "Gripper for the bottom mount: picks up dropped items while you hover low, carries up to 400 g and drops them with `Enter` or a radio switch.",
+                  "de": "Greifer für den unteren Halter: sammelt fallen gelassene Items auf, während du tief schwebst, trägt bis zu 400 g und wirft sie mit `Enter` oder einem Schalter an der Funke ab."
+                },
+                {
+                  "en": "Action Cam (Flashback): records your flight as a camera path for the replay mod Flashback, one ready-to-render scene per flight.",
+                  "de": "Action-Cam (Flashback): zeichnet deinen Flug als Kamerapfad für die Replay-Mod Flashback auf, eine fertig renderbare Szene je Flug."
+                },
+                {
+                  "en": "Bandos: rare abandoned barns, factories, piers, oil rigs and mine heads to fly through, some with a chest of used parts – find one with `/locate structure #propwash:bandos`.",
+                  "de": "Bandos: seltene verlassene Scheunen, Fabriken, Stege, Ölplattformen und Förderanlagen zum Durchfliegen, manche mit einer Truhe gebrauchter Teile – finde einen mit `/locate structure #propwash:bandos`."
+                },
+                {
+                  "en": "Ten new tricks, chains for tricks flown straight into each other (+25 %) and every trick with its points in the *Freestyle* tab.",
+                  "de": "Zehn neue Tricks, Ketten für Tricks, die direkt ineinander übergehen (+25 %), und jeder Trick mit seinen Punkten im Tab *Freestyle*."
+                },
+                {
+                  "en": "New Flight School lessons *Freestyle tricks*, *Gripper: collecting items* and *Bandos: abandoned spots*.",
+                  "de": "Neue Lektionen in der Flugschule: *Freestyle-Tricks*, *Greifer: Items einsammeln* und *Bandos: verlassene Spots*."
+                },
+                {
+                  "en": "Documentation at [propwashfpv.com/docs](https://propwashfpv.com/docs/): player guide, every world rule and the add-on API; Mod Menu links it as *Wiki*.",
+                  "de": "Dokumentation auf [propwashfpv.com/docs](https://propwashfpv.com/docs/): Spielerhandbuch, jede Welt-Regel und die Add-on-API; Mod Menu verlinkt sie als *Wiki*."
+                },
+                {
+                  "en": "Propwash is now source-available under the PolyForm Shield License – read the code, build it, put it in modpacks and send pull requests; the add-on API is MIT licensed.",
+                  "de": "Der Quellcode von Propwash ist jetzt einsehbar, unter der PolyForm Shield License – lies den Code, bau ihn selbst, nimm Propwash in Modpacks auf und schick Pull Requests; die Add-on-API steht unter der MIT-Lizenz."
+                }
+              ]
+            },
+            {
+              "kind": "improved",
+              "items": [
+                {
+                  "en": "Flips and rolls count out of fast forward flight, with some roll or yaw mixed in, a little short or ending in a dive.",
+                  "de": "Flips und Rollen zählen auch aus schnellem Vorwärtsflug heraus, mit etwas Rollen oder Gieren dazwischen, etwas zu kurz oder mit einem Sturzflug am Ende."
+                },
+                {
+                  "en": "A half roll there and straight back is now a rewind.",
+                  "de": "Eine halbe Rolle hin und direkt zurück ist jetzt ein Rewind."
+                },
+                {
+                  "en": "`/propwash rules` also lists the world rules.",
+                  "de": "`/propwash rules` listet auch die Welt-Regeln auf."
+                }
+              ]
+            },
+            {
+              "kind": "fixed",
+              "items": [
+                {
+                  "en": "Tricks flown back to back no longer cancel each other out, and flying fast at a steep angle no longer stops trick detection.",
+                  "de": "Direkt hintereinander geflogene Tricks heben sich nicht mehr gegenseitig auf, und schneller Flug in steilem Winkel stoppt die Trick-Erkennung nicht mehr."
+                }
+              ]
+            },
+            {
+              "kind": "compatibility",
+              "items": [
+                {
+                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · required on client and server; network protocol 10, so client and server must both run 0.5.0.",
+                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · auf Client und Server nötig; Netzwerkprotokoll 10, deshalb müssen Client und Server beide 0.5.0 nutzen."
+                },
+                {
+                  "en": "Worlds and drones from 0.4.0 load unchanged. With the default world rules the flight model is exactly as before, but drones now hit mobs and players – turn off *Drones hit mobs and players* to fly through them as in 0.4.0. The old personal *Simulation* settings and the server setting `partWear` are no longer used – set them again as world rules.",
+                  "de": "Welten und Drohnen aus 0.4.0 laden unverändert. Mit den Standard-Welt-Regeln rechnet das Flugmodell genau wie vorher, aber Drohnen treffen jetzt Mobs und Spieler – schalte *Drohnen treffen Lebewesen* aus, um wie in 0.4.0 durch sie hindurchzufliegen. Die alten persönlichen Einstellungen unter *Simulation* und die Server-Einstellung `partWear` gelten nicht mehr – stell sie als Welt-Regeln neu ein."
+                },
+                {
+                  "en": "Parts API 1.5.0: add-ons made for 1.4 keep working, *Propwash: Just More Parts* included. Flashback is optional (Fabric only, not included).",
+                  "de": "Parts-API 1.5.0: Add-ons für 1.4 laufen weiter, *Propwash: Just More Parts* eingeschlossen. Flashback ist optional (nur Fabric, nicht enthalten)."
+                },
+                {
+                  "en": "The new license applies from 0.5.0 on; Propwash 0.4.0 and older stay All Rights Reserved.",
+                  "de": "Die neue Lizenz gilt ab 0.5.0; Propwash 0.4.0 und älter bleiben All Rights Reserved."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "version": "0.4.0",
+          "id": "propwash-0.4.0",
+          "title": {
+            "en": "Parts API for add-ons, realistic flight times and battery, props in the FPV view",
+            "de": "Parts-API für Add-ons, realistische Flugzeiten und Akkus, Props im FPV-Bild"
+          },
+          "sections": [
+            {
+              "kind": "highlights",
+              "items": [
+                {
+                  "en": "**Parts from add-ons:** other mods can add frames, motors, props, batteries, stacks and video units that fly with their own data – the first is *Propwash: Just More Parts*.",
+                  "de": "**Teile aus Add-ons:** Andere Mods können Rahmen, Motoren, Props, Akkus, Stacks und Videoeinheiten hinzufügen, die mit ihren eigenen Daten fliegen – das erste ist *Propwash: Just More Parts*."
+                },
+                {
+                  "en": "**Race gates on walls and ceilings:** place any gate on the floor, a wall or a ceiling, turn it with `R` and fly dive gates, side gates and windows.",
+                  "de": "**Renn-Gates an Wand und Decke:** Setz jedes Gate auf den Boden, an eine Wand oder an die Decke, dreh es mit `R` und flieg Tauchtore, seitliche Gates und Fenster."
+                },
+                {
+                  "en": "**Realistic flight times and battery:** packs run empty as fast as real ones, and the workbench shows hover, cruise, mixed and aggressive flight times.",
+                  "de": "**Realistische Flugzeiten und Akkus:** Akkus leeren sich so schnell wie echte, und die Werkbank zeigt Flugzeiten für Schweben, Reiseflug, gemischtes und aggressives Fliegen."
+                }
+              ]
+            },
+            {
+              "kind": "new",
+              "items": [
+                {
+                  "en": "Add-on parts get items, Shift tooltips, workbench slots, build analysis, paint, wear, recycling and Flight School lessons.",
+                  "de": "Teile aus Add-ons bekommen Items, Shift-Tooltips, Plätze in der Werkbank, Build-Analyse, Lackierung, Verschleiß, Recycling und Lektionen in der Flugschule."
+                },
+                {
+                  "en": "Every add-on gets its own creative tab right after the Propwash FPV tab.",
+                  "de": "Jedes Add-on bekommt einen eigenen Kreativ-Tab direkt nach dem Tab Propwash FPV."
+                },
+                {
+                  "en": "New frame shapes from add-ons: deadcats, stretched and squashed X, H-frames, ducted frames and X-Class with props up to 13″.",
+                  "de": "Neue Rahmenformen aus Add-ons: Deadcats, gestreckte und gestauchte X, H-Rahmen, Ducted-Rahmen und X-Class mit Props bis 13″."
+                },
+                {
+                  "en": "More battery types (LiPo, LiHV, Li-Ion and more from add-ons) up to 12S; stacks have a voltage range, motors a prop mount.",
+                  "de": "Mehr Akkutypen (LiPo, LiHV, Li-Ion und weitere aus Add-ons) bis 12S; Stacks haben einen Spannungsbereich, Motoren eine Prop-Aufnahme."
+                },
+                {
+                  "en": "Motors heat up under load; above their limit they throttle back, the OSD shows *MOTOR OVERHEAT* and they wear.",
+                  "de": "Motoren werden unter Last warm; über ihrer Grenze regeln sie ab, das OSD zeigt *MOTOR ÜBERHITZT* und sie verschleißen."
+                },
+                {
+                  "en": "A battery with more cells than the stack allows burns out the ESC when you arm (*Hardware limits* in the *Simulation* tab).",
+                  "de": "Ein Akku mit mehr Zellen, als der Stack verträgt, brennt beim Scharfschalten den ESC durch (*Hardware-Grenzen* im Tab *Simulation*)."
+                },
+                {
+                  "en": "Your own props show in the FPV view where a real camera would see them, spinning props as a soft blur.",
+                  "de": "Deine eigenen Props sind im FPV-Bild dort zu sehen, wo eine echte Kamera sie sähe, drehende Props als weicher Schleier."
+                },
+                {
+                  "en": "The FPV field of view comes from the camera in the video unit, like on a real quad, instead of a setting per goggles.",
+                  "de": "Das FPV-Sichtfeld kommt von der Kamera in der Videoeinheit, wie bei einem echten Quad, statt aus einer Einstellung je Brille."
+                },
+                {
+                  "en": "Every drone keeps its own camera angle, set in its service menu (sneak + right-click) within what the frame's mount allows.",
+                  "de": "Jede Drohne behält ihren eigenen Kamerawinkel, eingestellt in ihrem Service-Menü (Schleichen + Rechtsklick) in den Grenzen, die der Kamerahalter des Rahmens erlaubt."
+                },
+                {
+                  "en": "*Gravity* slider in the *Simulation* tab (0.80× to 1.50×) for pilots who find the drones a little floaty.",
+                  "de": "Regler *Schwerkraft* im Tab *Simulation* (0,80× bis 1,50×) für Piloten, denen die Drohnen ein wenig zu sehr schweben."
+                },
+                {
+                  "en": "*Rotate gate* key (`R`, still *Cycle flight mode* in flight): turn or flip the gate you place, sneak to switch the mount, or look at a placed gate to rotate it.",
+                  "de": "Taste *Gate drehen* (`R`, im Flug weiterhin *Flugmodus wechseln*): Dreh oder wende das Gate, das du setzt, schleich, um die Lage zu wechseln, oder schau ein gesetztes Gate an, um es zu drehen."
+                },
+                {
+                  "en": "A translucent preview shows where a gate will go and turns red when there is no room.",
+                  "de": "Eine durchscheinende Vorschau zeigt, wo ein Gate hinkommt, und wird rot, wenn kein Platz ist."
+                },
+                {
+                  "en": "Drones, frames and props hang flat on the wall in item frames like a trophy and tilt towards you on shelves.",
+                  "de": "Drohnen, Rahmen und Props hängen im Gegenstandsrahmen flach an der Wand wie eine Trophäe und neigen sich im Regal zu dir."
+                },
+                {
+                  "en": "Radios such as the Radiomaster Pocket are now detected on macOS; pure MFi gamepads use the new *Apple GameController* option.",
+                  "de": "Funken wie die Radiomaster Pocket werden jetzt unter macOS erkannt; reine MFi-Gamepads nutzen die neue Option *Apples GameController*."
+                },
+                {
+                  "en": "Add-ons can share builds, paint, tunes and OSD layouts as codes; the server checks every import (survival uses your parts and dyes).",
+                  "de": "Add-ons können Builds, Lackierungen, Tunes und OSD-Layouts als Codes teilen; der Server prüft jeden Import (im Überlebensmodus kostet er deine Teile und Farbstoffe)."
+                },
+                {
+                  "en": "Removing an add-on keeps your drones: its parts show as *Unknown part* until you install it again.",
+                  "de": "Wenn du ein Add-on entfernst, bleiben deine Drohnen erhalten: Seine Teile erscheinen als *Unbekanntes Bauteil*, bis du es wieder installierst."
+                },
+                {
+                  "en": "Joining a server names parts that are missing or different instead of failing later.",
+                  "de": "Beim Verbinden mit einem Server nennt Propwash fehlende oder abweichende Teile, statt später zu scheitern."
+                }
+              ]
+            },
+            {
+              "kind": "improved",
+              "items": [
+                {
+                  "en": "All parts follow one naming scheme: size and device first, extras in brackets, e.g. *1S 300 mAh Battery (LiHV)*.",
+                  "de": "Alle Teile folgen einem Namensschema: Größe und Gerät zuerst, Extras in Klammern, z. B. *1S-Akku 300 mAh (LiHV)*."
+                },
+                {
+                  "en": "Battery level, OSD warnings and brownouts follow realistic power draw, including the full-throttle current of small props.",
+                  "de": "Akkustand, OSD-Warnungen und Brownouts folgen einem realistischen Stromverbrauch, einschließlich des Vollgasstroms kleiner Props."
+                },
+                {
+                  "en": "The workbench shows four flight times, currents, landing voltage and motor temperatures.",
+                  "de": "Die Werkbank zeigt vier Flugzeiten, Ströme, Landespannung und Motortemperaturen."
+                },
+                {
+                  "en": "\"Props in the camera view\" at the workbench matches the FPV image and depends on the frame and its camera mount.",
+                  "de": "„Props im Kamerabild“ an der Werkbank passt zum FPV-Bild und hängt vom Rahmen und seinem Kamerahalter ab."
+                },
+                {
+                  "en": "The built-in cinewhoop reaches a realistic 89 km/h instead of 62 km/h.",
+                  "de": "Der eingebaute Cinewhoop erreicht realistische 89 km/h statt 62 km/h."
+                },
+                {
+                  "en": "The Flight School key (`M`) opens the matching lessons over add-on parts too, and the gates lesson covers walls and ceilings.",
+                  "de": "Die Flugschul-Taste (`M`) öffnet die passenden Lektionen auch über Teilen aus Add-ons, und die Gate-Lektion behandelt Wände und Decken."
+                },
+                {
+                  "en": "Items have a sensible size on the ground, in item frames and on shelves; dropped drones show their size class.",
+                  "de": "Items haben eine sinnvolle Größe auf dem Boden, im Gegenstandsrahmen und im Regal; fallen gelassene Drohnen zeigen ihre Größenklasse."
+                },
+                {
+                  "en": "Big drones fit their inventory slot, and the 7″ two-blade prop no longer reaches into the screen in first person.",
+                  "de": "Große Drohnen passen in ihren Inventarplatz, und der 7″-Zweiblatt-Prop ragt in der Ego-Perspektive nicht mehr in den Bildschirm."
+                },
+                {
+                  "en": "Text fields in the settings, the paint screen and the OSD editor use the Propwash look.",
+                  "de": "Textfelder in den Einstellungen, im Lackier-Bildschirm und im OSD-Editor haben den Propwash-Look."
+                }
+              ]
+            },
+            {
+              "kind": "fixed",
+              "items": [
+                {
+                  "en": "The *LOW BATTERY* warning goes away when the voltage recovers after a hard punch; *Infinite battery* shows no battery warnings.",
+                  "de": "Die Warnung *AKKU SCHWACH* verschwindet, wenn sich die Spannung nach einem harten Punch erholt; *Unendlicher Akku* zeigt keine Akkuwarnungen."
+                },
+                {
+                  "en": "The receiver wizard reads the throttle and its direction from your movement (fully up, then fully down), wherever the stick starts, and ends with a check page that shows every channel live with *Inv.* to flip it.",
+                  "de": "Der Empfänger-Assistent liest Gas und Richtung aus deiner Bewegung (ganz hoch, dann ganz runter), egal wo der Knüppel startet, und endet mit einer Prüfseite, die jeden Kanal live zeigt, mit *Inv.* zum Umkehren."
+                },
+                {
+                  "en": "Crashed drones no longer hang in the air on an invisible floor; they fall and come to rest on the ground.",
+                  "de": "Abgestürzte Drohnen hängen nicht mehr auf einem unsichtbaren Boden in der Luft; sie fallen und bleiben am Boden liegen."
+                },
+                {
+                  "en": "The FPV camera no longer looks through the ground into caves after a crash or landing.",
+                  "de": "Die FPV-Kamera schaut nach einem Absturz oder einer Landung nicht mehr durch den Boden in Höhlen."
+                },
+                {
+                  "en": "Water no longer disappears behind spinning props, LED glow and ghost drones.",
+                  "de": "Wasser verschwindet nicht mehr hinter drehenden Props, LED-Leuchten und Geisterdrohnen."
+                },
+                {
+                  "en": "No more short freezes every few seconds with the OSD on setups with font resource packs.",
+                  "de": "Keine kurzen Hänger mehr alle paar Sekunden mit OSD bei Setups mit Schrift-Ressourcenpaketen."
+                },
+                {
+                  "en": "Workbench stats no longer run into their values in any language or GUI scale.",
+                  "de": "Werte an der Werkbank laufen in keiner Sprache und keiner GUI-Größe mehr in ihre Zahlen hinein."
+                },
+                {
+                  "en": "Propwash tooltips are no longer cut off at the bottom of the screen.",
+                  "de": "Propwash-Tooltips werden am unteren Bildschirmrand nicht mehr abgeschnitten."
+                }
+              ]
+            },
+            {
+              "kind": "compatibility",
+              "items": [
+                {
+                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · required on client and server.",
+                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · auf Client und Server nötig."
+                },
+                {
+                  "en": "Network protocol 8: client and server must both run 0.4.0.",
+                  "de": "Netzwerkprotokoll 8: Client und Server müssen beide 0.4.0 nutzen."
+                },
+                {
+                  "en": "Worlds, drones, items, presets, ghosts and settings from 0.3.x load unchanged; flying is unchanged apart from the cinewhoop fix and the realistic battery.",
+                  "de": "Welten, Drohnen, Items, Presets, Geister und Einstellungen aus 0.3.x laden unverändert; das Fliegen bleibt gleich, bis auf den Cinewhoop-Fix und den realistischen Akku."
+                },
+                {
+                  "en": "Add-ons use the new Parts API 1.4.0; *Propwash: Just More Parts* 1.0.0 is made for this version.",
+                  "de": "Add-ons nutzen die neue Parts-API 1.4.0; *Propwash: Just More Parts* 1.0.0 ist für diese Version gemacht."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "version": "0.3.2",
+          "id": "propwash-0.3.2",
+          "title": {
+            "en": "Drone items and ghosts show the real drone",
+            "de": "Drohnen-Items und Geister zeigen die echte Drohne"
+          },
+          "sections": [
+            {
+              "kind": "highlights",
+              "items": [
+                {
+                  "en": "**Drone items show their own drone:** frame, parts, accessories, paint, prop damage and a missing battery – in the inventory, in your hand, in item frames and on the ground.",
+                  "de": "**Drohnen-Items zeigen ihre eigene Drohne:** Rahmen, Teile, Zubehör, Lackierung, Prop-Schäden und ein fehlender Akku – im Inventar, in der Hand, im Gegenstandsrahmen und auf dem Boden."
+                },
+                {
+                  "en": "**Ghosts look like the drone that flew the lap:** a translucent copy with its paint, bluish for your own ghost and golden for the record.",
+                  "de": "**Geister sehen aus wie die Drohne, die die Runde geflogen ist:** eine durchscheinende Kopie mit ihrer Lackierung, bläulich für deinen eigenen Geist und golden für den Rekord."
+                }
+              ]
+            },
+            {
+              "kind": "improved",
+              "items": [
+                {
+                  "en": "Small whoops and big 7″ drones are scaled to stay readable in a slot.",
+                  "de": "Kleine Whoops und große 7″-Drohnen werden so skaliert, dass sie im Slot gut erkennbar bleiben."
+                },
+                {
+                  "en": "Identical drones share one icon, so full inventories stay fast.",
+                  "de": "Gleiche Drohnen teilen sich ein Symbol, damit volle Inventare schnell bleiben."
+                },
+                {
+                  "en": "Ghosts recorded with older versions use your current drone of the same class, otherwise a matching preset.",
+                  "de": "Geister aus älteren Versionen nutzen deine aktuelle Drohne derselben Klasse, sonst ein passendes Preset."
+                }
+              ]
+            },
+            {
+              "kind": "compatibility",
+              "items": [
+                {
+                  "en": "Minecraft 26.3 · Fabric and NeoForge · Java 25 · required on client and server.",
+                  "de": "Minecraft 26.3 · Fabric und NeoForge · Java 25 · auf Client und Server nötig."
+                },
+                {
+                  "en": "Network protocol 6 is unchanged: 0.3.2 plays together with 0.3.1 and 0.3.0.",
+                  "de": "Netzwerkprotokoll 6 bleibt gleich: 0.3.2 spielt zusammen mit 0.3.1 und 0.3.0."
+                },
+                {
+                  "en": "Worlds, drones, ghosts and settings load unchanged; record ghosts saved by a 0.3.2 server are not shown on older clients.",
+                  "de": "Welten, Drohnen, Geister und Einstellungen laden unverändert; Rekord-Geister, die ein Server mit 0.3.2 gespeichert hat, sehen ältere Clients nicht."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "version": "0.3.1",
+          "id": "propwash-0.3.1",
+          "title": {
+            "en": "Two-handed radio in first person and stackable gates",
+            "de": "Funke mit beiden Händen in der Ego-Perspektive und stapelbare Gates"
+          },
+          "sections": [
+            {
+              "kind": "highlights",
+              "items": [
+                {
+                  "en": "**Stackable race gates:** right-click a placed gate with a gate item to build a ladder up to four gates high.",
+                  "de": "**Stapelbare Renn-Gates:** Ein Rechtsklick mit einem Gate-Item auf ein gesetztes Gate baut eine Leiter aus bis zu vier Gates übereinander."
+                },
+                {
+                  "en": "**Radio in first person:** lower and smaller in view, with the forearms coming up from the bottom corners and the thumbs on the sticks.",
+                  "de": "**Funke in der Ego-Perspektive:** tiefer und kleiner im Bild, mit Unterarmen aus den unteren Ecken und den Daumen auf den Knüppeln."
+                }
+              ]
+            },
+            {
+              "kind": "new",
+              "items": [
+                {
+                  "en": "Stacked gates form one ladder with shared middle bars; look back while stacking to flip the new gate for zig-zag ladders.",
+                  "de": "Gestapelte Gates bilden eine Leiter mit gemeinsamen Mittelstreben; schau beim Stapeln zurück, um das neue Gate für Zickzack-Leitern zu wenden."
+                },
+                {
+                  "en": "The *Drone Arena* world course has a three-gate ladder, and a new Flight School step shows how to stack.",
+                  "de": "Der Weltkurs *Drohnen-Arena* hat eine Leiter aus drei Gates, und ein neuer Schritt in der Flugschule zeigt, wie man stapelt."
+                }
+              ]
+            },
+            {
+              "kind": "improved",
+              "items": [
+                {
+                  "en": "Every stacked gate stays its own course gate; break one in the middle and the gates above slide down.",
+                  "de": "Jedes gestapelte Gate bleibt ein eigenes Kurs-Gate; brich eines in der Mitte ab, und die Gates darüber rutschen nach unten."
+                },
+                {
+                  "en": "The race line takes a detour around double gates flown in the same direction.",
+                  "de": "Die Ideallinie macht einen Umweg um Doppel-Gates, die in derselben Richtung geflogen werden."
+                },
+                {
+                  "en": "While you hold the radio with both hands, the item in your other hand is hidden.",
+                  "de": "Solange du die Funke mit beiden Händen hältst, ist das Item in deiner anderen Hand ausgeblendet."
+                }
+              ]
+            },
+            {
+              "kind": "fixed",
+              "items": [
+                {
+                  "en": "The radio no longer climbs up the screen when you look down at the drone in line-of-sight flight.",
+                  "de": "Die Funke wandert nicht mehr den Bildschirm hinauf, wenn du beim Fliegen auf Sicht nach unten auf die Drohne schaust."
+                },
+                {
+                  "en": "The radio pose stays the same at any field of view and aspect ratio.",
+                  "de": "Die Haltung der Funke bleibt bei jedem Sichtfeld und Seitenverhältnis gleich."
+                }
+              ]
+            },
+            {
+              "kind": "compatibility",
+              "items": [
+                {
+                  "en": "Minecraft 26.3 · Fabric and NeoForge · Java 25 · required on client and server.",
+                  "de": "Minecraft 26.3 · Fabric und NeoForge · Java 25 · auf Client und Server nötig."
+                },
+                {
+                  "en": "Network protocol 6 is unchanged: 0.3.1 and 0.3.0 play together.",
+                  "de": "Netzwerkprotokoll 6 bleibt gleich: 0.3.1 und 0.3.0 spielen zusammen."
+                },
+                {
+                  "en": "Worlds, drones and settings load unchanged.",
+                  "de": "Welten, Drohnen und Einstellungen laden unverändert."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "version": "0.3.0",
+          "id": "propwash-0.3.0",
+          "title": {
+            "en": "Paint jobs, world race courses, spectating, ghost races and freestyle tricks",
+            "de": "Lackierungen, Rennkurse in der Welt, Zuschauen, Geisterrennen und Freestyle-Tricks"
+          },
+          "sections": [
+            {
+              "kind": "highlights",
+              "items": [
+                {
+                  "en": "**Paint jobs:** paint twelve parts of your drone with dyes, metal and carbon finishes or any hex color at the workbench.",
+                  "de": "**Lackierungen:** Lackier zwölf Teile deiner Drohne an der Werkbank mit Farbstoffen, Metall- und Carbon-Oberflächen oder einer beliebigen Hex-Farbe."
+                },
+                {
+                  "en": "**Race courses in the world:** four ready-made courses generate in the overworld, with the record holder on the start sign.",
+                  "de": "**Rennkurse in der Welt:** Vier fertige Kurse entstehen in der Oberwelt, mit dem Rekordhalter auf dem Startschild."
+                },
+                {
+                  "en": "**Ghost races, spectating and freestyle tricks:** race your best lap, watch other pilots' video with `F7` and score tricks with combos.",
+                  "de": "**Geisterrennen, Zuschauen und Freestyle-Tricks:** Flieg gegen deine beste Runde, schau mit `F7` das Video anderer Piloten und sammle Punkte für Tricks mit Kombos."
+                }
+              ]
+            },
+            {
+              "kind": "new",
+              "items": [
+                {
+                  "en": "Paint screen with a rotatable 3D preview, presets and copy and paste; in survival every repainted part costs a dye.",
+                  "de": "Lackier-Bildschirm mit drehbarer 3D-Vorschau, Vorlagen sowie Kopieren und Einfügen; im Überlebensmodus kostet jedes neu lackierte Teil einen Farbstoff."
+                },
+                {
+                  "en": "World courses *Field Slalom*, *Canyon Run*, *Forest Weave* and the rare *Drone Arena*, each with a loot chest.",
+                  "de": "Weltkurse *Feldslalom*, *Canyon-Run*, *Waldslalom* und die seltene *Drohnen-Arena*, jeweils mit einer Beutetruhe."
+                },
+                {
+                  "en": "Video channels: analog R1–R8 and F1–F8 on real 5.8 GHz frequencies, digital CH1–CH8, picked automatically or in the *Video Channel* tab.",
+                  "de": "Videokanäle: analog R1–R8 und F1–F8 auf echten 5,8-GHz-Frequenzen, digital CH1–CH8, automatisch gewählt oder im Tab *Videokanal*."
+                },
+                {
+                  "en": "Spectating: with goggles on, `F7` cycles through the feeds of other pilots, with their OSD and video breakup by distance.",
+                  "de": "Zuschauen: Mit aufgesetzter Brille wechselt `F7` durch die Bilder anderer Piloten, mit ihrem OSD und Bildstörungen je nach Entfernung."
+                },
+                {
+                  "en": "Ghosts: your best lap flies along in blue, the server record of your drone class in gold, with split times at every gate.",
+                  "de": "Geister: Deine beste Runde fliegt in Blau mit, der Server-Rekord deiner Drohnenklasse in Gold, mit Zwischenzeiten an jedem Gate."
+                },
+                {
+                  "en": "Leaderboards per course and drone class, saved in the world, with their own window (course tool or *Race* tab).",
+                  "de": "Bestenlisten je Kurs und Drohnenklasse, in der Welt gespeichert, mit eigenem Fenster (Kurs-Werkzeug oder Tab *Rennen*)."
+                },
+                {
+                  "en": "Standing starts with start lights: pilots line up at the start gate and start together on GO.",
+                  "de": "Stehende Starts mit Startampel: Die Piloten stellen sich am Start-Gate auf und starten gemeinsam bei GO."
+                },
+                {
+                  "en": "A glowing race line guides you through the next gates in a running race.",
+                  "de": "Eine leuchtende Ideallinie führt dich in einem laufenden Rennen durch die nächsten Gates."
+                },
+                {
+                  "en": "Course gates carry their number, arrows on the entry side and red markings on the back; gate 1 is the checkered start/finish gate.",
+                  "de": "Kurs-Gates tragen ihre Nummer, Pfeile auf der Einflugseite und rote Markierungen auf der Rückseite; Gate 1 ist das karierte Start-/Ziel-Gate."
+                },
+                {
+                  "en": "Freestyle tricks: flips, rolls, power loops, Matty flips, split-S, dives, yaw spins, orbits, gaps and more, with combos and style points.",
+                  "de": "Freestyle-Tricks: Flips, Rollen, Power Loops, Matty Flips, Split-S, Dives, Yaw Spins, Orbits, Gaps und mehr, mit Kombos und Style-Punkten."
+                },
+                {
+                  "en": "New OSD elements *VTX* and *Tricks*, and a *Freestyle* tab with the points table and your live score.",
+                  "de": "Neue OSD-Elemente *VTX* und *Tricks* und ein Tab *Freestyle* mit der Punktetabelle und deinem Live-Punktestand."
+                }
+              ]
+            },
+            {
+              "kind": "improved",
+              "items": [
+                {
+                  "en": "Damaged props show their state in three steps, in the world, at the workbench, in the Flight School and on the item.",
+                  "de": "Beschädigte Props zeigen ihren Zustand in drei Stufen, in der Welt, an der Werkbank, in der Flugschule und am Item."
+                },
+                {
+                  "en": "A false start now costs 3 seconds instead of cancelling the run.",
+                  "de": "Ein Frühstart kostet jetzt 3 Sekunden, statt den Lauf abzubrechen."
+                },
+                {
+                  "en": "Only laps the server verified count; laps with altitude or position hold, GPS Rescue or modified physics do not.",
+                  "de": "Es zählen nur Runden, die der Server geprüft hat; Runden mit Höhen- oder Positionshaltung, GPS Rescue oder veränderter Physik zählen nicht."
+                },
+                {
+                  "en": "The heavy action cam is smaller and sits on a TPU mount; the light action cam sits on a cradle with a strap.",
+                  "de": "Die schwere Action-Cam ist kleiner und sitzt auf einem TPU-Halter; die leichte Action-Cam sitzt in einer Halterung mit Gurt."
+                },
+                {
+                  "en": "LED strips and arm LEDs glow with soft halos, spinning prop discs are subtler and the headlight is warm white.",
+                  "de": "LED-Streifen und Arm-LEDs leuchten mit weichem Schein, drehende Prop-Scheiben sind dezenter und der Scheinwerfer ist warmweiß."
+                },
+                {
+                  "en": "The remote sits lower and closer in first person, and small and flat on an armor stand.",
+                  "de": "Die Fernsteuerung sitzt in der Ego-Perspektive tiefer und näher, auf einem Rüstungsständer klein und flach."
+                }
+              ]
+            },
+            {
+              "kind": "fixed",
+              "items": [
+                {
+                  "en": "Drifting behind the start gate no longer counts as a false start.",
+                  "de": "Hinter dem Start-Gate zu treiben zählt nicht mehr als Frühstart."
+                }
+              ]
+            },
+            {
+              "kind": "compatibility",
+              "items": [
+                {
+                  "en": "Minecraft 26.3 · Fabric and NeoForge · Java 25 · required on client and server.",
+                  "de": "Minecraft 26.3 · Fabric und NeoForge · Java 25 · auf Client und Server nötig."
+                },
+                {
+                  "en": "Network protocol 6: client and server must both run 0.3.0.",
+                  "de": "Netzwerkprotokoll 6: Client und Server müssen beide 0.3.0 nutzen."
+                },
+                {
+                  "en": "Worlds, drones, courses and settings from 0.2.x load unchanged; old drones keep their colors and old leaderboards carry over once.",
+                  "de": "Welten, Drohnen, Kurse und Einstellungen aus 0.2.x laden unverändert; alte Drohnen behalten ihre Farben, und alte Bestenlisten werden einmalig übernommen."
+                },
+                {
+                  "en": "Server owners can turn off new world courses (`worldCourses`) and spectating (`allowSpectating`).",
+                  "de": "Server-Betreiber können neue Weltkurse (`worldCourses`) und das Zuschauen (`allowSpectating`) abschalten."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "version": "0.2.1",
+          "id": "propwash-0.2.1",
+          "title": {
+            "en": "Clearer action cam recordings, survival recipe book",
+            "de": "Klarere Action-Cam-Aufnahmen, Rezeptbuch im Überlebensmodus"
+          },
+          "sections": [
+            {
+              "kind": "highlights",
+              "items": [
+                {
+                  "en": "**Cleaner recordings:** much subtler grain, a steady image quality and a better encoder for fast flips.",
+                  "de": "**Sauberere Aufnahmen:** viel dezenteres Rauschen, eine gleichmäßige Bildqualität und ein besserer Encoder für schnelle Flips."
+                },
+                {
+                  "en": "**Recipe book in survival:** every Propwash recipe can be unlocked and sits in a sensible tab.",
+                  "de": "**Rezeptbuch im Überlebensmodus:** Jedes Propwash-Rezept lässt sich freischalten und liegt in einem sinnvollen Tab."
+                }
+              ]
+            },
+            {
+              "kind": "new",
+              "items": [
+                {
+                  "en": "*Camera grain* switch in the *Action Cam* tab.",
+                  "de": "Schalter *Kamerarauschen* im Tab *Action-Cam*."
+                },
+                {
+                  "en": "Recording quality setting (High, Standard, Small) with the estimated size per minute.",
+                  "de": "Einstellung für die Aufnahmequalität (Hoch, Standard, Klein) mit der geschätzten Größe pro Minute."
+                },
+                {
+                  "en": "Searching the recipe book for \"propwash\" lists every Propwash recipe.",
+                  "de": "Die Suche nach „propwash“ im Rezeptbuch listet jedes Propwash-Rezept auf."
+                }
+              ]
+            },
+            {
+              "kind": "improved",
+              "items": [
+                {
+                  "en": "Recordings keep a steady image quality: calm scenes give smaller files, and *Standard* never exceeds the old bitrate.",
+                  "de": "Aufnahmen halten eine gleichmäßige Bildqualität: Ruhige Szenen ergeben kleinere Dateien, und *Standard* überschreitet nie die alte Bitrate."
+                },
+                {
+                  "en": "Finer detail in flat and dark areas and much sharper fast pans.",
+                  "de": "Feinere Details in flachen und dunklen Bereichen und viel schärfere schnelle Schwenks."
+                },
+                {
+                  "en": "Picking up an ingredient unlocks its recipes; any Propwash item unlocks all of them.",
+                  "de": "Eine Zutat aufzuheben schaltet ihre Rezepte frei; jedes Propwash-Item schaltet alle frei."
+                },
+                {
+                  "en": "The Flight School's survival lesson points to the recipe book at the crafting table.",
+                  "de": "Die Überlebens-Lektion der Flugschule verweist auf das Rezeptbuch an der Werkbank."
+                }
+              ]
+            },
+            {
+              "kind": "fixed",
+              "items": [
+                {
+                  "en": "Recordings no longer show horizontal seams or break up into blocks in fast or dark scenes.",
+                  "de": "Aufnahmen zeigen in schnellen oder dunklen Szenen keine waagrechten Nähte mehr und zerfallen nicht mehr in Blöcke."
+                },
+                {
+                  "en": "Flight School callouts point exactly at their target in every window size and GUI scale.",
+                  "de": "Hinweise in der Flugschule zeigen in jeder Fenstergröße und GUI-Größe genau auf ihr Ziel."
+                }
+              ]
+            },
+            {
+              "kind": "compatibility",
+              "items": [
+                {
+                  "en": "Minecraft 26.3 · Fabric and NeoForge · Java 25 · required on client and server.",
+                  "de": "Minecraft 26.3 · Fabric und NeoForge · Java 25 · auf Client und Server nötig."
+                },
+                {
+                  "en": "Network protocol 5 is unchanged: 0.2.1 and 0.2.0 play together.",
+                  "de": "Netzwerkprotokoll 5 bleibt gleich: 0.2.1 und 0.2.0 spielen zusammen."
+                },
+                {
+                  "en": "Worlds, drones and settings load unchanged.",
+                  "de": "Welten, Drohnen und Einstellungen laden unverändert."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "version": "0.2.0",
+          "id": "propwash-0.2.0",
+          "title": {
+            "en": "Accessories, action cams, LED strips and part wear",
+            "de": "Zubehör, Action-Cams, LED-Streifen und Verschleiß"
+          },
+          "sections": [
+            {
+              "kind": "highlights",
+              "items": [
+                {
+                  "en": "**Action cams that really record:** MP4 videos of your flights from a camera on the drone, with motor sound if you like.",
+                  "de": "**Action-Cams, die wirklich aufnehmen:** MP4-Videos deiner Flüge von einer Kamera auf der Drohne, auf Wunsch mit Motorsound."
+                },
+                {
+                  "en": "**LED strips and headlight:** 11 colors and several modes, and a light that makes caves flyable.",
+                  "de": "**LED-Streifen und Scheinwerfer:** 11 Farben und mehrere Modi, und ein Licht, mit dem du durch Höhlen fliegen kannst."
+                },
+                {
+                  "en": "**Part wear:** crashes wear down props, motors, camera and frame, and you swap props in the field.",
+                  "de": "**Verschleiß:** Abstürze nutzen Props, Motoren, Kamera und Rahmen ab, und Props wechselst du direkt vor Ort."
+                }
+              ]
+            },
+            {
+              "kind": "new",
+              "items": [
+                {
+                  "en": "Two accessory slots at the workbench, an action cam on top and an LED strip under the nose; both change how the drone flies.",
+                  "de": "Zwei Zubehörplätze an der Werkbank, eine Action-Cam oben und ein LED-Streifen unter der Nase; beide verändern, wie die Drohne fliegt."
+                },
+                {
+                  "en": "*Action Cam Light* (42 g, up to 1080p60) and *Action Cam Heavy* (150 g, stabilized, up to 1440p60, own battery).",
+                  "de": "*Action-Cam (Light)* (42 g, bis 1080p60) und *Action-Cam (Heavy)* (150 g, stabilisiert, bis 1440p60, eigener Akku)."
+                },
+                {
+                  "en": "Record with `F9`, a radio switch or automatically when arming; a *Recordings* window plays, deletes and opens your clips.",
+                  "de": "Aufnahme mit `F9`, einem Schalter an der Funke oder automatisch beim Scharfschalten; ein Fenster *Aufnahmen* spielt deine Clips ab, löscht und öffnet sie."
+                },
+                {
+                  "en": "*Action Cam* and *LED Strip* tabs in the configurator, and a REC element in the OSD.",
+                  "de": "Tabs *Action-Cam* und *LED-Streifen* im Konfigurator und ein REC-Element im OSD."
+                },
+                {
+                  "en": "*LEDs off* switch function (like Betaflight's LED_LOW) on any radio switch, or `F8` on the keyboard.",
+                  "de": "Schalter-Funktion *LEDs aus* (wie LED_LOW in Betaflight) auf jedem Schalter der Funke, oder `F8` auf der Tastatur."
+                },
+                {
+                  "en": "Optional LambDynamicLights support: drones with an LED strip become real light sources.",
+                  "de": "Optionale Unterstützung für LambDynamicLights: Drohnen mit LED-Streifen werden zu echten Lichtquellen."
+                },
+                {
+                  "en": "Damaged props cost thrust and shake the drone, a damaged camera tears the picture, and the OSD warns.",
+                  "de": "Beschädigte Props kosten Schub und lassen die Drohne zittern, eine beschädigte Kamera zerreißt das Bild, und das OSD warnt."
+                },
+                {
+                  "en": "Swap props in the field: hold props of the same type, sneak and right-click the drone.",
+                  "de": "Props vor Ort wechseln: Halte Props desselben Typs, schleich und klick die Drohne mit rechts an."
+                },
+                {
+                  "en": "New radios and gamepads are detected and set up with a pre-filled wizard.",
+                  "de": "Neue Funken und Gamepads werden erkannt und mit einem vorausgefüllten Assistenten eingerichtet."
+                },
+                {
+                  "en": "Every switch assignment can be inverted.",
+                  "de": "Jede Schalter-Zuweisung lässt sich umkehren."
+                },
+                {
+                  "en": "Flight School lessons \"Action cam: recording videos\" and \"Swapping props and damage\".",
+                  "de": "Lektionen in der Flugschule: „Action-Cam: Videos aufnehmen“ und „Props wechseln und Schäden“."
+                }
+              ]
+            },
+            {
+              "kind": "improved",
+              "items": [
+                {
+                  "en": "Realistic top speeds: the Freestyle preset reaches about 147 km/h instead of up to 202 km/h; hover and handling are unchanged.",
+                  "de": "Realistische Höchstgeschwindigkeiten: Das Freestyle-Preset erreicht etwa 147 km/h statt bis zu 202 km/h; Schweben und Handling bleiben gleich."
+                },
+                {
+                  "en": "Realistic video breakup: analog fades in stages down to static, digital blurs, blocks and freezes before \"NO SIGNAL\".",
+                  "de": "Realistische Bildstörungen: Analog verblasst stufenweise bis zum Rauschen, digital verschwimmt, wird blockig und friert ein, bevor „KEIN SIGNAL“ kommt."
+                },
+                {
+                  "en": "Arming safety like Betaflight: after a changed assignment or a new radio, flip the arm switch off and on again.",
+                  "de": "Scharfschalt-Sicherung wie bei Betaflight: Nach einer geänderten Zuweisung oder einer neuen Funke den Arm-Schalter einmal aus- und wieder einschalten."
+                },
+                {
+                  "en": "The remote is held with both hands in third person, also for other players.",
+                  "de": "Die Fernsteuerung wird in der Third-Person-Ansicht mit beiden Händen gehalten, auch bei anderen Spielern."
+                }
+              ]
+            },
+            {
+              "kind": "fixed",
+              "items": [
+                {
+                  "en": "The FPV picture no longer shakes at high speed.",
+                  "de": "Das FPV-Bild wackelt bei hoher Geschwindigkeit nicht mehr."
+                },
+                {
+                  "en": "In FPV the pilot no longer turns to follow the drone.",
+                  "de": "In FPV dreht sich der Pilot nicht mehr mit der Drohne mit."
+                }
+              ]
+            },
+            {
+              "kind": "compatibility",
+              "items": [
+                {
+                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · required on client and server.",
+                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · auf Client und Server nötig."
+                },
+                {
+                  "en": "Network protocol 5: client and server must both run 0.2.0.",
+                  "de": "Netzwerkprotokoll 5: Client und Server müssen beide 0.2.0 nutzen."
+                },
+                {
+                  "en": "Worlds and drones from 0.1.0 load unchanged; existing parts start in perfect condition.",
+                  "de": "Welten und Drohnen aus 0.1.0 laden unverändert; vorhandene Teile starten in einwandfreiem Zustand."
+                },
+                {
+                  "en": "Server owners can turn off part wear with the `partWear` rule.",
+                  "de": "Server-Betreiber können den Verschleiß mit der Regel `partWear` abschalten."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "version": "0.1.0",
+          "id": "propwash-0.1.0",
+          "title": {
+            "en": "First public release",
+            "de": "Erste öffentliche Version"
+          },
+          "sections": [
+            {
+              "kind": "highlights",
+              "items": [
+                {
+                  "en": "**Real FPV flying:** an own flight model and a Betaflight-style flight controller, flown with your RC radio, a gamepad or the keyboard.",
+                  "de": "**Echtes FPV-Fliegen:** ein eigenes Flugmodell und ein Flight Controller im Stil von Betaflight, geflogen mit deiner RC-Funke, einem Gamepad oder der Tastatur."
+                },
+                {
+                  "en": "**Drones from real parts:** build them at the Drone Workbench from five frames and dozens of parts, each with its own 3D model.",
+                  "de": "**Drohnen aus echten Teilen:** Bau sie an der Drohnen-Werkbank aus fünf Rahmen und Dutzenden Teilen, jedes mit eigenem 3D-Modell."
+                },
+                {
+                  "en": "**Race, craft and learn:** race gates with lap timing, survival recipes and loot, and an animated Flight School.",
+                  "de": "**Rennen, Craften, Lernen:** Renn-Gates mit Rundenzeiten, Rezepte und Beute für den Überlebensmodus und eine animierte Flugschule."
+                }
+              ]
+            },
+            {
+              "kind": "new",
+              "items": [
+                {
+                  "en": "Flight model with motors, ESC, battery, rotor aerodynamics, ground effect, prop wash, wind and turbulence.",
+                  "de": "Flugmodell mit Motoren, ESC, Akku, Rotor-Aerodynamik, Bodeneffekt, Prop-Wash, Wind und Turbulenz."
+                },
+                {
+                  "en": "Flight controller with Betaflight and Actual rates, PID tuning, Acro, Angle and Horizon, airmode, failsafe and GPS Rescue.",
+                  "de": "Flight Controller mit Betaflight- und Actual-Rates, PID-Tuning, Acro, Angle und Horizon, Airmode, Failsafe und GPS Rescue."
+                },
+                {
+                  "en": "FPV through bound goggles, or line of sight with a radio HUD; about 800 blocks of full radio range.",
+                  "de": "FPV durch gekoppelte Brillen oder auf Sicht mit Funken-HUD; etwa 800 Blöcke volle Funkreichweite."
+                },
+                {
+                  "en": "Five frames from the 65 mm whoop to the 7″ long range, with stacks, motors, props, batteries and video units, and five ready-to-fly presets.",
+                  "de": "Fünf Rahmen vom 65-mm-Whoop bis zum 7″-Long-Range, mit Stacks, Motoren, Props, Akkus und Videoeinheiten, und fünf flugfertige Presets."
+                },
+                {
+                  "en": "Drone Workbench with live 3D preview, build analysis and a salvage slot; tune and bindings stay on the drone.",
+                  "de": "Drohnen-Werkbank mit 3D-Live-Vorschau, Build-Analyse und Zerlegen-Feld; Tune und Belegungen bleiben auf der Drohne."
+                },
+                {
+                  "en": "EdgeTX and OpenTX radios over USB and gamepads, with a receiver wizard, free switch assignment and own keys for every function.",
+                  "de": "EdgeTX- und OpenTX-Funken über USB und Gamepads, mit Empfänger-Assistent, freier Schalter-Zuweisung und eigenen Tasten für jede Funktion."
+                },
+                {
+                  "en": "Analog and digital video with realistic breakup, latency and range; analog, digital and creative goggles.",
+                  "de": "Analoges und digitales Video mit realistischen Bildstörungen, Latenz und Reichweite; analoge, digitale und Kreativ-Brillen."
+                },
+                {
+                  "en": "Betaflight-like OSD with 41 elements, presets and a drag-and-drop editor.",
+                  "de": "OSD wie bei Betaflight mit 41 Elementen, Vorlagen und einem Editor mit Drag-and-drop."
+                },
+                {
+                  "en": "Batteries with their own charge, a quick swap and a Battery Charger with four bays.",
+                  "de": "Akkus mit eigener Ladung, ein schneller Wechsel und ein Akku-Ladegerät mit vier Fächern."
+                },
+                {
+                  "en": "Race gates in three sizes, a course tool, lap timing with splits, a best-lap ghost and leaderboards per world.",
+                  "de": "Renn-Gates in drei Größen, ein Kurs-Werkzeug, Rundenzeiten mit Splits, ein Geist der Bestrunde und Bestenlisten je Welt."
+                },
+                {
+                  "en": "Survival recipes for every item except the creative goggles, and chest loot from villages to end cities.",
+                  "de": "Rezepte für den Überlebensmodus für jedes Item außer der Kreativ-Brille und Beute in Truhen von Dörfern bis zu Endsiedlungen."
+                },
+                {
+                  "en": "Propwash dust: drones close to the ground stir up dust in the color of the block below.",
+                  "de": "Propwash-Staub: Drohnen nah am Boden wirbeln Staub in der Farbe des Blocks darunter auf."
+                },
+                {
+                  "en": "Flight School with ten animated 3D lessons; hold `M` over any Propwash item to open it.",
+                  "de": "Flugschule mit zehn animierten 3D-Lektionen; halte `M` über ein Propwash-Item, um sie zu öffnen."
+                },
+                {
+                  "en": "Configurator (`K`), Shift tooltips on every item and real-time motor sound with Doppler effect.",
+                  "de": "Konfigurator (`K`), Shift-Tooltips an jedem Item und Motorsound in Echtzeit mit Doppler-Effekt."
+                },
+                {
+                  "en": "Flip upright after a crash, a locator beeper and a name for your drone.",
+                  "de": "Nach einem Absturz wieder aufrichten, ein Suchpiepser und ein Name für deine Drohne."
+                },
+                {
+                  "en": "Chunks load around the drone, with server rules and `/propwash` commands for server owners.",
+                  "de": "Chunks rund um die Drohne bleiben geladen, mit Server-Regeln und `/propwash`-Befehlen für Server-Betreiber."
+                }
+              ]
+            },
+            {
+              "kind": "compatibility",
+              "items": [
+                {
+                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · required on client and server.",
+                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · auf Client und Server nötig."
+                },
+                {
+                  "en": "Network protocol 2: client and server must run the same version and get a clear message otherwise.",
+                  "de": "Netzwerkprotokoll 2: Client und Server müssen dieselbe Version nutzen und bekommen sonst eine klare Meldung."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "jmp",
+      "name": "Propwash: Just More Parts",
+      "short": "Just More Parts",
+      "tagline": {
+        "en": "The add-on with real-world parts",
+        "de": "Das Add-on mit echten Teilen"
+      },
+      "source": {
+        "ref": "v1.0.1"
+      },
+      "releases": [
+        {
+          "version": "1.0.1",
+          "id": "jmp-1.0.1",
+          "title": {
+            "en": "Source-available, ready for Propwash 0.5.0",
+            "de": "Quellcode einsehbar, bereit für Propwash 0.5.0"
+          },
+          "sections": [
+            {
+              "kind": "highlights",
+              "items": [
+                {
+                  "en": "**Source code on GitHub:** Just More Parts is now source-available under the PolyForm Shield License, like Propwash and Sodium – read the code, build it yourself, put it in modpacks and send pull requests.",
+                  "de": "**Quellcode auf GitHub:** Der Quellcode von Just More Parts ist jetzt einsehbar, unter der PolyForm Shield License wie bei Propwash und Sodium – lies den Code, bau es selbst, nimm es in Modpacks auf und schick Pull Requests."
+                }
+              ]
+            },
+            {
+              "kind": "new",
+              "items": [
+                {
+                  "en": "The documentation is MIT licensed; contributions are welcome as pull requests with a short contributor agreement.",
+                  "de": "Die Dokumentation steht unter der MIT-Lizenz; Beiträge sind als Pull Requests mit einer kurzen Beitragsvereinbarung willkommen."
+                },
+                {
+                  "en": "Exit clause: if Just More Parts ever goes 12 months without a release or maintainer activity, the code automatically becomes available under the MIT License.",
+                  "de": "Ausstiegsklausel: Sollte Just More Parts einmal 12 Monate ohne Release und ohne Aktivität eines Maintainers bleiben, steht der Code automatisch unter der MIT-Lizenz zur Verfügung."
+                }
+              ]
+            },
+            {
+              "kind": "compatibility",
+              "items": [
+                {
+                  "en": "Works with Propwash FPV 0.4.0 and 0.5.0 (Parts API 1.4 or newer) on client and server; drones, share codes and worlds load unchanged.",
+                  "de": "Läuft mit Propwash FPV 0.4.0 und 0.5.0 (Parts-API 1.4 oder neuer) auf Client und Server; Drohnen, Sharecodes und Welten laden unverändert."
+                },
+                {
+                  "en": "The new license applies from 1.0.1 on; Just More Parts 1.0.0 stays All Rights Reserved.",
+                  "de": "Die neue Lizenz gilt ab 1.0.1; Just More Parts 1.0.0 bleibt All Rights Reserved."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "version": "1.0.0",
+          "id": "jmp-1.0.0",
+          "title": {
+            "en": "First release",
+            "de": "Erste Version"
+          },
+          "sections": [
+            {
+              "kind": "highlights",
+              "items": [
+                {
+                  "en": "**143 real-world parts for Propwash FPV:** motors, props, batteries, stacks, video systems and frames with real data – Propwash's own flight model turns them into flight behaviour.",
+                  "de": "**143 echte Teile für Propwash FPV:** Motoren, Props, Akkus, Stacks, Videosysteme und Rahmen mit echten Daten – das Flugmodell von Propwash macht daraus das Flugverhalten."
+                },
+                {
+                  "en": "**New frame shapes:** stretched and squashed X, deadcat, H-frame, ducted whoops and cinewhoops, long range 4–8″ and X-Class 10, 12 and 13″.",
+                  "de": "**Neue Rahmenformen:** gestrecktes und gestauchtes X, Deadcat, H-Rahmen, Ducted-Whoops und -Cinewhoops, Long Range 4–8″ und X-Class 10, 12 und 13″."
+                },
+                {
+                  "en": "**Share codes:** copy a whole build with paint, tune, camera angle and OSD layout as one short text and rebuild it anywhere.",
+                  "de": "**Sharecodes:** Kopier einen ganzen Build mit Lackierung, Tune, Kamerawinkel und OSD-Layout als einen kurzen Text und bau ihn überall wieder auf."
+                }
+              ]
+            },
+            {
+              "kind": "new",
+              "items": [
+                {
+                  "en": "34 motors from 0702 to 4214 with several KV per stator, and new 31xx and 42xx mounts for X-Class.",
+                  "de": "34 Motoren von 0702 bis 4214 mit mehreren KV je Stator und neue 31xx- und 42xx-Aufnahmen für X-Class."
+                },
+                {
+                  "en": "38 props from 31 mm to 13″ with 2 to 5 blades in soft and hard PC, bi-blend, glass- and carbon-fiber nylon and full carbon, plus ducted props.",
+                  "de": "38 Props von 31 mm bis 13″ mit 2 bis 5 Blättern aus weichem und hartem PC, Bi-Blend, glas- und carbonfaserverstärktem Nylon und Voll-Carbon, dazu Ducted-Props."
+                },
+                {
+                  "en": "30 batteries from 1S 250 mAh to 8S 5000 mAh: LiHV, LiPo, Li-Ion and the new semi-solid LiHV (light, but overloaded at full throttle).",
+                  "de": "30 Akkus von 1S 250 mAh bis 8S 5000 mAh: LiHV, LiPo, Li-Ion und das neue Semi-Solid-LiHV (leicht, aber bei Vollgas überlastet)."
+                },
+                {
+                  "en": "12 stacks and AIOs from the 1S whoop AIO to a 30×30 8S stack with 100 A; the workbench reports overvoltage and ESCs that are too weak.",
+                  "de": "12 Stacks und AIOs vom 1S-Whoop-AIO bis zum 30×30-8S-Stack mit 100 A; die Werkbank meldet Überspannung und zu schwache ESCs."
+                },
+                {
+                  "en": "7 analog and digital video systems with their own latency, range, picture quality, power draw and camera field of view.",
+                  "de": "7 analoge und digitale Videosysteme mit eigener Latenz, Reichweite, Bildqualität, Stromaufnahme und eigenem Kamera-Sichtfeld."
+                },
+                {
+                  "en": "22 frames and 22 painted, ready-to-fly presets from the Whoop 75 to the 13″ H-frame X-Class, including a deadcat 7″ on 8S.",
+                  "de": "22 Rahmen und 22 lackierte, flugfertige Presets vom Whoop 75 bis zum 13″-H-Rahmen-X-Class, darunter ein Deadcat 7″ auf 8S."
+                },
+                {
+                  "en": "Own creative tab *Propwash: Just More Parts* right after the Propwash tab, presets first.",
+                  "de": "Eigener Kreativ-Tab *Propwash: Just More Parts* direkt nach dem Propwash-Tab, Presets zuerst."
+                },
+                {
+                  "en": "Every part has its own model in Propwash's style with a paint variant, and a Shift help with key figures, pros, cons and use.",
+                  "de": "Jedes Teil hat ein eigenes Modell im Stil von Propwash mit Lackier-Variante und eine Shift-Hilfe mit Kennzahlen, Vor- und Nachteilen und Einsatzzweck."
+                },
+                {
+                  "en": "Part names follow Propwash's naming scheme, e.g. *6S 2200 mAh Battery* or *1404 Motor, 3800 KV*.",
+                  "de": "Teilenamen folgen dem Namensschema von Propwash, z. B. *6S-Akku 2200 mAh* oder *1404-Motor, 3800 KV*."
+                },
+                {
+                  "en": "The workbench, the share code window and `/jmp code info` show Propwash's four flight times.",
+                  "de": "Die Werkbank, das Sharecode-Fenster und `/jmp code info` zeigen die vier Flugzeiten von Propwash."
+                },
+                {
+                  "en": "Every frame has a camera mount with its own range; set the drone's camera angle in Propwash's service menu.",
+                  "de": "Jeder Rahmen hat einen Kamerahalter mit eigenem Bereich; den Kamerawinkel der Drohne stellst du im Service-Menü von Propwash ein."
+                },
+                {
+                  "en": "How much prop you see depends on the frame: stretched race frames show the most, deadcats and H-frames none.",
+                  "de": "Wie viel Prop du siehst, hängt vom Rahmen ab: Gestreckte Race-Rahmen zeigen am meisten, Deadcats und H-Rahmen gar nichts."
+                },
+                {
+                  "en": "Survival recipes for every part, scaled by size, unlocked once you own a Propwash part.",
+                  "de": "Rezepte für den Überlebensmodus für jedes Teil, nach Größe gestaffelt, freigeschaltet, sobald du ein Propwash-Teil besitzt."
+                },
+                {
+                  "en": "Chest loot from village houses to end cities; X-Class and semi-solid parts are uncommon or rare and only in late structures.",
+                  "de": "Beute in Truhen von Dorfhäusern bis zu Endsiedlungen; X-Class- und Semi-Solid-Teile sind ungewöhnlich oder selten und nur in späten Bauwerken."
+                },
+                {
+                  "en": "*Share code* button at the workbench and *Share code* tab in the configurator, with preview, parts check, flight values and a survival shopping list.",
+                  "de": "Knopf *Sharecode* an der Werkbank und Tab *Sharecode* im Konfigurator, mit Vorschau, Teileprüfung, Flugwerten und Einkaufsliste für den Überlebensmodus."
+                },
+                {
+                  "en": "Copy just the tune, the paint or the OSD layout onto the drone you hold, or create a drone from a code in creative mode.",
+                  "de": "Kopier nur das Tune, die Lackierung oder das OSD-Layout auf die Drohne in deiner Hand, oder erstell im Kreativmodus eine Drohne aus einem Code."
+                },
+                {
+                  "en": "Command `/jmp code export|import|info|give` (also `/justmoreparts …`).",
+                  "de": "Befehl `/jmp code export|import|info|give` (auch `/justmoreparts …`)."
+                },
+                {
+                  "en": "Flight School lessons *Frame shapes compared* and *Sharing builds*; the `M` key opens the matching lessons over every part.",
+                  "de": "Lektionen in der Flugschule: *Rahmenformen im Vergleich* und *Builds teilen*; die Taste `M` öffnet die passenden Lektionen über jedem Teil."
+                },
+                {
+                  "en": "Drones, frames and props hang flat on the wall in item frames and tilt towards you on shelves, like Propwash's own.",
+                  "de": "Drohnen, Rahmen und Props hängen im Gegenstandsrahmen flach an der Wand und neigen sich im Regal zu dir, wie die von Propwash."
+                }
+              ]
+            },
+            {
+              "kind": "compatibility",
+              "items": [
+                {
+                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · required on client and server.",
+                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · auf Client und Server nötig."
+                },
+                {
+                  "en": "Requires Propwash FPV 0.4.0 or newer (Parts API 1.4) on client and server.",
+                  "de": "Benötigt Propwash FPV 0.4.0 oder neuer (Parts-API 1.4) auf Client und Server."
+                },
+                {
+                  "en": "Removing the add-on keeps your drones: its parts show as *Unknown part* until you install it again.",
+                  "de": "Wenn du das Add-on entfernst, bleiben deine Drohnen erhalten: Seine Teile erscheinen als *Unbekanntes Bauteil*, bis du es wieder installierst."
+                },
+                {
+                  "en": "Parts from other add-ons in a share code that the server does not have are reported as unknown on import.",
+                  "de": "Teile aus anderen Add-ons in einem Sharecode, die der Server nicht hat, werden beim Import als unbekannt gemeldet."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

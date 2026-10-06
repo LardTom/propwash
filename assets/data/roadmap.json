@@ -30,6 +30,13 @@
             "en": "Learn, race, explore",
             "de": "Lernen, fliegen, entdecken"
           },
+          "link": {
+            "href": "../changelog/#propwash-0.5.0",
+            "label": {
+              "en": "Full changelog",
+              "de": "Alle Änderungen"
+            }
+          },
           "items": [
             {
               "id": "flight-training",
@@ -155,6 +162,13 @@
           "title": {
             "en": "Parts API & add-ons",
             "de": "Parts-API & Add-ons"
+          },
+          "link": {
+            "href": "../changelog/#propwash-0.4.0",
+            "label": {
+              "en": "Full changelog",
+              "de": "Alle Änderungen"
+            }
           },
           "items": [
             {

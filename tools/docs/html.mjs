@@ -264,7 +264,7 @@ ${body}
     <div class="site-footer__brand">
       <img src="${prefix}assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
       <p><strong>Propwash FPV</strong> by lardtom</p>
-      <p class="site-footer__links"><a href="${DISCORD}" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="${CURSEFORGE}" target="_blank" rel="noopener">CurseForge</a> · <a href="${MODRINTH}" target="_blank" rel="noopener">Modrinth</a></p>
+      <p class="site-footer__links"><a href="${DISCORD}" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="${CURSEFORGE}" target="_blank" rel="noopener">CurseForge</a> · <a href="${MODRINTH}" target="_blank" rel="noopener">Modrinth</a> · <a href="${prefix}roadmap/">Roadmap</a> · <a href="${prefix}changelog/">Changelog</a></p>
     </div>
     <div class="site-footer__legal">
       <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
