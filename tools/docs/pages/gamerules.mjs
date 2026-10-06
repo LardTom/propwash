@@ -71,6 +71,13 @@ export function valuesText(rule) {
   return { en: range('en') + special('en'), de: range('de') + special('de') };
 }
 
+export function presetValueText(rule, value) {
+  if (rule.type === 'boolean') return value ? { en: 'on', de: 'an' } : { en: 'off', de: 'aus' };
+  const named = rule.values && rule.values[String(value)];
+  if (named) return { en: `${unit(rule, value, 'en')} (${named.en.toLowerCase()})`, de: `${unit(rule, value, 'de')} (${named.de.toLowerCase()})` };
+  return { en: unit(rule, value, 'en'), de: unit(rule, value, 'de') };
+}
+
 export function checkCommand(rules, command) {
   const m = command.match(/^\/gamerule (propwash:[a-z0-9_]+) (\S+)$/);
   if (!m) return `kein /gamerule-Befehl: ${command}`;
@@ -88,6 +95,7 @@ export default function gamerulesPage(ctx) {
   const physics = rules.filter((r) => r.changes_physics);
   const toc = [
     { id: 'how', title: { en: 'How they work', de: 'So funktionieren sie' } },
+    { id: 'presets', title: { en: 'Presets', de: 'Voreinstellungen' } },
     ...data.groups.map((g) => ({ id: `group-${g.id}`, title: g.title })),
     { id: 'recipes', title: { en: 'Recipes for server owners', de: 'Rezepte für Server-Betreiber' } },
     { id: 'from-04', title: { en: 'Coming from 0.4', de: 'Umstieg von 0.4' } },
@@ -95,8 +103,8 @@ export default function gamerulesPage(ctx) {
   ];
 
   const how = section('how', toc[0].title, `
-${P('World rules are Minecraft game rules of the world. They apply to every player in it, are saved with the world and reach every client from the server. With all rules at their defaults the flight model is exactly the same as in 0.4; the one difference is that drones now hit mobs and players (<em>Drones hit mobs and players</em>, on by default).',
-    'Welt-Regeln sind Minecraft-Spielregeln der Welt. Sie gelten für alle Spieler darin, werden mit der Welt gespeichert und erreichen jeden Client vom Server. Stehen alle Regeln auf Standard, rechnet das Flugmodell genau wie in 0.4; anders ist nur, dass Drohnen jetzt Lebewesen treffen (<em>Drohnen treffen Lebewesen</em>, Standard an).')}
+${P('World rules are Minecraft game rules of the world. They apply to every player in it, are saved with the world and reach every client from the server. With all rules at their defaults the flight model is exactly the same as in 0.4 except for the 65 mm whoop, which now carries a bit more momentum when falling and diving; the other difference is that drones now hit mobs and players (<em>Drones hit mobs and players</em>, on by default).',
+    'Welt-Regeln sind Minecraft-Spielregeln der Welt. Sie gelten für alle Spieler darin, werden mit der Welt gespeichert und erreichen jeden Client vom Server. Stehen alle Regeln auf Standard, rechnet das Flugmodell genau wie in 0.4 bis auf den 65-mm-Whoop, der jetzt im Fall und Sturzflug etwas mehr Schwung mitnimmt; anders ist außerdem, dass Drohnen jetzt Lebewesen treffen (<em>Drohnen treffen Lebewesen</em>, Standard an).')}
 ${figure(ctx.prefix, ctx.images.world_rules, { en: 'The World rules tab in the Propwash configurator: physics, wind and weather, battery and crash rules with sliders and switches', de: 'Der Tab „Welt-Regeln“ im Propwash-Konfigurator: Physik, Wind und Wetter, Akku und Absturz mit Reglern und Schaltern' }, { en: 'Configurator (<kbd>K</kbd>) → <em>World rules</em>. Hover a rule for its explanation, default, range and command.', de: 'Konfigurator (<kbd>K</kbd>) → <em>Welt-Regeln</em>. Mit der Maus über einer Regel stehen Erklärung, Standard, Bereich und Befehl.' })}
 ${h3('how-change', 'Who can change them', 'Wer sie ändern darf')}
 ${list([
@@ -106,12 +114,38 @@ ${list([
     ['Every change made in the tab shows up for all players as a grey chat line naming who changed which rule.', 'Jede Änderung aus dem Tab sehen alle Spieler als graue Chatzeile, die nennt, wer welche Regel geändert hat.'],
   ])}
 ${h3('how-commands', 'Commands', 'Befehle')}
-${code(`${data.command.replace('<id>', 'propwash:<rule>')}\n/gamerule propwash:wind\n/propwash rules`, 'chat')}
-${P('<code>/gamerule</code> without a value shows the current one. <code>/propwash rules</code> lists the server settings and all world rules at once. When you create a world, the rules are also in Minecraft’s <em>Game Rules</em> screen under the category <em>Propwash FPV</em>.',
-    '<code>/gamerule</code> ohne Wert zeigt den aktuellen. <code>/propwash rules</code> listet Server-Einstellungen und alle Welt-Regeln auf einmal. Beim Anlegen einer Welt stehen die Regeln auch in Minecrafts Fenster <em>Spielregeln</em> unter der Kategorie <em>Propwash FPV</em>.')}
+${code(`${data.command.replace('<id>', 'propwash:<rule>')}\n/gamerule propwash:wind\n/propwash rules\n/propwash rules preset <name>`, 'chat')}
+${P('<code>/gamerule</code> without a value shows the current one. <code>/propwash rules</code> lists the server settings and all world rules at once and names the preset they match; <code>/propwash rules preset</code> sets all rules of a preset (operators). When you create a world, the rules are also in Minecraft’s <em>Game Rules</em> screen under the category <em>Propwash FPV</em>.',
+    '<code>/gamerule</code> ohne Wert zeigt den aktuellen. <code>/propwash rules</code> listet Server-Einstellungen und alle Welt-Regeln auf einmal und nennt die Voreinstellung, der sie entsprechen; <code>/propwash rules preset</code> setzt alle Regeln einer Voreinstellung (Operatoren). Beim Anlegen einer Welt stehen die Regeln auch in Minecrafts Fenster <em>Spielregeln</em> unter der Kategorie <em>Propwash FPV</em>.')}
 ${h3('how-leaderboards', 'Leaderboards', 'Bestenlisten')}
 ${P(`Rules marked <span class="docs-badge docs-badge--physics">physics</span> change how drones fly (${physics.length} of ${rules.length}). As soon as one of them differs from its default, flights no longer count for leaderboards and server records, so records stay comparable. The server checks this itself.`,
     `Regeln mit <span class="docs-badge docs-badge--physics">Physik</span> ändern, wie Drohnen fliegen (${physics.length} von ${rules.length}). Sobald eine davon vom Standard abweicht, zählen Flüge nicht mehr für Bestenlisten und Server-Rekorde, damit Rekorde vergleichbar bleiben. Das prüft der Server selbst.`)}
+`);
+
+  const presetList = data.presets || [];
+  const presetCards = presetList.map((preset) => {
+    const changed = (preset.differs_from_default || []).map((name) => {
+      const rule = rules.find((r) => r.name === name);
+      const value = presetValueText(rule, preset.values[name]);
+      return [`<a href="#rule-${rule.name}">${esc(rule.title.en)}</a>: ${value.en}`, `<a href="#rule-${rule.name}">${esc(rule.title.de)}</a>: ${value.de}`];
+    });
+    const physicsNote = preset.changes_physics
+      ? P('Changes physics rules: flights do not count for leaderboards.', 'Ändert Physik-Regeln: Flüge zählen nicht für Bestenlisten.')
+      : P('Physics as by default: flights count for leaderboards.', 'Physik wie im Standard: Flüge zählen für Bestenlisten.');
+    return `<div class="docs-card docs-card--plain" id="preset-${preset.id}">
+<h3 class="docs-card__title">${L(esc(preset.title.en), esc(preset.title.de))}</h3>
+${P(esc(preset.description.en), esc(preset.description.de))}
+${changed.length ? list(changed) : P('Every rule at its default.', 'Jede Regel auf ihrem Standardwert.')}
+${physicsNote}
+${code(preset.command, 'chat')}
+</div>`;
+  }).join('\n');
+  const presets = section('presets', toc[1].title, `
+${P(`The top of the <em>World rules</em> tab has ${presetList.length} presets. One click sets every rule for everyone in the world; single rules stay adjustable afterwards, and the tab shows which preset the world matches or <em>Custom rules</em>. Who may click them is the same as for single rules: the host and operators.`,
+    `Oben im Tab <em>Welt-Regeln</em> stehen ${presetList.length} Voreinstellungen. Ein Klick setzt jede Regel für alle in der Welt; einzelne Regeln bleiben danach einstellbar, und der Tab zeigt, welcher Voreinstellung die Welt entspricht, oder <em>Eigene Regeln</em>. Klicken dürfen dieselben wie bei einzelnen Regeln: der Host und Operatoren.`)}
+<div class="docs-recipes">
+${presetCards}
+</div>
 `);
 
   const groups = data.groups.map((group) => {
@@ -171,7 +205,7 @@ ${P(`This page is generated from the rule catalogue of Propwash ${ctx.data.meta.
       de: `${rules.length} Gamerules bestimmen, wie sich Drohnen in einer Welt verhalten: Physik, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und wie viele Piloten gleichzeitig fliegen. Sie gelten für alle in der Welt.`,
     },
     toc,
-    body: [how, groups, recipes, from04, asData].join('\n'),
+    body: [how, presets, groups, recipes, from04, asData].join('\n'),
     extraFiles: { 'gamerules.json': JSON.stringify(data, null, 2) + '\n' },
   };
 }

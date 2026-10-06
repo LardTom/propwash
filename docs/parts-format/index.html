@@ -80,7 +80,7 @@
       <h1 class="docs-title"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></h1>
       <p lang="en" class="docs-lead">Every drone part can be a JSON file in an add-on, exactly like Propwash’s own parts. This page lists every field Propwash 0.5.0 reads.</p>
 <p lang="de" class="docs-lead">Jedes Drohnenteil kann eine JSON-Datei in einem Add-on sein, genau wie Propwashs eigene Teile. Diese Seite nennt jedes Feld, das Propwash 0.5.0 liest.</p>
-      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 10</p>
+      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 11</p>
     </div>
   </header>
   <div class="wrap docs">
@@ -110,7 +110,7 @@
 <li><span lang="en">Categories are the folder names: <code>frame</code>, <code>stack</code>, <code>motor</code>, <code>prop</code>, <code>video</code>, <code>battery</code>, <code>accessory</code>, <code>chemistry</code>. Sub-folders and other folder names are errors.</span><span lang="de">Kategorien sind die Ordnernamen: <code>frame</code>, <code>stack</code>, <code>motor</code>, <code>prop</code>, <code>video</code>, <code>battery</code>, <code>accessory</code>, <code>chemistry</code>. Unterordner und andere Ordnernamen sind Fehler.</span></li>
 <li><span lang="en">The id is <code>&lt;namespace&gt;:&lt;file name without .json&gt;</code>; the path may only contain <code>[a-z0-9_.-]</code> and must be unique across all categories.</span><span lang="de">Die Id ist <code>&lt;namensraum&gt;:&lt;dateiname ohne .json&gt;</code>; der Pfad darf nur <code>[a-z0-9_.-]</code> enthalten und muss über alle Kategorien eindeutig sein.</span></li>
 <li><span lang="en">Files are loaded only by <code>PropwashApi.parts().loadBundled(modId)</code> from the add-on’s own jar, in the order chemistry → frame → stack → motor → prop → video → battery → accessory, alphabetically within a folder. Not from world data packs, no <code>/reload</code>.</span><span lang="de">Geladen werden die Dateien nur von <code>PropwashApi.parts().loadBundled(modId)</code> aus dem eigenen Jar des Add-ons, in der Reihenfolge chemistry → frame → stack → motor → prop → video → battery → accessory, innerhalb eines Ordners alphabetisch. Nicht aus Welt-Datenpaketen, kein <code>/reload</code>.</span></li>
-<li><span lang="en">Propwash’s own 36 built-in parts and chemistries are files in exactly this format.</span><span lang="de">Propwashs eigene 36 eingebaute Teile und Zellchemien sind Dateien in genau diesem Format.</span></li>
+<li><span lang="en">Propwash’s own 37 built-in parts and chemistries are files in exactly this format.</span><span lang="de">Propwashs eigene 37 eingebaute Teile und Zellchemien sind Dateien in genau diesem Format.</span></li>
 </ul>
 
 </section>
@@ -522,7 +522,7 @@
 <thead><tr><th scope="col"><span lang="en">Category</span><span lang="de">Kategorie</span></th><th scope="col">Ids</th></tr></thead>
 <tbody>
 <tr><th scope="row"><code>frame</code></th><td><code title="65 mm Whoop Frame">propwash:whoop_65</code> <code title="3″ Cinewhoop Frame">propwash:cinewhoop_3</code> <code title="5″ Freestyle Frame">propwash:freestyle_5</code> <code title="5″ Race Frame">propwash:race_5</code> <code title="7″ Long Range Frame">propwash:long_range_7</code></td></tr>
-<tr><th scope="row"><code>stack</code></th><td><code title="Whoop AIO Board (1–2S, 5 A)">propwash:aio_whoop</code> <code title="20×20 AIO Board (2–6S, 25 A)">propwash:aio_20</code> <code title="30×30 FC/ESC Stack (3–6S, 55 A)">propwash:stack_30</code></td></tr>
+<tr><th scope="row"><code>stack</code></th><td><code title="Whoop AIO Board (1–2S, 5 A)">propwash:aio_whoop</code> <code title="20×20 AIO Board (2–6S, 25 A)">propwash:aio_20</code> <code title="30×30 FC/ESC Stack (3–6S, 55 A)">propwash:stack_30</code> <code title="Creative Flight Controller">propwash:creative_fc</code></td></tr>
 <tr><th scope="row"><code>motor</code></th><td><code title="0802 Motor, 22000 KV">propwash:m0802_22000</code> <code title="1404 Motor, 4600 KV">propwash:m1404_4600</code> <code title="2004 Motor, 3000 KV">propwash:m2004_3000</code> <code title="2207 Motor, 1750 KV">propwash:m2207_1750</code> <code title="2306.5 Motor, 1860 KV">propwash:m2306_1860</code> <code title="2807 Motor, 1300 KV">propwash:m2807_1300</code></td></tr>
 <tr><th scope="row"><code>prop</code></th><td><code title="31 mm Propeller (4-blade, 1.2″ pitch, PC)">propwash:p31_4b</code> <code title="31 mm Propeller (3-blade, 1.4″ pitch, PC)">propwash:p31_3b</code> <code title="3″ Propeller (3-blade, 3.0″ pitch, PC)">propwash:p3_3b</code> <code title="5.1″ Propeller (3-blade, 4.6″ pitch, PC)">propwash:p51_3b</code> <code title="7″ Propeller (2-blade, 3.5″ pitch, PC)">propwash:p7_2b</code></td></tr>
 <tr><th scope="row"><code>video</code></th><td><code title="Analog Nano Camera + VTX">propwash:analog_nano</code> <code title="Analog Race Camera + VTX">propwash:analog_race</code> <code title="Digital Video System (Lite)">propwash:digital_lite</code> <code title="Digital HD Video System">propwash:digital_hd</code></td></tr>

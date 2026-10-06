@@ -309,6 +309,13 @@
           "en": "30×30 FC/ESC Stack (3–6S, 55 A)",
           "de": "30×30-FC/ESC-Stack (3–6S, 55 A)"
         }
+      },
+      {
+        "id": "propwash:creative_fc",
+        "name": {
+          "en": "Creative Flight Controller",
+          "de": "Kreativ-Flugcontroller"
+        }
       }
     ],
     "motor": [

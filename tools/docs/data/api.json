@@ -182,6 +182,12 @@
             },
             {
               "kind": "method",
+              "name": "partCompatibility",
+              "static": false,
+              "display": "default boolean partCompatibility()"
+            },
+            {
+              "kind": "method",
               "name": "analyze",
               "static": false,
               "display": "Optional<BuildStats> analyze(BuildSpec spec)"
@@ -1080,6 +1086,18 @@
               "name": "RACE",
               "static": true,
               "display": "static final String RACE = \"propwash:race\""
+            },
+            {
+              "kind": "field",
+              "name": "GATE_FREE",
+              "static": true,
+              "display": "static final String GATE_FREE = \"propwash:gate_free\""
+            },
+            {
+              "kind": "field",
+              "name": "COURSE_ELEMENTS",
+              "static": true,
+              "display": "static final String COURSE_ELEMENTS = \"propwash:course_elements\""
             },
             {
               "kind": "field",

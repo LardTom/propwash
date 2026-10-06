@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js" data-title-en="World rules (gamerules) – Propwash FPV docs" data-title-de="Welt-Regeln (Gamerules) – Propwash-FPV-Doku" data-description-en="All 18 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands." data-description-de="Alle 18 Welt-Regeln (Gamerules) von Propwash FPV für Einzelspieler und Server: Schwerkraft, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Kanäle, mit Standardwerten, Bereichen und Befehlen.">
+<html lang="en" class="no-js" data-title-en="World rules (gamerules) – Propwash FPV docs" data-title-de="Welt-Regeln (Gamerules) – Propwash-FPV-Doku" data-description-en="All 20 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands." data-description-de="Alle 20 Welt-Regeln (Gamerules) von Propwash FPV für Einzelspieler und Server: Schwerkraft, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Kanäle, mit Standardwerten, Bereichen und Befehlen.">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>World rules (gamerules) – Propwash FPV docs</title>
-<meta name="description" content="All 18 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
+<meta name="description" content="All 20 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
 <meta name="theme-color" content="#1A1A1A">
 <meta name="color-scheme" content="dark">
 <meta name="referrer" content="no-referrer">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Propwash FPV">
 <meta property="og:title" content="World rules (gamerules) – Propwash FPV docs">
-<meta property="og:description" content="All 18 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
+<meta property="og:description" content="All 20 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
 <meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
@@ -78,9 +78,9 @@
     <div class="wrap docs-hero__inner">
       <p class="kicker"><span lang="en">Docs · For players and server owners</span><span lang="de">Doku · Für Spieler und Server-Betreiber</span></p>
       <h1 class="docs-title"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></h1>
-      <p lang="en" class="docs-lead">18 gamerules decide how drones behave in a world: physics, wind, battery life, crash damage, video range and how many pilots may be on air. They apply to everyone in the world.</p>
-<p lang="de" class="docs-lead">18 Gamerules bestimmen, wie sich Drohnen in einer Welt verhalten: Physik, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und wie viele Piloten gleichzeitig fliegen. Sie gelten für alle in der Welt.</p>
-      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 10</p>
+      <p lang="en" class="docs-lead">20 gamerules decide how drones behave in a world: physics, wind, battery life, crash damage, video range and how many pilots may be on air. They apply to everyone in the world.</p>
+<p lang="de" class="docs-lead">20 Gamerules bestimmen, wie sich Drohnen in einer Welt verhalten: Physik, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und wie viele Piloten gleichzeitig fliegen. Sie gelten für alle in der Welt.</p>
+      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 11</p>
     </div>
   </header>
   <div class="wrap docs">
@@ -91,7 +91,7 @@
 <li class="docs-menu__item"><a href="../../docs/"><span lang="en">Overview</span><span lang="de">Übersicht</span></a></li>
 <li class="docs-menu__item"><a href="../../docs/guide/"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></a></li>
 <li class="docs-menu__item is-current"><a href="../../docs/gamerules/" aria-current="page"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></a>
-<ol class="docs-menu__toc"><li><a href="#how"><span lang="en">How they work</span><span lang="de">So funktionieren sie</span></a></li><li><a href="#group-physics"><span lang="en">Physics</span><span lang="de">Physik</span></a></li><li><a href="#group-weather"><span lang="en">Wind and weather</span><span lang="de">Wind und Wetter</span></a></li><li><a href="#group-battery"><span lang="en">Battery</span><span lang="de">Akku</span></a></li><li><a href="#group-crash"><span lang="en">Crashes and damage</span><span lang="de">Absturz und Schaden</span></a></li><li><a href="#group-video"><span lang="en">Video and radio</span><span lang="de">Video und Funk</span></a></li><li><a href="#group-gameplay"><span lang="en">Gameplay</span><span lang="de">Spiel</span></a></li><li><a href="#recipes"><span lang="en">Recipes for server owners</span><span lang="de">Rezepte für Server-Betreiber</span></a></li><li><a href="#from-04"><span lang="en">Coming from 0.4</span><span lang="de">Umstieg von 0.4</span></a></li><li><a href="#data"><span lang="en">As data</span><span lang="de">Als Daten</span></a></li></ol></li>
+<ol class="docs-menu__toc"><li><a href="#how"><span lang="en">How they work</span><span lang="de">So funktionieren sie</span></a></li><li><a href="#presets"><span lang="en">Presets</span><span lang="de">Voreinstellungen</span></a></li><li><a href="#group-physics"><span lang="en">Physics</span><span lang="de">Physik</span></a></li><li><a href="#group-weather"><span lang="en">Wind and weather</span><span lang="de">Wind und Wetter</span></a></li><li><a href="#group-battery"><span lang="en">Battery</span><span lang="de">Akku</span></a></li><li><a href="#group-crash"><span lang="en">Crashes and damage</span><span lang="de">Absturz und Schaden</span></a></li><li><a href="#group-video"><span lang="en">Video and radio</span><span lang="de">Video und Funk</span></a></li><li><a href="#group-gameplay"><span lang="en">Gameplay</span><span lang="de">Spiel</span></a></li><li><a href="#recipes"><span lang="en">Recipes for server owners</span><span lang="de">Rezepte für Server-Betreiber</span></a></li><li><a href="#from-04"><span lang="en">Coming from 0.4</span><span lang="de">Umstieg von 0.4</span></a></li><li><a href="#data"><span lang="en">As data</span><span lang="de">Als Daten</span></a></li></ol></li>
 <li class="docs-menu__item"><a href="../../docs/api/"><span lang="en">Add-on API</span><span lang="de">Add-on-API</span></a></li>
 <li class="docs-menu__item docs-menu__item--sub"><a href="../../docs/api/reference/"><span lang="en">API reference</span><span lang="de">API-Referenz</span></a></li>
 <li class="docs-menu__item"><a href="../../docs/parts-format/"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></a></li>
@@ -102,8 +102,8 @@
 <section class="docs-section" aria-labelledby="how">
 <h2 id="how" class="docs-h2"><a class="docs-anchor" href="#how" aria-hidden="true" tabindex="-1">#</a><span lang="en">How they work</span><span lang="de">So funktionieren sie</span></h2>
 
-<p lang="en">World rules are Minecraft game rules of the world. They apply to every player in it, are saved with the world and reach every client from the server. With all rules at their defaults the flight model is exactly the same as in 0.4; the one difference is that drones now hit mobs and players (<em>Drones hit mobs and players</em>, on by default).</p>
-<p lang="de">Welt-Regeln sind Minecraft-Spielregeln der Welt. Sie gelten für alle Spieler darin, werden mit der Welt gespeichert und erreichen jeden Client vom Server. Stehen alle Regeln auf Standard, rechnet das Flugmodell genau wie in 0.4; anders ist nur, dass Drohnen jetzt Lebewesen treffen (<em>Drohnen treffen Lebewesen</em>, Standard an).</p>
+<p lang="en">World rules are Minecraft game rules of the world. They apply to every player in it, are saved with the world and reach every client from the server. With all rules at their defaults the flight model is exactly the same as in 0.4 except for the 65 mm whoop, which now carries a bit more momentum when falling and diving; the other difference is that drones now hit mobs and players (<em>Drones hit mobs and players</em>, on by default).</p>
+<p lang="de">Welt-Regeln sind Minecraft-Spielregeln der Welt. Sie gelten für alle Spieler darin, werden mit der Welt gespeichert und erreichen jeden Client vom Server. Stehen alle Regeln auf Standard, rechnet das Flugmodell genau wie in 0.4 bis auf den 65-mm-Whoop, der jetzt im Fall und Sturzflug etwas mehr Schwung mitnimmt; anders ist außerdem, dass Drohnen jetzt Lebewesen treffen (<em>Drohnen treffen Lebewesen</em>, Standard an).</p>
 <figure class="docs-figure">
 <div class="shot"><img src="../../assets/img/docs/world-rules-tab-800.webp" srcset="../../assets/img/docs/world-rules-tab-800.webp 800w, ../../assets/img/docs/world-rules-tab-1600.webp 1600w" sizes="(min-width: 1100px) 760px, 100vw" width="800" height="450" loading="lazy" decoding="async" alt="The World rules tab in the Propwash configurator: physics, wind and weather, battery and crash rules with sliders and switches" data-de-alt="Der Tab „Welt-Regeln“ im Propwash-Konfigurator: Physik, Wind und Wetter, Akku und Absturz mit Reglern und Schaltern"></div>
 <figcaption><span lang="en">Configurator (<kbd>K</kbd>) → <em>World rules</em>. Hover a rule for its explanation, default, range and command.</span><span lang="de">Konfigurator (<kbd>K</kbd>) → <em>Welt-Regeln</em>. Mit der Maus über einer Regel stehen Erklärung, Standard, Bereich und Befehl.</span></figcaption>
@@ -120,13 +120,81 @@
 <figcaption class="docs-code__bar"><span class="docs-code__lang">Chat</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
 <pre><code>/gamerule propwash:&lt;rule&gt; &lt;value&gt;
 /gamerule propwash:wind
-/propwash rules</code></pre>
+/propwash rules
+/propwash rules preset &lt;name&gt;</code></pre>
 </figure>
-<p lang="en"><code>/gamerule</code> without a value shows the current one. <code>/propwash rules</code> lists the server settings and all world rules at once. When you create a world, the rules are also in Minecraft’s <em>Game Rules</em> screen under the category <em>Propwash FPV</em>.</p>
-<p lang="de"><code>/gamerule</code> ohne Wert zeigt den aktuellen. <code>/propwash rules</code> listet Server-Einstellungen und alle Welt-Regeln auf einmal. Beim Anlegen einer Welt stehen die Regeln auch in Minecrafts Fenster <em>Spielregeln</em> unter der Kategorie <em>Propwash FPV</em>.</p>
+<p lang="en"><code>/gamerule</code> without a value shows the current one. <code>/propwash rules</code> lists the server settings and all world rules at once and names the preset they match; <code>/propwash rules preset</code> sets all rules of a preset (operators). When you create a world, the rules are also in Minecraft’s <em>Game Rules</em> screen under the category <em>Propwash FPV</em>.</p>
+<p lang="de"><code>/gamerule</code> ohne Wert zeigt den aktuellen. <code>/propwash rules</code> listet Server-Einstellungen und alle Welt-Regeln auf einmal und nennt die Voreinstellung, der sie entsprechen; <code>/propwash rules preset</code> setzt alle Regeln einer Voreinstellung (Operatoren). Beim Anlegen einer Welt stehen die Regeln auch in Minecrafts Fenster <em>Spielregeln</em> unter der Kategorie <em>Propwash FPV</em>.</p>
 <h3 id="how-leaderboards" class="docs-h3"><a class="docs-anchor" href="#how-leaderboards" aria-hidden="true" tabindex="-1">#</a><span lang="en">Leaderboards</span><span lang="de">Bestenlisten</span></h3>
-<p lang="en">Rules marked <span class="docs-badge docs-badge--physics">physics</span> change how drones fly (11 of 18). As soon as one of them differs from its default, flights no longer count for leaderboards and server records, so records stay comparable. The server checks this itself.</p>
-<p lang="de">Regeln mit <span class="docs-badge docs-badge--physics">Physik</span> ändern, wie Drohnen fliegen (11 von 18). Sobald eine davon vom Standard abweicht, zählen Flüge nicht mehr für Bestenlisten und Server-Rekorde, damit Rekorde vergleichbar bleiben. Das prüft der Server selbst.</p>
+<p lang="en">Rules marked <span class="docs-badge docs-badge--physics">physics</span> change how drones fly (11 of 20). As soon as one of them differs from its default, flights no longer count for leaderboards and server records, so records stay comparable. The server checks this itself.</p>
+<p lang="de">Regeln mit <span class="docs-badge docs-badge--physics">Physik</span> ändern, wie Drohnen fliegen (11 von 20). Sobald eine davon vom Standard abweicht, zählen Flüge nicht mehr für Bestenlisten und Server-Rekorde, damit Rekorde vergleichbar bleiben. Das prüft der Server selbst.</p>
+
+</section>
+<section class="docs-section" aria-labelledby="presets">
+<h2 id="presets" class="docs-h2"><a class="docs-anchor" href="#presets" aria-hidden="true" tabindex="-1">#</a><span lang="en">Presets</span><span lang="de">Voreinstellungen</span></h2>
+
+<p lang="en">The top of the <em>World rules</em> tab has 3 presets. One click sets every rule for everyone in the world; single rules stay adjustable afterwards, and the tab shows which preset the world matches or <em>Custom rules</em>. Who may click them is the same as for single rules: the host and operators.</p>
+<p lang="de">Oben im Tab <em>Welt-Regeln</em> stehen 3 Voreinstellungen. Ein Klick setzt jede Regel für alle in der Welt; einzelne Regeln bleiben danach einstellbar, und der Tab zeigt, welcher Voreinstellung die Welt entspricht, oder <em>Eigene Regeln</em>. Klicken dürfen dieselben wie bei einzelnen Regeln: der Host und Operatoren.</p>
+<div class="docs-recipes">
+<div class="docs-card docs-card--plain" id="preset-realistic">
+<h3 class="docs-card__title"><span lang="en">Realistic</span><span lang="de">Realistisch</span></h3>
+<p lang="en">Every rule at its default – Propwash as it comes. Flights count for leaderboards.</p>
+<p lang="de">Alle Regeln auf Standard – so fliegt Propwash ab Werk. Flüge zählen für Bestenlisten.</p>
+<p lang="en">Every rule at its default.</p>
+<p lang="de">Jede Regel auf ihrem Standardwert.</p>
+<p lang="en">Physics as by default: flights count for leaderboards.</p>
+<p lang="de">Physik wie im Standard: Flüge zählen für Bestenlisten.</p>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Chat</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>/propwash rules preset realistic</code></pre>
+</figure>
+</div>
+<div class="docs-card docs-card--plain" id="preset-training">
+<h3 class="docs-card__title">Training</h3>
+<p lang="en">Practice without consequences: drone and battery last forever, the handling stays as in Realistic – mild wind included.</p>
+<p lang="de">Üben ohne Folgen: Drohne und Akku halten ewig, das Flugverhalten bleibt wie bei Realistisch – auch der milde Wind.</p>
+<ul>
+<li><span lang="en"><a href="#rule-hardware_limits">Hardware limits</a>: off</span><span lang="de"><a href="#rule-hardware_limits">Hardware-Grenzen</a>: aus</span></li>
+<li><span lang="en"><a href="#rule-battery_scale">Battery life</a>: 0 % (infinite)</span><span lang="de"><a href="#rule-battery_scale">Akkulaufzeit</a>: 0 % (unendlich)</span></li>
+<li><span lang="en"><a href="#rule-battery_sag">Voltage sag</a>: off</span><span lang="de"><a href="#rule-battery_sag">Spannungseinbruch</a>: aus</span></li>
+<li><span lang="en"><a href="#rule-crash_damage">Crash damage</a>: off</span><span lang="de"><a href="#rule-crash_damage">Crash-Schaden</a>: aus</span></li>
+<li><span lang="en"><a href="#rule-prop_strikes">Prop strikes</a>: off</span><span lang="de"><a href="#rule-prop_strikes">Propellertreffer</a>: aus</span></li>
+</ul>
+<p lang="en">Changes physics rules: flights do not count for leaderboards.</p>
+<p lang="de">Ändert Physik-Regeln: Flüge zählen nicht für Bestenlisten.</p>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Chat</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>/propwash rules preset training</code></pre>
+</figure>
+</div>
+<div class="docs-card docs-card--plain" id="preset-arcade">
+<h3 class="docs-card__title">Arcade</h3>
+<p lang="en">Like Training, plus full freedom: any part fits any other, the air is calm, and the drone shrugs off hard hits and keeps flying.</p>
+<p lang="de">Wie Training, dazu volle Freiheit: Jedes Teil passt zu jedem, die Luft ist ruhig, und harte Aufschläge steckt die Drohne weg und fliegt weiter.</p>
+<ul>
+<li><span lang="en"><a href="#rule-prop_wash">Prop wash</a>: off</span><span lang="de"><a href="#rule-prop_wash">Prop-Wash</a>: aus</span></li>
+<li><span lang="en"><a href="#rule-hardware_limits">Hardware limits</a>: off</span><span lang="de"><a href="#rule-hardware_limits">Hardware-Grenzen</a>: aus</span></li>
+<li><span lang="en"><a href="#rule-wind">Wind</a>: 0 (off)</span><span lang="de"><a href="#rule-wind">Wind</a>: 0 (aus)</span></li>
+<li><span lang="en"><a href="#rule-turbulence">Turbulence</a>: off</span><span lang="de"><a href="#rule-turbulence">Turbulenz</a>: aus</span></li>
+<li><span lang="en"><a href="#rule-battery_scale">Battery life</a>: 0 % (infinite)</span><span lang="de"><a href="#rule-battery_scale">Akkulaufzeit</a>: 0 % (unendlich)</span></li>
+<li><span lang="en"><a href="#rule-battery_sag">Voltage sag</a>: off</span><span lang="de"><a href="#rule-battery_sag">Spannungseinbruch</a>: aus</span></li>
+<li><span lang="en"><a href="#rule-crash_damage">Crash damage</a>: off</span><span lang="de"><a href="#rule-crash_damage">Crash-Schaden</a>: aus</span></li>
+<li><span lang="en"><a href="#rule-crash_tolerance">Crash tolerance</a>: 300 %</span><span lang="de"><a href="#rule-crash_tolerance">Crash-Toleranz</a>: 300 %</span></li>
+<li><span lang="en"><a href="#rule-crash_disarm">Crash disarm</a>: off</span><span lang="de"><a href="#rule-crash_disarm">Absturz entschärft</a>: aus</span></li>
+<li><span lang="en"><a href="#rule-prop_strikes">Prop strikes</a>: off</span><span lang="de"><a href="#rule-prop_strikes">Propellertreffer</a>: aus</span></li>
+<li><span lang="en"><a href="#rule-infinite_range_analog">Infinite range (analog)</a>: on</span><span lang="de"><a href="#rule-infinite_range_analog">Unendliche Reichweite analog</a>: an</span></li>
+<li><span lang="en"><a href="#rule-infinite_range_digital">Infinite range (digital)</a>: on</span><span lang="de"><a href="#rule-infinite_range_digital">Unendliche Reichweite digital</a>: an</span></li>
+<li><span lang="en"><a href="#rule-drone_hits_entities">Drones hit mobs and players</a>: off</span><span lang="de"><a href="#rule-drone_hits_entities">Drohnen treffen Lebewesen</a>: aus</span></li>
+<li><span lang="en"><a href="#rule-part_compatibility">Parts must fit</a>: off</span><span lang="de"><a href="#rule-part_compatibility">Teile müssen zusammenpassen</a>: aus</span></li>
+</ul>
+<p lang="en">Changes physics rules: flights do not count for leaderboards.</p>
+<p lang="de">Ändert Physik-Regeln: Flüge zählen nicht für Bestenlisten.</p>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Chat</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>/propwash rules preset arcade</code></pre>
+</figure>
+</div>
+</div>
 
 </section>
 <section class="docs-section" aria-labelledby="group-physics">
@@ -210,6 +278,10 @@
 <p lang="de">Fliegende Drohnen prallen an Tieren, Monstern und Spielern ab und verletzen sie je nach Wucht (Masse × Tempo, höchstens 5 Herzen). Spieler nur mit PvP. Aus: Drohnen fliegen durch Lebewesen hindurch.</p><p class="docs-rule__example"><code>/gamerule propwash:drone_hits_entities false</code></p></td></tr>
 <tr id="rule-allow_3d_mode"><th scope="row"><span class="docs-rule__title"><span lang="en">3D mode allowed</span><span lang="de">3D-Modus erlaubt</span></span><br><code class="docs-rule__id">propwash:<wbr>allow_3d_mode</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">Pilots may use 3D mode (reversible motors, throttle center = zero thrust) once they have unlocked it for themselves. Off: the mode stays off for everyone, for example on race servers where nobody should brake with reverse thrust.</p>
 <p lang="de">Piloten dürfen den 3D-Modus benutzen (umkehrbare Motoren, Gasmitte = Nullschub), wenn sie ihn für sich freigeschaltet haben. Aus: Der Modus bleibt für alle aus, etwa auf Rennservern, auf denen niemand mit Umkehrschub bremsen soll.</p><p class="docs-rule__example"><code>/gamerule propwash:allow_3d_mode false</code></p></td></tr>
+<tr id="rule-part_compatibility"><th scope="row"><span class="docs-rule__title"><span lang="en">Parts must fit</span><span lang="de">Teile müssen zusammenpassen</span></span><br><code class="docs-rule__id">propwash:<wbr>part_compatibility</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">On: the workbench, imports and field service only build drones from parts that would fit together in reality (mounts, prop size, battery for the frame, accessory mounts). Off: every part fits every other. The notes stay visible, the drone flies with the real data of its parts and doesn't count for leaderboards. Overvoltage is still governed by “Hardware limits”.</p>
+<p lang="de">An: Werkbank, Import und Wartung bauen nur Drohnen aus Teilen, die auch in echt zusammenpassen (Halterungen, Propellergröße, Akku zum Rahmen, Zubehör-Halterung). Aus: Jedes Teil passt zu jedem. Die Hinweise bleiben sichtbar, die Drohne fliegt mit den echten Daten ihrer Teile und zählt nicht für Bestenlisten. Überspannung regelt weiter „Hardware-Grenzen“.</p><p class="docs-rule__example"><code>/gamerule propwash:part_compatibility false</code></p></td></tr>
+<tr id="rule-autonomous_rescue"><th scope="row"><span class="docs-rule__title"><span lang="en">GPS rescue without pilot</span><span lang="de">GPS Rescue ohne Pilot</span></span><br><code class="docs-rule__id">propwash:<wbr>autonomous_rescue</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">If the return to home (GPS rescue) is running when the pilot leaves – remote put away, flight stopped or game left – the drone keeps flying on its own and lands at the home point. The server only keeps the chunks around the drone loaded and never flies into unexplored terrain. Off: without a pilot the motors stop, as before.</p>
+<p lang="de">Läuft der Heimflug (GPS Rescue) und der Pilot steigt aus – Funke weggesteckt, Flug beendet oder Spiel verlassen –, fliegt die Drohne allein weiter und landet am Homepoint. Der Server hält dafür nur die Chunks um die Drohne geladen und fliegt nie in unerforschtes Gebiet. Aus: Ohne Pilot gehen die Motoren aus, wie bisher.</p><p class="docs-rule__example"><code>/gamerule propwash:autonomous_rescue false</code></p></td></tr>
 </tbody>
 </table></div>
 </section>

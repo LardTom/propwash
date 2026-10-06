@@ -403,6 +403,62 @@
         "en": "3D mode",
         "de": "3D-Modus"
       }
+    },
+    {
+      "name": "command_1",
+      "title": {
+        "en": "Custom command 1",
+        "de": "Eigener Befehl 1"
+      }
+    },
+    {
+      "name": "command_2",
+      "title": {
+        "en": "Custom command 2",
+        "de": "Eigener Befehl 2"
+      }
+    },
+    {
+      "name": "command_3",
+      "title": {
+        "en": "Custom command 3",
+        "de": "Eigener Befehl 3"
+      }
+    },
+    {
+      "name": "command_4",
+      "title": {
+        "en": "Custom command 4",
+        "de": "Eigener Befehl 4"
+      }
+    },
+    {
+      "name": "command_5",
+      "title": {
+        "en": "Custom command 5",
+        "de": "Eigener Befehl 5"
+      }
+    },
+    {
+      "name": "command_6",
+      "title": {
+        "en": "Custom command 6",
+        "de": "Eigener Befehl 6"
+      }
+    },
+    {
+      "name": "command_7",
+      "title": {
+        "en": "Custom command 7",
+        "de": "Eigener Befehl 7"
+      }
+    },
+    {
+      "name": "command_8",
+      "title": {
+        "en": "Custom command 8",
+        "de": "Eigener Befehl 8"
+      }
     }
   ]
 }

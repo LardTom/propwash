@@ -60,8 +60,8 @@
                 "de": "Welt-Regeln"
               },
               "text": {
-                "en": "Gravity, battery life, wind and more as game rules for everyone, with their own screen in the game.",
-                "de": "Schwerkraft, Akkulaufzeit, Wind und mehr als Spielregeln für alle, mit eigenem Bildschirm im Spiel."
+                "en": "Gravity, battery life, wind and more as game rules for everyone – one by one or as Realistic, Training or Arcade.",
+                "de": "Schwerkraft, Akkulaufzeit, Wind und mehr als Spielregeln für alle – einzeln oder als Realistisch, Training oder Arcade."
               }
             },
             {
@@ -73,8 +73,47 @@
                 "de": "Bessere Tricks & Kombos"
               },
               "text": {
-                "en": "26 tricks, detection that understands real flying, and chains for tricks flown back to back.",
-                "de": "26 Tricks, eine Erkennung, die echtes Fliegen versteht, und Ketten für Tricks am Stück."
+                "en": "59 tricks in nine families – from Matty flips to Sbang combos – and chains for tricks flown back to back.",
+                "de": "59 Tricks in neun Familien – vom Matty Flip bis zur Sbang-Kombo – und Ketten für Tricks am Stück."
+              }
+            },
+            {
+              "id": "mode-3d",
+              "icon": "tilt",
+              "status": "done",
+              "title": {
+                "en": "3D mode",
+                "de": "3D-Modus"
+              },
+              "text": {
+                "en": "Motors that spin backwards: fly upside down, save a low loop and take off again after landing on your back.",
+                "de": "Motoren, die rückwärts drehen: kopfüber fliegen, einen zu tiefen Loop retten und nach dem Crash auf dem Rücken wieder starten."
+              }
+            },
+            {
+              "id": "course-elements",
+              "icon": "flag",
+              "status": "done",
+              "title": {
+                "en": "Flags, slalom poles & dive cubes",
+                "de": "Flaggen, Slalomstangen & Tauchwürfel"
+              },
+              "text": {
+                "en": "New course elements that only count when flown right – with arrows, race line, splits and leaderboards.",
+                "de": "Neue Kurs-Elemente, die nur richtig geflogen zählen – mit Pfeilen, Ideallinie, Splits und Bestenlisten."
+              }
+            },
+            {
+              "id": "free-gates",
+              "icon": "gate",
+              "status": "done",
+              "title": {
+                "en": "Gates at any angle",
+                "de": "Gates in jedem Winkel"
+              },
+              "text": {
+                "en": "Turn gates freely and size them from 1 × 1 to 16 × 16 blocks – drones bounce off at the real angle.",
+                "de": "Gates frei drehen und von 1 × 1 bis 16 × 16 Blöcke groß machen – Drohnen prallen im echten Winkel ab."
               }
             },
             {
@@ -127,6 +166,71 @@
               "text": {
                 "en": "A claw for your drone: pick up items while you hover low and drop them where you want.",
                 "de": "Eine Klaue für deine Drohne: Items im Tiefflug aufsammeln und abwerfen, wo du willst."
+              }
+            },
+            {
+              "id": "creative-drone",
+              "icon": "wrench",
+              "status": "done",
+              "title": {
+                "en": "Creative drone editor",
+                "de": "Drohnen-Editor im Kreativmodus"
+              },
+              "text": {
+                "en": "A creative flight controller for any frame: set masses, motors, props and camera freely and share them as a code.",
+                "de": "Ein Kreativ-Flugcontroller für jeden Rahmen: Massen, Motoren, Props und Kamera frei einstellen und als Code teilen."
+              }
+            },
+            {
+              "id": "switch-commands",
+              "icon": "chat",
+              "status": "done",
+              "title": {
+                "en": "Commands on your radio",
+                "de": "Befehle auf der Funke"
+              },
+              "text": {
+                "en": "Put your own Minecraft commands on radio switches, buttons or keys – night falls at the flip of a switch.",
+                "de": "Eigene Minecraft-Befehle auf Schalter, Taster oder Tasten legen – die Nacht kommt per Schalter."
+              }
+            },
+            {
+              "id": "rescue-alone",
+              "icon": "compass",
+              "status": "done",
+              "title": {
+                "en": "GPS rescue without pilot",
+                "de": "GPS Rescue ohne Pilot"
+              },
+              "text": {
+                "en": "The drone flies home and lands on its own, even when you put the radio away or lose the signal.",
+                "de": "Die Drohne fliegt allein heim und landet, auch wenn du die Funke wegsteckst oder das Signal weg ist."
+              }
+            },
+            {
+              "id": "video-obstacles",
+              "icon": "fov",
+              "status": "done",
+              "title": {
+                "en": "Video behind obstacles & 4:3",
+                "de": "Video hinter Hindernissen & 4:3"
+              },
+              "text": {
+                "en": "Trees and walls weaken your video by what they are made of, and your goggles can show the classic 4:3 picture.",
+                "de": "Bäume und Mauern schwächen dein Video je nach Material, und die Brille zeigt auf Wunsch das klassische 4:3-Bild."
+              }
+            },
+            {
+              "id": "parts-freedom",
+              "icon": "puzzle",
+              "status": "done",
+              "title": {
+                "en": "Any part on any drone",
+                "de": "Jedes Teil an jede Drohne"
+              },
+              "text": {
+                "en": "Turn off Parts must fit and put 13″ props on a whoop – it flies with the real data of its parts.",
+                "de": "Schalte „Teile müssen zusammenpassen“ aus und bau 13″-Props an einen Whoop – er fliegt mit den echten Daten seiner Teile."
               }
             },
             {
