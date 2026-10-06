@@ -71,6 +71,7 @@ const TEXT = {
     'pid.throttleExpo': ['Throttle expo', 'Gas-Expo'], 'pid.throttleLimitType': ['Throttle limit', 'Gasbegrenzung'],
     'pid.throttleLimitPercent': ['Throttle limit value', 'Gasgrenze'], 'pid.thrustLinearPercent': ['Thrust linearisation', 'Schub-Linearisierung'],
     'pid.vbatSagCompensationPercent': ['Sag compensation', 'Spannungsausgleich'],
+    'pid.armMaxAngleDeg': ['Max arm angle', 'Max. Scharf-Winkel'],
     'filters.pidLoop': ['PID loop', 'PID-Loop'], 'filters.gyroLpfHz': ['Gyro lowpass', 'Gyro-Tiefpass'],
     'filters.dtermLpf1Hz': ['D-term lowpass 1', 'D-Term-Tiefpass 1'], 'filters.dtermLpf2Hz': ['D-term lowpass 2', 'D-Term-Tiefpass 2'],
     'filters.rcSmoothingHz': ['RC smoothing', 'RC-Glättung'],

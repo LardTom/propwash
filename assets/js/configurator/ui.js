@@ -1037,7 +1037,7 @@ function renderTune() {
       ...['p', 'i', 'd'].map((term) => control(`pid.${axis}.${term}`, `${t(`axes.${axis}`)} · ${term.toUpperCase()}`))));
   }
   groups.pid.append(pidTable);
-  for (const k of ['pid.angleStrength', 'pid.angleLimitDeg', 'pid.horizonStrength', 'pid.itermRelax', 'pid.antiGravityGain', 'pid.airmode']) groups.pid.append(control(k));
+  for (const k of ['pid.angleStrength', 'pid.angleLimitDeg', 'pid.horizonStrength', 'pid.itermRelax', 'pid.antiGravityGain', 'pid.airmode', 'pid.armMaxAngleDeg']) groups.pid.append(control(k));
 
   for (const axis of AXES) groups.feedforward.append(control(`pid.${axis}.ff`, `${t('tune.ff')} ${t(`axes.${axis}`)}`));
   for (const k of ['pid.tpaMode', 'pid.tpaRatePercent', 'pid.tpaBreakpoint']) groups.tpa.append(control(k));

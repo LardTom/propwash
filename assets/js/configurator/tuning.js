@@ -1,4 +1,4 @@
-// Flight tune of a build: defaults, effective values, normalisation and editing, a port of Propwash 0.4.0
+// Flight tune of a build: defaults, effective values, normalisation and editing, a port of Propwash 0.5.0
 // TuneMapping (flight keys only) with the PID auto-tune (PidAutoTune) that derives PIDs from the build.
 //
 // A "stored" tune (what the mod keeps on the drone and puts in a share code) only holds values that differ from the
@@ -78,6 +78,7 @@ export const TUNE_PARAMS = Object.freeze((() => {
   p['pid.throttleLimitPercent'] = number(25, 100, 1, 0, '%');
   p['pid.thrustLinearPercent'] = number(0, 100, 1, 0, '%');
   p['pid.vbatSagCompensationPercent'] = number(0, 100, 1, 0, '%');
+  p['pid.armMaxAngleDeg'] = number(0, 180, 1, 0, '°');
   p['filters.pidLoop'] = choice(TUNE_OPTIONS['filters.pidLoop']);
   p['filters.gyroLpfHz'] = filter(20, 1000, 5);
   p['filters.dtermLpf1Hz'] = filter(20, 1000, 5);
@@ -158,6 +159,7 @@ function newConfig() {
       throttleLimitPercent: 100,
     },
     filters: { pidLoop: 0, gyroLpfHz: 250, dtermLpf1Hz: 100, dtermLpf2Hz: 0, rcSmoothingHz: 40 },
+    armMaxTiltDeg: 25.0,
   };
 }
 
@@ -201,6 +203,7 @@ function sanitizeConfig(c) {
   p.throttleMid = sanitize(p.throttleMid, 0.05, 0.95, 0.5);
   p.throttleExpo = sanitize(p.throttleExpo, 0, 1, 0.0);
   p.throttleLimitPercent = sanitize(p.throttleLimitPercent, 25, 100, 100);
+  c.armMaxTiltDeg = sanitize(c.armMaxTiltDeg, 0.0, 180.0, 25.0);
   sanitizeFilters(c.filters);
 }
 
@@ -237,6 +240,7 @@ const ENTRIES = (() => {
   num('pid.throttleLimitPercent', (c) => c.pid.throttleLimitPercent, (c, v) => { c.pid.throttleLimitPercent = v; });
   num('pid.thrustLinearPercent', (c) => c.pid.thrustLinearPercent, (c, v) => { c.pid.thrustLinearPercent = v; });
   num('pid.vbatSagCompensationPercent', (c) => c.pid.vbatSagCompensationPercent, (c, v) => { c.pid.vbatSagCompensationPercent = v; });
+  num('pid.armMaxAngleDeg', (c) => c.armMaxTiltDeg, (c, v) => { c.armMaxTiltDeg = v; });
   enumEntry('filters.pidLoop', 3, (c) => c.filters.pidLoop, (c, v) => { c.filters.pidLoop = v; });
   num('filters.gyroLpfHz', (c) => c.filters.gyroLpfHz, (c, v) => { c.filters.gyroLpfHz = v; });
   num('filters.dtermLpf1Hz', (c) => c.filters.dtermLpf1Hz, (c, v) => { c.filters.dtermLpf1Hz = v; });

@@ -17,8 +17,8 @@
           "version": "0.5.0",
           "id": "propwash-0.5.0",
           "title": {
-            "en": "World rules, flight training, freestyle tricks, gripper and bandos",
-            "de": "Welt-Regeln, Flugtraining, Freestyle-Tricks, Greifer und Bandos"
+            "en": "World rules, flight training, 59 freestyle tricks, 3D mode and course elements",
+            "de": "Welt-Regeln, Flugtraining, 59 Freestyle-Tricks, 3D-Modus und Kurs-Elemente"
           },
           "sections": [
             {
@@ -29,12 +29,12 @@
                   "de": "**Flugtraining:** 20 Lektionen zum Selberfliegen in fünf Kapiteln – vom Schweben über Gates und Flips bis zur Abschlussprüfung –, geflogen mit deiner eigenen Drohne durch einen holografischen Kurs, mit Sternen und Bestzeiten."
                 },
                 {
-                  "en": "**World rules:** gravity, battery life, wind, crash damage, range and more are game rules for the whole world, with their own *World rules* tab in the configurator.",
-                  "de": "**Welt-Regeln:** Schwerkraft, Akkulaufzeit, Wind, Crash-Schaden, Reichweite und mehr sind Spielregeln für die ganze Welt, mit eigenem Tab *Welt-Regeln* im Konfigurator."
+                  "en": "**World rules for everyone:** gravity, battery life, wind, crash damage, range and more apply to the whole world – set them one by one in the new *World rules* tab or with one click as *Realistic*, *Training* or *Arcade*.",
+                  "de": "**Welt-Regeln für alle:** Schwerkraft, Akkulaufzeit, Wind, Crash-Schaden, Reichweite und mehr gelten für die ganze Welt – einzeln im neuen Tab *Welt-Regeln* oder mit einem Klick als *Realistisch*, *Training* oder *Arcade*."
                 },
                 {
-                  "en": "**Freestyle tricks that understand real flying:** 26 tricks such as the Juicy Flick, Rubik's Cube and McTwist are recognized even when sloppy, fast or flown straight into each other.",
-                  "de": "**Freestyle-Tricks, die echtes Fliegen verstehen:** 26 Tricks wie Juicy Flick, Rubik's Cube und McTwist werden erkannt, auch wenn sie unsauber, schnell oder direkt hintereinander geflogen sind."
+                  "en": "**Freestyle like the pros:** 59 tricks in nine families – from Matty flips and power loops to Sbang combos and Guillotines – are recognized even when sloppy, fast or chained, and the new 3D mode lets you fly upside down.",
+                  "de": "**Freestyle wie die Profis:** 59 Tricks in neun Familien – vom Matty Flip und Power Loop bis zur Sbang-Kombo und Guillotine – werden erkannt, auch wenn sie unsauber, schnell oder am Stück geflogen sind, und mit dem neuen 3D-Modus fliegst du kopfüber."
                 }
               ]
             },
@@ -42,24 +42,44 @@
               "kind": "new",
               "items": [
                 {
-                  "en": "Flight training in the Flight School or with `M` while flying: basics, forward flight, racing, freestyle and advanced lessons in FPV or line of sight; only you see the course, so it works in survival and on servers.",
-                  "de": "Flugtraining in der Flugschule oder mit `M` im Flug: Grundlagen, Vorwärtsflug, Rennen, Freestyle und Fortgeschrittene, in FPV oder auf Sicht; den Kurs siehst nur du, deshalb klappt es auch im Überlebensmodus und auf Servern."
+                  "en": "Flight training in the Flight School or with `M` while flying, in FPV or line of sight; only you see the course, so it works in survival and on servers.",
+                  "de": "Flugtraining in der Flugschule oder mit `M` im Flug, in FPV oder auf Sicht; den Kurs siehst nur du, deshalb klappt es auch im Überlebensmodus und auf Servern."
                 },
                 {
-                  "en": "*World rules* tab with an explanation for every rule: the host and operators change them, everyone else sees what applies – also with `/gamerule` and when you create a world.",
-                  "de": "Tab *Welt-Regeln* mit einer Erklärung zu jeder Regel: Der Host und Operatoren ändern sie, alle anderen sehen, was gilt – auch mit `/gamerule` und beim Erstellen einer Welt."
+                  "en": "*World rules* tab with an explanation for every rule: the host and operators change them, everyone else sees what applies – also with `/gamerule`, `/propwash rules preset` and when you create a world.",
+                  "de": "Tab *Welt-Regeln* mit einer Erklärung zu jeder Regel: Der Host und Operatoren ändern sie, alle anderen sehen, was gilt – auch mit `/gamerule`, `/propwash rules preset` und beim Erstellen einer Welt."
                 },
                 {
-                  "en": "World rules for gravity, battery life (0 = infinite), wind, turbulence, prop wash, ground effect, voltage sag, hardware limits, crash damage, crash tolerance, prop strikes, infinite range per video system and a video channel limit.",
-                  "de": "Welt-Regeln für Schwerkraft, Akkulaufzeit (0 = unendlich), Wind, Turbulenz, Prop-Wash, Bodeneffekt, Spannungseinbruch, Hardware-Grenzen, Crash-Schaden, Crash-Toleranz, Propellertreffer, unendliche Reichweite je Videosystem und eine Grenze für Videokanäle."
+                  "en": "World rules for gravity, battery life (0 = infinite), wind, turbulence, prop wash, ground effect, voltage sag, hardware limits, crash damage and tolerance, prop strikes, video range and channels, 3D mode and GPS rescue without pilot.",
+                  "de": "Welt-Regeln für Schwerkraft, Akkulaufzeit (0 = unendlich), Wind, Turbulenz, Prop-Wash, Bodeneffekt, Spannungseinbruch, Hardware-Grenzen, Crash-Schaden und Crash-Toleranz, Propellertreffer, Videoreichweite und Videokanäle, 3D-Modus und GPS Rescue ohne Pilot."
                 },
                 {
-                  "en": "Drones hit mobs and players: they bounce off and hurt them by the force of the impact, up to five hearts and players only with PvP (world rule *Drones hit mobs and players*).",
-                  "de": "Drohnen treffen Mobs und Spieler: Sie prallen ab und verletzen sie je nach Wucht des Aufpralls um bis zu fünf Herzen, Spieler nur mit PvP (Welt-Regel *Drohnen treffen Lebewesen*)."
+                  "en": "Drones hit mobs and players: they bounce off and hurt them by the force of the impact, up to five hearts and players only with PvP.",
+                  "de": "Drohnen treffen Mobs und Spieler: Sie prallen ab und verletzen sie je nach Wucht des Aufpralls um bis zu fünf Herzen, Spieler nur mit PvP."
                 },
                 {
-                  "en": "Gripper for the bottom mount: picks up dropped items while you hover low, carries up to 400 g and drops them with `Enter` or a radio switch.",
-                  "de": "Greifer für den unteren Halter: sammelt fallen gelassene Items auf, während du tief schwebst, trägt bis zu 400 g und wirft sie mit `Enter` oder einem Schalter an der Funke ab."
+                  "en": "World rule *Parts must fit*: turn it off to combine any parts – 13″ props on a whoop, a 6S pack on a 1S board. Such drones fly with the real data of their parts but don't count for leaderboards.",
+                  "de": "Welt-Regel *Teile müssen zusammenpassen*: Schalte sie aus, um beliebige Teile zu kombinieren – 13″-Props an einem Whoop, einen 6S-Akku an einem 1S-Board. Solche Drohnen fliegen mit den echten Daten ihrer Teile, zählen aber nicht für Bestenlisten."
+                },
+                {
+                  "en": "3D mode: unlock it in the *Modes* tab and put it on a switch – below center throttle the motors spin backwards, so you can fly inverted, save a low loop and take off upside down after a crash.",
+                  "de": "3D-Modus: im Tab *Modi* freischalten und auf einen Schalter legen – unterhalb der Gasmitte drehen die Motoren rückwärts, so fliegst du kopfüber, rettest einen zu tiefen Loop und startest nach einem Crash auch kopfüber."
+                },
+                {
+                  "en": "Trick catalogue in the *Freestyle* tab: every trick with its points, grouped into nine families with search and filter; tricks flown straight into each other score as a chain (+25 %).",
+                  "de": "Trick-Katalog im Tab *Freestyle*: jeder Trick mit seinen Punkten, in neun Familien mit Suche und Filter; direkt ineinander geflogene Tricks zählen als Kette (+25 %)."
+                },
+                {
+                  "en": "Flags, slalom poles and dive cubes for race courses: they join courses like gates, count only when flown right and work with the race line, splits, ghosts and leaderboards.",
+                  "de": "Flaggen, Slalomstangen und Tauchwürfel für Rennkurse: Sie gehören wie Gates zum Kurs, zählen nur richtig geflogen und funktionieren mit Ideallinie, Splits, Geistern und Bestenlisten."
+                },
+                {
+                  "en": "Gates turn and scale freely: *Adjust gate* (sneak + right-click) sets yaw, pitch and roll and any opening from 1 × 1 to 16 × 16 blocks, and drones bounce off angled gates at the real angle.",
+                  "de": "Gates frei drehen und frei groß: *Gate einstellen* (Schleichen + Rechtsklick) setzt Gieren, Nicken und Rollen und jede Öffnung von 1 × 1 bis 16 × 16 Blöcken, und Drohnen prallen an schrägen Gates im echten Winkel ab."
+                },
+                {
+                  "en": "Gripper for the bottom mount: picks up items while you hover low, carries up to 400 g and drops them with `Enter` or a radio switch.",
+                  "de": "Greifer für den unteren Halter: sammelt Items auf, während du tief schwebst, trägt bis zu 400 g und wirft sie mit `Enter` oder einem Schalter an der Funke ab."
                 },
                 {
                   "en": "Action Cam (Flashback): records your flight as a camera path for the replay mod Flashback, one ready-to-render scene per flight.",
@@ -70,12 +90,28 @@
                   "de": "Bandos: seltene verlassene Scheunen, Fabriken, Stege, Ölplattformen und Förderanlagen zum Durchfliegen, manche mit einer Truhe gebrauchter Teile – finde einen mit `/locate structure #propwash:bandos`."
                 },
                 {
-                  "en": "Ten new tricks, chains for tricks flown straight into each other (+25 %) and every trick with its points in the *Freestyle* tab.",
-                  "de": "Zehn neue Tricks, Ketten für Tricks, die direkt ineinander übergehen (+25 %), und jeder Trick mit seinen Punkten im Tab *Freestyle*."
+                  "en": "Creative Flight Controller (creative mode only): fits every frame and opens the *Drone Editor* – set masses, motors, props, battery, drag and camera freely, keep your own templates and share them as a code.",
+                  "de": "Kreativ-Flugcontroller (nur im Kreativmodus): passt in jeden Rahmen und öffnet den *Drohnen-Editor* – Massen, Motoren, Props, Akku, Luftwiderstand und Kamera frei einstellen, eigene Vorlagen behalten und als Code teilen."
                 },
                 {
-                  "en": "New Flight School lessons *Freestyle tricks*, *Gripper: collecting items* and *Bandos: abandoned spots*.",
-                  "de": "Neue Lektionen in der Flugschule: *Freestyle-Tricks*, *Greifer: Items einsammeln* und *Bandos: verlassene Spots*."
+                  "en": "Custom commands such as `/time set night` on a radio switch, button or key, run with your own permissions while you fly (*Modes* tab, page *Commands*).",
+                  "de": "Eigene Befehle wie `/time set night` auf einem Schalter oder Taster der Funke oder einer Taste, ausgeführt mit deinen eigenen Rechten, während du fliegst (Tab *Modi*, Seite *Befehle*)."
+                },
+                {
+                  "en": "GPS rescue without pilot: if the return to home is running when you stop flying, leave the game or lose the signal, the drone flies home and lands on its own.",
+                  "de": "GPS Rescue ohne Pilot: Läuft der Heimflug, wenn du aufhörst zu fliegen, das Spiel verlässt oder das Signal verlierst, fliegt die Drohne allein heim und landet."
+                },
+                {
+                  "en": "*Image format* 16:9, 4:3 like analog goggles or Auto in the *Video* tab, and *Max arm angle* per drone (like Betaflight's small_angle) in the *Configuration* tab, saved with the tune and share codes.",
+                  "de": "*Bildformat* 16:9, 4:3 wie eine analoge Brille oder Auto im Tab *Video*, und *Max. Scharf-Winkel* je Drohne (wie small_angle in Betaflight) im Tab *Konfiguration*, gespeichert mit dem Tuning und in Sharecodes."
+                },
+                {
+                  "en": "Receiver wizard with an animated radio that shows what to do in every step, and a reminder before you finish without an arm switch.",
+                  "de": "Empfänger-Assistent mit animierter Funke, die in jedem Schritt zeigt, was zu tun ist, und einer Rückfrage, bevor du ohne Arm-Schalter abschließt."
+                },
+                {
+                  "en": "New Flight School lessons for freestyle tricks, 3D mode, free gates, flags and slalom, the gripper, bandos and – in creative mode – the drone editor.",
+                  "de": "Neue Lektionen in der Flugschule zu Freestyle-Tricks, 3D-Modus, freien Gates, Flaggen und Slalom, Greifer, Bandos und – im Kreativmodus – zum Drohnen-Editor."
                 },
                 {
                   "en": "Documentation at [propwashfpv.com/docs](https://propwashfpv.com/docs/): player guide, every world rule and the add-on API; Mod Menu links it as *Wiki*.",
@@ -91,16 +127,40 @@
               "kind": "improved",
               "items": [
                 {
-                  "en": "Flips and rolls count out of fast forward flight, with some roll or yaw mixed in, a little short or ending in a dive.",
-                  "de": "Flips und Rollen zählen auch aus schnellem Vorwärtsflug heraus, mit etwas Rollen oder Gieren dazwischen, etwas zu kurz oder mit einem Sturzflug am Ende."
+                  "en": "Trick detection is more forgiving: flips and rolls count out of fast forward flight, with some roll or yaw mixed in or a little short, and a half roll or flip there and straight back counts as a rewind.",
+                  "de": "Die Trick-Erkennung ist nachsichtiger: Flips und Rollen zählen auch aus schnellem Vorwärtsflug heraus, mit etwas Rollen oder Gieren dazwischen oder etwas zu kurz, und eine halbe Rolle oder ein Flip hin und direkt zurück zählt als Rewind."
                 },
                 {
-                  "en": "A half roll there and straight back is now a rewind.",
-                  "de": "Eine halbe Rolle hin und direkt zurück ist jetzt ein Rewind."
+                  "en": "GPS rescue finds its way: it climbs to a safe height right away, flies around trees and buildings and out of halls through the door, never lands in water, lava or on tree tops, and hovers when it's stuck.",
+                  "de": "GPS Rescue findet seinen Weg: Er steigt sofort auf eine sichere Höhe, fliegt um Bäume und Gebäude herum und durchs Tor aus Hallen hinaus, landet nie in Wasser, Lava oder auf Baumkronen und schwebt, wenn er feststeckt."
                 },
                 {
-                  "en": "`/propwash rules` also lists the world rules.",
-                  "de": "`/propwash rules` listet auch die Welt-Regeln auf."
+                  "en": "Video behind obstacles is realistic: trees, houses, water and hills weaken analog and digital video by what they are made of; open-field range is unchanged.",
+                  "de": "Video hinter Hindernissen ist realistisch: Bäume, Häuser, Wasser und Hügel schwächen analoges und digitales Video je nach Material; die Reichweite im freien Feld bleibt gleich."
+                },
+                {
+                  "en": "Props last much longer: light bumps no longer hurt them, and how they fail depends on the material – shown in the prop tooltip under *Crash*.",
+                  "de": "Props halten viel länger: Leichte Stöße schaden ihnen nicht mehr, und wie sie kaputtgehen, hängt vom Material ab – zu sehen im Prop-Tooltip unter *Absturz*."
+                },
+                {
+                  "en": "The 65 mm whoop carries a bit more momentum when falling and diving; its top speed rises from 36 to 41 km/h.",
+                  "de": "Der 65-mm-Whoop nimmt im Fall und Sturzflug etwas mehr Schwung mit; seine Höchstgeschwindigkeit steigt von 36 auf 41 km/h."
+                },
+                {
+                  "en": "The workbench, the configurator overview and the drone tooltip show dry weight and all-up weight separately.",
+                  "de": "Werkbank, Konfigurator-Übersicht und Drohnen-Tooltip zeigen Trockengewicht und Abfluggewicht getrennt."
+                },
+                {
+                  "en": "*Rotate gate* (`R`) turns gates in 45°, 15° or 5° steps (*Race* tab), and *Leave course* in *Adjust gate* takes a gate out of its course.",
+                  "de": "*Gate drehen* (`R`) dreht Gates in Schritten von 45°, 15° oder 5° (Tab *Rennen*), und *Aus dem Kurs* in *Gate einstellen* nimmt ein Gate aus seinem Kurs."
+                },
+                {
+                  "en": "`/propwash rules` lists the world rules and the preset they match.",
+                  "de": "`/propwash rules` listet die Welt-Regeln und die Voreinstellung, der sie entsprechen."
+                },
+                {
+                  "en": "Flight School *Swapping and charging batteries* shows that the frame refuses a pack that is too heavy – the charger charges every pack, Li-Ion included.",
+                  "de": "Flugschule *Akku tauschen und laden* zeigt, dass der Rahmen einen zu schweren Akku ablehnt – das Ladegerät lädt jeden Akku, auch Li-Ion."
                 }
               ]
             },
@@ -108,8 +168,28 @@
               "kind": "fixed",
               "items": [
                 {
+                  "en": "Receiver wizard: the throttle is no longer stored the wrong way round when you move it down, up and rest at the top – if in doubt, the wizard asks.",
+                  "de": "Empfänger-Assistent: Das Gas wird nicht mehr verkehrt herum gespeichert, wenn du es nach unten, dann nach oben bewegst und oben stehen lässt – im Zweifel fragt der Assistent nach."
+                },
+                {
                   "en": "Tricks flown back to back no longer cancel each other out, and flying fast at a steep angle no longer stops trick detection.",
                   "de": "Direkt hintereinander geflogene Tricks heben sich nicht mehr gegenseitig auf, und schneller Flug in steilem Winkel stoppt die Trick-Erkennung nicht mehr."
+                },
+                {
+                  "en": "Flight modes: `R` and the Acro, Angle and Horizon keys always switch, also next to a radio mode switch, and the *Modes* tab shows the mode you actually fly.",
+                  "de": "Flugmodi: `R` und die Tasten für Acro, Angle und Horizon schalten immer, auch neben einem Modusschalter an der Funke, und der Tab *Modi* zeigt den Modus, den du wirklich fliegst."
+                },
+                {
+                  "en": "Holding `R` or another toggle key such as arm or LEDs no longer triggers it several times.",
+                  "de": "Gehaltenes `R` oder eine andere Umschalt-Taste wie Scharf schalten oder LEDs löst nicht mehr mehrfach aus."
+                },
+                {
+                  "en": "The service menu no longer fits props that are too small for the frame or don't fit the motor shaft (only possible with add-on parts).",
+                  "de": "Das Wartungsmenü setzt keine Props mehr ein, die zu klein für den Rahmen sind oder nicht auf die Motorwelle passen (nur mit Add-on-Teilen möglich)."
+                },
+                {
+                  "en": "At night with the LEDs on, the FPV view no longer turns black on some graphics cards (Intel UHD): Propwash switches to a simpler lighting by itself, and *LED lighting in FPV view* in the *Video* tab turns it off just for you.",
+                  "de": "Nachts mit eingeschalteten LEDs wird das FPV-Bild auf manchen Grafikkarten (Intel UHD) nicht mehr schwarz: Propwash schaltet selbst auf eine einfachere Ausleuchtung um, und *LED-Ausleuchtung* im Tab *Video* schaltet sie nur für dich ab."
                 }
               ]
             },
@@ -117,16 +197,16 @@
               "kind": "compatibility",
               "items": [
                 {
-                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · required on client and server; network protocol 10, so client and server must both run 0.5.0.",
-                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · auf Client und Server nötig; Netzwerkprotokoll 10, deshalb müssen Client und Server beide 0.5.0 nutzen."
+                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · required on client and server; network protocol 11, so client and server must both run 0.5.0.",
+                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · auf Client und Server nötig; Netzwerkprotokoll 11, deshalb müssen Client und Server beide 0.5.0 nutzen."
                 },
                 {
-                  "en": "Worlds and drones from 0.4.0 load unchanged. With the default world rules the flight model is exactly as before, but drones now hit mobs and players – turn off *Drones hit mobs and players* to fly through them as in 0.4.0. The old personal *Simulation* settings and the server setting `partWear` are no longer used – set them again as world rules.",
-                  "de": "Welten und Drohnen aus 0.4.0 laden unverändert. Mit den Standard-Welt-Regeln rechnet das Flugmodell genau wie vorher, aber Drohnen treffen jetzt Mobs und Spieler – schalte *Drohnen treffen Lebewesen* aus, um wie in 0.4.0 durch sie hindurchzufliegen. Die alten persönlichen Einstellungen unter *Simulation* und die Server-Einstellung `partWear` gelten nicht mehr – stell sie als Welt-Regeln neu ein."
+                  "en": "Worlds, drones, gates, courses and leaderboards from 0.4.0 load unchanged. With the default world rules the flight model is exactly as in 0.4.0 except for the 65 mm whoop, but drones now hit mobs and players – turn off *Drones hit mobs and players* to fly through them. The personal *Simulation* settings and the server setting `partWear` are now world rules.",
+                  "de": "Welten, Drohnen, Gates, Kurse und Bestenlisten aus 0.4.0 laden unverändert. Mit den Standard-Welt-Regeln rechnet das Flugmodell genau wie in 0.4.0 bis auf den 65-mm-Whoop, aber Drohnen treffen jetzt Mobs und Spieler – schalte *Drohnen treffen Lebewesen* aus, um durch sie hindurchzufliegen. Die persönlichen Einstellungen unter *Simulation* und die Server-Einstellung `partWear` sind jetzt Welt-Regeln."
                 },
                 {
-                  "en": "Parts API 1.5.0: add-ons made for 1.4 keep working, *Propwash: Just More Parts* included. Flashback is optional (Fabric only, not included).",
-                  "de": "Parts-API 1.5.0: Add-ons für 1.4 laufen weiter, *Propwash: Just More Parts* eingeschlossen. Flashback ist optional (nur Fabric, nicht enthalten)."
+                  "en": "Parts API 1.5.0: add-ons made for 1.4 keep working; the matching *Propwash: Just More Parts* is 1.1.0. Flashback is optional (Fabric only, not included).",
+                  "de": "Parts-API 1.5.0: Add-ons für 1.4 laufen weiter; das passende *Propwash: Just More Parts* ist 1.1.0. Flashback ist optional (nur Fabric, nicht enthalten)."
                 },
                 {
                   "en": "The new license applies from 0.5.0 on; Propwash 0.4.0 and older stay All Rights Reserved.",
@@ -952,23 +1032,27 @@
         "de": "Das Add-on mit echten Teilen"
       },
       "source": {
-        "ref": "v1.0.1"
+        "ref": "v1.1.0"
       },
       "releases": [
         {
-          "version": "1.0.1",
-          "id": "jmp-1.0.1",
+          "version": "1.1.0",
+          "id": "jmp-1.1.0",
           "title": {
-            "en": "Source-available, ready for Propwash 0.5.0",
-            "de": "Quellcode einsehbar, bereit für Propwash 0.5.0"
+            "en": "Source-available, made for Propwash 0.5.0",
+            "de": "Quellcode einsehbar, gemacht für Propwash 0.5.0"
           },
           "sections": [
             {
               "kind": "highlights",
               "items": [
                 {
-                  "en": "**Source code on GitHub:** Just More Parts is now source-available under the PolyForm Shield License, like Propwash and Sodium – read the code, build it yourself, put it in modpacks and send pull requests.",
-                  "de": "**Quellcode auf GitHub:** Der Quellcode von Just More Parts ist jetzt einsehbar, unter der PolyForm Shield License wie bei Propwash und Sodium – lies den Code, bau es selbst, nimm es in Modpacks auf und schick Pull Requests."
+                  "en": "**Source code on GitHub:** Just More Parts is now source-available under the PolyForm Shield License, like Propwash – read the code, build it yourself, put it in modpacks and send pull requests.",
+                  "de": "**Quellcode auf GitHub:** Der Quellcode von Just More Parts ist jetzt einsehbar, unter der PolyForm Shield License wie bei Propwash – lies den Code, bau es selbst, nimm es in Modpacks auf und schick Pull Requests."
+                },
+                {
+                  "en": "**Ready for Propwash 0.5.0:** built and tested against Propwash 0.5.0, and the whoop frames follow its corrected whoop data.",
+                  "de": "**Bereit für Propwash 0.5.0:** gebaut und geprüft gegen Propwash 0.5.0, und die Whoop-Rahmen folgen dessen korrigierten Whoop-Daten."
                 }
               ]
             },
@@ -986,15 +1070,28 @@
               ]
             },
             {
+              "kind": "improved",
+              "items": [
+                {
+                  "en": "The 65 mm Whoop Frame (Lite) and the 75 mm Whoop Frame carry a bit more momentum when falling and diving: their air resistance from above now follows the real frame outline. Top speed rises slightly (Whoop 75 preset 41 → 45 km/h).",
+                  "de": "Der 65-mm-Whoop-Rahmen (Lite) und der 75-mm-Whoop-Rahmen nehmen im Fall und Sturzflug etwas mehr Schwung mit: Ihr Luftwiderstand von oben folgt jetzt dem echten Umriss des Rahmens. Die Höchstgeschwindigkeit steigt leicht (Preset Whoop 75: 41 → 45 km/h)."
+                }
+              ]
+            },
+            {
               "kind": "compatibility",
               "items": [
                 {
-                  "en": "Works with Propwash FPV 0.4.0 and 0.5.0 (Parts API 1.4 or newer) on client and server; drones, share codes and worlds load unchanged.",
-                  "de": "Läuft mit Propwash FPV 0.4.0 und 0.5.0 (Parts-API 1.4 oder neuer) auf Client und Server; Drohnen, Sharecodes und Welten laden unverändert."
+                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · required on client and server.",
+                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · auf Client und Server nötig."
                 },
                 {
-                  "en": "The new license applies from 1.0.1 on; Just More Parts 1.0.0 stays All Rights Reserved.",
-                  "de": "Die neue Lizenz gilt ab 1.0.1; Just More Parts 1.0.0 bleibt All Rights Reserved."
+                  "en": "Works with Propwash FPV 0.5.0 and 0.4.0 (Parts API 1.4 or newer); drones, share codes and worlds load unchanged.",
+                  "de": "Läuft mit Propwash FPV 0.5.0 und 0.4.0 (Parts-API 1.4 oder neuer); Drohnen, Sharecodes und Welten laden unverändert."
+                },
+                {
+                  "en": "The new license applies from 1.1.0 on; Just More Parts 1.0.0 stays All Rights Reserved.",
+                  "de": "Die neue Lizenz gilt ab 1.1.0; Just More Parts 1.0.0 bleibt All Rights Reserved."
                 }
               ]
             }
@@ -1020,8 +1117,8 @@
                   "de": "**Neue Rahmenformen:** gestrecktes und gestauchtes X, Deadcat, H-Rahmen, Ducted-Whoops und -Cinewhoops, Long Range 4–8″ und X-Class 10, 12 und 13″."
                 },
                 {
-                  "en": "**Share codes:** copy a whole build with paint, tune, camera angle and OSD layout as one short text and rebuild it anywhere.",
-                  "de": "**Sharecodes:** Kopier einen ganzen Build mit Lackierung, Tune, Kamerawinkel und OSD-Layout als einen kurzen Text und bau ihn überall wieder auf."
+                  "en": "**Share codes:** copy a whole build with paint, tune, camera angle and OSD layout as one short word and rebuild it anywhere.",
+                  "de": "**Sharecodes:** Kopier einen ganzen Build mit Lackierung, Tune, Kamerawinkel und OSD-Layout als ein kurzes Wort und bau ihn überall wieder auf."
                 }
               ]
             },
@@ -1089,6 +1186,10 @@
                   "de": "Knopf *Sharecode* an der Werkbank und Tab *Sharecode* im Konfigurator, mit Vorschau, Teileprüfung, Flugwerten und Einkaufsliste für den Überlebensmodus."
                 },
                 {
+                  "en": "Share codes are much shorter: a ready-made preset is about 18 characters, a tuned build with name about 55–75, even with the OSD layout about 115 – one word without dashes, so a double-click copies all of it.",
+                  "de": "Sharecodes sind viel kürzer: Ein fertiges Preset hat etwa 18 Zeichen, ein getunter Build mit Namen etwa 55–75, selbst mit OSD-Layout etwa 115 – ein Wort ohne Bindestriche, ein Doppelklick kopiert also alles."
+                },
+                {
                   "en": "Copy just the tune, the paint or the OSD layout onto the drone you hold, or create a drone from a code in creative mode.",
                   "de": "Kopier nur das Tune, die Lackierung oder das OSD-Layout auf die Drohne in deiner Hand, oder erstell im Kreativmodus eine Drohne aus einem Code."
                 },
@@ -1122,8 +1223,8 @@
                   "de": "Wenn du das Add-on entfernst, bleiben deine Drohnen erhalten: Seine Teile erscheinen als *Unbekanntes Bauteil*, bis du es wieder installierst."
                 },
                 {
-                  "en": "Parts from other add-ons in a share code that the server does not have are reported as unknown on import.",
-                  "de": "Teile aus anderen Add-ons in einem Sharecode, die der Server nicht hat, werden beim Import als unbekannt gemeldet."
+                  "en": "Share codes from earlier test builds (`PW1-…`) still import and the website configurator reads both; parts from other add-ons the server does not have are reported as unknown.",
+                  "de": "Sharecodes aus früheren Testversionen (`PW1-…`) lassen sich weiter importieren, und der Konfigurator auf der Website liest beide; Teile aus anderen Add-ons, die der Server nicht hat, werden als unbekannt gemeldet."
                 }
               ]
             }
