@@ -1,4 +1,4 @@
-// PW2 share-code tables (sharecode.md, PW2 revision 2.0), identical to Pw2Tables in Just More Parts. Append only:
+// PW2 share-code tables (sharecode.md, PW2 revision 2.1), identical to Pw2Tables in Just More Parts. Append only:
 // a part, colour or dictionary byte never changes its place. The web export carries the same tables
 // (sharecode/spec.json, pw2) and tools/test-configurator.mjs compares them.
 
@@ -11,7 +11,8 @@ export const PW2_PARTS = Object.freeze({
     'justmoreparts:lr_7_deadcat', 'justmoreparts:lr_8_x', 'justmoreparts:race_5_stretched', 'justmoreparts:tp_25_x',
     'justmoreparts:tp_2_x', 'justmoreparts:tp_35_stretched', 'justmoreparts:tp_3_x', 'justmoreparts:whoop_65_lite',
     'justmoreparts:whoop_75_duct', 'justmoreparts:whoop_85_duct', 'justmoreparts:xclass_10',
-    'justmoreparts:xclass_12', 'justmoreparts:xclass_13', 'justmoreparts:xclass_13_h'
+    'justmoreparts:xclass_12', 'justmoreparts:xclass_13', 'justmoreparts:xclass_13_h', 'justmoreparts:lr_5_rocket',
+    'justmoreparts:lr_7_rocket'
   ]),
   stack: Object.freeze([
     'propwash:aio_20', 'propwash:aio_whoop', 'propwash:stack_30', 'propwash:creative_fc',
