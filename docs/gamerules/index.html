@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js" data-title-en="World rules (gamerules) – Propwash FPV docs" data-title-de="Welt-Regeln (Gamerules) – Propwash-FPV-Doku" data-description-en="All 20 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands." data-description-de="Alle 20 Welt-Regeln (Gamerules) von Propwash FPV für Einzelspieler und Server: Schwerkraft, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Kanäle, mit Standardwerten, Bereichen und Befehlen.">
+<html lang="en" class="no-js" data-title-en="World rules (gamerules) – Propwash FPV docs" data-title-de="Welt-Regeln (Gamerules) – Propwash-FPV-Doku" data-description-en="All 21 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands." data-description-de="Alle 21 Welt-Regeln (Gamerules) von Propwash FPV für Einzelspieler und Server: Schwerkraft, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Kanäle, mit Standardwerten, Bereichen und Befehlen.">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>World rules (gamerules) – Propwash FPV docs</title>
-<meta name="description" content="All 20 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
+<meta name="description" content="All 21 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
 <meta name="theme-color" content="#1A1A1A">
 <meta name="color-scheme" content="dark">
 <meta name="referrer" content="no-referrer">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Propwash FPV">
 <meta property="og:title" content="World rules (gamerules) – Propwash FPV docs">
-<meta property="og:description" content="All 20 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
+<meta property="og:description" content="All 21 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
 <meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
@@ -78,8 +78,8 @@
     <div class="wrap docs-hero__inner">
       <p class="kicker"><span lang="en">Docs · For players and server owners</span><span lang="de">Doku · Für Spieler und Server-Betreiber</span></p>
       <h1 class="docs-title"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></h1>
-      <p lang="en" class="docs-lead">20 gamerules decide how drones behave in a world: physics, wind, battery life, crash damage, video range and how many pilots may be on air. They apply to everyone in the world.</p>
-<p lang="de" class="docs-lead">20 Gamerules bestimmen, wie sich Drohnen in einer Welt verhalten: Physik, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und wie viele Piloten gleichzeitig fliegen. Sie gelten für alle in der Welt.</p>
+      <p lang="en" class="docs-lead">21 gamerules decide how drones behave in a world: physics, wind, battery life, crash damage, video range and how many pilots may be on air. They apply to everyone in the world.</p>
+<p lang="de" class="docs-lead">21 Gamerules bestimmen, wie sich Drohnen in einer Welt verhalten: Physik, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und wie viele Piloten gleichzeitig fliegen. Sie gelten für alle in der Welt.</p>
       <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 11</p>
     </div>
   </header>
@@ -126,8 +126,8 @@
 <p lang="en"><code>/gamerule</code> without a value shows the current one. <code>/propwash rules</code> lists the server settings and all world rules at once and names the preset they match; <code>/propwash rules preset</code> sets all rules of a preset (operators). When you create a world, the rules are also in Minecraft’s <em>Game Rules</em> screen under the category <em>Propwash FPV</em>.</p>
 <p lang="de"><code>/gamerule</code> ohne Wert zeigt den aktuellen. <code>/propwash rules</code> listet Server-Einstellungen und alle Welt-Regeln auf einmal und nennt die Voreinstellung, der sie entsprechen; <code>/propwash rules preset</code> setzt alle Regeln einer Voreinstellung (Operatoren). Beim Anlegen einer Welt stehen die Regeln auch in Minecrafts Fenster <em>Spielregeln</em> unter der Kategorie <em>Propwash FPV</em>.</p>
 <h3 id="how-leaderboards" class="docs-h3"><a class="docs-anchor" href="#how-leaderboards" aria-hidden="true" tabindex="-1">#</a><span lang="en">Leaderboards</span><span lang="de">Bestenlisten</span></h3>
-<p lang="en">Rules marked <span class="docs-badge docs-badge--physics">physics</span> change how drones fly (11 of 20). As soon as one of them differs from its default, flights no longer count for leaderboards and server records, so records stay comparable. The server checks this itself.</p>
-<p lang="de">Regeln mit <span class="docs-badge docs-badge--physics">Physik</span> ändern, wie Drohnen fliegen (11 von 20). Sobald eine davon vom Standard abweicht, zählen Flüge nicht mehr für Bestenlisten und Server-Rekorde, damit Rekorde vergleichbar bleiben. Das prüft der Server selbst.</p>
+<p lang="en">Rules marked <span class="docs-badge docs-badge--physics">physics</span> change how drones fly (11 of 21). As soon as one of them differs from its default, flights no longer count for leaderboards and server records, so records stay comparable. The server checks this itself.</p>
+<p lang="de">Regeln mit <span class="docs-badge docs-badge--physics">Physik</span> ändern, wie Drohnen fliegen (11 von 21). Sobald eine davon vom Standard abweicht, zählen Flüge nicht mehr für Bestenlisten und Server-Rekorde, damit Rekorde vergleichbar bleiben. Das prüft der Server selbst.</p>
 
 </section>
 <section class="docs-section" aria-labelledby="presets">
@@ -280,6 +280,8 @@
 <p lang="de">An: Werkbank, Import und Wartung bauen nur Drohnen aus Teilen, die auch in echt zusammenpassen (Halterungen, Propellergröße, Akku zum Rahmen, Zubehör-Halterung). Aus: Jedes Teil passt zu jedem. Die Hinweise bleiben sichtbar, die Drohne fliegt mit den echten Daten ihrer Teile und zählt nicht für Bestenlisten. Überspannung regelt weiter „Hardware-Grenzen“.</p><p class="docs-rule__example"><code>/gamerule propwash:part_compatibility false</code></p></td></tr>
 <tr id="rule-autonomous_rescue"><th scope="row"><span class="docs-rule__title"><span lang="en">GPS rescue without pilot</span><span lang="de">GPS Rescue ohne Pilot</span></span><br><code class="docs-rule__id">propwash:<wbr>autonomous_rescue</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">If the return to home (GPS rescue) is running when the pilot leaves – remote put away, flight stopped or game left – the drone keeps flying on its own and lands at the home point. The server only keeps the chunks around the drone loaded and never flies into unexplored terrain. Off: without a pilot the motors stop, as before.</p>
 <p lang="de">Läuft der Heimflug (GPS Rescue) und der Pilot steigt aus – Funke weggesteckt, Flug beendet oder Spiel verlassen –, fliegt die Drohne allein weiter und landet am Homepoint. Der Server hält dafür nur die Chunks um die Drohne geladen und fliegt nie in unerforschtes Gebiet. Aus: Ohne Pilot gehen die Motoren aus, wie bisher.</p><p class="docs-rule__example"><code>/gamerule propwash:autonomous_rescue false</code></p></td></tr>
+<tr id="rule-freeform_gate_max_size"><th scope="row"><span class="docs-rule__title"><span lang="en">Freeform gate: largest opening</span><span lang="de">Freiform-Gate: größte Öffnung</span></span><br><code class="docs-rule__id">propwash:<wbr>freeform_gate_max_size</code></th><td>20</td><td>1–64</td><td><p lang="en">How large the opening of a freeform gate may be, in blocks per direction: 20 = at most 20 × 20 blocks. Applies when placing and rescanning; placed gates stay as they are. Larger values allow wide halls and caves, smaller ones keep courses tight.</p>
+<p lang="de">Wie groß die Öffnung eines Freiform-Gates höchstens sein darf, in Blöcken je Richtung: 20 = höchstens 20 × 20 Blöcke. Gilt beim Setzen und beim Neu-Abtasten; gesetzte Gates bleiben, wie sie sind. Größere Werte erlauben weite Hallen und Höhlen, kleinere halten Kurse eng.</p><p class="docs-rule__example"><code>/gamerule propwash:freeform_gate_max_size 21</code></p></td></tr>
 </tbody>
 </table></div>
 </section>
