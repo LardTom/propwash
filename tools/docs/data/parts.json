@@ -104,6 +104,7 @@
       "material",
       "mount",
       "pitch_in",
+      "reverse_thrust",
       "stiffness"
     ],
     "battery": [

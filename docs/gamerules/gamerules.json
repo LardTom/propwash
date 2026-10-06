@@ -409,6 +409,24 @@
         "en": "Flying drones bounce off animals, monsters and players and hurt them by the force of the impact (mass × speed, at most 5 hearts). Players only with PvP. Off: drones fly through living things."
       },
       "example": "/gamerule propwash:drone_hits_entities false"
+    },
+    {
+      "id": "propwash:allow_3d_mode",
+      "name": "allow_3d_mode",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": true,
+      "changes_physics": false,
+      "title": {
+        "de": "3D-Modus erlaubt",
+        "en": "3D mode allowed"
+      },
+      "description": {
+        "de": "Piloten dürfen den 3D-Modus benutzen (umkehrbare Motoren, Gasmitte = Nullschub), wenn sie ihn für sich freigeschaltet haben. Aus: Der Modus bleibt für alle aus, etwa auf Rennservern, auf denen niemand mit Umkehrschub bremsen soll.",
+        "en": "Pilots may use 3D mode (reversible motors, throttle center = zero thrust) once they have unlocked it for themselves. Off: the mode stays off for everyone, for example on race servers where nobody should brake with reverse thrust."
+      },
+      "example": "/gamerule propwash:allow_3d_mode false"
     }
   ]
 }

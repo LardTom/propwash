@@ -72,7 +72,7 @@ export function valuesText(rule) {
 }
 
 export function checkCommand(rules, command) {
-  const m = command.match(/^\/gamerule (propwash:[a-z_]+) (\S+)$/);
+  const m = command.match(/^\/gamerule (propwash:[a-z0-9_]+) (\S+)$/);
   if (!m) return `kein /gamerule-Befehl: ${command}`;
   const rule = rules.find((r) => r.id === m[1]);
   if (!rule) return `unbekannte Regel: ${m[1]}`;

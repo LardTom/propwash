@@ -55,7 +55,7 @@ export const TYPE_INFO = {
   PartKind: { en: 'Part categories; the key is the folder name of JSON parts.', de: 'Teil-Kategorien; der Schlüssel ist der Ordnername der JSON-Teile.' },
   PartRegistry: { en: 'Registers and looks up parts and chemistries, loads JSON parts and converts them to and from JSON.', de: 'Meldet Teile und Zellchemien an, schlägt sie nach, lädt JSON-Teile und wandelt sie in JSON und zurück.' },
   PartVisual: { en: 'Accent colour and an alternative drone model of a part.', de: 'Akzentfarbe und ein anderes Drohnen-Modell eines Teils.' },
-  PropDefinition: { en: 'A propeller: diameter, pitch, blades, thrust and power coefficients, material, stiffness, mount.', de: 'Ein Propeller: Durchmesser, Steigung, Blätter, Schub- und Leistungsbeiwert, Material, Steifigkeit, Aufnahme.' },
+  PropDefinition: { en: 'A propeller: diameter, pitch, blades, thrust and power coefficients, material, stiffness, mount and the optional reverse thrust for 3D mode.', de: 'Ein Propeller: Durchmesser, Steigung, Blätter, Schub- und Leistungsbeiwert, Material, Steifigkeit, Aufnahme und der optionale Umkehrschub für den 3D-Modus.' },
   PropMaterial: { en: 'Prop materials with their default stiffness and durability; the key is the JSON value.', de: 'Prop-Materialien mit Standard-Steifigkeit und -Haltbarkeit; der Schlüssel ist der JSON-Wert.' },
   RecycleYield: { en: 'What the salvage slot gives back for a broken part.', de: 'Was das Zerlegen-Feld für ein kaputtes Teil zurückgibt.' },
   StackDefinition: { en: 'A flight controller and ESC stack: mount, current, cells, all-in-one.', de: 'Ein Flight-Controller- und ESC-Stack: Halterung, Strom, Zellen, All-in-One.' },
