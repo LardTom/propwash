@@ -24,7 +24,7 @@ import { encodePw2, parsePw2, PW2_FORMAT } from './sharecode2.js';
  * Format of new codes: 'PW1' or 'PW2'. Decoding always reads both. Switch to 'PW2' once Just More Parts with PW2
  * is out (the mod writes PW2 from then on, older versions only read PW1).
  */
-export const SHARE_FORMAT = 'PW1';
+export const SHARE_FORMAT = 'PW2';
 
 export const FORMAT = 'PW1';
 export const PREFIX = 'PW1-';
