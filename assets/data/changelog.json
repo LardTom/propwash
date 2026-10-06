@@ -202,6 +202,10 @@
                 {
                   "en": "With shader packs (Iris, e.g. Complementary) a dark, wing-shaped shadow no longer covers the FPV view over water and ground, and the GPS rescue home marker is visible in FPV again.",
                   "de": "Mit Shaderpacks (Iris, z. B. Complementary) liegt über Wasser und Boden kein dunkler, flügelförmiger Schatten mehr im FPV-Bild, und die Heimatmarke von GPS Rescue ist im FPV wieder zu sehen."
+                },
+                {
+                  "en": "Gates, course elements and freeform gates no longer hold wooden pressure plates down or keep tripwires triggered – a door with a pressure plate inside a gate closes again.",
+                  "de": "Gates, Kurs-Elemente und Freiform-Gates halten Holz-Druckplatten nicht mehr gedrückt und lösen keine Stolperdrähte mehr aus – eine Tür mit Druckplatte in einem Gate schließt wieder."
                 }
               ]
             },
