@@ -131,18 +131,19 @@ ${P(`Rules marked <span class="docs-badge docs-badge--physics">physics</span> ch
     });
     const physicsNote = preset.changes_physics
       ? P('Changes physics rules: flights do not count for leaderboards.', 'Ändert Physik-Regeln: Flüge zählen nicht für Bestenlisten.')
-      : P('Physics as by default: flights count for leaderboards.', 'Physik wie im Standard: Flüge zählen für Bestenlisten.');
+      : '';
     return `<div class="docs-card docs-card--plain" id="preset-${preset.id}">
 <h3 class="docs-card__title">${L(esc(preset.title.en), esc(preset.title.de))}</h3>
 ${P(esc(preset.description.en), esc(preset.description.de))}
-${changed.length ? list(changed) : P('Every rule at its default.', 'Jede Regel auf ihrem Standardwert.')}
+${changed.length ? list(changed) : ''}
 ${physicsNote}
 ${code(preset.command, 'chat')}
 </div>`;
   }).join('\n');
+  const countWord = (n, lang) => (lang === 'de' ? ['keine', 'eine', 'zwei', 'drei', 'vier', 'fünf'] : ['no', 'one', 'two', 'three', 'four', 'five'])[n] ?? String(n);
   const presets = section('presets', toc[1].title, `
-${P(`The top of the <em>World rules</em> tab has ${presetList.length} presets. One click sets every rule for everyone in the world; single rules stay adjustable afterwards, and the tab shows which preset the world matches or <em>Custom rules</em>. Who may click them is the same as for single rules: the host and operators.`,
-    `Oben im Tab <em>Welt-Regeln</em> stehen ${presetList.length} Voreinstellungen. Ein Klick setzt jede Regel für alle in der Welt; einzelne Regeln bleiben danach einstellbar, und der Tab zeigt, welcher Voreinstellung die Welt entspricht, oder <em>Eigene Regeln</em>. Klicken dürfen dieselben wie bei einzelnen Regeln: der Host und Operatoren.`)}
+${P(`The top of the <em>World rules</em> tab has ${countWord(presetList.length, 'en')} presets. One click sets every rule for everyone in the world; single rules stay adjustable afterwards, and the tab shows which preset the world matches or <em>Custom rules</em>. Who may click them is the same as for single rules: the host and operators.`,
+    `Oben im Tab <em>Welt-Regeln</em> stehen ${countWord(presetList.length, 'de')} Voreinstellungen. Ein Klick setzt jede Regel für alle in der Welt; einzelne Regeln bleiben danach einstellbar, und der Tab zeigt, welcher Voreinstellung die Welt entspricht, oder <em>Eigene Regeln</em>. Klicken dürfen dieselben wie bei einzelnen Regeln: der Host und Operatoren.`)}
 <div class="docs-recipes">
 ${presetCards}
 </div>
