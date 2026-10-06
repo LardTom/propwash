@@ -200,7 +200,7 @@ const KEY_LABELS = {
   UP: '↑', DOWN: '↓', LEFT: '←', RIGHT: '→', PERIOD: '.', COMMA: ',', BACKSPACE: 'Backspace', SPACE: 'Space',
   TAB: 'Tab', ENTER: 'Enter', RETURN: 'Enter', ESCAPE: 'Esc', MINUS: '-', EQUALS: '=', SEMICOLON: ';', APOSTROPHE: "'", SLASH: '/',
   BACKSLASH: '\\', GRAVE: '`', LBRACKET: '[', RBRACKET: ']', HOME: 'Home', END: 'End', INSERT: 'Insert', DELETE: 'Delete',
-  PAGEUP: 'Page Up', PAGEDOWN: 'Page Down',
+  PAGEUP: 'Page Up', PAGEDOWN: 'Page Down', LALT: 'Left Alt', RALT: 'Right Alt',
 };
 
 function keyLabel(constantName) {
