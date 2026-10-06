@@ -295,6 +295,16 @@
       ]
     },
     {
+      "name": "gate_edit_cursor",
+      "key": "Left Alt",
+      "flightStick": false,
+      "title": {
+        "en": "Adjust gate: free mouse (hold)",
+        "de": "Gate einstellen: Maus frei (halten)"
+      },
+      "sharedWith": []
+    },
+    {
       "name": "drone_cargo_drop",
       "key": "Enter",
       "flightStick": false,
