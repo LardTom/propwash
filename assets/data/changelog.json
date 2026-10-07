@@ -102,7 +102,7 @@
                   "de": "Action-Cam (Flashback): zeichnet deinen Flug als Kamerapfad für die Replay-Mod Flashback auf, eine fertig renderbare Szene je Flug."
                 },
                 {
-                  "en": "Hardware encoder for action cam videos: with ffmpeg installed, recordings use the video encoder of your graphics card or processor (NVENC, Quick Sync, AMD AMF, VideoToolbox) – 1080p60 keeps up easily and the processor stays free for the game (*Encoder* in the *Action Cam* tab; without ffmpeg Propwash's own encoder records as before).",
+                  "en": "Hardware encoder for action cam videos: with ffmpeg installed, recordings use the video encoder of your graphics card or processor (NVENC, Quick Sync, AMD AMF, VideoToolbox) – 1080p60 keeps up easily and the processor stays free for the game (*Encoder* in the *Action cam* tab; without ffmpeg Propwash's own encoder records as before).",
                   "de": "Hardware-Encoder für Action-Cam-Videos: Mit installiertem ffmpeg nutzen Aufnahmen den Video-Encoder deiner Grafikkarte oder deines Prozessors (NVENC, Quick Sync, AMD AMF, VideoToolbox) – 1080p60 hält locker mit, und der Prozessor bleibt frei fürs Spiel (*Encoder* im Tab *Action-Cam*; ohne ffmpeg nimmt Propwashs eigener Encoder wie bisher auf)."
                 },
                 {
@@ -110,8 +110,8 @@
                   "de": "*Stärke* für die Stabilisierung der Heavy-Cam: ein ruhigeres Bild und ein Horizont, der über mehr Schräglage gerade bleibt, oder weniger Ausschnitt für ein schärferes Bild."
                 },
                 {
-                  "en": "Bandos: rare abandoned barns, factories, piers, oil rigs and mine heads to fly through, built into the terrain even on slopes, some with a chest of used parts – find one with `/locate structure #propwash:bandos`.",
-                  "de": "Bandos: seltene verlassene Scheunen, Fabriken, Stege, Ölplattformen und Förderanlagen zum Durchfliegen, auch am Hang fest ins Gelände gebaut, manche mit einer Truhe gebrauchter Teile – finde einen mit `/locate structure #propwash:bandos`."
+                  "en": "Bandos: rare abandoned barns, factories, piers, oil rigs and mine heads to fly through, built into the terrain even on slopes and clear of villages and other structures, some with a chest of used parts – find one with `/locate structure #propwash:bandos`.",
+                  "de": "Bandos: seltene verlassene Scheunen, Fabriken, Stege, Ölplattformen und Förderanlagen zum Durchfliegen, auch am Hang fest ins Gelände gebaut und fern von Dörfern und anderen Bauwerken, manche mit einer Truhe gebrauchter Teile – finde einen mit `/locate structure #propwash:bandos`."
                 },
                 {
                   "en": "Creative Flight Controller (creative mode only): fits every frame and opens the *Drone Editor* – set masses, motors, props, battery, drag and camera freely, keep your own templates and share them as a code.",
@@ -215,11 +215,11 @@
                   "de": "Die Action-Cam-Aufnahme hält viel besser mit: Der Bildpuffer nimmt dem Spiel keinen Speicher mehr weg und wächst mit deinem Arbeitsspeicher, Propwashs Encoder nutzt auf großen Prozessoren mehr Kerne, und kommt er nicht hinterher, geht kein Bild verloren – das Video braucht nur länger zum Speichern."
                 },
                 {
-                  "en": "Recording notices name what actually slows the recording – game, graphics card, encoder, drive or frame buffer – with one concrete tip.",
-                  "de": "Hinweise bei der Aufnahme nennen, was sie wirklich bremst – Spiel, Grafikkarte, Encoder, Datenträger oder Bildpuffer – mit einem konkreten Tipp."
+                  "en": "Recording notices name what actually slows the recording – game, graphics card, encoder, drive or frame buffer – with one concrete tip that fits your recording format.",
+                  "de": "Hinweise bei der Aufnahme nennen, was sie wirklich bremst – Spiel, Grafikkarte, Encoder, Datenträger oder Bildpuffer – mit einem konkreten Tipp, der zu deinem Aufnahmeformat passt."
                 },
                 {
-                  "en": "Stabilized videos stay sharper when the crop has to scale the picture up, and the *Action Cam* tab shows whether your window size costs sharpness.",
+                  "en": "Stabilized videos stay sharper when the crop has to scale the picture up, and the *Action cam* tab shows whether your window size costs sharpness.",
                   "de": "Stabilisierte Videos bleiben schärfer, wenn der Ausschnitt das Bild hochrechnen muss, und der Tab *Action-Cam* zeigt, ob deine Fenstergröße Schärfe kostet."
                 }
               ]
