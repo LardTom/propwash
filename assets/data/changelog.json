@@ -1137,28 +1137,12 @@
                 {
                   "en": "**Ready for Propwash 0.5.0:** built and tested against Propwash 0.5.0, and the whoop frames follow its corrected whoop data.",
                   "de": "**Bereit für Propwash 0.5.0:** gebaut und geprüft gegen Propwash 0.5.0, und die Whoop-Rahmen folgen dessen korrigierten Whoop-Daten."
-                },
-                {
-                  "en": "**Rocket frames:** a 5″ and a 7″ long-range frame shaped like a lying rocket – camera in the nose, battery inside the fuselage, no props in view.",
-                  "de": "**Raketen-Rahmen:** ein 5″- und ein 7″-Long-Range-Rahmen in Form einer liegenden Rakete – Kamera in der Nase, Akku im Rumpf, keine Props im Bild."
                 }
               ]
             },
             {
               "kind": "new",
               "items": [
-                {
-                  "en": "Two rocket frames, *5″ Long Range Frame (rocket)* and *7″ Long Range Frame (rocket)*: a streamlined fuselage with the arms in its rear half and the props beside it. Little drag nose-first, more from the side and from above – a bit heavier and slower than an X frame, flips snappier than rolls.",
-                  "de": "Zwei Raketen-Rahmen, *5-Zoll-Long-Range-Rahmen (Rakete)* und *7-Zoll-Long-Range-Rahmen (Rakete)*: ein stromlinienförmiger Rumpf mit den Armen in der hinteren Hälfte und den Props daneben. Wenig Luftwiderstand mit der Nase voran, mehr von der Seite und von oben – etwas schwerer und langsamer als ein X-Rahmen, Flips spritziger als Rolls."
-                },
-                {
-                  "en": "Ready-to-fly preset *Rocket 5″ · 6S* in white and orange.",
-                  "de": "Flugfertiges Preset *Rakete 5″ · 6S* in Weiß und Orange."
-                },
-                {
-                  "en": "Craft the rockets with a firework rocket, or find them in rare and epic chests.",
-                  "de": "Bau die Raketen mit einer Feuerwerksrakete oder finde sie in seltenen und epischen Truhen."
-                },
                 {
                   "en": "The documentation is MIT licensed; contributions are welcome as pull requests with a short contributor agreement.",
                   "de": "Die Dokumentation steht unter der MIT-Lizenz; Beiträge sind als Pull Requests mit einer kurzen Beitragsvereinbarung willkommen."
@@ -1201,10 +1185,6 @@
                 {
                   "en": "The new license applies from 1.1.0 on; Just More Parts 1.0.0 stays All Rights Reserved.",
                   "de": "Die neue Lizenz gilt ab 1.1.0; Just More Parts 1.0.0 bleibt All Rights Reserved."
-                },
-                {
-                  "en": "Share codes of existing builds are unchanged; a code with a rocket frame needs Just More Parts 1.1.0 (older versions show the frame as an unknown part).",
-                  "de": "Sharecodes bestehender Aufbauten bleiben gleich; ein Code mit Raketen-Rahmen braucht Just More Parts 1.1.0 (ältere Versionen zeigen den Rahmen als unbekanntes Teil)."
                 }
               ]
             }

@@ -1,5 +1,5 @@
 // PW2 share codes: encoder and decoder, a port of Pw2Codec in "Propwash: Just More Parts" (spec: sharecode.md,
-// PW2 revision 2.1). Every code is byte-identical to the mod's; the OSD layer uses the vendored zlib port (level 9,
+// PW2 revision 2.0). Every code is byte-identical to the mod's; the OSD layer uses the vendored zlib port (level 9,
 // raw, preset dictionary) like java.util.zip.Deflater.
 //
 // Layout: 'PW2' + base62 of [bit stream, padded to whole bytes] + [low 16 bits of the CRC-32 of those bytes].
@@ -19,7 +19,7 @@ import {
 
 export const PW2_FORMAT = 'PW2';
 export const PW2_PREFIX = 'PW2';
-export const PW2_REVISION = '2.1';
+export const PW2_REVISION = '2.0';
 export const BASE62 = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 export const TEXT_ALPHABET = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz -';
 export const PW2_TUNE_KEYS = Object.freeze([...PW1_TUNE_KEYS, 'pid.armMaxAngleDeg']);
