@@ -313,6 +313,16 @@
         "de": "Greifer öffnen (Fracht abwerfen)"
       },
       "sharedWith": []
+    },
+    {
+      "name": "blackbox",
+      "key": "Numpad 7",
+      "flightStick": false,
+      "title": {
+        "en": "Blackbox pause / resume",
+        "de": "Blackbox pausieren / fortsetzen"
+      },
+      "sharedWith": []
     }
   ],
   "switches": [
@@ -412,6 +422,13 @@
       "title": {
         "en": "3D mode",
         "de": "3D-Modus"
+      }
+    },
+    {
+      "name": "blackbox",
+      "title": {
+        "en": "Blackbox",
+        "de": "Blackbox"
       }
     },
     {

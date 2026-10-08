@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="Blackbox tuning – Propwash FPV docs" data-title-de="Tuning mit der Blackbox – Propwash-FPV-Doku" data-description-en="Record flights in Propwash FPV 0.5.0 as Betaflight blackbox logs and tune your drone with Blackbox Explorer and PIDtoolbox." data-description-de="Flüge in Propwash FPV 0.5.0 als Betaflight-Blackbox-Logs aufzeichnen und die Drohne mit Blackbox Explorer und PIDtoolbox tunen.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blackbox tuning – Propwash FPV docs</title>
+<meta name="description" content="Record flights in Propwash FPV 0.5.0 as Betaflight blackbox logs and tune your drone with Blackbox Explorer and PIDtoolbox.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="Blackbox tuning – Propwash FPV docs">
+<meta property="og:description" content="Record flights in Propwash FPV 0.5.0 as Betaflight blackbox logs and tune your drone with Blackbox Explorer and PIDtoolbox.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="../../assets/css/docs.css">
+<script>
+(function () {
+  var d = document.documentElement, lang = null;
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="docs-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+</svg>
+<a class="skip" href="#main"><span lang="en">Skip to content</span><span lang="de">Zum Inhalt springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
+      <a href="../../#how"><span lang="en">How it works</span><span lang="de">So geht’s</span></a>
+      <a href="../../#flight"><span lang="en">Flight</span><span lang="de">Flug</span></a>
+      <a href="../../#video">Video</a>
+      <a href="../../#racing"><span lang="en">Racing</span><span lang="de">Rennen</span></a>
+      <a href="../../#gallery"><span lang="en">Screenshots</span><span lang="de">Bilder</span></a>
+      <a href="../../#faq">FAQ</a>
+      <a href="../../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+      <a href="../../docs/" aria-current="page"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a href="../../roadmap/">Roadmap</a>
+      <a href="../../changelog/">Changelog</a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <header class="docs-hero">
+    <div class="wrap docs-hero__inner">
+      <p class="kicker"><span lang="en">Docs · For players</span><span lang="de">Doku · Für Spieler</span></p>
+      <h1 class="docs-title"><span lang="en">Tuning with Blackbox Explorer and PIDtoolbox</span><span lang="de">Tuning mit Blackbox Explorer und PIDtoolbox</span></h1>
+      <p lang="en" class="docs-lead">Every armed flight as a real Betaflight blackbox log – open it in the tools real pilots use.</p>
+<p lang="de" class="docs-lead">Jeder scharfe Flug als echter Betaflight-Blackbox-Log – zum Öffnen in den Werkzeugen echter Piloten.</p>
+      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 11</p>
+    </div>
+  </header>
+  <div class="wrap docs">
+    <nav class="docs-menu" aria-label="Documentation" data-de-aria-label="Dokumentation">
+<details class="docs-menu__fold" data-docs-menu open>
+<summary class="docs-menu__summary"><span lang="en">Docs menu</span><span lang="de">Doku-Menü</span></summary>
+<ol class="docs-menu__list">
+<li class="docs-menu__item"><a href="../../docs/"><span lang="en">Overview</span><span lang="de">Übersicht</span></a></li>
+<li class="docs-menu__item"><a href="../../docs/guide/"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></a></li>
+<li class="docs-menu__item is-current"><a href="../../docs/blackbox/" aria-current="page"><span lang="en">Blackbox tuning</span><span lang="de">Tuning mit der Blackbox</span></a>
+<ol class="docs-menu__toc"><li><a href="#what"><span lang="en">What the blackbox records</span><span lang="de">Was die Blackbox aufzeichnet</span></a></li><li><a href="#switch-on"><span lang="en">Switch it on</span><span lang="de">Einschalten</span></a></li><li><a href="#test-flight"><span lang="en">Fly a test log</span><span lang="de">Einen Testflug fliegen</span></a></li><li><a href="#open"><span lang="en">Open the log</span><span lang="de">Log öffnen</span></a></li><li><a href="#read"><span lang="en">Read it and tune</span><span lang="de">Lesen und tunen</span></a></li><li><a href="#fields"><span lang="en">Fields and units</span><span lang="de">Felder und Einheiten</span></a></li><li><a href="#faq"><span lang="en">Questions</span><span lang="de">Fragen</span></a></li></ol></li>
+<li class="docs-menu__item"><a href="../../docs/gamerules/"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></a></li>
+<li class="docs-menu__item"><a href="../../docs/api/"><span lang="en">Add-on API</span><span lang="de">Add-on-API</span></a></li>
+<li class="docs-menu__item docs-menu__item--sub"><a href="../../docs/api/reference/"><span lang="en">API reference</span><span lang="de">API-Referenz</span></a></li>
+<li class="docs-menu__item"><a href="../../docs/parts-format/"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></a></li>
+</ol>
+</details>
+</nav>
+    <article class="docs-body">
+<section class="docs-section" aria-labelledby="what">
+<h2 id="what" class="docs-h2"><a class="docs-anchor" href="#what" aria-hidden="true" tabindex="-1">#</a><span lang="en">What the blackbox records</span><span lang="de">Was die Blackbox aufzeichnet</span></h2>
+
+<p lang="en">Like a real drone with Betaflight, Propwash 0.5.0 can record every flight: sticks, setpoints, gyro, PID terms, motors and battery at every pass of the flight controller loop – 2 kHz with the default PID loop. The logs are real Betaflight blackbox logs (<code>.bbl</code>), so real tuning tools open them:</p>
+<p lang="de">Wie eine echte Drohne mit Betaflight zeichnet Propwash 0.5.0 auf Wunsch jeden Flug auf: Knüppel, Sollwerte, Gyro, PID-Anteile, Motoren und Akku bei jedem Durchlauf der Regelschleife – 2 kHz mit der Standard-Regelschleife. Die Logs sind echte Betaflight-Blackbox-Logs (<code>.bbl</code>), also öffnen sie echte Tuning-Werkzeuge:</p>
+<ul>
+<li><span lang="en"><strong>Betaflight Blackbox Explorer</strong> – in the browser at <a href="https://blackbox.betaflight.com/" target="_blank" rel="noopener">blackbox.betaflight.com</a> or as an app: every trace over time, the sticks, the motors and a spectrum of the noise.</span><span lang="de"><strong>Betaflight Blackbox Explorer</strong> – im Browser unter <a href="https://blackbox.betaflight.com/" target="_blank" rel="noopener">blackbox.betaflight.com</a> oder als Programm: alle Kurven über der Zeit, die Knüppel, die Motoren und ein Spektrum des Rauschens.</span></li>
+<li><span lang="en"><strong>PIDtoolbox</strong> – <a href="https://pidtoolbox.com/" target="_blank" rel="noopener">pidtoolbox.com</a>: step response per axis (how fast and how cleanly the gyro follows the setpoint), noise by throttle and frequency.</span><span lang="de"><strong>PIDtoolbox</strong> – <a href="https://pidtoolbox.com/" target="_blank" rel="noopener">pidtoolbox.com</a>: Sprungantwort je Achse (wie schnell und sauber das Gyro dem Sollwert folgt), Rauschen nach Gas und Frequenz.</span></li>
+</ul>
+<p lang="en">The flight model of Propwash reacts to PIDs, filters and rates like a real drone, so what you learn from the log goes straight back into the configurator.</p>
+<p lang="de">Das Flugmodell von Propwash reagiert auf PIDs, Filter und Rates wie eine echte Drohne – was du aus dem Log lernst, trägst du direkt im Konfigurator ein.</p>
+
+</section>
+<section class="docs-section" aria-labelledby="switch-on">
+<h2 id="switch-on" class="docs-h2"><a class="docs-anchor" href="#switch-on" aria-hidden="true" tabindex="-1">#</a><span lang="en">Switch it on</span><span lang="de">Einschalten</span></h2>
+
+<ol>
+<li><span lang="en">Open the configurator (<kbd>K</kbd>) and go to the <em>Blackbox</em> tab.</span><span lang="de">Konfigurator öffnen (<kbd>K</kbd>), Tab <em>Blackbox</em>.</span></li>
+<li><span lang="en">Set <em>Log while armed</em> to <em>On</em>. Leave <em>Logging rate</em> at 1/1 (every loop, about 4 MB per flight minute); 1/2 to 1/8 make smaller logs.</span><span lang="de"><em>Beim Scharfschalten loggen</em> auf <em>An</em>. <em>Lograte</em> auf 1/1 lassen (jeder Durchlauf, etwa 4 MB pro Flugminute); 1/2 bis 1/8 ergeben kleinere Logs.</span></li>
+<li><span lang="en"><em>Storage for logs</em> caps the folder (128 MB to 4 GB, default 512 MB): before a new log starts, the oldest logs are deleted until it fits.</span><span lang="de"><em>Speicher für Logs</em> begrenzt den Ordner (128 MB bis 4 GB, Standard 512 MB): Bevor ein neuer Log beginnt, werden die ältesten Logs gelöscht, bis er hineinpasst.</span></li>
+<li><span lang="en">Save. From now on every arm starts a new log and disarming ends it. The logs stay on your computer; nothing is sent to the server.</span><span lang="de">Speichern. Ab jetzt beginnt jedes Scharfschalten einen neuen Log, Entschärfen beendet ihn. Die Logs bleiben auf deinem Rechner, nichts geht an den Server.</span></li>
+</ol>
+<p lang="en">Only some flights: put <em>Blackbox</em> on a radio switch in the <em>Modes</em> tab, like the BLACKBOX mode in Betaflight – then the blackbox logs only while the switch is on (in a failsafe it always logs). Without that switch, the key <kbd>Numpad 7</kbd> pauses and resumes logging; every arm starts with logging running.</p>
+<p lang="de">Nur bestimmte Flüge: <em>Blackbox</em> im Tab <em>Modi</em> auf einen Schalter legen, wie den Modus BLACKBOX in Betaflight – dann loggt die Blackbox nur, solange der Schalter an ist (im Failsafe immer). Ohne diesen Schalter pausiert die Taste <kbd>Numpad 7</kbd> die Aufzeichnung und setzt sie fort; jedes Scharfschalten beginnt mit laufender Aufzeichnung.</p>
+<figure class="docs-figure">
+<div class="shot"><img src="../../assets/img/docs/blackbox-tab-800.webp" srcset="../../assets/img/docs/blackbox-tab-800.webp 800w, ../../assets/img/docs/blackbox-tab-1600.webp 1600w" sizes="(min-width: 1100px) 760px, 100vw" width="800" height="450" loading="lazy" decoding="async" alt="The Blackbox tab of the configurator: logging switched on, logging rate 1/1 at 2 kHz, storage limit, a list of logs with date, duration and size, and the status ready" data-de-alt="Der Tab Blackbox des Konfigurators: Aufzeichnung eingeschaltet, Lograte 1/1 bei 2 kHz, Speichergrenze, eine Liste der Logs mit Datum, Dauer und Größe und der Status bereit"></div>
+<figcaption><span lang="en">The Blackbox tab with the logs of the last flights.</span><span lang="de">Der Tab Blackbox mit den Logs der letzten Flüge.</span></figcaption>
+</figure>
+
+</section>
+<section class="docs-section" aria-labelledby="test-flight">
+<h2 id="test-flight" class="docs-h2"><a class="docs-anchor" href="#test-flight" aria-hidden="true" tabindex="-1">#</a><span lang="en">Fly a test log</span><span lang="de">Einen Testflug fliegen</span></h2>
+
+<p lang="en">Good tuning logs are short (30 s to 2 min) and contain what you want to check:</p>
+<p lang="de">Gute Tuning-Logs sind kurz (30 s bis 2 min) und enthalten, was du prüfen willst:</p>
+<ul>
+<li><span lang="en"><strong>Step response (P, D, feedforward):</strong> in Acro, short hard stick snaps on roll and pitch with the sticks released in between, a few flips and rolls.</span><span lang="de"><strong>Sprungantwort (P, D, Feedforward):</strong> im Acro-Modus kurze, harte Knüppelschläge auf Roll und Nick, dazwischen loslassen, ein paar Flips und Rollen.</span></li>
+<li><span lang="en"><strong>Noise and filters:</strong> one slow throttle sweep to full and back, then quick punches.</span><span lang="de"><strong>Rauschen und Filter:</strong> einmal langsam bis Vollgas und zurück, dann kurze Gasstöße.</span></li>
+<li><span lang="en"><strong>Prop wash:</strong> steep dives into your own air and hard turns.</span><span lang="de"><strong>Prop-Wash:</strong> steile Sturzflüge in die eigene Luft und harte Kehren.</span></li>
+<li><span lang="en"><strong>I-term:</strong> long turns and fast straight flight with changing throttle.</span><span lang="de"><strong>I-Anteil:</strong> lange Kurven und schneller Geradeausflug mit wechselndem Gas.</span></li>
+</ul>
+
+</section>
+<section class="docs-section" aria-labelledby="open">
+<h2 id="open" class="docs-h2"><a class="docs-anchor" href="#open" aria-hidden="true" tabindex="-1">#</a><span lang="en">Open the log</span><span lang="de">Log öffnen</span></h2>
+
+<p lang="en">Click <em>Open folder</em> in the <em>Blackbox</em> tab. The logs are in <code>propwash/blackbox</code> in your game directory, named <code>propwash_YYYY-MM-DD_HH-MM-SS_&lt;drone name&gt;.bbl</code>.</p>
+<p lang="de">Im Tab <em>Blackbox</em> auf <em>Ordner öffnen</em> klicken. Die Logs liegen in <code>propwash/blackbox</code> im Spielverzeichnis und heißen <code>propwash_JJJJ-MM-TT_HH-MM-SS_&lt;Name der Drohne&gt;.bbl</code>.</p>
+<ul>
+<li><span lang="en"><strong>Blackbox Explorer:</strong> open the file (or drop it on the page). The header shows Betaflight 4.5.1 and your drone’s PIDs, rates and filters. Lay gyro and setpoint of one axis on top of each other and show the spectrum.</span><span lang="de"><strong>Blackbox Explorer:</strong> Datei öffnen (oder auf die Seite ziehen). Der Kopf zeigt Betaflight 4.5.1 und PIDs, Rates und Filter deiner Drohne. Gyro und Sollwert einer Achse übereinanderlegen und das Spektrum einblenden.</span></li>
+<li><span lang="en"><strong>PIDtoolbox:</strong> load the file (PIDtoolbox decodes it with blackbox_decode), then look at the step response and the spectral analysis.</span><span lang="de"><strong>PIDtoolbox:</strong> Datei laden (PIDtoolbox dekodiert sie mit blackbox_decode), dann Sprungantwort und Spektralanalyse ansehen.</span></li>
+</ul>
+<div class="docs-note docs-note--info"><p lang="en">The logs identify as Betaflight 4.5.1 on the board “PROPWASH” so that both tools understand every field. Filters the flight model doesn’t have – dynamic notch, RPM filter, dynamic lowpasses – are 0 in the header.</p>
+<p lang="de">Die Logs geben sich als Betaflight 4.5.1 auf dem Board „PROPWASH“ aus, damit beide Werkzeuge jedes Feld verstehen. Filter, die das Flugmodell nicht hat – dynamischer Notch, RPM-Filter, dynamische Tiefpässe –, stehen im Kopf auf 0.</p></div>
+
+</section>
+<section class="docs-section" aria-labelledby="read">
+<h2 id="read" class="docs-h2"><a class="docs-anchor" href="#read" aria-hidden="true" tabindex="-1">#</a><span lang="en">Read it and tune</span><span lang="de">Lesen und tunen</span></h2>
+
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col"><span lang="en">What you see</span><span lang="de">Was du siehst</span></th><th scope="col"><span lang="en">Meaning</span><span lang="de">Bedeutung</span></th><th scope="col"><span lang="en">Change in the <em>PID tuning</em> or <em>Rates</em> tab</span><span lang="de">Im Tab <em>PID-Tuning</em> oder <em>Rates</em> ändern</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><span lang="en">Step response rises slowly and stays below 1</span><span lang="de">Sprungantwort steigt langsam und bleibt unter 1</span></th><td><span lang="en">Too little P or feedforward</span><span lang="de">Zu wenig P oder Feedforward</span></td><td><span lang="en">Raise P or FF</span><span lang="de">P oder FF erhöhen</span></td></tr>
+<tr><th scope="row"><span lang="en">Step response overshoots well above 1 and rings</span><span lang="de">Sprungantwort schießt deutlich über 1 und schwingt nach</span></th><td><span lang="en">Too much P, too little D</span><span lang="de">Zu viel P, zu wenig D</span></td><td><span lang="en">Lower P or raise D</span><span lang="de">P senken oder D erhöhen</span></td></tr>
+<tr><th scope="row"><span lang="en">Gyro lags behind the setpoint</span><span lang="de">Gyro folgt dem Sollwert verzögert</span></th><td><span lang="en">Feedforward too small, filters too low</span><span lang="de">Feedforward zu klein, Filter zu tief</span></td><td><span lang="en">Raise FF, raise the gyro or D-term lowpass</span><span lang="de">FF erhöhen, Gyro- oder D-Tiefpass höher</span></td></tr>
+<tr><th scope="row"><span lang="en">Oscillation in dives and hard turns (prop wash)</span><span lang="de">Schwingen in Sturzflügen und harten Kehren (Prop-Wash)</span></th><td><span lang="en">Too little D</span><span lang="de">Zu wenig D</span></td><td><span lang="en">Raise D, check I-term relax</span><span lang="de">D erhöhen, I-Relax prüfen</span></td></tr>
+<tr><th scope="row"><span lang="en">Broad noise above 100–200 Hz in the gyro spectrum</span><span lang="de">Breites Rauschen über 100–200 Hz im Gyro-Spektrum</span></th><td><span lang="en">Motor and frame vibration, damaged props</span><span lang="de">Motor- und Rahmenvibration, beschädigte Props</span></td><td><span lang="en">Lower the gyro lowpass, swap damaged props</span><span lang="de">Gyro-Tiefpass senken, beschädigte Props tauschen</span></td></tr>
+<tr><th scope="row"><span lang="en">Very busy D-term, warm motors</span><span lang="de">D-Anteil sehr unruhig, warme Motoren</span></th><td><span lang="en">D or the D-term lowpass too high</span><span lang="de">D oder D-Tiefpass zu hoch</span></td><td><span lang="en">Lower D or the D-term lowpass</span><span lang="de">D oder D-Tiefpass senken</span></td></tr>
+<tr><th scope="row"><span lang="en">I-term drifts far in long turns</span><span lang="de">I-Anteil wandert in langen Kurven weit</span></th><td><span lang="en">Wind, center of gravity or too little I</span><span lang="de">Wind, Schwerpunkt oder zu wenig I</span></td><td><span lang="en">Raise I</span><span lang="de">I erhöhen</span></td></tr>
+<tr><th scope="row"><span lang="en">Motors often hit 100 %</span><span lang="de">Motoren stoßen oft an 100 %</span></th><td><span lang="en">Weak drone or very hard rates</span><span lang="de">Schwache Drohne oder sehr harte Rates</span></td><td><span lang="en">Lower the rates, use stronger parts</span><span lang="de">Rates senken, stärkere Teile</span></td></tr>
+</tbody>
+</table></div>
+<p lang="en">Change one thing at a time, fly the same test again and compare.</p>
+<p lang="de">Eine Sache auf einmal ändern, denselben Test noch einmal fliegen und vergleichen.</p>
+
+</section>
+<section class="docs-section" aria-labelledby="fields">
+<h2 id="fields" class="docs-h2"><a class="docs-anchor" href="#fields" aria-hidden="true" tabindex="-1">#</a><span lang="en">Fields and units</span><span lang="de">Felder und Einheiten</span></h2>
+
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col"><span lang="en">Field</span><span lang="de">Feld</span></th><th scope="col"><span lang="en">Content</span><span lang="de">Inhalt</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><code>gyroADC[0–2]</code></th><td><span lang="en">Filtered gyro in °/s (roll, pitch, yaw)</span><span lang="de">Gefiltertes Gyro in °/s (Roll, Nick, Gier)</span></td></tr>
+<tr><th scope="row"><code>gyroUnfilt[0–2], debug[0–2]</code></th><td><span lang="en">Raw gyro before the lowpass (debug mode Gyro Scaled)</span><span lang="de">Rohes Gyro vor dem Tiefpass (Debug-Modus Gyro Scaled)</span></td></tr>
+<tr><th scope="row"><code>setpoint[0–3]</code></th><td><span lang="en">Setpoint in °/s, throttle of the mixer</span><span lang="de">Sollwert in °/s, Gas des Mischers</span></td></tr>
+<tr><th scope="row"><code>rcCommand[0–3]</code></th><td><span lang="en">Sticks after the deadband (±500, throttle 1000–2000)</span><span lang="de">Knüppel nach dem Totband (±500, Gas 1000–2000)</span></td></tr>
+<tr><th scope="row"><code>axisP/I/D/F[0–2]</code></th><td><span lang="en">PID terms (D only on axes with a D gain)</span><span lang="de">PID-Anteile (D nur auf Achsen mit D-Wert)</span></td></tr>
+<tr><th scope="row"><code>motor[0–3], eRPM[0–3]</code></th><td><span lang="en">Motor output 0–100 % as a DShot value, motor speed</span><span lang="de">Motorleistung 0–100 % als DShot-Wert, Motordrehzahl</span></td></tr>
+<tr><th scope="row"><code>vbatLatest, amperageLatest</code></th><td><span lang="en">Battery voltage and current</span><span lang="de">Akkuspannung und -strom</span></td></tr>
+<tr><th scope="row"><code>baroAlt, rssi</code></th><td><span lang="en">Barometer height, radio link</span><span lang="de">Barometerhöhe, Funkverbindung</span></td></tr>
+<tr><th scope="row"><code>GPS</code></th><td><span lang="en">Position of the simulated GPS receiver around 0° N 0° E (the world has no real coordinates), speed and course</span><span lang="de">Position des simulierten GPS-Empfängers um 0° N 0° O (die Welt hat keine echten Koordinaten), Tempo und Kurs</span></td></tr>
+<tr><th scope="row"><code>flightModeFlags</code></th><td><span lang="en">Arm, Angle, Horizon, Airmode, 3D, failsafe, GPS rescue, beeper, blackbox switch</span><span lang="de">Scharf, Angle, Horizon, Airmode, 3D, Failsafe, GPS-Rettung, Piepser, Blackbox-Schalter</span></td></tr>
+</tbody>
+</table></div>
+
+</section>
+<section class="docs-section" aria-labelledby="faq">
+<h2 id="faq" class="docs-h2"><a class="docs-anchor" href="#faq" aria-hidden="true" tabindex="-1">#</a><span lang="en">Questions</span><span lang="de">Fragen</span></h2>
+
+<ul>
+<li><span lang="en"><strong>No log?</strong> Is the blackbox switched on and saved in the tab? If the <em>Blackbox</em> function is on a switch, the switch must be on while you fly. The status line in the tab tells what the blackbox is doing.</span><span lang="de"><strong>Kein Log?</strong> Ist die Blackbox im Tab eingeschaltet und gespeichert? Liegt die Funktion <em>Blackbox</em> auf einem Schalter, muss er beim Fliegen an sein. Die Statuszeile im Tab sagt, was die Blackbox gerade tut.</span></li>
+<li><span lang="en"><strong>Logs disappear?</strong> The storage limit was reached; copy logs you want to keep or raise the limit.</span><span lang="de"><strong>Logs verschwinden?</strong> Die Speichergrenze ist erreicht; Logs, die du behalten willst, wegkopieren oder die Grenze erhöhen.</span></li>
+<li><span lang="en"><strong>Altitude or position hold?</strong> Betaflight 4.5 has no flag for them, so the log shows them as Angle.</span><span lang="de"><strong>Höhe oder Position halten?</strong> Betaflight 4.5 hat dafür kein Flag, der Log zeigt sie als Angle.</span></li>
+</ul>
+
+</section>
+    </article>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a> · <a href="../../roadmap/">Roadmap</a> · <a href="../../changelog/">Changelog</a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice is kept in your browser. These pages are generated from the Propwash source code of each release. Fonts: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl bleibt in deinem Browser. Diese Seiten entstehen bei jeder Version aus dem Quellcode von Propwash. Schriften: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (SIL Open Font License), direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js" defer></script>
+<script src="../../assets/js/docs.js" defer></script>
+</body>
+</html>
