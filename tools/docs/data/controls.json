@@ -323,6 +323,16 @@
         "de": "Blackbox pausieren / fortsetzen"
       },
       "sharedWith": []
+    },
+    {
+      "name": "drone_trails",
+      "key": null,
+      "flightStick": false,
+      "title": {
+        "en": "Toggle drone trails",
+        "de": "Drohnen-Trails ein/aus"
+      },
+      "sharedWith": []
     }
   ],
   "switches": [

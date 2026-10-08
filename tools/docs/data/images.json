@@ -54,5 +54,29 @@
     "height": 1080,
     "small": 800,
     "large": 1600
+  },
+  "drone_trails": {
+    "name": "drone-trails",
+    "src": "trails_several_drones.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "block_break": {
+    "name": "block-break-pane",
+    "src": "block_break_pane.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "join_mismatch": {
+    "name": "join-addon-mismatch",
+    "src": "join_addon_mismatch.png",
+    "width": 1708,
+    "height": 960,
+    "small": 800,
+    "large": 1600
   }
 }

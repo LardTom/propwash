@@ -438,6 +438,24 @@
       "example": "/gamerule propwash:drone_hits_entities false"
     },
     {
+      "id": "propwash:drones_break_blocks",
+      "name": "drones_break_blocks",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": false,
+      "changes_physics": false,
+      "title": {
+        "de": "Drohnen zerbrechen Blöcke",
+        "en": "Drones break blocks"
+      },
+      "description": {
+        "de": "Schnelle Drohnen zerbrechen Glas, Glasscheiben und verzierte Töpfe (Block-Tag propwash:drone_breakable), wenn die Wucht des Aufpralls (Masse × Tempo²) reicht, und fliegen langsamer weiter. Ein Whoop prallt ab, ein 5-Zoll durchschlägt eine Scheibe ab etwa 42 km/h. Zählt wie Abbauen durch den Piloten: Spawn-Schutz, Abenteuermodus und Schutz-Mods gelten, Glas lässt nichts fallen. Aus: Blöcke bleiben immer ganz.",
+        "en": "Fast drones smash glass, glass panes and decorated pots (block tag propwash:drone_breakable) when the impact is strong enough (mass × speed²) and fly on slower. A whoop bounces off, a 5″ goes through a pane from about 42 km/h. Counts as the pilot breaking the block: spawn protection, adventure mode and protection mods apply, glass drops nothing. Off: blocks always stay intact."
+      },
+      "example": "/gamerule propwash:drones_break_blocks true"
+    },
+    {
       "id": "propwash:allow_3d_mode",
       "name": "allow_3d_mode",
       "group": "gameplay",
@@ -547,6 +565,24 @@
         "en": "On: laps and races flown with a flight aid – altitude or position hold, GPS rescue, changed world rules, creative drone, parts that only fit with “Parts must fit” off, or a goggles latency below the video transmitter's – are saved anyway: the leaderboard, personal best, ghost and race display show them with the badge “Assisted” and the reason. In the leaderboard they get their own section below the unassisted times and never become a record. Off: assisted laps don't count (as before)."
       },
       "example": "/gamerule propwash:save_assisted_laps true"
+    },
+    {
+      "id": "propwash:drone_trails",
+      "name": "drone_trails",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": false,
+      "changes_physics": false,
+      "title": {
+        "de": "Drohnen-Trails",
+        "en": "Drone trails"
+      },
+      "description": {
+        "de": "An: Hinter jeder fliegenden Drohne zieht eine dünne, verblassende Spur in der Farbe der Drohne (LED-Streifen oder Lackierung) – so sieht man andere Piloten auch im FPV-Bild. Gelandete und entschärfte Drohnen ziehen keine Spur. Jeder Spieler kann die Trails für sich im Tab „Darstellung“ ausschalten. Ändert keine Physik.",
+        "en": "On: every flying drone draws a thin, fading trail in its own color (LED strip or paint) – so you can see other pilots even in the FPV view. Landed and disarmed drones draw no trail. Every player can turn the trails off for themselves in the Display tab. Does not change the physics."
+      },
+      "example": "/gamerule propwash:drone_trails true"
     }
   ],
   "presets": [
@@ -580,12 +616,14 @@
         "max_video_channels": 0,
         "signal_repeaters": 4,
         "drone_hits_entities": true,
+        "drones_break_blocks": false,
         "allow_3d_mode": true,
         "part_compatibility": true,
         "autonomous_rescue": true,
         "freeform_gate_max_size": 20,
         "drones_generate_chunks": true,
-        "save_assisted_laps": false
+        "save_assisted_laps": false,
+        "drone_trails": false
       },
       "differs_from_default": [],
       "command": "/propwash rules preset realistic"
@@ -620,12 +658,14 @@
         "max_video_channels": 0,
         "signal_repeaters": 4,
         "drone_hits_entities": true,
+        "drones_break_blocks": false,
         "allow_3d_mode": true,
         "part_compatibility": true,
         "autonomous_rescue": true,
         "freeform_gate_max_size": 20,
         "drones_generate_chunks": true,
-        "save_assisted_laps": true
+        "save_assisted_laps": true,
+        "drone_trails": true
       },
       "differs_from_default": [
         "hardware_limits",
@@ -633,7 +673,8 @@
         "battery_sag",
         "crash_damage",
         "prop_strikes",
-        "save_assisted_laps"
+        "save_assisted_laps",
+        "drone_trails"
       ],
       "command": "/propwash rules preset training"
     },
@@ -667,12 +708,14 @@
         "max_video_channels": 0,
         "signal_repeaters": 4,
         "drone_hits_entities": false,
+        "drones_break_blocks": false,
         "allow_3d_mode": true,
         "part_compatibility": false,
         "autonomous_rescue": true,
         "freeform_gate_max_size": 20,
         "drones_generate_chunks": true,
-        "save_assisted_laps": true
+        "save_assisted_laps": true,
+        "drone_trails": true
       },
       "differs_from_default": [
         "prop_wash",
@@ -689,7 +732,8 @@
         "infinite_range_digital",
         "drone_hits_entities",
         "part_compatibility",
-        "save_assisted_laps"
+        "save_assisted_laps",
+        "drone_trails"
       ],
       "command": "/propwash rules preset arcade"
     }

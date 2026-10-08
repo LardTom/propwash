@@ -43,6 +43,15 @@ export const RECIPES = [
     },
     commands: ['/gamerule propwash:wind 3', '/gamerule propwash:crash_tolerance 75', '/gamerule propwash:crash_damage_scale 200'],
   },
+  {
+    id: 'freestyle-park',
+    title: { en: 'Freestyle playground', de: 'Freestyle-Spielplatz' },
+    text: {
+      en: 'Every drone pulls a trail in its own colour, so you see each other in FPV, and fast drones smash through glass – spawn protection and claims stay whole. Neither rule changes the physics: laps still count for the leaderboards.',
+      de: 'Jede Drohne zieht eine Spur in ihrer eigenen Farbe, so seht ihr euch im FPV-Bild, und schnelle Drohnen zerbrechen Glas – Spawn-Schutz und Claims bleiben ganz. Keine der beiden Regeln ändert die Physik: Runden zählen weiter für die Bestenlisten.',
+    },
+    commands: ['/gamerule propwash:drone_trails true', '/gamerule propwash:drones_break_blocks true'],
+  },
 ];
 
 function fmt(n, lang) {

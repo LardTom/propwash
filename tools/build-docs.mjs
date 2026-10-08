@@ -39,6 +39,9 @@ export const IMAGES = {
   blackbox_tab: { src: 'configurator_blackbox_logs.png', name: 'blackbox-tab' },
   bind_phrase: { src: 'bind_phrase_screen.png', name: 'bind-phrase' },
   fpv_ducts: { src: 'fpv_guards_whoop_65_20.png', name: 'fpv-ducts-whoop' },
+  drone_trails: { src: 'trails_several_drones.png', name: 'drone-trails' },
+  block_break: { src: 'block_break_pane.png', name: 'block-break-pane' },
+  join_mismatch: { src: 'join_addon_mismatch.png', name: 'join-addon-mismatch' },
 };
 const SIZES = [800, 1600];
 

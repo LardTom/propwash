@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js" data-title-en="World rules (gamerules) – Propwash FPV docs" data-title-de="Welt-Regeln (Gamerules) – Propwash-FPV-Doku" data-description-en="All 24 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands." data-description-de="Alle 24 Welt-Regeln (Gamerules) von Propwash FPV für Einzelspieler und Server: Schwerkraft, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Kanäle, mit Standardwerten, Bereichen und Befehlen.">
+<html lang="en" class="no-js" data-title-en="World rules (gamerules) – Propwash FPV docs" data-title-de="Welt-Regeln (Gamerules) – Propwash-FPV-Doku" data-description-en="All 26 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands." data-description-de="Alle 26 Welt-Regeln (Gamerules) von Propwash FPV für Einzelspieler und Server: Schwerkraft, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Kanäle, mit Standardwerten, Bereichen und Befehlen.">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>World rules (gamerules) – Propwash FPV docs</title>
-<meta name="description" content="All 24 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
+<meta name="description" content="All 26 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
 <meta name="theme-color" content="#1A1A1A">
 <meta name="color-scheme" content="dark">
 <meta name="referrer" content="no-referrer">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Propwash FPV">
 <meta property="og:title" content="World rules (gamerules) – Propwash FPV docs">
-<meta property="og:description" content="All 24 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
+<meta property="og:description" content="All 26 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
 <meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
@@ -78,9 +78,9 @@
     <div class="wrap docs-hero__inner">
       <p class="kicker"><span lang="en">Docs · For players and server owners</span><span lang="de">Doku · Für Spieler und Server-Betreiber</span></p>
       <h1 class="docs-title"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></h1>
-      <p lang="en" class="docs-lead">24 gamerules decide how drones behave in a world: physics, wind, battery life, crash damage, video range and how many pilots may be on air. They apply to everyone in the world.</p>
-<p lang="de" class="docs-lead">24 Gamerules bestimmen, wie sich Drohnen in einer Welt verhalten: Physik, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und wie viele Piloten gleichzeitig fliegen. Sie gelten für alle in der Welt.</p>
-      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 12</p>
+      <p lang="en" class="docs-lead">26 gamerules decide how drones behave in a world: physics, wind, battery life, crash damage, video range and how many pilots may be on air. They apply to everyone in the world.</p>
+<p lang="de" class="docs-lead">26 Gamerules bestimmen, wie sich Drohnen in einer Welt verhalten: Physik, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und wie viele Piloten gleichzeitig fliegen. Sie gelten für alle in der Welt.</p>
+      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 13</p>
     </div>
   </header>
   <div class="wrap docs">
@@ -127,8 +127,8 @@
 <p lang="en"><code>/gamerule</code> without a value shows the current one. <code>/propwash rules</code> lists the server settings and all world rules at once and names the preset they match; <code>/propwash rules preset</code> sets all rules of a preset (operators). When you create a world, the rules are also in Minecraft’s <em>Game Rules</em> screen under the category <em>Propwash FPV</em>.</p>
 <p lang="de"><code>/gamerule</code> ohne Wert zeigt den aktuellen. <code>/propwash rules</code> listet Server-Einstellungen und alle Welt-Regeln auf einmal und nennt die Voreinstellung, der sie entsprechen; <code>/propwash rules preset</code> setzt alle Regeln einer Voreinstellung (Operatoren). Beim Anlegen einer Welt stehen die Regeln auch in Minecrafts Fenster <em>Spielregeln</em> unter der Kategorie <em>Propwash FPV</em>.</p>
 <h3 id="how-leaderboards" class="docs-h3"><a class="docs-anchor" href="#how-leaderboards" aria-hidden="true" tabindex="-1">#</a><span lang="en">Leaderboards</span><span lang="de">Bestenlisten</span></h3>
-<p lang="en">Rules marked <span class="docs-badge docs-badge--physics">physics</span> change how drones fly (11 of 24). As soon as one of them differs from its default, flights no longer count for leaderboards and server records, so records stay comparable. The server checks this itself.</p>
-<p lang="de">Regeln mit <span class="docs-badge docs-badge--physics">Physik</span> ändern, wie Drohnen fliegen (11 von 24). Sobald eine davon vom Standard abweicht, zählen Flüge nicht mehr für Bestenlisten und Server-Rekorde, damit Rekorde vergleichbar bleiben. Das prüft der Server selbst.</p>
+<p lang="en">Rules marked <span class="docs-badge docs-badge--physics">physics</span> change how drones fly (11 of 26). As soon as one of them differs from its default, flights no longer count for leaderboards and server records, so records stay comparable. The server checks this itself.</p>
+<p lang="de">Regeln mit <span class="docs-badge docs-badge--physics">Physik</span> ändern, wie Drohnen fliegen (11 von 26). Sobald eine davon vom Standard abweicht, zählen Flüge nicht mehr für Bestenlisten und Server-Rekorde, damit Rekorde vergleichbar bleiben. Das prüft der Server selbst.</p>
 
 </section>
 <section class="docs-section" aria-labelledby="presets">
@@ -159,6 +159,7 @@
 <li><span lang="en"><a href="#rule-crash_damage">Crash damage</a>: off</span><span lang="de"><a href="#rule-crash_damage">Crash-Schaden</a>: aus</span></li>
 <li><span lang="en"><a href="#rule-prop_strikes">Prop strikes</a>: off</span><span lang="de"><a href="#rule-prop_strikes">Propellertreffer</a>: aus</span></li>
 <li><span lang="en"><a href="#rule-save_assisted_laps">Save assisted laps</a>: on</span><span lang="de"><a href="#rule-save_assisted_laps">Runden mit Flughilfe speichern</a>: an</span></li>
+<li><span lang="en"><a href="#rule-drone_trails">Drone trails</a>: on</span><span lang="de"><a href="#rule-drone_trails">Drohnen-Trails</a>: an</span></li>
 </ul>
 <p lang="en">Changes physics rules: flights do not count for leaderboards.</p>
 <p lang="de">Ändert Physik-Regeln: Flüge zählen nicht für Bestenlisten.</p>
@@ -187,6 +188,7 @@
 <li><span lang="en"><a href="#rule-drone_hits_entities">Drones hit mobs and players</a>: off</span><span lang="de"><a href="#rule-drone_hits_entities">Drohnen treffen Lebewesen</a>: aus</span></li>
 <li><span lang="en"><a href="#rule-part_compatibility">Parts must fit</a>: off</span><span lang="de"><a href="#rule-part_compatibility">Teile müssen zusammenpassen</a>: aus</span></li>
 <li><span lang="en"><a href="#rule-save_assisted_laps">Save assisted laps</a>: on</span><span lang="de"><a href="#rule-save_assisted_laps">Runden mit Flughilfe speichern</a>: an</span></li>
+<li><span lang="en"><a href="#rule-drone_trails">Drone trails</a>: on</span><span lang="de"><a href="#rule-drone_trails">Drohnen-Trails</a>: an</span></li>
 </ul>
 <p lang="en">Changes physics rules: flights do not count for leaderboards.</p>
 <p lang="de">Ändert Physik-Regeln: Flüge zählen nicht für Bestenlisten.</p>
@@ -279,6 +281,8 @@
 <tbody>
 <tr id="rule-drone_hits_entities"><th scope="row"><span class="docs-rule__title"><span lang="en">Drones hit mobs and players</span><span lang="de">Drohnen treffen Lebewesen</span></span><br><code class="docs-rule__id">propwash:<wbr>drone_hits_entities</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">Flying drones bounce off animals, monsters and players and hurt them by the force of the impact (mass × speed, at most 5 hearts). Players only with PvP. Off: drones fly through living things.</p>
 <p lang="de">Fliegende Drohnen prallen an Tieren, Monstern und Spielern ab und verletzen sie je nach Wucht (Masse × Tempo, höchstens 5 Herzen). Spieler nur mit PvP. Aus: Drohnen fliegen durch Lebewesen hindurch.</p><p class="docs-rule__example"><code>/gamerule propwash:drone_hits_entities false</code></p></td></tr>
+<tr id="rule-drones_break_blocks"><th scope="row"><span class="docs-rule__title"><span lang="en">Drones break blocks</span><span lang="de">Drohnen zerbrechen Blöcke</span></span><br><code class="docs-rule__id">propwash:<wbr>drones_break_blocks</code></th><td><span lang="en">Off</span><span lang="de">Aus</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">Fast drones smash glass, glass panes and decorated pots (block tag propwash:drone_breakable) when the impact is strong enough (mass × speed²) and fly on slower. A whoop bounces off, a 5″ goes through a pane from about 42 km/h. Counts as the pilot breaking the block: spawn protection, adventure mode and protection mods apply, glass drops nothing. Off: blocks always stay intact.</p>
+<p lang="de">Schnelle Drohnen zerbrechen Glas, Glasscheiben und verzierte Töpfe (Block-Tag propwash:drone_breakable), wenn die Wucht des Aufpralls (Masse × Tempo²) reicht, und fliegen langsamer weiter. Ein Whoop prallt ab, ein 5-Zoll durchschlägt eine Scheibe ab etwa 42 km/h. Zählt wie Abbauen durch den Piloten: Spawn-Schutz, Abenteuermodus und Schutz-Mods gelten, Glas lässt nichts fallen. Aus: Blöcke bleiben immer ganz.</p><p class="docs-rule__example"><code>/gamerule propwash:drones_break_blocks true</code></p></td></tr>
 <tr id="rule-allow_3d_mode"><th scope="row"><span class="docs-rule__title"><span lang="en">3D mode allowed</span><span lang="de">3D-Modus erlaubt</span></span><br><code class="docs-rule__id">propwash:<wbr>allow_3d_mode</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">Pilots may use 3D mode (reversible motors, throttle center = zero thrust) once they have unlocked it for themselves. Off: Propwash doesn't let anyone switch it on, for example on race servers where nobody should brake with reverse thrust. Like the flight model, the rule is applied by each pilot's game.</p>
 <p lang="de">Piloten dürfen den 3D-Modus benutzen (umkehrbare Motoren, Gasmitte = Nullschub), wenn sie ihn für sich freigeschaltet haben. Aus: Propwash lässt ihn niemanden einschalten, etwa auf Rennservern, auf denen niemand mit Umkehrschub bremsen soll. Wie das Flugmodell setzt das Spiel jedes Piloten die Regel um.</p><p class="docs-rule__example"><code>/gamerule propwash:allow_3d_mode false</code></p></td></tr>
 <tr id="rule-part_compatibility"><th scope="row"><span class="docs-rule__title"><span lang="en">Parts must fit</span><span lang="de">Teile müssen zusammenpassen</span></span><br><code class="docs-rule__id">propwash:<wbr>part_compatibility</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">On: the workbench, imports and field service only build drones from parts that would fit together in reality (mounts, prop size, battery for the frame, accessory mounts). Off: every part fits every other. The notes stay visible, the drone flies with the real data of its parts and doesn't count for leaderboards. Overvoltage is still governed by “Hardware limits”.</p>
@@ -291,6 +295,8 @@
 <p lang="de">An: Fliegt eine Drohne über den Rand der bisher erzeugten Welt hinaus, entsteht dort neues Gelände – wie wenn ein Spieler hinläuft (wie bisher). Aus: Drohnen laden nur Gelände, das es schon gibt. Am Rand bremst die Drohne sanft ab und bleibt kurz davor stehen, das OSD zeigt „WELTRAND“, das FPV-Bild bleibt ohne Löcher. Spart Rechenzeit auf dem Server; GPS Rescue ohne Pilot fliegt ohnehin nie in unerforschtes Gebiet. Die Server-Config (server.json) kann das Erzeugen zusätzlich auf Rechtestufen beschränken.</p><p class="docs-rule__example"><code>/gamerule propwash:drones_generate_chunks false</code></p></td></tr>
 <tr id="rule-save_assisted_laps"><th scope="row"><span class="docs-rule__title"><span lang="en">Save assisted laps</span><span lang="de">Runden mit Flughilfe speichern</span></span><br><code class="docs-rule__id">propwash:<wbr>save_assisted_laps</code></th><td><span lang="en">Off</span><span lang="de">Aus</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">On: laps and races flown with a flight aid – altitude or position hold, GPS rescue, changed world rules, creative drone, parts that only fit with “Parts must fit” off, or a goggles latency below the video transmitter's – are saved anyway: the leaderboard, personal best, ghost and race display show them with the badge “Assisted” and the reason. In the leaderboard they get their own section below the unassisted times and never become a record. Off: assisted laps don't count (as before).</p>
 <p lang="de">An: Runden und Rennen mit Flughilfe – Höhe oder Position halten, GPS Rescue, veränderte Welt-Regeln, Kreativ-Drohne, Teile, die nur ohne „Teile müssen zusammenpassen“ gehen, oder eine Brillen-Latenz unter der des Videosenders – werden trotzdem gespeichert: Bestenliste, persönliche Bestzeit, Geist und Rennanzeige zeigen sie mit dem Abzeichen „Flughilfe“ und dem Grund. In der Bestenliste stehen sie in einem eigenen Abschnitt unter den Zeiten ohne Flughilfe und werden nie Rekord. Aus: Runden mit Flughilfe zählen nicht (wie bisher).</p><p class="docs-rule__example"><code>/gamerule propwash:save_assisted_laps true</code></p></td></tr>
+<tr id="rule-drone_trails"><th scope="row"><span class="docs-rule__title"><span lang="en">Drone trails</span><span lang="de">Drohnen-Trails</span></span><br><code class="docs-rule__id">propwash:<wbr>drone_trails</code></th><td><span lang="en">Off</span><span lang="de">Aus</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">On: every flying drone draws a thin, fading trail in its own color (LED strip or paint) – so you can see other pilots even in the FPV view. Landed and disarmed drones draw no trail. Every player can turn the trails off for themselves in the Display tab. Does not change the physics.</p>
+<p lang="de">An: Hinter jeder fliegenden Drohne zieht eine dünne, verblassende Spur in der Farbe der Drohne (LED-Streifen oder Lackierung) – so sieht man andere Piloten auch im FPV-Bild. Gelandete und entschärfte Drohnen ziehen keine Spur. Jeder Spieler kann die Trails für sich im Tab „Darstellung“ ausschalten. Ändert keine Physik.</p><p class="docs-rule__example"><code>/gamerule propwash:drone_trails true</code></p></td></tr>
 </tbody>
 </table></div>
 </section>
@@ -339,6 +345,16 @@
 <pre><code>/gamerule propwash:wind 3
 /gamerule propwash:crash_tolerance 75
 /gamerule propwash:crash_damage_scale 200</code></pre>
+</figure>
+</div>
+<div class="docs-card docs-card--plain" id="recipe-freestyle-park">
+<h3 class="docs-card__title"><span lang="en">Freestyle playground</span><span lang="de">Freestyle-Spielplatz</span></h3>
+<p lang="en">Every drone pulls a trail in its own colour, so you see each other in FPV, and fast drones smash through glass – spawn protection and claims stay whole. Neither rule changes the physics: laps still count for the leaderboards.</p>
+<p lang="de">Jede Drohne zieht eine Spur in ihrer eigenen Farbe, so seht ihr euch im FPV-Bild, und schnelle Drohnen zerbrechen Glas – Spawn-Schutz und Claims bleiben ganz. Keine der beiden Regeln ändert die Physik: Runden zählen weiter für die Bestenlisten.</p>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Chat</span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>/gamerule propwash:drone_trails true
+/gamerule propwash:drones_break_blocks true</code></pre>
 </figure>
 </div>
 </div>

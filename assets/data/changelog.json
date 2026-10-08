@@ -54,6 +54,14 @@
                   "de": "Drohnen treffen Mobs und Spieler und prallen ab, bis zu fünf Herzen – Spieler nur mit PvP."
                 },
                 {
+                  "en": "Drone trails: a new world rule draws a thin, fading trail in each drone's color behind every flying drone – in FPV you see where the other pilots fly. Everyone can switch it off for themselves in the *Display* tab.",
+                  "de": "Drohnen-Trails: Eine neue Welt-Regel zieht hinter jeder fliegenden Drohne eine dünne, verblassende Spur in ihrer Farbe – im FPV-Bild siehst du, wo die anderen Piloten fliegen. Jeder kann sie für sich im Tab *Darstellung* ausschalten."
+                },
+                {
+                  "en": "Drones break glass: with the world rule *Drones break blocks* (off by default) a fast drone smashes through glass, panes and decorated pots and flies on a little slower – a whoop bounces off, a 5″ breaks a pane from about 40 km/h. In spawn protection and claims the drone bounces off like at a wall.",
+                  "de": "Drohnen zerbrechen Glas: Mit der Welt-Regel *Drohnen zerbrechen Blöcke* (Standard aus) bricht eine schnelle Drohne durch Glas, Scheiben und verzierte Töpfe und fliegt etwas langsamer weiter – ein Whoop prallt ab, ein 5″ bricht eine Scheibe ab etwa 40 km/h. In Spawn-Schutz und Claims prallt die Drohne ab wie an einer Wand."
+                },
+                {
                   "en": "3D mode: put it on a switch and the motors spin backwards below center throttle – fly inverted and take off upside down after a crash.",
                   "de": "3D-Modus: auf einen Schalter legen, und unter Mittelgas drehen die Motoren rückwärts – flieg kopfüber und starte nach einem Crash auf dem Rücken liegend."
                 },
@@ -102,8 +110,8 @@
                   "de": "Blackbox wie auf einem Betaflight-Flugcontroller: jeder scharfe Flug als `.bbl`-Log für Blackbox Explorer oder PIDtoolbox (neuer Tab *Blackbox*)."
                 },
                 {
-                  "en": "Ducts in the FPV view: whoops and cinewhoops see their own ducts where the real camera would, with camera angle, field of view and paint (*Ducts in FPV view* in the *Display* tab).",
-                  "de": "Ducts im FPV-Bild: Whoops und Cinewhoops sehen ihre eigenen Ducts dort, wo die echte Kamera sie sähe, mit Kamerawinkel, Sichtfeld und Lackierung (*Ducts im FPV-Bild* im Tab *Darstellung*)."
+                  "en": "Ducts in the FPV view: whoops and cinewhoops see their own ducts where the real camera would – also when landed, low over the ground or close to a wall – with camera angle, field of view and paint (*Ducts in FPV view* in the *Display* tab).",
+                  "de": "Ducts im FPV-Bild: Whoops und Cinewhoops sehen ihre eigenen Ducts dort, wo die echte Kamera sie sähe – auch gelandet, im Tiefflug oder dicht an einer Wand –, mit Kamerawinkel, Sichtfeld und Lackierung (*Ducts im FPV-Bild* im Tab *Darstellung*)."
                 },
                 {
                   "en": "Configurator search (`Ctrl+F`), your own rate and PID presets as short codes, *Image format* 16:9 or 4:3, *Max arm angle* per drone and a receiver wizard with an animated radio.",
@@ -151,12 +159,16 @@
                   "de": "Die Action-Cam nimmt viel flüssiger auf, und ihre Hinweise nennen, was bremst, mit einem konkreten Tipp."
                 },
                 {
-                  "en": "Drones you hear from outside fade out by their size, Flight School labels stay calm while you rotate or zoom, and with shader packs your own drone casts its real shadow.",
-                  "de": "Drohnen, die du von außen hörst, verklingen je nach Größe, Hinweise der Flugschule bleiben ruhig, während du drehst oder zoomst, und mit Shaderpacks wirft deine eigene Drohne ihren echten Schatten."
+                  "en": "Drones you hear from outside fade out by their size (a whoop after about 20 blocks, a 5″ after about 70), Flight School labels stay calm while you rotate or zoom and fade over to the other side instead of sliding across what they point at, and with shader packs your own drone casts its real shadow.",
+                  "de": "Drohnen, die du von außen hörst, verklingen je nach Größe (ein Whoop nach etwa 20 Blöcken, ein 5″ nach etwa 70), Hinweise der Flugschule bleiben ruhig, während du drehst oder zoomst, und blenden auf die andere Seite um, statt über das zu gleiten, worauf sie zeigen, und mit Shaderpacks wirft deine eigene Drohne ihren echten Schatten."
                 },
                 {
                   "en": "The workbench shows dry and all-up weight, and *Rotate gate* turns gates in 45°, 15° or 5° steps.",
                   "de": "Die Werkbank zeigt Trocken- und Abfluggewicht, und *Gate drehen* dreht Gates in Schritten von 45°, 15° oder 5°."
+                },
+                {
+                  "en": "If your add-ons don't match a server, you now see which add-on is missing or different – with the server's and your version, what to do (install, update or remove) and a link to its page – instead of a list of parts or registry entries; *Copy details* gives the server owner the same list, and the server log has it too.",
+                  "de": "Passen deine Add-ons nicht zu einem Server, siehst du jetzt, welches Add-on fehlt oder anders ist – mit der Version des Servers und deiner, was zu tun ist (installieren, aktualisieren oder entfernen) und einem Link zu seiner Seite – statt einer Liste von Teilen oder Registereinträgen; *Details kopieren* gibt dem Server-Betreiber dieselbe Liste, und das Server-Log zeigt sie auch."
                 }
               ]
             },
