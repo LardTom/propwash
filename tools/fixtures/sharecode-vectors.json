@@ -2200,7 +2200,7 @@
    "sustained_motor_temp_c": 48.58349712384887,
    "motor_temp_minute_c": 48.58349712384887,
    "mixed_motor_temp_c": 31.796236120232376,
-   "props_in_view_percent": 8.635711700030033,
+   "props_in_view_percent": 6.0098750129176866,
    "warnings": []
   }
  },
@@ -2259,7 +2259,7 @@
    "sustained_motor_temp_c": 48.58349712384887,
    "motor_temp_minute_c": 48.58349712384887,
    "mixed_motor_temp_c": 31.796236120232376,
-   "props_in_view_percent": 8.635711700030033,
+   "props_in_view_percent": 6.0098750129176866,
    "warnings": []
   }
  },
@@ -2323,7 +2323,7 @@
    "sustained_motor_temp_c": 48.58349712384887,
    "motor_temp_minute_c": 48.58349712384887,
    "mixed_motor_temp_c": 31.796236120232376,
-   "props_in_view_percent": 8.635711700030033,
+   "props_in_view_percent": 6.0098750129176866,
    "warnings": []
   }
  },
@@ -2382,7 +2382,7 @@
    "sustained_motor_temp_c": 48.58349712384887,
    "motor_temp_minute_c": 48.58349712384887,
    "mixed_motor_temp_c": 31.796236120232376,
-   "props_in_view_percent": 8.635711700030033,
+   "props_in_view_percent": 6.0098750129176866,
    "warnings": []
   }
  },
@@ -2446,7 +2446,7 @@
    "sustained_motor_temp_c": 46.780384908945436,
    "motor_temp_minute_c": 46.780384908945436,
    "mixed_motor_temp_c": 30.54109156733979,
-   "props_in_view_percent": 6.147561631848717,
+   "props_in_view_percent": 7.414714219497688,
    "warnings": []
   }
  },
@@ -2505,7 +2505,7 @@
    "sustained_motor_temp_c": 46.780384908945436,
    "motor_temp_minute_c": 46.780384908945436,
    "mixed_motor_temp_c": 30.54109156733979,
-   "props_in_view_percent": 6.147561631848717,
+   "props_in_view_percent": 7.414714219497688,
    "warnings": []
   }
  },
@@ -2569,7 +2569,7 @@
    "sustained_motor_temp_c": 46.780384908945436,
    "motor_temp_minute_c": 46.780384908945436,
    "mixed_motor_temp_c": 30.54109156733979,
-   "props_in_view_percent": 6.147561631848717,
+   "props_in_view_percent": 7.414714219497688,
    "warnings": []
   }
  },
@@ -2628,7 +2628,7 @@
    "sustained_motor_temp_c": 46.780384908945436,
    "motor_temp_minute_c": 46.780384908945436,
    "mixed_motor_temp_c": 30.54109156733979,
-   "props_in_view_percent": 6.147561631848717,
+   "props_in_view_percent": 7.414714219497688,
    "warnings": []
   }
  },
@@ -3431,7 +3431,7 @@
    "sustained_motor_temp_c": 68.38754084900441,
    "motor_temp_minute_c": 68.38754084900441,
    "mixed_motor_temp_c": 35.800346605203934,
-   "props_in_view_percent": 6.6664161186646265,
+   "props_in_view_percent": 2.391787399500043,
    "warnings": []
   }
  },
@@ -3490,7 +3490,7 @@
    "sustained_motor_temp_c": 68.38754084900441,
    "motor_temp_minute_c": 68.38754084900441,
    "mixed_motor_temp_c": 35.800346605203934,
-   "props_in_view_percent": 6.6664161186646265,
+   "props_in_view_percent": 2.391787399500043,
    "warnings": []
   }
  },
@@ -3555,7 +3555,7 @@
    "sustained_motor_temp_c": 68.38754084900441,
    "motor_temp_minute_c": 68.38754084900441,
    "mixed_motor_temp_c": 35.800346605203934,
-   "props_in_view_percent": 6.6664161186646265,
+   "props_in_view_percent": 2.391787399500043,
    "warnings": []
   }
  },
@@ -3614,7 +3614,7 @@
    "sustained_motor_temp_c": 68.38754084900441,
    "motor_temp_minute_c": 68.38754084900441,
    "mixed_motor_temp_c": 35.800346605203934,
-   "props_in_view_percent": 6.6664161186646265,
+   "props_in_view_percent": 2.391787399500043,
    "warnings": []
   }
  },
@@ -3679,7 +3679,7 @@
    "sustained_motor_temp_c": 82.08566862477898,
    "motor_temp_minute_c": 82.08566862477898,
    "mixed_motor_temp_c": 38.88619868777338,
-   "props_in_view_percent": 6.8540822630209695,
+   "props_in_view_percent": 13.322690197655959,
    "warnings": []
   }
  },
@@ -3738,7 +3738,7 @@
    "sustained_motor_temp_c": 82.08566862477898,
    "motor_temp_minute_c": 82.08566862477898,
    "mixed_motor_temp_c": 38.88619868777338,
-   "props_in_view_percent": 6.8540822630209695,
+   "props_in_view_percent": 13.322690197655959,
    "warnings": []
   }
  },
@@ -3803,7 +3803,7 @@
    "sustained_motor_temp_c": 82.08566862477898,
    "motor_temp_minute_c": 82.08566862477898,
    "mixed_motor_temp_c": 38.88619868777338,
-   "props_in_view_percent": 6.8540822630209695,
+   "props_in_view_percent": 13.322690197655959,
    "warnings": []
   }
  },
@@ -3862,7 +3862,7 @@
    "sustained_motor_temp_c": 82.08566862477898,
    "motor_temp_minute_c": 82.08566862477898,
    "mixed_motor_temp_c": 38.88619868777338,
-   "props_in_view_percent": 6.8540822630209695,
+   "props_in_view_percent": 13.322690197655959,
    "warnings": []
   }
  },
