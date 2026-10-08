@@ -37,6 +37,8 @@ export const IMAGES = {
   freeform_gate: { src: 'freeform_gate_cave.png', name: 'freeform-gate-cave' },
   signal_repeater: { src: 'signal_repeater_mounts_day.png', name: 'signal-repeater' },
   blackbox_tab: { src: 'configurator_blackbox_logs.png', name: 'blackbox-tab' },
+  bind_phrase: { src: 'bind_phrase_screen.png', name: 'bind-phrase' },
+  fpv_ducts: { src: 'fpv_guards_whoop_65_20.png', name: 'fpv-ducts-whoop' },
 };
 const SIZES = [800, 1600];
 

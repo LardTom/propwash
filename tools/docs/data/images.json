@@ -38,5 +38,21 @@
     "height": 1080,
     "small": 800,
     "large": 1600
+  },
+  "bind_phrase": {
+    "name": "bind-phrase",
+    "src": "bind_phrase_screen.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "fpv_ducts": {
+    "name": "fpv-ducts-whoop",
+    "src": "fpv_guards_whoop_65_20.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
   }
 }

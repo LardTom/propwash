@@ -1,7 +1,7 @@
 {
   "propwash": "0.5.0",
   "minecraft": "26.3",
-  "protocol": 11,
+  "protocol": 12,
   "api": "1.5.0",
   "partsFormat": 1
 }

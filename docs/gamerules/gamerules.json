@@ -511,6 +511,42 @@
         "en": "How large the opening of a freeform gate may be, in blocks per direction: 20 = at most 20 × 20 blocks. Applies when placing and rescanning; placed gates stay as they are. Larger values allow wide halls and caves, smaller ones keep courses tight."
       },
       "example": "/gamerule propwash:freeform_gate_max_size 21"
+    },
+    {
+      "id": "propwash:drones_generate_chunks",
+      "name": "drones_generate_chunks",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": true,
+      "changes_physics": false,
+      "title": {
+        "de": "Drohnen erzeugen neues Gelände",
+        "en": "Drones generate new terrain"
+      },
+      "description": {
+        "de": "An: Fliegt eine Drohne über den Rand der bisher erzeugten Welt hinaus, entsteht dort neues Gelände – wie wenn ein Spieler hinläuft (wie bisher). Aus: Drohnen laden nur Gelände, das es schon gibt. Am Rand bremst die Drohne sanft ab und bleibt kurz davor stehen, das OSD zeigt „WELTRAND“, das FPV-Bild bleibt ohne Löcher. Spart Rechenzeit auf dem Server; GPS Rescue ohne Pilot fliegt ohnehin nie in unerforschtes Gebiet. Die Server-Config (server.json) kann das Erzeugen zusätzlich auf Rechtestufen beschränken.",
+        "en": "On: when a drone flies past the edge of the world generated so far, new terrain is created there – as if a player walked there (as before). Off: drones only load terrain that already exists. At the edge the drone brakes gently and stops just short of it, the OSD shows “WORLD EDGE” and the FPV view has no holes. Saves server time; GPS rescue without pilot never flies into unexplored terrain anyway. The server config (server.json) can additionally limit generation to permission levels."
+      },
+      "example": "/gamerule propwash:drones_generate_chunks false"
+    },
+    {
+      "id": "propwash:save_assisted_laps",
+      "name": "save_assisted_laps",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": false,
+      "changes_physics": false,
+      "title": {
+        "de": "Runden mit Flughilfe speichern",
+        "en": "Save assisted laps"
+      },
+      "description": {
+        "de": "An: Runden und Rennen mit Flughilfe – Höhe oder Position halten, GPS Rescue, veränderte Welt-Regeln, Kreativ-Drohne, Teile, die nur ohne „Teile müssen zusammenpassen“ gehen, oder eine Brillen-Latenz unter der des Videosenders – werden trotzdem gespeichert: Bestenliste, persönliche Bestzeit, Geist und Rennanzeige zeigen sie mit dem Abzeichen „Flughilfe“ und dem Grund. In der Bestenliste stehen sie in einem eigenen Abschnitt unter den Zeiten ohne Flughilfe und werden nie Rekord. Aus: Runden mit Flughilfe zählen nicht (wie bisher).",
+        "en": "On: laps and races flown with a flight aid – altitude or position hold, GPS rescue, changed world rules, creative drone, parts that only fit with “Parts must fit” off, or a goggles latency below the video transmitter's – are saved anyway: the leaderboard, personal best, ghost and race display show them with the badge “Assisted” and the reason. In the leaderboard they get their own section below the unassisted times and never become a record. Off: assisted laps don't count (as before)."
+      },
+      "example": "/gamerule propwash:save_assisted_laps true"
     }
   ],
   "presets": [
@@ -547,7 +583,9 @@
         "allow_3d_mode": true,
         "part_compatibility": true,
         "autonomous_rescue": true,
-        "freeform_gate_max_size": 20
+        "freeform_gate_max_size": 20,
+        "drones_generate_chunks": true,
+        "save_assisted_laps": false
       },
       "differs_from_default": [],
       "command": "/propwash rules preset realistic"
@@ -559,8 +597,8 @@
         "en": "Training"
       },
       "description": {
-        "de": "Üben ohne Folgen: kein Verschleiß und keine Propellertreffer, der Akku wird nie leer und bricht nicht ein, Motoren überhitzen nicht – die Drohne behält die volle Leistung. Wind und Luft bleiben wie bei Realistisch.",
-        "en": "Practice without consequences: no wear and no prop strikes, the battery never runs empty or sags and motors never overheat – the drone keeps its full power. Wind and air stay as in Realistic."
+        "de": "Üben ohne Folgen: kein Verschleiß und keine Propellertreffer, der Akku wird nie leer und bricht nicht ein, Motoren überhitzen nicht – die Drohne behält die volle Leistung. Wind und Luft bleiben wie bei Realistisch. Rundenzeiten werden mit dem Abzeichen „Flughilfe“ gespeichert.",
+        "en": "Practice without consequences: no wear and no prop strikes, the battery never runs empty or sags and motors never overheat – the drone keeps its full power. Wind and air stay as in Realistic. Lap times are saved with the badge “Assisted”."
       },
       "changes_physics": true,
       "values": {
@@ -585,14 +623,17 @@
         "allow_3d_mode": true,
         "part_compatibility": true,
         "autonomous_rescue": true,
-        "freeform_gate_max_size": 20
+        "freeform_gate_max_size": 20,
+        "drones_generate_chunks": true,
+        "save_assisted_laps": true
       },
       "differs_from_default": [
         "hardware_limits",
         "battery_scale",
         "battery_sag",
         "crash_damage",
-        "prop_strikes"
+        "prop_strikes",
+        "save_assisted_laps"
       ],
       "command": "/propwash rules preset training"
     },
@@ -629,7 +670,9 @@
         "allow_3d_mode": true,
         "part_compatibility": false,
         "autonomous_rescue": true,
-        "freeform_gate_max_size": 20
+        "freeform_gate_max_size": 20,
+        "drones_generate_chunks": true,
+        "save_assisted_laps": true
       },
       "differs_from_default": [
         "prop_wash",
@@ -645,7 +688,8 @@
         "infinite_range_analog",
         "infinite_range_digital",
         "drone_hits_entities",
-        "part_compatibility"
+        "part_compatibility",
+        "save_assisted_laps"
       ],
       "command": "/propwash rules preset arcade"
     }
