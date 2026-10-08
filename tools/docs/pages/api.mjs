@@ -100,6 +100,25 @@ type = "required"
 versionRange = "[${v},)"
 ordering = "AFTER"
 side = "BOTH"`, 'toml', mono('neoforge.mods.toml'))}
+${h3('setup-join', 'Name, version and homepage for the join overview', 'Name, Version und Homepage für die Beitritts-Übersicht')}
+${P(`If a player's add-ons don't match the server's, Propwash shows an overview with one card per add-on: name, mod id, the version on the server and on the player's side, what to do (“Install <em>Your Add-on</em> 1.2.3”) and a link to the add-on's page (see <a href="${prefix}docs/guide/#servers-addons">When add-ons don't match</a>). These details come from the add-on's loader metadata, which the server sends along when a player connects (Propwash add-ons only, never the whole mod list):`,
+    `Passen die Add-ons eines Spielers nicht zu denen des Servers, zeigt Propwash eine Übersicht mit einer Karte je Add-on: Name, Mod-Id, Version auf dem Server und beim Spieler, was zu tun ist („Installiere <em>Dein Add-on</em> 1.2.3“) und ein Link zur Seite des Add-ons (siehe <a href="${prefix}docs/guide/#servers-addons">Wenn Add-ons nicht passen</a>). Diese Angaben stammen aus den Loader-Metadaten des Add-ons, die der Server beim Verbinden mitschickt (nur Propwash-Add-ons, nie die ganze Mod-Liste):`)}
+${table([L('Shown', 'Angabe'), mono('fabric.mod.json'), L('<code>neoforge.mods.toml</code> (<code>[[mods]]</code>)', '<code>neoforge.mods.toml</code> (<code>[[mods]]</code>)')], [
+    [L('Name in the overview', 'Name in der Übersicht'), mono('name'), mono('displayName')],
+    [L('Version', 'Version'), mono('version'), mono('version')],
+    [L('Link (only <code>https://</code> or <code>http://</code>)', 'Link (nur <code>https://</code> oder <code>http://</code>)'), L('<code>contact.homepage</code>, else <code>contact.sources</code>', '<code>contact.homepage</code>, sonst <code>contact.sources</code>'), L('<code>displayURL</code>, else <code>modUrl</code>', '<code>displayURL</code>, sonst <code>modUrl</code>')],
+    [L('Recognized as a Propwash add-on', 'Erkannt als Propwash-Add-on'), L('<code>propwash</code> under <code>depends</code>, <code>recommends</code> or <code>suggests</code>', '<code>propwash</code> unter <code>depends</code>, <code>recommends</code> oder <code>suggests</code>'), L('<code>[[dependencies.&lt;modid&gt;]]</code> with <code>modId = "propwash"</code>', '<code>[[dependencies.&lt;modid&gt;]]</code> mit <code>modId = "propwash"</code>')],
+  ])}
+${code(`"name": "Propwash: My Add-on",
+"version": "1.2.3",
+"contact": { "homepage": "https://modrinth.com/mod/my-addon" }`, 'json', mono('fabric.mod.json'))}
+${code(`[[mods]]
+modId = "examplemod"
+version = "1.2.3"
+displayName = "Propwash: My Add-on"
+displayURL = "https://modrinth.com/mod/my-addon"`, 'toml', mono('neoforge.mods.toml'))}
+${P('Use your mod id as the namespace of your parts: Propwash assigns parts to an add-on by their namespace. Control characters, <code>§</code> formatting and links with other schemes are dropped; names may have up to 96 characters, versions up to 64. Without <code>name</code>/<code>displayName</code> or a homepage, the card shows only the mod id and no link.',
+    'Die Mod-Id als Namensraum der Teile verwenden: Propwash ordnet Teile über ihren Namensraum dem Add-on zu. Steuerzeichen, <code>§</code>-Formatierung und Links mit anderem Schema verwirft Propwash; Namen höchstens 96 Zeichen, Versionen 64. Ohne <code>name</code>/<code>displayName</code> oder Homepage zeigt die Karte nur die Mod-Id und keinen Link.')}
 ${h3('setup-version', 'Checking the API version', 'API-Version prüfen')}
 ${P(`The API has its own version (<code>PropwashApi.API_VERSION</code>, SemVer), independent of the mod version: Propwash ${v} ships <strong>${api.version}</strong>. When your mod starts, require the major version and the smallest minor version whose features you need, and test for newer ones before using them:`,
     `Die API hat eine eigene Version (<code>PropwashApi.API_VERSION</code>, SemVer), unabhängig von der Mod-Version: Propwash ${v} bringt <strong>${api.version}</strong>. Beim Start die Hauptversion und die kleinste Nebenversion verlangen, deren Funktionen das Add-on braucht, und neuere vor dem Benutzen abfragen:`)}
@@ -314,7 +333,8 @@ ${P(`Propwash ${v} ships API ${api.version} and network protocol ${meta.protocol
 `);
 
   const multiplayer = section('multiplayer', T.multiplayer, list([
-    ['When a player connects, Propwash compares the part lists of server and client (ids and a short hash per definition). If they differ, the server disconnects with a message naming the missing or different parts: the flight model runs on the client and has to see the same data.', 'Beim Verbinden vergleicht Propwash die Teile-Listen von Server und Client (Ids und ein kurzer Hash je Definition). Weichen sie ab, trennt der Server mit einer Meldung, welche Teile fehlen oder andere Werte haben: Das Flugmodell läuft auf dem Client und muss dieselben Daten sehen.'],
+    ['When a player connects, Propwash compares the Propwash version, the network protocol, the add-on list and the part lists of server and client (ids and a short hash per definition). If parts or the protocol differ, the player cannot join: the flight model runs on the client and has to see the same data. The player then sees the join overview with one card per add-on – which version to install, update or remove, and a link from your loader metadata (see <a href="#setup-join">Name, version and homepage</a>); the server log lists the same differences.', 'Beim Verbinden vergleicht Propwash Version, Netzprotokoll, Add-on-Liste und Teile-Listen von Server und Client (Ids und ein kurzer Hash je Definition). Weichen Teile oder Protokoll ab, kann der Spieler nicht beitreten: Das Flugmodell läuft auf dem Client und muss dieselben Daten sehen. Der Spieler sieht dann die Beitritts-Übersicht mit einer Karte je Add-on – welche Version er installieren, aktualisieren oder entfernen soll, und einen Link aus deinen Loader-Metadaten (siehe <a href="#setup-join">Name, Version und Homepage</a>); das Server-Log nennt dieselben Unterschiede.'],
+    ['An add-on without parts that only one side has (for example a pure HUD add-on on the client) does not block joining; the overview lists it only as a note.', 'Ein Add-on ohne Teile, das nur eine Seite hat (etwa ein reines HUD-Add-on beim Client), blockiert den Beitritt nicht; die Übersicht nennt es nur als Hinweis.'],
     ['If an add-on is removed from a world, drones with its parts survive: Propwash keeps the unknown id in a placeholder part (not armable, tooltip “Unknown part”). When the add-on comes back, the drone is complete again.', 'Wird ein Add-on aus einer Welt entfernt, bleiben Drohnen mit seinen Teilen erhalten: Propwash behält die unbekannte Id in einem Platzhalter (nicht scharfschaltbar, Tooltip „Unbekanntes Bauteil“). Kommt das Add-on zurück, ist die Drohne wieder vollständig.'],
   ]));
 
