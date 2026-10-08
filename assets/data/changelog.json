@@ -54,6 +54,14 @@
                   "de": "Welt-Regeln für Schwerkraft, Akkulaufzeit (0 = unendlich), Wind, Turbulenz, Prop-Wash, Bodeneffekt, Spannungseinbruch, Hardware-Grenzen, Crash-Schaden und Crash-Toleranz, Propellertreffer, Videoreichweite und Videokanäle, 3D-Modus und GPS Rescue ohne Pilot."
                 },
                 {
+                  "en": "World rule *Drones generate new terrain*: turn it off and drones only load terrain that already exists – at the edge of the generated world they brake gently and stop just before it, the OSD shows *WORLD EDGE* and the FPV view has no holes.",
+                  "de": "Welt-Regel *Drohnen erzeugen neues Gelände*: Schalte sie aus, und Drohnen laden nur schon vorhandenes Gelände – am Rand der erzeugten Welt bremsen sie sanft und halten kurz davor an, das OSD zeigt *WELTRAND* und das FPV-Bild hat keine Löcher."
+                },
+                {
+                  "en": "World rule *Save assisted laps*: laps and races with altitude or position hold, GPS rescue, changed world rules or other flight aids are saved anyway – in their own *Assisted* section of the leaderboard with a badge and the reason on hover, with their own violet ghost and *ASSISTED* while racing, never as a record. *Training* and *Arcade* turn it on.",
+                  "de": "Welt-Regel *Runden mit Flughilfe speichern*: Runden und Rennen mit Höhe oder Position halten, GPS Rescue, geänderten Welt-Regeln oder anderer Flughilfe werden trotzdem gespeichert – in einem eigenen Abschnitt *Mit Flughilfe* der Bestenliste mit Abzeichen und dem Grund beim Darüberfahren, mit eigenem violettem Geist und *FLUGHILFE* im Rennen, nie als Rekord. *Training* und *Arcade* schalten sie ein."
+                },
+                {
                   "en": "Drones hit mobs and players: they bounce off and hurt them by the force of the impact, up to five hearts and players only with PvP.",
                   "de": "Drohnen treffen Mobs und Spieler: Sie prallen ab und verletzen sie je nach Wucht des Aufpralls um bis zu fünf Herzen, Spieler nur mit PvP."
                 },
@@ -134,6 +142,10 @@
                   "de": "Empfänger-Assistent mit animierter Funke, die in jedem Schritt zeigt, was zu tun ist, und einer Rückfrage, bevor du ohne Arm-Schalter abschließt."
                 },
                 {
+                  "en": "The binding stays in the drone, like with ExpressLRS: its receiver remembers who bound it last and that pilot's *binding phrase*, so your remote connects right away after the workbench, picking up, item frames and restarts. Share your phrase (*Receiver* tab) and friends fly your drones without binding them again; *RX* in the service menu resets a drone.",
+                  "de": "Die Bindung bleibt in der Drohne, wie bei ExpressLRS: Ihr Empfänger merkt sich, wer sie zuletzt gebunden hat, und dessen *Binding-Phrase*, deshalb verbindet deine Funke nach Werkbank, Aufheben, Item-Rahmen und Neustart sofort. Teile deine Phrase (Tab *Empfänger*), dann fliegen Freunde deine Drohnen, ohne sie neu zu binden; *RX* im Wartungsmenü setzt eine Drohne zurück."
+                },
+                {
                   "en": "Search the configurator: press `Ctrl+F` (`Cmd+F` on Mac) or click the search box at the top, type in English or German and pick a suggestion – it opens the tab, scrolls to the setting, world rule or key binding and highlights it.",
                   "de": "Suche im Konfigurator: Drück `Strg+F` (`Cmd+F` auf dem Mac) oder klick oben ins Suchfeld, tipp auf Deutsch oder Englisch und wähl einen Vorschlag – der Tab öffnet sich, scrollt zur Einstellung, Welt-Regel oder Tastenbelegung und hebt sie hervor."
                 },
@@ -142,8 +154,16 @@
                   "de": "Eigene Presets für Rates und PID-Tuning: Merk dir deine Werte unter einem Namen neben den eingebauten Presets, lade, benenne oder lösche sie und teile sie als kurzen Code – sie passen auf jede Drohne."
                 },
                 {
+                  "en": "Blackbox like on a Betaflight flight controller: switch it on in the new *Blackbox* tab and every armed flight is saved as a `.bbl` log with sticks, setpoints, gyro, PID terms, motors and battery at the full PID loop rate – open it in Betaflight Blackbox Explorer or PIDtoolbox and tune your drone with real tools. A radio switch or `Num 7` pauses logging.",
+                  "de": "Blackbox wie auf einem Betaflight-Flugcontroller: Schalte sie im neuen Tab *Blackbox* ein, und jeder scharfe Flug landet als `.bbl`-Log mit Knüppeln, Sollwerten, Gyro, PID-Anteilen, Motoren und Akku in voller PID-Loop-Rate – öffne ihn im Betaflight Blackbox Explorer oder in PIDtoolbox und tune deine Drohne mit echten Werkzeugen. Ein Schalter an der Funke oder `Num 7` pausiert die Aufzeichnung."
+                },
+                {
                   "en": "New Flight School lessons for freestyle tricks, 3D mode, free gates, flags and slalom, the gripper, bandos and – in creative mode – the drone editor.",
                   "de": "Neue Lektionen in der Flugschule zu Freestyle-Tricks, 3D-Modus, freien Gates, Flaggen und Slalom, Greifer, Bandos und – im Kreativmodus – zum Drohnen-Editor."
+                },
+                {
+                  "en": "Ducts in the FPV view: whoops and cinewhoops see their own ducts where the real camera would – in the lower corners on a whoop, at the sides on a cinewhoop – matching camera angle, field of view and paint (*Ducts in FPV view* in the *Display* tab).",
+                  "de": "Ducts im FPV-Bild: Whoops und Cinewhoops sehen ihre eigenen Ducts dort, wo die echte Kamera sie sähe – beim Whoop in den unteren Ecken, beim Cinewhoop an den Seiten –, passend zu Kamerawinkel, Sichtfeld und Lackierung (*Ducts im FPV-Bild* im Tab *Darstellung*)."
                 },
                 {
                   "en": "Documentation at [propwashfpv.com/docs](https://propwashfpv.com/docs/): player guide, every world rule and the add-on API; Mod Menu links it as *Wiki*.",
@@ -183,8 +203,16 @@
                   "de": "Werkbank, Konfigurator-Übersicht und Drohnen-Tooltip zeigen Trockengewicht und Abfluggewicht getrennt."
                 },
                 {
+                  "en": "Whoop and cinewhoop ducts look like real ones: thinner walls, a slim lip, rounder rings and just tall enough to cover the props.",
+                  "de": "Die Ducts von Whoop und Cinewhoop sehen aus wie echte: dünnere Wände, eine schmale Lippe, rundere Ringe und gerade hoch genug, um die Props abzudecken."
+                },
+                {
                   "en": "*Rotate gate* (`R`) turns gates in 45°, 15° or 5° steps (*Race* tab), and *Leave course* in *Adjust gate* takes a gate out of its course.",
                   "de": "*Gate drehen* (`R`) dreht Gates in Schritten von 45°, 15° oder 5° (Tab *Rennen*), und *Aus dem Kurs* in *Gate einstellen* nimmt ein Gate aus seinem Kurs."
+                },
+                {
+                  "en": "On servers an old remote no longer flies a drone that someone else has bound since, and nobody can bind a drone while another pilot is flying it.",
+                  "de": "Auf Servern fliegt eine alte Funke keine Drohne mehr, die inzwischen jemand anders gebunden hat, und niemand kann eine Drohne binden, während ein anderer Pilot sie fliegt."
                 },
                 {
                   "en": "`/propwash rules` lists the world rules and the preset they match.",
@@ -201,6 +229,10 @@
                 {
                   "en": "Flight School *Swapping and charging batteries* shows that the frame refuses a pack that is too heavy – the charger charges every pack, Li-Ion included.",
                   "de": "Flugschule *Akku tauschen und laden* zeigt, dass der Rahmen einen zu schweren Akku ablehnt – das Ladegerät lädt jeden Akku, auch Li-Ion."
+                },
+                {
+                  "en": "Flight School labels stay calm in every lesson: each box keeps its place while you rotate or zoom and only glides slowly aside when it must, while its pointer always follows the exact spot.",
+                  "de": "Die Hinweise der Flugschule bleiben in jeder Lektion ruhig: Jeder Kasten behält seinen Platz, während du drehst oder zoomst, und gleitet nur langsam zur Seite, wenn er muss, während seine Zeigelinie immer genau ihrem Punkt folgt."
                 },
                 {
                   "en": "With shader packs your own drone casts its real shadow when you fly low, and *Shadow* in the *Display* tab also switches off the shader shadows of drones.",
@@ -221,6 +253,10 @@
                 {
                   "en": "Stabilized videos stay sharper when the crop has to scale the picture up, and the *Action cam* tab shows whether your window size costs sharpness.",
                   "de": "Stabilisierte Videos bleiben schärfer, wenn der Ausschnitt das Bild hochrechnen muss, und der Tab *Action-Cam* zeigt, ob deine Fenstergröße Schärfe kostet."
+                },
+                {
+                  "en": "Drones you hear from outside get quieter with distance like real ones and fade out by their size – a whoop after about 20 blocks, a 5″ after about 70, an X-Class after up to 160; full throttle carries a bit farther.",
+                  "de": "Drohnen, die du von außen hörst, werden mit der Entfernung leiser wie echte und verklingen je nach Größe – ein Whoop nach etwa 20 Blöcken, ein 5″ nach etwa 70, eine X-Class nach bis zu 160; Vollgas trägt etwas weiter."
                 }
               ]
             },
@@ -274,6 +310,30 @@
                 {
                   "en": "Action cam: \"Computer too slow – frames missing\" no longer appears when frames were only buffered and nothing was lost, missing frames are no longer counted twice, and the first recorded frame no longer stutters.",
                   "de": "Action-Cam: „Rechner zu langsam – Bilder fehlen“ erscheint nicht mehr, wenn Bilder nur zwischengespeichert wurden und nichts verloren ging, fehlende Bilder werden nicht mehr doppelt gezählt, und das erste aufgenommene Bild ruckelt nicht mehr."
+                },
+                {
+                  "en": "Other players' drones no longer sound like wind rushing past: camera wind and frame rumble are only in the pilot's own FPV sound, and prop wash is just a quiet flutter from outside.",
+                  "de": "Die Drohnen anderer Spieler klingen nicht mehr nach vorbeirauschendem Wind: Fahrtwind an der Kamera und Rumpeln des Rahmens hört nur der Pilot im eigenen FPV-Ton, und Prop-Wash ist von außen nur ein leises Flattern."
+                },
+                {
+                  "en": "Flight School lessons no longer end with an old label left over next to the summary (e.g. the H-frame in *Frame shapes compared*), and the last labels no longer flicker out and back in when a lesson finishes.",
+                  "de": "Lektionen der Flugschule enden nicht mehr mit einem übrig gebliebenen alten Hinweis neben der Zusammenfassung (etwa beim H-Frame in *Rahmenformen im Vergleich*), und die letzten Hinweise blenden am Ende einer Lektion nicht mehr kurz aus und wieder ein."
+                },
+                {
+                  "en": "Long race messages in the FPV view (for example why a lap doesn't count) wrap onto a second line instead of running off the screen.",
+                  "de": "Lange Rennmeldungen im FPV-Bild (etwa warum eine Runde nicht zählt) brechen in eine zweite Zeile um, statt aus dem Bild zu laufen."
+                },
+                {
+                  "en": "The motor bars M1–M4 in the configurator's *Live telemetry* no longer stick out below the panel in narrow windows and at large GUI scales.",
+                  "de": "Die Motorbalken M1–M4 der *Live-Telemetrie* im Konfigurator ragen in schmalen Fenstern und bei großer GUI-Skala nicht mehr unten aus dem Panel."
+                },
+                {
+                  "en": "A clean lap right after an assisted one counts again on the server, just as the race display already said.",
+                  "de": "Eine saubere Runde direkt nach einer mit Flughilfe zählt auf dem Server wieder, so wie es die Rennanzeige schon sagte."
+                },
+                {
+                  "en": "With new chunks limited in `server.json`, drones no longer lose the signal two chunks before unexplored terrain, and the FPV view shows the generated terrain up to the edge instead of only the nearest chunks.",
+                  "de": "Mit eingeschränkten neuen Chunks in `server.json` verlieren Drohnen nicht mehr zwei Chunks vor unerkundetem Gelände das Signal, und das FPV-Bild zeigt das erzeugte Gelände bis zum Rand statt nur die nächsten Chunks."
                 }
               ]
             },
@@ -281,12 +341,12 @@
               "kind": "compatibility",
               "items": [
                 {
-                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · required on client and server; network protocol 11, so client and server must both run 0.5.0.",
-                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · auf Client und Server nötig; Netzwerkprotokoll 11, deshalb müssen Client und Server beide 0.5.0 nutzen."
+                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · required on client and server; network protocol 12, so client and server must both run 0.5.0.",
+                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · auf Client und Server nötig; Netzwerkprotokoll 12, deshalb müssen Client und Server beide 0.5.0 nutzen."
                 },
                 {
-                  "en": "Worlds, drones, gates, courses and leaderboards from 0.4.0 load unchanged. With the default world rules the flight model is exactly as in 0.4.0 except for the 65 mm whoop, but drones now hit mobs and players – turn off *Drones hit mobs and players* to fly through them. The personal *Simulation* settings are now world rules – set them again in the *World rules* tab; a server with `partWear` off in `server.json` keeps *Crash damage* off.",
-                  "de": "Welten, Drohnen, Gates, Kurse und Bestenlisten aus 0.4.0 laden unverändert. Mit den Standard-Welt-Regeln rechnet das Flugmodell genau wie in 0.4.0 bis auf den 65-mm-Whoop, aber Drohnen treffen jetzt Mobs und Spieler – schalte *Drohnen treffen Lebewesen* aus, um durch sie hindurchzufliegen. Die persönlichen Einstellungen unter *Simulation* sind jetzt Welt-Regeln – stell sie im Tab *Welt-Regeln* neu ein; ein Server mit `partWear` aus in `server.json` behält *Crash-Schaden* aus."
+                  "en": "Worlds, drones, gates, courses and leaderboards from 0.4.0 load unchanged; drones from 0.4.0 keep their binding behavior until you bind them once. With the default world rules the flight model is exactly as in 0.4.0 except for the 65 mm whoop, but drones now hit mobs and players – turn off *Drones hit mobs and players* to fly through them. The personal *Simulation* settings are now world rules – set them again in the *World rules* tab; a server with `partWear` off in `server.json` keeps *Crash damage* off.",
+                  "de": "Welten, Drohnen, Gates, Kurse und Bestenlisten aus 0.4.0 laden unverändert; Drohnen aus 0.4.0 verhalten sich beim Binden wie bisher, bis du sie einmal bindest. Mit den Standard-Welt-Regeln rechnet das Flugmodell genau wie in 0.4.0 bis auf den 65-mm-Whoop, aber Drohnen treffen jetzt Mobs und Spieler – schalte *Drohnen treffen Lebewesen* aus, um durch sie hindurchzufliegen. Die persönlichen Einstellungen unter *Simulation* sind jetzt Welt-Regeln – stell sie im Tab *Welt-Regeln* neu ein; ein Server mit `partWear` aus in `server.json` behält *Crash-Schaden* aus."
                 },
                 {
                   "en": "Parts API 1.5.0: add-ons made for 1.4 keep working; the matching *Propwash: Just More Parts* is 1.1.0. Flashback (Fabric only) and ffmpeg are optional and not included.",
@@ -1157,6 +1217,10 @@
               "kind": "improved",
               "items": [
                 {
+                  "en": "Whoop and cinewhoop ducts look like real ones: thinner walls, a slim rim and round rings – and with Propwash 0.5.0 you see them in your FPV view.",
+                  "de": "Die Ducts von Whoop und Cinewhoop sehen aus wie echte: dünnere Wände, ein schmaler Rand und runde Ringe – und mit Propwash 0.5.0 siehst du sie im FPV-Bild."
+                },
+                {
                   "en": "The 65 mm Whoop Frame (Lite) and the 75 mm Whoop Frame carry a bit more momentum when falling and diving: their air resistance from above now follows the real frame outline. Top speed rises slightly (Whoop 75 preset 41 → 45 km/h).",
                   "de": "Der 65-mm-Whoop-Rahmen (Lite) und der 75-mm-Whoop-Rahmen nehmen im Fall und Sturzflug etwas mehr Schwung mit: Ihr Luftwiderstand von oben folgt jetzt dem echten Umriss des Rahmens. Die Höchstgeschwindigkeit steigt leicht (Preset Whoop 75: 41 → 45 km/h)."
                 }
@@ -1165,6 +1229,10 @@
             {
               "kind": "fixed",
               "items": [
+                {
+                  "en": "On the ducted whoops and cinewhoops the props no longer stick out above the ducts, and the motors sit on their mounts instead of floating above them.",
+                  "de": "Bei den Whoops und Cinewhoops mit Ducts ragen die Props nicht mehr oben aus den Ducts, und die Motoren sitzen auf ihren Halterungen, statt darüber zu schweben."
+                },
                 {
                   "en": "Motors and other small parts are no longer huge in your hand: they are held at a size that fits their real size, like Propwash's own parts – a 1103 motor is a small part, a 4214 a bigger one, frames and props from 5″ up look as before.",
                   "de": "Motoren und andere kleine Teile sind in der Hand nicht mehr riesig: Du hältst sie in einer Größe, die zu ihrer echten Größe passt, wie die Teile von Propwash selbst – ein 1103-Motor ist ein kleines Teil, ein 4214 ein größeres, Rahmen und Props ab 5″ sehen aus wie bisher."
