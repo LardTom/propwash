@@ -49,8 +49,11 @@ for (const p of data.products) {
   if (/^v\d+\.\d+\.\d+$/.test(p.source.ref)) check(p.releases[0].version === p.source.ref.slice(1), `${p.id}: newest release ${p.releases[0].version} matches the tag ${p.source.ref}`);
 }
 const propwash = data.products.find((p) => p.id === 'propwash');
-for (const v of ['0.1.0', '0.2.0', '0.2.1', '0.3.0', '0.3.1', '0.3.2', '0.4.0']) {
+for (const v of ['0.3.2', '0.4.0']) {
   check(propwash?.releases.some((r) => r.version === v), `propwash ${v} is on the page`);
+}
+for (const v of ['0.1.0', '0.2.0', '0.2.1', '0.3.0', '0.3.1']) {
+  check(!propwash?.releases.some((r) => r.version === v), `propwash ${v} is internal and not on the page`);
 }
 check(data.products.find((p) => p.id === 'jmp')?.releases.some((r) => r.version === '1.0.0'), 'jmp 1.0.0 is on the page');
 

@@ -39,6 +39,7 @@ export const PRODUCTS = [
     short: 'Propwash',
     tagline: { en: 'The FPV drone mod for Minecraft', de: 'Die FPV-Drohnen-Mod für Minecraft' },
     folder: 'propwash',
+    firstPublic: '0.3.2',
     env: 'PROPWASH_SRC',
     option: 'propwash'
   },
@@ -255,7 +256,8 @@ export function buildChangelog(sources, de = loadTranslations()) {
   const used = new Set();
   for (const { meta, dir, ref } of sources) {
     const markdown = readChangelog(dir, ref);
-    const releases = parseChangelog(markdown, `${meta.short} CHANGELOG.md@${ref}`);
+    const releases = parseChangelog(markdown, `${meta.short} CHANGELOG.md@${ref}`)
+      .filter((r) => !meta.firstPublic || compareVersions(r.version, meta.firstPublic) >= 0);
     if (!releases.length) throw new Error(`${meta.name}: CHANGELOG.md at ${ref} has no release`);
     const built = buildProduct(meta, releases, ref, de);
     products.push(built.product);
