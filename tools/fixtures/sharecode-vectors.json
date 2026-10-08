@@ -986,7 +986,7 @@
    "sustained_motor_temp_c": 29.823155826216475,
    "motor_temp_minute_c": 29.823155826216475,
    "mixed_motor_temp_c": 27.35198262309715,
-   "props_in_view_percent": 8.81269965587293,
+   "props_in_view_percent": 6.227636098067385,
    "warnings": []
   }
  },
@@ -1045,7 +1045,7 @@
    "sustained_motor_temp_c": 29.823155826216475,
    "motor_temp_minute_c": 29.823155826216475,
    "mixed_motor_temp_c": 27.35198262309715,
-   "props_in_view_percent": 8.81269965587293,
+   "props_in_view_percent": 6.227636098067385,
    "warnings": []
   }
  },
@@ -1105,7 +1105,7 @@
    "sustained_motor_temp_c": 29.823155826216475,
    "motor_temp_minute_c": 29.823155826216475,
    "mixed_motor_temp_c": 27.35198262309715,
-   "props_in_view_percent": 8.81269965587293,
+   "props_in_view_percent": 6.227636098067385,
    "warnings": []
   }
  },
@@ -1164,7 +1164,7 @@
    "sustained_motor_temp_c": 29.823155826216475,
    "motor_temp_minute_c": 29.823155826216475,
    "mixed_motor_temp_c": 27.35198262309715,
-   "props_in_view_percent": 8.81269965587293,
+   "props_in_view_percent": 6.227636098067385,
    "warnings": []
   }
  },
@@ -1224,7 +1224,7 @@
    "sustained_motor_temp_c": 102.09859352242808,
    "motor_temp_minute_c": 102.09859352242808,
    "mixed_motor_temp_c": 45.58334645184632,
-   "props_in_view_percent": 6.997833603889635,
+   "props_in_view_percent": 1.941569153709167,
    "warnings": []
   }
  },
@@ -1283,7 +1283,7 @@
    "sustained_motor_temp_c": 102.09859352242808,
    "motor_temp_minute_c": 102.09859352242808,
    "mixed_motor_temp_c": 45.58334645184632,
-   "props_in_view_percent": 6.997833603889635,
+   "props_in_view_percent": 1.941569153709167,
    "warnings": []
   }
  },
@@ -1343,7 +1343,7 @@
    "sustained_motor_temp_c": 102.09859352242808,
    "motor_temp_minute_c": 102.09859352242808,
    "mixed_motor_temp_c": 45.58334645184632,
-   "props_in_view_percent": 6.997833603889635,
+   "props_in_view_percent": 1.941569153709167,
    "warnings": []
   }
  },
@@ -1402,7 +1402,7 @@
    "sustained_motor_temp_c": 102.09859352242808,
    "motor_temp_minute_c": 102.09859352242808,
    "mixed_motor_temp_c": 45.58334645184632,
-   "props_in_view_percent": 6.997833603889635,
+   "props_in_view_percent": 1.941569153709167,
    "warnings": []
   }
  },
