@@ -91,6 +91,7 @@
 <li class="docs-menu__item"><a href="../../docs/"><span lang="en">Overview</span><span lang="de">Übersicht</span></a></li>
 <li class="docs-menu__item is-current"><a href="../../docs/guide/" aria-current="page"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></a>
 <ol class="docs-menu__toc"><li><a href="#start"><span lang="en">Before you start</span><span lang="de">Bevor es losgeht</span></a></li><li><a href="#first-flight"><span lang="en">First flight</span><span lang="de">Erster Flug</span></a></li><li><a href="#radio"><span lang="en">Radio, gamepad, keyboard</span><span lang="de">Funke, Gamepad, Tastatur</span></a></li><li><a href="#controls"><span lang="en">Keys</span><span lang="de">Tasten</span></a></li><li><a href="#modes"><span lang="en">Flight modes and tuning</span><span lang="de">Flugmodi und Tuning</span></a></li><li><a href="#racing"><span lang="en">Gates and courses</span><span lang="de">Gates und Kurse</span></a></li><li><a href="#video"><span lang="en">Video and FPV view</span><span lang="de">Video und FPV-Bild</span></a></li><li><a href="#creative"><span lang="en">Creative drone</span><span lang="de">Kreativ-Drohne</span></a></li><li><a href="#servers"><span lang="en">For server owners</span><span lang="de">Für Server-Betreiber</span></a></li><li><a href="#help"><span lang="en">Help</span><span lang="de">Hilfe</span></a></li></ol></li>
+<li class="docs-menu__item"><a href="../../docs/blackbox/"><span lang="en">Blackbox tuning</span><span lang="de">Tuning mit der Blackbox</span></a></li>
 <li class="docs-menu__item"><a href="../../docs/gamerules/"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></a></li>
 <li class="docs-menu__item"><a href="../../docs/api/"><span lang="en">Add-on API</span><span lang="de">Add-on-API</span></a></li>
 <li class="docs-menu__item docs-menu__item--sub"><a href="../../docs/api/reference/"><span lang="en">API reference</span><span lang="de">API-Referenz</span></a></li>
@@ -167,6 +168,7 @@
 <li><span lang="en">Position hold (POSHOLD)</span><span lang="de">Position halten (POSHOLD)</span></li>
 <li><span lang="en">Drop cargo</span><span lang="de">Fracht abwerfen</span></li>
 <li><span lang="en">3D mode</span><span lang="de">3D-Modus</span></li>
+<li>Blackbox</li>
 <li><span lang="en">Custom command 1</span><span lang="de">Eigener Befehl 1</span></li>
 <li><span lang="en">Custom command 2</span><span lang="de">Eigener Befehl 2</span></li>
 <li><span lang="en">Custom command 3</span><span lang="de">Eigener Befehl 3</span></li>
@@ -246,6 +248,7 @@
 <tr><th scope="row"><span lang="en">Spectate: next video channel</span><span lang="de">Zuschauen: nächster Videokanal</span></th><td><kbd>F7</kbd></td></tr>
 <tr><th scope="row"><span lang="en">Rotate gate (sneak: change mount) <span class="docs-muted">(shared on purpose)</span></span><span lang="de">Gate drehen (Schleichen: Lage) <span class="docs-muted">(bewusst geteilt)</span></span></th><td><kbd>R</kbd></td></tr>
 <tr><th scope="row"><span lang="en">Adjust gate: free mouse (hold)</span><span lang="de">Gate einstellen: Maus frei (halten)</span></th><td><kbd>Left Alt</kbd></td></tr>
+<tr><th scope="row"><span lang="en">Blackbox pause / resume</span><span lang="de">Blackbox pausieren / fortsetzen</span></th><td><kbd>Numpad 7</kbd></td></tr>
 </tbody>
 </table></div>
 <div class="docs-note docs-note--info"><p lang="en">Right-clicking with the radio also ends a flight. The rotate-gate key shares <kbd>R</kbd> with the flight mode on purpose: one works only with a gate in hand, the other only while flying.</p>
@@ -264,6 +267,7 @@
 <li><span lang="en">Rates, PID, filters and the throttle curve are set in the configurator tabs <em>Rates</em> and <em>PID Tuning</em> and saved to the drone you fly or hold. The <a href="../../configurator/">online configurator</a> uses the same defaults.</span><span lang="de">Rates, PID, Filter und Gaskurve stellst du in den Konfigurator-Tabs <em>Rates</em> und <em>PID-Tuning</em> ein; sie werden auf der Drohne gespeichert, die du fliegst oder hältst. Der <a href="../../configurator/">Online-Konfigurator</a> nutzt dieselben Standards.</span></li>
 <li><span lang="en">Every number field takes typed values: click it and type with the number row or the numpad, dot or comma. <kbd>Enter</kbd> applies, <kbd>Esc</kbd> brings the old value back, <kbd>↑</kbd>/<kbd>↓</kbd> step; a value out of range turns orange and is set to the limit.</span><span lang="de">Jedes Zahlenfeld nimmt getippte Werte: anklicken und mit der Ziffernreihe oder dem Ziffernblock tippen, Punkt oder Komma. <kbd>Enter</kbd> übernimmt, <kbd>Esc</kbd> holt den alten Wert zurück, <kbd>↑</kbd>/<kbd>↓</kbd> gehen schrittweise; ein Wert außerhalb des Bereichs wird orange und auf die Grenze gesetzt.</span></li>
 <li><span lang="en"><strong>Your own presets:</strong> at the end of the <em>Rates</em> and <em>PID Tuning</em> tabs, <em>Keep</em> saves your values under a name next to the built-in presets; load, rename or delete them there. They work on every drone (rates as the feel of your sticks, PID tuning only where it differs from the drone’s defaults) and travel as a short code (<code>PWT1-…</code>).</span><span lang="de"><strong>Eigene Presets:</strong> Am Ende der Tabs <em>Rates</em> und <em>PID-Tuning</em> speichert <em>Merken</em> deine Werte unter einem Namen neben den eingebauten Presets; dort lädst, benennst oder löschst du sie. Sie gelten für jede Drohne (Rates als Gefühl deiner Knüppel, PID-Tuning nur, wo es vom Standard der Drohne abweicht) und lassen sich als kurzer Code teilen (<code>PWT1-…</code>).</span></li>
+<li><span lang="en"><strong>Blackbox:</strong> switched on in the <em>Blackbox</em> tab, every armed flight is saved as a Betaflight blackbox log – open it in Blackbox Explorer or PIDtoolbox to see what your PIDs and filters do (<a href="../../docs/blackbox/">Tuning with the blackbox</a>).</span><span lang="de"><strong>Blackbox:</strong> Im Tab <em>Blackbox</em> eingeschaltet, wird jeder scharfe Flug als Betaflight-Blackbox-Log gespeichert – in Blackbox Explorer oder PIDtoolbox siehst du, was deine PIDs und Filter tun (<a href="../../docs/blackbox/">Tuning mit der Blackbox</a>).</span></li>
 </ul>
 
 </section>

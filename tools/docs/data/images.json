@@ -30,5 +30,13 @@
     "height": 1080,
     "small": 800,
     "large": 1600
+  },
+  "blackbox_tab": {
+    "name": "blackbox-tab",
+    "src": "configurator_blackbox_logs.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
   }
 }

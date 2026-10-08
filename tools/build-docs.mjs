@@ -25,6 +25,7 @@ import gamerulesPage from './docs/pages/gamerules.mjs';
 import apiPage from './docs/pages/api.mjs';
 import referencePage from './docs/pages/reference.mjs';
 import partsFormatPage from './docs/pages/parts-format.mjs';
+import blackboxPage from './docs/pages/blackbox.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const DATA_DIR = path.join(ROOT, 'tools/docs/data');
@@ -35,12 +36,14 @@ export const IMAGES = {
   receiver_wizard: { src: 'receiver_wizard_check.png', name: 'receiver-wizard-check' },
   freeform_gate: { src: 'freeform_gate_cave.png', name: 'freeform-gate-cave' },
   signal_repeater: { src: 'signal_repeater_mounts_day.png', name: 'signal-repeater' },
+  blackbox_tab: { src: 'configurator_blackbox_logs.png', name: 'blackbox-tab' },
 };
 const SIZES = [800, 1600];
 
 const BUILDERS = {
   overview: indexPage,
   guide: guidePage,
+  blackbox: blackboxPage,
   gamerules: gamerulesPage,
   api: apiPage,
   reference: referencePage,

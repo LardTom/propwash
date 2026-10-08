@@ -19,6 +19,9 @@ export default function indexPage(ctx) {
 ${card('docs/guide/', { en: 'Player guide', de: 'Spielerhandbuch' },
     { en: `First flight, binding radio and goggles, radio and gamepad setup, all ${controls.keys.length} keys and what server owners need.`, de: `Erster Flug, Funke und Brille binden, Funke und Gamepad einrichten, alle ${controls.keys.length} Tasten und was Server-Betreiber brauchen.` },
     { en: 'Players', de: 'Spieler' })}
+${card('docs/blackbox/', { en: 'Blackbox tuning', de: 'Tuning mit der Blackbox' },
+    { en: 'Record every flight as a Betaflight blackbox log and tune your drone with Blackbox Explorer and PIDtoolbox.', de: 'Jeden Flug als Betaflight-Blackbox-Log aufzeichnen und die Drohne mit Blackbox Explorer und PIDtoolbox tunen.' },
+    { en: 'Players', de: 'Spieler' })}
 ${card('docs/gamerules/', { en: 'World rules', de: 'Welt-Regeln' },
     { en: `All ${gamerules.rules.length} gamerules: gravity, wind, battery life, crash damage, video range and channels, with commands and recipes.`, de: `Alle ${gamerules.rules.length} Gamerules: Schwerkraft, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Kanäle, mit Befehlen und Rezepten.` },
     { en: 'Players and server owners', de: 'Spieler und Server-Betreiber' })}

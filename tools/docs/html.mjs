@@ -8,6 +8,7 @@ export const MODRINTH = 'https://modrinth.com/mod/propwash-fpv';
 export const PAGES = [
   { path: 'docs/', id: 'overview', title: { en: 'Overview', de: 'Übersicht' } },
   { path: 'docs/guide/', id: 'guide', title: { en: 'Player guide', de: 'Spielerhandbuch' } },
+  { path: 'docs/blackbox/', id: 'blackbox', title: { en: 'Blackbox tuning', de: 'Tuning mit der Blackbox' } },
   { path: 'docs/gamerules/', id: 'gamerules', title: { en: 'World rules', de: 'Welt-Regeln' } },
   { path: 'docs/api/', id: 'api', title: { en: 'Add-on API', de: 'Add-on-API' } },
   { path: 'docs/api/reference/', id: 'reference', title: { en: 'API reference', de: 'API-Referenz' } },
