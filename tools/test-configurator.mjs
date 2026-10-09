@@ -280,7 +280,8 @@ console.log(`Presets: ${presetPass}/${catalog.presets.length} (share code, check
       if (v.analysis_before && analysis) {
         // Recalibrated energy balance (Propwash 0.4.0): the flight physics stays bit-identical, only the energy
         // figures (flight times, pack currents, motor temperatures) change.
-        for (const key of ['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'top_speed_kmh', 'esc_load_percent',
+        // The top speed is left out since Propwash 0.5.0: the climb thrust after momentum theory moves it slightly.
+        for (const key of ['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'esc_load_percent',
           'motor_response_ms', 'crash_speed_ms', 'props_in_view_percent']) {
           sameNumber(analysis[key], v.analysis_before[key], `${v.name}: ${key} unchanged by the recalibration`);
         }

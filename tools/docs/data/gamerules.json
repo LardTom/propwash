@@ -59,9 +59,9 @@
       "type": "integer",
       "display": "percent",
       "default": 100,
-      "min": 80,
-      "max": 150,
-      "step": 5,
+      "min": 0,
+      "max": 1000,
+      "step": 1,
       "unit": "%",
       "changes_physics": true,
       "title": {
@@ -69,10 +69,10 @@
         "en": "Gravity"
       },
       "description": {
-        "de": "Schwerkraft für Drohnen in Prozent der Erdschwerkraft, 100 entspricht 9,81 m/s². Mehr: Drohnen fallen schneller und brauchen mehr Gas zum Schweben. Werkbank und Übersicht rechnen immer mit der echten Erdschwerkraft.",
-        "en": "Gravity for drones in percent of Earth's gravity, 100 is 9.81 m/s². Higher: drones fall faster and need more throttle to hover. The workbench and overview always calculate with real Earth gravity."
+        "de": "Schwerkraft für Drohnen in Prozent der Erdschwerkraft (100 = 9,81 m/s², 0 = schwerelos). Mehr: Drohnen fallen schneller und brauchen mehr Gas zum Schweben; sie heben nur ab, solange ihr Schub/Gewicht aus der Werkbank über dem Faktor liegt. Werkbank und Übersicht rechnen immer mit der echten Erdschwerkraft.",
+        "en": "Gravity for drones in percent of Earth's gravity (100 = 9.81 m/s², 0 = weightless). Higher: drones fall faster and need more throttle to hover; they only take off while their thrust-to-weight ratio from the workbench is above the factor. The workbench and overview always calculate with real Earth gravity."
       },
-      "example": "/gamerule propwash:gravity_scale 105"
+      "example": "/gamerule propwash:gravity_scale 101"
     },
     {
       "id": "propwash:prop_wash",

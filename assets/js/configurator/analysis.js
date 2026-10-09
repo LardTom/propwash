@@ -1,4 +1,4 @@
-// Flight analysis of a build, a port of Propwash 0.4.0 BuildAccess#analyze (BuildStats): airframe derivation,
+// Flight analysis of a build, a port of Propwash 0.5.0 BuildAccess#analyze (BuildStats): airframe derivation,
 // steady operating points of motors and battery, top speed, the energy balance of sim.EnergyModel (pack current with
 // drive losses, prop factor and avionics load, flight times for hover, cruise, mixed and aggressive flying down to the
 // landing voltage, motor heating) and camera occlusion (the FPV rig of the renderer, fpv.js).
@@ -27,6 +27,8 @@ const ZERO_LIFT_PITCH = 0.2;
 const V0_MIN = 1.0;
 const DESCENT_GAIN = 0.5;
 const DESCENT_CAP = 0.6;
+const MOMENTUM_MIN_RATIO = 1.05;
+const MOMENTUM_MAX_RATIO = 1.0e6;
 const Q_CLIMB = 0.6;
 const Q_MIN = 0.05;
 const Q_DESCENT = 0.3;
@@ -315,6 +317,7 @@ function deriveAirframe(parts, catalog) {
   p.motorTau = jEff / damping;
   p.zeroThrustPerOmega = (p.propPitch + ZERO_LIFT_PITCH * diameter) / (2.0 * Math.PI);
   p.hoverInducedVelocity = Math.sqrt(weight / (8.0 * RHO0 * area * ductGain));
+  p.inducedPerOmega = inducedPerOmega(p.kThrust, p.discArea);
   p.translationalLiftGain = ducted ? (duct.translational_lift_gain != null ? duct.translational_lift_gain : K_TL_DUCT) : K_TL_OPEN;
   const stiffness = pd.stiffness;
   p.propStiffness = stiffness;
@@ -680,6 +683,41 @@ function axialThrustFactor(lambda) {
   return 1.0 + DESCENT_GAIN * Math.min(-lambda, DESCENT_CAP);
 }
 
+function inducedPerOmega(kThrust, discArea) {
+  return discArea > 0.0 && kThrust > 0.0 ? Math.sqrt(kThrust / (2.0 * RHO0 * discArea)) : 0.0;
+}
+
+// Propwash 0.5.0: thrust in a climb after momentum and blade element theory (the induced velocity drops as the rotor
+// climbs, initial slope -r/(2r - 1) instead of -1), faded out in forward flight after Glauert.
+function axialThrustFactorFor(p, lambda, omega, crossSpeed) {
+  const w = Math.abs(omega);
+  return momentumThrustFactor(lambda, Math.max(V0_MIN, p.zeroThrustPerOmega * w), p.inducedPerOmega * w,
+    inducedCoupling(crossSpeed, p.hoverInducedVelocity));
+}
+
+function momentumThrustFactor(lambda, pitchSpeed, inducedSpeed, coupling) {
+  if (lambda <= 0.0 || lambda >= 1.0 || !(inducedSpeed > 0.0) || !(coupling > 0.0)) return axialThrustFactor(lambda);
+  const r = pitchSpeed / inducedSpeed;
+  if (!(r > MOMENTUM_MIN_RATIO) || r > MOMENTUM_MAX_RATIO) return axialThrustFactor(lambda);
+  const linear = 1.0 - lambda;
+  const k = 1.0 / (r - 1.0);
+  const s = lambda * r;
+  const b = s + k;
+  const c = (r - s) * k;
+  const u = 2.0 * c / (b + Math.sqrt(b * b + 4.0 * c));
+  const momentum = Math.max(0.0, (r - s - u) * k);
+  return linear + coupling * (momentum - linear);
+}
+
+function inducedCoupling(crossSpeed, hoverInducedVelocity) {
+  if (!(crossSpeed > 0.0)) return 1.0;
+  if (!(hoverInducedVelocity > 0.0)) return 0.0;
+  const mu = crossSpeed / hoverInducedVelocity;
+  const mu2 = mu * mu;
+  const q = Math.sqrt(mu2 * mu2 + 4.0);
+  return 4.0 / (q * (q + mu2));
+}
+
 function torqueFactor(lambda) {
   if (lambda >= 0.0) return Math.max(Q_MIN, 1.0 - Q_CLIMB * lambda);
   return 1.0 + Q_DESCENT * Math.min(-lambda, DESCENT_CAP);
@@ -710,7 +748,7 @@ function translationalLiftFactor(crossSpeed, hoverInducedVelocity, gain, scale) 
 
 function thrust(p, omega, axialSpeed, crossSpeed, rhoRatio, tlScale) {
   const lambda = inflowRatio(axialSpeed, p.zeroThrustPerOmega, omega);
-  const t = p.kThrust * rhoRatio * ductFactor(p.ducted, p.ductGain, lambda) * axialThrustFactor(lambda)
+  const t = p.kThrust * rhoRatio * ductFactor(p.ducted, p.ductGain, lambda) * axialThrustFactorFor(p, lambda, omega, crossSpeed)
     * translationalLiftFactor(crossSpeed, p.hoverInducedVelocity, p.translationalLiftGain, tlScale) * omega * omega;
   return p.propFlex === 0.0 ? t : t * flexFactor(p, omega);
 }

@@ -1257,6 +1257,12 @@
           "members": [
             {
               "kind": "method",
+              "name": "isAddonActive",
+              "static": true,
+              "display": "static boolean isAddonActive(String modId)"
+            },
+            {
+              "kind": "method",
               "name": "registerConfigTab",
               "static": true,
               "display": "static void registerConfigTab(Supplier<? extends ConfigTab> factory)"
