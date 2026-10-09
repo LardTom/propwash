@@ -39,9 +39,33 @@
     "small": 800,
     "large": 1600
   },
-  "bind_phrase": {
-    "name": "bind-phrase",
-    "src": "bind_phrase_screen.png",
+  "goggles_check": {
+    "name": "goggles-no-signal",
+    "src": "goggles_mismatch_analog.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "course_edit": {
+    "name": "course-edit",
+    "src": "course_edit.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "glass_break": {
+    "name": "glass-break-fpv",
+    "src": "glass_break_fpv_pane.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "ffmpeg_tab": {
+    "name": "action-cam-ffmpeg",
+    "src": "configurator_action_cam_ffmpeg.png",
     "width": 1920,
     "height": 1080,
     "small": 800,

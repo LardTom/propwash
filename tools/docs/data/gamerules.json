@@ -456,6 +456,34 @@
       "example": "/gamerule propwash:drones_break_blocks true"
     },
     {
+      "id": "propwash:break_impact_scale",
+      "name": "break_impact_scale",
+      "group": "gameplay",
+      "type": "integer",
+      "display": "percent",
+      "default": 100,
+      "min": 0,
+      "max": 300,
+      "step": 10,
+      "unit": "%",
+      "changes_physics": false,
+      "title": {
+        "de": "Wucht beim Durchbruch",
+        "en": "Break-through impact"
+      },
+      "description": {
+        "de": "Wie deutlich eine Drohne spürt, dass sie Glas durchschlägt, in Prozent: Tempoverlust durch mitgerissene Scherben, ein Stoß, der sie aus der Lage kippt (stärker, wenn sie schief oder nur mit einer Seite trifft), und Scherben in den vorderen Props. 100 ist realistisch, 0 lässt nur die Bruchenergie übrig. Wirkt nur mit „Drohnen zerbrechen Blöcke“; ob ein Block bricht und wann die Drohne abstürzt, bleibt gleich.",
+        "en": "How clearly a drone feels smashing through glass, in percent: speed lost to the shards it drags along, a kick that knocks it off its attitude (stronger when it hits tilted or with one side only) and shards in the front props. 100 is realistic, 0 leaves only the fracture energy. Only applies with \"Drones break blocks\"; whether a block breaks and when the drone crashes stays the same."
+      },
+      "values": {
+        "0": {
+          "de": "Kein Stoß",
+          "en": "No kick"
+        }
+      },
+      "example": "/gamerule propwash:break_impact_scale 110"
+    },
+    {
       "id": "propwash:allow_3d_mode",
       "name": "allow_3d_mode",
       "group": "gameplay",
@@ -635,6 +663,7 @@
         "signal_repeaters": 4,
         "drone_hits_entities": true,
         "drones_break_blocks": false,
+        "break_impact_scale": 100,
         "allow_3d_mode": true,
         "part_compatibility": true,
         "autonomous_rescue": true,
@@ -678,6 +707,7 @@
         "signal_repeaters": 4,
         "drone_hits_entities": true,
         "drones_break_blocks": false,
+        "break_impact_scale": 100,
         "allow_3d_mode": true,
         "part_compatibility": true,
         "autonomous_rescue": true,
@@ -729,6 +759,7 @@
         "signal_repeaters": 4,
         "drone_hits_entities": false,
         "drones_break_blocks": false,
+        "break_impact_scale": 100,
         "allow_3d_mode": true,
         "part_compatibility": false,
         "autonomous_rescue": true,
