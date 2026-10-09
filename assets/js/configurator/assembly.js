@@ -6,7 +6,7 @@
 // A block model is drawn with its model point (8, 8, 8) at the part's position, 1 model unit = 8 mm.
 //
 // assemble(build, env) → { layout, cameraTilt, pieces } where each piece is
-//   { role, id, slot?, position: [x, y, z], variant: 'base' | 'ccw', paintPosition, tiltX, spinY, stretchX, procedural? }
+//   { role, id, slot?, position: [x, y, z], variant: 'base' | 'ccw' | 'under', paintPosition, tiltX, spinY, stretchX, procedural? }
 // env = { catalog, render, model(id) → loaded model JSON of a part or null }.
 
 export const SLOTS = 4;
@@ -91,7 +91,7 @@ export function layoutFromDefinition(frame, catalog) {
     stackY = y;
   }
   const plate = d.battery.plate_mm;
-  const battery = d.battery.on_top ? [0, plate + 2, 0.04 * wb] : [0, plate - 7, 0];
+  const battery = d.battery.on_top ? [0, plate + 2, 0.04 * wb] : [0, plate, 0];
   const lens = d.camera && d.camera.pos;
   const video = lens ? [lens[0], lens[1], lens[2] + CAMERA_BEHIND_LENS_MM] : [0, d.electronics_mm, -0.21 * wb];
   const propHeight = frame.builtin ? defaultPropHeight(typicalMotor(frame, catalog)) : NaN;
@@ -164,12 +164,51 @@ export function propHeight(layout, frame, motor, env) {
   return defaultPropHeight(motor);
 }
 
-/** DroneAssembly.batteryPosition: batteries below a frame from the definition hang from the battery plate. */
+/** DroneLayout#batteryBelow: the frame carries the pack under it; the layout's battery point is then the top of the pack. */
+export function batteryBelow(frame) {
+  return !!(frame && frame.data && frame.data.battery) && frame.data.battery.on_top === false;
+}
+
+/** FallbackShapes.batteryDimensions, height only: pack size from the definition, else from mass and chemistry. */
+export function packHeight(battery, catalog) {
+  const pack = battery.data && battery.data.pack_mm;
+  if (Array.isArray(pack) && pack.length === 3 && finite(pack[2])) return pack[2];
+  const id = battery.data && battery.data.chemistry;
+  let density;
+  if (id === 'propwash:lion') density = 2.4;
+  else if (id === 'propwash:lipo' || id === 'propwash:lihv') density = 2.1;
+  else {
+    const chemistry = catalog && catalog.chemistry ? catalog.chemistry(id) : null;
+    density = chemistry && finite(chemistry.density_g_cm3) && chemistry.density_g_cm3 > 0 ? chemistry.density_g_cm3 : 2.1;
+  }
+  return Math.cbrt(battery.basics.mass_g / density / 2.86) * 10;
+}
+
+/** DroneAssembly.hangBelow: a pack whose top sits at the anchor. */
+export function hangBelow(anchor, packTop) {
+  return [anchor[0], anchor[1] - Math.max(1, packTop), anchor[2]];
+}
+
+/** DroneAssembly.batteryPosition: batteries below the frame hang from the battery point by the height of their model. */
 export function batteryPosition(layout, frame, battery, env) {
-  if (layout.fromFile || frame.builtin || !(layout.battery[1] < 0)) return layout.battery;
+  if (!batteryBelow(frame)) return layout.battery;
   let height = modelTop(env.model(battery.id));
-  if (!finite(height)) height = Math.cbrt(battery.basics.mass_g / 2.1 / 2.86) * 10;
-  return [layout.battery[0], frame.data.battery.plate_mm - Math.max(1, height), layout.battery[2]];
+  if (!finite(height)) height = packHeight(battery, env.catalog);
+  return hangBelow(layout.battery, height);
+}
+
+/**
+ * DroneAssembly.batteryPart: below the frame the pack's own "_under" model (strap underneath, authored hanging from 0)
+ * sits at the battery point; without it the normal model hangs below by its height.
+ */
+export function batteryPiece(layout, frame, battery, env) {
+  if (batteryBelow(frame)) {
+    const model = env.model(battery.id);
+    if (model && model.variants && model.variants.under) {
+      return { role: 'battery', id: battery.id, position: layout.battery.slice(), variant: 'under' };
+    }
+  }
+  return { role: 'battery', id: battery.id, position: batteryPosition(layout, frame, battery, env) };
 }
 
 /**
@@ -200,7 +239,7 @@ export function assemble(build, env) {
 
   pieces.push({ role: 'frame', id: frame.id, position: [0, 0, 0], procedural: hasModel(frame) ? null : 'frame' });
   if (stack) pieces.push({ role: 'stack', id: stack.id, position: layout.stack });
-  if (battery) pieces.push({ role: 'battery', id: battery.id, position: batteryPosition(layout, frame, battery, env) });
+  if (battery) pieces.push(batteryPiece(layout, frame, battery, env));
   if (video) pieces.push({ role: 'video', id: video.id, position: layout.video, tiltX: layout.cameraTilt });
 
   const height = motor ? propHeight(layout, frame, motor, env) : defaultPropHeight(null);
@@ -257,6 +296,13 @@ function armThickness(wb) {
 
 const armWidth = (wb) => Math.min(36, Math.max(4, 0.06 * wb));
 const bodySpan = (wb) => (wb <= 300 ? wb : 300 + 0.3 * (wb - 300));
+
+/** FallbackShapes.topPlateHeight: the top plate carries a pack on top; a frame that normally has it on top keeps a plate over the electronics. */
+export function topPlateHeight(frame, layout) {
+  if (!batteryBelow(frame)) return layout.battery[1];
+  if (!(frame.data.wheelbase_mm >= 100)) return NaN;
+  return Math.max(10, 2 * frame.data.electronics_mm);
+}
 
 /** FallbackShapes.buildFrame for frames without a model (X-Class frames). */
 export function proceduralFrame(frame, layout, catalog) {
@@ -318,9 +364,8 @@ export function proceduralFrame(frame, layout, catalog) {
   } else {
     out.push(between(-0.12 * span, -2, -0.3 * span, 0.12 * span, 0, 0.3 * span, CARBON));
   }
-  const battery = layout.battery;
-  if (battery[1] > 8) {
-    const plateTop = battery[1];
+  const plateTop = topPlateHeight(frame, layout);
+  if (plateTop > 8) {
     const plateBottom = plateTop - 2;
     out.push(between(-0.09 * span, plateBottom, -0.24 * span, 0.09 * span, plateTop, 0.24 * span, CARBON));
     const sx = 0.07 * span;

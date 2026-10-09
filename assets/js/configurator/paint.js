@@ -167,7 +167,8 @@ export function groupsOf(piece, model, render) {
     return base ? base.groups : null;
   }
   if (!model || !model.variants) return null;
-  const painted = model.variants[piece.variant === 'ccw' ? 'ccw_paint' : 'paint'];
+  const plain = piece.variant && piece.variant !== 'base' && model.variants[piece.variant] ? piece.variant : 'base';
+  const painted = model.variants[plain === 'base' ? 'paint' : `${plain}_paint`];
   return painted && painted.groups ? painted.groups : null;
 }
 

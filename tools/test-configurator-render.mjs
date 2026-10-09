@@ -5,6 +5,9 @@
 //     definition in the web export (only when the export is available)
 //   - every preset and every frame assembles with finite positions; built-in frames use drone_layout.json
 //   - frame models are drawn at real size: they reach their motor positions (render "transformation" baked in)
+//   - batteries under a frame (on_top false) hang from the battery point: top of the pack at the point (the strap of an
+//     "_under" model up to 4 mm through the plate), bottom below the battery plate, the "_under" model where the pack
+//     has one (DroneAssembly.batteryPart)
 //
 //   node tools/test-configurator-render.mjs [--export <web-export dir>]
 
@@ -12,7 +15,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createCatalog } from '../assets/js/configurator/data.js';
-import { assemble, frameLayout, proceduralFrame, proceduralAccessoryBase, SLOTS } from '../assets/js/configurator/assembly.js';
+import { assemble, frameLayout, proceduralFrame, proceduralAccessoryBase, SLOTS, MM_PER_MODEL_UNIT, batteryBelow } from '../assets/js/configurator/assembly.js';
 import { channelTint, rgbOf, paintTints, paintDefaults, paintAvailable } from '../assets/js/configurator/paint.js';
 import { PAINT_SLOTS } from '../assets/js/configurator/sharecode.js';
 import { exportDir } from './build-configurator-data.mjs';
@@ -163,6 +166,40 @@ for (const preset of catalog.presets) {
     }
   }
   console.log(`FPV rig: ${rigs} builds, prop hubs within ${worst.toExponential(1)} mm of the drone renderer's props`);
+}
+
+// Batteries under the frame: every frame with on_top false and every battery with a model.
+{
+  const base = catalog.presetBuild('propwash:freestyle');
+  let hanging = 0;
+  let under = 0;
+  for (const frame of catalog.partsIn('frame')) {
+    if (!batteryBelow(frame)) continue;
+    const layout = frameLayout(frame, catalog, render);
+    const plate = frame.data.battery.plate_mm;
+    for (const battery of catalog.partsIn('battery')) {
+      const model = models.get(battery.id);
+      if (!model) continue;
+      const piece = assemble({ ...base, frame: frame.id, battery: battery.id }, env).pieces.find((p) => p.role === 'battery');
+      const variant = piece && model.variants[piece.variant || 'base'];
+      if (!piece || !variant || !variant.box) {
+        check(false, `${battery.id} on ${frame.id}: no battery piece with a model box`);
+        continue;
+      }
+      const top = (variant.box[4] - 8) * MM_PER_MODEL_UNIT + piece.position[1];
+      const bottom = (variant.box[1] - 8) * MM_PER_MODEL_UNIT + piece.position[1];
+      const label = `${battery.id} on ${frame.id} (${piece.variant || 'base'})`;
+      // "_under" models: the strap runs up through the battery plate, at most 4 mm (RaceBatteryAssetsTest).
+      const reach = piece.variant === 'under' ? 4.01 : 1.01;
+      check(top <= layout.battery[1] + reach, `${label}: model reaches ${(top - layout.battery[1]).toFixed(1)} mm above the battery point ${layout.battery[1]}`);
+      check(bottom < plate, `${label}: bottom of the pack ${bottom.toFixed(1)} mm not below the battery plate ${plate} mm`);
+      check(!model.variants.under || piece.variant === 'under', `${label}: "_under" model not used`);
+      hanging++;
+      if (piece.variant === 'under') under++;
+    }
+  }
+  check(hanging > 0 && under > 0, `batteries under the frame: ${hanging} builds, ${under} with an "_under" model`);
+  console.log(`Batteries under the frame: ${hanging} builds, ${under} with the "_under" model`);
 }
 
 // Unknown parts are left out, not drawn.

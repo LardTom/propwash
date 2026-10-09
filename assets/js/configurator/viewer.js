@@ -475,8 +475,8 @@ export function createViewer(container, options) {
       mesh = new Mesh(shapeGeometry(proceduralFrame(frame, current.layout, catalog)), material(whiteTexture()));
       mesh.userData.dispose = true;
     } else {
-      const plain = piece.variant === 'ccw' ? 'ccw' : 'base';
-      const painted = plain === 'ccw' ? 'ccw_paint' : 'paint';
+      const plain = piece.variant && piece.variant !== 'base' && model.variants[piece.variant] ? piece.variant : 'base';
+      const painted = plain === 'base' ? 'paint' : `${plain}_paint`;
       const tints = model.variants[painted] ? paintTints(model.variants[painted].groups, paint, piece.paintPosition || 0, render.channels) : null;
       const name = tints ? painted : plain;
       const variant = model.variants[name];

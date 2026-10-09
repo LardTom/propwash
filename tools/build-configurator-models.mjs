@@ -10,7 +10,7 @@
 //                                                               paint channel references, accessory base tints
 //   assets/data/configurator/models/<ns>/<category>/<path>.json one file per part with a model: the block-model
 //                                                               elements in a compact form plus the textures as
-//                                                               data URLs (base, paint, ccw variants)
+//                                                               data URLs (base, paint, ccw and battery under variants)
 //
 // Only files from the web export are used. The block models keep Minecraft's model units (0–16 per model block);
 // worn, damaged, broken and blur variants are left out because the configurator shows new parts at rest.
@@ -228,9 +228,10 @@ function main() {
 
     add('base', '', null);
     if (p.category === 'prop' && add('ccw', '_ccw', null)) add('ccw_paint', '_ccw_paint', 'ccw');
+    if (p.category === 'battery' && add('under', '_under', null)) add('under_paint', '_under_paint', 'under');
     add('paint', '_paint', 'base');
     // Paint groups belong to the unpainted model (DroneRenderResources#paintGroups); keep them on the paint entry.
-    for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint']]) {
+    for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint']]) {
       if (variants[plain] && variants[plain].groups) {
         if (variants[painted]) variants[painted].groups = variants[plain].groups;
         delete variants[plain].groups;
