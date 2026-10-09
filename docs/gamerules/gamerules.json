@@ -583,6 +583,24 @@
         "en": "On: every flying drone draws a thin, fading trail in its own color (LED strip or paint) – so you can see other pilots even in the FPV view. Landed and disarmed drones draw no trail. Every player can turn the trails off for themselves in the Display tab. Does not change the physics."
       },
       "example": "/gamerule propwash:drone_trails true"
+    },
+    {
+      "id": "propwash:invulnerable_pilots",
+      "name": "invulnerable_pilots",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": false,
+      "changes_physics": false,
+      "title": {
+        "de": "Unverwundbare Piloten",
+        "en": "Invulnerable pilots"
+      },
+      "description": {
+        "de": "An: Wer gerade eine Drohne steuert, nimmt keinen Schaden – für Events, bei denen Piloten geschützt am Rand stehen sollen. Aus (Standard): Der Körper des Piloten bleibt ein normaler Spieler; Schwerkraft, Mobs, andere Spieler, Stürze, Lava, Ertrinken und Hunger wirken wie sonst. Die Leere und /kill wirken immer.",
+        "en": "On: whoever is flying a drone takes no damage – for events where pilots should stand protected at the side. Off (default): the pilot's body stays a normal player; gravity, mobs, other players, falls, lava, drowning and hunger work as usual. The void and /kill always apply."
+      },
+      "example": "/gamerule propwash:invulnerable_pilots true"
     }
   ],
   "presets": [
@@ -623,7 +641,8 @@
         "freeform_gate_max_size": 20,
         "drones_generate_chunks": true,
         "save_assisted_laps": false,
-        "drone_trails": false
+        "drone_trails": false,
+        "invulnerable_pilots": false
       },
       "differs_from_default": [],
       "command": "/propwash rules preset realistic"
@@ -665,7 +684,8 @@
         "freeform_gate_max_size": 20,
         "drones_generate_chunks": true,
         "save_assisted_laps": true,
-        "drone_trails": true
+        "drone_trails": true,
+        "invulnerable_pilots": false
       },
       "differs_from_default": [
         "hardware_limits",
@@ -715,7 +735,8 @@
         "freeform_gate_max_size": 20,
         "drones_generate_chunks": true,
         "save_assisted_laps": true,
-        "drone_trails": true
+        "drone_trails": true,
+        "invulnerable_pilots": false
       },
       "differs_from_default": [
         "prop_wash",

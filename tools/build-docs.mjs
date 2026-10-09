@@ -42,6 +42,8 @@ export const IMAGES = {
   drone_trails: { src: 'trails_several_drones.png', name: 'drone-trails' },
   block_break: { src: 'block_break_pane.png', name: 'block-break-pane' },
   join_mismatch: { src: 'join_addon_mismatch.png', name: 'join-addon-mismatch' },
+  gate_pole: { src: 'gate_pole_multigp.png', name: 'gate-pole-multigp' },
+  gate_redstone: { src: 'gate_redstone.png', name: 'gate-redstone' },
 };
 const SIZES = [800, 1600];
 

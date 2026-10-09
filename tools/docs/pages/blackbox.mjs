@@ -37,7 +37,7 @@ ${P('The flight model of Propwash reacts to PIDs, filters and rates like a real 
   const on = section('switch-on', toc[1].title, `
 ${list([
     ['Open the configurator (<kbd>K</kbd>) and go to the <em>Blackbox</em> tab.', 'Konfigurator öffnen (<kbd>K</kbd>), Tab <em>Blackbox</em>.'],
-    ['Set <em>Log while armed</em> to <em>On</em>. Leave <em>Logging rate</em> at 1/1 (every loop, about 4 MB per flight minute); 1/2 to 1/8 make smaller logs.', '<em>Beim Scharfschalten loggen</em> auf <em>An</em>. <em>Lograte</em> auf 1/1 lassen (jeder Durchlauf, etwa 4 MB pro Flugminute); 1/2 bis 1/8 ergeben kleinere Logs.'],
+    ['Set <em>Log while armed</em> to <em>On</em>. Leave <em>Logging rate</em> at 1/1 (every loop, about 4 MB per flight minute); 1/2 to 1/8 make smaller logs.', '<em>Loggen, wenn scharf</em> auf <em>An</em>. <em>Lograte</em> auf 1/1 lassen (jeder Durchlauf, etwa 4 MB pro Flugminute); 1/2 bis 1/8 ergeben kleinere Logs.'],
     ['<em>Storage for logs</em> caps the folder (128 MB to 4 GB, default 512 MB): before a new log starts, the oldest logs are deleted until it fits.', '<em>Speicher für Logs</em> begrenzt den Ordner (128 MB bis 4 GB, Standard 512 MB): Bevor ein neuer Log beginnt, werden die ältesten Logs gelöscht, bis er hineinpasst.'],
     ['Save. From now on every arm starts a new log and disarming ends it. The logs stay on your computer; nothing is sent to the server.', 'Speichern. Ab jetzt beginnt jedes Scharfschalten einen neuen Log, Entschärfen beendet ihn. Die Logs bleiben auf deinem Rechner, nichts geht an den Server.'],
   ], true)}

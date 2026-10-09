@@ -78,5 +78,21 @@
     "height": 960,
     "small": 800,
     "large": 1600
+  },
+  "gate_pole": {
+    "name": "gate-pole-multigp",
+    "src": "gate_pole_multigp.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "gate_redstone": {
+    "name": "gate-redstone",
+    "src": "gate_redstone.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
   }
 }
