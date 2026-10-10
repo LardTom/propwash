@@ -188,8 +188,8 @@
               "kind": "fixed",
               "items": [
                 {
-                  "en": "Menus fit every GUI scale and window size: what does not fit scrolls, long texts wrap instead of being cut off, and narrow windows rearrange into a single column.",
-                  "de": "Menüs passen in jede GUI-Skalierung und Fenstergröße: Was nicht hineinpasst, scrollt, lange Texte brechen um, statt abgeschnitten zu werden, und schmale Fenster ordnen sich einspaltig an."
+                  "en": "Menus fit every GUI scale and window size – with keyboard, mouse or a transmitter connected: what does not fit scrolls, long texts wrap instead of being cut off, and narrow windows rearrange into a single column.",
+                  "de": "Menüs passen in jede GUI-Skalierung und Fenstergröße – mit Tastatur, Maus oder verbundener Funke: Was nicht hineinpasst, scrollt, lange Texte brechen um, statt abgeschnitten zu werden, und schmale Fenster ordnen sich einspaltig an."
                 },
                 {
                   "en": "While you fly a drone your body no longer hangs invulnerable in the air: it falls, burns, drowns and can die like any player. A red edge, a sound and a short notice in FPV warn you, and if you die the drone goes into its failsafe. Event servers can protect pilots with the world rule *Invulnerable pilots*.",
