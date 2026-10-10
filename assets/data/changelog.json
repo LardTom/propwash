@@ -192,6 +192,10 @@
                   "de": "Menüs passen in jede GUI-Skalierung und Fenstergröße – mit Tastatur, Maus oder verbundener Funke: Was nicht hineinpasst, scrollt, lange Texte brechen um, statt abgeschnitten zu werden, und schmale Fenster ordnen sich einspaltig an."
                 },
                 {
+                  "en": "The leaderboard scrolls when it does not fit, so your own row and the assisted laps are always reachable. Pilot names stay readable in narrow windows, and every drone class can be picked as a filter.",
+                  "de": "Die Bestenliste scrollt, wenn sie nicht ins Fenster passt – die eigene Zeile und die Runden mit Flughilfe sind immer erreichbar. Pilotennamen bleiben auch in schmalen Fenstern lesbar, und jede Drohnenklasse lässt sich als Filter wählen."
+                },
+                {
                   "en": "While you fly a drone your body no longer hangs invulnerable in the air: it falls, burns, drowns and can die like any player. A red edge, a sound and a short notice in FPV warn you, and if you die the drone goes into its failsafe. Event servers can protect pilots with the world rule *Invulnerable pilots*.",
                   "de": "Während du eine Drohne fliegst, hängt dein Körper nicht mehr unverwundbar in der Luft: Er fällt, brennt, ertrinkt und kann sterben wie jeder Spieler. Ein roter Bildrand, ein Ton und ein kurzer Hinweis im FPV warnen dich, und stirbst du, geht die Drohne in ihr Failsafe. Event-Server schützen Piloten mit der Welt-Regel *Unverwundbare Piloten*."
                 },
