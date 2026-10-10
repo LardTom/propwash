@@ -240,8 +240,8 @@
                   "de": "Übrig gebliebene Flugschul-Hinweise, Rennmeldungen, die aus dem Bild laufen, und Telemetrie-Balken, die aus dem Feld ragen, sind behoben."
                 },
                 {
-                  "en": "Drones no longer sink into the ground: props, ducts and battery stay above the surface when a drone lands tilted, tips over or lies on its back, a crashed drone falls flat, and drones lie on top of snow layers, soul sand, mud and honey blocks.",
-                  "de": "Drohnen versinken nicht mehr im Boden: Props, Ducts und Akku bleiben über der Oberfläche, wenn eine Drohne schräg landet, umkippt oder auf dem Rücken liegt, eine abgestürzte Drohne legt sich flach hin, und Drohnen liegen auf Schneeschichten, Seelensand, Schlamm und Honigblöcken obenauf."
+                  "en": "Drones sit on the ground: props, ducts and battery stay above the surface when a drone lands tilted, tips over or lies on its back, a standing drone no longer hovers a finger's width above it, a crashed drone falls flat, and drones lie on top of snow layers, soul sand, mud and honey blocks.",
+                  "de": "Drohnen stehen auf dem Boden: Props, Ducts und Akku bleiben über der Oberfläche, wenn eine Drohne schräg landet, umkippt oder auf dem Rücken liegt, eine stehende Drohne schwebt nicht mehr einen Fingerbreit darüber, eine abgestürzte Drohne legt sich flach hin, und Drohnen liegen auf Schneeschichten, Seelensand, Schlamm und Honigblöcken obenauf."
                 }
               ]
             },
@@ -513,8 +513,8 @@
                   "de": "Minecraft 26.3 · Fabric und NeoForge · Java 25 · auf Client und Server nötig."
                 },
                 {
-                  "en": "Network protocol 6 is unchanged: 0.3.2 plays together with 0.3.1 and 0.3.0.",
-                  "de": "Netzwerkprotokoll 6 bleibt gleich: 0.3.2 spielt zusammen mit 0.3.1 und 0.3.0."
+                  "en": "Network protocol 6 is unchanged.",
+                  "de": "Netzwerkprotokoll 6 bleibt gleich."
                 },
                 {
                   "en": "Worlds, drones, ghosts and settings load unchanged; record ghosts saved by a 0.3.2 server are not shown on older clients.",
