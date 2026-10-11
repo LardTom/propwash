@@ -969,3 +969,7 @@ a.docs-card:active {
   padding-bottom: 32px;
   border-bottom: 1px solid var(--border-soft);
 }
+
+.docs-body {
+  padding-bottom: clamp(3rem, 2rem + 3vw, 5rem);
+}
