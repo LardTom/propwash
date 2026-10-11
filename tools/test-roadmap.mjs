@@ -69,7 +69,7 @@ for (const [file, href] of [['index.html', 'roadmap/'], ['configurator/index.htm
   check(nav.includes(`href="${href}"`), `${file}: main navigation links to the roadmap (${href})`);
 }
 // Only the hosts the site already links to; scripts, styles, fonts and data come from the site itself.
-const HOSTS = new Set(['propwashfpv.com', 'discord.gg', 'www.curseforge.com', 'modrinth.com', 'www.w3.org']);
+const HOSTS = new Set(['propwashfpv.com', 'discord.gg', 'www.curseforge.com', 'modrinth.com', 'github.com', 'www.w3.org']);
 for (const file of ['assets/js/roadmap/view.js', 'assets/js/roadmap/data.js', 'assets/css/roadmap.css', 'roadmap/index.html', 'assets/data/roadmap.json']) {
   const foreign = [...read(file).matchAll(/https?:\/\/([a-z0-9.-]+)/gi)].map((m) => m[1].toLowerCase()).filter((h) => !HOSTS.has(h));
   check(foreign.length === 0, `${file}: other hosts ${[...new Set(foreign)].join(', ')}`);

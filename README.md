@@ -20,7 +20,7 @@ This repository contains only the website, no mod source code.
 - `assets/js/configurator/` – the configurator as plain ES modules:
   - core: `data.js` (catalog), `sharecode.js` (PW1 share codes and the entry point; `SHARE_FORMAT` chooses what new
     codes use), `sharecode2.js` + `sharecode2-tables.js` (the shorter PW2 codes), `crc32.js`, `inflate.js`, `tune.js`,
-    `rules.js` (compatibility), `analysis.js` (flight analysis with the energy balance of Propwash 0.4.0), `fpv.js` (FPV camera rig and props in view),
+    `rules.js` (compatibility), `analysis.js` (flight analysis as in Propwash 0.5.0: energy balance and climb thrust), `fpv.js` (FPV camera rig and props in view),
     `tuning.js` (tune defaults and editing), `index.js`
   - page: `ui.js` (part pickers, paint, tune editor, OSD layer, stats, share code, import), `i18n.js` (texts),
     `assembly.js` (where every part sits on the drone), `paint.js` (paint tints), `viewer.js` (three.js viewer)
@@ -35,13 +35,37 @@ This repository contains only the website, no mod source code.
   block-model geometry plus textures, loaded only for the parts on the drone)
 - `assets/vendor/three/` – three.js r186 as a trimmed, minified bundle (MIT, `LICENSE`)
 - `assets/vendor/pako/` – the deflate part of pako 2.1.0 (MIT, `LICENSE`), so share codes are byte-identical to the mod's
-- `assets/img/` – real in-game screenshots as WebP (800 and 1600 px wide, plus cropped shots) and `og-image.jpg` for link previews
+- `assets/img/` – real in-game screenshots as WebP (800 and 1600 px wide, plus cropped shots) and `og-image.jpg` for link
+  previews, converted by `tools/build-landing-images.mjs` (see [Landing page](#landing-page)); `assets/img/docs/` – the
+  pictures of the docs pages
+- `sitemap.xml` and `robots.txt` – every page for search engines (see [Link check](#link-check))
 - `assets/fonts/` – Saira and JetBrains Mono, both under the SIL Open Font License 1.1
-- `tools/` – build and test scripts for the configurator data, the docs, the changelog and the roadmap check (not needed at runtime)
+- `tools/` – build and test scripts for the landing page pictures, the configurator data, the docs, the changelog, the
+  roadmap check and the link check (not needed at runtime)
 
 No build step, no external requests, no cookies, no tracking. The chosen language and the hero's pause switch are
 kept in the browser's `localStorage`; the drone built in the configurator lives only in the page address
 (`configurator/#PW2…` or `#PW1-…`).
+
+## Landing page
+
+`index.html` is written by hand, English and German side by side (`<span lang="en">` / `<span lang="de">`, pictures
+with `alt` and `data-de-alt`). For a release:
+
+- the section **New in Propwash x.y.z** (`#new`) and the version line in the hero name the release and link to
+  `changelog/#propwash-<version>`; numbers such as tricks, lessons and world rules come from the mod's `CHANGELOG.md`
+- the download section names the version, the add-on Just More Parts with its version and part count, and the
+  compatibility lines of the changelog
+- the pictures are the mod's own screenshots of the release commit:
+
+```sh
+node tools/build-landing-images.mjs --propwash <propwash repository>   # assets/img/*.webp and og-image.jpg
+```
+
+The list of pictures is `IMAGES` in that script: name, screenshot, widths and, for cut-outs, the crop in screenshot
+pixels (windows are cut out at their real size, drone close-ups are cut around the drone because drones are shown at
+their real size since 0.5.0). Pictures also used by the docs (`assets/img/docs/`) are not converted twice. After a
+change of a window's layout in the mod, check the cut-outs by eye. Needs ImageMagick and `cwebp`.
 
 ## Drone configurator
 
@@ -50,7 +74,7 @@ kept in the browser's `localStorage`; the drone built in the configurator lives 
 - part pickers per category with search, a class filter (whoop, toothpick, cinewhoop, freestyle, race, long range,
   X-Class; video by link, accessories by mount), “only parts that fit”, fit badges and tips with pros, cons and what the
   part would change
-- live flight figures like the workbench of Propwash 0.4.0 (weight, thrust-to-weight, hover throttle, top speed and its
+- live flight figures like the workbench of Propwash 0.5.0 (weight, thrust-to-weight, hover throttle, top speed and its
   energy balance: flight times down to the landing voltage for mixed flying of the frame's class as the main value,
   aggressive/racing, hovering and cruising at the class's cruise speed, pack currents, landing voltage under load,
   base load of flight controller and video, motor temperature after 60 s full throttle and after a mixed flight) and
@@ -68,7 +92,7 @@ kept in the browser's `localStorage`; the drone built in the configurator lives 
   renderer (frame layouts, motor seats, camera tilt, accessory anchors); drag to turn, scroll or pinch to zoom,
   auto-rotate (off with reduced motion or paused animations), keyboard control on the canvas
 - FPV camera preview (switch “3D / FPV camera” in the viewer, or open `configurator/?view=camera#PW1-…`): the image the
-  drone's camera sends, drawn like the game's FPV view (Propwash 0.4.0): 16:9 rectilinear from the lens with the drone's
+  drone's camera sends, drawn like the game's FPV view (since Propwash 0.4.0): 16:9 rectilinear from the lens with the drone's
   camera angle and the field of view of the camera in the video unit (`camera_fov_deg`, e.g. analog race 125°, digital
   lite 104°, HD 130°), the drone itself hidden except its props, spinning props as translucent blur discs in their paint
   colour, over a sky and grass backdrop; a camera-angle slider limited to the frame's camera mount (e.g. race 15–70°,
@@ -99,7 +123,7 @@ each one. The first is the 7″ deadcat whose props the game showed at the image
 0.0 %; its `game` entry holds what Propwash's self test counted in the rendered FPV image (2.01 % of 1708 × 960 pixels),
 and the test fails if the configurator ever shows 0 % for it again. The same code carries the second report (flight
 times and part stats a bit off, e.g. 24.2 min hovering and 124 °C at full throttle): `analysis` holds the figures of
-Propwash 0.4.0 and Just More Parts 1.0.0 (19.5 min hovering, 11.8 min cruising, 8.0 min mixed, 5.7 min aggressive,
+Propwash 0.5.0 and Just More Parts 1.1.0 (19.5 min hovering, 11.9 min cruising, 8.1 min mixed, 5.8 min aggressive,
 95 °C after 60 s full throttle), `analysis_before` the ones of an earlier pre-release build; the test checks that weight, thrust-to-weight, hover
 throttle, top speed and props in view stay unchanged (the flight physics is bit-identical) and that the energy figures
 changed.
@@ -246,6 +270,23 @@ translation. `test-changelog.mjs` fails while an entry has no German text, while
 line changed), when the JSON differs from a fresh build or a newer release tag exists, and checks the navigation and footer
 links of every page and that the released groups of the roadmap link to `../changelog/#propwash-<version>`.
 
+## Link check
+
+```sh
+node tools/test-links.mjs                 # every local link, anchor, picture, canonical address, sitemap, unused pictures
+node tools/test-links.mjs --external      # also lists every external address and the pages that use it
+node tools/test-links.mjs --online        # also requests each external address and prints the answer
+node tools/test-links.mjs --write-sitemap # rewrites sitemap.xml after adding or removing a page
+```
+
+All local links are relative, so the pages also work under a sub-path. The anchors the changelog draws from its data
+(`#propwash-0.5.0`, `#jmp-1.1.0`, …) count as present. Addresses that only work once a release is published – the
+public source repositories on GitHub (`https://github.com/LardTom/propwash-fpv`,
+`https://github.com/LardTom/propwash-justmoreparts`) and the Modrinth page in review – are listed under `PENDING` in the
+script and marked “after publishing” in the list. The source repositories are named in one place per page type:
+`SOURCE` and `SOURCE_JMP` in `tools/docs/html.mjs` (docs), the footer and the download section of `index.html`, the
+footers of `configurator/`, `roadmap/` and `changelog/`, and the roadmap card “Source code goes public”.
+
 ## Preview
 
 Serve the folder locally (the configurator, the roadmap and the changelog load their data with `fetch`, which does not work from `file://`):
@@ -255,6 +296,10 @@ python3 -m http.server 8000
 ```
 
 ## Publish on GitHub Pages
+
+Before a release goes live: publish the public source repositories first (the pages link to them), upload the mod
+files, then merge the release branch into `main` and push. `node tools/test-links.mjs --online` then shows every
+external address answering.
 
 1. Push this folder to the repository `LardTom/propwash`.
 2. Settings → Pages → Build and deployment → Source: *Deploy from a branch*, branch `main`, folder `/ (root)`.
@@ -268,7 +313,9 @@ from `https://propwashfpv.com/configurator/`, the roadmap from `https://propwash
 
 `og:image` and `twitter:image` need an absolute URL. They point to
 `https://propwashfpv.com/assets/img/og-image.jpg`. With a different repository name (or a custom domain),
-change the URLs in the `<head>` of `index.html`, `configurator/index.html`, `roadmap/index.html` and `changelog/index.html`.
+change the URLs in the `<head>` of `index.html`, `configurator/index.html`, `roadmap/index.html` and `changelog/index.html`,
+`SITE` in `tools/docs/html.mjs` and `tools/test-links.mjs`, and `sitemap.xml` / `robots.txt`. Every page also carries its
+canonical address and `og:url`.
 
 ---
 

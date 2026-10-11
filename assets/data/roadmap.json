@@ -49,6 +49,13 @@
               "text": {
                 "en": "20 lessons you fly yourself – with stars, best times and a course right where your drone sits.",
                 "de": "20 Lektionen zum Selberfliegen – mit Sternen, Bestzeiten und einem Kurs direkt an deiner Drohne."
+              },
+              "link": {
+                "href": "../docs/guide/#help",
+                "label": {
+                  "en": "In the player guide",
+                  "de": "Im Spielerhandbuch"
+                }
               }
             },
             {
@@ -62,6 +69,13 @@
               "text": {
                 "en": "Gravity, battery life, wind and more as game rules for everyone – one by one or as Realistic, Training or Arcade.",
                 "de": "Schwerkraft, Akkulaufzeit, Wind und mehr als Spielregeln für alle – einzeln oder als Realistisch, Training oder Arcade."
+              },
+              "link": {
+                "href": "../docs/gamerules/",
+                "label": {
+                  "en": "All world rules",
+                  "de": "Alle Welt-Regeln"
+                }
               }
             },
             {
@@ -283,6 +297,13 @@
               "text": {
                 "en": "Guides and lookups for parts, settings and rules at propwashfpv.com/docs.",
                 "de": "Anleitungen und Nachschlagen zu Teilen, Einstellungen und Regeln unter propwashfpv.com/docs."
+              },
+              "link": {
+                "href": "../docs/",
+                "label": {
+                  "en": "Open the docs",
+                  "de": "Zur Doku"
+                }
               }
             },
             {
@@ -296,6 +317,13 @@
               "text": {
                 "en": "Anyone can read the code: the mod under PolyForm Shield, the add-on API under MIT.",
                 "de": "Alle können den Code lesen: die Mod unter PolyForm Shield, die Add-on-API unter MIT."
+              },
+              "link": {
+                "href": "https://github.com/LardTom/propwash-fpv",
+                "label": {
+                  "en": "Source code on GitHub",
+                  "de": "Quellcode auf GitHub"
+                }
               }
             }
           ]
@@ -325,6 +353,13 @@
               "text": {
                 "en": "Other mods can add frames, motors, props, batteries and more – the first add-on is Just More Parts.",
                 "de": "Andere Mods können Rahmen, Motoren, Props, Akkus und mehr beisteuern – das erste Add-on ist Just More Parts."
+              },
+              "link": {
+                "href": "../docs/api/",
+                "label": {
+                  "en": "Add-on API",
+                  "de": "Add-on-API"
+                }
               }
             },
             {
@@ -524,37 +559,6 @@
       ]
     },
     {
-      "id": "later",
-      "icon": "compass",
-      "label": {
-        "en": "Later",
-        "de": "Später"
-      },
-      "title": {
-        "en": "In the coming months",
-        "de": "In den kommenden Monaten"
-      },
-      "groups": [
-        {
-          "items": [
-            {
-              "id": "cinematic-drones",
-              "icon": "cinema",
-              "status": "planned",
-              "title": {
-                "en": "Cinematic Drones add-on",
-                "de": "Add-on Cinematic Drones"
-              },
-              "text": {
-                "en": "A GPS camera drone for smooth shots: waypoints, orbits around a point, follow-me and a gimbal.",
-                "de": "Eine GPS-Kameradrohne für ruhige Aufnahmen: Wegpunkte, Kreisflug um einen Punkt, Follow-me und Gimbal."
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "ideas",
       "icon": "bulb",
       "label": {
@@ -566,25 +570,12 @@
         "de": "In Überlegung"
       },
       "intro": {
-        "en": "Not promised yet. If you want one of these – or something else – say so on the Discord.",
-        "de": "Noch nicht versprochen. Wenn du dir etwas davon wünschst – oder etwas ganz anderes –, sag es auf dem Discord."
+        "en": "Nothing here is promised yet. Tell us on the Discord what you would like to see.",
+        "de": "Hier ist noch nichts versprochen. Sag uns auf dem Discord, was du dir wünschst."
       },
       "groups": [
         {
           "items": [
-            {
-              "id": "forge",
-              "icon": "anvil",
-              "status": "idea",
-              "title": {
-                "en": "Forge support",
-                "de": "Forge-Unterstützung"
-              },
-              "text": {
-                "en": "A Forge version, if enough players ask for it.",
-                "de": "Eine Forge-Version, wenn genug Spieler danach fragen."
-              }
-            },
             {
               "id": "community",
               "icon": "chat",

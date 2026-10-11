@@ -2692,9 +2692,8 @@ html.lightbox-open {
 
 .hero__version a {
   display: inline-flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 8px 12px;
+  gap: 12px;
   padding: 8px 12px;
   border: 1px solid var(--border);
   border-radius: 4px;
@@ -2717,9 +2716,17 @@ html.lightbox-open {
   letter-spacing: 0.08em;
 }
 
+.hero__version .mono,
 .hero__version svg {
   flex: none;
+}
+
+.hero__version svg {
   color: var(--accent);
+}
+
+.hero__version span[lang] {
+  min-width: 0;
 }
 
 .hero__version + .hero__specs {

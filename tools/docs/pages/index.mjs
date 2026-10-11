@@ -1,6 +1,6 @@
 // Docs start page: what is where, for whom, and which release the pages describe.
 
-import { L, P, list, section } from '../html.mjs';
+import { L, P, list, section, SHIELD, SOURCE, SOURCE_JMP } from '../html.mjs';
 
 export default function indexPage(ctx) {
   const { meta, gamerules, api, parts, controls } = ctx.data;
@@ -14,6 +14,7 @@ export default function indexPage(ctx) {
   const toc = [
     { id: 'sections', title: { en: 'What is here', de: 'Was hier steht' } },
     { id: 'made', title: { en: 'How these pages are made', de: 'Wie diese Seiten entstehen' } },
+    { id: 'source', title: { en: 'Source code and license', de: 'Quellcode und Lizenz' } },
   ];
   const cards = section('sections', toc[0].title, `<div class="docs-cards">
 ${card('docs/guide/', { en: 'Player guide', de: 'Spielerhandbuch' },
@@ -51,6 +52,14 @@ ${P('The explanations around them are written by hand. Found something wrong? Te
     'Die Erklärungen drumherum sind von Hand geschrieben. Etwas falsch gefunden? Sag es uns auf <a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener">Discord</a>.')}
 `);
 
+  const ext = 'target="_blank" rel="noopener"';
+  const source = section('source', toc[2].title, `
+${P(`From Propwash 0.5.0 on, the source code is public: <a href="${SOURCE}" ${ext}>Propwash FPV</a> and the add-on <a href="${SOURCE_JMP}" ${ext}>Just More Parts</a> (from 1.1.0) are on GitHub under the <a href="${SHIELD}" ${ext}>PolyForm Shield License 1.0.0</a> with additional permissions. You may read the code, build it yourself, include the mods in modpacks and contribute through pull requests; re-uploading them, publishing forks as alternative downloads and building competing mods from the code are not allowed.`,
+    `Ab Propwash 0.5.0 ist der Quellcode öffentlich: <a href="${SOURCE}" ${ext}>Propwash FPV</a> und das Add-on <a href="${SOURCE_JMP}" ${ext}>Just More Parts</a> (ab 1.1.0) liegen auf GitHub unter der <a href="${SHIELD}" ${ext}>PolyForm Shield License 1.0.0</a> mit Zusatzrechten. Du darfst den Code lesen, selbst bauen, die Mods in Modpacks aufnehmen und über Pull Requests beitragen; nicht erlaubt sind erneutes Hochladen, Forks als alternative Downloads und konkurrierende Mods aus dem Code.`)}
+${P(`The add-on API (<code>de.lardtom.propwash.api</code>), the example add-on and the documentation are under the <strong>MIT License</strong>, so add-ons can use them freely; <a href="${SOURCE}/blob/main/LICENSE-MIT" ${ext}><code>LICENSE-MIT</code></a> lists the exact files. The texts in <a href="${SOURCE}/blob/main/LICENSE" ${ext}><code>LICENSE</code></a>, <code>LICENSE-MIT</code> and <a href="${SOURCE}/blob/main/NOTICE" ${ext}><code>NOTICE</code></a> are binding. Propwash 0.4.0 and Just More Parts 1.0.0 and older stay All Rights Reserved.`,
+    `Die Add-on-API (<code>de.lardtom.propwash.api</code>), das Beispiel-Add-on und die Doku stehen unter der <strong>MIT-Lizenz</strong>, Add-ons dürfen sie also frei benutzen; <a href="${SOURCE}/blob/main/LICENSE-MIT" ${ext}><code>LICENSE-MIT</code></a> nennt die genauen Dateien. Verbindlich sind die Texte in <a href="${SOURCE}/blob/main/LICENSE" ${ext}><code>LICENSE</code></a>, <code>LICENSE-MIT</code> und <a href="${SOURCE}/blob/main/NOTICE" ${ext}><code>NOTICE</code></a>. Propwash 0.4.0 und Just More Parts 1.0.0 und älter bleiben All Rights Reserved.`)}
+`);
+
   return {
     id: 'overview',
     title: { en: 'Docs – Propwash FPV', de: 'Doku – Propwash FPV' },
@@ -65,6 +74,6 @@ ${P('The explanations around them are written by hand. Found something wrong? Te
       de: 'Alles über Propwash FPV an einem Ort: wie deine erste Drohne in die Luft kommt, die Welt-Regeln für Server-Betreiber und die Add-on-API samt Datenformat für Mod-Autoren.',
     },
     toc,
-    body: [cards, made].join('\n'),
+    body: [cards, made, source].join('\n'),
   };
 }

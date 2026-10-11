@@ -4,6 +4,10 @@
 export const DISCORD = 'https://discord.gg/bNhkSXYSgZ';
 export const CURSEFORGE = 'https://www.curseforge.com/minecraft/mc-mods/propwash-fpv';
 export const MODRINTH = 'https://modrinth.com/mod/propwash-fpv';
+export const SITE = 'https://propwashfpv.com/';
+export const SOURCE = 'https://github.com/LardTom/propwash-fpv';
+export const SOURCE_JMP = 'https://github.com/LardTom/propwash-justmoreparts';
+export const SHIELD = 'https://polyformproject.org/licenses/shield/1.0.0';
 
 export const PAGES = [
   { path: 'docs/', id: 'overview', title: { en: 'Overview', de: 'Übersicht' } },
@@ -180,6 +184,7 @@ export function siteNav(prefix, nav) {
 
 export function page({ id, prefix, title, description, kicker, heading, lead, toc, body, meta, nav }) {
   const t = (x) => esc(x);
+  const url = SITE + PAGES.find((p) => p.id === id).path;
   return `<!DOCTYPE html>
 <html lang="en" class="no-js" data-title-en="${t(title.en)}" data-title-de="${t(title.de)}" data-description-en="${t(description.en)}" data-description-de="${t(description.de)}">
 <head>
@@ -190,6 +195,8 @@ export function page({ id, prefix, title, description, kicker, heading, lead, to
 <meta name="theme-color" content="#1A1A1A">
 <meta name="color-scheme" content="dark">
 <meta name="referrer" content="no-referrer">
+<link rel="canonical" href="${url}">
+<meta property="og:url" content="${url}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Propwash FPV">
 <meta property="og:title" content="${t(title.en)}">
@@ -265,7 +272,7 @@ ${body}
     <div class="site-footer__brand">
       <img src="${prefix}assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
       <p><strong>Propwash FPV</strong> by lardtom</p>
-      <p class="site-footer__links"><a href="${DISCORD}" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="${CURSEFORGE}" target="_blank" rel="noopener">CurseForge</a> · <a href="${MODRINTH}" target="_blank" rel="noopener">Modrinth</a> · <a href="${prefix}roadmap/">Roadmap</a> · <a href="${prefix}changelog/">Changelog</a></p>
+      <p class="site-footer__links"><a href="${DISCORD}" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="${CURSEFORGE}" target="_blank" rel="noopener">CurseForge</a> · <a href="${MODRINTH}" target="_blank" rel="noopener">Modrinth</a> · <a href="${prefix}roadmap/">Roadmap</a> · <a href="${prefix}changelog/">Changelog</a> · <a href="${SOURCE}" target="_blank" rel="noopener"><span lang="en">Source code</span><span lang="de">Quellcode</span></a></p>
     </div>
     <div class="site-footer__legal">
       <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
