@@ -188,8 +188,8 @@
               "kind": "fixed",
               "items": [
                 {
-                  "en": "Menus fit every GUI scale and window size – with keyboard, mouse or a transmitter connected, also while you are flying a drone: what does not fit scrolls, long texts wrap instead of being cut off, and narrow windows rearrange into a single column.",
-                  "de": "Menüs passen in jede GUI-Skalierung und Fenstergröße – mit Tastatur, Maus oder verbundener Funke, auch während du eine Drohne fliegst: Was nicht hineinpasst, scrollt, lange Texte brechen um, statt abgeschnitten zu werden, und schmale Fenster ordnen sich einspaltig an."
+                  "en": "Menus fit every GUI scale and window size – with keyboard, mouse or a transmitter connected, also while you are flying a drone: what does not fit scrolls, long texts wrap instead of being cut off, and narrow windows rearrange into a single column. Tooltips wrap and stay on screen, and very long ones scroll with the mouse wheel.",
+                  "de": "Menüs passen in jede GUI-Skalierung und Fenstergröße – mit Tastatur, Maus oder verbundener Funke, auch während du eine Drohne fliegst: Was nicht hineinpasst, scrollt, lange Texte brechen um, statt abgeschnitten zu werden, und schmale Fenster ordnen sich einspaltig an. Tooltips brechen um und bleiben im Bild, sehr lange scrollen mit dem Mausrad."
                 },
                 {
                   "en": "The leaderboard scrolls when it does not fit, so your own row and the assisted laps are always reachable. Pilot names stay readable in narrow windows, and every drone class can be picked as a filter.",
@@ -605,8 +605,8 @@
               "kind": "fixed",
               "items": [
                 {
-                  "en": "The share-code window fits large GUI scales and small windows: a long code and the drone's values scroll with the mouse wheel instead of being cut off.",
-                  "de": "Das Sharecode-Fenster passt in große GUI-Skalierungen und kleine Fenster: Ein langer Code und die Werte der Drohne scrollen mit dem Mausrad, statt abgeschnitten zu werden."
+                  "en": "The share-code window and the *Share code* tab fit large GUI scales and small windows: a long code and the drone's values scroll with the mouse wheel instead of being cut off, and long lines in the tab wrap instead of sliding back and forth.",
+                  "de": "Das Sharecode-Fenster und der Tab *Sharecode* passen in große GUI-Skalierungen und kleine Fenster: Ein langer Code und die Werte der Drohne scrollen mit dem Mausrad, statt abgeschnitten zu werden, und lange Zeilen im Tab brechen um, statt hin und her zu laufen."
                 },
                 {
                   "en": "On the ducted whoops and cinewhoops the props no longer stick out above the ducts, and the motors sit on their mounts instead of floating above them.",
