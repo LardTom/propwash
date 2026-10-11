@@ -2458,7 +2458,7 @@ html[lang="de"] .toggle[aria-pressed="true"]::after {
 
 @media (min-width: 900px) {
   .site-footer__inner {
-    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1.3fr) minmax(16rem, 1fr) auto;
     gap: 48px;
     align-items: start;
   }

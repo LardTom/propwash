@@ -111,3 +111,7 @@ html[lang="de"] .docs-body :not(p) + p[lang="en"] + p[lang="de"] {
   color: var(--text-2);
   font-size: 0.97rem;
 }
+
+.docs-body {
+  padding-bottom: clamp(3rem, 2rem + 3vw, 5rem);
+}
