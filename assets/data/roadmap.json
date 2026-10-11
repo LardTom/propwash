@@ -518,8 +518,8 @@
         "de": "Als Nächstes"
       },
       "title": {
-        "en": "In the coming weeks",
-        "de": "In den kommenden Wochen"
+        "en": "Planned, no date yet",
+        "de": "Geplant, noch ohne Termin"
       },
       "groups": [
         {
@@ -537,8 +537,8 @@
                 "de": "Minecraft 1.21.1"
               },
               "text": {
-                "en": "A one-time port of a stable 0.5 version for Fabric and NeoForge, without the add-on API.",
-                "de": "Einmalige Portierung einer stabilen 0.5-Version für Fabric und NeoForge, ohne Add-on-API."
+                "en": "A backport to Minecraft 1.21.1 is coming. It gets less upkeep than the 26.3 version, with updates now and then.",
+                "de": "Ein Backport auf Minecraft 1.21.1 kommt. Er wird weniger gepflegt als die 26.3-Version, Updates gibt es gelegentlich."
               }
             },
             {
@@ -550,8 +550,8 @@
                 "de": "Minecraft 26.2"
               },
               "text": {
-                "en": "The same one-time port for 26.2, also for Fabric and NeoForge and without the add-on API.",
-                "de": "Dieselbe einmalige Portierung für 26.2, ebenfalls für Fabric und NeoForge und ohne Add-on-API."
+                "en": "A port to Minecraft 26.2 is coming. It gets less upkeep than the 26.3 version too, with updates now and then.",
+                "de": "Ein Port auf Minecraft 26.2 kommt. Auch er wird weniger gepflegt als die 26.3-Version, Updates gibt es gelegentlich."
               }
             }
           ]
