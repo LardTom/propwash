@@ -83,6 +83,11 @@ const used = new Set();
 
 function resolve(from, ref, where) {
   if (/^(mailto:|tel:|data:|javascript:)/i.test(ref)) {
+    if (/^mailto:/i.test(ref)) {
+      const decoded = ref.slice('mailto:'.length).replace(/&#(\d+);/g, (_, c) => String.fromCharCode(Number(c)));
+      check(/^[^\s@]+@propwashfpv\.com$/i.test(decoded), `${where}: unexpected mailto address ${ref}`);
+      return;
+    }
     check(ref.startsWith('data:'), `${where}: unexpected address ${ref.slice(0, 40)}`);
     return;
   }
