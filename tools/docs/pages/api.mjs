@@ -2,7 +2,7 @@
 // de.lardtom.propwash.api). Condensed from docs/api/addon-guide.md of the Propwash repository; versions, the event list
 // and the API history check come from the extracted data.
 
-import { L, P, esc, list, note, section, table, code, h3, mono, SHIELD, SOURCE } from '../html.mjs';
+import { L, P, esc, list, note, section, table, code, h3, mono, SHIELD, SOURCE, CURSEFORGE } from '../html.mjs';
 
 export const LICENSE_NOTE = {
   en: 'From Propwash 0.5.0 on, the add-on API (<code>de.lardtom.propwash.api</code> and its subpackages), the example add-on and the documentation are under the <strong>MIT License</strong>: your add-on may use them freely, copy from them and have any license of its own. The rest of Propwash is source-available under the <strong><a href="' + SHIELD + '" target="_blank" rel="noopener">PolyForm Shield License 1.0.0</a></strong> with additional permissions: whoever takes code from it passes on the license with its <em>Required Notice</em> line and must not use it to compete with Propwash. <a href="' + SOURCE + '/blob/main/LICENSE-MIT" target="_blank" rel="noopener"><code>LICENSE-MIT</code></a> lists the exact files; the texts in <a href="' + SOURCE + '/blob/main/LICENSE" target="_blank" rel="noopener"><code>LICENSE</code></a>, <code>LICENSE-MIT</code> and <a href="' + SOURCE + '/blob/main/NOTICE" target="_blank" rel="noopener"><code>NOTICE</code></a> in the <a href="' + SOURCE + '" target="_blank" rel="noopener">source repository</a> are binding. Propwash 0.4.0 and older stay All Rights Reserved.',
@@ -87,6 +87,21 @@ dependencies {
 }`, 'groovy', L('<code>compileOnly</code> in <code>common</code>, <code>implementation</code> in the loader module', '<code>compileOnly</code> in <code>common</code>, <code>implementation</code> im Loader-Modul'))}
 ${P('The variants carry the attribute <code>io.github.mcgradleconventions.loader</code> (<code>common</code>, <code>fabric</code>, <code>neoforge</code>) like the MultiLoader template, so an add-on built from that template picks the right one.',
     'Die Varianten tragen das Attribut <code>io.github.mcgradleconventions.loader</code> (<code>common</code>, <code>fabric</code>, <code>neoforge</code>) wie im MultiLoader-Template; ein Add-on aus diesem Template bekommt damit von selbst die passende.')}
+${note(`The Modrinth Maven above only resolves once the Propwash project is actually live on Modrinth, which it is not yet (see the note on the <a href="${prefix}">landing page</a>). Until then, download the jar from <a href="${CURSEFORGE}" target="_blank" rel="noopener">CurseForge</a> or build Propwash from its source repository (<a href="${SOURCE}" target="_blank" rel="noopener">github.com/LardTom/propwash-fpv</a>, public from the release on) and depend on it as a local file or a <code>mavenLocal()</code> publish instead:`,
+    `Das Modrinth-Maven oben löst erst auf, sobald das Propwash-Projekt wirklich auf Modrinth steht – das ist noch nicht der Fall (siehe der Hinweis auf der <a href="${prefix}">Startseite</a>). Bis dahin das Jar von <a href="${CURSEFORGE}" target="_blank" rel="noopener">CurseForge</a> herunterladen oder Propwash aus dem Quellcode-Repository bauen (<a href="${SOURCE}" target="_blank" rel="noopener">github.com/LardTom/propwash-fpv</a>, ab dem Release öffentlich) und stattdessen als lokale Datei oder über <code>mavenLocal()</code> einbinden:`)}
+${code(`repositories {
+    mavenLocal() // only needed for the mavenLocal() dependencies below
+}
+
+dependencies {
+    // Jar downloaded from CurseForge, placed in libs/
+    compileOnly files('libs/propwash-common-${mc}-${v}.jar')
+    implementation files('libs/propwash-fabric-${mc}-${v}.jar')
+
+    // or: built from source with ./gradlew publishToMavenLocal
+    // compileOnly 'de.lardtom:propwash-common-${mc}:${v}'
+    // implementation 'de.lardtom:propwash-fabric-${mc}:${v}'
+}`, 'groovy', L('Fallback while Propwash is not on Modrinth yet', 'Übergangslösung, solange Propwash noch nicht auf Modrinth steht'))}
 ${h3('setup-metadata', 'Dependency in the loader metadata', 'Abhängigkeit in den Loader-Metadaten')}
 ${P('Propwash has to run on client <em>and</em> server, and so does the add-on: the part lists are compared when a player connects.',
     'Propwash muss auf Client <em>und</em> Server laufen, das Add-on ebenso: Beim Verbinden werden die Teile-Listen verglichen.')}

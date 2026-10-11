@@ -62,6 +62,12 @@ function unit(rule, n, lang) {
   return rule.unit === '%' ? `${fmt(n, lang)}${NB}%` : fmt(n, lang);
 }
 
+// Lower-cases only the leading letter, so a named value folds into a sentence ("0 = kein Stoß") without
+// lower-casing a German noun further in (capitalisation elsewhere in the string is never incidental).
+function decap(s) {
+  return s.charAt(0).toLowerCase() + s.slice(1);
+}
+
 export function defaultText(rule) {
   if (rule.type === 'boolean') return rule.default ? { en: 'On', de: 'An' } : { en: 'Off', de: 'Aus' };
   const named = rule.values && rule.values[String(rule.default)];
@@ -76,14 +82,14 @@ export function valuesText(rule) {
     return { en: parts('en'), de: parts('de') };
   }
   const range = (lang) => `${unit(rule, rule.min, lang)}–${unit(rule, rule.max, lang)}`.replace(`${NB}%–`, '–');
-  const special = (lang) => Object.entries(rule.values || {}).map(([k, v]) => `; <code>${k}</code> = ${esc(v[lang].toLowerCase())}`).join('');
+  const special = (lang) => Object.entries(rule.values || {}).map(([k, v]) => `; <code>${k}</code> = ${esc(decap(v[lang]))}`).join('');
   return { en: range('en') + special('en'), de: range('de') + special('de') };
 }
 
 export function presetValueText(rule, value) {
   if (rule.type === 'boolean') return value ? { en: 'on', de: 'an' } : { en: 'off', de: 'aus' };
   const named = rule.values && rule.values[String(value)];
-  if (named) return { en: `${unit(rule, value, 'en')} (${named.en.toLowerCase()})`, de: `${unit(rule, value, 'de')} (${named.de.toLowerCase()})` };
+  if (named) return { en: `${unit(rule, value, 'en')} (${decap(named.en)})`, de: `${unit(rule, value, 'de')} (${decap(named.de)})` };
   return { en: unit(rule, value, 'en'), de: unit(rule, value, 'de') };
 }
 

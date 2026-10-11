@@ -13,6 +13,9 @@ This repository contains only the website, no mod source code.
 - `roadmap/index.html` – the roadmap (English and German, same switch), drawn from `assets/data/roadmap.json`
 - `changelog/index.html` – the changelog of every release of Propwash FPV and Just More Parts (English and German, same
   switch), drawn from `assets/data/changelog.json`, which `tools/build-changelog.mjs` generates from the mods' `CHANGELOG.md`
+- `impressum/index.html` and `datenschutz/index.html` – the legal notice and privacy policy required under German law
+  (English and German, same switch), linked from the footer of every page; the bracketed placeholders need filling in
+  before the site goes live
 - `assets/css/style.css` – styles of all pages; `assets/css/configurator.css` – configurator only;
   `assets/css/docs.css` and `assets/js/docs.js` – docs only (menu, tables, code blocks with copy buttons);
   `assets/css/roadmap.css` – roadmap only; `assets/css/changelog.css` – changelog only
@@ -285,7 +288,8 @@ public source repositories on GitHub (`https://github.com/LardTom/propwash-fpv`,
 `https://github.com/LardTom/propwash-justmoreparts`) and the Modrinth page in review – are listed under `PENDING` in the
 script and marked “after publishing” in the list. The source repositories are named in one place per page type:
 `SOURCE` and `SOURCE_JMP` in `tools/docs/html.mjs` (docs), the footer and the download section of `index.html`, the
-footers of `configurator/`, `roadmap/` and `changelog/`, and the roadmap card “Source code goes public”.
+footers of `configurator/`, `roadmap/`, `changelog/`, `impressum/` and `datenschutz/`, and the roadmap card “Source
+code goes public”.
 
 ## Preview
 

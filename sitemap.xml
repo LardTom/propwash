@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://propwashfpv.com/changelog/</loc></url>
   <url><loc>https://propwashfpv.com/configurator/</loc></url>
+  <url><loc>https://propwashfpv.com/datenschutz/</loc></url>
   <url><loc>https://propwashfpv.com/docs/api/</loc></url>
   <url><loc>https://propwashfpv.com/docs/api/reference/</loc></url>
   <url><loc>https://propwashfpv.com/docs/blackbox/</loc></url>
@@ -9,6 +10,7 @@
   <url><loc>https://propwashfpv.com/docs/guide/</loc></url>
   <url><loc>https://propwashfpv.com/docs/</loc></url>
   <url><loc>https://propwashfpv.com/docs/parts-format/</loc></url>
+  <url><loc>https://propwashfpv.com/impressum/</loc></url>
   <url><loc>https://propwashfpv.com/</loc></url>
   <url><loc>https://propwashfpv.com/roadmap/</loc></url>
 </urlset>
