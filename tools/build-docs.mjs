@@ -19,6 +19,7 @@ import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { extractAll } from './docs/extract.mjs';
 import { page, PAGES, L } from './docs/html.mjs';
+import { computePlan, applyPlan } from './stamp-assets.mjs';
 import indexPage from './docs/pages/index.mjs';
 import guidePage from './docs/pages/guide.mjs';
 import gamerulesPage from './docs/pages/gamerules.mjs';
@@ -154,6 +155,10 @@ function main() {
     fs.writeFileSync(target, content);
   }
   console.log(`${Object.keys(files).length} Dateien unter docs/ geschrieben`);
+  // Cache-Busting-Stempel (?v=<hash>) neu ziehen, damit die frisch geschriebenen Seiten (und alle anderen, falls
+  // seit dem letzten Lauf CSS/JS geändert wurde) wieder den aktuellen Hash tragen – siehe tools/stamp-assets.mjs.
+  const stamped = applyPlan(computePlan());
+  if (stamped) console.log(`${stamped} Datei(en) mit aktuellem Cache-Busting-Stempel versehen (tools/stamp-assets.mjs)`);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

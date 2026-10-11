@@ -2,11 +2,11 @@
 // tools/build-configurator-data.mjs. loadCatalog() fetches assets/data/configurator/catalog.json (same origin, no
 // external requests); createCatalog() wraps already parsed JSON (used by the node tests).
 
-import { check as checkBuild } from './rules.js';
-import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js';
-import { encode as encodeCode, decode as decodeCode, hexColor } from './sharecode.js';
-import { sharedOnly } from './tune.js';
-import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js';
+import { check as checkBuild } from './rules.js?v=147e54d1';
+import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=11771e54';
+import { encode as encodeCode, decode as decodeCode, hexColor } from './sharecode.js?v=f703cd12';
+import { sharedOnly } from './tune.js?v=f4084d0e';
+import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=1700c67a';
 
 export const CATALOG_URL = new URL('../../data/configurator/catalog.json', import.meta.url);
 export const CATEGORIES = Object.freeze(['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory']);

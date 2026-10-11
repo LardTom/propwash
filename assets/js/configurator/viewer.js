@@ -11,9 +11,9 @@ import {
   NearestFilter, LinearFilter, Vector3, Box3, Sphere, CanvasTexture, PlaneGeometry, MeshBasicMaterial, NoColorSpace,
   LinearSRGBColorSpace, OrbitControls,
 } from '../../vendor/three/three.min.js';
-import { assemble, proceduralFrame, proceduralAccessoryBase, MM_PER_MODEL_UNIT } from './assembly.js';
-import { paintTints, groupsOf, rgbOf, slotOf, shade } from './paint.js';
-import { discCenter, verticalFov, ASPECT as FPV_ASPECT, SLOTS } from './fpv.js';
+import { assemble, proceduralFrame, proceduralAccessoryBase, MM_PER_MODEL_UNIT } from './assembly.js?v=6349ca95';
+import { paintTints, groupsOf, rgbOf, slotOf, shade } from './paint.js?v=a741176a';
+import { discCenter, verticalFov, ASPECT as FPV_ASPECT, SLOTS } from './fpv.js?v=76cdbbe6';
 
 const MAX_TINTS = 8;
 const DEG = Math.PI / 180;

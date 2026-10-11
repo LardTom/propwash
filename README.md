@@ -44,7 +44,8 @@ This repository contains only the website, no mod source code.
 - `sitemap.xml` and `robots.txt` – every page for search engines (see [Link check](#link-check))
 - `assets/fonts/` – Saira and JetBrains Mono, both under the SIL Open Font License 1.1
 - `tools/` – build and test scripts for the landing page pictures, the configurator data, the docs, the changelog, the
-  roadmap check and the link check (not needed at runtime)
+  roadmap check, the link check and the cache-busting stamps (`tools/stamp-assets.mjs`, see [Cache busting](#cache-busting);
+  not needed at runtime)
 
 No build step, no external requests, no cookies, no tracking. The chosen language and the hero's pause switch are
 kept in the browser's `localStorage`; the drone built in the configurator lives only in the page address
@@ -290,6 +291,41 @@ script and marked “after publishing” in the list. The source repositories ar
 `SOURCE` and `SOURCE_JMP` in `tools/docs/html.mjs` (docs), the footer and the download section of `index.html`, the
 footers of `configurator/`, `roadmap/`, `changelog/`, `impressum/` and `datenschutz/`, and the roadmap card “Source
 code goes public”.
+
+## Cache busting
+
+GitHub Pages serves this site with `max-age=600` caching. Without cache busting, a browser that already cached
+`assets/css/style.css` or a configurator script keeps using that cached file for up to 10 minutes after a new HTML
+page of the same release has already loaded – new tiles get squeezed, the footer wraps one word per line, until a
+hard reload. `tools/stamp-assets.mjs` fixes this by giving every local reference to `assets/css/*.css` and
+`assets/js/**/*.js` a version query derived from the content it currently points to, e.g. `style.css?v=a1b2c3d4` (8
+hex characters of a sha-256 of the file): a page always pulls the exact CSS/JS that was live when it was generated,
+whatever a browser still has cached under the old, unversioned or differently stamped URL.
+
+```sh
+node tools/stamp-assets.mjs          # restamp every page and script that is out of date
+node tools/stamp-assets.mjs --check  # report what is out of date and exit 1, writes nothing (used by the test below)
+node tools/test-stamp-assets.mjs     # every local css/js reference, on every page and between the scripts, carries the current hash
+```
+
+Stamped: every `<link rel="stylesheet">`, `<link rel="modulepreload">` and `<script src>`/`<script type="module"
+src>` of a local `assets/css/*.css` or `assets/js/**/*.js` file, on every page including the ones
+`tools/build-docs.mjs` generates – and the ES module imports *between* the configurator's own scripts (`import …
+from './data.js'`, the dynamic `import('./viewer.js')` the 3D view uses, and the changelog's and roadmap's `view.js`
+→ `data.js`). That last part matters because the configurator and the roadmap/changelog pages are themselves ES
+modules that import several sibling scripts directly – a stale cached `data.js` loaded alongside a fresh `ui.js`
+would be exactly the same kind of broken-layout bug, just inside the configurator instead of on the page. A script's
+hash also changes whenever a module it imports changes (computed in dependency order, so the one import cycle in the
+configurator – `sharecode.js` and `sharecode2.js` import each other – gets one shared hash for both instead of an
+unsolvable loop), so editing `rules.js` alone still busts every page that eventually loads it through `ui.js`.
+Imports of `assets/vendor/*` (three.js, pako) are left alone: out of scope, pinned and only touched by the rebuild
+command further up.
+
+`tools/build-docs.mjs` calls the same stamping step right after writing `docs/**/index.html`, so regenerated docs
+pages keep current stamps without an extra step. After hand-editing any other HTML page or any CSS/JS file, rerun
+`node tools/stamp-assets.mjs` before committing; `tools/test-stamp-assets.mjs` (part of the test suite) fails with
+the list of files to restamp until you do. `tools/test-links.mjs` and the other tests already ignore the `?v=` query
+when resolving a local reference.
 
 ## Preview
 

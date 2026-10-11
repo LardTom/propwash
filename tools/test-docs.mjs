@@ -19,6 +19,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { renderAll, loadData, ROOT } from './build-docs.mjs';
+import { computeHashes, stampHtml } from './stamp-assets.mjs';
 import { checkGamerules } from './docs/extract.mjs';
 import { RECIPES, checkCommand } from './docs/pages/gamerules.mjs';
 import { SERVER_FIELDS } from './docs/pages/guide.mjs';
@@ -57,9 +58,13 @@ const rel = (file) => path.relative(ROOT, file).split(path.sep).join('/');
 
 const data = loadData();
 const rendered = renderAll(data);
+// build-docs.mjs stamps every page it writes with the current ?v= cache-busting hash (tools/stamp-assets.mjs) right
+// after rendering it, so the disk content is compared against the same stamped version here, not the bare render.
+const hashes = computeHashes();
 for (const [file, content] of Object.entries(rendered)) {
   const target = path.join(ROOT, file);
-  ok(fs.existsSync(target) && fs.readFileSync(target, 'utf8') === content, `${file} entspricht der Ausgabe von build-docs (node tools/build-docs.mjs --render-only)`);
+  const expected = file.endsWith('.html') ? stampHtml(file, content, hashes) : content;
+  ok(fs.existsSync(target) && fs.readFileSync(target, 'utf8') === expected, `${file} entspricht der Ausgabe von build-docs (node tools/build-docs.mjs --render-only)`);
 }
 for (const file of walk(path.join(ROOT, 'docs'))) {
   if (path.basename(file) === '.DS_Store') continue;

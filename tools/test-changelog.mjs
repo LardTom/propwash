@@ -158,8 +158,8 @@ if (sources.length === PRODUCTS.length) {
 
 // 5. The page and its links
 const page = read('changelog/index.html');
-check(page.includes('src="../assets/js/changelog/view.js"'), 'changelog/index.html loads assets/js/changelog/view.js');
-check(page.includes('href="../assets/css/changelog.css"'), 'changelog/index.html loads assets/css/changelog.css');
+check(/src="\.\.\/assets\/js\/changelog\/view\.js(\?v=[0-9a-f]+)?"/.test(page), 'changelog/index.html loads assets/js/changelog/view.js');
+check(/href="\.\.\/assets\/css\/changelog\.css(\?v=[0-9a-f]+)?"/.test(page), 'changelog/index.html loads assets/css/changelog.css');
 check(page.includes('href="../assets/data/changelog.json"'), 'changelog/index.html preloads assets/data/changelog.json');
 check(/data-cl-root/.test(page) && /data-cl-tally/.test(page) && /data-cl-latest/.test(page) && /data-cl-status/.test(page), 'changelog/index.html has the render targets');
 const view = read('assets/js/changelog/view.js');

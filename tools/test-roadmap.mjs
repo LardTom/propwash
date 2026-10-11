@@ -60,8 +60,8 @@ for (const [what, mutate, expected] of broken) {
 }
 
 // 3. The page and its links
-check(page.includes('src="../assets/js/roadmap/view.js"'), 'roadmap/index.html loads assets/js/roadmap/view.js');
-check(page.includes('href="../assets/css/roadmap.css"'), 'roadmap/index.html loads assets/css/roadmap.css');
+check(/src="\.\.\/assets\/js\/roadmap\/view\.js(\?v=[0-9a-f]+)?"/.test(page), 'roadmap/index.html loads assets/js/roadmap/view.js');
+check(/href="\.\.\/assets\/css\/roadmap\.css(\?v=[0-9a-f]+)?"/.test(page), 'roadmap/index.html loads assets/css/roadmap.css');
 check(page.includes('href="../assets/data/roadmap.json"'), 'roadmap/index.html preloads assets/data/roadmap.json');
 check(/data-rm-root/.test(page) && /data-rm-current/.test(page) && /data-rm-tally/.test(page) && /data-rm-jump/.test(page), 'roadmap/index.html has the render targets');
 for (const [file, href] of [['index.html', 'roadmap/'], ['configurator/index.html', '../roadmap/'], ['roadmap/index.html', './'], ['changelog/index.html', '../roadmap/']]) {

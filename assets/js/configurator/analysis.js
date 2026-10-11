@@ -13,8 +13,8 @@
 //     motor_temp_minute_c, mixed_motor_temp_c, props_in_view_percent, warnings }
 // NaN (e.g. flight times of a build that cannot hover) means "no value".
 
-import { resolveBuild, batteryContinuousCurrent } from './rules.js';
-import { rig as fpvRig, occlusionPercent, cameraView as rigCameraView } from './fpv.js';
+import { resolveBuild, batteryContinuousCurrent } from './rules.js?v=147e54d1';
+import { rig as fpvRig, occlusionPercent, cameraView as rigCameraView } from './fpv.js?v=76cdbbe6';
 
 // ---------------------------------------------------------------------------------------------------------------
 // Constants of the model

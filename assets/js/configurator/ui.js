@@ -2,16 +2,16 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText } from './data.js';
-import { shareLink, codeFromHash, PAINT_SLOTS } from './sharecode.js';
-import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js';
-import { FLIGHT_GROUPS } from './tune.js';
-import { PROPS_IN_VIEW_WARNING } from './analysis.js';
-import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js';
-import { batteryFit } from './rules.js';
-import { assemble, PROP_SLOTS } from './assembly.js';
-import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js';
-import { t, tk, entry, num, lang, NB, glue } from './i18n.js';
+import { loadCatalog, localText } from './data.js?v=d51a314a';
+import { shareLink, codeFromHash, PAINT_SLOTS } from './sharecode.js?v=f703cd12';
+import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=1700c67a';
+import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
+import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=11771e54';
+import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
+import { batteryFit } from './rules.js?v=147e54d1';
+import { assemble, PROP_SLOTS } from './assembly.js?v=6349ca95';
+import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=a741176a';
+import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=5baa2171';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
@@ -1691,7 +1691,7 @@ async function startViewer() {
   const button = $('[data-autorotate]');
   let mod;
   try {
-    mod = await import('./viewer.js');
+    mod = await import('./viewer.js?v=c0423cef');
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;

@@ -2,7 +2,7 @@
 // segmented progress ring, and item cards. Every text is written in both languages (lang="en"/"de" spans), so the
 // site's language switch works without re-rendering. Texts go in via textContent only.
 
-import { loadRoadmap, validateRoadmap, tally, allItems, currentRelease, STATUSES } from './data.js';
+import { loadRoadmap, validateRoadmap, tally, allItems, currentRelease, STATUSES } from './data.js?v=3050ccc1';
 
 const doc = document;
 const SVG_NS = 'http://www.w3.org/2000/svg';

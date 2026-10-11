@@ -7,15 +7,15 @@
 // and repeats, the tune as index gaps and decimal values, the OSD layout (deflated against the preset layouts) and
 // the name. Content shape and decode result are the same as for PW1 (sharecode.js).
 
-import { crc32 } from './crc32.js';
-import { inflateRaw } from './inflate.js';
-import { TUNE_KEYS as PW1_TUNE_KEYS, isSharedKey } from './tune.js';
+import { crc32 } from './crc32.js?v=62ad0fa2';
+import { inflateRaw } from './inflate.js?v=f04f9641';
+import { TUNE_KEYS as PW1_TUNE_KEYS, isSharedKey } from './tune.js?v=f4084d0e';
 import { deflateRaw } from '../../vendor/pako/deflate.js';
-import { PW2_PARTS, PW2_COLORS, PW2_OSD_DICTIONARY } from './sharecode2-tables.js';
+import { PW2_PARTS, PW2_COLORS, PW2_OSD_DICTIONARY } from './sharecode2-tables.js?v=82cbc1ac';
 import {
   Fail, utf8Encode, javaStrip, validPath, validNamespace, unknownNamespaceIndex, LIMITS, ACCESSORY_SLOTS, PAINT_SLOTS,
   BUILD_FIELDS,
-} from './sharecode.js';
+} from './sharecode.js?v=f703cd12';
 
 export const PW2_FORMAT = 'PW2';
 export const PW2_PREFIX = 'PW2';

@@ -7,9 +7,9 @@
 //
 // All values are float32 like in the mod. Keys outside the flight groups (hold, camera, led, vtx) are ignored.
 
-import { airframe, hoverStick } from './analysis.js';
-import { tuneGroup, isFlightKey } from './tune.js';
-import { CAMERA_UPTILT } from './fpv.js';
+import { airframe, hoverStick } from './analysis.js?v=11771e54';
+import { tuneGroup, isFlightKey } from './tune.js?v=f4084d0e';
+import { CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
 
 const AXES = ['roll', 'pitch', 'yaw'];
 const TERMS = ['p', 'i', 'd', 'ff'];
