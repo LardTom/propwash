@@ -473,6 +473,26 @@ ${table([['Command', 'Befehl'], ['What it does', 'Wirkung']], [
     [mono('/propwash reload'), L('Reloads server.json (operators).', 'Lädt server.json neu (Operatoren).')],
     [mono('/propwash race courses | leaderboard | laps | reset | delete | archive'), L('Race courses and leaderboards.', 'Rennkurse und Bestenlisten.')],
   ])}
+${h3('servers-tags', 'Drone tags', 'Drohnen-Tags')}
+${P('Every drone (entity <code>propwash:drone</code>) carries ordinary entity tags for selectors – to clear a player’s drones or every drone nobody is flying. Names are spelled exactly as in the player’s profile.',
+    'Jede Drohne (Entity <code>propwash:drone</code>) trägt gewöhnliche Entity-Tags für Selektoren – um die Drohnen eines Spielers zu löschen oder alle, die gerade niemand fliegt. Namen stehen genau so da wie im Profil des Spielers.')}
+${table([['Tag', 'Tag'], ['Meaning', 'Bedeutung']], [
+    [mono('pw_owner_<name>'), L('Who placed the drone. Every placement replaces it, also in creative mode; drones spawned with <code>/summon</code> have none.', 'Wer die Drohne platziert hat. Jedes Platzieren ersetzt ihn, auch im Kreativmodus; mit <code>/summon</code> erzeugte Drohnen haben keinen.')],
+    [mono('pw_pilot_<name>'), L('Who flew it last. Set when a flight starts, replaced by the next pilot, kept after landing.', 'Wer sie zuletzt geflogen hat. Gesetzt beim Start eines Flugs, ersetzt vom nächsten Piloten, bleibt nach der Landung.')],
+    [mono('pw_flying'), L('Someone is flying it right now – also while it sits disarmed on the ground. Gone as soon as the pilot stops, puts the radio away, leaves, flies out of range or dies.', 'Jemand fliegt sie gerade – auch wenn sie unscharf am Boden steht. Weg, sobald der Pilot aufhört, die Funke weglegt, das Spiel verlässt, aus der Reichweite fliegt oder stirbt.')],
+    [mono('pw_autopilot'), L('GPS rescue is flying it home or landing it without a pilot.', 'GPS Rescue fliegt sie ohne Piloten heim oder landet sie.')],
+  ])}
+${code(`/kill @e[type=propwash:drone,tag=pw_owner_Steve]
+/kill @e[type=propwash:drone,tag=!pw_flying,tag=!pw_autopilot]
+/tag @e[type=propwash:drone,limit=1,sort=nearest] list`, 'chat', L('Steve’s drones · every parked drone · tags of the nearest drone', 'Steves Drohnen · alle geparkten Drohnen · Tags der nächsten Drohne'))}
+${list([
+    ['<code>pw_flying</code> and <code>pw_autopilot</code> follow the drone every tick and are cleared whenever a drone is loaded, so they never stay stuck after a restart or a crash; adding or removing them by hand lasts one tick. The owner and pilot tags are yours to change with <code>/tag</code> – Propwash only replaces them on the next placement or flight.',
+      '<code>pw_flying</code> und <code>pw_autopilot</code> folgen der Drohne in jedem Tick und fallen beim Laden einer Drohne weg, nach einem Neustart oder Absturz bleibt also keiner hängen; von Hand gesetzt oder entfernt halten sie einen Tick. Besitzer- und Pilot-Tag darfst du mit <code>/tag</code> ändern – Propwash ersetzt sie erst beim nächsten Platzieren bzw. Flug.'],
+    ['<code>@e</code> only finds drones in loaded chunks. <code>/kill</code> deletes a drone without dropping it as an item: cargo in the gripper falls out, and whoever was flying it leaves FPV.',
+      '<code>@e</code> findet nur Drohnen in geladenen Chunks. <code>/kill</code> löscht eine Drohne, ohne sie als Item fallen zu lassen: Fracht im Greifer fällt heraus, und wer sie geflogen hat, verlässt das FPV-Bild.'],
+    ['After a name change, drones get the new name the next time the player places or flies them. Characters other than letters, digits and <code>_</code> (only possible on offline servers) become <code>_</code>.',
+      'Nach einer Namensänderung bekommen Drohnen den neuen Namen, sobald der Spieler sie wieder platziert oder fliegt. Andere Zeichen als Buchstaben, Ziffern und <code>_</code> (nur auf Offline-Servern möglich) werden zu <code>_</code>.'],
+  ])}
 `);
 
   const help = section('help', toc[9].title, list([
