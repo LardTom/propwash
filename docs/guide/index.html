@@ -572,6 +572,29 @@
 <tr><th scope="row"><code>/propwash race courses | leaderboard | laps | reset | delete | archive</code></th><td><span lang="en">Race courses and leaderboards.</span><span lang="de">Rennkurse und Bestenlisten.</span></td></tr>
 </tbody>
 </table></div>
+<h3 id="servers-tags" class="docs-h3"><a class="docs-anchor" href="#servers-tags" aria-hidden="true" tabindex="-1">#</a><span lang="en">Drone tags</span><span lang="de">Drohnen-Tags</span></h3>
+<p lang="en">Every drone (entity <code>propwash:drone</code>) carries ordinary entity tags for selectors – to clear a player’s drones or every drone nobody is flying. Names are spelled exactly as in the player’s profile.</p>
+<p lang="de">Jede Drohne (Entity <code>propwash:drone</code>) trägt gewöhnliche Entity-Tags für Selektoren – um die Drohnen eines Spielers zu löschen oder alle, die gerade niemand fliegt. Namen stehen genau so da wie im Profil des Spielers.</p>
+<div class="docs-table-wrap" tabindex="0"><table class="docs-table ">
+<thead><tr><th scope="col">Tag</th><th scope="col"><span lang="en">Meaning</span><span lang="de">Bedeutung</span></th></tr></thead>
+<tbody>
+<tr><th scope="row"><code>pw_owner_&lt;name&gt;</code></th><td><span lang="en">Who placed the drone. Every placement replaces it, also in creative mode; drones spawned with <code>/summon</code> have none.</span><span lang="de">Wer die Drohne platziert hat. Jedes Platzieren ersetzt ihn, auch im Kreativmodus; mit <code>/summon</code> erzeugte Drohnen haben keinen.</span></td></tr>
+<tr><th scope="row"><code>pw_pilot_&lt;name&gt;</code></th><td><span lang="en">Who flew it last. Set when a flight starts, replaced by the next pilot, kept after landing.</span><span lang="de">Wer sie zuletzt geflogen hat. Gesetzt beim Start eines Flugs, ersetzt vom nächsten Piloten, bleibt nach der Landung.</span></td></tr>
+<tr><th scope="row"><code>pw_flying</code></th><td><span lang="en">Someone is flying it right now – also while it sits disarmed on the ground. Gone as soon as the pilot stops, puts the radio away, leaves, flies out of range or dies.</span><span lang="de">Jemand fliegt sie gerade – auch wenn sie unscharf am Boden steht. Weg, sobald der Pilot aufhört, die Funke weglegt, das Spiel verlässt, aus der Reichweite fliegt oder stirbt.</span></td></tr>
+<tr><th scope="row"><code>pw_autopilot</code></th><td><span lang="en">GPS rescue is flying it home or landing it without a pilot.</span><span lang="de">GPS Rescue fliegt sie ohne Piloten heim oder landet sie.</span></td></tr>
+</tbody>
+</table></div>
+<figure class="docs-code" data-code>
+<figcaption class="docs-code__bar"><span class="docs-code__lang">Chat</span><span class="docs-code__caption"><span lang="en">Steve’s drones · every parked drone · tags of the nearest drone</span><span lang="de">Steves Drohnen · alle geparkten Drohnen · Tags der nächsten Drohne</span></span><button type="button" class="docs-code__copy needs-js" data-copy><span lang="en">Copy</span><span lang="de">Kopieren</span></button></figcaption>
+<pre><code>/kill @e[type=propwash:drone,tag=pw_owner_Steve]
+/kill @e[type=propwash:drone,tag=!pw_flying,tag=!pw_autopilot]
+/tag @e[type=propwash:drone,limit=1,sort=nearest] list</code></pre>
+</figure>
+<ul>
+<li><span lang="en"><code>pw_flying</code> and <code>pw_autopilot</code> follow the drone every tick and are cleared whenever a drone is loaded, so they never stay stuck after a restart or a crash; adding or removing them by hand lasts one tick. The owner and pilot tags are yours to change with <code>/tag</code> – Propwash only replaces them on the next placement or flight.</span><span lang="de"><code>pw_flying</code> und <code>pw_autopilot</code> folgen der Drohne in jedem Tick und fallen beim Laden einer Drohne weg, nach einem Neustart oder Absturz bleibt also keiner hängen; von Hand gesetzt oder entfernt halten sie einen Tick. Besitzer- und Pilot-Tag darfst du mit <code>/tag</code> ändern – Propwash ersetzt sie erst beim nächsten Platzieren bzw. Flug.</span></li>
+<li><span lang="en"><code>@e</code> only finds drones in loaded chunks. <code>/kill</code> deletes a drone without dropping it as an item: cargo in the gripper falls out, and whoever was flying it leaves FPV.</span><span lang="de"><code>@e</code> findet nur Drohnen in geladenen Chunks. <code>/kill</code> löscht eine Drohne, ohne sie als Item fallen zu lassen: Fracht im Greifer fällt heraus, und wer sie geflogen hat, verlässt das FPV-Bild.</span></li>
+<li><span lang="en">After a name change, drones get the new name the next time the player places or flies them. Characters other than letters, digits and <code>_</code> (only possible on offline servers) become <code>_</code>.</span><span lang="de">Nach einer Namensänderung bekommen Drohnen den neuen Namen, sobald der Spieler sie wieder platziert oder fliegt. Andere Zeichen als Buchstaben, Ziffern und <code>_</code> (nur auf Offline-Servern möglich) werden zu <code>_</code>.</span></li>
+</ul>
 
 </section>
 <section class="docs-section" aria-labelledby="help">
