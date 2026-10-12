@@ -124,7 +124,7 @@ ${figure(ctx.prefix, ctx.images.world_rules, { en: 'The World rules tab in the P
 ${h3('how-change', 'Who can change them', 'Wer sie ändern darf')}
 ${list([
     ['<strong>Singleplayer and LAN host:</strong> always, in the configurator tab <em>World rules</em>, even in a world without cheats.', '<strong>Einzelspieler und LAN-Host:</strong> immer, im Konfigurator-Tab <em>Welt-Regeln</em>, auch in einer Welt ohne Cheats.'],
-    ['<strong>Servers:</strong> operators (permission level 2), in the same tab or with <code>/gamerule</code>.', '<strong>Server:</strong> Operatoren (Rechtestufe 2), im selben Tab oder mit <code>/gamerule</code>.'],
+    ['<strong>Servers:</strong> everyone allowed to use <code>/gamerule</code>, in the same tab or with the command – operators (permission level 2) and, since 0.5.1, admins who get that permission from a permission mod. A rule a permission mod locks for someone stays locked in the tab too. Presets need <code>/propwash rules preset</code> or the right to set every rule.', '<strong>Server:</strong> alle, die <code>/gamerule</code> nutzen dürfen, im selben Tab oder mit dem Befehl – Operatoren (Rechtestufe 2) und seit 0.5.1 auch Admins, die das Recht über einen Rechte-Mod bekommen. Sperrt ein Rechte-Mod jemandem eine Regel, bleibt sie auch im Tab gesperrt. Voreinstellungen brauchen <code>/propwash rules preset</code> oder das Recht, jede Regel zu setzen.'],
     ['<strong>Everyone else</strong> sees the same tab as a read-only list with every explanation, so nobody has to guess what applies.', '<strong>Alle anderen</strong> sehen denselben Tab als lesbare Liste mit allen Erklärungen und müssen nicht raten, was gilt.'],
     ['Every change made in the tab shows up for all players as a grey chat line naming who changed which rule.', 'Jede Änderung aus dem Tab sehen alle Spieler als graue Chatzeile, die nennt, wer welche Regel geändert hat.'],
   ])}
@@ -181,8 +181,8 @@ ${presetCards}
   }).join('\n');
 
   const recipes = section('recipes', toc[toc.length - 3].title, `
-${P('A few combinations that work well. Type them in the chat as an operator or change the same rules in the tab.',
-    'Ein paar Kombinationen, die gut funktionieren. Als Operator in den Chat tippen oder dieselben Regeln im Tab ändern.')}
+${P('A few combinations that work well. Type them in the chat if you may use <code>/gamerule</code>, or change the same rules in the tab.',
+    'Ein paar Kombinationen, die gut funktionieren. In den Chat tippen, wenn du <code>/gamerule</code> nutzen darfst, oder dieselben Regeln im Tab ändern.')}
 <div class="docs-recipes">
 ${RECIPES.map((r) => `<div class="docs-card docs-card--plain" id="recipe-${r.id}">
 <h3 class="docs-card__title">${L(r.title.en, r.title.de)}</h3>

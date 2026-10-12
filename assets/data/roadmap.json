@@ -25,6 +25,61 @@
       },
       "groups": [
         {
+          "version": "0.5.1",
+          "title": {
+            "en": "Bug fixes for servers",
+            "de": "Fehlerbehebungen für Server"
+          },
+          "link": {
+            "href": "../changelog/#propwash-0.5.1",
+            "label": {
+              "en": "Full changelog",
+              "de": "Alle Änderungen"
+            }
+          },
+          "items": [
+            {
+              "id": "remote-trails",
+              "icon": "spark",
+              "status": "done",
+              "title": {
+                "en": "Trails of other pilots on servers",
+                "de": "Trails anderer Piloten auf Servern"
+              },
+              "text": {
+                "en": "Drone trails of other pilots now show in multiplayer, not only during GPS Rescue.",
+                "de": "Die Drohnen-Trails anderer Piloten erscheinen jetzt im Mehrspieler, nicht nur während GPS Rescue."
+              }
+            },
+            {
+              "id": "rules-permission",
+              "icon": "globe",
+              "status": "done",
+              "title": {
+                "en": "World rules for admins",
+                "de": "Welt-Regeln für Admins"
+              },
+              "text": {
+                "en": "Server admins who may use /gamerule can edit the World rules tab, not only operators.",
+                "de": "Server-Admins, die /gamerule nutzen dürfen, ändern den Tab Welt-Regeln, nicht nur Operatoren."
+              }
+            },
+            {
+              "id": "drone-tags",
+              "icon": "flag",
+              "status": "done",
+              "title": {
+                "en": "Drone tags for server admins",
+                "de": "Drohnen-Tags für Server-Admins"
+              },
+              "text": {
+                "en": "Every drone carries tags for its owner, its last pilot and whether it is flying – e.g. remove a player's drones with /kill.",
+                "de": "Jede Drohne trägt Tags für Besitzer, letzten Piloten und Flugzustand – z. B. entfernst du mit /kill die Drohnen eines Spielers."
+              }
+            }
+          ]
+        },
+        {
           "version": "0.5.0",
           "title": {
             "en": "Learn, race, explore",
@@ -487,14 +542,14 @@
       },
       "groups": [
         {
-          "version": "0.5.1",
+          "version": "0.5.2",
           "title": {
             "en": "Bug fixes",
             "de": "Fehlerbehebungen"
           },
           "items": [
             {
-              "id": "fixes-051",
+              "id": "fixes-052",
               "icon": "bug",
               "status": "planned",
               "title": {
@@ -502,8 +557,8 @@
                 "de": "Bugfix-Update"
               },
               "text": {
-                "en": "Fixes for what you find and report after 0.5.0.",
-                "de": "Korrekturen für das, was du nach 0.5.0 findest und meldest."
+                "en": "Fixes for what you find and report after 0.5.1.",
+                "de": "Korrekturen für das, was du nach 0.5.1 findest und meldest."
               }
             }
           ]

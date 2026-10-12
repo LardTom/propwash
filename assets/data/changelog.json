@@ -10,9 +10,63 @@
         "de": "Die FPV-Drohnen-Mod für Minecraft"
       },
       "source": {
-        "ref": "v0.5.0"
+        "ref": "v0.5.1"
       },
       "releases": [
+        {
+          "version": "0.5.1",
+          "id": "propwash-0.5.1",
+          "title": {
+            "en": "Drone trails on servers, world rules for admins, drone tags",
+            "de": "Drohnen-Trails auf Servern, Welt-Regeln für Admins, Drohnen-Tags"
+          },
+          "sections": [
+            {
+              "kind": "new",
+              "items": [
+                {
+                  "en": "Drones carry tags for server admins: `pw_owner_<name>` (who placed it), `pw_pilot_<name>` (who flew it last) and `pw_flying` (`pw_autopilot` while GPS Rescue brings it home alone) – e.g. remove a player's drones with `/kill @e[type=propwash:drone,tag=pw_owner_Steve]`.",
+                  "de": "Drohnen tragen Tags für Server-Admins: `pw_owner_<Name>` (wer sie platziert hat), `pw_pilot_<Name>` (wer sie zuletzt geflogen hat) und `pw_flying` (`pw_autopilot`, solange GPS Rescue sie allein heimbringt) – z. B. entfernt `/kill @e[type=propwash:drone,tag=pw_owner_Steve]` die Drohnen eines Spielers."
+                }
+              ]
+            },
+            {
+              "kind": "improved",
+              "items": [
+                {
+                  "en": "Server admins who may use `/gamerule` – for example through a permission mod – can now edit the *World rules* tab, not only operators.",
+                  "de": "Server-Admins, die `/gamerule` nutzen dürfen – etwa über einen Rechte-Mod –, können jetzt den Tab *Welt-Regeln* bearbeiten, nicht nur Operatoren."
+                }
+              ]
+            },
+            {
+              "kind": "fixed",
+              "items": [
+                {
+                  "en": "Drone trails of other pilots now show on servers, not only during GPS Rescue (return to home).",
+                  "de": "Die Drohnen-Trails anderer Piloten erscheinen jetzt auch auf Servern, nicht nur während GPS Rescue (Rückflug zum Startpunkt)."
+                }
+              ]
+            },
+            {
+              "kind": "compatibility",
+              "items": [
+                {
+                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · 0.5.0 and 0.5.1 play together – clients and servers can mix both versions; other pilots' trails show as soon as the server or your own game runs 0.5.1.",
+                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · 0.5.0 und 0.5.1 spielen zusammen – Clients und Server dürfen beide Versionen mischen; die Trails anderer Piloten erscheinen, sobald der Server oder dein eigenes Spiel 0.5.1 nutzt."
+                },
+                {
+                  "en": "Worlds, drones, courses and settings from 0.5.0 load unchanged; drones placed before the update get their owner tag the next time someone places them.",
+                  "de": "Welten, Drohnen, Kurse und Einstellungen aus 0.5.0 laden unverändert; Drohnen, die vor dem Update platziert wurden, bekommen ihren Besitzer-Tag, sobald jemand sie das nächste Mal platziert."
+                },
+                {
+                  "en": "*Propwash: Just More Parts* 1.1.0 and other add-ons made for 0.5.0 keep working.",
+                  "de": "*Propwash: Just More Parts* 1.1.0 und andere Add-ons für 0.5.0 laufen weiter."
+                }
+              ]
+            }
+          ]
+        },
         {
           "version": "0.5.0",
           "id": "propwash-0.5.0",
