@@ -82,6 +82,8 @@ const broken = [
   ['unclosed code', (d) => { d.products[0].releases[0].sections[0].items[0].en = 'Press `M to open'; }, 'unclosed `'],
   ['javascript link', (d) => { d.products[0].releases[0].sections[0].items[0].en = '[x](javascript:alert(1))'; }, 'https:// address'],
   ['HTML', (d) => { d.products[0].releases[0].sections[0].items[0].de = '<b>fett</b>'; }, 'no HTML'],
+  ['HTML next to code', (d) => { d.products[0].releases[0].sections[0].items[0].en = '`pw_owner_<name>` and <i>x</i>'; }, 'no HTML'],
+  ['HTML in a title', (d) => { d.products[0].releases[0].title.en = 'Big <b>release</b>'; }, 'no HTML'],
   ['unknown section', (d) => { d.products[0].releases[0].sections[0].kind = 'misc'; }, 'must be one of'],
   ['sections out of order', (d) => { d.products[0].releases[0].sections.reverse(); }, 'in the order'],
   ['empty section', (d) => { d.products[0].releases[0].sections[0].items = []; }, 'needs at least one entry'],
@@ -93,6 +95,12 @@ for (const [what, mutate, expected] of broken) {
   mutate(copy);
   const errs = validateChangelog(copy);
   check(errs.some((e) => e.includes(expected)), `validator misses: ${what} (got ${errs.length ? errs.slice(0, 3).join(' | ') : 'no error'})`);
+}
+{
+  const copy = structuredClone(data);
+  copy.products[0].releases[0].sections[0].items[0].en = 'Tags such as `pw_owner_<name>` for admins.';
+  const errs = validateChangelog(copy);
+  check(errs.length === 0, `angle brackets inside a code span are allowed (got ${errs.slice(0, 3).join(' | ')})`);
 }
 
 // The parser of CHANGELOG.md

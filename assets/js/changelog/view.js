@@ -3,7 +3,7 @@
 // Known issues. Every text is written in both languages (lang="en"/"de" spans), so the site's language switch works
 // without re-rendering. Texts go in via textContent only; the entries' inline Markdown is turned into elements.
 
-import { loadChangelog, validateChangelog, parseInline, tally, KINDS } from './data.js?v=c84d3dca';
+import { loadChangelog, validateChangelog, parseInline, tally, KINDS } from './data.js?v=7e0fef0c';
 
 const doc = document;
 const SVG_NS = 'http://www.w3.org/2000/svg';

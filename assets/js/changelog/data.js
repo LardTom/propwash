@@ -117,6 +117,11 @@ export function plainText(nodes) {
   return nodes.map((n) => (n.c ? plainText(n.c) : n.v)).join('');
 }
 
+/** The text outside `code` spans; placeholders such as `pw_owner_<name>` may show angle brackets as code. */
+export function proseText(nodes) {
+  return nodes.map((n) => (n.c ? proseText(n.c) : n.t === 'code' ? '' : n.v)).join('');
+}
+
 /** Counts the entries per section kind (highlights excluded from the total, they repeat what the sections say). */
 export function tally(releases) {
   const count = { releases: 0, entries: 0 };
@@ -151,11 +156,13 @@ export function validateChangelog(data) {
         continue;
       }
       if (s !== s.trim() || /\s{2,}/.test(s)) err(at, 'stray whitespace');
-      if (/[<>]/.test(s)) err(at, 'no HTML in texts');
       if (markdown) {
         const parsed = parseInline(s);
+        if (/[<>]/.test(proseText(parsed.nodes))) err(at, 'no HTML in texts');
         for (const e of parsed.errors) err(at, e);
         if (!plainText(parsed.nodes).trim()) err(at, 'empty text');
+      } else if (/[<>]/.test(s)) {
+        err(at, 'no HTML in texts');
       } else if (/[*`[\]]/.test(s)) {
         err(at, 'no Markdown in titles');
       }
