@@ -26,7 +26,7 @@
 <meta name="twitter:image:alt" content="FPV view through the goggles in Propwash FPV: flying through the checkered start/finish gate with the Betaflight-style OSD">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-<link rel="stylesheet" href="assets/css/style.css?v=226c3b3b">
+<link rel="stylesheet" href="assets/css/style.css?v=3aa9abfa">
 <script>
 (function () {
   var d = document.documentElement, lang = null;
@@ -52,18 +52,27 @@
       <img src="assets/img/logo-96.webp" width="36" height="36" alt="">
       <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
     </a>
-    <nav class="site-nav" id="site-nav" aria-label="Sections" data-de-aria-label="Abschnitte">
-      <a href="#how"><span lang="en">How it works</span><span lang="de">So geht’s</span></a>
-      <a href="#flight"><span lang="en">Flight</span><span lang="de">Flug</span></a>
-      <a href="#video">Video</a>
-      <a href="#racing"><span lang="en">Racing</span><span lang="de">Rennen</span></a>
-      <a href="#gallery"><span lang="en">Screenshots</span><span lang="de">Bilder</span></a>
-      <a href="#faq">FAQ</a>
-      <a href="configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+    <nav class="site-nav" id="site-nav" aria-label="Main" data-de-aria-label="Hauptmenü">
+      <div class="nav-group" data-nav-group>
+        <button type="button" class="nav-group__toggle" aria-expanded="false" aria-controls="nav-features" data-nav-group-toggle><span lang="en">Features</span><span lang="de">Funktionen</span><svg class="nav-group__chev" aria-hidden="true" viewBox="0 0 12 12" width="12" height="12"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+        <ul class="nav-group__panel" id="nav-features">
+          <li><a href="#how"><span class="nav-group__title"><span lang="en">Get started</span><span lang="de">Loslegen</span></span><span class="nav-group__text"><span lang="en">Build, bind, fly and race in four steps</span><span lang="de">Bauen, binden, fliegen, rennen in vier Schritten</span></span></a></li>
+          <li><a href="#new"><span class="nav-group__title"><span lang="en">What’s new</span><span lang="de">Neuigkeiten</span></span><span class="nav-group__text"><span lang="en">The highlights of the latest update</span><span lang="de">Die Highlights des neuesten Updates</span></span></a></li>
+          <li><a href="#flight"><span class="nav-group__title"><span lang="en">Flight &amp; tuning</span><span lang="de">Flug &amp; Tuning</span></span><span class="nav-group__text"><span lang="en">Flight model, Betaflight-style tuning, radio or gamepad</span><span lang="de">Flugmodell, Tuning wie in Betaflight, Funke oder Gamepad</span></span></a></li>
+          <li><a href="#video"><span class="nav-group__title">Video</span><span class="nav-group__text"><span lang="en">Analog or digital, and how the picture breaks up</span><span lang="de">Analog oder digital, und wie das Bild zerfällt</span></span></a></li>
+          <li><a href="#racing"><span class="nav-group__title"><span lang="en">Racing &amp; freestyle</span><span lang="de">Rennen &amp; Freestyle</span></span><span class="nav-group__text"><span lang="en">Gates, ghosts, leaderboards and tricks</span><span lang="de">Gates, Geister, Bestenlisten und Tricks</span></span></a></li>
+          <li><a href="#survival"><span class="nav-group__title"><span lang="en">Survival</span><span lang="de">Überlebensmodus</span></span><span class="nav-group__text"><span lang="en">Crafting, loot, batteries and part wear</span><span lang="de">Herstellen, Beute, Akkus und Verschleiß</span></span></a></li>
+          <li><a href="#extras"><span class="nav-group__title"><span lang="en">More details</span><span lang="de">Mehr Details</span></span><span class="nav-group__text"><span lang="en">Lights, action cams, paint, sound and bandos</span><span lang="de">Licht, Action-Cams, Lack, Sound und Bandos</span></span></a></li>
+          <li><a href="#gallery"><span class="nav-group__title">Screenshots</span><span class="nav-group__text"><span lang="en">Straight from the game</span><span lang="de">Direkt aus dem Spiel</span></span></a></li>
+          <li><a href="#faq"><span class="nav-group__title">FAQ</span><span class="nav-group__text"><span lang="en">Questions before take-off</span><span lang="de">Fragen vor dem Start</span></span></a></li>
+        </ul>
+      </div>
       <a href="docs/"><span lang="en">Docs</span><span lang="de">Doku</span></a>
-      <a href="roadmap/">Roadmap</a>
       <a href="changelog/">Changelog</a>
+      <a href="roadmap/">Roadmap</a>
+      <a href="#download">Download</a>
       <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a>
+      <a class="site-nav__cta" href="configurator/"><svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18" class="quad-icon"><path d="M6.2 6.2l7.6 7.6M13.8 6.2l-7.6 7.6"/><circle cx="5" cy="5" r="3"/><circle cx="15" cy="5" r="3"/><circle cx="5" cy="15" r="3"/><circle cx="15" cy="15" r="3"/><rect x="8" y="8" width="4" height="4" rx="1"/></svg><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
     </nav>
     <div class="social">
       <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg></a>
@@ -89,23 +98,14 @@
         <span class="hero__name">Propwash <em>FPV</em></span>
         <span class="hero__pitch"><span lang="en">Real FPV drone racing in Minecraft.</span><span lang="de">Echtes FPV-Drohnenrennen in Minecraft.</span></span>
       </h1>
-      <p class="hero__lead" lang="en">Build a quadcopter from real-world parts, put on your goggles and fly it through the drone’s camera&nbsp;– with your own RC transmitter, a gamepad or mouse and keyboard. Its own flight model, a Betaflight-style flight controller, flight training, race gates and freestyle tricks&nbsp;– and every bit of it playable in survival.</p>
-      <p class="hero__lead" lang="de">Bau dir einen Quadcopter aus realen Bauteilen, setz die Brille auf und flieg durch die Kamera der Drohne&nbsp;– mit deiner eigenen Funke, einem Gamepad oder Maus und Tastatur. Eigenes Flugmodell, Flight-Controller im Betaflight-Stil, Flugtraining, Renn-Gates und Freestyle-Tricks&nbsp;– und alles davon ist im Überlebensmodus spielbar.</p>
+      <p class="hero__lead" lang="en">Build a quadcopter from real-world parts, put on your goggles and fly it through the drone’s camera&nbsp;– with your own RC transmitter, a gamepad or mouse and keyboard. Its own flight model, a Betaflight-style flight controller, flight training, racing and freestyle, all playable in survival.</p>
+      <p class="hero__lead" lang="de">Bau dir einen Quadcopter aus realen Bauteilen, setz die Brille auf und flieg durch die Kamera der Drohne&nbsp;– mit deiner eigenen Funke, einem Gamepad oder Maus und Tastatur. Eigenes Flugmodell, Flight-Controller im Betaflight-Stil, Flugtraining, Rennen und Freestyle, alles im Überlebensmodus spielbar.</p>
       <div class="hero__cta">
-        <a class="btn btn--primary" href="#how">
-          <span lang="en">How it works</span><span lang="de">So funktioniert’s</span>
-          <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M8 3v10M3.5 8.5 8 13l4.5-4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
-        </a>
-        <a class="btn btn--ghost" href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">
+        <a class="btn btn--primary" href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">
           <span lang="en">Download on CurseForge</span><span lang="de">Download auf CurseForge</span>
         </a>
-        <a class="btn btn--ghost" href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">
-          <span class="soon-dot" aria-hidden="true"></span>
-          <span lang="en">Modrinth · in review</span><span lang="de">Modrinth · in Prüfung</span>
-        </a>
-        <a class="btn btn--ghost" href="configurator/">
-          <span lang="en">Build a drone online</span><span lang="de">Drohne online bauen</span>
-          <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg>
+        <a class="btn btn--config" href="configurator/">
+          <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18" class="quad-icon"><path d="M6.2 6.2l7.6 7.6M13.8 6.2l-7.6 7.6"/><circle cx="5" cy="5" r="3"/><circle cx="15" cy="5" r="3"/><circle cx="5" cy="15" r="3"/><circle cx="15" cy="15" r="3"/><rect x="8" y="8" width="4" height="4" rx="1"/></svg><span lang="en">Build a drone online</span><span lang="de">Drohne online bauen</span>
         </a>
       </div>
       <p class="hero__version"><a href="#new"><span class="mono">0.5.1</span><span lang="en">New: flight training, world rules, 59 freestyle tricks</span><span lang="de">Neu: Flugtraining, Welt-Regeln, 59 Freestyle-Tricks</span><svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></p>
@@ -163,6 +163,142 @@
   </div>
 </section>
 
+<!-- HOW IT WORKS -->
+<section class="section" id="how" aria-labelledby="how-title">
+  <div class="wrap">
+    <header class="section__head">
+      <p class="kicker"><span lang="en">Get started</span><span lang="de">Loslegen</span></p>
+      <h2 id="how-title"><span lang="en">From the parts bin to the start gate</span><span lang="de">Von der Teilekiste bis zum Startgate</span></h2>
+      <p class="section__intro" lang="en">Four steps, all inside the game. Stuck somewhere? Hold <kbd>M</kbd> over any Propwash item and its Flight School lesson explains it&nbsp;– and the <a href="#learn">flight training</a> teaches you to fly, lesson by lesson.</p>
+      <p class="section__intro" lang="de">Vier Schritte, alles im Spiel. Du hängst irgendwo fest? Halte <kbd>M</kbd> über ein Propwash-Item, und die passende Flugschul-Lektion erklärt es dir&nbsp;– und das <a href="#learn">Flugtraining</a> bringt dir das Fliegen bei, Lektion für Lektion.</p>
+    </header>
+
+    <ol class="steps">
+      <li class="step" data-step>
+        <div class="gate-num" aria-hidden="true"><span>1</span></div>
+        <div class="step__body">
+          <h3><span lang="en">Build your drone</span><span lang="de">Drohne bauen</span></h3>
+          <p lang="en">Put a frame, flight controller, four motors, four props, a battery and a video unit together at the <strong>Drone Workbench</strong>. The live 3D preview shows dry and all-up weight, thrust-to-weight, hover throttle, top speed and flight time&nbsp;– and warns you about parts that don’t fit. Plan it first in the <a href="#configurator">online configurator</a>.</p>
+          <p lang="de">Setz an der <strong>Drohnen-Werkbank</strong> Rahmen, Flight-Controller, vier Motoren, vier Propeller, Akku und Videoeinheit zusammen. Die 3D-Vorschau zeigt Leer- und Abfluggewicht, Schub-Gewicht-Verhältnis, Schwebegas, Höchstgeschwindigkeit und Flugzeit&nbsp;– und warnt dich vor Teilen, die nicht zusammenpassen. Planen kannst du sie vorher im <a href="#configurator">Online-Konfigurator</a>.</p>
+          <ul class="chips">
+            <li><span lang="en">Whoop · Cinewhoop · Freestyle · Race · Long&nbsp;range</span><span lang="de">Whoop · Cinewhoop · Freestyle · Race · Long&nbsp;Range</span></li>
+            <li><span lang="en">Ready-to-fly presets in creative</span><span lang="de">Flugfertige Vorlagen im Kreativmodus</span></li>
+          </ul>
+        </div>
+        <figure class="step__media">
+          <div class="shot shot--ui">
+            <img src="assets/img/workbench-freestyle-ui-944.webp" srcset="assets/img/workbench-freestyle-ui-640.webp 640w, assets/img/workbench-freestyle-ui-944.webp 944w" sizes="(min-width: 1060px) 620px, 100vw" width="944" height="680" loading="lazy" decoding="async" alt="The Drone Workbench: part slots, 3D preview and build stats like dry and all-up weight, thrust-to-weight, top speed and flight time" data-de-alt="Die Drohnen-Werkbank: Teile-Slots, 3D-Vorschau und Werte wie Leer- und Abfluggewicht, Schub-Gewicht-Verhältnis, Höchstgeschwindigkeit und Flugzeit">
+          </div>
+        </figure>
+      </li>
+
+      <li class="step" data-step>
+        <div class="gate-num" aria-hidden="true"><span>2</span></div>
+        <div class="step__body">
+          <h3><span lang="en">Bind the radio, put on goggles</span><span lang="de">Funke binden, Brille aufsetzen</span></h3>
+          <p lang="en">Place the drone and right-click it with the <strong>FPV Remote</strong>&nbsp;– that binds it, and the drone remembers you. Then put on <strong>FPV goggles</strong> that match the drone’s video system: analog goggles for analog video, digital for digital. Without goggles you fly line of sight. A real EdgeTX/OpenTX radio or a gamepad is detected and set up in a minute&nbsp;– or you simply fly with mouse and keyboard.</p>
+          <p lang="de">Stell die Drohne ab und klick sie mit der <strong>FPV-Funke</strong> an&nbsp;– damit ist sie gebunden, und die Drohne merkt sich dich. Setz dann eine <strong>FPV-Brille</strong> auf, die zum Videosystem der Drohne passt: analoge Brille für analoges Video, digitale für digitales. Ohne Brille fliegst du auf Sicht. Eine echte EdgeTX-/OpenTX-Funke oder ein Gamepad wird erkannt und ist in einer Minute eingerichtet&nbsp;– oder du fliegst einfach mit Maus und Tastatur.</p>
+          <ul class="chips">
+            <li><span lang="en">Right-click to bind</span><span lang="de">Rechtsklick zum Binden</span></li>
+            <li><span lang="en">Sneak + right-click: battery, props, camera angle</span><span lang="de">Schleichen + Rechtsklick: Akku, Props, Kamerawinkel</span></li>
+          </ul>
+        </div>
+        <figure class="step__media">
+          <div class="shot">
+            <img src="assets/img/items-remote-battery-charger-1600.webp" srcset="assets/img/items-remote-battery-charger-800.webp 800w, assets/img/items-remote-battery-charger-1600.webp 1600w" sizes="(min-width: 1060px) 620px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="The FPV Remote in both hands in front of a Battery Charger with three packs in its bays" data-de-alt="Die FPV-Funke in beiden Händen vor einem Akku-Ladegerät mit drei Akkus in den Schächten">
+          </div>
+        </figure>
+      </li>
+
+      <li class="step" data-step>
+        <div class="gate-num" aria-hidden="true"><span>3</span></div>
+        <div class="step__body">
+          <h3><span lang="en">Fly FPV&nbsp;– or line of sight</span><span lang="de">FPV fliegen&nbsp;– oder auf Sicht</span></h3>
+          <p lang="en">Hold the radio and right-click into the air. With matching goggles you see through the drone’s camera, with a Betaflight-like OSD. Without goggles your view follows the drone and a compact radio HUD shows battery, signal and mode; take the goggles off in flight and the view switches at once. Arm with a switch or <kbd>Z</kbd>&nbsp;– and go.</p>
+          <p lang="de">Nimm die Funke in die Hand und klick in die Luft. Mit passender Brille siehst du durch die Kamera der Drohne, mit einem OSD wie bei Betaflight. Ohne Brille folgt dein Blick der Drohne, ein kompaktes Funk-HUD zeigt Akku, Signal und Flugmodus; nimmst du die Brille im Flug ab, wechselt die Ansicht sofort. Scharfschalten per Schalter oder <span class="nowrap"><kbd>Y</kbd> (QWERTZ)</span>&nbsp;– und los.</p>
+        </div>
+        <figure class="step__media" data-tabs>
+          <div class="tabs needs-js" role="group" aria-label="View" data-de-aria-label="Ansicht">
+            <button type="button" aria-pressed="true">FPV</button>
+            <button type="button" aria-pressed="false"><span lang="en">Line of sight</span><span lang="de">Sichtflug</span></button>
+            <button type="button" aria-pressed="false">Pilot</button>
+          </div>
+          <div class="shot shot--feed">
+            <img src="assets/img/pilot-from-drone-1600.webp" srcset="assets/img/pilot-from-drone-800.webp 800w, assets/img/pilot-from-drone-1600.webp 1600w" sizes="(min-width: 1060px) 620px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="FPV view from the drone looking back at the pilot, with the OSD" data-de-alt="FPV-Blick von der Drohne zurück zum Piloten, mit OSD">
+            <img hidden src="assets/img/race-gates-1600.webp" srcset="assets/img/race-gates-800.webp 800w, assets/img/race-gates-1600.webp 1600w" sizes="(min-width: 1060px) 620px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Line-of-sight flight: the radio in both hands, the compact radio HUD top left and the next gate lit green" data-de-alt="Sichtflug: die Funke in beiden Händen, oben links das kompakte Funk-HUD, das nächste Gate leuchtet grün">
+            <img hidden src="assets/img/pilot-third-person-1600.webp" srcset="assets/img/pilot-third-person-800.webp 800w, assets/img/pilot-third-person-1600.webp 1600w" sizes="(min-width: 1060px) 620px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="The pilot in third person with FPV goggles on and the radio in both hands" data-de-alt="Der Pilot in der Außenansicht mit aufgesetzter FPV-Brille und der Funke in beiden Händen">
+          </div>
+        </figure>
+      </li>
+
+      <li class="step" data-step>
+        <div class="gate-num" aria-hidden="true"><span>4</span></div>
+        <div class="step__body">
+          <h3><span lang="en">Race through gates</span><span lang="de">Durch Gates jagen</span></h3>
+          <p lang="en">Place gates, flags, slalom poles and dive cubes, link them into a course with the <strong>Course Tool</strong> and line up for the start lights. Lap timing with splits, the ghost of your best lap and a leaderboard per course and drone class&nbsp;– only server-verified laps count.</p>
+          <p lang="de">Stell Gates, Wendeflaggen, Slalomstangen und Tauchwürfel auf, verbinde sie mit dem <strong>Kurs-Werkzeug</strong> zur Strecke und stell dich an die Startampel. Zeitmessung mit Zwischenzeiten, der Geist deiner Bestrunde und eine Bestenliste je Kurs und Drohnenklasse&nbsp;– es zählen nur vom Server geprüfte Runden.</p>
+        </div>
+        <figure class="step__media" data-tabs>
+          <div class="tabs needs-js" role="group" aria-label="Race start" data-de-aria-label="Rennstart">
+            <button type="button" aria-pressed="true"><span lang="en">Start lights</span><span lang="de">Startampel</span></button>
+            <button type="button" aria-pressed="false">GO!</button>
+            <button type="button" aria-pressed="false"><span lang="en">Leaderboard</span><span lang="de">Bestenliste</span></button>
+          </div>
+          <div class="shot shot--feed">
+            <img src="assets/img/race-start-lights-1600.webp" srcset="assets/img/race-start-lights-800.webp 800w, assets/img/race-start-lights-1600.webp 1600w" sizes="(min-width: 1060px) 620px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Standing start: the start lights count down above the start gate" data-de-alt="Stehender Start: Die Startampel zählt über dem Startgate herunter">
+            <img hidden src="assets/img/race-start-go-1600.webp" srcset="assets/img/race-start-go-800.webp 800w, assets/img/race-start-go-1600.webp 1600w" sizes="(min-width: 1060px) 620px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="GO! – the start lights turn green" data-de-alt="„GO!“ – die Startampel schaltet auf Grün">
+            <img hidden class="fit-contain" src="assets/img/leaderboard-screen-ui-1392.webp" srcset="assets/img/leaderboard-screen-ui-640.webp 640w, assets/img/leaderboard-screen-ui-1392.webp 1392w" sizes="(min-width: 1060px) 620px, 100vw" width="1392" height="933" loading="lazy" decoding="async" alt="Leaderboard window with the best laps per course and drone class" data-de-alt="Bestenliste mit den besten Runden je Kurs und Drohnenklasse">
+          </div>
+        </figure>
+      </li>
+    </ol>
+
+    <div class="learn" id="learn">
+    <div class="pip learn__media">
+        <div class="shot shot--ui">
+          <img src="assets/img/flight-school-build-1600.webp" srcset="assets/img/flight-school-build-800.webp 800w, assets/img/flight-school-build-1600.webp 1600w" sizes="(min-width: 1060px) 720px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Flight School lesson: building a drone at the workbench, with callouts and a timeline" data-de-alt="Flugschul-Lektion: eine Drohne an der Werkbank bauen, mit Hinweisen und Zeitleiste">
+        </div>
+        <div class="shot pip__inset">
+          <img src="assets/img/flight-school-race-640.webp" srcset="assets/img/flight-school-race-640.webp 640w, assets/img/flight-school-race-1280.webp 1280w" sizes="(min-width: 760px) 260px, 100vw" width="1280" height="720" loading="lazy" decoding="async" alt="Flight School lesson on racing, as a 3D diorama: the next gate glows green, the others stay white" data-de-alt="Flugschul-Lektion zum Rennen als 3D-Diorama: Das nächste Gate leuchtet grün, die anderen bleiben weiß">
+        </div>
+      </div>
+      <div class="learn__text">
+        <p class="kicker"><span lang="en">New to FPV?</span><span lang="de">Neu bei FPV?</span></p>
+        <h3><span lang="en">Learn it in the game</span><span lang="de">Lernen im Spiel</span></h3>
+        <p lang="en">The animated Flight School explains the whole mod with small 3D dioramas, callouts and your real key bindings. Its flight training takes you from hovering to gates, flips and a final exam in 20 lessons you fly yourself&nbsp;– with your own drone, in FPV or line of sight, with stars and best times. Hold <kbd>M</kbd> over any Propwash item to open its lesson.</p>
+        <p lang="de">Die animierte Flugschule erklärt die ganze Mod mit kleinen 3D-Dioramen, Hinweisen und deiner echten Tastenbelegung. Im Flugtraining fliegst du dich in 20 Lektionen vom Schweben über Gates und Flips bis zur Abschlussprüfung&nbsp;– mit deiner eigenen Drohne, im FPV oder auf Sicht, mit Sternen und Bestzeiten. Halte <kbd>M</kbd> über ein Propwash-Item, um seine Lektion zu öffnen.</p>
+        <div class="hero__cta">
+          <a class="btn btn--ghost" href="docs/guide/"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span><svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONFIGURATOR -->
+<section class="section section--config" id="configurator" aria-labelledby="configurator-title">
+  <div class="wrap teaser">
+    <div class="teaser__text">
+      <p class="kicker"><span lang="en">Online configurator</span><span lang="de">Online-Konfigurator</span></p>
+      <h2 id="configurator-title"><span lang="en">Build your drone in the browser</span><span lang="de">Bau deine Drohne im Browser</span></h2>
+      <p class="section__intro" lang="en">Every part of Propwash and Just More Parts, right here: put a drone together in 3D, paint and tune it, and see the same flight figures as the workbench in the game. No download, no account.</p>
+      <p class="section__intro" lang="de">Alle Teile von Propwash und Just More Parts, direkt hier: Setz eine Drohne in 3D zusammen, lackier und tune sie und sieh dieselben Flugwerte wie an der Werkbank im Spiel. Ohne Download, ohne Konto.</p>
+      <ul class="teaser__points">
+        <li><span lang="en">From 65&nbsp;mm whoops to 13″ X-Class, with ready-to-fly presets</span><span lang="de">Vom 65-mm-Whoop bis zur 13-Zoll-X-Class, mit flugfertigen Presets</span></li>
+        <li><span lang="en">Weight, thrust-to-weight, hover throttle, flight time and top speed as you build</span><span lang="de">Gewicht, Schub-Gewicht-Verhältnis, Schwebegas, Flugzeit und Höchstgeschwindigkeit beim Bauen</span></li>
+        <li><span lang="en">Fit check and the view through the FPV camera</span><span lang="de">Passt-Prüfung und der Blick durch die FPV-Kamera</span></li>
+        <li><span lang="en">Share code: send the link, import the drone in the game</span><span lang="de">Sharecode: Link verschicken, Drohne im Spiel importieren</span></li>
+      </ul>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="configurator/"><svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18" class="quad-icon"><path d="M6.2 6.2l7.6 7.6M13.8 6.2l-7.6 7.6"/><circle cx="5" cy="5" r="3"/><circle cx="15" cy="5" r="3"/><circle cx="5" cy="15" r="3"/><circle cx="15" cy="15" r="3"/><rect x="8" y="8" width="4" height="4" rx="1"/></svg><span lang="en">Open the configurator</span><span lang="de">Konfigurator öffnen</span><svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
+      </div>
+    </div>
+    <a class="teaser__shot" href="configurator/" tabindex="-1" aria-hidden="true">
+      <img src="assets/img/configurator-preview-640.webp" srcset="assets/img/configurator-preview-640.webp 640w, assets/img/configurator-preview-1200.webp 1200w" sizes="(min-width: 1060px) 600px, 100vw" width="1200" height="1079" loading="lazy" decoding="async" alt="">
+    </a>
+  </div>
+</section>
+
 <!-- NEW IN THIS VERSION -->
 <section class="section section--panel" id="new" aria-labelledby="new-title">
   <div class="wrap">
@@ -206,114 +342,11 @@
       </figure>
     </div>
 
-    <ul class="ticks">
-      <li><span lang="en">Fly with mouse and keyboard: the mouse steers like aiming in a shooter</span><span lang="de">Fliegen mit Maus und Tastatur: Die Maus lenkt wie beim Zielen im Shooter</span></li>
-      <li><span lang="en">Binding made simple: click the drone with your remote&nbsp;– goggles only have to match the drone’s video system</span><span lang="de">Binden ganz einfach: Drohne mit der Funke anklicken&nbsp;– die Brille muss nur zum Videosystem der Drohne passen</span></li>
-      <li><span lang="en">Flags, slalom poles, dive cubes, gate poles and freeform gates for your courses&nbsp;– and gates that give a redstone signal</span><span lang="de">Wendeflaggen, Slalomstangen, Tauchwürfel, Gate-Stangen und Freiform-Gates für deine Kurse&nbsp;– und Gates, die ein Redstone-Signal geben</span></li>
-      <li><span lang="en">Bandos: rare abandoned barns, factories, piers, oil rigs and mine heads to fly through</span><span lang="de">Bandos: seltene verlassene Scheunen, Fabriken, Stege, Bohrinseln und Fördertürme zum Durchfliegen</span></li>
-      <li><span lang="en">Blackbox: every armed flight as a log for Blackbox Explorer or PIDtoolbox</span><span lang="de">Blackbox: jeder scharfe Flug als Log für Blackbox Explorer oder PIDtoolbox</span></li>
-      <li><span lang="en">A gripper that carries items, signal repeaters through walls, drone trails and glass that shatters</span><span lang="de">Ein Greifer, der Items trägt, Signal-Repeater durch Wände, Drohnen-Trails und Glas, das zerbricht</span></li>
-      <li><span lang="en">Whoops drop and dive like real ones, punch-outs pull harder, and GPS Rescue flies around obstacles</span><span lang="de">Whoops fallen und stürzen wie echte, Punch-outs ziehen kräftiger, und GPS Rescue fliegt um Hindernisse herum</span></li>
-      <li><span lang="en">Menus fit every GUI scale and window size, and the source code is public</span><span lang="de">Menüs passen bei jeder GUI-Größe und Fenstergröße, und der Quellcode ist öffentlich</span></li>
-    </ul>
-
     <div class="hero__cta new__cta">
       <a class="btn btn--primary" href="changelog/#propwash-0.5.0"><span lang="en">Everything in 0.5.0</span><span lang="de">Alles in 0.5.0</span><svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
       <a class="btn btn--ghost" href="docs/guide/"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></a>
-      <a class="btn btn--ghost" href="#release"><span lang="en">Download</span><span lang="de">Download</span></a>
+      <a class="btn btn--ghost" href="#download"><span lang="en">Download</span><span lang="de">Download</span></a>
     </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="section" id="how" aria-labelledby="how-title">
-  <div class="wrap">
-    <header class="section__head">
-      <p class="kicker"><span lang="en">How it works</span><span lang="de">So funktioniert’s</span></p>
-      <h2 id="how-title"><span lang="en">From the parts bin to the start gate</span><span lang="de">Von der Teilekiste bis zum Startgate</span></h2>
-      <p class="section__intro" lang="en">Four steps, all inside the game. Stuck somewhere? Hold <kbd>M</kbd> over any Propwash item and its Flight School lesson explains it&nbsp;– and the <a href="#new">flight training</a> teaches you to fly, lesson by lesson.</p>
-      <p class="section__intro" lang="de">Vier Schritte, alles im Spiel. Du hängst irgendwo fest? Halte <kbd>M</kbd> über ein Propwash-Item, und die passende Flugschul-Lektion erklärt es dir&nbsp;– und das <a href="#new">Flugtraining</a> bringt dir das Fliegen bei, Lektion für Lektion.</p>
-    </header>
-
-    <ol class="steps">
-      <li class="step" data-step>
-        <div class="gate-num" aria-hidden="true"><span>1</span></div>
-        <div class="step__body">
-          <h3><span lang="en">Build your drone</span><span lang="de">Drohne bauen</span></h3>
-          <p lang="en">Put a frame, flight controller, four motors, four props, a battery and a video unit together at the <strong>Drone Workbench</strong>. The live 3D preview shows dry and all-up weight, thrust-to-weight, hover throttle, top speed and flight time&nbsp;– and warns you about parts that don’t fit.</p>
-          <p lang="de">Setz an der <strong>Drohnen-Werkbank</strong> Rahmen, Flight-Controller, vier Motoren, vier Propeller, Akku und Videoeinheit zusammen. Die 3D-Vorschau zeigt Leer- und Abfluggewicht, Schub-Gewicht-Verhältnis, Schwebegas, Höchstgeschwindigkeit und Flugzeit&nbsp;– und warnt dich vor Teilen, die nicht zusammenpassen.</p>
-          <ul class="chips">
-            <li><span lang="en">Whoop · Cinewhoop · Freestyle · Race · Long&nbsp;range</span><span lang="de">Whoop · Cinewhoop · Freestyle · Race · Long&nbsp;Range</span></li>
-            <li><span lang="en">Ready-to-fly presets in creative</span><span lang="de">Flugfertige Vorlagen im Kreativmodus</span></li>
-          </ul>
-        </div>
-        <figure class="step__media">
-          <div class="shot shot--ui">
-            <img src="assets/img/workbench-freestyle-ui-944.webp" srcset="assets/img/workbench-freestyle-ui-640.webp 640w, assets/img/workbench-freestyle-ui-944.webp 944w" sizes="(min-width: 1060px) 620px, 100vw" width="944" height="680" loading="lazy" decoding="async" alt="The Drone Workbench: part slots, 3D preview and build stats like dry and all-up weight, thrust-to-weight, top speed and flight time" data-de-alt="Die Drohnen-Werkbank: Teile-Slots, 3D-Vorschau und Werte wie Leer- und Abfluggewicht, Schub-Gewicht-Verhältnis, Höchstgeschwindigkeit und Flugzeit">
-          </div>
-        </figure>
-      </li>
-
-      <li class="step" data-step>
-        <div class="gate-num" aria-hidden="true"><span>2</span></div>
-        <div class="step__body">
-          <h3><span lang="en">Bind the radio, put on goggles</span><span lang="de">Funke binden, Brille aufsetzen</span></h3>
-          <p lang="en">Place the drone and right-click it with the <strong>FPV Remote</strong>&nbsp;– that binds it, and the drone remembers you. Then put on <strong>FPV goggles</strong> that match the drone’s video system: analog goggles for analog video, digital for digital. Goggles are never bound, and without them you fly line of sight. Plug in a real EdgeTX/OpenTX radio or a gamepad: Propwash detects it and offers a quick setup&nbsp;– or you simply fly with mouse and keyboard. Every battery is its own item with its own charge; top it up in the <strong>Battery Charger</strong>.</p>
-          <p lang="de">Stell die Drohne ab und klick sie mit der <strong>FPV-Funke</strong> an&nbsp;– damit ist sie gebunden, und die Drohne merkt sich dich. Setz dann eine <strong>FPV-Brille</strong> auf, die zum Videosystem der Drohne passt: analoge Brille für analoges Video, digitale für digitales. Brillen werden nie gebunden, ohne Brille fliegst du auf Sicht. Steck eine echte EdgeTX-/OpenTX-Funke oder ein Gamepad an: Propwash erkennt das Gerät und bietet eine kurze Einrichtung an&nbsp;– oder du fliegst einfach mit Maus und Tastatur. Jeder Akku ist ein eigenes Item mit eigenem Ladestand; aufgeladen wird im <strong>Akku-Ladegerät</strong>.</p>
-          <ul class="chips">
-            <li><span lang="en">Right-click to bind</span><span lang="de">Rechtsklick zum Binden</span></li>
-            <li><span lang="en">Sneak + right-click: battery, props, camera angle</span><span lang="de">Schleichen + Rechtsklick: Akku, Props, Kamerawinkel</span></li>
-          </ul>
-        </div>
-        <figure class="step__media">
-          <div class="shot">
-            <img src="assets/img/items-remote-battery-charger-1600.webp" srcset="assets/img/items-remote-battery-charger-800.webp 800w, assets/img/items-remote-battery-charger-1600.webp 1600w" sizes="(min-width: 1060px) 620px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="The FPV Remote in both hands in front of a Battery Charger with three packs in its bays" data-de-alt="Die FPV-Funke in beiden Händen vor einem Akku-Ladegerät mit drei Akkus in den Schächten">
-          </div>
-        </figure>
-      </li>
-
-      <li class="step" data-step>
-        <div class="gate-num" aria-hidden="true"><span>3</span></div>
-        <div class="step__body">
-          <h3><span lang="en">Fly FPV&nbsp;– or line of sight</span><span lang="de">FPV fliegen&nbsp;– oder auf Sicht</span></h3>
-          <p lang="en">Hold the radio and right-click into the air. With matching goggles you see through the drone’s camera, with a Betaflight-like OSD. Without goggles you fly line of sight: your view follows the drone and a compact radio HUD shows battery, signal and mode. Put the goggles on or take them off in flight and the view switches at once. Arm with a switch or <kbd>Z</kbd>&nbsp;– and go.</p>
-          <p lang="de">Nimm die Funke in die Hand und klick in die Luft. Mit passender Brille siehst du durch die Kamera der Drohne, mit einem OSD wie bei Betaflight. Ohne Brille fliegst du auf Sicht: Dein Blick folgt der Drohne, ein kompaktes Funk-HUD zeigt Akku, Signal und Flugmodus. Setzt du die Brille im Flug auf oder ab, wechselt die Ansicht sofort. Scharfschalten per Schalter oder <span class="nowrap"><kbd>Y</kbd> (QWERTZ)</span>&nbsp;– und los.</p>
-        </div>
-        <figure class="step__media" data-tabs>
-          <div class="tabs needs-js" role="group" aria-label="View" data-de-aria-label="Ansicht">
-            <button type="button" aria-pressed="true">FPV</button>
-            <button type="button" aria-pressed="false"><span lang="en">Line of sight</span><span lang="de">Sichtflug</span></button>
-            <button type="button" aria-pressed="false">Pilot</button>
-          </div>
-          <div class="shot shot--feed">
-            <img src="assets/img/pilot-from-drone-1600.webp" srcset="assets/img/pilot-from-drone-800.webp 800w, assets/img/pilot-from-drone-1600.webp 1600w" sizes="(min-width: 1060px) 620px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="FPV view from the drone looking back at the pilot, with the OSD" data-de-alt="FPV-Blick von der Drohne zurück zum Piloten, mit OSD">
-            <img hidden src="assets/img/race-gates-1600.webp" srcset="assets/img/race-gates-800.webp 800w, assets/img/race-gates-1600.webp 1600w" sizes="(min-width: 1060px) 620px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Line-of-sight flight: the radio in both hands, the compact radio HUD top left and the next gate lit green" data-de-alt="Sichtflug: die Funke in beiden Händen, oben links das kompakte Funk-HUD, das nächste Gate leuchtet grün">
-            <img hidden src="assets/img/pilot-third-person-1600.webp" srcset="assets/img/pilot-third-person-800.webp 800w, assets/img/pilot-third-person-1600.webp 1600w" sizes="(min-width: 1060px) 620px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="The pilot in third person with FPV goggles on and the radio in both hands" data-de-alt="Der Pilot in der Außenansicht mit aufgesetzter FPV-Brille und der Funke in beiden Händen">
-          </div>
-        </figure>
-      </li>
-
-      <li class="step" data-step>
-        <div class="gate-num" aria-hidden="true"><span>4</span></div>
-        <div class="step__body">
-          <h3><span lang="en">Race through gates</span><span lang="de">Durch Gates jagen</span></h3>
-          <p lang="en">Place gates, flags, slalom poles and dive cubes, link them into a course with the <strong>Course Tool</strong> and line up for the start lights. Lap timing with splits, the ghost of your best lap and a leaderboard per course and drone class&nbsp;– only server-verified laps count.</p>
-          <p lang="de">Stell Gates, Wendeflaggen, Slalomstangen und Tauchwürfel auf, verbinde sie mit dem <strong>Kurs-Werkzeug</strong> zur Strecke und stell dich an die Startampel. Zeitmessung mit Zwischenzeiten, der Geist deiner Bestrunde und eine Bestenliste je Kurs und Drohnenklasse&nbsp;– es zählen nur vom Server geprüfte Runden.</p>
-        </div>
-        <figure class="step__media" data-tabs>
-          <div class="tabs needs-js" role="group" aria-label="Race start" data-de-aria-label="Rennstart">
-            <button type="button" aria-pressed="true"><span lang="en">Start lights</span><span lang="de">Startampel</span></button>
-            <button type="button" aria-pressed="false">GO!</button>
-            <button type="button" aria-pressed="false"><span lang="en">Leaderboard</span><span lang="de">Bestenliste</span></button>
-          </div>
-          <div class="shot shot--feed">
-            <img src="assets/img/race-start-lights-1600.webp" srcset="assets/img/race-start-lights-800.webp 800w, assets/img/race-start-lights-1600.webp 1600w" sizes="(min-width: 1060px) 620px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Standing start: the start lights count down above the start gate" data-de-alt="Stehender Start: Die Startampel zählt über dem Startgate herunter">
-            <img hidden src="assets/img/race-start-go-1600.webp" srcset="assets/img/race-start-go-800.webp 800w, assets/img/race-start-go-1600.webp 1600w" sizes="(min-width: 1060px) 620px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="GO! – the start lights turn green" data-de-alt="„GO!“ – die Startampel schaltet auf Grün">
-            <img hidden class="fit-contain" src="assets/img/leaderboard-screen-ui-1392.webp" srcset="assets/img/leaderboard-screen-ui-640.webp 640w, assets/img/leaderboard-screen-ui-1392.webp 1392w" sizes="(min-width: 1060px) 620px, 100vw" width="1392" height="933" loading="lazy" decoding="async" alt="Leaderboard window with the best laps per course and drone class" data-de-alt="Bestenliste mit den besten Runden je Kurs und Drohnenklasse">
-          </div>
-        </figure>
-      </li>
-    </ol>
   </div>
 </section>
 
@@ -322,21 +355,17 @@
   <div class="wrap">
     <div class="split">
       <div class="split__text">
-        <p class="kicker"><span lang="en">Flight model &amp; configurator</span><span lang="de">Flugmodell &amp; Konfigurator</span></p>
+        <p class="kicker"><span lang="en">Flight model &amp; tuning</span><span lang="de">Flugmodell &amp; Tuning</span></p>
         <h2 id="flight-title"><span lang="en">Flies like the real thing. Tunes like Betaflight.</span><span lang="de">Fliegt sich wie echt. Einstellen wie in Betaflight.</span></h2>
         <p class="section__intro" lang="en">Propwash runs its own flight model. Every drone is derived from its parts: weight, thrust, hover throttle, top speed and flight time follow from the build&nbsp;– punchy 5″ freestylers, nimble whoops, efficient long-range cruisers. Since 0.5.0 the physics is checked against blackbox logs of real drones from a 65&nbsp;mm whoop to 7″.</p>
         <p class="section__intro" lang="de">Propwash rechnet mit einem eigenen Flugmodell. Jede Drohne ergibt sich aus ihren Teilen: Gewicht, Schub, Schwebegas, Höchstgeschwindigkeit und Flugzeit folgen aus dem Build&nbsp;– bissige 5-Zoll-Freestyler, wendige Whoops, sparsame Long-Range-Kreuzer. Seit 0.5.0 ist die Physik mit Blackbox-Logs echter Drohnen vom 65-mm-Whoop bis 7&nbsp;Zoll abgeglichen.</p>
         <dl class="specs">
           <div><dt><span lang="en">Physics</span><span lang="de">Physik</span></dt>
             <dd><span lang="en">Rigid body with motor, ESC and battery simulation, rotor aerodynamics, ground effect, prop wash, voltage sag, wind and gusts.</span><span lang="de">Starrkörper mit Motor-, Regler- und Akkusimulation, Rotoraerodynamik, Bodeneffekt, Prop-Wash, Spannungseinbruch, Wind und Böen.</span></dd></div>
-          <div><dt>Rates</dt>
-            <dd><span lang="en">Betaflight and Actual rates with live rate curves.</span><span lang="de">Rates nach Betaflight und Actual, mit Live-Kurven.</span></dd></div>
-          <div><dt>PID</dt>
-            <dd><span lang="en">Feed-forward, I-term relax, anti-gravity, TPA, airmode and filters. The tune is stored on the drone, like on a real flight controller.</span><span lang="de">Feed-Forward, I-Term-Relax, Anti-Gravity, TPA, Airmode und Filter. Das Tuning steckt in der Drohne, wie auf einem echten Flight-Controller.</span></dd></div>
+          <div><dt>Tuning</dt>
+            <dd><span lang="en">Betaflight and Actual rates with live curves, PID with feed-forward, I-term relax, anti-gravity, TPA, airmode and filters&nbsp;– stored on the drone, like on a real flight controller.</span><span lang="de">Rates nach Betaflight und Actual mit Live-Kurven, PID mit Feed-Forward, I-Term-Relax, Anti-Gravity, TPA, Airmode und Filtern&nbsp;– gespeichert in der Drohne, wie auf einem echten Flight-Controller.</span></dd></div>
           <div><dt><span lang="en">Modes</span><span lang="de">Modi</span></dt>
-            <dd><span lang="en">Acro, Angle and Horizon, altitude and position hold, 3D mode with reversing motors, arming checks, failsafe and flip-upright after a crash.</span><span lang="de">Acro, Angle und Horizon, Höhen- und Positionshaltung, 3D-Modus mit rückwärts drehenden Motoren, Arming-Prüfungen, Failsafe und Aufrichten nach einem Absturz.</span></dd></div>
-          <div><dt>Rescue</dt>
-            <dd><span lang="en">GPS Rescue climbs to a safe height, flies around trees and buildings and lands by itself&nbsp;– also when the signal is lost or you stop flying.</span><span lang="de">GPS Rescue steigt auf sichere Höhe, fliegt um Bäume und Gebäude herum und landet selbst&nbsp;– auch bei Funkverlust oder wenn du aufhörst zu fliegen.</span></dd></div>
+            <dd><span lang="en">Acro, Angle and Horizon, altitude and position hold, 3D mode with reversing motors, failsafe, flip-upright after a crash&nbsp;– and GPS Rescue, which flies around trees and buildings and lands by itself.</span><span lang="de">Acro, Angle und Horizon, Höhen- und Positionshaltung, 3D-Modus mit rückwärts drehenden Motoren, Failsafe, Aufrichten nach einem Absturz&nbsp;– und GPS Rescue, das um Bäume und Gebäude herumfliegt und selbst landet.</span></dd></div>
           <div><dt>OSD</dt>
             <dd><span lang="en">More than 40 elements, presets and a drag-and-drop editor, in 16:9 or 4:3.</span><span lang="de">Über 40 Elemente, Vorlagen und ein Editor per Ziehen und Ablegen, in 16:9 oder 4:3.</span></dd></div>
           <div><dt>Blackbox</dt>
@@ -355,7 +384,7 @@
           <img hidden src="assets/img/configurator-pid-1600.webp" srcset="assets/img/configurator-pid-800.webp 800w, assets/img/configurator-pid-1600.webp 1600w" sizes="(min-width: 1060px) 700px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Configurator, PID tuning tab: P, I, D and feed-forward per axis, flight mode strengths and PID controller settings" data-de-alt="Konfigurator, Tab PID-Tuning: P, I, D und Feed-Forward je Achse, Flugmodus-Stärken und PID-Controller">
           <img hidden src="assets/img/configurator-osd-1600.webp" srcset="assets/img/configurator-osd-800.webp 800w, assets/img/configurator-osd-1600.webp 1600w" sizes="(min-width: 1060px) 700px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Configurator, OSD tab: choose, place and style OSD elements with a live preview" data-de-alt="Konfigurator, Tab OSD: Elemente wählen, platzieren und gestalten, mit Live-Vorschau">
         </div>
-        <figcaption><span lang="en">The configurator <span class="nowrap">(<kbd>K</kbd>)</span> has tabs for tuning, rates, receiver, modes, keys, video, OSD, LED strip, racing, freestyle, rescue, blackbox, world rules and more&nbsp;– and a search with <span class="nowrap"><kbd>Ctrl</kbd>+<kbd>F</kbd>.</span></span><span lang="de">Der Konfigurator <span class="nowrap">(<kbd>K</kbd>)</span> hat Tabs für Tuning, Rates, Empfänger, Modi, Tasten, Video, OSD, LED-Streifen, Rennen, Freestyle, Rescue, Blackbox, Welt-Regeln und mehr&nbsp;– und eine Suche mit <span class="nowrap"><kbd>Strg</kbd>+<kbd>F</kbd>.</span></span></figcaption>
+        <figcaption><span lang="en">The configurator in the game <span class="nowrap">(<kbd>K</kbd>)</span> has tabs for tuning, rates, receiver, modes, keys, video, OSD, LED strip, racing, freestyle, rescue, blackbox, world rules and more&nbsp;– and a search with <span class="nowrap"><kbd>Ctrl</kbd>+<kbd>F</kbd>.</span></span><span lang="de">Der Konfigurator im Spiel <span class="nowrap">(<kbd>K</kbd>)</span> hat Tabs für Tuning, Rates, Empfänger, Modi, Tasten, Video, OSD, LED-Streifen, Rennen, Freestyle, Rescue, Blackbox, Welt-Regeln und mehr&nbsp;– und eine Suche mit <span class="nowrap"><kbd>Strg</kbd>+<kbd>F</kbd>.</span></span></figcaption>
       </figure>
     </div>
 
@@ -482,10 +511,10 @@
 <section class="section" id="racing" aria-labelledby="racing-title">
   <div class="wrap">
     <header class="section__head">
-      <p class="kicker"><span lang="en">Racing</span><span lang="de">Rennen</span></p>
+      <p class="kicker"><span lang="en">Racing &amp; freestyle</span><span lang="de">Rennen &amp; Freestyle</span></p>
       <h2 id="racing-title"><span lang="en">Gates, ghosts and a leaderboard to beat</span><span lang="de">Gates, Geister und eine Bestenliste zum Knacken</span></h2>
-      <p class="section__intro" lang="en">Build a course anywhere&nbsp;– or find one: four kinds of ready-made race courses generate in the world, each with a record sign and a loot chest.</p>
-      <p class="section__intro" lang="de">Bau dir überall eine Strecke&nbsp;– oder finde eine: Vier Arten fertiger Rennkurse entstehen in der Welt, jeder mit Rekordtafel und Beutetruhe.</p>
+      <p class="section__intro" lang="en">Build a course anywhere&nbsp;– or find one: four kinds of ready-made race courses generate in the world, each with a record sign and a loot chest. Between races, freestyle tricks score points.</p>
+      <p class="section__intro" lang="de">Bau dir überall eine Strecke&nbsp;– oder finde eine: Vier Arten fertiger Rennkurse entstehen in der Welt, jeder mit Rekordtafel und Beutetruhe. Zwischen den Rennen bringen Freestyle-Tricks Punkte.</p>
     </header>
 
     <div class="bento">
@@ -498,8 +527,8 @@
         <figcaption><span lang="en">Checkered start/finish&nbsp;– your next gate lights up green</span><span lang="de">Kariertes Start/Ziel&nbsp;– dein nächstes Gate leuchtet grün</span></figcaption>
       </figure>
       <figure class="bento__item">
-        <img src="assets/img/gate-markings-800.webp" srcset="assets/img/gate-markings-800.webp 800w, assets/img/gate-markings-1600.webp 1600w" sizes="(min-width: 1060px) 300px, (min-width: 700px) 50vw, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Gates 2, 3 and 4 with number boards and arrows on the ground" data-de-alt="Gates 2, 3 und 4 mit Nummerntafeln und Pfeilen am Boden">
-        <figcaption><span lang="en">Gate numbers and arrows for the flight direction</span><span lang="de">Gate-Nummern und Pfeile für die Flugrichtung</span></figcaption>
+        <img src="assets/img/trick-chain-fpv-800.webp" srcset="assets/img/trick-chain-fpv-800.webp 800w, assets/img/trick-chain-fpv-1600.webp 1600w" sizes="(min-width: 1060px) 300px, (min-width: 700px) 50vw, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Freestyle in FPV: the OSD scores a Juicy Flick and a roll flown back to back with +385 points and a ×3 combo" data-de-alt="Freestyle im FPV: Das OSD wertet einen Juicy Flick und eine Rolle am Stück mit +385 Punkten und Kombo ×3">
+        <figcaption><span lang="en">59 freestyle tricks with points, chains and combos up to ×4</span><span lang="de">59 Freestyle-Tricks mit Punkten, Ketten und Kombos bis ×4</span></figcaption>
       </figure>
       <figure class="bento__item">
         <img src="assets/img/race-ghost-800.webp" srcset="assets/img/race-ghost-800.webp 800w, assets/img/race-ghost-1600.webp 1600w" sizes="(min-width: 1060px) 300px, (min-width: 700px) 50vw, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="A ghost drone flying through the gates ahead of the pilot" data-de-alt="Eine Geister-Drohne fliegt vor dem Piloten durch die Gates">
@@ -512,46 +541,15 @@
     </div>
 
     <ul class="ticks">
-      <li><span lang="en">Gates in three sizes&nbsp;– stack up to four into ladders and double gates</span><span lang="de">Gates in drei Größen&nbsp;– bis zu vier hoch zu Leitern und Doppel-Gates stapeln</span></li>
-      <li><span lang="en">Gates on walls and ceilings too&nbsp;– dive gates, side gates and hanging gates, turned with one key</span><span lang="de">Gates auch an Wand und Decke&nbsp;– Tauchtore, seitliche und hängende Gates, mit einer Taste gedreht</span></li>
+      <li><span lang="en">Gates in three sizes, stacked into ladders and double gates, on walls and ceilings too</span><span lang="de">Gates in drei Größen, gestapelt zu Leitern und Doppel-Gates, auch an Wand und Decke</span></li>
+      <li><span lang="en">Flags, slalom poles and dive cubes that only count when flown right</span><span lang="de">Wendeflaggen, Slalomstangen und Tauchwürfel, die nur zählen, wenn du sie richtig fliegst</span></li>
       <li><span lang="en">Standing starts with start lights for several pilots and a <span class="nowrap">3-second</span> false-start penalty</span><span lang="de">Stehende Starts mit Startampel für mehrere Piloten und 3&nbsp;Sekunden Frühstart-Strafe</span></li>
-      <li><span lang="en">Lap timing with splits and the gap to the ghost at every gate</span><span lang="de">Zeitmessung mit Zwischenzeiten und dem Abstand zum Geist an jedem Gate</span></li>
-      <li><span lang="en">Leaderboards per course and drone class&nbsp;– only server-verified laps count</span><span lang="de">Bestenlisten je Kurs und Drohnenklasse&nbsp;– nur vom Server geprüfte Runden zählen</span></li>
-      <li><span lang="en">Laps and a name per course, and <em>Edit course</em>: reorder gates, move start and finish, add or take out gates&nbsp;– a changed layout starts a new leaderboard</span><span lang="de">Rundenzahl und Name je Kurs, dazu <em>Kurs bearbeiten</em>: Gates umsortieren, Start und Ziel verlegen, Gates ergänzen oder herausnehmen&nbsp;– ein geändertes Layout beginnt eine neue Bestenliste</span></li>
+      <li><span lang="en">Splits and the gap to the ghost at every gate, leaderboards per course and drone class&nbsp;– only server-verified laps count</span><span lang="de">Zwischenzeiten und Abstand zum Geist an jedem Gate, Bestenlisten je Kurs und Drohnenklasse&nbsp;– es zählen nur vom Server geprüfte Runden</span></li>
+      <li><span lang="en"><em>Edit course</em>: reorder gates, move start and finish, set laps and a name</span><span lang="de"><em>Kurs bearbeiten</em>: Gates umsortieren, Start und Ziel verschieben, Runden und Namen festlegen</span></li>
+      <li><span lang="en">Any hallway, cave mouth or window becomes a freeform gate; <em>Adjust gate</em> turns and scales gates up to 16&nbsp;×&nbsp;16 blocks</span><span lang="de">Jeder Gang, Höhleneingang oder jedes Fenster wird zum Freiform-Gate; <em>Gate einstellen</em> dreht und skaliert Gates bis 16&nbsp;×&nbsp;16 Blöcke</span></li>
+      <li><span lang="en">Gates give a redstone signal when a drone flies through, gate poles add LEDs in 16 colors</span><span lang="de">Gates geben ein Redstone-Signal, wenn eine Drohne hindurchfliegt, Gate-Stangen bringen LEDs in 16 Farben mit</span></li>
+      <li><span lang="en">Tricks are recognized even when sloppy, fast or back to back&nbsp;– the <em>Freestyle</em> tab lists all 59 with their points</span><span lang="de">Tricks werden auch unsauber, schnell und am Stück erkannt&nbsp;– der Tab <em>Freestyle</em> listet alle 59 mit ihren Punkten</span></li>
     </ul>
-
-    <div class="trio">
-      <figure>
-        <div class="shot shot--feed">
-          <img src="assets/img/course-elements-800.webp" srcset="assets/img/course-elements-800.webp 800w, assets/img/course-elements-1600.webp 1600w" sizes="(min-width: 900px) 380px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="A course with the start/finish gate, a dive cube, slalom poles and a turn flag" data-de-alt="Ein Kurs mit Start-/Ziel-Gate, Tauchwürfel, Slalomstangen und Wendeflagge">
-        </div>
-        <figcaption>
-          <h3><span lang="en">Flags, slalom poles, dive cubes</span><span lang="de">Wendeflaggen, Slalomstangen, Tauchwürfel</span></h3>
-          <p lang="en">Course elements that only count when flown right&nbsp;– with arrows, race line, splits and leaderboards like any gate.</p>
-          <p lang="de">Kurs-Elemente, die nur zählen, wenn du sie richtig fliegst&nbsp;– mit Pfeilen, Ideallinie, Zwischenzeiten und Bestenlisten wie bei jedem Gate.</p>
-        </figcaption>
-      </figure>
-      <figure>
-        <div class="shot shot--feed">
-          <img src="assets/img/docs/freeform-gate-cave-800.webp" srcset="assets/img/docs/freeform-gate-cave-800.webp 800w, assets/img/docs/freeform-gate-cave-1600.webp 1600w" sizes="(min-width: 900px) 380px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="A cave mouth in a rocky hill turned into the start gate of a course: a glowing dashed outline runs along the edge of the opening" data-de-alt="Ein Höhleneingang in einem Felshügel als Start-Gate eines Kurses: Eine leuchtende, gestrichelte Leiste läuft am Rand der Öffnung entlang">
-        </div>
-        <figcaption>
-          <h3><span lang="en">Any opening becomes a gate</span><span lang="de">Jede Öffnung wird zum Gate</span></h3>
-          <p lang="en">Right-click a hallway, cave mouth, window or shaft and it is a freeform gate. <em>Adjust gate</em> turns and scales normal gates freely, from 1&nbsp;×&nbsp;1 to 16&nbsp;×&nbsp;16 blocks.</p>
-          <p lang="de">Rechtsklick auf einen Gang, einen Höhleneingang, ein Fenster oder einen Schacht, und schon ist es ein Freiform-Gate. <em>Gate einstellen</em> dreht und skaliert normale Gates frei, von 1&nbsp;×&nbsp;1 bis 16&nbsp;×&nbsp;16 Blöcke.</p>
-        </figcaption>
-      </figure>
-      <figure>
-        <div class="shot shot--feed">
-          <img src="assets/img/docs/gate-redstone-800.webp" srcset="assets/img/docs/gate-redstone-800.webp 800w, assets/img/docs/gate-redstone-1600.webp 1600w" sizes="(min-width: 900px) 380px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="A standing gate on a row of stone bricks; redstone dust leads from the block under it to an extended piston, and a redstone lamp glows behind the gate" data-de-alt="Ein stehendes Gate auf einer Reihe Steinziegel; Redstone-Staub führt vom Block darunter zu einem ausgefahrenen Kolben, hinter dem Gate leuchtet eine Redstone-Lampe">
-        </div>
-        <figcaption>
-          <h3><span lang="en">Gates with redstone</span><span lang="de">Gates mit Redstone</span></h3>
-          <p lang="en">Every drone flying through powers the block the gate stands or hangs on for half a second: light lamps, open doors or fire pistons. Gate poles add LEDs in 16 colors.</p>
-          <p lang="de">Jede Drohne, die hindurchfliegt, versorgt den Block, auf dem das Gate steht oder an dem es hängt, eine halbe Sekunde lang: Lampen einschalten, Türen öffnen oder Kolben auslösen. Gate-Stangen bringen LEDs in 16 Farben mit.</p>
-        </figcaption>
-      </figure>
-    </div>
   </div>
 </section>
 
@@ -639,7 +637,7 @@
       </article>
 
       <article class="tile tile--cam">
-        <div class="pip pip--stack">
+        <div class="pip">
           <div class="shot">
             <img src="assets/img/drone-closeup-action-cam-heavy-800.webp" srcset="assets/img/drone-closeup-action-cam-heavy-800.webp 800w, assets/img/drone-closeup-action-cam-heavy-1120.webp 1120w" sizes="(min-width: 1060px) 560px, 100vw" width="1120" height="630" loading="lazy" decoding="async" alt="A 5″ drone with the Action Cam (Heavy) mounted on top" data-de-alt="Eine 5-Zoll-Drohne mit aufgesetzter Action-Cam (Heavy)">
           </div>
@@ -649,8 +647,8 @@
         </div>
         <div class="tile__text">
           <h3><span lang="en">Action cams that really record</span><span lang="de">Action-Cams, die wirklich aufnehmen</span></h3>
-          <p lang="en">Mount an action cam and record your flight as a real MP4 video&nbsp;– H.264, up to 1440p60, optionally with the motor sound, and smoothly with your graphics card’s encoder once the free program ffmpeg is installed. <strong>Light</strong> (42&nbsp;g, powered by the flight pack) or <strong>Heavy</strong> (150&nbsp;g, stabilized, its own battery)&nbsp;– and you feel the extra weight in the air. A third one saves the flight as a camera path for the replay mod Flashback.</p>
-          <p lang="de">Eine Action-Cam obendrauf nimmt deinen Flug als echtes MP4-Video auf&nbsp;– H.264, bis 1440p60, auf Wunsch mit Motorsound, und flüssig mit dem Encoder deiner Grafikkarte, sobald das kostenlose Programm ffmpeg installiert ist. <strong>Light</strong> (42&nbsp;g, Strom aus dem Flugakku) oder <strong>Heavy</strong> (150&nbsp;g, stabilisiert, eigener Akku)&nbsp;– das Zusatzgewicht spürst du im Flug. Eine dritte speichert den Flug als Kamerapfad für die Replay-Mod Flashback.</p>
+          <p lang="en">Mount an action cam and record your flight as a real MP4 video, up to 1440p60 with the motor sound. <strong>Light</strong> or <strong>Heavy</strong>&nbsp;– you feel the extra weight in the air. A third one saves the flight as a camera path for the replay mod Flashback.</p>
+          <p lang="de">Eine Action-Cam obendrauf nimmt deinen Flug als echtes MP4-Video auf, bis 1440p60 mit Motorsound. <strong>Light</strong> oder <strong>Heavy</strong>&nbsp;– das Zusatzgewicht spürst du im Flug. Eine dritte speichert den Flug als Kamerapfad für die Replay-Mod Flashback.</p>
         </div>
       </article>
 
@@ -667,33 +665,6 @@
           <h3><span lang="en">Paint every part</span><span lang="de">Jedes Teil lackieren</span></h3>
           <p lang="en">Color twelve parts separately&nbsp;– frame, motor bells, each prop, battery wrap, camera and more&nbsp;– with 16 dyes, five finishes like carbon and gold, any hex color and presets. Other players see your colors.</p>
           <p lang="de">Zwölf Teile einzeln färben&nbsp;– Rahmen, Motorglocken, jeden Prop, Akku, Kamera und mehr&nbsp;– mit 16 Farbstoffen, fünf Oberflächen wie Carbon und Gold, beliebigen Hex-Farben und Vorlagen. Andere Spieler sehen deine Farben.</p>
-        </div>
-      </article>
-
-      <article class="tile tile--tricks">
-        <div class="shot shot--feed">
-          <img src="assets/img/trick-popup-fpv-800.webp" srcset="assets/img/trick-popup-fpv-800.webp 800w, assets/img/trick-popup-fpv-1600.webp 1600w" sizes="(min-width: 1060px) 400px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Freestyle in FPV: the OSD scores a flip with +120 points" data-de-alt="Freestyle im FPV: Das OSD wertet einen Flip mit +120 Punkten">
-        </div>
-        <div class="tile__text">
-          <h3><span lang="en">Tricks that count</span><span lang="de">Tricks, die zählen</span></h3>
-          <p lang="en">59 tricks in nine families&nbsp;– flips, rolls and power loops, Matty variants, Juicy Flicks, Rubik’s Cubes, Sbang combos, Guillotines, gaps and proximity passes&nbsp;– are recognized even when sloppy, fast or back to back, with points, chains and combos up to ×4. The <em>Freestyle</em> tab lists them all.</p>
-          <p lang="de">59 Tricks in neun Familien&nbsp;– Flips, Rollen und Power Loops, Matty-Varianten, Juicy Flicks, Rubik’s Cubes, Sbang-Kombos, Guillotines, Gaps und Proximity-Vorbeiflüge&nbsp;– werden auch unsauber, schnell und am Stück erkannt, mit Punkten, Ketten und Kombos bis ×4. Der Tab <em>Freestyle</em> listet sie alle.</p>
-        </div>
-      </article>
-
-      <article class="tile tile--school">
-        <div class="pip">
-          <div class="shot shot--ui">
-            <img src="assets/img/flight-school-build-1600.webp" srcset="assets/img/flight-school-build-800.webp 800w, assets/img/flight-school-build-1600.webp 1600w" sizes="(min-width: 1060px) 720px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="Flight School lesson: building a drone at the workbench, with callouts and a timeline" data-de-alt="Flugschul-Lektion: eine Drohne an der Werkbank bauen, mit Hinweisen und Zeitleiste">
-          </div>
-          <div class="shot pip__inset">
-            <img src="assets/img/flight-school-race-640.webp" srcset="assets/img/flight-school-race-640.webp 640w, assets/img/flight-school-race-1280.webp 1280w" sizes="(min-width: 760px) 260px, 100vw" width="1280" height="720" loading="lazy" decoding="async" alt="Flight School lesson on racing, as a 3D diorama: the next gate glows green, the others stay white" data-de-alt="Flugschul-Lektion zum Rennen als 3D-Diorama: Das nächste Gate leuchtet grün, die anderen bleiben weiß">
-          </div>
-        </div>
-        <div class="tile__text">
-          <h3><span lang="en">Learn it in the game</span><span lang="de">Lernen im Spiel</span></h3>
-          <p lang="en">The animated Flight School explains the whole mod with small 3D dioramas, callouts and your real key bindings, and its flight training lets you practise each step in 20 lessons. Hold <kbd>M</kbd> over any Propwash item to open its lesson, or <kbd>Shift</kbd> for a detailed tooltip.</p>
-          <p lang="de">Die animierte Flugschule erklärt die ganze Mod mit kleinen 3D-Dioramen, Hinweisen und deiner echten Tastenbelegung, und im Flugtraining übst du jeden Schritt in 20 Lektionen selbst. Halte <kbd>M</kbd> über ein Propwash-Item für seine Lektion oder <kbd>Shift</kbd> für einen ausführlichen Tooltip.</p>
         </div>
       </article>
 
@@ -742,102 +713,24 @@
         <p class="kicker">Screenshots</p>
         <h2 id="gallery-title"><span lang="en">Straight from the game</span><span lang="de">Direkt aus dem Spiel</span></h2>
       </div>
-      <p class="section__intro" lang="en">Every screenshot is real and unretouched (some are cropped). Click or tap any screenshot on this page to enlarge it.</p>
-      <p class="section__intro" lang="de">Alle Screenshots sind echt und unretuschiert (teils zugeschnitten). Klick oder tipp auf dieser Seite einen Screenshot an, um ihn zu vergrößern.</p>
+      <p class="section__intro" lang="en">More from the game&nbsp;– every screenshot is real and unretouched. Click or tap any screenshot on this page to enlarge it.</p>
+      <p class="section__intro" lang="de">Mehr aus dem Spiel&nbsp;– alle Screenshots sind echt und unretuschiert. Klick oder tipp auf dieser Seite einen Screenshot an, um ihn zu vergrößern.</p>
     </header>
 
     <ul class="gallery" data-gallery>
-      <li><a href="assets/img/osd-flight-1600.webp"><img src="assets/img/osd-flight-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="FPV view through the goggles: flying through the start/finish gate with the Betaflight-style OSD" data-de-alt="FPV-Blick durch die Brille: Flug durch das Start-/Ziel-Gate mit OSD im Betaflight-Stil"></a></li>
       <li><a href="assets/img/drone-closeup-1120.webp"><img src="assets/img/drone-closeup-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="A 5″ freestyle drone built from real parts: frame, stack, four motors, props, HD video unit and a 6S battery" data-de-alt="Eine 5-Zoll-Freestyle-Drohne aus realen Teilen: Rahmen, Stack, vier Motoren, Props, HD-Videoeinheit und 6S-Akku"></a></li>
       <li><a href="assets/img/workbench-freestyle-1600.webp"><img src="assets/img/workbench-freestyle-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="The Drone Workbench with live 3D preview and build analysis" data-de-alt="Die Drohnen-Werkbank mit 3D-Vorschau und Build-Analyse"></a></li>
-      <li><a href="assets/img/action-cam-rec-osd-1600.webp"><img src="assets/img/action-cam-rec-osd-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Racing in FPV with the action cam recording: the race line leads through gate 2 towards gates 3 and 4" data-de-alt="Rennen im FPV mit laufender Action-Cam: Die Ideallinie führt durch Gate 2 zu den Gates 3 und 4"></a></li>
-      <li><a href="assets/img/race-start-go-1600.webp"><img src="assets/img/race-start-go-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="GO! – the start lights turn green at a standing start" data-de-alt="„GO!“ – die Startampel schaltet beim stehenden Start auf Grün"></a></li>
-      <li><a href="assets/img/pilot-third-person-1600.webp"><img src="assets/img/pilot-third-person-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="The pilot with goggles on and the radio in both hands" data-de-alt="Der Pilot mit aufgesetzter Brille und der Funke in beiden Händen"></a></li>
       <li><a href="assets/img/remote-first-person-1600.webp"><img src="assets/img/remote-first-person-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="The radio held with both hands in first person" data-de-alt="Die Funke mit beiden Händen in der Ich-Perspektive"></a></li>
-      <li><a href="assets/img/configurator-osd-1600.webp"><img src="assets/img/configurator-osd-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Configurator, OSD tab: choose, place and style OSD elements" data-de-alt="Konfigurator, Tab OSD: Elemente wählen, platzieren und gestalten"></a></li>
       <li><a href="assets/img/drone-closeup-paint-race-team-1120.webp"><img src="assets/img/drone-closeup-paint-race-team-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="A drone in the Race Team paint preset" data-de-alt="Eine Drohne mit der Lackier-Vorlage Race Team"></a></li>
       <li><a href="assets/img/flight-school-sticks-1600.webp"><img src="assets/img/flight-school-sticks-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Flight School: sticks and axes, explained with the radio and a drone" data-de-alt="Flugschule: Knüppel und Achsen, erklärt mit Funke und Drohne"></a></li>
-      <li><a href="assets/img/spectate-view-1600.webp"><img src="assets/img/spectate-view-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Spectating another pilot's analog feed on R1 5658 MHz" data-de-alt="Zuschauen beim analogen Bild eines anderen Piloten auf R1, 5658 MHz"></a></li>
-      <li><a href="assets/img/race-ghost-1600.webp"><img src="assets/img/race-ghost-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Ghost race: a ghost drone flies through the gates" data-de-alt="Geisterrennen: Eine Geister-Drohne fliegt durch die Gates"></a></li>
-      <li><a href="assets/img/headlight-cave-1600.webp"><img src="assets/img/headlight-cave-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="FPV in a dark cave with the LED headlight on" data-de-alt="FPV in einer dunklen Höhle mit eingeschaltetem LED-Scheinwerfer"></a></li>
-      <li><a href="assets/img/drone-closeup-paint-neon-1120.webp"><img src="assets/img/drone-closeup-paint-neon-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="A drone in the Neon paint preset" data-de-alt="Eine Drohne mit der Lackier-Vorlage Neon"></a></li>
-      <li><a href="assets/img/video-analog-stage4-1600.webp"><img src="assets/img/video-analog-stage4-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Analog video breaking up: snow, sync jumps and a WEAK VIDEO warning" data-de-alt="Analoges Video zerfällt: Schnee, Bildsprünge und die Warnung „WEAK VIDEO“"></a></li>
-      <li><a href="assets/img/pilot-from-drone-1600.webp"><img src="assets/img/pilot-from-drone-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Looking back from the drone at the pilot" data-de-alt="Blick von der Drohne zurück zum Piloten"></a></li>
       <li><a href="assets/img/training-course-los-1600.webp"><img src="assets/img/training-course-los-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Flight training in line of sight: lesson 2.4, Figure eight, with holographic rings and the radio in both hands" data-de-alt="Flugtraining auf Sicht: Lektion 2.4, Die Acht, mit holografischen Ringen und der Funke in beiden Händen"></a></li>
       <li><a href="assets/img/training-screen-1600.webp"><img src="assets/img/training-screen-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Flight training window: 20 lessons in 5 chapters with stars, best time and a tip for the lesson Flying turns" data-de-alt="Fenster Flugtraining: 20 Lektionen in 5 Kapiteln mit Sternen, Bestzeit und einem Tipp zur Lektion Kurven fliegen"></a></li>
-      <li><a href="assets/img/docs/world-rules-tab-1600.webp"><img src="assets/img/docs/world-rules-tab-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Configurator, World rules tab with the presets Realistic, Training and Arcade" data-de-alt="Konfigurator, Tab Welt-Regeln mit den Voreinstellungen Realistisch, Training und Arcade"></a></li>
       <li><a href="assets/img/configurator-tricks-1600.webp"><img src="assets/img/configurator-tricks-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Configurator, Freestyle tab: all 59 tricks with their points, grouped into families, with search" data-de-alt="Konfigurator, Tab Freestyle: alle 59 Tricks mit ihren Punkten, nach Familien gruppiert, mit Suche"></a></li>
-      <li><a href="assets/img/trick-chain-fpv-1600.webp"><img src="assets/img/trick-chain-fpv-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Freestyle in FPV: the OSD scores a Juicy Flick and a roll flown back to back with +385 points and a ×3 combo" data-de-alt="Freestyle im FPV: Das OSD wertet einen Juicy Flick und eine Rolle am Stück mit +385 Punkten und Kombo ×3"></a></li>
+      <li><a href="assets/img/gate-markings-1600.webp"><img src="assets/img/gate-markings-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="Gates 2, 3 and 4 with number boards and arrows on the ground" data-de-alt="Gates 2, 3 und 4 mit Nummerntafeln und Pfeilen am Boden"></a></li>
       <li><a href="assets/img/course-elements-1600.webp"><img src="assets/img/course-elements-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="A course with the start/finish gate, a dive cube, slalom poles and a turn flag" data-de-alt="Ein Kurs mit Start-/Ziel-Gate, Tauchwürfel, Slalomstangen und Wendeflagge"></a></li>
       <li><a href="assets/img/docs/gate-pole-multigp-1600.webp"><img src="assets/img/docs/gate-pole-multigp-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="A square gate standing on grass with a tall pole rising from its upper right corner" data-de-alt="Ein quadratisches Gate auf einer Wiese, aus seiner oberen rechten Ecke ragt eine hohe Stange nach oben"></a></li>
       <li><a href="assets/img/bando-field-barn-1600.webp"><img src="assets/img/bando-field-barn-800.webp" width="800" height="450" loading="lazy" decoding="async" alt="A bando from above: an abandoned barn in a field" data-de-alt="Ein Bando von oben: eine verlassene Scheune auf einem Feld"></a></li>
     </ul>
-  </div>
-</section>
-
-<!-- RELEASE + COMPAT -->
-<section class="section" id="release" aria-labelledby="release-title">
-  <div class="wrap release">
-    <div class="release__cta">
-      <p class="kicker"><span lang="en">Release</span><span lang="de">Veröffentlichung</span></p>
-      <h2 id="release-title"><span lang="en">Download</span><span lang="de">Download</span></h2>
-      <p class="section__intro" lang="en">Propwash FPV 0.5.1 is available on CurseForge, for Fabric and NeoForge. The Modrinth page is still in review.</p>
-      <p class="section__intro" lang="de">Propwash FPV 0.5.1 gibt es auf CurseForge, für Fabric und NeoForge. Die Modrinth-Seite wird noch geprüft.</p>
-      <div class="hero__cta">
-        <a class="btn btn--primary" href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener"><span lang="en">Download on CurseForge</span><span lang="de">Download auf CurseForge</span></a>
-        <a class="btn btn--ghost" href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener"><span class="soon-dot" aria-hidden="true"></span><span lang="en">Modrinth · in review</span><span lang="de">Modrinth · in Prüfung</span></a>
-        <a class="btn btn--ghost" href="changelog/#propwash-0.5.1"><span lang="en">What’s new in 0.5.1</span><span lang="de">Was in 0.5.1 neu ist</span></a>
-        <a class="btn btn--ghost" href="roadmap/"><span lang="en">What’s coming next</span><span lang="de">Was als Nächstes kommt</span><svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
-      </div>
-      <p class="status"><span class="soon-dot" aria-hidden="true"></span><span class="mono">VERSION 0.5.1</span> <span lang="en">Out on CurseForge · Modrinth in review</span><span lang="de">Auf CurseForge erschienen · Modrinth in Prüfung</span></p>
-      <div class="community">
-        <p class="kicker"><span lang="en">Community</span><span lang="de">Community</span></p>
-        <p lang="en">Questions, bug reports, race nights, course ideas or your drone builds? Come over to the Discord.</p>
-        <p lang="de">Fragen, Bugs, Rennabende, Kurs-Ideen oder deine Drohnen-Builds? Komm auf den Discord.</p>
-        <p lang="en">Put your drone together in the <a href="configurator/">online configurator</a> with every Propwash and Just More Parts part, then share its link in the Discord builds forum – others open it in the browser or import the code in the game.</p>
-        <p lang="de">Bau deine Drohne im <a href="configurator/">Online-Konfigurator</a> mit allen Teilen von Propwash und Just More Parts und teil den Link im Build-Forum auf dem Discord – andere öffnen ihn im Browser oder importieren den Code im Spiel.</p>
-        <div class="hero__cta">
-          <a class="btn btn--ghost" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg><span lang="en">Join the Discord</span><span lang="de">Discord beitreten</span></a>
-          <a class="btn btn--ghost" href="configurator/"><span lang="en">Open the configurator</span><span lang="de">Zum Konfigurator</span></a>
-        </div>
-      </div>
-      <div class="community">
-        <p class="kicker"><span lang="en">Add-on</span><span lang="de">Add-on</span></p>
-        <p lang="en"><strong>Propwash: Just More Parts 1.1.0</strong> adds 143 more realistic parts and 22 ready-to-fly presets, from 65&nbsp;mm whoops to 13″ X-Class, plus share codes for your builds&nbsp;– made for Propwash 0.5.0 and 0.5.1. On a server without it, it simply stays off while you play there.</p>
-        <p lang="de"><strong>Propwash: Just More Parts 1.1.0</strong> bringt 143 weitere realistische Teile und 22 flugfertige Presets mit, vom 65-mm-Whoop bis zur 13-Zoll-X-Class, dazu Sharecodes für deine Builds&nbsp;– gemacht für Propwash 0.5.0 und 0.5.1. Auf einem Server ohne das Add-on bleibt es einfach aus, solange du dort spielst.</p>
-        <div class="hero__cta">
-          <a class="btn btn--ghost" href="https://www.curseforge.com/minecraft/mc-mods/propwash-just-more-parts" target="_blank" rel="noopener"><span lang="en">Just More Parts on CurseForge</span><span lang="de">Just More Parts auf CurseForge</span></a>
-          <a class="btn btn--ghost" href="docs/api/"><span lang="en">Build your own add-on</span><span lang="de">Eigenes Add-on bauen</span></a>
-        </div>
-      </div>
-      <div class="community" id="source">
-        <p class="kicker"><span lang="en">Source code &amp; license</span><span lang="de">Quellcode &amp; Lizenz</span></p>
-        <p lang="en">From 0.5.0 on, the source code of Propwash FPV is public under the <a href="https://polyformproject.org/licenses/shield/1.0.0" target="_blank" rel="noopener">PolyForm Shield License 1.0.0</a>: read it, build it yourself, put Propwash in modpacks and send pull requests. Not allowed: re-uploading Propwash, publishing forks as alternative downloads or building competing mods from it. The add-on API, the example add-on and the documentation are under the MIT License. Propwash 0.4.0 and older stay All Rights Reserved.</p>
-        <p lang="de">Ab 0.5.0 ist der Quellcode von Propwash FPV öffentlich, unter der <a href="https://polyformproject.org/licenses/shield/1.0.0" target="_blank" rel="noopener">PolyForm Shield License 1.0.0</a>: lesen, selbst bauen, Propwash in Modpacks aufnehmen und Pull Requests schicken. Nicht erlaubt: Propwash erneut hochladen, Forks als alternative Downloads veröffentlichen oder daraus konkurrierende Mods bauen. Die Add-on-API, das Beispiel-Add-on und die Doku stehen unter der MIT-Lizenz. Propwash 0.4.0 und älter bleiben All Rights Reserved.</p>
-        <div class="hero__cta">
-          <a class="btn btn--ghost" href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener"><span lang="en">Propwash FPV on GitHub</span><span lang="de">Propwash FPV auf GitHub</span></a>
-          <a class="btn btn--ghost" href="https://github.com/LardTom/propwash-justmoreparts" target="_blank" rel="noopener"><span lang="en">Just More Parts on GitHub</span><span lang="de">Just More Parts auf GitHub</span></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="compat">
-      <h3 id="compat-title" class="compat__title"><span lang="en">Compatibility</span><span lang="de">Kompatibilität</span></h3>
-      <dl class="compat__list">
-        <div><dt>Minecraft</dt><dd>26.3</dd></div>
-        <div><dt>Fabric</dt><dd><span lang="en">Fabric Loader 0.19.5+ and Fabric API 0.161.0+26.3 or newer</span><span lang="de">Fabric Loader 0.19.5+ und Fabric API 0.161.0+26.3 oder neuer</span></dd></div>
-        <div><dt>NeoForge</dt><dd><span lang="en">26.3.0.10-beta or newer</span><span lang="de">26.3.0.10-beta oder neuer</span></dd></div>
-        <div><dt>Java</dt><dd>25</dd></div>
-        <div><dt><span lang="en">Install</span><span lang="de">Installation</span></dt><dd><span lang="en">Required on client and server – 0.5.0 and 0.5.1 play together</span><span lang="de">Auf Client und Server nötig – 0.5.0 und 0.5.1 spielen zusammen</span></dd></div>
-        <div><dt><span lang="en">Worlds</span><span lang="de">Welten</span></dt><dd><span lang="en">Worlds, drones, gates, courses and leaderboards from 0.4.0 load unchanged</span><span lang="de">Welten, Drohnen, Gates, Kurse und Bestenlisten aus 0.4.0 laden unverändert</span></dd></div>
-        <div><dt>Add-ons</dt><dd><span lang="en">Add-ons made for 0.4.0 keep working. Add-ons on a server are needed by everyone who joins; add-ons only you have stay off there.</span><span lang="de">Add-ons für 0.4.0 funktionieren weiter. Add-ons auf einem Server braucht jeder, der beitritt; Add-ons, die nur du hast, bleiben dort aus.</span></dd></div>
-        <div><dt><span lang="en">Play</span><span lang="de">Spielen</span></dt><dd><span lang="en">Singleplayer and multiplayer</span><span lang="de">Einzel- und Mehrspieler</span></dd></div>
-        <div><dt>Optional</dt><dd><span lang="en">LambDynamicLights&nbsp;– drones with LED strips become real light sources</span><span lang="de">LambDynamicLights&nbsp;– Drohnen mit LED-Streifen werden zu echten Lichtquellen</span></dd></div>
-        <div><dt><span lang="en">Shader packs</span><span lang="de">Shaderpacks</span></dt><dd><span lang="en">With an active shader pack (Iris/Oculus) or another renderer, the video effect falls back to a simpler overlay.</span><span lang="de">Mit aktivem Shaderpack (Iris/Oculus) oder einem anderen Renderer wird der Videoeffekt durch ein einfacheres Overlay ersetzt.</span></dd></div>
-      </dl>
-      <p class="compat__note" lang="en">Radios must run in USB joystick (HID) mode. Outside creative, the radio link reaches about 1,200 blocks; servers can limit it further. Recording with your graphics card’s encoder needs the free program ffmpeg&nbsp;– <a href="docs/guide/#video-ffmpeg">how to install it</a>.</p>
-      <p class="compat__note" lang="de">Funken müssen im USB-Joystick-Modus (HID) laufen. Außerhalb des Kreativmodus reicht die Funkverbindung etwa 1.200 Blöcke weit; Server können sie weiter begrenzen. Aufnehmen mit dem Encoder deiner Grafikkarte braucht das kostenlose Programm ffmpeg&nbsp;– <a href="docs/guide/#video-ffmpeg">so installierst du es</a>.</p>
-    </div>
   </div>
 </section>
 
@@ -875,6 +768,11 @@
         <p lang="de">Beides. Im Überlebensmodus stellst du alles außer den reinen Kreativ-Items selbst her und findest Teile in Truhen. Im Kreativmodus gibt es fünf flugfertige Vorlagen, die Kreativ-Brille mit frei einstellbarem Video und den Kreativ-Flugcontroller, dessen <em>Drohnen-Editor</em> Massen, Motoren, Props, Akku und Luftwiderstand frei einstellt.</p>
       </details>
       <details>
+        <summary><span lang="en">Can I try anything without installing the mod?</span><span lang="de">Kann ich etwas ausprobieren, ohne die Mod zu installieren?</span></summary>
+        <p lang="en">Yes: the <a href="configurator/">online configurator</a> builds, paints and tunes any drone from Propwash and Just More Parts in your browser and shows its flight figures. Its share code loads the same drone in the game.</p>
+        <p lang="de">Ja: Der <a href="configurator/">Online-Konfigurator</a> baut, lackiert und tunt jede Drohne aus Propwash und Just More Parts im Browser und zeigt ihre Flugwerte. Ihr Sharecode lädt dieselbe Drohne im Spiel.</p>
+      </details>
+      <details>
         <summary><span lang="en">Where can I download it?</span><span lang="de">Wo kann ich die Mod herunterladen?</span></summary>
         <p lang="en">On <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a>, for Minecraft 26.3 with Fabric and NeoForge; the current version is 0.5.1. The <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a> page is still in review.</p>
         <p lang="de">Auf <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a>, für Minecraft 26.3 mit Fabric und NeoForge; aktuell ist Version 0.5.1. Die <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a>-Seite wird noch geprüft.</p>
@@ -893,6 +791,72 @@
   </div>
 </section>
 
+<!-- DOWNLOAD -->
+<section class="section" id="download" aria-labelledby="download-title">
+  <span class="anchor-alias" id="release"></span>
+  <div class="wrap release">
+    <div class="release__cta">
+      <p class="kicker"><span lang="en">Download</span><span lang="de">Download</span></p>
+      <h2 id="download-title"><span lang="en">Ready for take-off</span><span lang="de">Bereit zum Abheben</span></h2>
+      <p class="section__intro" lang="en">Propwash FPV 0.5.1 is available on CurseForge, for Fabric and NeoForge. The Modrinth page is still in review.</p>
+      <p class="section__intro" lang="de">Propwash FPV 0.5.1 gibt es auf CurseForge, für Fabric und NeoForge. Die Modrinth-Seite wird noch geprüft.</p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener"><span lang="en">Download on CurseForge</span><span lang="de">Download auf CurseForge</span></a>
+        <a class="btn btn--ghost" href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener"><span class="soon-dot" aria-hidden="true"></span><span lang="en">Modrinth · in review</span><span lang="de">Modrinth · in Prüfung</span></a>
+        <a class="btn btn--ghost" href="changelog/#propwash-0.5.1"><span lang="en">What’s new in 0.5.1</span><span lang="de">Was in 0.5.1 neu ist</span></a>
+        <a class="btn btn--ghost" href="roadmap/"><span lang="en">What’s coming next</span><span lang="de">Was als Nächstes kommt</span><svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
+      </div>
+      <p class="status"><span class="soon-dot" aria-hidden="true"></span><span class="mono">VERSION 0.5.1</span> <span lang="en">Out on CurseForge · Modrinth in review</span><span lang="de">Auf CurseForge erschienen · Modrinth in Prüfung</span></p>
+      <div class="community" id="community">
+        <p class="kicker"><span lang="en">Community</span><span lang="de">Community</span></p>
+        <p lang="en">Questions, bug reports, race nights, course ideas or your drone builds? Come over to the Discord.</p>
+        <p lang="de">Fragen, Bugs, Rennabende, Kurs-Ideen oder deine Drohnen-Builds? Komm auf den Discord.</p>
+        <p lang="en">Share your builds in the Discord builds forum: a configurator link opens in the browser, its code imports in the game.</p>
+        <p lang="de">Teil deine Builds im Build-Forum auf dem Discord: Ein Konfigurator-Link öffnet sich im Browser, sein Code lässt sich im Spiel importieren.</p>
+        <div class="hero__cta">
+          <a class="btn btn--ghost" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg><span lang="en">Join the Discord</span><span lang="de">Discord beitreten</span></a>
+        </div>
+      </div>
+      <div class="community">
+        <p class="kicker"><span lang="en">Add-on</span><span lang="de">Add-on</span></p>
+        <p lang="en"><strong>Propwash: Just More Parts 1.1.0</strong> adds 143 more realistic parts and 22 ready-to-fly presets, from 65&nbsp;mm whoops to 13″ X-Class, plus share codes for your builds&nbsp;– made for Propwash 0.5.0 and 0.5.1. On a server without it, it simply stays off while you play there.</p>
+        <p lang="de"><strong>Propwash: Just More Parts 1.1.0</strong> bringt 143 weitere realistische Teile und 22 flugfertige Presets mit, vom 65-mm-Whoop bis zur 13-Zoll-X-Class, dazu Sharecodes für deine Builds&nbsp;– gemacht für Propwash 0.5.0 und 0.5.1. Auf einem Server ohne das Add-on bleibt es einfach aus, solange du dort spielst.</p>
+        <div class="hero__cta">
+          <a class="btn btn--ghost" href="https://www.curseforge.com/minecraft/mc-mods/propwash-just-more-parts" target="_blank" rel="noopener"><span lang="en">Just More Parts on CurseForge</span><span lang="de">Just More Parts auf CurseForge</span></a>
+          <a class="btn btn--ghost" href="docs/api/"><span lang="en">Build your own add-on</span><span lang="de">Eigenes Add-on bauen</span></a>
+        </div>
+      </div>
+      <div class="community" id="source">
+        <p class="kicker"><span lang="en">Source code &amp; license</span><span lang="de">Quellcode &amp; Lizenz</span></p>
+        <p lang="en">From 0.5.0 on, the source code of Propwash FPV is public under the <a href="https://polyformproject.org/licenses/shield/1.0.0" target="_blank" rel="noopener">PolyForm Shield License 1.0.0</a>: read it, build it yourself, put Propwash in modpacks and send pull requests. The add-on API and the documentation are MIT licensed&nbsp;– <a href="docs/#source">what is allowed in detail</a>.</p>
+        <p lang="de">Ab 0.5.0 ist der Quellcode von Propwash FPV öffentlich, unter der <a href="https://polyformproject.org/licenses/shield/1.0.0" target="_blank" rel="noopener">PolyForm Shield License 1.0.0</a>: lesen, selbst bauen, Propwash in Modpacks aufnehmen und Pull Requests schicken. Die Add-on-API und die Doku stehen unter der MIT-Lizenz&nbsp;– <a href="docs/#source">was genau erlaubt ist</a>.</p>
+        <div class="hero__cta">
+          <a class="btn btn--ghost" href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener"><span lang="en">Propwash FPV on GitHub</span><span lang="de">Propwash FPV auf GitHub</span></a>
+          <a class="btn btn--ghost" href="https://github.com/LardTom/propwash-justmoreparts" target="_blank" rel="noopener"><span lang="en">Just More Parts on GitHub</span><span lang="de">Just More Parts auf GitHub</span></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="compat">
+      <h3 id="compat-title" class="compat__title"><span lang="en">Compatibility</span><span lang="de">Kompatibilität</span></h3>
+      <dl class="compat__list">
+        <div><dt>Minecraft</dt><dd>26.3</dd></div>
+        <div><dt>Fabric</dt><dd><span lang="en">Fabric Loader 0.19.5+ and Fabric API 0.161.0+26.3 or newer</span><span lang="de">Fabric Loader 0.19.5+ und Fabric API 0.161.0+26.3 oder neuer</span></dd></div>
+        <div><dt>NeoForge</dt><dd><span lang="en">26.3.0.10-beta or newer</span><span lang="de">26.3.0.10-beta oder neuer</span></dd></div>
+        <div><dt>Java</dt><dd>25</dd></div>
+        <div><dt><span lang="en">Install</span><span lang="de">Installation</span></dt><dd><span lang="en">Required on client and server – 0.5.0 and 0.5.1 play together</span><span lang="de">Auf Client und Server nötig – 0.5.0 und 0.5.1 spielen zusammen</span></dd></div>
+        <div><dt><span lang="en">Worlds</span><span lang="de">Welten</span></dt><dd><span lang="en">Worlds, drones, gates, courses and leaderboards from 0.4.0 load unchanged</span><span lang="de">Welten, Drohnen, Gates, Kurse und Bestenlisten aus 0.4.0 laden unverändert</span></dd></div>
+        <div><dt>Add-ons</dt><dd><span lang="en">Add-ons made for 0.4.0 keep working. Add-ons on a server are needed by everyone who joins; add-ons only you have stay off there.</span><span lang="de">Add-ons für 0.4.0 funktionieren weiter. Add-ons auf einem Server braucht jeder, der beitritt; Add-ons, die nur du hast, bleiben dort aus.</span></dd></div>
+        <div><dt><span lang="en">Play</span><span lang="de">Spielen</span></dt><dd><span lang="en">Singleplayer and multiplayer</span><span lang="de">Einzel- und Mehrspieler</span></dd></div>
+        <div><dt>Optional</dt><dd><span lang="en">LambDynamicLights&nbsp;– drones with LED strips become real light sources</span><span lang="de">LambDynamicLights&nbsp;– Drohnen mit LED-Streifen werden zu echten Lichtquellen</span></dd></div>
+        <div><dt><span lang="en">Shader packs</span><span lang="de">Shaderpacks</span></dt><dd><span lang="en">With an active shader pack (Iris/Oculus) or another renderer, the video effect falls back to a simpler overlay.</span><span lang="de">Mit aktivem Shaderpack (Iris/Oculus) oder einem anderen Renderer wird der Videoeffekt durch ein einfacheres Overlay ersetzt.</span></dd></div>
+      </dl>
+      <p class="compat__note" lang="en">Radios must run in USB joystick (HID) mode. Outside creative, the radio link reaches about 1,200 blocks; servers can limit it further. Recording with your graphics card’s encoder needs the free program ffmpeg&nbsp;– <a href="docs/guide/#video-ffmpeg">how to install it</a>.</p>
+      <p class="compat__note" lang="de">Funken müssen im USB-Joystick-Modus (HID) laufen. Außerhalb des Kreativmodus reicht die Funkverbindung etwa 1.200 Blöcke weit; Server können sie weiter begrenzen. Aufnehmen mit dem Encoder deiner Grafikkarte braucht das kostenlose Programm ffmpeg&nbsp;– <a href="docs/guide/#video-ffmpeg">so installierst du es</a>.</p>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <footer class="site-footer">
@@ -900,7 +864,7 @@
     <div class="site-footer__brand">
       <img src="assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
       <p><strong>Propwash FPV</strong> by lardtom</p>
-      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a> · <a href="docs/"><span lang="en">Docs</span><span lang="de">Doku</span></a> · <a href="roadmap/">Roadmap</a> · <a href="changelog/">Changelog</a> · <a href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener"><span lang="en">Source code</span><span lang="de">Quellcode</span></a> · <a href="impressum/"><span lang="en">Legal notice</span><span lang="de">Impressum</span></a> · <a href="datenschutz/"><span lang="en">Privacy policy</span><span lang="de">Datenschutz</span></a></p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a> · <a href="configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a> · <a href="docs/"><span lang="en">Docs</span><span lang="de">Doku</span></a> · <a href="changelog/">Changelog</a> · <a href="roadmap/">Roadmap</a> · <a href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener"><span lang="en">Source code</span><span lang="de">Quellcode</span></a> · <a href="impressum/"><span lang="en">Legal notice</span><span lang="de">Impressum</span></a> · <a href="datenschutz/"><span lang="en">Privacy policy</span><span lang="de">Datenschutz</span></a></p>
     </div>
     <div class="site-footer__legal">
       <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
@@ -929,6 +893,6 @@
   </div>
 </dialog>
 
-<script src="assets/js/main.js?v=84d67d6a" defer></script>
+<script src="assets/js/main.js?v=6d3b106e" defer></script>
 </body>
 </html>

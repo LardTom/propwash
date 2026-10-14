@@ -48,7 +48,7 @@ export const IMAGES = [
   ['configurator-tricks', 'configurator_tricks', FULL],
   ['flight-school-build', 'flight_school_build', FULL],
   ['flight-school-sticks', 'flight_school_sticks', FULL],
-  ['headlight-cave', 'headlight_cave', FULL],
+  ['headlight-cave', 'headlight_cave', [1600]],
   ['headlight-cave-off', 'headlight_cave_off', [1600]],
   ['training-gates-fpv', 'training_gates_fpv', FULL],
   ['training-course-los', 'training_course_los', FULL],
