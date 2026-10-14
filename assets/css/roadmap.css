@@ -7,10 +7,6 @@
   --rm-idea: #b8b8b8;
 }
 
-.site-nav a[aria-current="page"] {
-  color: var(--accent);
-}
-
 .ri {
   display: block;
   flex: none;

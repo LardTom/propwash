@@ -13,10 +13,6 @@
   border: 0;
 }
 
-.site-nav a[aria-current="page"] {
-  color: var(--accent);
-}
-
 /* ---------- Intro ---------- */
 
 .cfg-intro {

@@ -87,33 +87,66 @@
   });
   applyLang(lang(), false);
 
-  /* ---------- Section menu (below 960 px) ---------- */
+  /* ---------- Main navigation: menu button (narrow screens) and the "Features" menu ---------- */
 
   (function navMenu() {
     var toggle = $('[data-nav-toggle]');
     var nav = $('#site-nav');
     if (!toggle || !nav) return;
-    var wide = window.matchMedia ? window.matchMedia('(min-width: 960px)') : null;
+    var wide = window.matchMedia ? window.matchMedia('(min-width: 1100px)') : null;
+    var groups = $$('[data-nav-group]', nav).map(function (group) {
+      return { el: group, btn: $('[data-nav-group-toggle]', group) };
+    }).filter(function (g) { return g.btn; });
+
+    function isWide() { return !!(wide && wide.matches); }
+    function setGroup(g, open) { g.btn.setAttribute('aria-expanded', String(open)); }
+    function groupOpen(g) { return g.btn.getAttribute('aria-expanded') === 'true'; }
+    function closeGroups() { groups.forEach(function (g) { setGroup(g, false); }); }
 
     function setOpen(open, returnFocus) {
       toggle.setAttribute('aria-expanded', String(open));
       nav.classList.toggle('is-open', open);
+      if (!open) closeGroups();
       if (!open && returnFocus) toggle.focus();
     }
     function isOpen() { return toggle.getAttribute('aria-expanded') === 'true'; }
 
+    groups.forEach(function (g) {
+      g.btn.addEventListener('click', function () {
+        var next = !groupOpen(g);
+        closeGroups();
+        setGroup(g, next);
+      });
+      g.el.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && groupOpen(g)) {
+          e.stopPropagation();
+          setGroup(g, false);
+          g.btn.focus();
+        }
+      });
+      g.el.addEventListener('focusout', function (e) {
+        if (isWide() && groupOpen(g) && e.relatedTarget && !g.el.contains(e.relatedTarget)) setGroup(g, false);
+      });
+    });
+
     toggle.addEventListener('click', function () { setOpen(!isOpen(), false); });
     $$('a', nav).forEach(function (a) {
-      a.addEventListener('click', function () { if (isOpen()) setOpen(false, false); });
+      a.addEventListener('click', function () {
+        closeGroups();
+        if (isOpen()) setOpen(false, false);
+      });
     });
     doc.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && isOpen()) setOpen(false, true);
     });
     doc.addEventListener('click', function (e) {
       if (isOpen() && !nav.contains(e.target) && !toggle.contains(e.target)) setOpen(false, false);
+      groups.forEach(function (g) {
+        if (isWide() && groupOpen(g) && !g.el.contains(e.target)) setGroup(g, false);
+      });
     });
     if (wide && wide.addEventListener) {
-      wide.addEventListener('change', function (e) { if (e.matches) setOpen(false, false); });
+      wide.addEventListener('change', function () { setOpen(false, false); });
     }
   })();
 
