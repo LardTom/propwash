@@ -2435,12 +2435,17 @@ html[lang="de"] .toggle[aria-pressed="true"]::after {
 @media (min-width: 1000px) {
   .release {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-    gap: 64px;
+    grid-template-rows: auto 1fr;
+    gap: 0 64px;
     align-items: start;
   }
+  .release__cta { grid-area: 1 / 1; }
+  .release__more { grid-area: 2 / 1; }
+  .compat { grid-area: 1 / 2 / 3 / 3; }
 }
 
 .release__cta,
+.release__more,
 .compat {
   min-width: 0;
 }
