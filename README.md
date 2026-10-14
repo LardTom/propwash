@@ -159,6 +159,9 @@ on hover and focus; without JavaScript narrow screens show the links as a row be
   the clipboard, or downloaded where the browser can’t copy images. Both always show the drone from the same angle,
   whatever the 3D view shows: from the front right and above (`SHOT_AZIMUTH` 34.75° from the nose towards the right
   side, `SHOT_ELEVATION` 27.75° in `viewer.js`), nose to the lower right, all four props in sight
+- picking in the 3D view and the FPV image: a click or tap on a part opens its category with the current part card
+  focused (Parts tab) or makes its paint slot the target (Paint tab); the mouse pointer highlights and names the part,
+  drags, long presses and pinches never select (`tools/test-configurator-pick.mjs` clicks every part in headless Chrome)
 
 ### Updating the data
 
@@ -170,6 +173,7 @@ node tools/build-configurator-data.mjs     # catalog.json and the share-code tes
 node tools/build-configurator-models.mjs   # render.json and models/
 node tools/test-configurator.mjs           # share codes, presets, analysis, FPV camera and tune defaults against the export
 node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts, assembly and FPV prop hubs
+node tools/test-configurator-pick.mjs      # clicks and taps on the parts in the 3D view (headless Chrome, ~1 min)
 ```
 
 `tools/fixtures/report-vectors.json` keeps share codes from bug reports with the build, analysis and FPV camera the
