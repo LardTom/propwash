@@ -333,6 +333,46 @@
         "de": "Drohnen-Trails ein/aus"
       },
       "sharedWith": []
+    },
+    {
+      "name": "accessory_action_1",
+      "key": "Numpad 8",
+      "flightStick": false,
+      "title": {
+        "en": "Accessory action 1",
+        "de": "Zubehör-Aktion 1"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "accessory_action_2",
+      "key": "Numpad 9",
+      "flightStick": false,
+      "title": {
+        "en": "Accessory action 2",
+        "de": "Zubehör-Aktion 2"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "accessory_action_3",
+      "key": "Numpad 0",
+      "flightStick": false,
+      "title": {
+        "en": "Accessory action 3",
+        "de": "Zubehör-Aktion 3"
+      },
+      "sharedWith": []
+    },
+    {
+      "name": "accessory_action_4",
+      "key": "Numpad Enter",
+      "flightStick": false,
+      "title": {
+        "en": "Accessory action 4",
+        "de": "Zubehör-Aktion 4"
+      },
+      "sharedWith": []
     }
   ],
   "switches": [
@@ -439,6 +479,34 @@
       "title": {
         "en": "Blackbox",
         "de": "Blackbox"
+      }
+    },
+    {
+      "name": "accessory_1",
+      "title": {
+        "en": "Accessory action 1",
+        "de": "Zubehör-Aktion 1"
+      }
+    },
+    {
+      "name": "accessory_2",
+      "title": {
+        "en": "Accessory action 2",
+        "de": "Zubehör-Aktion 2"
+      }
+    },
+    {
+      "name": "accessory_3",
+      "title": {
+        "en": "Accessory action 3",
+        "de": "Zubehör-Aktion 3"
+      }
+    },
+    {
+      "name": "accessory_4",
+      "title": {
+        "en": "Accessory action 4",
+        "de": "Zubehör-Aktion 4"
       }
     },
     {

@@ -16,6 +16,9 @@ export const EVENT_INFO = {
   DRONE_DISASSEMBLED: { thread: { en: 'server', de: 'Server' }, when: { en: 'a drone was taken apart in the workbench', de: 'eine Drohne wurde in der Werkbank zerlegt' } },
   BUILD_IMPORTED: { thread: { en: 'server', de: 'Server' }, when: { en: 'after every import request, also rejected ones', de: 'nach jeder Import-Anfrage, auch abgelehnten' } },
   ESC_BURNED: { thread: { en: 'server', de: 'Server' }, when: { en: 'the ESC of a flown drone burned out because the battery has more cells than the stack takes (only with crash damage on)', de: 'der ESC einer geflogenen Drohne ist durchgebrannt, weil der Akku mehr Zellen hat, als der Stack verträgt (nur mit Crash-Schaden an)' } },
+  DRONE_HIT_ENTITY: { thread: { en: 'server', de: 'Server' }, when: { en: 'a flown drone hits a living entity and the game rules allow it; damage and knockback can be changed (since 1.6)', de: 'eine geflogene Drohne trifft ein Lebewesen und die Spielregeln erlauben es; Schaden und Rückstoß sind änderbar (seit 1.6)' } },
+  DRONE_DAMAGED: { thread: { en: 'server', de: 'Server' }, when: { en: 'a drone takes damage from mobs, projectiles, explosions or players; the amount can be changed or the damage cancelled (since 1.6)', de: 'eine Drohne nimmt Schaden durch Mobs, Geschosse, Explosionen oder Spieler; die Menge ist änderbar, der Schaden abbrechbar (seit 1.6)' } },
+  ACCESSORY_ACTION: { thread: { en: 'server', de: 'Server' }, when: { en: 'the pilot presses or releases accessory action 1–4 (checked by the server, since 1.6)', de: 'der Pilot drückt oder lässt Zubehör-Aktion 1–4 los (vom Server geprüft, seit 1.6)' } },
 };
 
 export const API_HISTORY = [
@@ -25,6 +28,7 @@ export const API_HISTORY = [
   { version: '1.3', text: { en: 'Flight School links for items of any namespace (<code>linkFlightSchoolItems</code>, <code>linkFlightSchoolParts</code>, <code>FlightSchoolScenes</code>).', de: 'Flugschul-Verknüpfungen für Items jedes Namensraums (<code>linkFlightSchoolItems</code>, <code>linkFlightSchoolParts</code>, <code>FlightSchoolScenes</code>).' } },
   { version: '1.4', text: { en: 'Chest loot without loader code (<code>PropwashApi.loot()</code>), rarity in JSON, more analysis figures, <code>ESC_BURNED</code>, part condition and paint cost, batteries with partial charge, the <code>NAME</code> import layer and new drones from the client, Propwash’s own JSON codec, language texts on the server, workbench header space and icon buttons, camera field of view from <code>camera_fov_deg</code> and the uptilt range of the camera mount.', de: 'Truhen-Beute ohne Loader-Code (<code>PropwashApi.loot()</code>), Seltenheit im JSON, mehr Analysewerte, <code>ESC_BURNED</code>, Teilezustand und Lackkosten, Akkus mit Teilladung, Import-Ebene <code>NAME</code> und neue Drohnen vom Client, Propwashs eigener JSON-Codec, Sprachtexte auf dem Server, Platz im Werkbank-Kopf und Symbol-Knöpfe, Kamera-Sichtfeld aus <code>camera_fov_deg</code> und der Uptilt-Bereich des Kamerahalters.' } },
   { version: '1.5', text: { en: 'Three new built-in Flight School lessons for item links: <code>FlightSchoolScenes.TRICKS</code> (freestyle tricks, after <code>RACE</code>), <code>FlightSchoolScenes.GRIPPER</code> (gripper, after <code>ACTION_CAM</code>) and <code>FlightSchoolScenes.MODE_3D</code> (3D mode, after <code>HOLD</code>), all in <code>FlightSchoolScenes.ALL</code>. Props can declare their reverse thrust for 3D mode: <code>PropDefinition#reverseThrust()</code>, builder <code>reverseThrust(r)</code>, JSON <code>reverse_thrust</code>.', de: 'Drei neue eingebaute Flugschul-Lektionen für Item-Verknüpfungen: <code>FlightSchoolScenes.TRICKS</code> (Freestyle-Tricks, nach <code>RACE</code>), <code>FlightSchoolScenes.GRIPPER</code> (Greifer, nach <code>ACTION_CAM</code>) und <code>FlightSchoolScenes.MODE_3D</code> (3D-Modus, nach <code>HOLD</code>), alle in <code>FlightSchoolScenes.ALL</code>. Props können ihren Umkehrschub für den 3D-Modus angeben: <code>PropDefinition#reverseThrust()</code>, Builder <code>reverseThrust(r)</code>, JSON <code>reverse_thrust</code>.' } },
+  { version: '1.6', text: { en: 'Building blocks for the add-ons <em>Mob Defense</em> and a cinematic camera drone: the front accessory mount (<code>AccessorySlot.FRONT</code>), accessory behaviours with synchronised inventories and accessory actions 1–4 (<code>PropwashApi.accessories()</code>), drone queries, impulses and pushes (<code>PropwashApi.drones()</code>), flight assists and force providers inside the flight model (<code>PropwashApi.flight()</code>), the events <code>DRONE_HIT_ENTITY</code>, <code>DRONE_DAMAGED</code> and <code>ACCESSORY_ACTION</code>, and on the client HUD elements, gimbal cameras and input (<code>registerHudElement</code>, <code>registerGimbal</code>, <code>input()</code>). Network protocol 16.', de: 'Bausteine für die Add-ons <em>Mob Defense</em> und eine Kino-Drohne: die Zubehör-Halterung vorne (<code>AccessorySlot.FRONT</code>), Zubehör-Verhalten mit synchronisierten Inventaren und Zubehör-Aktionen 1–4 (<code>PropwashApi.accessories()</code>), Drohnen-Abfragen, Stöße und Schübe (<code>PropwashApi.drones()</code>), Flughilfen und Kräfte im Flugmodell (<code>PropwashApi.flight()</code>), die Events <code>DRONE_HIT_ENTITY</code>, <code>DRONE_DAMAGED</code> und <code>ACCESSORY_ACTION</code> und im Client HUD-Elemente, Gimbal-Kameras und Eingaben (<code>registerHudElement</code>, <code>registerGimbal</code>, <code>input()</code>). Netzprotokoll 16.' } },
 ];
 
 function minor(version) {
@@ -46,6 +50,7 @@ export default function apiPage(ctx) {
     { id: 'presets', title: { en: 'Presets and creative tab', de: 'Presets und Kreativ-Tab' } },
     { id: 'builds', title: { en: 'Builds and import', de: 'Baupläne und Import' } },
     { id: 'client', title: { en: 'Client extensions', de: 'Client-Erweiterungen' } },
+    { id: 'flight', title: { en: 'Accessories, flight and HUD', de: 'Zubehör, Flug und HUD' } },
     { id: 'events', title: { en: 'Events', de: 'Events' } },
     { id: 'versions', title: { en: 'Stability and versions', de: 'Stabilität und Versionen' } },
     { id: 'multiplayer', title: { en: 'Multiplayer', de: 'Mehrspieler' } },
@@ -62,7 +67,7 @@ ${table([['Possible with API ' + api.version, 'Möglich mit API ' + api.version]
     { header: false, cells: [L('Frames, stacks, motors, props, batteries, video units and accessories, in Java or JSON', 'Rahmen, Stacks, Motoren, Props, Akkus, Videomodule und Zubehör, in Java oder JSON'), L('other motor counts than four (hexa, octo)', 'andere Motorzahlen als vier (Hexa, Okto)')] },
     { header: false, cells: [L('own arm geometry, camera position, centre of mass, ducts, drag, battery rules per frame', 'eigene Arm-Geometrie, Kameraposition, Schwerpunkt, Ducts, Luftwiderstand, Akku-Regeln je Rahmen'), L('new video systems or goggles (only <code>analog</code> and <code>digital</code>)', 'neue Videosysteme oder Brillen (nur <code>analog</code> und <code>digital</code>)')] },
     { header: false, cells: [L('new motor and stack mounts, prop mounts, cell chemistries up to 12S', 'neue Motor- und Stack-Halterungen, Prop-Aufnahmen, Zellchemien bis 12S'), L('parts from world data packs or <code>/reload</code>', 'Teile aus Welt-Datenpaketen oder per <code>/reload</code>')] },
-    { header: false, cells: [L('items, tooltips, workbench, analysis, flight model, rendering and saving come for free', 'Items, Tooltips, Werkbank, Analyse, Flugmodell, Rendering und Speichern gibt es geschenkt'), L('new OSD elements, paint slots or accessory mounts', 'neue OSD-Elemente, Lack-Plätze oder Zubehör-Halterungen')] },
+    { header: false, cells: [L('items, tooltips, workbench, analysis, flight model, rendering and saving come for free', 'Items, Tooltips, Werkbank, Analyse, Flugmodell, Rendering und Speichern gibt es geschenkt'), L('new paint slots, accessory mounts beyond top, bottom and front, placeable elements in the OSD editor', 'neue Lack-Plätze, Zubehör-Halterungen außer oben, unten und vorne, platzierbare Elemente im OSD-Editor')] },
     { header: false, cells: [L('presets and an own creative tab right after the Propwash tab', 'Presets und ein eigener Kreativ-Tab direkt hinter dem Propwash-Tab'), L('own item classes for parts (Propwash provides the part items)', 'eigene Item-Klassen für Teile (Propwash stellt die Teil-Items)')] },
     { header: false, cells: [L('reading builds, creating drone items, setting tune and paint, a server-checked import', 'Baupläne lesen, Drohnen-Items erzeugen, Tuning und Lack setzen, ein vom Server geprüfter Import'), L('changing or removing built-in parts', 'eingebaute Teile ändern oder entfernen')] },
     { header: false, cells: [L('workbench buttons, child screens, configurator tabs, Flight School scenes, events, chest loot', 'Werkbank-Knöpfe, Kind-Fenster, Konfigurator-Tabs, Flugschul-Szenen, Events, Truhen-Beute'), '&nbsp;'] },
@@ -318,6 +323,41 @@ ${P('Every screen that hooks into Propwash uses the Propwash theme: <code>Themed
     'Jedes Fenster, das sich in Propwash einklinkt, benutzt das Propwash-Theme: <code>ThemedScreen</code>, <code>ThemeDraw</code>, <code>ThemeText</code>, <code>Palette</code>, <code>Metrics</code>, <code>FlatButton</code>, <code>ScrollPanel</code>, <code>StepSlider</code> und <code>TextField</code>. Diese Klassen sind für Add-ons freigegeben und werden nur ergänzt.')}
 `);
 
+  const flight = section('flight', T.flight, `
+${P('Since API 1.6 add-ons can give accessories behaviour, react to the pilot, push the drone and fly it. Everything is optional; without an add-on using it Propwash flies exactly as before. Details, limits and threads: <code>docs/design/addon-api-1.6.md</code> in the source repository.',
+    'Seit API 1.6 können Add-ons Zubehör Verhalten geben, auf den Piloten reagieren, die Drohne anschieben und sie fliegen. Alles ist optional; ohne Add-on, das es benutzt, fliegt Propwash genau wie vorher. Einzelheiten, Grenzen und Threads: <code>docs/design/addon-api-1.6.md</code> im Quellcode-Repository.')}
+${h3('flight-mount', 'Front mount', 'Halterung vorne')}
+${P('Besides <code>top</code> and <code>bottom</code> there is <code>front</code> (<code>AccessorySlot.FRONT</code>): the accessory hangs under the nose and points forward. Every built-in frame except the Whoop has it; own frames add <code>"front"</code> to <code>accessory_mounts</code> and an anchor <code>accessory_anchors.front</code>.',
+    'Neben <code>top</code> und <code>bottom</code> gibt es <code>front</code> (<code>AccessorySlot.FRONT</code>): Das Zubehör hängt unter der Nase und zeigt nach vorn. Alle eingebauten Rahmen außer dem Whoop haben die Halterung; eigene Rahmen ergänzen <code>"front"</code> in <code>accessory_mounts</code> und einen Anbaupunkt <code>accessory_anchors.front</code>.')}
+${h3('flight-behaviour', 'Accessory behaviour, inventory and actions', 'Zubehör-Verhalten, Inventar und Aktionen')}
+${code(`PropwashApi.accessories().register(LAUNCHER, new AccessoryBehavior() {
+    @Override public int slots() { return 4; }
+    @Override public boolean accepts(int slot, ItemStack stack) { return stack.is(Items.ARROW); }
+    @Override public void onAction(AccessoryAction action) {
+        if (action.number() != 1 || !action.pressed()) return;
+        int slot = action.inventory().firstFilled();
+        if (slot < 0) return;
+        ItemStack ammo = action.inventory().take(slot, 1);
+        MountPose mount = action.mount();
+        // spawn the projectile at mount.front(), owner action.player()
+        action.physics().impulse(mount.forward().scale(-1.0), new Vec3(0.0, -0.03, -0.08));
+    }
+});`, 'java')}
+${P('Players fill the inventory with the <em>Accessories</em> button in the drone’s service menu; the load stays with drone and item and adds weight in flight. <em>Accessory action 1–4</em> are switch functions in the <em>Modes</em> tab and keys (numpad 8, 9, 0 and Enter); every press and release is checked by the server (pilot, reset epoch, rate) before <code>onAction</code> runs and <code>ACCESSORY_ACTION</code> fires.',
+    'Spieler füllen das Inventar mit dem Knopf <em>Zubehör</em> in der Wartung der Drohne; die Beladung bleibt an Drohne und Item und wiegt im Flug mit. <em>Zubehör-Aktion 1–4</em> sind Schalterfunktionen im Tab <em>Modi</em> und Tasten (Ziffernblock 8, 9, 0 und Enter); jedes Drücken und Loslassen prüft der Server (Pilot, Reset-Epoche, Rate), bevor <code>onAction</code> läuft und <code>ACCESSORY_ACTION</code> feuert.')}
+${h3('flight-physics', 'Impulses, pushes and forces', 'Stöße, Schübe und Kräfte')}
+${P('<code>PropwashApi.drones().physics(drone)</code> gives <code>impulse(J, framePoint)</code> in N·s and <code>push(F, frameRelative, framePoint, seconds)</code> in N; Propwash sends them to the pilot’s flight model, the server return flight or a parked drone. Continuous forces (balloon, parachute) come from <code>PropwashApi.flight().registerForces(id, profile -> provider)</code> at 100 Hz on both sides. <code>PropwashApi.drones()</code> also finds drones near a point or a mob (with line of sight), aims with lead (<code>aim</code>) and scans for obstacles in six directions.',
+    '<code>PropwashApi.drones().physics(drone)</code> liefert <code>impulse(J, rahmenpunkt)</code> in N·s und <code>push(F, rahmenrelativ, rahmenpunkt, sekunden)</code> in N; Propwash schickt sie an das Flugmodell des Piloten, den Heimflug am Server oder eine abgestellte Drohne. Dauerhafte Kräfte (Ballon, Fallschirm) kommen von <code>PropwashApi.flight().registerForces(id, profil -> anbieter)</code> mit 100 Hz auf beiden Seiten. <code>PropwashApi.drones()</code> findet außerdem Drohnen nahe einem Punkt oder einem Mob (mit Sichtprüfung), zielt mit Vorhalt (<code>aim</code>) und sucht Hindernisse in sechs Richtungen.')}
+${h3('flight-assist', 'Flight assists', 'Flughilfen')}
+${code(`PropwashApi.flight().registerAssist("examplemod:cine",
+        profile -> profile.hasAccessory("examplemod:gimbal_cam") ? new CineAssist() : null);`, 'java')}
+${P('A <code>FlightAssist</code> runs at 100 Hz inside the pilot’s flight model and gets a <code>FlightState</code> (true and GPS/barometer-estimated position and velocity, attitude, sticks, accessory actions, obstacle distances). Through <code>AssistOutput</code> it sets sticks and mode, an altitude or climb rate, a position or velocity with a speed limit (Propwash’s ALTHOLD/POSHOLD loops with their sensor errors), a yaw rate or heading, an OSD label and may start GPS Rescue. Assists rest during GPS Rescue.',
+    'Eine <code>FlightAssist</code> läuft mit 100 Hz im Flugmodell des Piloten und bekommt einen <code>FlightState</code> (wahre und per GPS/Barometer geschätzte Position und Geschwindigkeit, Lage, Knüppel, Zubehör-Aktionen, Hindernisabstände). Über <code>AssistOutput</code> setzt sie Knüppel und Modus, eine Höhe oder Steigrate, eine Position oder Geschwindigkeit mit Tempogrenze (die Regelkreise von ALTHOLD/POSHOLD mit ihren Sensorfehlern), eine Gierrate oder einen Kurs, eine OSD-Anzeige und darf GPS Rescue starten. Während GPS Rescue ruhen Flughilfen.')}
+${h3('flight-client', 'Gimbal camera and HUD', 'Gimbal-Kamera und HUD')}
+${P('<code>PropwashClientApi.registerGimbal(id, provider)</code> sets the world attitude of the FPV camera (also for spectators); <code>GimbalModel</code> is a ready-made stabilised 3-axis gimbal. <code>PropwashClientApi.registerHudElement(id, element)</code> draws own HUD elements with <code>FlightTelemetry</code> inside the picture area and may replace the Propwash OSD. <code>PropwashClientApi.input()</code> reads sticks and accessory actions.',
+    '<code>PropwashClientApi.registerGimbal(id, anbieter)</code> setzt die Weltlage der FPV-Kamera (auch für Zuschauer); <code>GimbalModel</code> ist ein fertiger stabilisierter 3-Achsen-Gimbal. <code>PropwashClientApi.registerHudElement(id, element)</code> zeichnet eigene HUD-Elemente mit <code>FlightTelemetry</code> im Bildbereich und darf das Propwash-OSD ersetzen. <code>PropwashClientApi.input()</code> liest Knüppel und Zubehör-Aktionen.')}
+`);
+
   const eventsType = api.packages.flatMap((p) => p.types).find((t) => t.name === 'PropwashEvents');
   const eventRows = eventsType.members.filter((m) => m.kind === 'field').map((m) => {
     const listenerName = m.display.match(/PropwashEvent<([A-Za-z]+)>/)[1];
@@ -397,7 +437,7 @@ ${table([['Message or behaviour', 'Meldung oder Verhalten'], ['Cause', 'Ursache'
       de: 'Propwash FPV aus dem eigenen Mod erweitern, ohne Propwash zu ändern: neue Teile jeder Kategorie, Presets, ein Kreativ-Tab, Knöpfe in der Werkbank, Konfigurator-Tabs, Flugschul-Szenen und ein Sharecode-System.',
     },
     toc,
-    body: [what, setup, lifecycle, parts, items, presets, builds, client, events, versions, multiplayer, example, checklist, license].join('\n'),
+    body: [what, setup, lifecycle, parts, items, presets, builds, client, flight, events, versions, multiplayer, example, checklist, license].join('\n'),
   };
 }
 
