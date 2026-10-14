@@ -5865,7 +5865,8 @@
             "double cameraWidthMm",
             "OptionalDouble cameraFovDeg",
             "int vtxPowerMw",
-            "OptionalDouble powerW"
+            "OptionalDouble powerW",
+            "List<Integer> vtxLevelsMw"
           ],
           "extends": "",
           "implements": "PartDefinition",
@@ -5873,10 +5874,22 @@
           "constants": [],
           "members": [
             {
+              "kind": "field",
+              "name": "MAX_VTX_LEVELS",
+              "static": true,
+              "display": "static final int MAX_VTX_LEVELS = 8"
+            },
+            {
               "kind": "constructor",
               "name": "VideoDefinition",
               "static": false,
               "display": "VideoDefinition(Identifier id, PartBasics basics, VideoLink link, int latencyMs, int rangeBlocks, double imageQuality, double cameraWidthMm, OptionalDouble cameraFovDeg, int vtxPowerMw)"
+            },
+            {
+              "kind": "constructor",
+              "name": "VideoDefinition",
+              "static": false,
+              "display": "VideoDefinition(Identifier id, PartBasics basics, VideoLink link, int latencyMs, int rangeBlocks, double imageQuality, double cameraWidthMm, OptionalDouble cameraFovDeg, int vtxPowerMw, OptionalDouble powerW)"
             },
             {
               "kind": "method",
@@ -5962,6 +5975,12 @@
                   "name": "powerWatts",
                   "static": false,
                   "display": "Builder powerWatts(double watts)"
+                },
+                {
+                  "kind": "method",
+                  "name": "vtxLevels",
+                  "static": false,
+                  "display": "Builder vtxLevels(int... milliwatts)"
                 },
                 {
                   "kind": "method",

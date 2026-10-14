@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js" data-title-en="Blackbox tuning – Propwash FPV docs" data-title-de="Tuning mit der Blackbox – Propwash-FPV-Doku" data-description-en="Record flights in Propwash FPV 0.5.1 as Betaflight blackbox logs and tune your drone with Blackbox Explorer and PIDtoolbox." data-description-de="Flüge in Propwash FPV 0.5.1 als Betaflight-Blackbox-Logs aufzeichnen und die Drohne mit Blackbox Explorer und PIDtoolbox tunen.">
+<html lang="en" class="no-js" data-title-en="Blackbox tuning – Propwash FPV docs" data-title-de="Tuning mit der Blackbox – Propwash-FPV-Doku" data-description-en="Record flights in Propwash FPV 0.5.2 as Betaflight blackbox logs and tune your drone with Blackbox Explorer and PIDtoolbox." data-description-de="Flüge in Propwash FPV 0.5.2 als Betaflight-Blackbox-Logs aufzeichnen und die Drohne mit Blackbox Explorer und PIDtoolbox tunen.">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Blackbox tuning – Propwash FPV docs</title>
-<meta name="description" content="Record flights in Propwash FPV 0.5.1 as Betaflight blackbox logs and tune your drone with Blackbox Explorer and PIDtoolbox.">
+<meta name="description" content="Record flights in Propwash FPV 0.5.2 as Betaflight blackbox logs and tune your drone with Blackbox Explorer and PIDtoolbox.">
 <meta name="theme-color" content="#1A1A1A">
 <meta name="color-scheme" content="dark">
 <meta name="referrer" content="no-referrer">
@@ -13,7 +13,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Propwash FPV">
 <meta property="og:title" content="Blackbox tuning – Propwash FPV docs">
-<meta property="og:description" content="Record flights in Propwash FPV 0.5.1 as Betaflight blackbox logs and tune your drone with Blackbox Explorer and PIDtoolbox.">
+<meta property="og:description" content="Record flights in Propwash FPV 0.5.2 as Betaflight blackbox logs and tune your drone with Blackbox Explorer and PIDtoolbox.">
 <meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
@@ -91,7 +91,7 @@
       <h1 class="docs-title"><span lang="en">Tuning with Blackbox Explorer and PIDtoolbox</span><span lang="de">Tuning mit Blackbox Explorer und PIDtoolbox</span></h1>
       <p lang="en" class="docs-lead">Every armed flight as a real Betaflight blackbox log – open it in the tools real pilots use.</p>
 <p lang="de" class="docs-lead">Jeder scharfe Flug als echter Betaflight-Blackbox-Log – zum Öffnen in den Werkzeugen echter Piloten.</p>
-      <p class="docs-meta">Propwash 0.5.1 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 15</p>
+      <p class="docs-meta">Propwash 0.5.2 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.6.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 16</p>
     </div>
   </header>
   <div class="wrap docs">
@@ -120,8 +120,8 @@
 <section class="docs-section" aria-labelledby="what">
 <h2 id="what" class="docs-h2"><a class="docs-anchor" href="#what" aria-hidden="true" tabindex="-1">#</a><span lang="en">What the blackbox records</span><span lang="de">Was die Blackbox aufzeichnet</span></h2>
 
-<p lang="en">Like a real drone with Betaflight, Propwash 0.5.1 can record every flight: sticks, setpoints, gyro, PID terms, motors and battery at every pass of the flight controller loop – 2 kHz with the default PID loop. The logs are real Betaflight blackbox logs (<code>.bbl</code>), so real tuning tools open them:</p>
-<p lang="de">Wie eine echte Drohne mit Betaflight zeichnet Propwash 0.5.1 auf Wunsch jeden Flug auf: Knüppel, Sollwerte, Gyro, PID-Anteile, Motoren und Akku bei jedem Durchlauf der Regelschleife – 2 kHz mit der Standard-Regelschleife. Die Logs sind echte Betaflight-Blackbox-Logs (<code>.bbl</code>), also öffnen sie echte Tuning-Werkzeuge:</p>
+<p lang="en">Like a real drone with Betaflight, Propwash 0.5.2 can record every flight: sticks, setpoints, gyro, PID terms, motors and battery at every pass of the flight controller loop – 2 kHz with the default PID loop. The logs are real Betaflight blackbox logs (<code>.bbl</code>), so real tuning tools open them:</p>
+<p lang="de">Wie eine echte Drohne mit Betaflight zeichnet Propwash 0.5.2 auf Wunsch jeden Flug auf: Knüppel, Sollwerte, Gyro, PID-Anteile, Motoren und Akku bei jedem Durchlauf der Regelschleife – 2 kHz mit der Standard-Regelschleife. Die Logs sind echte Betaflight-Blackbox-Logs (<code>.bbl</code>), also öffnen sie echte Tuning-Werkzeuge:</p>
 <ul>
 <li><span lang="en"><strong>Betaflight Blackbox Explorer</strong> – in the browser at <a href="https://blackbox.betaflight.com/" target="_blank" rel="noopener">blackbox.betaflight.com</a> or as an app: every trace over time, the sticks, the motors and a spectrum of the noise.</span><span lang="de"><strong>Betaflight Blackbox Explorer</strong> – im Browser unter <a href="https://blackbox.betaflight.com/" target="_blank" rel="noopener">blackbox.betaflight.com</a> oder als Programm: alle Kurven über der Zeit, die Knüppel, die Motoren und ein Spektrum des Rauschens.</span></li>
 <li><span lang="en"><strong>PIDtoolbox</strong> – <a href="https://pidtoolbox.com/" target="_blank" rel="noopener">pidtoolbox.com</a>: step response per axis (how fast and how cleanly the gyro follows the setpoint), noise by throttle and frequency.</span><span lang="de"><strong>PIDtoolbox</strong> – <a href="https://pidtoolbox.com/" target="_blank" rel="noopener">pidtoolbox.com</a>: Sprungantwort je Achse (wie schnell und sauber das Gyro dem Sollwert folgt), Rauschen nach Gas und Frequenz.</span></li>

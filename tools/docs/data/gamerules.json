@@ -1,7 +1,7 @@
 {
   "format": 1,
   "mod": "propwash",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "command": "/gamerule <id> <value>",
   "category": {
     "de": "Propwash FPV",
@@ -226,8 +226,8 @@
         "en": "Voltage sag"
       },
       "description": {
-        "de": "An: Die Akkuspannung sinkt mit der Ladung, die Drohne wird gegen Ende des Akkus träger. Aus: Die Ruhespannung bleibt auf vollem Akku. Der Einbruch unter Last durch den Innenwiderstand bleibt in beiden Fällen.",
-        "en": "On: battery voltage falls as the pack drains, so the drone gets weaker towards the end. Off: resting voltage stays at full charge. Load sag from the internal resistance stays either way."
+        "de": "An: Die Akkuspannung sinkt mit der Ladung, ein fast leerer Akku bricht bei Vollgas viel stärker ein und die Drohne wird gegen Ende träger. Aus: Der Akku verhält sich bis zuletzt wie ein voller. Der Einbruch unter Last durch den Innenwiderstand bleibt in beiden Fällen.",
+        "en": "On: battery voltage falls as the pack drains, a nearly empty pack sags much harder on a punch, and the drone gets weaker towards the end. Off: the pack behaves like a full one until it is empty. Load sag from the internal resistance stays either way."
       },
       "example": "/gamerule propwash:battery_sag false"
     },
@@ -302,12 +302,12 @@
       "default": true,
       "changes_physics": true,
       "title": {
-        "de": "Absturz entschärft",
-        "en": "Crash disarm"
+        "de": "Nach Absturz abschalten",
+        "en": "Disarm on crash"
       },
       "description": {
-        "de": "Nach einem harten Aufprall schaltet der Flugcontroller die Motoren ab.",
-        "en": "After a hard impact the flight controller shuts the motors off."
+        "de": "An: Nach einem harten Aufprall schaltet der Flugcontroller die Motoren ab, wie die Absturzerkennung einer echten Drohne. Aus: Die Drohne bleibt nach Abstürzen scharf – weiterfliegen oder sie mit dem Turtle-Modus wieder umdrehen, wenn sie kopfüber liegt.",
+        "en": "On: after a hard impact the flight controller shuts the motors off, like crash detection on a real quad. Off: the drone stays armed after crashes – fly on, or flip it back over with turtle mode while it lies upside down."
       },
       "example": "/gamerule propwash:crash_disarm false"
     },
@@ -629,6 +629,24 @@
         "en": "On: whoever is flying a drone takes no damage – for events where pilots should stand protected at the side. Off (default): the pilot's body stays a normal player; gravity, mobs, other players, falls, lava, drowning and hunger work as usual. The void and /kill always apply."
       },
       "example": "/gamerule propwash:invulnerable_pilots true"
+    },
+    {
+      "id": "propwash:waterproof_drones",
+      "name": "waterproof_drones",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": false,
+      "changes_physics": false,
+      "title": {
+        "de": "Drohnen sind wasserdicht",
+        "en": "Drones are waterproof"
+      },
+      "description": {
+        "de": "An: Jede Drohne verhält sich, als hätte sie eine wasserdichte Beschichtung – sie lässt sich im Wasser scharf schalten, fliegen und entschärfen, statt einen Kurzschluss zu bekommen. Aus (Standard): Nur mit Wasserschutz-Spray beschichtete Drohnen überstehen Wasser. Lava beendet jeden Flug.",
+        "en": "On: every drone behaves as if it had a waterproof coating – it can arm, fly and disarm in water instead of shorting out. Off (default): only drones sprayed with waterproof coating survive water. Lava always ends a flight."
+      },
+      "example": "/gamerule propwash:waterproof_drones true"
     }
   ],
   "presets": [
@@ -671,7 +689,8 @@
         "drones_generate_chunks": true,
         "save_assisted_laps": false,
         "drone_trails": false,
-        "invulnerable_pilots": false
+        "invulnerable_pilots": false,
+        "waterproof_drones": false
       },
       "differs_from_default": [],
       "command": "/propwash rules preset realistic"
@@ -715,7 +734,8 @@
         "drones_generate_chunks": true,
         "save_assisted_laps": true,
         "drone_trails": true,
-        "invulnerable_pilots": false
+        "invulnerable_pilots": false,
+        "waterproof_drones": false
       },
       "differs_from_default": [
         "hardware_limits",
@@ -735,8 +755,8 @@
         "en": "Arcade"
       },
       "description": {
-        "de": "Wie Training, dazu volle Freiheit: Jedes Teil passt zu jedem, die Luft ist ruhig, und harte Aufschläge steckt die Drohne weg und fliegt weiter.",
-        "en": "Like Training, plus full freedom: any part fits any other, the air is calm, and the drone shrugs off hard hits and keeps flying."
+        "de": "Wie Training, dazu volle Freiheit: Jedes Teil passt zu jedem, die Luft ist ruhig, harte Aufschläge steckt die Drohne weg und fliegt weiter, und Wasser schadet ihr nicht.",
+        "en": "Like Training, plus full freedom: any part fits any other, the air is calm, the drone shrugs off hard hits and keeps flying, and water does not hurt it."
       },
       "changes_physics": true,
       "values": {
@@ -767,7 +787,8 @@
         "drones_generate_chunks": true,
         "save_assisted_laps": true,
         "drone_trails": true,
-        "invulnerable_pilots": false
+        "invulnerable_pilots": false,
+        "waterproof_drones": true
       },
       "differs_from_default": [
         "prop_wash",
@@ -785,7 +806,8 @@
         "drone_hits_entities",
         "part_compatibility",
         "save_assisted_laps",
-        "drone_trails"
+        "drone_trails",
+        "waterproof_drones"
       ],
       "command": "/propwash rules preset arcade"
     }

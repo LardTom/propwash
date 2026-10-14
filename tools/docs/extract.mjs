@@ -201,6 +201,7 @@ const KEY_LABELS = {
   TAB: 'Tab', ENTER: 'Enter', RETURN: 'Enter', ESCAPE: 'Esc', MINUS: '-', EQUALS: '=', SEMICOLON: ';', APOSTROPHE: "'", SLASH: '/',
   BACKSLASH: '\\', GRAVE: '`', LBRACKET: '[', RBRACKET: ']', HOME: 'Home', END: 'End', INSERT: 'Insert', DELETE: 'Delete',
   PAGEUP: 'Page Up', PAGEDOWN: 'Page Down', LALT: 'Left Alt', RALT: 'Right Alt', NUMPADENTER: 'Numpad Enter',
+  ADD: 'Numpad +', MULTIPLY: 'Numpad *',
 };
 
 function keyLabel(constantName) {

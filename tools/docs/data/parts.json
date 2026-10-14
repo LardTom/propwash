@@ -124,6 +124,7 @@
       "link",
       "power_w",
       "range_blocks",
+      "vtx_levels_mw",
       "vtx_power_mw"
     ],
     "accessory": [
@@ -398,6 +399,13 @@
           "en": "7″ Propeller (2-blade, 3.5″ pitch, PC)",
           "de": "7-Zoll-Propeller (2 Blätter, 3,5″ Steigung, PC)"
         }
+      },
+      {
+        "id": "propwash:p51_29_3b",
+        "name": {
+          "en": "5.1″ Propeller (3-blade, 2.9″ pitch, PC)",
+          "de": "5,1-Zoll-Propeller (3 Blätter, 2,9″ Steigung, PC)"
+        }
       }
     ],
     "video": [
@@ -538,7 +546,7 @@
     },
     "video": {
       "id": "propwash:analog_race",
-      "json": "{\n  \"format\": 1,\n  \"mass_g\": 8.0,\n  \"link\": \"analog\",\n  \"latency_ms\": 12,\n  \"range_blocks\": 380,\n  \"image_quality\": 0.65,\n  \"camera_width_mm\": 19.0,\n  \"camera_fov_deg\": 125.0,\n  \"power_w\": 3.5,\n  \"sort\": 1\n}"
+      "json": "{\n  \"format\": 1,\n  \"mass_g\": 8.0,\n  \"link\": \"analog\",\n  \"latency_ms\": 12,\n  \"range_blocks\": 380,\n  \"image_quality\": 0.65,\n  \"camera_width_mm\": 19.0,\n  \"camera_fov_deg\": 125.0,\n  \"vtx_power_mw\": 400,\n  \"vtx_levels_mw\": [25, 200, 400, 800, 1600],\n  \"power_w\": 3.5,\n  \"sort\": 1\n}"
     },
     "battery": {
       "id": "propwash:b6s_1300",
@@ -550,7 +558,7 @@
     },
     "chemistry": {
       "id": "propwash:lipo",
-      "json": "{\n  \"format\": 1,\n  \"full_v\": 4.2,\n  \"nominal_v\": 3.7,\n  \"empty_v\": 3.5,\n  \"cutoff_v\": 3.3,\n  \"storage_v\": 3.8,\n  \"density_g_cm3\": 2.0,\n  \"usable_fraction\": 0.8,\n  \"ocv_shape\": [0.0, 0.13, 0.2, 0.29, 0.34, 0.39, 0.43, 0.49, 0.57, 0.69, 0.83, 1.0]\n}"
+      "json": "{\n  \"format\": 1,\n  \"full_v\": 4.2,\n  \"nominal_v\": 3.7,\n  \"empty_v\": 3.5,\n  \"cutoff_v\": 3.3,\n  \"storage_v\": 3.8,\n  \"density_g_cm3\": 2.0,\n  \"usable_fraction\": 0.8,\n  \"ocv_shape\": [0.0, 0.16, 0.27, 0.33, 0.37, 0.4, 0.43, 0.5, 0.61, 0.73, 0.86, 1.0]\n}"
     },
     "addon_frame": {
       "id": "propwash_example:deadcat_5",

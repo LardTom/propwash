@@ -11,6 +11,7 @@ const ID = { en: 'id', de: 'Id' };
 const OBJ = { en: 'object', de: 'Objekt' };
 const VEC3 = { en: '<code>[x, y, z]</code> mm', de: '<code>[x, y, z]</code> mm' };
 const RANGE = { en: '<code>[min, max]</code>', de: '<code>[min, max]</code>' };
+const INTS = { en: 'list of integers', de: 'Liste ganzer Zahlen' };
 const t = (en, de = en) => ({ en, de });
 
 function f(path, type, req, def, desc) {
@@ -129,7 +130,8 @@ export const FIELDS = {
     f('image_quality', NUM, REQ, null, t('Image quality, above 0 and at most 1.', 'Bildqualität, über 0 und höchstens 1.')),
     f('camera_width_mm', NUM, OPT, t('19'), t('Camera width, 8–40.', 'Kamerabreite, 8–40.')),
     f('camera_fov_deg', NUM, OPT, t('analog 120, digital 130'), t('Horizontal field of view of the camera, 60–180; it is the FPV field of view in the game.', 'Horizontales Sichtfeld der Kamera, 60–180; es ist das FPV-Sichtfeld im Spiel.')),
-    f('vtx_power_mw', INT, OPT, t('0'), t('Transmitter power in mW, 0–10000 (information only).', 'Sendeleistung in mW, 0–10000 (nur zur Information).')),
+    f('vtx_power_mw', INT, OPT, t('0 (= 200 mW)'), t('Rated transmitter power in mW, 0–10000: the level a drone transmits at until the pilot picks another one; range and power draw are given for it (since API 1.6, before information only).', 'Nennleistung des Senders in mW, 0–10000: die Stufe, mit der eine Drohne sendet, bis der Pilot eine andere wählt; Reichweite und Leistungsaufnahme gelten für sie (seit API 1.6, vorher nur Information).')),
+    f('vtx_levels_mw', INTS, OPT, t('derived from vtx_power_mw', 'aus vtx_power_mw abgeleitet'), t('Selectable power levels in mW, ascending, 1–10000, at most 8, must contain vtx_power_mw, e.g. <code>[25, 200, 400, 800]</code>. Without the list Propwash derives levels up to the rated power (API 1.6).', 'Wählbare Leistungsstufen in mW, aufsteigend, 1–10000, höchstens 8, muss vtx_power_mw enthalten, z. B. <code>[25, 200, 400, 800]</code>. Ohne Liste leitet Propwash Stufen bis zur Nennleistung ab (API 1.6).')),
     f('power_w', NUM, OPT, t('from system, mass and power', 'aus System, Masse und Leistung'), t('Power draw of the video system in W for the energy balance, 0.1–60.', 'Leistungsaufnahme des Videosystems in W für die Energiebilanz, 0,1–60.')),
   ],
   battery: [

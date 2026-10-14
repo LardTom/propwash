@@ -118,5 +118,37 @@
     "height": 1080,
     "small": 800,
     "large": 1600
+  },
+  "fisheye": {
+    "name": "fisheye-fpv",
+    "src": "iris_fpv_water_fisheye_vanilla.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "waterproof": {
+    "name": "waterproof-underwater",
+    "src": "waterproof_underwater_fpv.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "bando_map": {
+    "name": "bando-map",
+    "src": "bando_map_hand.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "zones": {
+    "name": "zones-border",
+    "src": "zones_border.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
   }
 }

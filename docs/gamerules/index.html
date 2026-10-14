@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js" data-title-en="World rules (gamerules) – Propwash FPV docs" data-title-de="Welt-Regeln (Gamerules) – Propwash-FPV-Doku" data-description-en="All 28 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands." data-description-de="Alle 28 Welt-Regeln (Gamerules) von Propwash FPV für Einzelspieler und Server: Schwerkraft, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Kanäle, mit Standardwerten, Bereichen und Befehlen.">
+<html lang="en" class="no-js" data-title-en="World rules (gamerules) – Propwash FPV docs" data-title-de="Welt-Regeln (Gamerules) – Propwash-FPV-Doku" data-description-en="All 29 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands." data-description-de="Alle 29 Welt-Regeln (Gamerules) von Propwash FPV für Einzelspieler und Server: Schwerkraft, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Kanäle, mit Standardwerten, Bereichen und Befehlen.">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>World rules (gamerules) – Propwash FPV docs</title>
-<meta name="description" content="All 28 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
+<meta name="description" content="All 29 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
 <meta name="theme-color" content="#1A1A1A">
 <meta name="color-scheme" content="dark">
 <meta name="referrer" content="no-referrer">
@@ -13,7 +13,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Propwash FPV">
 <meta property="og:title" content="World rules (gamerules) – Propwash FPV docs">
-<meta property="og:description" content="All 28 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
+<meta property="og:description" content="All 29 Propwash FPV world rules (gamerules) for singleplayer and servers: gravity, wind, battery life, crash damage, video range and channels, with defaults, ranges and commands.">
 <meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
@@ -89,9 +89,9 @@
     <div class="wrap docs-hero__inner">
       <p class="kicker"><span lang="en">Docs · For players and server owners</span><span lang="de">Doku · Für Spieler und Server-Betreiber</span></p>
       <h1 class="docs-title"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></h1>
-      <p lang="en" class="docs-lead">28 gamerules decide how drones behave in a world: physics, wind, battery life, crash damage, video range and how many pilots may be on air. They apply to everyone in the world.</p>
-<p lang="de" class="docs-lead">28 Gamerules bestimmen, wie sich Drohnen in einer Welt verhalten: Physik, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und wie viele Piloten gleichzeitig fliegen. Sie gelten für alle in der Welt.</p>
-      <p class="docs-meta">Propwash 0.5.1 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 15</p>
+      <p lang="en" class="docs-lead">29 gamerules decide how drones behave in a world: physics, wind, battery life, crash damage, video range and how many pilots may be on air. They apply to everyone in the world.</p>
+<p lang="de" class="docs-lead">29 Gamerules bestimmen, wie sich Drohnen in einer Welt verhalten: Physik, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und wie viele Piloten gleichzeitig fliegen. Sie gelten für alle in der Welt.</p>
+      <p class="docs-meta">Propwash 0.5.2 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.6.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 16</p>
     </div>
   </header>
   <div class="wrap docs">
@@ -144,8 +144,8 @@
 <p lang="en"><code>/gamerule</code> without a value shows the current one. <code>/propwash rules</code> lists the server settings and all world rules at once and names the preset they match; <code>/propwash rules preset</code> sets all rules of a preset (operators). When you create a world, the rules are also in Minecraft’s <em>Game Rules</em> screen under the category <em>Propwash FPV</em>.</p>
 <p lang="de"><code>/gamerule</code> ohne Wert zeigt den aktuellen. <code>/propwash rules</code> listet Server-Einstellungen und alle Welt-Regeln auf einmal und nennt die Voreinstellung, der sie entsprechen; <code>/propwash rules preset</code> setzt alle Regeln einer Voreinstellung (Operatoren). Beim Anlegen einer Welt stehen die Regeln auch in Minecrafts Fenster <em>Spielregeln</em> unter der Kategorie <em>Propwash FPV</em>.</p>
 <h3 id="how-leaderboards" class="docs-h3"><a class="docs-anchor" href="#how-leaderboards" aria-hidden="true" tabindex="-1">#</a><span lang="en">Leaderboards</span><span lang="de">Bestenlisten</span></h3>
-<p lang="en">Rules marked <span class="docs-badge docs-badge--physics">physics</span> change how drones fly (11 of 28). As soon as one of them differs from its default, flights no longer count for leaderboards and server records, so records stay comparable. The server checks this itself.</p>
-<p lang="de">Regeln mit <span class="docs-badge docs-badge--physics">Physik</span> ändern, wie Drohnen fliegen (11 von 28). Sobald eine davon vom Standard abweicht, zählen Flüge nicht mehr für Bestenlisten und Server-Rekorde, damit Rekorde vergleichbar bleiben. Das prüft der Server selbst.</p>
+<p lang="en">Rules marked <span class="docs-badge docs-badge--physics">physics</span> change how drones fly (11 of 29). As soon as one of them differs from its default, flights no longer count for leaderboards and server records, so records stay comparable. The server checks this itself.</p>
+<p lang="de">Regeln mit <span class="docs-badge docs-badge--physics">Physik</span> ändern, wie Drohnen fliegen (11 von 29). Sobald eine davon vom Standard abweicht, zählen Flüge nicht mehr für Bestenlisten und Server-Rekorde, damit Rekorde vergleichbar bleiben. Das prüft der Server selbst.</p>
 
 </section>
 <section class="docs-section" aria-labelledby="presets">
@@ -187,8 +187,8 @@
 </div>
 <div class="docs-card docs-card--plain" id="preset-arcade">
 <h3 class="docs-card__title">Arcade</h3>
-<p lang="en">Like Training, plus full freedom: any part fits any other, the air is calm, and the drone shrugs off hard hits and keeps flying.</p>
-<p lang="de">Wie Training, dazu volle Freiheit: Jedes Teil passt zu jedem, die Luft ist ruhig, und harte Aufschläge steckt die Drohne weg und fliegt weiter.</p>
+<p lang="en">Like Training, plus full freedom: any part fits any other, the air is calm, the drone shrugs off hard hits and keeps flying, and water does not hurt it.</p>
+<p lang="de">Wie Training, dazu volle Freiheit: Jedes Teil passt zu jedem, die Luft ist ruhig, harte Aufschläge steckt die Drohne weg und fliegt weiter, und Wasser schadet ihr nicht.</p>
 <ul>
 <li><span lang="en"><a href="#rule-prop_wash">Prop wash</a>: off</span><span lang="de"><a href="#rule-prop_wash">Prop-Wash</a>: aus</span></li>
 <li><span lang="en"><a href="#rule-hardware_limits">Hardware limits</a>: off</span><span lang="de"><a href="#rule-hardware_limits">Hardware-Grenzen</a>: aus</span></li>
@@ -198,7 +198,7 @@
 <li><span lang="en"><a href="#rule-battery_sag">Voltage sag</a>: off</span><span lang="de"><a href="#rule-battery_sag">Spannungseinbruch</a>: aus</span></li>
 <li><span lang="en"><a href="#rule-crash_damage">Crash damage</a>: off</span><span lang="de"><a href="#rule-crash_damage">Crash-Schaden</a>: aus</span></li>
 <li><span lang="en"><a href="#rule-crash_tolerance">Crash tolerance</a>: 300 %</span><span lang="de"><a href="#rule-crash_tolerance">Crash-Toleranz</a>: 300 %</span></li>
-<li><span lang="en"><a href="#rule-crash_disarm">Crash disarm</a>: off</span><span lang="de"><a href="#rule-crash_disarm">Absturz entschärft</a>: aus</span></li>
+<li><span lang="en"><a href="#rule-crash_disarm">Disarm on crash</a>: off</span><span lang="de"><a href="#rule-crash_disarm">Nach Absturz abschalten</a>: aus</span></li>
 <li><span lang="en"><a href="#rule-prop_strikes">Prop strikes</a>: off</span><span lang="de"><a href="#rule-prop_strikes">Propellertreffer</a>: aus</span></li>
 <li><span lang="en"><a href="#rule-infinite_range_analog">Infinite range (analog)</a>: on</span><span lang="de"><a href="#rule-infinite_range_analog">Unendliche Reichweite analog</a>: an</span></li>
 <li><span lang="en"><a href="#rule-infinite_range_digital">Infinite range (digital)</a>: on</span><span lang="de"><a href="#rule-infinite_range_digital">Unendliche Reichweite digital</a>: an</span></li>
@@ -206,6 +206,7 @@
 <li><span lang="en"><a href="#rule-part_compatibility">Parts must fit</a>: off</span><span lang="de"><a href="#rule-part_compatibility">Teile müssen zusammenpassen</a>: aus</span></li>
 <li><span lang="en"><a href="#rule-save_assisted_laps">Save assisted laps</a>: on</span><span lang="de"><a href="#rule-save_assisted_laps">Runden mit Flughilfe speichern</a>: an</span></li>
 <li><span lang="en"><a href="#rule-drone_trails">Drone trails</a>: on</span><span lang="de"><a href="#rule-drone_trails">Drohnen-Trails</a>: an</span></li>
+<li><span lang="en"><a href="#rule-waterproof_drones">Drones are waterproof</a>: on</span><span lang="de"><a href="#rule-waterproof_drones">Drohnen sind wasserdicht</a>: an</span></li>
 </ul>
 <p lang="en">Changes physics rules: flights do not count for leaderboards.</p>
 <p lang="de">Ändert Physik-Regeln: Flüge zählen nicht für Bestenlisten.</p>
@@ -252,8 +253,8 @@
 <tbody>
 <tr id="rule-battery_scale"><th scope="row"><span class="docs-rule__title"><span lang="en">Battery life</span><span lang="de">Akkulaufzeit</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>battery_scale</code></th><td>100 %</td><td><span lang="en">0–1000 %; <code>0</code> = infinite</span><span lang="de">0–1000 %; <code>0</code> = unendlich</span></td><td><p lang="en">How long a battery lasts, in percent: 200 twice as long, 50 half as long, 0 infinite (the battery does not drain while flying). The mAh drawn in the OSD count along.</p>
 <p lang="de">Wie lange ein Akku hält, in Prozent: 200 doppelt so lange, 50 halb so lange, 0 unendlich (der Akku entlädt sich beim Fliegen nicht). Die verbrauchten mAh im OSD zählen mit.</p><p class="docs-rule__example"><code>/gamerule propwash:battery_scale 110</code></p></td></tr>
-<tr id="rule-battery_sag"><th scope="row"><span class="docs-rule__title"><span lang="en">Voltage sag</span><span lang="de">Spannungseinbruch</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>battery_sag</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">On: battery voltage falls as the pack drains, so the drone gets weaker towards the end. Off: resting voltage stays at full charge. Load sag from the internal resistance stays either way.</p>
-<p lang="de">An: Die Akkuspannung sinkt mit der Ladung, die Drohne wird gegen Ende des Akkus träger. Aus: Die Ruhespannung bleibt auf vollem Akku. Der Einbruch unter Last durch den Innenwiderstand bleibt in beiden Fällen.</p><p class="docs-rule__example"><code>/gamerule propwash:battery_sag false</code></p></td></tr>
+<tr id="rule-battery_sag"><th scope="row"><span class="docs-rule__title"><span lang="en">Voltage sag</span><span lang="de">Spannungseinbruch</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>battery_sag</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">On: battery voltage falls as the pack drains, a nearly empty pack sags much harder on a punch, and the drone gets weaker towards the end. Off: the pack behaves like a full one until it is empty. Load sag from the internal resistance stays either way.</p>
+<p lang="de">An: Die Akkuspannung sinkt mit der Ladung, ein fast leerer Akku bricht bei Vollgas viel stärker ein und die Drohne wird gegen Ende träger. Aus: Der Akku verhält sich bis zuletzt wie ein voller. Der Einbruch unter Last durch den Innenwiderstand bleibt in beiden Fällen.</p><p class="docs-rule__example"><code>/gamerule propwash:battery_sag false</code></p></td></tr>
 </tbody>
 </table></div>
 </section>
@@ -268,8 +269,8 @@
 <p lang="de">Wie stark Abstürze die Teile abnutzen, in Prozent; 100 ist normal. Wirkt nur mit eingeschaltetem Crash-Schaden.</p><p class="docs-rule__example"><code>/gamerule propwash:crash_damage_scale 105</code></p></td></tr>
 <tr id="rule-crash_tolerance"><th scope="row"><span class="docs-rule__title"><span lang="en">Crash tolerance</span><span lang="de">Crash-Toleranz</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>crash_tolerance</code></th><td>100 %</td><td>50–400 %</td><td><p lang="en">The impact speed from which a hit counts as a crash, in percent; 100 is normal, higher is more forgiving.</p>
 <p lang="de">Ab welcher Aufprallgeschwindigkeit ein Aufprall als Absturz zählt, in Prozent; 100 ist normal, höher ist nachsichtiger.</p><p class="docs-rule__example"><code>/gamerule propwash:crash_tolerance 105</code></p></td></tr>
-<tr id="rule-crash_disarm"><th scope="row"><span class="docs-rule__title"><span lang="en">Crash disarm</span><span lang="de">Absturz entschärft</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>crash_disarm</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">After a hard impact the flight controller shuts the motors off.</p>
-<p lang="de">Nach einem harten Aufprall schaltet der Flugcontroller die Motoren ab.</p><p class="docs-rule__example"><code>/gamerule propwash:crash_disarm false</code></p></td></tr>
+<tr id="rule-crash_disarm"><th scope="row"><span class="docs-rule__title"><span lang="en">Disarm on crash</span><span lang="de">Nach Absturz abschalten</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>crash_disarm</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">On: after a hard impact the flight controller shuts the motors off, like crash detection on a real quad. Off: the drone stays armed after crashes – fly on, or flip it back over with turtle mode while it lies upside down.</p>
+<p lang="de">An: Nach einem harten Aufprall schaltet der Flugcontroller die Motoren ab, wie die Absturzerkennung einer echten Drohne. Aus: Die Drohne bleibt nach Abstürzen scharf – weiterfliegen oder sie mit dem Turtle-Modus wieder umdrehen, wenn sie kopfüber liegt.</p><p class="docs-rule__example"><code>/gamerule propwash:crash_disarm false</code></p></td></tr>
 <tr id="rule-prop_strikes"><th scope="row"><span class="docs-rule__title"><span lang="en">Prop strikes</span><span lang="de">Propellertreffer</span></span> <span class="docs-badge docs-badge--physics"><span lang="en">physics</span><span lang="de">Physik</span></span><br><code class="docs-rule__id">propwash:<wbr>prop_strikes</code></th><td><span lang="en">On</span><span lang="de">An</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">A prop clipping an obstacle slows its motor and sends the drone tumbling.</p>
 <p lang="de">Streift ein Propeller ein Hindernis, bremst der Motor ab und die Drohne gerät ins Taumeln.</p><p class="docs-rule__example"><code>/gamerule propwash:prop_strikes false</code></p></td></tr>
 </tbody>
@@ -318,6 +319,8 @@
 <p lang="de">An: Hinter jeder fliegenden Drohne zieht eine dünne, verblassende Spur in der Farbe der Drohne (LED-Streifen oder Lackierung) – so sieht man andere Piloten auch im FPV-Bild. Gelandete und entschärfte Drohnen ziehen keine Spur. Jeder Spieler kann die Trails für sich im Tab „Darstellung“ ausschalten. Ändert keine Physik.</p><p class="docs-rule__example"><code>/gamerule propwash:drone_trails true</code></p></td></tr>
 <tr id="rule-invulnerable_pilots"><th scope="row"><span class="docs-rule__title"><span lang="en">Invulnerable pilots</span><span lang="de">Unverwundbare Piloten</span></span><br><code class="docs-rule__id">propwash:<wbr>invulnerable_pilots</code></th><td><span lang="en">Off</span><span lang="de">Aus</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">On: whoever is flying a drone takes no damage – for events where pilots should stand protected at the side. Off (default): the pilot's body stays a normal player; gravity, mobs, other players, falls, lava, drowning and hunger work as usual. The void and /kill always apply.</p>
 <p lang="de">An: Wer gerade eine Drohne steuert, nimmt keinen Schaden – für Events, bei denen Piloten geschützt am Rand stehen sollen. Aus (Standard): Der Körper des Piloten bleibt ein normaler Spieler; Schwerkraft, Mobs, andere Spieler, Stürze, Lava, Ertrinken und Hunger wirken wie sonst. Die Leere und /kill wirken immer.</p><p class="docs-rule__example"><code>/gamerule propwash:invulnerable_pilots true</code></p></td></tr>
+<tr id="rule-waterproof_drones"><th scope="row"><span class="docs-rule__title"><span lang="en">Drones are waterproof</span><span lang="de">Drohnen sind wasserdicht</span></span><br><code class="docs-rule__id">propwash:<wbr>waterproof_drones</code></th><td><span lang="en">Off</span><span lang="de">Aus</span></td><td><span class="nowrap"><code>true</code> / <code>false</code></span></td><td><p lang="en">On: every drone behaves as if it had a waterproof coating – it can arm, fly and disarm in water instead of shorting out. Off (default): only drones sprayed with waterproof coating survive water. Lava always ends a flight.</p>
+<p lang="de">An: Jede Drohne verhält sich, als hätte sie eine wasserdichte Beschichtung – sie lässt sich im Wasser scharf schalten, fliegen und entschärfen, statt einen Kurzschluss zu bekommen. Aus (Standard): Nur mit Wasserschutz-Spray beschichtete Drohnen überstehen Wasser. Lava beendet jeden Flug.</p><p class="docs-rule__example"><code>/gamerule propwash:waterproof_drones true</code></p></td></tr>
 </tbody>
 </table></div>
 </section>
@@ -397,8 +400,8 @@
 <section class="docs-section" aria-labelledby="data">
 <h2 id="data" class="docs-h2"><a class="docs-anchor" href="#data" aria-hidden="true" tabindex="-1">#</a><span lang="en">As data</span><span lang="de">Als Daten</span></h2>
 
-<p lang="en">This page is generated from the rule catalogue of Propwash 0.5.1. The same list as JSON (id, type, default, range, group, texts in English and German, example command) is <a href="gamerules.json" download>gamerules.json</a>, for server panels and tools.</p>
-<p lang="de">Diese Seite entsteht aus dem Regel-Katalog von Propwash 0.5.1. Dieselbe Liste als JSON (Id, Typ, Standard, Bereich, Gruppe, Texte auf Englisch und Deutsch, Beispielbefehl) ist <a href="gamerules.json" download>gamerules.json</a>, für Server-Panels und Werkzeuge.</p>
+<p lang="en">This page is generated from the rule catalogue of Propwash 0.5.2. The same list as JSON (id, type, default, range, group, texts in English and German, example command) is <a href="gamerules.json" download>gamerules.json</a>, for server panels and tools.</p>
+<p lang="de">Diese Seite entsteht aus dem Regel-Katalog von Propwash 0.5.2. Dieselbe Liste als JSON (Id, Typ, Standard, Bereich, Gruppe, Texte auf Englisch und Deutsch, Beispielbefehl) ist <a href="gamerules.json" download>gamerules.json</a>, für Server-Panels und Werkzeuge.</p>
 
 </section>
     </article>

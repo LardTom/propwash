@@ -173,6 +173,16 @@
       "sharedWith": []
     },
     {
+      "name": "drone_turtle",
+      "key": "Numpad 8",
+      "flightStick": false,
+      "title": {
+        "en": "Turtle mode on/off",
+        "de": "Turtle-Modus an/aus"
+      },
+      "sharedWith": []
+    },
+    {
       "name": "drone_exit",
       "key": "Y",
       "flightStick": false,
@@ -299,8 +309,8 @@
       "key": "Left Alt",
       "flightStick": false,
       "title": {
-        "en": "Adjust gate: free mouse (hold)",
-        "de": "Gate einstellen: Maus frei (halten)"
+        "en": "Adjust gate: use the mouse (hold)",
+        "de": "Gate einstellen: Maus benutzen (halten)"
       },
       "sharedWith": []
     },
@@ -335,8 +345,18 @@
       "sharedWith": []
     },
     {
+      "name": "vtx_power",
+      "key": "F10",
+      "flightStick": false,
+      "title": {
+        "en": "Step VTX power",
+        "de": "VTX-Leistung umschalten"
+      },
+      "sharedWith": []
+    },
+    {
       "name": "accessory_action_1",
-      "key": "Numpad 8",
+      "key": "Numpad 9",
       "flightStick": false,
       "title": {
         "en": "Accessory action 1",
@@ -346,7 +366,7 @@
     },
     {
       "name": "accessory_action_2",
-      "key": "Numpad 9",
+      "key": "Numpad 0",
       "flightStick": false,
       "title": {
         "en": "Accessory action 2",
@@ -356,7 +376,7 @@
     },
     {
       "name": "accessory_action_3",
-      "key": "Numpad 0",
+      "key": "Numpad Enter",
       "flightStick": false,
       "title": {
         "en": "Accessory action 3",
@@ -366,7 +386,7 @@
     },
     {
       "name": "accessory_action_4",
-      "key": "Numpad Enter",
+      "key": "Numpad +",
       "flightStick": false,
       "title": {
         "en": "Accessory action 4",
@@ -479,6 +499,20 @@
       "title": {
         "en": "Blackbox",
         "de": "Blackbox"
+      }
+    },
+    {
+      "name": "vtx_power",
+      "title": {
+        "en": "VTX power",
+        "de": "VTX-Leistung"
+      }
+    },
+    {
+      "name": "turtle",
+      "title": {
+        "en": "Turtle mode",
+        "de": "Turtle-Modus"
       }
     },
     {

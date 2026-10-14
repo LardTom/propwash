@@ -48,6 +48,10 @@ export const IMAGES = {
   join_mismatch: { src: 'join_addon_mismatch.png', name: 'join-addon-mismatch' },
   gate_pole: { src: 'gate_pole_multigp.png', name: 'gate-pole-multigp' },
   gate_redstone: { src: 'gate_redstone.png', name: 'gate-redstone' },
+  fisheye: { src: 'iris_fpv_water_fisheye_vanilla.png', name: 'fisheye-fpv' },
+  waterproof: { src: 'waterproof_underwater_fpv.png', name: 'waterproof-underwater' },
+  bando_map: { src: 'bando_map_hand.png', name: 'bando-map' },
+  zones: { src: 'zones_border.png', name: 'zones-border' },
 };
 const SIZES = [800, 1600];
 
