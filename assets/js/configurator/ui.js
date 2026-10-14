@@ -9,8 +9,8 @@ import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
 import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=11771e54';
 import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
 import { batteryFit } from './rules.js?v=147e54d1';
-import { assemble, PROP_SLOTS } from './assembly.js?v=6349ca95';
-import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=a741176a';
+import { assemble, PROP_SLOTS } from './assembly.js?v=ac181a91';
+import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=12d6a44c';
 import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=5baa2171';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
@@ -1691,7 +1691,7 @@ async function startViewer() {
   const button = $('[data-autorotate]');
   let mod;
   try {
-    mod = await import('./viewer.js?v=c0423cef');
+    mod = await import('./viewer.js?v=759013f2');
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;
