@@ -120,7 +120,7 @@ The docs pages take both from the same module when they are rendered (`node tool
 new hand-written page goes into `HAND_PAGES` of `tools/build-nav.mjs`. Below 1100 px the navigation folds behind the
 menu button; the width is in `assets/css/style.css` and `assets/js/main.js` and `test-nav.mjs` checks that both agree.
 The Features menu opens on click, tap or keyboard (Escape closes it, focus returns to its button), without JavaScript
-on hover and focus.
+on hover and focus; without JavaScript narrow screens show the links as a row below the brand.
 
 ## Drone configurator
 

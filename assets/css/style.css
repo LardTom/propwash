@@ -447,11 +447,35 @@ kbd {
   }
 }
 
-/* Without JavaScript the menu opens on hover and keyboard focus. */
-@media (min-width: 1100px) {
-  html.no-js .nav-group:hover .nav-group__panel,
-  html.no-js .nav-group:focus-within .nav-group__panel {
-    display: grid;
+/* Without JavaScript the menu opens on hover and keyboard focus, and narrow screens show the links as a row below
+   the brand (the menu button needs JavaScript). */
+html.no-js .nav-group:hover .nav-group__panel,
+html.no-js .nav-group:focus-within .nav-group__panel {
+  display: grid;
+}
+
+@media (max-width: 1099px) {
+  html.no-js .site-header {
+    position: relative;
+  }
+  html.no-js .site-header__inner {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: var(--header-h);
+    padding-block: 10px;
+  }
+  html.no-js .site-nav {
+    display: flex;
+    flex-wrap: wrap;
+    order: 10;
+    width: 100%;
+    margin: 0;
+  }
+  html.no-js .site-nav .nav-group {
+    width: 100%;
+  }
+  html.no-js .site-nav__cta {
+    margin-left: 4px;
   }
 }
 
