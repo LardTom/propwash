@@ -132,6 +132,28 @@
   }
 }
 
+.docs-menu__sublist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.docs-menu__heading {
+  display: block;
+  margin-top: 14px;
+  padding: 4px 12px;
+  color: var(--faint);
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.docs-section > .docs-h3 + .docs-cards {
+  margin-top: 14px;
+}
+
 .docs-menu__item > a {
   display: block;
   margin-left: -1px;

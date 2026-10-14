@@ -1,22 +1,29 @@
 // HTML building blocks of the docs pages: the page frame (same header, language switch and footer as the rest of the
 // site), the docs menu, bilingual text helpers, tables and highlighted code blocks.
 
-export const DISCORD = 'https://discord.gg/bNhkSXYSgZ';
-export const CURSEFORGE = 'https://www.curseforge.com/minecraft/mc-mods/propwash-fpv';
-export const MODRINTH = 'https://modrinth.com/mod/propwash-fpv';
+import { siteNav, siteFooterLinks, DISCORD, DISCORD_PATH, CURSEFORGE, MODRINTH, SOURCE } from '../site-nav.mjs';
+
+export { DISCORD, CURSEFORGE, MODRINTH, SOURCE };
 export const SITE = 'https://propwashfpv.com/';
-export const SOURCE = 'https://github.com/LardTom/propwash-fpv';
 export const SOURCE_JMP = 'https://github.com/LardTom/propwash-justmoreparts';
 export const SHIELD = 'https://polyformproject.org/licenses/shield/1.0.0';
 
+// Groups of the docs menu and the cards on the overview page, in this order. A new docs page: an entry in PAGES with
+// its group, a builder in tools/docs/pages/ registered in BUILDERS of tools/build-docs.mjs, and a card in
+// tools/docs/pages/index.mjs.
+export const GROUPS = [
+  { id: 'play', title: { en: 'Play', de: 'Spielen' } },
+  { id: 'addons', title: { en: 'Make add-ons', de: 'Add-ons bauen' } },
+];
+
 export const PAGES = [
   { path: 'docs/', id: 'overview', title: { en: 'Overview', de: 'Übersicht' } },
-  { path: 'docs/guide/', id: 'guide', title: { en: 'Player guide', de: 'Spielerhandbuch' } },
-  { path: 'docs/blackbox/', id: 'blackbox', title: { en: 'Blackbox tuning', de: 'Tuning mit der Blackbox' } },
-  { path: 'docs/gamerules/', id: 'gamerules', title: { en: 'World rules', de: 'Welt-Regeln' } },
-  { path: 'docs/api/', id: 'api', title: { en: 'Add-on API', de: 'Add-on-API' } },
-  { path: 'docs/api/reference/', id: 'reference', title: { en: 'API reference', de: 'API-Referenz' } },
-  { path: 'docs/parts-format/', id: 'parts-format', title: { en: 'Parts format (JSON)', de: 'Teile-Format (JSON)' } },
+  { path: 'docs/guide/', id: 'guide', group: 'play', title: { en: 'Player guide', de: 'Spielerhandbuch' } },
+  { path: 'docs/blackbox/', id: 'blackbox', group: 'play', title: { en: 'Blackbox tuning', de: 'Tuning mit der Blackbox' } },
+  { path: 'docs/gamerules/', id: 'gamerules', group: 'play', title: { en: 'World rules', de: 'Welt-Regeln' } },
+  { path: 'docs/api/', id: 'api', group: 'addons', title: { en: 'Add-on API', de: 'Add-on-API' } },
+  { path: 'docs/api/reference/', id: 'reference', group: 'addons', sub: true, title: { en: 'API reference', de: 'API-Referenz' } },
+  { path: 'docs/parts-format/', id: 'parts-format', group: 'addons', title: { en: 'Parts format (JSON)', de: 'Teile-Format (JSON)' } },
 ];
 
 export function esc(value) {
@@ -153,16 +160,25 @@ export function siteImage(prefix, name, sizes, alt, caption, dims) {
     + (caption ? `<figcaption>${L(caption.en, caption.de)}</figcaption>\n` : '') + '</figure>';
 }
 
-const DISCORD_SYMBOL = '<symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>';
+const DISCORD_SYMBOL = `<symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="${DISCORD_PATH}"/></symbol>`;
 
 function docsMenu(prefix, current, toc) {
-  const items = PAGES.map((p) => {
+  const item = (p) => {
     const here = p.id === current;
     const sub = here && toc.length
       ? `\n<ol class="docs-menu__toc">${toc.map((t) => `<li><a href="#${t.id}">${L(t.title.en, t.title.de)}</a></li>`).join('')}</ol>`
       : '';
-    return `<li class="docs-menu__item${here ? ' is-current' : ''}${p.id === 'reference' ? ' docs-menu__item--sub' : ''}"><a href="${prefix}${p.path}"${here ? ' aria-current="page"' : ''}>${L(p.title.en, p.title.de)}</a>${sub}</li>`;
-  }).join('\n');
+    return `<li class="docs-menu__item${here ? ' is-current' : ''}${p.sub ? ' docs-menu__item--sub' : ''}"><a href="${prefix}${p.path}"${here ? ' aria-current="page"' : ''}>${L(p.title.en, p.title.de)}</a>${sub}</li>`;
+  };
+  const unknown = PAGES.filter((p) => p.group && !GROUPS.some((g) => g.id === p.group));
+  if (unknown.length) throw new Error(`PAGES: unknown group in ${unknown.map((p) => p.id).join(', ')}`);
+  const items = [
+    ...PAGES.filter((p) => !p.group).map(item),
+    ...GROUPS.map((g) => `<li class="docs-menu__group"><span class="docs-menu__heading" id="docs-menu-${g.id}">${L(g.title.en, g.title.de)}</span>
+<ol class="docs-menu__sublist" aria-labelledby="docs-menu-${g.id}">
+${PAGES.filter((p) => p.group === g.id).map(item).join('\n')}
+</ol></li>`),
+  ].join('\n');
   return `<nav class="docs-menu" aria-label="Documentation" data-de-aria-label="Dokumentation">
 <details class="docs-menu__fold" data-docs-menu open>
 <summary class="docs-menu__summary"><span lang="en">Docs menu</span><span lang="de">Doku-Menü</span></summary>
@@ -173,16 +189,7 @@ ${items}
 </nav>`;
 }
 
-export function siteNav(prefix, nav) {
-  const match = nav.match(/^[ \t]*<nav class="site-nav"[\s\S]*?<\/nav>/m);
-  if (!match) throw new Error('index.html: <nav class="site-nav"> nicht gefunden');
-  if (!/href="docs\/"/.test(match[0])) throw new Error('index.html: Navigation ohne Link auf docs/');
-  return match[0]
-    .replace(/href="([^"]*)"/g, (all, href) => (/^(https?:|mailto:)/.test(href) ? all : `href="${prefix}${href}"`))
-    .replace(`href="${prefix}docs/"`, `href="${prefix}docs/" aria-current="page"`);
-}
-
-export function page({ id, prefix, title, description, kicker, heading, lead, toc, body, meta, nav }) {
+export function page({ id, prefix, title, description, kicker, heading, lead, toc, body, meta }) {
   const t = (x) => esc(x);
   const url = SITE + PAGES.find((p) => p.id === id).path;
   return `<!DOCTYPE html>
@@ -236,7 +243,7 @@ export function page({ id, prefix, title, description, kicker, heading, lead, to
       <img src="${prefix}assets/img/logo-96.webp" width="36" height="36" alt="">
       <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
     </a>
-${siteNav(prefix, nav)}
+${siteNav(prefix, id === 'overview' ? 'docs' : 'docs-sub')}
     <div class="social">
       <a class="social__link" href="${DISCORD}" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
     </div>
@@ -272,7 +279,7 @@ ${body}
     <div class="site-footer__brand">
       <img src="${prefix}assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
       <p><strong>Propwash FPV</strong> by lardtom</p>
-      <p class="site-footer__links"><a href="${DISCORD}" target="_blank" rel="noopener"><svg aria-hidden="true" width="14" height="14"><use href="#i-discord"/></svg> Discord</a> · <a href="${CURSEFORGE}" target="_blank" rel="noopener">CurseForge</a> · <a href="${MODRINTH}" target="_blank" rel="noopener">Modrinth</a> · <a href="${prefix}roadmap/">Roadmap</a> · <a href="${prefix}changelog/">Changelog</a> · <a href="${SOURCE}" target="_blank" rel="noopener"><span lang="en">Source code</span><span lang="de">Quellcode</span></a> · <a href="${prefix}impressum/"><span lang="en">Legal notice</span><span lang="de">Impressum</span></a> · <a href="${prefix}datenschutz/"><span lang="en">Privacy policy</span><span lang="de">Datenschutz</span></a></p>
+      ${siteFooterLinks(prefix, id === 'overview' ? 'docs' : 'docs-sub')}
     </div>
     <div class="site-footer__legal">
       <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
