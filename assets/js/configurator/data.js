@@ -3,10 +3,10 @@
 // external requests); createCatalog() wraps already parsed JSON (used by the node tests).
 
 import { check as checkBuild } from './rules.js?v=147e54d1';
-import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=11771e54';
-import { encode as encodeCode, decode as decodeCode, hexColor } from './sharecode.js?v=f703cd12';
+import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=2f177e4b';
+import { encode as encodeCode, decode as decodeCode, hexColor } from './sharecode.js?v=ff46f4e6';
 import { sharedOnly } from './tune.js?v=f4084d0e';
-import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=1700c67a';
+import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=7cb226f7';
 
 export const CATALOG_URL = new URL('../../data/configurator/catalog.json', import.meta.url);
 export const CATEGORIES = Object.freeze(['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory']);

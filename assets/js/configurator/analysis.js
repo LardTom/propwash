@@ -53,8 +53,12 @@ const MOTOR_TAU_MAX = 0.04;
 const WIRING_R = 0.003;
 const POL_FRACTION = 0.5;
 const C_RATE_PENALTY = 0.5;
-const LOW_SOC_GAIN = 1.0;
-const LOW_SOC_KNEE = 0.25;
+const SAG_FAST_FRACTION = 0.35;
+const LOW_SOC_KNEE = 0.15;
+const LOW_SOC_EXPONENT = 1.5;
+const LOW_SOC_OHMIC_GAIN = 1.5;
+const LOW_SOC_FAST_GAIN = 6.0;
+const LOW_SOC_SLOW_GAIN = 4.0;
 const AUX_BASE_W = 0.6;
 const AUX_PER_GRAM_W = 0.3;
 const BATTERY_LENGTH = 2.2;
@@ -773,10 +777,27 @@ function emf(p, soc) {
   return p.cells * cellOcv(p.chemistry, soc);
 }
 
-function internalResistance(p, batteryCurrent, soc) {
-  const rate = 1.0 + C_RATE_PENALTY * Math.max(0.0, batteryCurrent / p.continuousCurrent - 1.0);
-  const low = 1.0 + LOW_SOC_GAIN * Math.max(0.0, LOW_SOC_KNEE - soc) / LOW_SOC_KNEE;
-  return p.packResistance * rate * low;
+function lowSoc(soc) {
+  const x = Math.min(1.0, Math.max(0.0, LOW_SOC_KNEE - soc) / LOW_SOC_KNEE);
+  return Math.pow(x, LOW_SOC_EXPONENT);
+}
+
+function rateFactor(p, batteryCurrent) {
+  return 1.0 + C_RATE_PENALTY * Math.max(0.0, batteryCurrent / p.continuousCurrent - 1.0);
+}
+
+function slowResistance(p, soc) {
+  return p.polarizationResistance * (1.0 + LOW_SOC_SLOW_GAIN * lowSoc(soc));
+}
+
+function sustainedResistance(p, batteryCurrent, soc) {
+  const low = lowSoc(soc);
+  return p.packResistance * rateFactor(p, batteryCurrent) * (1.0 + LOW_SOC_OHMIC_GAIN * low)
+    + SAG_FAST_FRACTION * p.packResistance * (LOW_SOC_FAST_GAIN - LOW_SOC_OHMIC_GAIN) * low;
+}
+
+function dcResistance(p, batteryCurrent, soc) {
+  return sustainedResistance(p, batteryCurrent, soc) + slowResistance(p, soc);
 }
 
 function inputLimitedCurrent(r, backEmf, busVoltage, inputLimit) {
@@ -823,8 +844,8 @@ function uniformDuty(p, duty, soc, polarized, axialSpeed, crossSpeed, out, fixed
     const omega = motorOmega(p, duty, mid, axialSpeed, 1.0);
     const current = phaseCurrent(p, duty, mid, omega);
     const iBat = 4.0 * motorInputCurrent(p, mid, omega, current) + p.auxPower / mid;
-    const r = internalResistance(p, iBat, soc);
-    const vPol = polarized ? p.polarizationResistance * iBat : fixedPolarization;
+    const r = sustainedResistance(p, iBat, soc);
+    const vPol = polarized ? slowResistance(p, soc) * iBat : fixedPolarization;
     if (e - vPol - r * iBat - mid > 0.0) lo = mid;
     else hi = mid;
   }
@@ -841,15 +862,16 @@ function uniformDuty(p, duty, soc, polarized, axialSpeed, crossSpeed, out, fixed
 }
 
 function steadyMotor(p, omega, current, soc, polarized, fixedPolarization, sag, out) {
-  const e = emf(p, sag ? soc : 1.0);
+  const rested = sag ? soc : 1.0;
+  const e = emf(p, rested);
   const drive = p.phaseResistance * current + p.kt * omega;
   let v = e;
   for (let k = 0; k < HOVER_STEPS; k++) {
     const vv = Math.max(v, 0.05 * e);
     const duty = drive / vv;
     const iBat = 4.0 * duty * current + p.auxPower / vv;
-    const r = internalResistance(p, iBat, soc);
-    const vPol = polarized ? p.polarizationResistance * iBat : fixedPolarization;
+    const r = sustainedResistance(p, iBat, rested);
+    const vPol = polarized ? slowResistance(p, rested) * iBat : fixedPolarization;
     v = 0.5 * v + 0.5 * (e - vPol - r * iBat);
   }
   v = Math.max(v, 0.05 * e);
@@ -1098,7 +1120,7 @@ function packCurrent(p, pt) {
 }
 
 function loadedVoltage(p, soc, current) {
-  const r = internalResistance(p, current, soc) + p.polarizationResistance;
+  const r = dcResistance(p, current, soc);
   return emf(p, soc) - r * current;
 }
 

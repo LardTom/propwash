@@ -18,7 +18,7 @@ import { crc32 } from './crc32.js?v=62ad0fa2';
 import { inflateRaw } from './inflate.js?v=f04f9641';
 import { TUNE_KEYS, tuneIndex, isSharedKey } from './tune.js?v=f4084d0e';
 import { deflateRaw } from '../../vendor/pako/deflate.js';
-import { encodePw2, parsePw2, PW2_FORMAT } from './sharecode2.js?v=f703cd12';
+import { encodePw2, parsePw2, PW2_FORMAT } from './sharecode2.js?v=ff46f4e6';
 
 /**
  * Format of new codes: 'PW1' or 'PW2'. Decoding always reads both. Switch to 'PW2' once Just More Parts with PW2

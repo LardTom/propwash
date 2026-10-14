@@ -11,11 +11,11 @@ import { crc32 } from './crc32.js?v=62ad0fa2';
 import { inflateRaw } from './inflate.js?v=f04f9641';
 import { TUNE_KEYS as PW1_TUNE_KEYS, isSharedKey } from './tune.js?v=f4084d0e';
 import { deflateRaw } from '../../vendor/pako/deflate.js';
-import { PW2_PARTS, PW2_COLORS, PW2_OSD_DICTIONARY } from './sharecode2-tables.js?v=82cbc1ac';
+import { PW2_PARTS, PW2_COLORS, PW2_OSD_DICTIONARY } from './sharecode2-tables.js?v=1e97a115';
 import {
   Fail, utf8Encode, javaStrip, validPath, validNamespace, unknownNamespaceIndex, LIMITS, ACCESSORY_SLOTS, PAINT_SLOTS,
   BUILD_FIELDS,
-} from './sharecode.js?v=f703cd12';
+} from './sharecode.js?v=ff46f4e6';
 
 export const PW2_FORMAT = 'PW2';
 export const PW2_PREFIX = 'PW2';
