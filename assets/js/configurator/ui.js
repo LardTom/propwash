@@ -11,7 +11,7 @@ import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe
 import { batteryFit } from './rules.js?v=147e54d1';
 import { assemble, PROP_SLOTS } from './assembly.js?v=ac181a91';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=12d6a44c';
-import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=5baa2171';
+import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=6636e110';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
@@ -496,7 +496,7 @@ function picker() {
   });
   list.addEventListener('focusin', (e) => {
     const node = e.target.closest('[role="option"]');
-    if (node && node.dataset.id) showTip(node, catalog.part(node.dataset.id));
+    if (node && node.dataset.id && !quietFocus) showTip(node, catalog.part(node.dataset.id));
   });
   list.addEventListener('focusout', hideTip);
   list.addEventListener('pointerover', (e) => {
@@ -514,6 +514,8 @@ function picker() {
 }
 
 const listScroll = {};
+// Focus moved by a pick in the 3D view: no part tip then (it would cover the view).
+let quietFocus = false;
 
 // Floating part tip with pros/cons and what the part would change.
 let tipTimer = 0;
@@ -771,7 +773,7 @@ function renderPaint() {
     const value = painted || derived.paintDefaults[slot] || '#808080';
     const off = !derived.available.has(slot);
     const name = catalog.paintSlotName(slot, lang());
-    rows.append(el('div', { class: `paint-row${painted ? ' is-painted' : ''}${off ? ' is-off' : ''}`, 'data-paint-row': slot },
+    rows.append(el('div', { class: `paint-row${painted ? ' is-painted' : ''}${off ? ' is-off' : ''}${slot === paintTarget ? ' is-target' : ''}`, 'data-paint-row': slot },
       el('div', { class: 'paint-row__head' },
         el('div', { class: 'paint-row__label' },
           el('span', { class: 'paint-row__name', id: `paint-${slot}-name` }, name),
@@ -788,7 +790,7 @@ function renderPaint() {
     el('p', { class: 'panel-intro' }, t('ui.paintIntro')),
     derived.proceduralFrame ? el('p', { class: 'cfg-note' }, t('ui.procedural')) : '',
     el('div', { class: 'paint-tools' },
-      el('label', { class: 'check' }, el('input', { type: 'checkbox', checked: state.linkProps || null, onchange: (e) => { state.linkProps = e.target.checked; } }), el('span', null, t('ui.linkProps'))),
+      el('label', { class: 'check' }, el('input', { type: 'checkbox', checked: state.linkProps || null, onchange: (e) => { state.linkProps = e.target.checked; syncPicking(); } }), el('span', null, t('ui.linkProps'))),
       el('button', { type: 'button', id: 'paint-randomize', class: 'btn btn--ghost btn--small', title: t('ui.randomPaintHint'), onclick: randomizePaint },
         useIcon('i-dice'), el('span', null, t('ui.randomPaint')))),
     rows,
@@ -1663,6 +1665,7 @@ function selectTab(name, focus) {
     if (on && focus) tab.focus();
   }
   if (name === 'paint') renderPaint();
+  syncPicking();
 }
 
 function wireTabs() {
@@ -1706,7 +1709,9 @@ async function startViewer() {
   }
   const paused = root.classList.contains('motion-paused');
   try {
-    viewer = mod.createViewer(host, { catalog, render, loadModel, autoRotate: !reducedMotion && !paused, reducedMotion });
+    viewer = mod.createViewer(host, {
+      catalog, render, loadModel, autoRotate: !reducedMotion && !paused, reducedMotion, onPick: onViewPick, onHover: onViewHover,
+    });
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;
@@ -1727,15 +1732,183 @@ async function startViewer() {
       button.setAttribute('aria-pressed', 'false');
     }
   });
+  viewer.canvas.addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    const r = viewer.canvas.getBoundingClientRect();
+    pickPointer = { x: e.clientX - r.left, y: e.clientY - r.top };
+    placePickLabel();
+  });
   wireShotMenu();
   wireCamera();
   viewerName();
+  syncPicking();
+  // For scripts and tests that drive the 3D view (tools/test-configurator-pick.mjs).
+  doc.dispatchEvent(new CustomEvent('propwash:viewer', { detail: viewer }));
   const shown = await viewer.show(state.build, state.paint);
   if (shown) viewerNote(!shown.layout ? t('ui.noFrame') : '');
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-// Screenshots: the drone alone as a transparent PNG (cover image of a forum post) or a detail card with name, class,
+// Picking in the 3D view: a click or tap on a part opens its category in the parts tab (current part card in view and
+// focused) or makes its paint slot the target in the paint tab (row marked, in view, its swatches focused). The mouse
+// pointer gets a label with what a click would pick; a short hint in the view says what a click does. Tune and OSD
+// tabs leave the view as it was (drag only).
+
+let pickPointer = null;
+let paintTarget = null;
+let noteTimer = 0;
+const touchOnly = !!(window.matchMedia && window.matchMedia('(hover: none)').matches);
+
+function pickMode() {
+  return viewer && (state.tab === 'parts' || state.tab === 'paint') ? state.tab : null;
+}
+
+function syncPicking() {
+  if (!viewer) return;
+  viewer.setPicking({ mode: pickMode(), linkProps: state.linkProps });
+  pickHint();
+}
+
+/** The hint in the 3D view for the current tab (hidden where clicks pick nothing). */
+function pickHint() {
+  clearTimeout(noteTimer);
+  const hint = $('[data-pick-hint]');
+  const mode = pickMode();
+  hint.classList.remove('is-note');
+  hint.hidden = !mode;
+  if (mode) hint.textContent = t(`ui.pickHint${mode === 'paint' ? 'Paint' : 'Parts'}${touchOnly ? 'Touch' : ''}`);
+}
+
+/** A short message in place of the hint, e.g. for a part that can't be painted. */
+function pickNote(text) {
+  const hint = $('[data-pick-hint]');
+  hint.textContent = text;
+  hint.classList.add('is-note');
+  hint.hidden = false;
+  clearTimeout(noteTimer);
+  noteTimer = setTimeout(pickHint, 3500);
+}
+
+function pickedPartName(hit) {
+  return hit.id && catalog.part(hit.id) ? catalog.partName(hit.id, lang()) : '';
+}
+
+/** The paint row a pick paints, or null when its part can't be painted (or paint does not show on it). */
+function pickedPaintRow(hit) {
+  return hit.paintSlot && !hit.procedural ? $(`[data-paint-row="${hit.paintSlot}"]`) : null;
+}
+
+function onViewHover(hit) {
+  const label = $('[data-pick-label]');
+  if (!hit) {
+    label.hidden = true;
+    return;
+  }
+  const name = pickedPartName(hit);
+  let kind = hit.category === 'accessory' && hit.mount ? `${t('categories.accessory')} · ${t(`roles.${hit.mount}`)}` : t(`categories.${hit.category}`);
+  let note = null;
+  if (state.tab === 'paint') {
+    if (pickedPaintRow(hit)) kind = catalog.paintSlotName(hit.paintSlot, lang());
+    else note = t('ui.pickNoPaintShort');
+  }
+  label.replaceChildren(el('span', { class: 'viewer__pick-kind' }, kind), name ? el('span', { class: 'viewer__pick-name' }, name) : '',
+    note ? el('span', { class: 'viewer__pick-note' }, note) : '');
+  label.hidden = false;
+  placePickLabel();
+}
+
+/** The hover label next to the mouse pointer, kept inside the view. */
+function placePickLabel() {
+  const label = $('[data-pick-label]');
+  if (label.hidden || !pickPointer) return;
+  const box = label.parentElement;
+  const w = label.offsetWidth;
+  const h = label.offsetHeight;
+  let x = pickPointer.x + 16;
+  let y = pickPointer.y + 18;
+  if (x + w > box.clientWidth - 6) x = Math.max(6, pickPointer.x - w - 12);
+  if (y + h > box.clientHeight - 6) y = Math.max(6, pickPointer.y - h - 12);
+  label.style.transform = `translate(${Math.round(x)}px, ${Math.round(y)}px)`;
+}
+
+function onViewPick(hit) {
+  $('[data-pick-hint]').classList.add('is-used');
+  if (state.tab === 'parts') pickPart(hit);
+  else if (state.tab === 'paint') pickPaint(hit);
+}
+
+/** Scrolls a picked card or row to the middle unless it is fully in view already, and lets it pulse once. */
+function revealPicked(node) {
+  const r = node.getBoundingClientRect();
+  const list = node.closest('.part-list');
+  const box = list ? list.getBoundingClientRect() : { top: 0, bottom: window.innerHeight };
+  const header = parseFloat(getComputedStyle(root).getPropertyValue('--header-h')) || 0;
+  if (r.top < Math.max(box.top, header) || r.bottom > Math.min(box.bottom, window.innerHeight)) {
+    node.scrollIntoView({ block: 'center', behavior: reducedMotion ? 'auto' : 'smooth' });
+  }
+  node.classList.remove('is-picked');
+  void node.offsetWidth;
+  node.classList.add('is-picked');
+  node.addEventListener('animationend', () => node.classList.remove('is-picked'), { once: true });
+}
+
+/**
+ * Parts tab: the picked part's category with its current part card focused, ready to swap. A search, class or fit
+ * filter that hides the card is cleared first.
+ */
+function pickPart(hit) {
+  hideTip();
+  state.category = hit.category;
+  const selected = () => [...doc.querySelectorAll('[data-picker] [role="option"][aria-selected="true"]')]
+    .find((o) => !hit.mount || o.dataset.mount === hit.mount);
+  slotRows();
+  picker();
+  let node = selected();
+  if (!node) {
+    const filter = filterFor(hit.category);
+    Object.assign(filter, { q: '', fits: false });
+    picker();
+    node = selected();
+    if (!node) {
+      filter.cls = 'all';
+      picker();
+      node = selected();
+    }
+  }
+  if (!node) {
+    const tile = $(`[data-slots] [data-cat="${hit.category}"]`);
+    if (tile) tile.focus();
+    return;
+  }
+  doc.querySelectorAll('[data-picker] [role="option"]').forEach((o) => { o.tabIndex = -1; });
+  node.tabIndex = 0;
+  quietFocus = true;
+  node.focus({ preventScroll: true });
+  quietFocus = false;
+  revealPicked(node);
+}
+
+function markPaintTarget() {
+  for (const row of doc.querySelectorAll('[data-paint-row]')) row.classList.toggle('is-target', row.dataset.paintRow === paintTarget);
+}
+
+/** Paint tab: the picked paint slot becomes the target (row marked, in view, its swatches focused); else a hint. */
+function pickPaint(hit) {
+  const row = pickedPaintRow(hit);
+  if (!row) {
+    pickNote(hit.procedural ? t('ui.pickPaintHidden') : t('ui.pickNoPaint', { part: pickedPartName(hit) || t(`categories.${hit.category}`) }));
+    return;
+  }
+  paintTarget = hit.paintSlot;
+  markPaintTarget();
+  hideSwatchTip();
+  const radio = $('[role="radio"][tabindex="0"]', row) || $('[role="radio"]', row);
+  if (radio) radio.focus({ preventScroll: true });
+  revealPicked(row);
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Screenshots:the drone alone as a transparent PNG (cover image of a forum post) or a detail card with name, class,
 // key figures and share code. Both go to the clipboard; where images can't be copied, the PNG is downloaded.
 
 const CARD_W = 1600;
@@ -2068,6 +2241,13 @@ function wireEvents() {
     renderShare();
     scheduleHash();
   });
+  $('[data-panel-paint]').addEventListener('focusin', (e) => {
+    const row = e.target.closest('[data-paint-row]');
+    if (paintTarget && row && row.dataset.paintRow !== paintTarget) {
+      paintTarget = null;
+      markPaintTarget();
+    }
+  });
   const tunePanel = $('[data-panel-tune]');
   tunePanel.addEventListener('input', (e) => {
     if (e.target.matches('.tune-num')) onTuneInput(e.target, false);
@@ -2123,6 +2303,7 @@ function wireEvents() {
     if (!catalog) return;
     refreshAll();
     if (state.tab === 'paint') renderPaint();
+    pickHint();
     const raw = $('[data-import]').value.trim();
     importPreview(raw ? decodeField(raw).result : null);
     if (lastBanner) banner(lastBanner.message, lastBanner.level, lastBanner.withUndo);

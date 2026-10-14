@@ -364,6 +364,110 @@ button {
   pointer-events: none;
 }
 
+/* Picking: the hint what a click on a part does (bottom left, beside the toolbar) and the label of the part under the
+   mouse pointer. Narrower views put the hint under the drone's name (the toolbar fills the bottom edge) and fade it
+   out after the first pick; a message (part can't be painted) always shows. */
+.viewer__hint {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 1;
+  max-width: calc(100% - 350px);
+  margin: 0;
+  color: var(--faint);
+  font: 600 0.64rem/1.45 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+
+.viewer__hint.is-note {
+  color: var(--accent);
+}
+
+/* Over the bright FPV image the hint gets a dark backing. */
+.viewer.is-camera .viewer__hint {
+  max-width: calc(100% - 28px);
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: rgba(18, 18, 18, 0.78);
+  color: var(--muted);
+}
+
+.viewer.is-camera .viewer__hint.is-note {
+  color: var(--accent);
+}
+
+.viewer.is-fallback .viewer__hint,
+.viewer.is-noframe .viewer__hint,
+.viewer.is-fallback .viewer__pick,
+.viewer.is-noframe .viewer__pick {
+  display: none;
+}
+
+@media (max-width: 699px) {
+  .viewer__hint,
+  .viewer.is-camera .viewer__hint {
+    top: 34px;
+    bottom: auto;
+    max-width: calc(100% - 210px);
+  }
+  .viewer__hint.is-used:not(.is-note) {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 479px) {
+  .viewer__hint,
+  .viewer.is-camera .viewer__hint {
+    max-width: calc(100% - 118px);
+    font-size: 0.6rem;
+    line-height: 1.4;
+  }
+}
+
+.viewer__pick {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  display: grid;
+  gap: 1px;
+  max-width: min(280px, 72%);
+  margin: 0;
+  padding: 6px 10px 7px;
+  border: 1px solid var(--border-strong);
+  border-left: 2px solid var(--accent);
+  border-radius: 4px;
+  background: rgba(18, 18, 18, 0.92);
+  box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+.viewer__pick-kind {
+  color: var(--accent);
+  font: 600 0.64rem/1.35 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.viewer__pick-name {
+  overflow: hidden;
+  color: var(--text);
+  font-size: 0.84rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viewer__pick-note {
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.3;
+}
+
 .viewer__tools {
   position: absolute;
   right: 10px;
@@ -759,8 +863,13 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .toast {
+  .toast,
+  .part.is-picked,
+  .paint-row.is-picked {
     animation: none;
+  }
+  .viewer__hint {
+    transition: none;
   }
 }
 
@@ -1371,6 +1480,21 @@ button {
   background: #262214;
 }
 
+/* Card or paint row picked in the 3D view: one pulse of an accent ring. */
+.part.is-picked,
+.paint-row.is-picked {
+  animation: picked 0.9s var(--ease-out);
+}
+
+@keyframes picked {
+  from {
+    box-shadow: 0 0 0 3px rgba(255, 187, 0, 0.55);
+  }
+  to {
+    box-shadow: 0 0 0 3px rgba(255, 187, 0, 0);
+  }
+}
+
 .part__fit {
   width: 18px;
   height: 18px;
@@ -1640,6 +1764,13 @@ button {
 
 .paint-row.is-off {
   opacity: 0.6;
+}
+
+/* Paint slot picked in the 3D view: the next swatch here paints that part. */
+.paint-row.is-target {
+  outline: 1px solid var(--accent);
+  outline-offset: -1px;
+  background: #2a2618;
 }
 
 .paint-row__head {
