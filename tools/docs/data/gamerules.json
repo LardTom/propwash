@@ -1,7 +1,7 @@
 {
   "format": 1,
   "mod": "propwash",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "command": "/gamerule <id> <value>",
   "category": {
     "de": "Propwash FPV",

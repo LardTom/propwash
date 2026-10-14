@@ -1,5 +1,5 @@
 {
-  "version": "1.5.0",
+  "version": "1.6.0",
   "packages": [
     {
       "name": "de.lardtom.propwash.api",
@@ -56,7 +56,7 @@
               "kind": "field",
               "name": "API_VERSION",
               "static": true,
-              "display": "static final String API_VERSION = \"1.5.0\""
+              "display": "static final String API_VERSION = \"1.6.0\""
             },
             {
               "kind": "field",
@@ -120,6 +120,24 @@
             },
             {
               "kind": "method",
+              "name": "accessories",
+              "static": true,
+              "display": "static AccessoryRegistry accessories()"
+            },
+            {
+              "kind": "method",
+              "name": "drones",
+              "static": true,
+              "display": "static DroneAccess drones()"
+            },
+            {
+              "kind": "method",
+              "name": "flight",
+              "static": true,
+              "display": "static FlightExtensions flight()"
+            },
+            {
+              "kind": "method",
               "name": "text",
               "static": true,
               "display": "static Optional<String> text(String languageCode, String key)"
@@ -127,6 +145,342 @@
           ],
           "types": [],
           "file": "common/src/main/java/de/lardtom/propwash/api/PropwashApi.java"
+        }
+      ]
+    },
+    {
+      "name": "de.lardtom.propwash.api.accessory",
+      "types": [
+        {
+          "name": "AccessoryAction",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "AccessoryContext",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "number",
+              "static": false,
+              "display": "int number()"
+            },
+            {
+              "kind": "method",
+              "name": "pressed",
+              "static": false,
+              "display": "boolean pressed()"
+            },
+            {
+              "kind": "method",
+              "name": "player",
+              "static": false,
+              "display": "ServerPlayer player()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/accessory/AccessoryAction.java"
+        },
+        {
+          "name": "AccessoryBehavior",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MAX_SLOTS",
+              "static": false,
+              "display": "int MAX_SLOTS = 9"
+            },
+            {
+              "kind": "method",
+              "name": "slots",
+              "static": false,
+              "display": "default int slots()"
+            },
+            {
+              "kind": "method",
+              "name": "accepts",
+              "static": false,
+              "display": "default boolean accepts(int slot, ItemStack stack)"
+            },
+            {
+              "kind": "method",
+              "name": "maxStackSize",
+              "static": false,
+              "display": "default int maxStackSize(int slot, ItemStack stack)"
+            },
+            {
+              "kind": "method",
+              "name": "payloadGrams",
+              "static": false,
+              "display": "default OptionalDouble payloadGrams(List<ItemStack> contents)"
+            },
+            {
+              "kind": "method",
+              "name": "onAction",
+              "static": false,
+              "display": "default void onAction(AccessoryAction action)"
+            },
+            {
+              "kind": "method",
+              "name": "tick",
+              "static": false,
+              "display": "default void tick(AccessoryContext context)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/accessory/AccessoryBehavior.java"
+        },
+        {
+          "name": "AccessoryContext",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "level",
+              "static": false,
+              "display": "ServerLevel level()"
+            },
+            {
+              "kind": "method",
+              "name": "drone",
+              "static": false,
+              "display": "Entity drone()"
+            },
+            {
+              "kind": "method",
+              "name": "accessory",
+              "static": false,
+              "display": "Identifier accessory()"
+            },
+            {
+              "kind": "method",
+              "name": "slot",
+              "static": false,
+              "display": "AccessorySlot slot()"
+            },
+            {
+              "kind": "method",
+              "name": "inventory",
+              "static": false,
+              "display": "AccessoryInventory inventory()"
+            },
+            {
+              "kind": "method",
+              "name": "pilot",
+              "static": false,
+              "display": "Optional<ServerPlayer> pilot()"
+            },
+            {
+              "kind": "method",
+              "name": "flying",
+              "static": false,
+              "display": "boolean flying()"
+            },
+            {
+              "kind": "method",
+              "name": "armed",
+              "static": false,
+              "display": "boolean armed()"
+            },
+            {
+              "kind": "method",
+              "name": "actionHeld",
+              "static": false,
+              "display": "boolean actionHeld(int number)"
+            },
+            {
+              "kind": "method",
+              "name": "mount",
+              "static": false,
+              "display": "MountPose mount()"
+            },
+            {
+              "kind": "method",
+              "name": "velocity",
+              "static": false,
+              "display": "Vec3 velocity()"
+            },
+            {
+              "kind": "method",
+              "name": "physics",
+              "static": false,
+              "display": "DronePhysics physics()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/accessory/AccessoryContext.java"
+        },
+        {
+          "name": "AccessoryInventory",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "size",
+              "static": false,
+              "display": "int size()"
+            },
+            {
+              "kind": "method",
+              "name": "get",
+              "static": false,
+              "display": "ItemStack get(int slot)"
+            },
+            {
+              "kind": "method",
+              "name": "set",
+              "static": false,
+              "display": "void set(int slot, ItemStack stack)"
+            },
+            {
+              "kind": "method",
+              "name": "take",
+              "static": false,
+              "display": "ItemStack take(int slot, int count)"
+            },
+            {
+              "kind": "method",
+              "name": "firstFilled",
+              "static": false,
+              "display": "int firstFilled()"
+            },
+            {
+              "kind": "method",
+              "name": "isEmpty",
+              "static": false,
+              "display": "boolean isEmpty()"
+            },
+            {
+              "kind": "method",
+              "name": "contents",
+              "static": false,
+              "display": "List<ItemStack> contents()"
+            },
+            {
+              "kind": "method",
+              "name": "payloadGrams",
+              "static": false,
+              "display": "double payloadGrams()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/accessory/AccessoryInventory.java"
+        },
+        {
+          "name": "AccessoryRegistry",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "register",
+              "static": false,
+              "display": "void register(Identifier accessoryId, AccessoryBehavior behavior)"
+            },
+            {
+              "kind": "method",
+              "name": "behavior",
+              "static": false,
+              "display": "Optional<AccessoryBehavior> behavior(Identifier accessoryId)"
+            },
+            {
+              "kind": "method",
+              "name": "registered",
+              "static": false,
+              "display": "List<Identifier> registered()"
+            },
+            {
+              "kind": "method",
+              "name": "accessoryAt",
+              "static": false,
+              "display": "Optional<Identifier> accessoryAt(Entity drone, AccessorySlot slot)"
+            },
+            {
+              "kind": "method",
+              "name": "contents",
+              "static": false,
+              "display": "List<ItemStack> contents(Entity drone, AccessorySlot slot)"
+            },
+            {
+              "kind": "method",
+              "name": "inventory",
+              "static": false,
+              "display": "Optional<AccessoryInventory> inventory(Entity drone, AccessorySlot slot)"
+            },
+            {
+              "kind": "method",
+              "name": "contents",
+              "static": false,
+              "display": "List<ItemStack> contents(ItemStack droneItem, AccessorySlot slot)"
+            },
+            {
+              "kind": "method",
+              "name": "itemGrams",
+              "static": false,
+              "display": "double itemGrams(ItemStack stack)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/accessory/AccessoryRegistry.java"
+        },
+        {
+          "name": "MountPose",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Vec3 anchor",
+            "Vec3 center",
+            "Vec3 front",
+            "Vec3 forward",
+            "Vec3 up",
+            "Vec3 right"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "at",
+              "static": false,
+              "display": "Vec3 at(double rightMetres, double upMetres, double forwardMetres)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/accessory/MountPose.java"
         }
       ]
     },
@@ -1008,6 +1362,63 @@
       "name": "de.lardtom.propwash.api.client",
       "types": [
         {
+          "name": "ClientInput",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "flying",
+              "static": false,
+              "display": "boolean flying()"
+            },
+            {
+              "kind": "method",
+              "name": "drone",
+              "static": false,
+              "display": "Optional<Entity> drone()"
+            },
+            {
+              "kind": "method",
+              "name": "roll",
+              "static": false,
+              "display": "double roll()"
+            },
+            {
+              "kind": "method",
+              "name": "pitch",
+              "static": false,
+              "display": "double pitch()"
+            },
+            {
+              "kind": "method",
+              "name": "yaw",
+              "static": false,
+              "display": "double yaw()"
+            },
+            {
+              "kind": "method",
+              "name": "throttle",
+              "static": false,
+              "display": "double throttle()"
+            },
+            {
+              "kind": "method",
+              "name": "action",
+              "static": false,
+              "display": "boolean action(int number)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/ClientInput.java"
+        },
+        {
           "name": "ClientTune",
           "kind": "interface",
           "modifiers": [],
@@ -1341,6 +1752,24 @@
             },
             {
               "kind": "method",
+              "name": "registerHudElement",
+              "static": true,
+              "display": "static void registerHudElement(String id, HudElement element)"
+            },
+            {
+              "kind": "method",
+              "name": "registerGimbal",
+              "static": true,
+              "display": "static void registerGimbal(String id, GimbalProvider provider)"
+            },
+            {
+              "kind": "method",
+              "name": "input",
+              "static": true,
+              "display": "static ClientInput input()"
+            },
+            {
+              "kind": "method",
               "name": "tune",
               "static": true,
               "display": "static ClientTune tune()"
@@ -1538,8 +1967,682 @@
       ]
     },
     {
+      "name": "de.lardtom.propwash.api.client.camera",
+      "types": [
+        {
+          "name": "GimbalContext",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "drone",
+              "static": false,
+              "display": "Entity drone()"
+            },
+            {
+              "kind": "method",
+              "name": "frame",
+              "static": false,
+              "display": "Quaternionfc frame()"
+            },
+            {
+              "kind": "method",
+              "name": "uptiltDegrees",
+              "static": false,
+              "display": "float uptiltDegrees()"
+            },
+            {
+              "kind": "method",
+              "name": "deltaSeconds",
+              "static": false,
+              "display": "double deltaSeconds()"
+            },
+            {
+              "kind": "method",
+              "name": "spectating",
+              "static": false,
+              "display": "boolean spectating()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/camera/GimbalContext.java"
+        },
+        {
+          "name": "GimbalProvider",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "appliesTo",
+              "static": false,
+              "display": "boolean appliesTo(Entity drone)"
+            },
+            {
+              "kind": "method",
+              "name": "orient",
+              "static": false,
+              "display": "void orient(GimbalContext context, Quaternionf rotation)"
+            },
+            {
+              "kind": "method",
+              "name": "suppressesShake",
+              "static": false,
+              "display": "default boolean suppressesShake()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/camera/GimbalProvider.java"
+        }
+      ]
+    },
+    {
+      "name": "de.lardtom.propwash.api.client.hud",
+      "types": [
+        {
+          "name": "FlightTelemetry",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "boolean armed",
+            "String mode",
+            "Optional<String> assistLabel",
+            "double x",
+            "double y",
+            "double z",
+            "double speed",
+            "double verticalSpeed",
+            "double headingDeg",
+            "double pitchDeg",
+            "double rollDeg",
+            "double throttle",
+            "double batteryVoltage",
+            "double cellVoltage",
+            "double batteryCharge",
+            "boolean hasHome",
+            "double homeX",
+            "double homeY",
+            "double homeZ",
+            "boolean gpsFix",
+            "int satellites",
+            "double linkQuality",
+            "double videoSignal",
+            "double flightSeconds",
+            "double stickRoll",
+            "double stickPitch",
+            "double stickYaw",
+            "double stickThrottle"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "homeDistance",
+              "static": false,
+              "display": "double homeDistance()"
+            },
+            {
+              "kind": "method",
+              "name": "homeHeight",
+              "static": false,
+              "display": "double homeHeight()"
+            },
+            {
+              "kind": "method",
+              "name": "homeBearingDeg",
+              "static": false,
+              "display": "double homeBearingDeg()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/hud/FlightTelemetry.java"
+        },
+        {
+          "name": "HudContext",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "drone",
+              "static": false,
+              "display": "Entity drone()"
+            },
+            {
+              "kind": "method",
+              "name": "fpv",
+              "static": false,
+              "display": "boolean fpv()"
+            },
+            {
+              "kind": "method",
+              "name": "lineOfSight",
+              "static": false,
+              "display": "boolean lineOfSight()"
+            },
+            {
+              "kind": "method",
+              "name": "spectating",
+              "static": false,
+              "display": "boolean spectating()"
+            },
+            {
+              "kind": "method",
+              "name": "imageX0",
+              "static": false,
+              "display": "int imageX0()"
+            },
+            {
+              "kind": "method",
+              "name": "imageY0",
+              "static": false,
+              "display": "int imageY0()"
+            },
+            {
+              "kind": "method",
+              "name": "imageX1",
+              "static": false,
+              "display": "int imageX1()"
+            },
+            {
+              "kind": "method",
+              "name": "imageY1",
+              "static": false,
+              "display": "int imageY1()"
+            },
+            {
+              "kind": "method",
+              "name": "partialTick",
+              "static": false,
+              "display": "float partialTick()"
+            },
+            {
+              "kind": "method",
+              "name": "telemetry",
+              "static": false,
+              "display": "FlightTelemetry telemetry()"
+            },
+            {
+              "kind": "method",
+              "name": "font",
+              "static": false,
+              "display": "Font font()"
+            },
+            {
+              "kind": "method",
+              "name": "imageWidth",
+              "static": false,
+              "display": "default int imageWidth()"
+            },
+            {
+              "kind": "method",
+              "name": "imageHeight",
+              "static": false,
+              "display": "default int imageHeight()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/hud/HudContext.java"
+        },
+        {
+          "name": "HudElement",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "render",
+              "static": false,
+              "display": "void render(GuiGraphicsExtractor graphics, HudContext context)"
+            },
+            {
+              "kind": "method",
+              "name": "active",
+              "static": false,
+              "display": "default boolean active(HudContext context)"
+            },
+            {
+              "kind": "method",
+              "name": "replacesOsd",
+              "static": false,
+              "display": "default boolean replacesOsd(HudContext context)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/hud/HudElement.java"
+        }
+      ]
+    },
+    {
+      "name": "de.lardtom.propwash.api.drone",
+      "types": [
+        {
+          "name": "DroneAccess",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "isDrone",
+              "static": false,
+              "display": "boolean isDrone(Entity entity)"
+            },
+            {
+              "kind": "method",
+              "name": "view",
+              "static": false,
+              "display": "Optional<DroneView> view(Entity entity)"
+            },
+            {
+              "kind": "method",
+              "name": "dronesNear",
+              "static": false,
+              "display": "List<DroneView> dronesNear(Level level, Vec3 center, double radius, boolean flyingOnly)"
+            },
+            {
+              "kind": "method",
+              "name": "nearestDrone",
+              "static": false,
+              "display": "Optional<DroneView> nearestDrone(Mob mob, double range, boolean requireSight, boolean flyingOnly)"
+            },
+            {
+              "kind": "method",
+              "name": "physics",
+              "static": false,
+              "display": "Optional<DronePhysics> physics(Entity drone)"
+            },
+            {
+              "kind": "method",
+              "name": "obstacleDistance",
+              "static": false,
+              "display": "double obstacleDistance(Level level, Vec3 origin, Vec3 direction, double range, boolean entities, @Nullable Entity ignore)"
+            },
+            {
+              "kind": "method",
+              "name": "scan",
+              "static": false,
+              "display": "ObstacleScan scan(Entity drone, double range)"
+            },
+            {
+              "kind": "method",
+              "name": "aim",
+              "static": false,
+              "display": "Optional<Intercept.Aim> aim(Vec3 shooter, Entity drone, double projectileSpeedPerTick, double gravityPerTick)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/drone/DroneAccess.java"
+        },
+        {
+          "name": "DronePhysics",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MAX_IMPULSE",
+              "static": false,
+              "display": "double MAX_IMPULSE = 50.0"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_FORCE",
+              "static": false,
+              "display": "double MAX_FORCE = 500.0"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_SECONDS",
+              "static": false,
+              "display": "double MAX_SECONDS = 30.0"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_ARM",
+              "static": false,
+              "display": "double MAX_ARM = 2.0"
+            },
+            {
+              "kind": "method",
+              "name": "impulse",
+              "static": false,
+              "display": "boolean impulse(Vec3 impulse, Vec3 framePoint)"
+            },
+            {
+              "kind": "method",
+              "name": "push",
+              "static": false,
+              "display": "boolean push(Vec3 force, boolean frameRelative, Vec3 framePoint, double seconds)"
+            },
+            {
+              "kind": "method",
+              "name": "impulse",
+              "static": false,
+              "display": "default boolean impulse(Vec3 impulse)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/drone/DronePhysics.java"
+        },
+        {
+          "name": "DroneView",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Entity entity",
+            "Optional<UUID> pilot",
+            "boolean flying",
+            "boolean armed",
+            "boolean autopilot",
+            "Vec3 center",
+            "Vec3 velocity",
+            "Vec3 forward",
+            "Vec3 up",
+            "double massKg",
+            "Map<AccessorySlot, Identifier> accessories"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "accessory",
+              "static": false,
+              "display": "Optional<Identifier> accessory(AccessorySlot slot)"
+            },
+            {
+              "kind": "method",
+              "name": "speed",
+              "static": false,
+              "display": "double speed()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/drone/DroneView.java"
+        },
+        {
+          "name": "ObstacleScan",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "double range",
+            "double[] distances"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "distance",
+              "static": false,
+              "display": "double distance(SensorDirection direction)"
+            },
+            {
+              "kind": "method",
+              "name": "clear",
+              "static": false,
+              "display": "boolean clear(SensorDirection direction)"
+            },
+            {
+              "kind": "method",
+              "name": "nearest",
+              "static": false,
+              "display": "double nearest()"
+            },
+            {
+              "kind": "method",
+              "name": "distances",
+              "static": false,
+              "display": "double[] distances()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/drone/ObstacleScan.java"
+        }
+      ]
+    },
+    {
       "name": "de.lardtom.propwash.api.event",
       "types": [
+        {
+          "name": "DroneDamage",
+          "kind": "class",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "constructor",
+              "name": "DroneDamage",
+              "static": false,
+              "display": "DroneDamage(Entity drone, ServerLevel level, DamageSource source, float amount)"
+            },
+            {
+              "kind": "method",
+              "name": "drone",
+              "static": false,
+              "display": "Entity drone()"
+            },
+            {
+              "kind": "method",
+              "name": "level",
+              "static": false,
+              "display": "ServerLevel level()"
+            },
+            {
+              "kind": "method",
+              "name": "source",
+              "static": false,
+              "display": "DamageSource source()"
+            },
+            {
+              "kind": "method",
+              "name": "originalAmount",
+              "static": false,
+              "display": "float originalAmount()"
+            },
+            {
+              "kind": "method",
+              "name": "amount",
+              "static": false,
+              "display": "float amount()"
+            },
+            {
+              "kind": "method",
+              "name": "setAmount",
+              "static": false,
+              "display": "void setAmount(float value)"
+            },
+            {
+              "kind": "method",
+              "name": "cancelled",
+              "static": false,
+              "display": "boolean cancelled()"
+            },
+            {
+              "kind": "method",
+              "name": "cancel",
+              "static": false,
+              "display": "void cancel()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/event/DroneDamage.java"
+        },
+        {
+          "name": "EntityHit",
+          "kind": "class",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MAX_DAMAGE",
+              "static": true,
+              "display": "static final float MAX_DAMAGE = 40.0F"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_KNOCKBACK",
+              "static": true,
+              "display": "static final float MAX_KNOCKBACK = 3.0F"
+            },
+            {
+              "kind": "constructor",
+              "name": "EntityHit",
+              "static": false,
+              "display": "EntityHit(Entity drone, ServerPlayer pilot, LivingEntity target, Vec3 relativeVelocity, double closingSpeed, Vec3 normal, Vec3 framePoint, Optional<AccessorySlot> slot, Optional<Identifier> accessory, float baseDamage, float knockback)"
+            },
+            {
+              "kind": "method",
+              "name": "drone",
+              "static": false,
+              "display": "Entity drone()"
+            },
+            {
+              "kind": "method",
+              "name": "pilot",
+              "static": false,
+              "display": "ServerPlayer pilot()"
+            },
+            {
+              "kind": "method",
+              "name": "target",
+              "static": false,
+              "display": "LivingEntity target()"
+            },
+            {
+              "kind": "method",
+              "name": "relativeVelocity",
+              "static": false,
+              "display": "Vec3 relativeVelocity()"
+            },
+            {
+              "kind": "method",
+              "name": "closingSpeed",
+              "static": false,
+              "display": "double closingSpeed()"
+            },
+            {
+              "kind": "method",
+              "name": "normal",
+              "static": false,
+              "display": "Vec3 normal()"
+            },
+            {
+              "kind": "method",
+              "name": "framePoint",
+              "static": false,
+              "display": "Vec3 framePoint()"
+            },
+            {
+              "kind": "method",
+              "name": "slot",
+              "static": false,
+              "display": "Optional<AccessorySlot> slot()"
+            },
+            {
+              "kind": "method",
+              "name": "accessory",
+              "static": false,
+              "display": "Optional<Identifier> accessory()"
+            },
+            {
+              "kind": "method",
+              "name": "baseDamage",
+              "static": false,
+              "display": "float baseDamage()"
+            },
+            {
+              "kind": "method",
+              "name": "damage",
+              "static": false,
+              "display": "float damage()"
+            },
+            {
+              "kind": "method",
+              "name": "knockback",
+              "static": false,
+              "display": "float knockback()"
+            },
+            {
+              "kind": "method",
+              "name": "setDamage",
+              "static": false,
+              "display": "void setDamage(float value)"
+            },
+            {
+              "kind": "method",
+              "name": "addDamage",
+              "static": false,
+              "display": "void addDamage(float value)"
+            },
+            {
+              "kind": "method",
+              "name": "setKnockback",
+              "static": false,
+              "display": "void setKnockback(float value)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/event/EntityHit.java"
+        },
         {
           "name": "PropwashEvent",
           "kind": "class",
@@ -1631,6 +2734,24 @@
               "name": "ESC_BURNED",
               "static": true,
               "display": "static final PropwashEvent<EscBurned> ESC_BURNED"
+            },
+            {
+              "kind": "field",
+              "name": "DRONE_HIT_ENTITY",
+              "static": true,
+              "display": "static final PropwashEvent<DroneHitEntity> DRONE_HIT_ENTITY"
+            },
+            {
+              "kind": "field",
+              "name": "DRONE_DAMAGED",
+              "static": true,
+              "display": "static final PropwashEvent<DroneDamaged> DRONE_DAMAGED"
+            },
+            {
+              "kind": "field",
+              "name": "ACCESSORY_ACTION",
+              "static": true,
+              "display": "static final PropwashEvent<AccessoryActionUsed> ACCESSORY_ACTION"
             }
           ],
           "types": [
@@ -1753,9 +2874,919 @@
                 }
               ],
               "types": []
+            },
+            {
+              "name": "DroneHitEntity",
+              "kind": "interface",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "onDroneHitEntity",
+                  "static": false,
+                  "display": "void onDroneHitEntity(EntityHit hit)"
+                }
+              ],
+              "types": []
+            },
+            {
+              "name": "DroneDamaged",
+              "kind": "interface",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "onDroneDamaged",
+                  "static": false,
+                  "display": "void onDroneDamaged(DroneDamage damage)"
+                }
+              ],
+              "types": []
+            },
+            {
+              "name": "AccessoryActionUsed",
+              "kind": "interface",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [
+                {
+                  "kind": "method",
+                  "name": "onAccessoryAction",
+                  "static": false,
+                  "display": "void onAccessoryAction(ServerPlayer player, Entity drone, int number, boolean pressed)"
+                }
+              ],
+              "types": []
             }
           ],
           "file": "common/src/main/java/de/lardtom/propwash/api/event/PropwashEvents.java"
+        }
+      ]
+    },
+    {
+      "name": "de.lardtom.propwash.api.flight",
+      "types": [
+        {
+          "name": "AssistOutput",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MAX_SPEED",
+              "static": false,
+              "display": "double MAX_SPEED = 20.0"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_CLIMB",
+              "static": false,
+              "display": "double MAX_CLIMB = 8.0"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_LABEL",
+              "static": false,
+              "display": "int MAX_LABEL = 8"
+            },
+            {
+              "kind": "method",
+              "name": "sticks",
+              "static": false,
+              "display": "void sticks(double roll, double pitch, double yaw, double throttle)"
+            },
+            {
+              "kind": "method",
+              "name": "mode",
+              "static": false,
+              "display": "void mode(StabilizationMode mode)"
+            },
+            {
+              "kind": "method",
+              "name": "holdAltitude",
+              "static": false,
+              "display": "void holdAltitude(double y)"
+            },
+            {
+              "kind": "method",
+              "name": "climb",
+              "static": false,
+              "display": "void climb(double metresPerSecond)"
+            },
+            {
+              "kind": "method",
+              "name": "holdPosition",
+              "static": false,
+              "display": "void holdPosition(double x, double z)"
+            },
+            {
+              "kind": "method",
+              "name": "velocity",
+              "static": false,
+              "display": "void velocity(double vx, double vz)"
+            },
+            {
+              "kind": "method",
+              "name": "maxSpeed",
+              "static": false,
+              "display": "void maxSpeed(double metresPerSecond)"
+            },
+            {
+              "kind": "method",
+              "name": "yawRate",
+              "static": false,
+              "display": "void yawRate(double degreesPerSecond)"
+            },
+            {
+              "kind": "method",
+              "name": "heading",
+              "static": false,
+              "display": "void heading(double compassDegrees)"
+            },
+            {
+              "kind": "method",
+              "name": "label",
+              "static": false,
+              "display": "void label(String text)"
+            },
+            {
+              "kind": "method",
+              "name": "requestReturnHome",
+              "static": false,
+              "display": "void requestReturnHome()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/flight/AssistOutput.java"
+        },
+        {
+          "name": "DroneProfile",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "String frame",
+            "String stack",
+            "String motor",
+            "String prop",
+            "String video",
+            "String battery",
+            "Map<String, String> accessories",
+            "double massKg"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "accessory",
+              "static": false,
+              "display": "Optional<String> accessory(String slotKey)"
+            },
+            {
+              "kind": "method",
+              "name": "hasAccessory",
+              "static": false,
+              "display": "boolean hasAccessory(String accessoryId)"
+            },
+            {
+              "kind": "method",
+              "name": "has",
+              "static": false,
+              "display": "boolean has(String partId)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/flight/DroneProfile.java"
+        },
+        {
+          "name": "FlightAssist",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "update",
+              "static": false,
+              "display": "void update(FlightState state, AssistOutput output)"
+            },
+            {
+              "kind": "method",
+              "name": "sensorRange",
+              "static": false,
+              "display": "default double sensorRange()"
+            },
+            {
+              "kind": "method",
+              "name": "reset",
+              "static": false,
+              "display": "default void reset()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/flight/FlightAssist.java"
+        },
+        {
+          "name": "FlightExtensions",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "registerAssist",
+              "static": false,
+              "display": "void registerAssist(String id, Function<DroneProfile, FlightAssist> factory)"
+            },
+            {
+              "kind": "method",
+              "name": "registerForces",
+              "static": false,
+              "display": "void registerForces(String id, Function<DroneProfile, ForceProvider> factory)"
+            },
+            {
+              "kind": "method",
+              "name": "assistIds",
+              "static": false,
+              "display": "List<String> assistIds()"
+            },
+            {
+              "kind": "method",
+              "name": "forceIds",
+              "static": false,
+              "display": "List<String> forceIds()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/flight/FlightExtensions.java"
+        },
+        {
+          "name": "FlightState",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "ACTIONS",
+              "static": false,
+              "display": "int ACTIONS = 4"
+            },
+            {
+              "kind": "method",
+              "name": "time",
+              "static": false,
+              "display": "double time()"
+            },
+            {
+              "kind": "method",
+              "name": "massKg",
+              "static": false,
+              "display": "double massKg()"
+            },
+            {
+              "kind": "method",
+              "name": "gravity",
+              "static": false,
+              "display": "double gravity()"
+            },
+            {
+              "kind": "method",
+              "name": "x",
+              "static": false,
+              "display": "double x()"
+            },
+            {
+              "kind": "method",
+              "name": "y",
+              "static": false,
+              "display": "double y()"
+            },
+            {
+              "kind": "method",
+              "name": "z",
+              "static": false,
+              "display": "double z()"
+            },
+            {
+              "kind": "method",
+              "name": "vx",
+              "static": false,
+              "display": "double vx()"
+            },
+            {
+              "kind": "method",
+              "name": "vy",
+              "static": false,
+              "display": "double vy()"
+            },
+            {
+              "kind": "method",
+              "name": "vz",
+              "static": false,
+              "display": "double vz()"
+            },
+            {
+              "kind": "method",
+              "name": "estimatedX",
+              "static": false,
+              "display": "double estimatedX()"
+            },
+            {
+              "kind": "method",
+              "name": "estimatedY",
+              "static": false,
+              "display": "double estimatedY()"
+            },
+            {
+              "kind": "method",
+              "name": "estimatedZ",
+              "static": false,
+              "display": "double estimatedZ()"
+            },
+            {
+              "kind": "method",
+              "name": "estimatedVx",
+              "static": false,
+              "display": "double estimatedVx()"
+            },
+            {
+              "kind": "method",
+              "name": "estimatedVy",
+              "static": false,
+              "display": "double estimatedVy()"
+            },
+            {
+              "kind": "method",
+              "name": "estimatedVz",
+              "static": false,
+              "display": "double estimatedVz()"
+            },
+            {
+              "kind": "method",
+              "name": "positionValid",
+              "static": false,
+              "display": "boolean positionValid()"
+            },
+            {
+              "kind": "method",
+              "name": "gpsFix",
+              "static": false,
+              "display": "boolean gpsFix()"
+            },
+            {
+              "kind": "method",
+              "name": "satellites",
+              "static": false,
+              "display": "int satellites()"
+            },
+            {
+              "kind": "method",
+              "name": "headingDeg",
+              "static": false,
+              "display": "double headingDeg()"
+            },
+            {
+              "kind": "method",
+              "name": "pitchDeg",
+              "static": false,
+              "display": "double pitchDeg()"
+            },
+            {
+              "kind": "method",
+              "name": "rollDeg",
+              "static": false,
+              "display": "double rollDeg()"
+            },
+            {
+              "kind": "method",
+              "name": "rollRateDps",
+              "static": false,
+              "display": "double rollRateDps()"
+            },
+            {
+              "kind": "method",
+              "name": "pitchRateDps",
+              "static": false,
+              "display": "double pitchRateDps()"
+            },
+            {
+              "kind": "method",
+              "name": "yawRateDps",
+              "static": false,
+              "display": "double yawRateDps()"
+            },
+            {
+              "kind": "method",
+              "name": "forwardX",
+              "static": false,
+              "display": "double forwardX()"
+            },
+            {
+              "kind": "method",
+              "name": "forwardY",
+              "static": false,
+              "display": "double forwardY()"
+            },
+            {
+              "kind": "method",
+              "name": "forwardZ",
+              "static": false,
+              "display": "double forwardZ()"
+            },
+            {
+              "kind": "method",
+              "name": "upX",
+              "static": false,
+              "display": "double upX()"
+            },
+            {
+              "kind": "method",
+              "name": "upY",
+              "static": false,
+              "display": "double upY()"
+            },
+            {
+              "kind": "method",
+              "name": "upZ",
+              "static": false,
+              "display": "double upZ()"
+            },
+            {
+              "kind": "method",
+              "name": "rightX",
+              "static": false,
+              "display": "double rightX()"
+            },
+            {
+              "kind": "method",
+              "name": "rightY",
+              "static": false,
+              "display": "double rightY()"
+            },
+            {
+              "kind": "method",
+              "name": "rightZ",
+              "static": false,
+              "display": "double rightZ()"
+            },
+            {
+              "kind": "method",
+              "name": "heightAboveGround",
+              "static": false,
+              "display": "double heightAboveGround()"
+            },
+            {
+              "kind": "method",
+              "name": "armed",
+              "static": false,
+              "display": "boolean armed()"
+            },
+            {
+              "kind": "method",
+              "name": "grounded",
+              "static": false,
+              "display": "boolean grounded()"
+            },
+            {
+              "kind": "method",
+              "name": "failsafe",
+              "static": false,
+              "display": "boolean failsafe()"
+            },
+            {
+              "kind": "method",
+              "name": "hoverThrottle",
+              "static": false,
+              "display": "double hoverThrottle()"
+            },
+            {
+              "kind": "method",
+              "name": "batteryCharge",
+              "static": false,
+              "display": "double batteryCharge()"
+            },
+            {
+              "kind": "method",
+              "name": "stickRoll",
+              "static": false,
+              "display": "double stickRoll()"
+            },
+            {
+              "kind": "method",
+              "name": "stickPitch",
+              "static": false,
+              "display": "double stickPitch()"
+            },
+            {
+              "kind": "method",
+              "name": "stickYaw",
+              "static": false,
+              "display": "double stickYaw()"
+            },
+            {
+              "kind": "method",
+              "name": "stickThrottle",
+              "static": false,
+              "display": "double stickThrottle()"
+            },
+            {
+              "kind": "method",
+              "name": "pilotMode",
+              "static": false,
+              "display": "StabilizationMode pilotMode()"
+            },
+            {
+              "kind": "method",
+              "name": "action",
+              "static": false,
+              "display": "boolean action(int number)"
+            },
+            {
+              "kind": "method",
+              "name": "obstacleDistance",
+              "static": false,
+              "display": "double obstacleDistance(SensorDirection direction)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/flight/FlightState.java"
+        },
+        {
+          "name": "ForceProvider",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "apply",
+              "static": false,
+              "display": "void apply(FlightState state, ForceSink sink)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/flight/ForceProvider.java"
+        },
+        {
+          "name": "ForceSink",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MAX_FORCE",
+              "static": false,
+              "display": "double MAX_FORCE = 500.0"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_TORQUE",
+              "static": false,
+              "display": "double MAX_TORQUE = 50.0"
+            },
+            {
+              "kind": "method",
+              "name": "addForce",
+              "static": false,
+              "display": "void addForce(double fx, double fy, double fz)"
+            },
+            {
+              "kind": "method",
+              "name": "addForceAt",
+              "static": false,
+              "display": "void addForceAt(double fx, double fy, double fz, double frameX, double frameY, double frameZ)"
+            },
+            {
+              "kind": "method",
+              "name": "addTorque",
+              "static": false,
+              "display": "void addTorque(double tx, double ty, double tz)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/flight/ForceSink.java"
+        },
+        {
+          "name": "GimbalModel",
+          "kind": "class",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "mode",
+              "static": false,
+              "display": "GimbalModel mode(Mode value)"
+            },
+            {
+              "kind": "method",
+              "name": "mode",
+              "static": false,
+              "display": "Mode mode()"
+            },
+            {
+              "kind": "method",
+              "name": "pitchRange",
+              "static": false,
+              "display": "GimbalModel pitchRange(double minDeg, double maxDeg)"
+            },
+            {
+              "kind": "method",
+              "name": "mechanicalLimits",
+              "static": false,
+              "display": "GimbalModel mechanicalLimits(double relativePitchMinDeg, double relativePitchMaxDeg, double relativeRollLimitDeg, double relativeYawLimitDeg)"
+            },
+            {
+              "kind": "method",
+              "name": "smoothing",
+              "static": false,
+              "display": "GimbalModel smoothing(double followTimeSeconds, double maxYawRateDps, double maxPitchRateDps)"
+            },
+            {
+              "kind": "method",
+              "name": "pitch",
+              "static": false,
+              "display": "GimbalModel pitch(double degrees)"
+            },
+            {
+              "kind": "method",
+              "name": "commandedPitch",
+              "static": false,
+              "display": "double commandedPitch()"
+            },
+            {
+              "kind": "method",
+              "name": "lockHeading",
+              "static": false,
+              "display": "GimbalModel lockHeading(double compassDegrees)"
+            },
+            {
+              "kind": "method",
+              "name": "reset",
+              "static": false,
+              "display": "void reset()"
+            },
+            {
+              "kind": "method",
+              "name": "update",
+              "static": false,
+              "display": "void update(double dt, double frameQx, double frameQy, double frameQz, double frameQw)"
+            },
+            {
+              "kind": "method",
+              "name": "headingDeg",
+              "static": false,
+              "display": "double headingDeg()"
+            },
+            {
+              "kind": "method",
+              "name": "pitchDeg",
+              "static": false,
+              "display": "double pitchDeg()"
+            },
+            {
+              "kind": "method",
+              "name": "rollDeg",
+              "static": false,
+              "display": "double rollDeg()"
+            },
+            {
+              "kind": "method",
+              "name": "atLimit",
+              "static": false,
+              "display": "boolean atLimit()"
+            },
+            {
+              "kind": "method",
+              "name": "qx",
+              "static": false,
+              "display": "double qx()"
+            },
+            {
+              "kind": "method",
+              "name": "qy",
+              "static": false,
+              "display": "double qy()"
+            },
+            {
+              "kind": "method",
+              "name": "qz",
+              "static": false,
+              "display": "double qz()"
+            },
+            {
+              "kind": "method",
+              "name": "qw",
+              "static": false,
+              "display": "double qw()"
+            }
+          ],
+          "types": [
+            {
+              "name": "Mode",
+              "kind": "enum",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [
+                {
+                  "name": "FOLLOW"
+                },
+                {
+                  "name": "LOCK"
+                },
+                {
+                  "name": "FPV"
+                }
+              ],
+              "members": [],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/flight/GimbalModel.java"
+        },
+        {
+          "name": "Intercept",
+          "kind": "class",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "ITERATIONS",
+              "static": true,
+              "display": "static final int ITERATIONS = 8"
+            },
+            {
+              "kind": "method",
+              "name": "aim",
+              "static": true,
+              "display": "static Optional<Aim> aim(double shooterX, double shooterY, double shooterZ, double targetX, double targetY, double targetZ, double targetVx, double targetVy, double targetVz, double projectileSpeed, double gravity, double maxTime)"
+            }
+          ],
+          "types": [
+            {
+              "name": "Aim",
+              "kind": "record",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [
+                "double dx",
+                "double dy",
+                "double dz",
+                "double time"
+              ],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [],
+              "members": [],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/flight/Intercept.java"
+        },
+        {
+          "name": "SensorDirection",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "FORWARD"
+            },
+            {
+              "name": "BACK"
+            },
+            {
+              "name": "LEFT"
+            },
+            {
+              "name": "RIGHT"
+            },
+            {
+              "name": "UP"
+            },
+            {
+              "name": "DOWN"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "x",
+              "static": false,
+              "display": "double x()"
+            },
+            {
+              "kind": "method",
+              "name": "y",
+              "static": false,
+              "display": "double y()"
+            },
+            {
+              "kind": "method",
+              "name": "z",
+              "static": false,
+              "display": "double z()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/flight/SensorDirection.java"
+        },
+        {
+          "name": "StabilizationMode",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "ACRO"
+            },
+            {
+              "name": "ANGLE"
+            },
+            {
+              "name": "HORIZON"
+            }
+          ],
+          "members": [],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/flight/StabilizationMode.java"
         }
       ]
     },
@@ -1894,6 +3925,10 @@
             {
               "name": "BOTTOM",
               "key": "bottom"
+            },
+            {
+              "name": "FRONT",
+              "key": "front"
             }
           ],
           "members": [

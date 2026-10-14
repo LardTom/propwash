@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" class="no-js" data-title-en="API reference 1.5.0 – Propwash FPV docs" data-title-de="API-Referenz 1.5.0 – Propwash-FPV-Doku" data-description-en="Every public type, record component and method of the Propwash FPV add-on API 1.5.0, generated from the source code." data-description-de="Jeder öffentliche Typ, jede Record-Komponente und Methode der Add-on-API 1.5.0 von Propwash FPV, aus dem Quellcode erzeugt.">
+<html lang="en" class="no-js" data-title-en="API reference 1.6.0 – Propwash FPV docs" data-title-de="API-Referenz 1.6.0 – Propwash-FPV-Doku" data-description-en="Every public type, record component and method of the Propwash FPV add-on API 1.6.0, generated from the source code." data-description-de="Jeder öffentliche Typ, jede Record-Komponente und Methode der Add-on-API 1.6.0 von Propwash FPV, aus dem Quellcode erzeugt.">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>API reference 1.5.0 – Propwash FPV docs</title>
-<meta name="description" content="Every public type, record component and method of the Propwash FPV add-on API 1.5.0, generated from the source code.">
+<title>API reference 1.6.0 – Propwash FPV docs</title>
+<meta name="description" content="Every public type, record component and method of the Propwash FPV add-on API 1.6.0, generated from the source code.">
 <meta name="theme-color" content="#1A1A1A">
 <meta name="color-scheme" content="dark">
 <meta name="referrer" content="no-referrer">
@@ -12,8 +12,8 @@
 <meta property="og:url" content="https://propwashfpv.com/docs/api/reference/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Propwash FPV">
-<meta property="og:title" content="API reference 1.5.0 – Propwash FPV docs">
-<meta property="og:description" content="Every public type, record component and method of the Propwash FPV add-on API 1.5.0, generated from the source code.">
+<meta property="og:title" content="API reference 1.6.0 – Propwash FPV docs">
+<meta property="og:description" content="Every public type, record component and method of the Propwash FPV add-on API 1.6.0, generated from the source code.">
 <meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
@@ -78,11 +78,11 @@
 <main id="main">
   <header class="docs-hero">
     <div class="wrap docs-hero__inner">
-      <p class="kicker"><span lang="en">Docs · For mod authors · API 1.5.0</span><span lang="de">Doku · Für Mod-Autoren · API 1.5.0</span></p>
+      <p class="kicker"><span lang="en">Docs · For mod authors · API 1.6.0</span><span lang="de">Doku · Für Mod-Autoren · API 1.6.0</span></p>
       <h1 class="docs-title"><span lang="en">API reference</span><span lang="de">API-Referenz</span></h1>
       <p lang="en" class="docs-lead">Every type and member of the public API at a glance, generated from the Propwash source code of this release.</p>
 <p lang="de" class="docs-lead">Jeder Typ und jedes Mitglied der öffentlichen API auf einen Blick, aus dem Propwash-Quellcode dieser Version erzeugt.</p>
-      <p class="docs-meta">Propwash 0.5.0 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.5.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 15</p>
+      <p class="docs-meta">Propwash 0.5.2 · Minecraft 26.3 · Fabric &amp; NeoForge · API 1.6.0 · <span lang="en">protocol</span><span lang="de">Protokoll</span> 16</p>
     </div>
   </header>
   <div class="wrap docs">
@@ -96,19 +96,24 @@
 <li class="docs-menu__item"><a href="../../../docs/gamerules/"><span lang="en">World rules</span><span lang="de">Welt-Regeln</span></a></li>
 <li class="docs-menu__item"><a href="../../../docs/api/"><span lang="en">Add-on API</span><span lang="de">Add-on-API</span></a></li>
 <li class="docs-menu__item is-current docs-menu__item--sub"><a href="../../../docs/api/reference/" aria-current="page"><span lang="en">API reference</span><span lang="de">API-Referenz</span></a>
-<ol class="docs-menu__toc"><li><a href="#api-package">api</a></li><li><a href="#api-build-package">api.build</a></li><li><a href="#api-client-package">api.client</a></li><li><a href="#api-event-package">api.event</a></li><li><a href="#api-part-package">api.part</a></li><li><a href="#api-registry-package">api.registry</a></li><li><a href="#outside"><span lang="en">Types from outside</span><span lang="de">Typen von außerhalb</span></a></li></ol></li>
+<ol class="docs-menu__toc"><li><a href="#api-package">api</a></li><li><a href="#api-accessory-package">api.accessory</a></li><li><a href="#api-build-package">api.build</a></li><li><a href="#api-client-package">api.client</a></li><li><a href="#api-client-camera-package">api.client.camera</a></li><li><a href="#api-client-hud-package">api.client.hud</a></li><li><a href="#api-drone-package">api.drone</a></li><li><a href="#api-event-package">api.event</a></li><li><a href="#api-flight-package">api.flight</a></li><li><a href="#api-part-package">api.part</a></li><li><a href="#api-registry-package">api.registry</a></li><li><a href="#outside"><span lang="en">Types from outside</span><span lang="de">Typen von außerhalb</span></a></li></ol></li>
 <li class="docs-menu__item"><a href="../../../docs/parts-format/"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></a></li>
 </ol>
 </details>
 </nav>
     <article class="docs-body">
-<p lang="en">All 62 public types of the package <code>de.lardtom.propwash.api</code> in Propwash 0.5.0 (API 1.5.0), read from the source code. Public members only; how to use them is in the <a href="../">add-on guide</a>. The Maven artifacts also carry sources and Javadoc for your IDE.</p>
-<p lang="de">Alle 62 öffentlichen Typen des Pakets <code>de.lardtom.propwash.api</code> in Propwash 0.5.0 (API 1.5.0), aus dem Quellcode gelesen. Nur öffentliche Mitglieder; wie man sie benutzt, steht im <a href="../">Add-on-Handbuch</a>. Die Maven-Artefakte bringen auch Quellen und Javadoc für die IDE mit.</p>
+<p lang="en">All 91 public types of the package <code>de.lardtom.propwash.api</code> in Propwash 0.5.2 (API 1.6.0), read from the source code. Public members only; how to use them is in the <a href="../">add-on guide</a>. The Maven artifacts also carry sources and Javadoc for your IDE.</p>
+<p lang="de">Alle 91 öffentlichen Typen des Pakets <code>de.lardtom.propwash.api</code> in Propwash 0.5.2 (API 1.6.0), aus dem Quellcode gelesen. Nur öffentliche Mitglieder; wie man sie benutzt, steht im <a href="../">Add-on-Handbuch</a>. Die Maven-Artefakte bringen auch Quellen und Javadoc für die IDE mit.</p>
 <nav class="docs-api__index" aria-label="Types" data-de-aria-label="Typen">
 <p><strong><code>api</code></strong> <a href="#api-apiversion"><code>ApiVersion</code></a> <a href="#api-propwashapi"><code>PropwashApi</code></a></p>
+<p><strong><code>api.accessory</code></strong> <a href="#api-accessory-accessoryaction"><code>AccessoryAction</code></a> <a href="#api-accessory-accessorybehavior"><code>AccessoryBehavior</code></a> <a href="#api-accessory-accessorycontext"><code>AccessoryContext</code></a> <a href="#api-accessory-accessoryinventory"><code>AccessoryInventory</code></a> <a href="#api-accessory-accessoryregistry"><code>AccessoryRegistry</code></a> <a href="#api-accessory-mountpose"><code>MountPose</code></a></p>
 <p><strong><code>api.build</code></strong> <a href="#api-build-buildaccess"><code>BuildAccess</code></a> <a href="#api-build-buildcheck"><code>BuildCheck</code></a> <a href="#api-build-buildspec"><code>BuildSpec</code></a> <a href="#api-build-buildstats"><code>BuildStats</code></a> <a href="#api-build-cameraview"><code>CameraView</code></a> <a href="#api-build-dronedata"><code>DroneData</code></a> <a href="#api-build-dronepreset"><code>DronePreset</code></a> <a href="#api-build-importlayer"><code>ImportLayer</code></a> <a href="#api-build-importrequest"><code>ImportRequest</code></a> <a href="#api-build-importresult"><code>ImportResult</code></a> <a href="#api-build-importstatus"><code>ImportStatus</code></a> <a href="#api-build-importtarget"><code>ImportTarget</code></a> <a href="#api-build-paintspec"><code>PaintSpec</code></a> <a href="#api-build-tunegroup"><code>TuneGroup</code></a> <a href="#api-build-tunespec"><code>TuneSpec</code></a></p>
-<p><strong><code>api.client</code></strong> <a href="#api-client-clienttune"><code>ClientTune</code></a> <a href="#api-client-flightschoolscenes"><code>FlightSchoolScenes</code></a> <a href="#api-client-osdlayoutaccess"><code>OsdLayoutAccess</code></a> <a href="#api-client-osdlayoutspec"><code>OsdLayoutSpec</code></a> <a href="#api-client-propwashclientapi"><code>PropwashClientApi</code></a> <a href="#api-client-workbenchcontext"><code>WorkbenchContext</code></a> <a href="#api-client-workbenchextension"><code>WorkbenchExtension</code></a></p>
-<p><strong><code>api.event</code></strong> <a href="#api-event-propwashevent"><code>PropwashEvent</code></a> <a href="#api-event-propwashevents"><code>PropwashEvents</code></a></p>
+<p><strong><code>api.client</code></strong> <a href="#api-client-clientinput"><code>ClientInput</code></a> <a href="#api-client-clienttune"><code>ClientTune</code></a> <a href="#api-client-flightschoolscenes"><code>FlightSchoolScenes</code></a> <a href="#api-client-osdlayoutaccess"><code>OsdLayoutAccess</code></a> <a href="#api-client-osdlayoutspec"><code>OsdLayoutSpec</code></a> <a href="#api-client-propwashclientapi"><code>PropwashClientApi</code></a> <a href="#api-client-workbenchcontext"><code>WorkbenchContext</code></a> <a href="#api-client-workbenchextension"><code>WorkbenchExtension</code></a></p>
+<p><strong><code>api.client.camera</code></strong> <a href="#api-client-camera-gimbalcontext"><code>GimbalContext</code></a> <a href="#api-client-camera-gimbalprovider"><code>GimbalProvider</code></a></p>
+<p><strong><code>api.client.hud</code></strong> <a href="#api-client-hud-flighttelemetry"><code>FlightTelemetry</code></a> <a href="#api-client-hud-hudcontext"><code>HudContext</code></a> <a href="#api-client-hud-hudelement"><code>HudElement</code></a></p>
+<p><strong><code>api.drone</code></strong> <a href="#api-drone-droneaccess"><code>DroneAccess</code></a> <a href="#api-drone-dronephysics"><code>DronePhysics</code></a> <a href="#api-drone-droneview"><code>DroneView</code></a> <a href="#api-drone-obstaclescan"><code>ObstacleScan</code></a></p>
+<p><strong><code>api.event</code></strong> <a href="#api-event-dronedamage"><code>DroneDamage</code></a> <a href="#api-event-entityhit"><code>EntityHit</code></a> <a href="#api-event-propwashevent"><code>PropwashEvent</code></a> <a href="#api-event-propwashevents"><code>PropwashEvents</code></a></p>
+<p><strong><code>api.flight</code></strong> <a href="#api-flight-assistoutput"><code>AssistOutput</code></a> <a href="#api-flight-droneprofile"><code>DroneProfile</code></a> <a href="#api-flight-flightassist"><code>FlightAssist</code></a> <a href="#api-flight-flightextensions"><code>FlightExtensions</code></a> <a href="#api-flight-flightstate"><code>FlightState</code></a> <a href="#api-flight-forceprovider"><code>ForceProvider</code></a> <a href="#api-flight-forcesink"><code>ForceSink</code></a> <a href="#api-flight-gimbalmodel"><code>GimbalModel</code></a> <a href="#api-flight-intercept"><code>Intercept</code></a> <a href="#api-flight-sensordirection"><code>SensorDirection</code></a> <a href="#api-flight-stabilizationmode"><code>StabilizationMode</code></a></p>
 <p><strong><code>api.part</code></strong> <a href="#api-part-accessorydefinition"><code>AccessoryDefinition</code></a> <a href="#api-part-accessoryslot"><code>AccessorySlot</code></a> <a href="#api-part-actioncamdefinition"><code>ActionCamDefinition</code></a> <a href="#api-part-airframegeometry"><code>AirframeGeometry</code></a> <a href="#api-part-anchorspec"><code>AnchorSpec</code></a> <a href="#api-part-batterydefinition"><code>BatteryDefinition</code></a> <a href="#api-part-batteryfitrule"><code>BatteryFitRule</code></a> <a href="#api-part-cellchemistry"><code>CellChemistry</code></a> <a href="#api-part-ductspec"><code>DuctSpec</code></a> <a href="#api-part-frameaero"><code>FrameAero</code></a> <a href="#api-part-framedefinition"><code>FrameDefinition</code></a> <a href="#api-part-framerole"><code>FrameRole</code></a> <a href="#api-part-frameshape"><code>FrameShape</code></a> <a href="#api-part-masssplit"><code>MassSplit</code></a> <a href="#api-part-motorarm"><code>MotorArm</code></a> <a href="#api-part-motordefinition"><code>MotorDefinition</code></a> <a href="#api-part-motorthermal"><code>MotorThermal</code></a> <a href="#api-part-mounts"><code>Mounts</code></a> <a href="#api-part-packsize"><code>PackSize</code></a> <a href="#api-part-partbasics"><code>PartBasics</code></a> <a href="#api-part-partdefinition"><code>PartDefinition</code></a> <a href="#api-part-partkind"><code>PartKind</code></a> <a href="#api-part-partregistry"><code>PartRegistry</code></a> <a href="#api-part-partvisual"><code>PartVisual</code></a> <a href="#api-part-propdefinition"><code>PropDefinition</code></a> <a href="#api-part-propmaterial"><code>PropMaterial</code></a> <a href="#api-part-recycleyield"><code>RecycleYield</code></a> <a href="#api-part-stackdefinition"><code>StackDefinition</code></a> <a href="#api-part-vec3mm"><code>Vec3Mm</code></a> <a href="#api-part-videodefinition"><code>VideoDefinition</code></a> <a href="#api-part-videolink"><code>VideoLink</code></a></p>
 <p><strong><code>api.registry</code></strong> <a href="#api-registry-creativeentries"><code>CreativeEntries</code></a> <a href="#api-registry-extensiontab"><code>ExtensionTab</code></a> <a href="#api-registry-lootinjections"><code>LootInjections</code></a> <a href="#api-registry-partitems"><code>PartItems</code></a> <a href="#api-registry-tabsection"><code>TabSection</code></a></p>
 </nav>
@@ -124,10 +129,61 @@
 </article>
 <article class="docs-api">
 <h3 id="api-propwashapi" class="docs-api__name"><a class="docs-anchor" href="#api-propwashapi" aria-hidden="true" tabindex="-1">#</a><code>PropwashApi</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></h3>
-<p lang="en" class="docs-api__desc">Entry point of the API: version, part registry, part items, builds, creative tab, loot and language texts.</p>
-<p lang="de" class="docs-api__desc">Einstieg in die API: Version, Teile-Register, Teil-Items, Baupläne, Kreativ-Tab, Beute und Sprachtexte.</p>
+<p lang="en" class="docs-api__desc">Entry point of the API: version, part registry, part items, builds, creative tab, loot, language texts and (since 1.6) accessories, drones and flight extensions.</p>
+<p lang="de" class="docs-api__desc">Einstieg in die API: Version, Teile-Register, Teil-Items, Baupläne, Kreativ-Tab, Beute, Sprachtexte und (seit 1.6) Zubehör, Drohnen und Flug-Erweiterungen.</p>
 <pre class="docs-api__sig"><code>class PropwashApi</code></pre>
-<ul class="docs-api__members"><li><code>static final String MOD_ID = &quot;propwash&quot;</code></li><li><code>static final String API_VERSION = &quot;1.5.0&quot;</code></li><li><code>static final ApiVersion VERSION</code></li><li><code>static boolean isCompatible(String requiredVersion)</code></li><li><code>static void requireVersion(String modId, String requiredVersion)</code></li><li><code>static PartRegistry parts()</code></li><li><code>static PartItems partItems()</code></li><li><code>static BuildAccess builds()</code></li><li><code>static CreativeEntries creativeTab()</code></li><li><code>static ExtensionTab extensionTab(String namespace)</code></li><li><code>static List&lt;ExtensionTab&gt; extensionTabs()</code></li><li><code>static LootInjections loot()</code></li><li><code>static Optional&lt;String&gt; text(String languageCode, String key)</code></li></ul>
+<ul class="docs-api__members"><li><code>static final String MOD_ID = &quot;propwash&quot;</code></li><li><code>static final String API_VERSION = &quot;1.6.0&quot;</code></li><li><code>static final ApiVersion VERSION</code></li><li><code>static boolean isCompatible(String requiredVersion)</code></li><li><code>static void requireVersion(String modId, String requiredVersion)</code></li><li><code>static PartRegistry parts()</code></li><li><code>static PartItems partItems()</code></li><li><code>static BuildAccess builds()</code></li><li><code>static CreativeEntries creativeTab()</code></li><li><code>static ExtensionTab extensionTab(String namespace)</code></li><li><code>static List&lt;ExtensionTab&gt; extensionTabs()</code></li><li><code>static LootInjections loot()</code></li><li><code>static AccessoryRegistry accessories()</code></li><li><code>static DroneAccess drones()</code></li><li><code>static FlightExtensions flight()</code></li><li><code>static Optional&lt;String&gt; text(String languageCode, String key)</code></li></ul>
+
+</article>
+</section>
+<section class="docs-section" aria-labelledby="api-accessory-package">
+<h2 id="api-accessory-package" class="docs-h2"><a class="docs-anchor" href="#api-accessory-package" aria-hidden="true" tabindex="-1">#</a>api.accessory</h2>
+<article class="docs-api">
+<h3 id="api-accessory-accessoryaction" class="docs-api__name"><a class="docs-anchor" href="#api-accessory-accessoryaction" aria-hidden="true" tabindex="-1">#</a><code>AccessoryAction</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">What an accessory sees when the pilot presses or releases accessory action 1–4: number, pressed, player, plus the accessory context.</p>
+<p lang="de" class="docs-api__desc">Was ein Zubehörteil sieht, wenn der Pilot Zubehör-Aktion 1–4 drückt oder loslässt: Nummer, gedrückt, Spieler und der Zubehör-Kontext.</p>
+<pre class="docs-api__sig"><code>interface AccessoryAction extends AccessoryContext</code></pre>
+<ul class="docs-api__members"><li><code>int number()</code></li><li><code>boolean pressed()</code></li><li><code>ServerPlayer player()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-accessory-accessorybehavior" class="docs-api__name"><a class="docs-anchor" href="#api-accessory-accessorybehavior" aria-hidden="true" tabindex="-1">#</a><code>AccessoryBehavior</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Code behind an add-on accessory: inventory size and filter, own payload weight, reaction to accessory actions and a server tick.</p>
+<p lang="de" class="docs-api__desc">Code hinter einem Zubehörteil eines Add-ons: Inventargröße und Filter, eigenes Beladungsgewicht, Reaktion auf Zubehör-Aktionen und ein Server-Tick.</p>
+<pre class="docs-api__sig"><code>interface AccessoryBehavior</code></pre>
+<ul class="docs-api__members"><li><code>int MAX_SLOTS = 9</code></li><li><code>default int slots()</code></li><li><code>default boolean accepts(int slot, ItemStack stack)</code></li><li><code>default int maxStackSize(int slot, ItemStack stack)</code></li><li><code>default OptionalDouble payloadGrams(List&lt;ItemStack&gt; contents)</code></li><li><code>default void onAction(AccessoryAction action)</code></li><li><code>default void tick(AccessoryContext context)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-accessory-accessorycontext" class="docs-api__name"><a class="docs-anchor" href="#api-accessory-accessorycontext" aria-hidden="true" tabindex="-1">#</a><code>AccessoryContext</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Server view of one accessory on one drone: level, drone, slot, inventory, pilot, flight state, held actions, mount pose, velocity and physics.</p>
+<p lang="de" class="docs-api__desc">Server-Sicht auf ein Zubehörteil an einer Drohne: Welt, Drohne, Halterung, Inventar, Pilot, Flugzustand, gehaltene Aktionen, Lage der Halterung, Tempo und Physik.</p>
+<pre class="docs-api__sig"><code>interface AccessoryContext</code></pre>
+<ul class="docs-api__members"><li><code>ServerLevel level()</code></li><li><code>Entity drone()</code></li><li><code>Identifier accessory()</code></li><li><code>AccessorySlot slot()</code></li><li><code>AccessoryInventory inventory()</code></li><li><code>Optional&lt;ServerPlayer&gt; pilot()</code></li><li><code>boolean flying()</code></li><li><code>boolean armed()</code></li><li><code>boolean actionHeld(int number)</code></li><li><code>MountPose mount()</code></li><li><code>Vec3 velocity()</code></li><li><code>DronePhysics physics()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-accessory-accessoryinventory" class="docs-api__name"><a class="docs-anchor" href="#api-accessory-accessoryinventory" aria-hidden="true" tabindex="-1">#</a><code>AccessoryInventory</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">The synchronised inventory of an accessory on a drone (server): read copies, set and take stacks, payload weight.</p>
+<p lang="de" class="docs-api__desc">Das synchronisierte Inventar eines Zubehörteils an einer Drohne (Server): Kopien lesen, Stapel setzen und entnehmen, Beladungsgewicht.</p>
+<pre class="docs-api__sig"><code>interface AccessoryInventory</code></pre>
+<ul class="docs-api__members"><li><code>int size()</code></li><li><code>ItemStack get(int slot)</code></li><li><code>void set(int slot, ItemStack stack)</code></li><li><code>ItemStack take(int slot, int count)</code></li><li><code>int firstFilled()</code></li><li><code>boolean isEmpty()</code></li><li><code>List&lt;ItemStack&gt; contents()</code></li><li><code>double payloadGrams()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-accessory-accessoryregistry" class="docs-api__name"><a class="docs-anchor" href="#api-accessory-accessoryregistry" aria-hidden="true" tabindex="-1">#</a><code>AccessoryRegistry</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Registers accessory behaviours and reads accessories and their contents on drones and drone items.</p>
+<p lang="de" class="docs-api__desc">Meldet Zubehör-Verhalten an und liest Zubehör samt Inhalt an Drohnen und Drohnen-Items.</p>
+<pre class="docs-api__sig"><code>interface AccessoryRegistry</code></pre>
+<ul class="docs-api__members"><li><code>void register(Identifier accessoryId, AccessoryBehavior behavior)</code></li><li><code>Optional&lt;AccessoryBehavior&gt; behavior(Identifier accessoryId)</code></li><li><code>List&lt;Identifier&gt; registered()</code></li><li><code>Optional&lt;Identifier&gt; accessoryAt(Entity drone, AccessorySlot slot)</code></li><li><code>List&lt;ItemStack&gt; contents(Entity drone, AccessorySlot slot)</code></li><li><code>Optional&lt;AccessoryInventory&gt; inventory(Entity drone, AccessorySlot slot)</code></li><li><code>List&lt;ItemStack&gt; contents(ItemStack droneItem, AccessorySlot slot)</code></li><li><code>double itemGrams(ItemStack stack)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-accessory-mountpose" class="docs-api__name"><a class="docs-anchor" href="#api-accessory-mountpose" aria-hidden="true" tabindex="-1">#</a><code>MountPose</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">World pose of an accessory mount: anchor, centre, front face and the forward, up and right directions including tilt.</p>
+<p lang="de" class="docs-api__desc">Weltlage einer Zubehör-Halterung: Anbaupunkt, Mitte, Vorderseite und die Richtungen vorn, oben und rechts samt Neigung.</p>
+<pre class="docs-api__sig"><code>record MountPose(Vec3 anchor, Vec3 center, Vec3 front, Vec3 forward, Vec3 up, Vec3 right)</code></pre>
+<ul class="docs-api__members"><li><code>Vec3 at(double rightMetres, double upMetres, double forwardMetres)</code></li></ul>
 
 </article>
 </section>
@@ -279,6 +335,14 @@
 <section class="docs-section" aria-labelledby="api-client-package">
 <h2 id="api-client-package" class="docs-h2"><a class="docs-anchor" href="#api-client-package" aria-hidden="true" tabindex="-1">#</a>api.client</h2>
 <article class="docs-api">
+<h3 id="api-client-clientinput" class="docs-api__name"><a class="docs-anchor" href="#api-client-clientinput" aria-hidden="true" tabindex="-1">#</a><code>ClientInput</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Reads the local pilot’s input: flown drone, sticks and accessory actions (client only).</p>
+<p lang="de" class="docs-api__desc">Liest die Eingaben des Piloten: geflogene Drohne, Knüppel und Zubehör-Aktionen (nur Client).</p>
+<pre class="docs-api__sig"><code>interface ClientInput</code></pre>
+<ul class="docs-api__members"><li><code>boolean flying()</code></li><li><code>Optional&lt;Entity&gt; drone()</code></li><li><code>double roll()</code></li><li><code>double pitch()</code></li><li><code>double yaw()</code></li><li><code>double throttle()</code></li><li><code>boolean action(int number)</code></li></ul>
+
+</article>
+<article class="docs-api">
 <h3 id="api-client-clienttune" class="docs-api__name"><a class="docs-anchor" href="#api-client-clienttune" aria-hidden="true" tabindex="-1">#</a><code>ClientTune</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
 <p lang="en" class="docs-api__desc">Reads and applies the tune of the drone the player flies or holds (client only).</p>
 <p lang="de" class="docs-api__desc">Liest und setzt das Tuning der Drohne, die der Spieler fliegt oder hält (nur Client).</p>
@@ -312,10 +376,10 @@
 </article>
 <article class="docs-api">
 <h3 id="api-client-propwashclientapi" class="docs-api__name"><a class="docs-anchor" href="#api-client-propwashclientapi" aria-hidden="true" tabindex="-1">#</a><code>PropwashClientApi</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></h3>
-<p lang="en" class="docs-api__desc">Client entry point: configurator tabs, workbench extensions, Flight School scenes and links, OSD, tune, imports and the drone preview.</p>
-<p lang="de" class="docs-api__desc">Client-Einstieg: Konfigurator-Tabs, Werkbank-Erweiterungen, Flugschul-Szenen und -Verknüpfungen, OSD, Tuning, Importe und die Drohnen-Vorschau.</p>
+<p lang="en" class="docs-api__desc">Client entry point: configurator tabs, workbench extensions, Flight School scenes and links, OSD, tune, imports and the drone preview, HUD elements, gimbal cameras and input (since 1.6).</p>
+<p lang="de" class="docs-api__desc">Client-Einstieg: Konfigurator-Tabs, Werkbank-Erweiterungen, Flugschul-Szenen und -Verknüpfungen, OSD, Tuning, Importe und die Drohnen-Vorschau, HUD-Elemente, Gimbal-Kameras und Eingaben (seit 1.6).</p>
 <pre class="docs-api__sig"><code>class PropwashClientApi</code></pre>
-<ul class="docs-api__members"><li><code>static boolean isAddonActive(String modId)</code></li><li><code>static void registerConfigTab(Supplier&lt;? extends ConfigTab&gt; factory)</code></li><li><code>static boolean openConfigTab(String tabId, @Nullable Screen parent)</code></li><li><code>static void registerWorkbenchExtension(WorkbenchExtension extension)</code></li><li><code>static List&lt;WorkbenchExtension&gt; workbenchExtensions()</code></li><li><code>static void registerFlightSchoolScene(Supplier&lt;Scene&gt; scene)</code></li><li><code>static void registerFlightSchoolScene(Supplier&lt;Scene&gt; scene, BooleanSupplier visible)</code></li><li><code>static ActorSpec.Drone flightSchoolDrone(BuildSpec build, boolean assembled, float scale)</code></li><li><code>static boolean openFlightSchoolScene(String sceneId, @Nullable Screen parent)</code></li><li><code>static void linkFlightSchoolItems(String sceneId, String... itemIds)</code></li><li><code>static void linkFlightSchoolParts(String sceneId, String namespace, PartKind... kinds)</code></li><li><code>static List&lt;String&gt; flightSchoolScenes(ItemStack stack)</code></li><li><code>static boolean openFlightSchool(ItemStack stack, @Nullable Screen parent)</code></li><li><code>static OsdLayoutAccess osd()</code></li><li><code>static ClientTune tune()</code></li><li><code>static Optional&lt;DroneData&gt; heldDrone()</code></li><li><code>static CompletableFuture&lt;ImportResult&gt; sendImport(ImportRequest request)</code></li><li><code>static CompletableFuture&lt;ImportResult&gt; sendCreateDrone(DroneData data)</code></li><li><code>static void forceShiftHelp(@Nullable Boolean shown)</code></li><li><code>static void renderPreview(GuiGraphicsExtractor graphics, DroneData drone, int x0, int y0, int x1, int y1, float yawDegrees)</code></li><li><code>static void renderPreview(GuiGraphicsExtractor graphics, DroneData drone, int x0, int y0, int x1, int y1, float yawDegrees, float pixelsPerMillimetre)</code></li></ul>
+<ul class="docs-api__members"><li><code>static boolean isAddonActive(String modId)</code></li><li><code>static void registerConfigTab(Supplier&lt;? extends ConfigTab&gt; factory)</code></li><li><code>static boolean openConfigTab(String tabId, @Nullable Screen parent)</code></li><li><code>static void registerWorkbenchExtension(WorkbenchExtension extension)</code></li><li><code>static List&lt;WorkbenchExtension&gt; workbenchExtensions()</code></li><li><code>static void registerFlightSchoolScene(Supplier&lt;Scene&gt; scene)</code></li><li><code>static void registerFlightSchoolScene(Supplier&lt;Scene&gt; scene, BooleanSupplier visible)</code></li><li><code>static ActorSpec.Drone flightSchoolDrone(BuildSpec build, boolean assembled, float scale)</code></li><li><code>static boolean openFlightSchoolScene(String sceneId, @Nullable Screen parent)</code></li><li><code>static void linkFlightSchoolItems(String sceneId, String... itemIds)</code></li><li><code>static void linkFlightSchoolParts(String sceneId, String namespace, PartKind... kinds)</code></li><li><code>static List&lt;String&gt; flightSchoolScenes(ItemStack stack)</code></li><li><code>static boolean openFlightSchool(ItemStack stack, @Nullable Screen parent)</code></li><li><code>static OsdLayoutAccess osd()</code></li><li><code>static void registerHudElement(String id, HudElement element)</code></li><li><code>static void registerGimbal(String id, GimbalProvider provider)</code></li><li><code>static ClientInput input()</code></li><li><code>static ClientTune tune()</code></li><li><code>static Optional&lt;DroneData&gt; heldDrone()</code></li><li><code>static CompletableFuture&lt;ImportResult&gt; sendImport(ImportRequest request)</code></li><li><code>static CompletableFuture&lt;ImportResult&gt; sendCreateDrone(DroneData data)</code></li><li><code>static void forceShiftHelp(@Nullable Boolean shown)</code></li><li><code>static void renderPreview(GuiGraphicsExtractor graphics, DroneData drone, int x0, int y0, int x1, int y1, float yawDegrees)</code></li><li><code>static void renderPreview(GuiGraphicsExtractor graphics, DroneData drone, int x0, int y0, int x1, int y1, float yawDegrees, float pixelsPerMillimetre)</code></li></ul>
 
 </article>
 <article class="docs-api">
@@ -335,8 +399,105 @@
 
 </article>
 </section>
+<section class="docs-section" aria-labelledby="api-client-camera-package">
+<h2 id="api-client-camera-package" class="docs-h2"><a class="docs-anchor" href="#api-client-camera-package" aria-hidden="true" tabindex="-1">#</a>api.client.camera</h2>
+<article class="docs-api">
+<h3 id="api-client-camera-gimbalcontext" class="docs-api__name"><a class="docs-anchor" href="#api-client-camera-gimbalcontext" aria-hidden="true" tabindex="-1">#</a><code>GimbalContext</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">What a gimbal gets: drone, frame attitude of the shown picture, camera uptilt, time step, spectating (client only).</p>
+<p lang="de" class="docs-api__desc">Was ein Gimbal bekommt: Drohne, Rahmenlage des gezeigten Bilds, Kamerawinkel, Zeitschritt, Zuschauen (nur Client).</p>
+<pre class="docs-api__sig"><code>interface GimbalContext</code></pre>
+<ul class="docs-api__members"><li><code>Entity drone()</code></li><li><code>Quaternionfc frame()</code></li><li><code>float uptiltDegrees()</code></li><li><code>double deltaSeconds()</code></li><li><code>boolean spectating()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-client-camera-gimbalprovider" class="docs-api__name"><a class="docs-anchor" href="#api-client-camera-gimbalprovider" aria-hidden="true" tabindex="-1">#</a><code>GimbalProvider</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Sets the world attitude of the FPV camera for drones it applies to – a stabilised gimbal (client only).</p>
+<p lang="de" class="docs-api__desc">Setzt die Weltlage der FPV-Kamera für passende Drohnen – ein stabilisierter Gimbal (nur Client).</p>
+<pre class="docs-api__sig"><code>interface GimbalProvider</code></pre>
+<ul class="docs-api__members"><li><code>boolean appliesTo(Entity drone)</code></li><li><code>void orient(GimbalContext context, Quaternionf rotation)</code></li><li><code>default boolean suppressesShake()</code></li></ul>
+
+</article>
+</section>
+<section class="docs-section" aria-labelledby="api-client-hud-package">
+<h2 id="api-client-hud-package" class="docs-h2"><a class="docs-anchor" href="#api-client-hud-package" aria-hidden="true" tabindex="-1">#</a>api.client.hud</h2>
+<article class="docs-api">
+<h3 id="api-client-hud-flighttelemetry" class="docs-api__name"><a class="docs-anchor" href="#api-client-hud-flighttelemetry" aria-hidden="true" tabindex="-1">#</a><code>FlightTelemetry</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Flight data for HUD elements: mode, position, speed, attitude, battery, home point, GPS, signals, flight time, sticks.</p>
+<p lang="de" class="docs-api__desc">Flugdaten für HUD-Elemente: Modus, Position, Tempo, Lage, Akku, Home-Punkt, GPS, Signale, Flugzeit, Knüppel.</p>
+<pre class="docs-api__sig"><code>record FlightTelemetry(boolean armed, String mode, Optional&lt;String&gt; assistLabel, double x, double y, double z, double speed, double verticalSpeed, double headingDeg, double pitchDeg, double rollDeg, double throttle, double batteryVoltage, double cellVoltage, double batteryCharge, boolean hasHome, double homeX, double homeY, double homeZ, boolean gpsFix, int satellites, double linkQuality, double videoSignal, double flightSeconds, double stickRoll, double stickPitch, double stickYaw, double stickThrottle)</code></pre>
+<ul class="docs-api__members"><li><code>double homeDistance()</code></li><li><code>double homeHeight()</code></li><li><code>double homeBearingDeg()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-client-hud-hudcontext" class="docs-api__name"><a class="docs-anchor" href="#api-client-hud-hudcontext" aria-hidden="true" tabindex="-1">#</a><code>HudContext</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">What a HUD element gets: drone, view mode, image area, telemetry and font (client only).</p>
+<p lang="de" class="docs-api__desc">Was ein HUD-Element bekommt: Drohne, Ansicht, Bildbereich, Telemetrie und Schrift (nur Client).</p>
+<pre class="docs-api__sig"><code>interface HudContext</code></pre>
+<ul class="docs-api__members"><li><code>Entity drone()</code></li><li><code>boolean fpv()</code></li><li><code>boolean lineOfSight()</code></li><li><code>boolean spectating()</code></li><li><code>int imageX0()</code></li><li><code>int imageY0()</code></li><li><code>int imageX1()</code></li><li><code>int imageY1()</code></li><li><code>float partialTick()</code></li><li><code>FlightTelemetry telemetry()</code></li><li><code>Font font()</code></li><li><code>default int imageWidth()</code></li><li><code>default int imageHeight()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-client-hud-hudelement" class="docs-api__name"><a class="docs-anchor" href="#api-client-hud-hudelement" aria-hidden="true" tabindex="-1">#</a><code>HudElement</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">An own HUD element in FPV or line of sight; may replace the Propwash OSD (client only).</p>
+<p lang="de" class="docs-api__desc">Ein eigenes HUD-Element im FPV oder Sichtflug; darf das Propwash-OSD ersetzen (nur Client).</p>
+<pre class="docs-api__sig"><code>interface HudElement</code></pre>
+<ul class="docs-api__members"><li><code>void render(GuiGraphicsExtractor graphics, HudContext context)</code></li><li><code>default boolean active(HudContext context)</code></li><li><code>default boolean replacesOsd(HudContext context)</code></li></ul>
+
+</article>
+</section>
+<section class="docs-section" aria-labelledby="api-drone-package">
+<h2 id="api-drone-package" class="docs-h2"><a class="docs-anchor" href="#api-drone-package" aria-hidden="true" tabindex="-1">#</a>api.drone</h2>
+<article class="docs-api">
+<h3 id="api-drone-droneaccess" class="docs-api__name"><a class="docs-anchor" href="#api-drone-droneaccess" aria-hidden="true" tabindex="-1">#</a><code>DroneAccess</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Finds and describes drones, applies impulses and pushes, scans for obstacles and aims with lead.</p>
+<p lang="de" class="docs-api__desc">Findet und beschreibt Drohnen, gibt Stöße und Schübe, sucht Hindernisse und zielt mit Vorhalt.</p>
+<pre class="docs-api__sig"><code>interface DroneAccess</code></pre>
+<ul class="docs-api__members"><li><code>boolean isDrone(Entity entity)</code></li><li><code>Optional&lt;DroneView&gt; view(Entity entity)</code></li><li><code>List&lt;DroneView&gt; dronesNear(Level level, Vec3 center, double radius, boolean flyingOnly)</code></li><li><code>Optional&lt;DroneView&gt; nearestDrone(Mob mob, double range, boolean requireSight, boolean flyingOnly)</code></li><li><code>Optional&lt;DronePhysics&gt; physics(Entity drone)</code></li><li><code>double obstacleDistance(Level level, Vec3 origin, Vec3 direction, double range, boolean entities, @Nullable Entity ignore)</code></li><li><code>ObstacleScan scan(Entity drone, double range)</code></li><li><code>Optional&lt;Intercept.Aim&gt; aim(Vec3 shooter, Entity drone, double projectileSpeedPerTick, double gravityPerTick)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-drone-dronephysics" class="docs-api__name"><a class="docs-anchor" href="#api-drone-dronephysics" aria-hidden="true" tabindex="-1">#</a><code>DronePhysics</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Impulses (N·s) and timed pushes (N) at a frame point; routed to the pilot’s flight model, the server return flight or a parked drone.</p>
+<p lang="de" class="docs-api__desc">Stöße (N·s) und zeitlich begrenzte Schübe (N) an einem Rahmenpunkt; gehen an das Flugmodell des Piloten, den Heimflug am Server oder eine abgestellte Drohne.</p>
+<pre class="docs-api__sig"><code>interface DronePhysics</code></pre>
+<ul class="docs-api__members"><li><code>double MAX_IMPULSE = 50.0</code></li><li><code>double MAX_FORCE = 500.0</code></li><li><code>double MAX_SECONDS = 30.0</code></li><li><code>double MAX_ARM = 2.0</code></li><li><code>boolean impulse(Vec3 impulse, Vec3 framePoint)</code></li><li><code>boolean push(Vec3 force, boolean frameRelative, Vec3 framePoint, double seconds)</code></li><li><code>default boolean impulse(Vec3 impulse)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-drone-droneview" class="docs-api__name"><a class="docs-anchor" href="#api-drone-droneview" aria-hidden="true" tabindex="-1">#</a><code>DroneView</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">A snapshot of a drone: pilot, flying, armed, autopilot, centre, velocity, attitude, mass with load and accessories.</p>
+<p lang="de" class="docs-api__desc">Momentaufnahme einer Drohne: Pilot, fliegt, scharf, Autopilot, Mitte, Tempo, Lage, Masse mit Beladung und Zubehör.</p>
+<pre class="docs-api__sig"><code>record DroneView(Entity entity, Optional&lt;UUID&gt; pilot, boolean flying, boolean armed, boolean autopilot, Vec3 center, Vec3 velocity, Vec3 forward, Vec3 up, double massKg, Map&lt;AccessorySlot, Identifier&gt; accessories)</code></pre>
+<ul class="docs-api__members"><li><code>Optional&lt;Identifier&gt; accessory(AccessorySlot slot)</code></li><li><code>double speed()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-drone-obstaclescan" class="docs-api__name"><a class="docs-anchor" href="#api-drone-obstaclescan" aria-hidden="true" tabindex="-1">#</a><code>ObstacleScan</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">Obstacle distances in the six frame directions up to a range.</p>
+<p lang="de" class="docs-api__desc">Hindernisabstände in den sechs Rahmenrichtungen bis zu einer Reichweite.</p>
+<pre class="docs-api__sig"><code>record ObstacleScan(double range, double[] distances)</code></pre>
+<ul class="docs-api__members"><li><code>double distance(SensorDirection direction)</code></li><li><code>boolean clear(SensorDirection direction)</code></li><li><code>double nearest()</code></li><li><code>double[] distances()</code></li></ul>
+
+</article>
+</section>
 <section class="docs-section" aria-labelledby="api-event-package">
 <h2 id="api-event-package" class="docs-h2"><a class="docs-anchor" href="#api-event-package" aria-hidden="true" tabindex="-1">#</a>api.event</h2>
+<article class="docs-api">
+<h3 id="api-event-dronedamage" class="docs-api__name"><a class="docs-anchor" href="#api-event-dronedamage" aria-hidden="true" tabindex="-1">#</a><code>DroneDamage</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></h3>
+<p lang="en" class="docs-api__desc">A drone taking damage: source and amount, changeable and cancellable.</p>
+<p lang="de" class="docs-api__desc">Eine Drohne nimmt Schaden: Quelle und Menge, änderbar und abbrechbar.</p>
+<pre class="docs-api__sig"><code>class DroneDamage</code></pre>
+<ul class="docs-api__members"><li><code>DroneDamage(Entity drone, ServerLevel level, DamageSource source, float amount)</code></li><li><code>Entity drone()</code></li><li><code>ServerLevel level()</code></li><li><code>DamageSource source()</code></li><li><code>float originalAmount()</code></li><li><code>float amount()</code></li><li><code>void setAmount(float value)</code></li><li><code>boolean cancelled()</code></li><li><code>void cancel()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-event-entityhit" class="docs-api__name"><a class="docs-anchor" href="#api-event-entityhit" aria-hidden="true" tabindex="-1">#</a><code>EntityHit</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></h3>
+<p lang="en" class="docs-api__desc">A flown drone hitting a living entity: relative velocity, contact point, mount, base damage; damage and knockback changeable.</p>
+<p lang="de" class="docs-api__desc">Eine geflogene Drohne trifft ein Lebewesen: Relativtempo, Kontaktpunkt, Halterung, Grundschaden; Schaden und Rückstoß änderbar.</p>
+<pre class="docs-api__sig"><code>class EntityHit</code></pre>
+<ul class="docs-api__members"><li><code>static final float MAX_DAMAGE = 40.0F</code></li><li><code>static final float MAX_KNOCKBACK = 3.0F</code></li><li><code>EntityHit(Entity drone, ServerPlayer pilot, LivingEntity target, Vec3 relativeVelocity, double closingSpeed, Vec3 normal, Vec3 framePoint, Optional&lt;AccessorySlot&gt; slot, Optional&lt;Identifier&gt; accessory, float baseDamage, float knockback)</code></li><li><code>Entity drone()</code></li><li><code>ServerPlayer pilot()</code></li><li><code>LivingEntity target()</code></li><li><code>Vec3 relativeVelocity()</code></li><li><code>double closingSpeed()</code></li><li><code>Vec3 normal()</code></li><li><code>Vec3 framePoint()</code></li><li><code>Optional&lt;AccessorySlot&gt; slot()</code></li><li><code>Optional&lt;Identifier&gt; accessory()</code></li><li><code>float baseDamage()</code></li><li><code>float damage()</code></li><li><code>float knockback()</code></li><li><code>void setDamage(float value)</code></li><li><code>void addDamage(float value)</code></li><li><code>void setKnockback(float value)</code></li></ul>
+
+</article>
 <article class="docs-api">
 <h3 id="api-event-propwashevent" class="docs-api__name"><a class="docs-anchor" href="#api-event-propwashevent" aria-hidden="true" tabindex="-1">#</a><code>PropwashEvent</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></h3>
 <p lang="en" class="docs-api__desc">An event with listeners; register in the open phase.</p>
@@ -350,7 +511,7 @@
 <p lang="en" class="docs-api__desc">All events of the API and their listener interfaces.</p>
 <p lang="de" class="docs-api__desc">Alle Events der API und ihre Listener-Interfaces.</p>
 <pre class="docs-api__sig"><code>class PropwashEvents</code></pre>
-<ul class="docs-api__members"><li><code>static final PropwashEvent&lt;PartRegistered&gt; PART_REGISTERED</code></li><li><code>static final PropwashEvent&lt;RegistryFrozen&gt; REGISTRY_FROZEN</code></li><li><code>static final PropwashEvent&lt;DroneAssembled&gt; DRONE_ASSEMBLED</code></li><li><code>static final PropwashEvent&lt;DroneDisassembled&gt; DRONE_DISASSEMBLED</code></li><li><code>static final PropwashEvent&lt;BuildImported&gt; BUILD_IMPORTED</code></li><li><code>static final PropwashEvent&lt;EscBurned&gt; ESC_BURNED</code></li></ul>
+<ul class="docs-api__members"><li><code>static final PropwashEvent&lt;PartRegistered&gt; PART_REGISTERED</code></li><li><code>static final PropwashEvent&lt;RegistryFrozen&gt; REGISTRY_FROZEN</code></li><li><code>static final PropwashEvent&lt;DroneAssembled&gt; DRONE_ASSEMBLED</code></li><li><code>static final PropwashEvent&lt;DroneDisassembled&gt; DRONE_DISASSEMBLED</code></li><li><code>static final PropwashEvent&lt;BuildImported&gt; BUILD_IMPORTED</code></li><li><code>static final PropwashEvent&lt;EscBurned&gt; ESC_BURNED</code></li><li><code>static final PropwashEvent&lt;DroneHitEntity&gt; DRONE_HIT_ENTITY</code></li><li><code>static final PropwashEvent&lt;DroneDamaged&gt; DRONE_DAMAGED</code></li><li><code>static final PropwashEvent&lt;AccessoryActionUsed&gt; ACCESSORY_ACTION</code></li></ul>
 <details class="docs-api__nested">
 <summary><code>PropwashEvents.PartRegistered</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></summary>
 <div id="api-event-propwashevents-partregistered" class="docs-api docs-api--nested">
@@ -411,14 +572,154 @@
 
 </div>
 </details>
+<details class="docs-api__nested">
+<summary><code>PropwashEvents.DroneHitEntity</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></summary>
+<div id="api-event-propwashevents-dronehitentity" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>interface DroneHitEntity</code></pre>
+<ul class="docs-api__members"><li><code>void onDroneHitEntity(EntityHit hit)</code></li></ul>
+
+</div>
+</details>
+<details class="docs-api__nested">
+<summary><code>PropwashEvents.DroneDamaged</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></summary>
+<div id="api-event-propwashevents-dronedamaged" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>interface DroneDamaged</code></pre>
+<ul class="docs-api__members"><li><code>void onDroneDamaged(DroneDamage damage)</code></li></ul>
+
+</div>
+</details>
+<details class="docs-api__nested">
+<summary><code>PropwashEvents.AccessoryActionUsed</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></summary>
+<div id="api-event-propwashevents-accessoryactionused" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>interface AccessoryActionUsed</code></pre>
+<ul class="docs-api__members"><li><code>void onAccessoryAction(ServerPlayer player, Entity drone, int number, boolean pressed)</code></li></ul>
+
+</div>
+</details>
+</article>
+</section>
+<section class="docs-section" aria-labelledby="api-flight-package">
+<h2 id="api-flight-package" class="docs-h2"><a class="docs-anchor" href="#api-flight-package" aria-hidden="true" tabindex="-1">#</a>api.flight</h2>
+<article class="docs-api">
+<h3 id="api-flight-assistoutput" class="docs-api__name"><a class="docs-anchor" href="#api-flight-assistoutput" aria-hidden="true" tabindex="-1">#</a><code>AssistOutput</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">What a flight assist commands each nav tick: sticks and mode, altitude, position or velocity, yaw, an OSD label, return to home.</p>
+<p lang="de" class="docs-api__desc">Was eine Flughilfe in jedem Nav-Takt vorgibt: Knüppel und Modus, Höhe, Position oder Geschwindigkeit, Gieren, eine OSD-Anzeige, Rückkehr.</p>
+<pre class="docs-api__sig"><code>interface AssistOutput</code></pre>
+<ul class="docs-api__members"><li><code>double MAX_SPEED = 20.0</code></li><li><code>double MAX_CLIMB = 8.0</code></li><li><code>int MAX_LABEL = 8</code></li><li><code>void sticks(double roll, double pitch, double yaw, double throttle)</code></li><li><code>void mode(StabilizationMode mode)</code></li><li><code>void holdAltitude(double y)</code></li><li><code>void climb(double metresPerSecond)</code></li><li><code>void holdPosition(double x, double z)</code></li><li><code>void velocity(double vx, double vz)</code></li><li><code>void maxSpeed(double metresPerSecond)</code></li><li><code>void yawRate(double degreesPerSecond)</code></li><li><code>void heading(double compassDegrees)</code></li><li><code>void label(String text)</code></li><li><code>void requestReturnHome()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-flight-droneprofile" class="docs-api__name"><a class="docs-anchor" href="#api-flight-droneprofile" aria-hidden="true" tabindex="-1">#</a><code>DroneProfile</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
+<p lang="en" class="docs-api__desc">The parts of a drone as ids and its mass, for choosing flight assists and force providers.</p>
+<p lang="de" class="docs-api__desc">Die Teile einer Drohne als Ids und ihre Masse, zur Wahl von Flughilfen und Kräften.</p>
+<pre class="docs-api__sig"><code>record DroneProfile(String frame, String stack, String motor, String prop, String video, String battery, Map&lt;String, String&gt; accessories, double massKg)</code></pre>
+<ul class="docs-api__members"><li><code>Optional&lt;String&gt; accessory(String slotKey)</code></li><li><code>boolean hasAccessory(String accessoryId)</code></li><li><code>boolean has(String partId)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-flight-flightassist" class="docs-api__name"><a class="docs-anchor" href="#api-flight-flightassist" aria-hidden="true" tabindex="-1">#</a><code>FlightAssist</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">A flight controller extension running at 100 Hz inside the pilot’s flight model (position hold, cinematic smoothing, orbit, waypoints).</p>
+<p lang="de" class="docs-api__desc">Eine Erweiterung des Flight-Controllers, die mit 100 Hz im Flugmodell des Piloten läuft (Position halten, Kino-Glättung, Umkreisen, Wegpunkte).</p>
+<pre class="docs-api__sig"><code>interface FlightAssist</code></pre>
+<ul class="docs-api__members"><li><code>void update(FlightState state, AssistOutput output)</code></li><li><code>default double sensorRange()</code></li><li><code>default void reset()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-flight-flightextensions" class="docs-api__name"><a class="docs-anchor" href="#api-flight-flightextensions" aria-hidden="true" tabindex="-1">#</a><code>FlightExtensions</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Registers flight assists and force providers per drone profile.</p>
+<p lang="de" class="docs-api__desc">Meldet Flughilfen und Kräfte je Drohnen-Profil an.</p>
+<pre class="docs-api__sig"><code>interface FlightExtensions</code></pre>
+<ul class="docs-api__members"><li><code>void registerAssist(String id, Function&lt;DroneProfile, FlightAssist&gt; factory)</code></li><li><code>void registerForces(String id, Function&lt;DroneProfile, ForceProvider&gt; factory)</code></li><li><code>List&lt;String&gt; assistIds()</code></li><li><code>List&lt;String&gt; forceIds()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-flight-flightstate" class="docs-api__name"><a class="docs-anchor" href="#api-flight-flightstate" aria-hidden="true" tabindex="-1">#</a><code>FlightState</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Read-only state for assists and forces: true and estimated position and velocity, attitude, sensors, sticks, actions, obstacles.</p>
+<p lang="de" class="docs-api__desc">Nur-lese-Zustand für Flughilfen und Kräfte: wahre und geschätzte Position und Geschwindigkeit, Lage, Sensoren, Knüppel, Aktionen, Hindernisse.</p>
+<pre class="docs-api__sig"><code>interface FlightState</code></pre>
+<ul class="docs-api__members"><li><code>int ACTIONS = 4</code></li><li><code>double time()</code></li><li><code>double massKg()</code></li><li><code>double gravity()</code></li><li><code>double x()</code></li><li><code>double y()</code></li><li><code>double z()</code></li><li><code>double vx()</code></li><li><code>double vy()</code></li><li><code>double vz()</code></li><li><code>double estimatedX()</code></li><li><code>double estimatedY()</code></li><li><code>double estimatedZ()</code></li><li><code>double estimatedVx()</code></li><li><code>double estimatedVy()</code></li><li><code>double estimatedVz()</code></li><li><code>boolean positionValid()</code></li><li><code>boolean gpsFix()</code></li><li><code>int satellites()</code></li><li><code>double headingDeg()</code></li><li><code>double pitchDeg()</code></li><li><code>double rollDeg()</code></li><li><code>double rollRateDps()</code></li><li><code>double pitchRateDps()</code></li><li><code>double yawRateDps()</code></li><li><code>double forwardX()</code></li><li><code>double forwardY()</code></li><li><code>double forwardZ()</code></li><li><code>double upX()</code></li><li><code>double upY()</code></li><li><code>double upZ()</code></li><li><code>double rightX()</code></li><li><code>double rightY()</code></li><li><code>double rightZ()</code></li><li><code>double heightAboveGround()</code></li><li><code>boolean armed()</code></li><li><code>boolean grounded()</code></li><li><code>boolean failsafe()</code></li><li><code>double hoverThrottle()</code></li><li><code>double batteryCharge()</code></li><li><code>double stickRoll()</code></li><li><code>double stickPitch()</code></li><li><code>double stickYaw()</code></li><li><code>double stickThrottle()</code></li><li><code>StabilizationMode pilotMode()</code></li><li><code>boolean action(int number)</code></li><li><code>double obstacleDistance(SensorDirection direction)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-flight-forceprovider" class="docs-api__name"><a class="docs-anchor" href="#api-flight-forceprovider" aria-hidden="true" tabindex="-1">#</a><code>ForceProvider</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Adds forces and torques to the flight model at 100 Hz on the pilot client and in the server return flight.</p>
+<p lang="de" class="docs-api__desc">Gibt dem Flugmodell mit 100 Hz Kräfte und Drehmomente, auf dem Pilot-Client und im Heimflug am Server.</p>
+<pre class="docs-api__sig"><code>interface ForceProvider</code></pre>
+<ul class="docs-api__members"><li><code>void apply(FlightState state, ForceSink sink)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-flight-forcesink" class="docs-api__name"><a class="docs-anchor" href="#api-flight-forcesink" aria-hidden="true" tabindex="-1">#</a><code>ForceSink</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
+<p lang="en" class="docs-api__desc">Collects the forces (N) and torques (N·m) of a force provider, also at frame points.</p>
+<p lang="de" class="docs-api__desc">Sammelt Kräfte (N) und Drehmomente (N·m) eines Kraft-Anbieters, auch an Rahmenpunkten.</p>
+<pre class="docs-api__sig"><code>interface ForceSink</code></pre>
+<ul class="docs-api__members"><li><code>double MAX_FORCE = 500.0</code></li><li><code>double MAX_TORQUE = 50.0</code></li><li><code>void addForce(double fx, double fy, double fz)</code></li><li><code>void addForceAt(double fx, double fy, double fz, double frameX, double frameY, double frameZ)</code></li><li><code>void addTorque(double tx, double ty, double tz)</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-flight-gimbalmodel" class="docs-api__name"><a class="docs-anchor" href="#api-flight-gimbalmodel" aria-hidden="true" tabindex="-1">#</a><code>GimbalModel</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></h3>
+<p lang="en" class="docs-api__desc">A ready-made stabilised 3-axis gimbal without Minecraft types: follow, lock and FPV modes, pitch range, mechanical limits, smoothing.</p>
+<p lang="de" class="docs-api__desc">Ein fertiger stabilisierter 3-Achsen-Gimbal ohne Minecraft-Typen: Modi Folgen, Sperren und FPV, Nickbereich, mechanische Grenzen, Glättung.</p>
+<pre class="docs-api__sig"><code>class GimbalModel</code></pre>
+<ul class="docs-api__members"><li><code>GimbalModel mode(Mode value)</code></li><li><code>Mode mode()</code></li><li><code>GimbalModel pitchRange(double minDeg, double maxDeg)</code></li><li><code>GimbalModel mechanicalLimits(double relativePitchMinDeg, double relativePitchMaxDeg, double relativeRollLimitDeg, double relativeYawLimitDeg)</code></li><li><code>GimbalModel smoothing(double followTimeSeconds, double maxYawRateDps, double maxPitchRateDps)</code></li><li><code>GimbalModel pitch(double degrees)</code></li><li><code>double commandedPitch()</code></li><li><code>GimbalModel lockHeading(double compassDegrees)</code></li><li><code>void reset()</code></li><li><code>void update(double dt, double frameQx, double frameQy, double frameQz, double frameQw)</code></li><li><code>double headingDeg()</code></li><li><code>double pitchDeg()</code></li><li><code>double rollDeg()</code></li><li><code>boolean atLimit()</code></li><li><code>double qx()</code></li><li><code>double qy()</code></li><li><code>double qz()</code></li><li><code>double qw()</code></li></ul>
+<details class="docs-api__nested">
+<summary><code>GimbalModel.Mode</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></summary>
+<div id="api-flight-gimbalmodel-mode" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>enum Mode</code></pre>
+<ul class="docs-api__constants"><li><code>FOLLOW</code></li><li><code>LOCK</code></li><li><code>FPV</code></li></ul>
+
+</div>
+</details>
+</article>
+<article class="docs-api">
+<h3 id="api-flight-intercept" class="docs-api__name"><a class="docs-anchor" href="#api-flight-intercept" aria-hidden="true" tabindex="-1">#</a><code>Intercept</code> <span class="docs-badge"><span lang="en">class</span><span lang="de">Klasse</span></span></h3>
+<p lang="en" class="docs-api__desc">Aiming with lead and gravity compensation for projectiles at moving targets.</p>
+<p lang="de" class="docs-api__desc">Zielen mit Vorhalt und Schwerkraft-Ausgleich für Geschosse auf bewegte Ziele.</p>
+<pre class="docs-api__sig"><code>class Intercept</code></pre>
+<ul class="docs-api__members"><li><code>static final int ITERATIONS = 8</code></li><li><code>static Optional&lt;Aim&gt; aim(double shooterX, double shooterY, double shooterZ, double targetX, double targetY, double targetZ, double targetVx, double targetVy, double targetVz, double projectileSpeed, double gravity, double maxTime)</code></li></ul>
+<details class="docs-api__nested">
+<summary><code>Intercept.Aim</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></summary>
+<div id="api-flight-intercept-aim" class="docs-api docs-api--nested">
+
+
+<pre class="docs-api__sig"><code>record Aim(double dx, double dy, double dz, double time)</code></pre>
+
+
+</div>
+</details>
+</article>
+<article class="docs-api">
+<h3 id="api-flight-sensordirection" class="docs-api__name"><a class="docs-anchor" href="#api-flight-sensordirection" aria-hidden="true" tabindex="-1">#</a><code>SensorDirection</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
+<p lang="en" class="docs-api__desc">The six obstacle sensor directions in frame coordinates.</p>
+<p lang="de" class="docs-api__desc">Die sechs Richtungen der Hindernissensoren in Rahmen-Koordinaten.</p>
+<pre class="docs-api__sig"><code>enum SensorDirection</code></pre>
+<ul class="docs-api__constants"><li><code>FORWARD</code></li><li><code>BACK</code></li><li><code>LEFT</code></li><li><code>RIGHT</code></li><li><code>UP</code></li><li><code>DOWN</code></li></ul>
+<ul class="docs-api__members"><li><code>double x()</code></li><li><code>double y()</code></li><li><code>double z()</code></li></ul>
+
+</article>
+<article class="docs-api">
+<h3 id="api-flight-stabilizationmode" class="docs-api__name"><a class="docs-anchor" href="#api-flight-stabilizationmode" aria-hidden="true" tabindex="-1">#</a><code>StabilizationMode</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
+<p lang="en" class="docs-api__desc">Stabilisation modes a flight assist can select: acro, angle, horizon.</p>
+<p lang="de" class="docs-api__desc">Stabilisierungsmodi, die eine Flughilfe wählen kann: Acro, Angle, Horizon.</p>
+<pre class="docs-api__sig"><code>enum StabilizationMode</code></pre>
+<ul class="docs-api__constants"><li><code>ACRO</code></li><li><code>ANGLE</code></li><li><code>HORIZON</code></li></ul>
+
 </article>
 </section>
 <section class="docs-section" aria-labelledby="api-part-package">
 <h2 id="api-part-package" class="docs-h2"><a class="docs-anchor" href="#api-part-package" aria-hidden="true" tabindex="-1">#</a>api.part</h2>
 <article class="docs-api">
 <h3 id="api-part-accessorydefinition" class="docs-api__name"><a class="docs-anchor" href="#api-part-accessorydefinition" aria-hidden="true" tabindex="-1">#</a><code>AccessoryDefinition</code> <span class="docs-badge"><span lang="en">record</span><span lang="de">Record</span></span></h3>
-<p lang="en" class="docs-api__desc">An accessory for the top or bottom mount: size, power draw, LEDs, lens, optional action cam.</p>
-<p lang="de" class="docs-api__desc">Ein Zubehörteil für die obere oder untere Halterung: Maße, Leistungsaufnahme, LEDs, Objektiv, optional Action-Cam.</p>
+<p lang="en" class="docs-api__desc">An accessory for the top, bottom or front mount: size, power draw, LEDs, lens, optional action cam.</p>
+<p lang="de" class="docs-api__desc">Ein Zubehörteil für die obere, untere oder vordere Halterung: Maße, Leistungsaufnahme, LEDs, Objektiv, optional Action-Cam.</p>
 <pre class="docs-api__sig"><code>record AccessoryDefinition(Identifier id, PartBasics basics, AccessorySlot slot, double widthMm, double heightMm, double depthMm, double flightBatteryWatts, double frontalAreaM2, int ledCount, Optional&lt;ActionCamDefinition&gt; actionCam, double lensXMm, double lensLengthMm) implements PartDefinition</code></pre>
 <ul class="docs-api__members"><li><code>static Builder builder(Identifier id)</code></li><li><code>PartKind kind()</code></li></ul>
 <details class="docs-api__nested">
@@ -434,10 +735,10 @@
 </article>
 <article class="docs-api">
 <h3 id="api-part-accessoryslot" class="docs-api__name"><a class="docs-anchor" href="#api-part-accessoryslot" aria-hidden="true" tabindex="-1">#</a><code>AccessorySlot</code> <span class="docs-badge"><span lang="en">enum</span><span lang="de">Enum</span></span></h3>
-<p lang="en" class="docs-api__desc">Accessory mounts: top and bottom.</p>
-<p lang="de" class="docs-api__desc">Zubehör-Halterungen: oben und unten.</p>
+<p lang="en" class="docs-api__desc">Accessory mounts: top, bottom and (since 1.6) front under the nose.</p>
+<p lang="de" class="docs-api__desc">Zubehör-Halterungen: oben, unten und (seit 1.6) vorne unter der Nase.</p>
 <pre class="docs-api__sig"><code>enum AccessorySlot</code></pre>
-<ul class="docs-api__constants"><li><code>TOP</code> <span class="docs-muted">&quot;top&quot;</span></li><li><code>BOTTOM</code> <span class="docs-muted">&quot;bottom&quot;</span></li></ul>
+<ul class="docs-api__constants"><li><code>TOP</code> <span class="docs-muted">&quot;top&quot;</span></li><li><code>BOTTOM</code> <span class="docs-muted">&quot;bottom&quot;</span></li><li><code>FRONT</code> <span class="docs-muted">&quot;front&quot;</span></li></ul>
 <ul class="docs-api__members"><li><code>static Optional&lt;AccessorySlot&gt; byKey(String key)</code></li><li><code>String key()</code></li></ul>
 
 </article>
