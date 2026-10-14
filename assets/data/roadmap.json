@@ -25,6 +25,180 @@
       },
       "groups": [
         {
+          "version": "0.5.2",
+          "title": {
+            "en": "Fisheye, water and zones",
+            "de": "Fisheye, Wasser und Zonen"
+          },
+          "link": {
+            "href": "../changelog/#propwash-0.5.2",
+            "label": {
+              "en": "Full changelog",
+              "de": "Alle Änderungen"
+            }
+          },
+          "items": [
+            {
+              "id": "fisheye",
+              "icon": "fov",
+              "status": "done",
+              "title": {
+                "en": "A real FPV lens",
+                "de": "Ein echtes FPV-Objektiv"
+              },
+              "text": {
+                "en": "The FPV picture looks through a fisheye like a real FPV camera – or flat, if you prefer.",
+                "de": "Das FPV-Bild sieht durch ein Fisheye wie eine echte FPV-Kamera – oder flach, wenn dir das lieber ist."
+              },
+              "link": {
+                "href": "../docs/guide/#video-lens",
+                "label": {
+                  "en": "In the player guide",
+                  "de": "Im Spielerhandbuch"
+                }
+              }
+            },
+            {
+              "id": "waterproof",
+              "icon": "spark",
+              "status": "done",
+              "title": {
+                "en": "Waterproof drones",
+                "de": "Wasserdichte Drohnen"
+              },
+              "text": {
+                "en": "Coat a drone with waterproof spray and it flies in water – props bog down, full throttle gets you out.",
+                "de": "Mit Wasserschutz-Spray fliegt eine Drohne im Wasser – die Props laufen schwer, mit Vollgas kommst du heraus."
+              },
+              "link": {
+                "href": "../docs/guide/#world-waterproof",
+                "label": {
+                  "en": "In the player guide",
+                  "de": "Im Spielerhandbuch"
+                }
+              }
+            },
+            {
+              "id": "turtle-mode",
+              "icon": "flip",
+              "status": "done",
+              "title": {
+                "en": "Turtle mode",
+                "de": "Turtle-Modus"
+              },
+              "text": {
+                "en": "Landed upside down? Flip the drone back over with its own props, like in Betaflight.",
+                "de": "Auf dem Kopf gelandet? Dreh die Drohne mit den eigenen Props wieder um, wie in Betaflight."
+              }
+            },
+            {
+              "id": "zones",
+              "icon": "globe",
+              "status": "done",
+              "title": {
+                "en": "Zones",
+                "de": "Zonen"
+              },
+              "text": {
+                "en": "Areas with their own simulation settings – race-legal or counted as assisted.",
+                "de": "Bereiche mit eigenen Simulationswerten – rennfrei oder als Flughilfe gewertet."
+              },
+              "link": {
+                "href": "../docs/guide/#servers-zones",
+                "label": {
+                  "en": "In the player guide",
+                  "de": "Im Spielerhandbuch"
+                }
+              }
+            },
+            {
+              "id": "vtx-power",
+              "icon": "fov",
+              "status": "done",
+              "title": {
+                "en": "VTX power",
+                "de": "VTX-Leistung"
+              },
+              "text": {
+                "en": "25 to 1600 mW: more range and penetration, but more heat and battery drain.",
+                "de": "25 bis 1600 mW: mehr Reichweite und Durchdringung, aber mehr Wärme und Akkuverbrauch."
+              }
+            },
+            {
+              "id": "bando-maps",
+              "icon": "bando",
+              "status": "done",
+              "title": {
+                "en": "Bando maps",
+                "de": "Bando-Karten"
+              },
+              "text": {
+                "en": "Cartographers sell explorer maps that lead to the nearest unexplored bando.",
+                "de": "Kartografen verkaufen Entdeckerkarten zum nächsten unerkundeten Bando."
+              }
+            },
+            {
+              "id": "cobwebs-bells",
+              "icon": "impact",
+              "status": "done",
+              "title": {
+                "en": "Cobwebs and bells",
+                "de": "Spinnweben und Glocken"
+              },
+              "text": {
+                "en": "Cobwebs catch your drone, vines brake it, and bells ring when you fly into them.",
+                "de": "Spinnweben fangen deine Drohne, Ranken bremsen sie, und Glocken läuten, wenn du hineinfliegst."
+              }
+            },
+            {
+              "id": "battery-curve",
+              "icon": "battery",
+              "status": "done",
+              "title": {
+                "en": "Batteries like real packs",
+                "de": "Akkus wie echte Packs"
+              },
+              "text": {
+                "en": "A flat discharge curve with a steep end you feel in every punch; the OSD voltage flashes when it sags.",
+                "de": "Eine flache Entladekurve mit steilem Ende, das du in jedem Punch spürst; die OSD-Spannung blinkt beim Einbruch."
+              }
+            },
+            {
+              "id": "landings",
+              "icon": "tilt",
+              "status": "done",
+              "title": {
+                "en": "Better landings",
+                "de": "Bessere Landungen"
+              },
+              "text": {
+                "en": "Drones touch down on their real frame, battery and props instead of ending upside down.",
+                "de": "Drohnen setzen auf Rahmen, Akku und Props auf, statt auf dem Kopf zu landen."
+              }
+            },
+            {
+              "id": "addon-api-16",
+              "icon": "puzzle",
+              "status": "done",
+              "title": {
+                "en": "Add-on API 1.6",
+                "de": "Add-on-API 1.6"
+              },
+              "text": {
+                "en": "Front mount, accessories with their own load and actions, flight assists, gimbal cameras and HUD elements for add-ons.",
+                "de": "Halterung vorne, Zubehör mit eigener Ladung und Aktionen, Flughilfen, Gimbal-Kameras und HUD-Elemente für Add-ons."
+              },
+              "link": {
+                "href": "../docs/api/",
+                "label": {
+                  "en": "Add-on API",
+                  "de": "Add-on-API"
+                }
+              }
+            }
+          ]
+        },
+        {
           "version": "0.5.1",
           "title": {
             "en": "Bug fixes for servers",
@@ -542,14 +716,14 @@
       },
       "groups": [
         {
-          "version": "0.5.2",
+          "version": "0.5.3",
           "title": {
             "en": "Bug fixes",
             "de": "Fehlerbehebungen"
           },
           "items": [
             {
-              "id": "fixes-052",
+              "id": "fixes-053",
               "icon": "bug",
               "status": "planned",
               "title": {
@@ -557,8 +731,8 @@
                 "de": "Bugfix-Update"
               },
               "text": {
-                "en": "Fixes for what you find and report after 0.5.1.",
-                "de": "Korrekturen für das, was du nach 0.5.1 findest und meldest."
+                "en": "Fixes for what you find and report after 0.5.2.",
+                "de": "Korrekturen für das, was du nach 0.5.2 findest und meldest."
               }
             }
           ]

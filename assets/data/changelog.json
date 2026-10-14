@@ -10,9 +10,164 @@
         "de": "Die FPV-Drohnen-Mod für Minecraft"
       },
       "source": {
-        "ref": "v0.5.1"
+        "ref": "v0.5.2"
       },
       "releases": [
+        {
+          "version": "0.5.2",
+          "id": "propwash-0.5.2",
+          "title": {
+            "en": "Fisheye lens, waterproof drones, turtle mode and zones",
+            "de": "Fisheye-Objektiv, wasserdichte Drohnen, Turtle-Modus und Zonen"
+          },
+          "sections": [
+            {
+              "kind": "highlights",
+              "items": [
+                {
+                  "en": "**A real FPV lens:** the FPV picture now looks through a fisheye like a real FPV camera – things ahead appear bigger and closer, the edges bend away, and speed feels like in a real feed.",
+                  "de": "**Ein echtes FPV-Objektiv:** Das FPV-Bild sieht jetzt durch ein Fisheye wie eine echte FPV-Kamera – Dinge voraus wirken größer und näher, die Ränder biegen sich weg, und Tempo fühlt sich an wie im echten Feed."
+                },
+                {
+                  "en": "**Waterproof drones and turtle mode:** spray a drone with waterproof coating and it flies in water; when it lands upside down, flip it back over with its own props, just like in Betaflight.",
+                  "de": "**Wasserdichte Drohnen und Turtle-Modus:** Mit Wasserschutz-Spray fliegt eine Drohne im Wasser; landet sie auf dem Kopf, drehst du sie mit den eigenen Props wieder um, genau wie in Betaflight."
+                },
+                {
+                  "en": "**Zones:** give part of your world its own simulation settings – infinite battery on a practice field, zero gravity in a race passage – race-legal or counted as assisted.",
+                  "de": "**Zonen:** Ein Teil deiner Welt bekommt eigene Simulationswerte – unendlicher Akku auf dem Übungsplatz, Schwerelosigkeit in einer Rennpassage – rennfrei oder als Flughilfe gewertet."
+                }
+              ]
+            },
+            {
+              "kind": "new",
+              "items": [
+                {
+                  "en": "*Lens: Fisheye / Flat* in the *Video* tab, fisheye by default – with interference, 4:3, the OSD, props in view and shader packs. *Flat* brings back the old picture.",
+                  "de": "*Objektiv: Fisheye / Flach* im Tab *Video*, Standard Fisheye – mit Störungen, 4:3, dem OSD, Props im Bild und Shaderpacks. *Flach* bringt das alte Bild zurück."
+                },
+                {
+                  "en": "Waterproof Coating spray can (iron nuggets, honeycomb, resin clump): right-click a placed drone or combine both in the crafting grid; one can coats ten drones. The world rule *Drones are waterproof* coats every drone (on in *Arcade*).",
+                  "de": "Sprühdose Wasserschutz-Spray (Eisennuggets, Honigwabe, Harzklumpen): Rechtsklick auf eine platzierte Drohne oder beides zusammen ins Handwerksraster; eine Dose reicht für zehn Drohnen. Die Welt-Regel *Drohnen sind wasserdicht* beschichtet jede Drohne (in *Arcade* an)."
+                },
+                {
+                  "en": "Turtle mode on a radio switch or key (numpad 8) in the *Modes* tab: arm while the drone lies upside down and push the stick toward the side it should tip to.",
+                  "de": "Turtle-Modus auf einem Funkenschalter oder einer Taste (Ziffernblock 8) im Tab *Modi*: scharf schalten, solange die Drohne auf dem Kopf liegt, und den Knüppel zu der Seite drücken, über die sie kippen soll."
+                },
+                {
+                  "en": "Zones are made in the *World rules* tab, with a zone editor like *Adjust gate* or with `/propwash zone`; they show a subtle border, the OSD tells you when you fly in or out, and gravity and wind fade in smoothly.",
+                  "de": "Zonen entstehen im Tab *Welt-Regeln*, mit einem Zonen-Editor wie bei *Gate einstellen* oder mit `/propwash zone`; sie zeigen einen dezenten Rand, das OSD meldet Ein- und Ausfliegen, und Schwerkraft und Wind gleiten sanft über."
+                },
+                {
+                  "en": "VTX power from 25 mW up to 1600 mW in the *Video channel* tab, or step through it in flight with the *VTX power* switch or F10: more range and better penetration, but more battery drain and heat (*VTX OVERHEAT*). *Auto* for digital systems, *Low when disarmed* like in Betaflight, and an OSD element for the power.",
+                  "de": "VTX-Leistung von 25 mW bis 1600 mW im Tab *Videokanal* oder im Flug mit dem Schalter *VTX-Leistung* bzw. F10: mehr Reichweite und bessere Durchdringung, aber mehr Akkuverbrauch und Wärme (*VTX ÜBERHITZT*). *Auto* für digitale Systeme, *Niedrig, wenn unscharf* wie in Betaflight und ein OSD-Element für die Leistung."
+                },
+                {
+                  "en": "Bando maps: journeyman cartographers sell a map (10 emeralds and a compass) to the nearest unexplored bando; sometimes one lies in a bando chest or a village cartographer's house.",
+                  "de": "Bando-Karten: Kartografen ab der Stufe Geselle verkaufen eine Karte (10 Smaragde und ein Kompass) zum nächsten unerkundeten Bando; manchmal liegt eine in einer Bando-Truhe oder im Haus eines Dorf-Kartografen."
+                },
+                {
+                  "en": "Cobwebs catch your drone – punch out with full throttle; tripwire string snags the props, vines, glow lichen, hanging roots and moss brake you lightly. Fly into a bell and it rings like an arrow hit it.",
+                  "de": "Spinnweben fangen deine Drohne – mit Vollgas kommst du frei; Stolperdraht verfängt sich in den Props, Ranken, Leuchtflechte, hängende Wurzeln und Moos bremsen leicht. Fliegst du in eine Glocke, läutet sie wie bei einem Pfeil."
+                },
+                {
+                  "en": "*Why is my lap assisted?* check in the *Race* tab: lists everything that would make your lap count as assisted right now.",
+                  "de": "Prüfung *Warum gilt meine Runde als unterstützt?* im Tab *Rennen*: listet alles, was deine Runde gerade zur Runde mit Flughilfe machen würde."
+                },
+                {
+                  "en": "A 5.1″ race prop with 2.9″ pitch (the \"5129\" many racers fly): the same punch off the line as the 4.6″ prop, less top speed.",
+                  "de": "Ein 5,1″-Race-Prop mit 2,9″ Steigung (der „5129“, den viele Racer fliegen): derselbe Punch beim Start wie der 4,6″-Prop, weniger Topspeed."
+                },
+                {
+                  "en": "*Invert pitch* in the *Receiver* tab flips forward and back for the mouse and the pitch keys.",
+                  "de": "*Nick (Pitch) umkehren* im Tab *Empfänger* kehrt vor und zurück für die Maus und die Nick-Tasten um."
+                },
+                {
+                  "en": "Action Cam (Flashback): OSD element *Flashback timeline*, a *Simplification* slider with a preview of the saved camera path, and *Check replays* to thin flights that are too long.",
+                  "de": "Action-Cam (Flashback): OSD-Element *Flashback-Zeitleiste*, ein Regler *Vereinfachung* mit Vorschau des gespeicherten Kamerapfads und *Aufnahmen prüfen*, um zu lange Flüge auszudünnen."
+                },
+                {
+                  "en": "Every drone remembers its GPS Rescue home point; server admins read and move it with `/data` (`HomePoint`).",
+                  "de": "Jede Drohne merkt sich ihren GPS-Rescue-Homepoint; Server-Admins lesen und verschieben ihn mit `/data` (`HomePoint`)."
+                },
+                {
+                  "en": "For add-ons: a front mount under the nose (all frames except the Whoop), accessories with their own load (*Accessories* in the service menu) and *Accessory action 1–4* (switch functions and the keys numpad 9, 0, Enter and +).",
+                  "de": "Für Add-ons: eine Halterung vorne unter der Nase (alle Rahmen außer dem Whoop), Zubehör mit eigener Ladung (*Zubehör* im Wartungsmenü) und *Zubehör-Aktion 1–4* (Schalterfunktionen und die Tasten Ziffernblock 9, 0, Enter und +)."
+                }
+              ]
+            },
+            {
+              "kind": "improved",
+              "items": [
+                {
+                  "en": "Batteries discharge like real packs: nearly flat for most of the flight, a steep drop in the last ~10 %, and you feel the end of the pack in every punch. The OSD voltage is smoothed like in Betaflight and flashes while it sags below warning or cutoff.",
+                  "de": "Akkus entladen sich wie echte Packs: fast flach über den größten Teil des Flugs, steiler Abfall in den letzten rund 10 %, und das Ende des Packs spürst du in jedem Punch. Die OSD-Spannung ist geglättet wie bei Betaflight und blinkt, solange sie unter die Warn- oder Abschaltspannung einbricht."
+                },
+                {
+                  "en": "Drones touch down on their real frame, battery, props and ducts and settle like a real quad.",
+                  "de": "Drohnen setzen auf ihrem echten Rahmen, Akku, Props und Ducts auf und kommen zur Ruhe wie ein echter Quad."
+                },
+                {
+                  "en": "Assisted laps name their exact reasons everywhere, for example \"Gravity 130 % instead of 100 %\".",
+                  "de": "Runden mit Flughilfe nennen überall ihre genauen Gründe, zum Beispiel „Schwerkraft 130 % statt 100 %“."
+                },
+                {
+                  "en": "The 5″ race frame is a true X like current race quads, and the Racing Drone flies the new race prop: about 147 km/h top speed instead of 168 – fit the 4.6″ prop if you want top speed.",
+                  "de": "Der 5″-Race-Rahmen ist ein True-X wie aktuelle Race-Quads, und die Racing-Drohne fliegt den neuen Race-Prop: rund 147 km/h Topspeed statt 168 – bau den 4,6″-Prop an, wenn du Topspeed willst."
+                },
+                {
+                  "en": "The rule that stops the motors after a crash is now called *Disarm on crash* and is easy to find – in the *Configuration* tab, the settings search and the Flight School.",
+                  "de": "Die Regel, die nach einem Absturz die Motoren anhält, heißt jetzt *Nach Absturz abschalten* und ist leicht zu finden – im Tab *Konfiguration*, in der Suche der Einstellungen und in der Flugschule."
+                },
+                {
+                  "en": "*Adjust gate* shows at the top of its panel how to use the mouse: hold `Alt` (`⌥ Option` on a Mac).",
+                  "de": "*Gate einstellen* zeigt oben im Panel, wie du die Maus benutzt: `Alt` halten (auf dem Mac `⌥ Wahltaste`)."
+                }
+              ]
+            },
+            {
+              "kind": "fixed",
+              "items": [
+                {
+                  "en": "Drones no longer end up upside down after gentle landings, on half slabs or when sliding off a step.",
+                  "de": "Drohnen landen nach sanften Landungen, auf Halbblöcken oder beim Rutschen über eine Stufe nicht mehr auf dem Kopf."
+                },
+                {
+                  "en": "Long Action Cam flights no longer crash the game when you open the replay in Flashback: Propwash thins them when saving (*Flashback limit*, on by default).",
+                  "de": "Lange Flüge der Action-Cam lassen das Spiel nicht mehr abstürzen, wenn du die Aufnahme in Flashback öffnest: Propwash dünnt sie beim Speichern aus (*Flashback-Obergrenze*, Standard an)."
+                },
+                {
+                  "en": "The *Modes* tab lights up the mode your switch selects right away, also while the menu pauses the game and for ranges you haven't saved yet; toggle switches show their real state.",
+                  "de": "Der Tab *Modi* zeigt den Modus, den dein Schalter wählt, sofort an – auch wenn das Menü das Spiel pausiert und für Bereiche, die du noch nicht gespeichert hast; Umschalter zeigen ihren echten Stand."
+                },
+                {
+                  "en": "Laps no longer count as assisted after world rules were set back to default mid-flight, and servers judge each lap on its own for every pilot.",
+                  "de": "Runden gelten nicht mehr als unterstützt, nachdem die Welt-Regeln im Flug auf Standard zurückgesetzt wurden, und Server bewerten jede Runde für jeden Piloten einzeln."
+                },
+                {
+                  "en": "Setting *Battery life* from infinite back to a limit mid-flight no longer drains the battery.",
+                  "de": "Wird *Akkulaufzeit* im Flug von unendlich auf eine Grenze zurückgestellt, leert sich der Akku nicht mehr um alles, was in der Zwischenzeit verbraucht wurde."
+                }
+              ]
+            },
+            {
+              "kind": "compatibility",
+              "items": [
+                {
+                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · client and server must both run 0.5.2 – 0.5.0 and 0.5.1 can't join a 0.5.2 server and the other way round.",
+                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · Client und Server brauchen beide 0.5.2 – 0.5.0 und 0.5.1 können einem 0.5.2-Server nicht beitreten und umgekehrt."
+                },
+                {
+                  "en": "Worlds, drones, courses, leaderboards and settings from 0.5.x load unchanged; drones keep their module's default VTX power, and your Flashback keyframe setting carries over.",
+                  "de": "Welten, Drohnen, Kurse, Bestenlisten und Einstellungen aus 0.5.x laden unverändert; Drohnen behalten die Standardleistung ihres Videomoduls, und deine Keyframe-Einstellung für Flashback wird übernommen."
+                },
+                {
+                  "en": "*Propwash: Just More Parts* 1.1.1 and other add-ons made for 0.5.x keep working; new add-on features for accessories, flight assists, gimbal cameras and HUD elements.",
+                  "de": "*Propwash: Just More Parts* 1.1.1 und andere Add-ons für 0.5.x funktionieren weiter; neue Add-on-Funktionen für Zubehör, Flughilfen, Gimbal-Kameras und HUD-Elemente."
+                }
+              ]
+            }
+          ]
+        },
         {
           "version": "0.5.1",
           "id": "propwash-0.5.1",
@@ -593,9 +748,53 @@
         "de": "Das Add-on mit echten Teilen"
       },
       "source": {
-        "ref": "v1.1.0"
+        "ref": "v1.1.1"
       },
       "releases": [
+        {
+          "version": "1.1.1",
+          "id": "jmp-1.1.1",
+          "title": {
+            "en": "Battery curve and race prop of Propwash 0.5.2",
+            "de": "Akku-Kurve und Race-Prop von Propwash 0.5.2"
+          },
+          "sections": [
+            {
+              "kind": "improved",
+              "items": [
+                {
+                  "en": "All batteries discharge like real packs with Propwash 0.5.2: the voltage stays up for most of the flight and falls off at the very end, a punch near the end pulls it much lower and it comes back when you let off. The semi-solid packs follow the new LiPo curve.",
+                  "de": "Alle Akkus entladen sich mit Propwash 0.5.2 wie echte Packs: Die Spannung bleibt den größten Teil des Flugs oben und fällt erst ganz am Ende ab, ein Punch kurz vor Schluss zieht sie deutlich tiefer, und beim Loslassen kommt sie zurück. Die Semi-Solid-Akkus folgen der neuen LiPo-Kurve."
+                },
+                {
+                  "en": "Share codes know the new 5.1″ race propeller with 2.9″ pitch of Propwash 0.5.2; every existing code reads the same as before.",
+                  "de": "Sharecodes kennen den neuen 5,1″-Race-Prop mit 2,9″ Steigung von Propwash 0.5.2; jeder bestehende Code liest sich wie vorher."
+                },
+                {
+                  "en": "Share codes carry an accessory on the new front mount of Propwash 0.5.2.",
+                  "de": "Sharecodes tragen ein Zubehör auf der neuen Halterung vorne von Propwash 0.5.2."
+                },
+                {
+                  "en": "A few part descriptions follow the new battery curve: the 6″ two-blade prop now promises a longer hover instead of longer flights, the 3.5″ triblade on 6S reaches 116 km/h.",
+                  "de": "Einige Teilebeschreibungen folgen der neuen Akku-Kurve: Der 6″-Zweiblatt verspricht jetzt längeres Schweben statt längerer Flüge, der 3,5″-Dreiblatt erreicht auf 6S 116 km/h."
+                }
+              ]
+            },
+            {
+              "kind": "compatibility",
+              "items": [
+                {
+                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · install it on the server and on every client that plays there.",
+                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · auf dem Server und auf jedem Client installieren, der dort spielt."
+                },
+                {
+                  "en": "Works with Propwash FPV 0.5.2, 0.5.1, 0.5.0 and 0.4.0; the new discharge curves need Propwash 0.5.2. Drones, share codes and worlds load unchanged.",
+                  "de": "Läuft mit Propwash FPV 0.5.2, 0.5.1, 0.5.0 und 0.4.0; die neuen Entladekurven brauchen Propwash 0.5.2. Drohnen, Sharecodes und Welten laden unverändert."
+                }
+              ]
+            }
+          ]
+        },
         {
           "version": "1.1.0",
           "id": "jmp-1.1.0",
