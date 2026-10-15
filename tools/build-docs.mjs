@@ -35,6 +35,7 @@ const DATA_FILES = ['meta', 'api', 'parts', 'controls', 'server', 'gamerules', '
 export const IMAGES = {
   world_rules: { src: 'configurator_world_rules.png', name: 'world-rules-tab' },
   receiver_wizard: { src: 'receiver_wizard_check.png', name: 'receiver-wizard-check' },
+  stick_mode: { src: 'receiver_wizard_stick_mode.png', name: 'receiver-wizard-stick-mode' },
   freeform_gate: { src: 'freeform_gate_cave.png', name: 'freeform-gate-cave' },
   signal_repeater: { src: 'signal_repeater_mounts_day.png', name: 'signal-repeater' },
   blackbox_tab: { src: 'configurator_blackbox_logs.png', name: 'blackbox-tab' },

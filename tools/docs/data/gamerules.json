@@ -647,6 +647,24 @@
         "en": "On: every drone behaves as if it had a waterproof coating – it can arm, fly and disarm in water instead of shorting out. Off (default): only drones sprayed with waterproof coating survive water. Lava always ends a flight."
       },
       "example": "/gamerule propwash:waterproof_drones true"
+    },
+    {
+      "id": "propwash:allow_reset",
+      "name": "allow_reset",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": true,
+      "changes_physics": false,
+      "title": {
+        "de": "Reset erlauben",
+        "en": "Allow reset"
+      },
+      "description": {
+        "de": "An (Standard): Piloten setzen ihre Drohne mit dem Reset-Schalter oder der Taste (Rücktaste) auf ihren Homepoint zurück – gerade, entschärft und im Stillstand. Ein laufendes Rennen wird abgebrochen, Fracht fällt dort ab, wo die Drohne war. Aus: Reset wird mit einer Meldung abgelehnt, Piloten fliegen oder laufen zurück.",
+        "en": "On (default): pilots put their drone back on its home point with the Reset switch or key (Backspace) – level, disarmed and standing still. A running race is canceled and cargo drops where the drone was. Off: Reset is refused with a message, pilots fly or walk back."
+      },
+      "example": "/gamerule propwash:allow_reset false"
     }
   ],
   "presets": [
@@ -690,7 +708,8 @@
         "save_assisted_laps": false,
         "drone_trails": false,
         "invulnerable_pilots": false,
-        "waterproof_drones": false
+        "waterproof_drones": false,
+        "allow_reset": true
       },
       "differs_from_default": [],
       "command": "/propwash rules preset realistic"
@@ -735,7 +754,8 @@
         "save_assisted_laps": true,
         "drone_trails": true,
         "invulnerable_pilots": false,
-        "waterproof_drones": false
+        "waterproof_drones": false,
+        "allow_reset": true
       },
       "differs_from_default": [
         "hardware_limits",
@@ -788,7 +808,8 @@
         "save_assisted_laps": true,
         "drone_trails": true,
         "invulnerable_pilots": false,
-        "waterproof_drones": true
+        "waterproof_drones": true,
+        "allow_reset": true
       },
       "differs_from_default": [
         "prop_wash",

@@ -243,12 +243,12 @@
       "sharedWith": []
     },
     {
-      "name": "race_restart",
+      "name": "reset",
       "key": "Backspace",
       "flightStick": false,
       "title": {
-        "en": "Restart race",
-        "de": "Rennen neu starten"
+        "en": "Reset (back to home point)",
+        "de": "Reset (zurück zum Homepoint)"
       },
       "sharedWith": []
     },
@@ -446,10 +446,10 @@
       }
     },
     {
-      "name": "race_restart",
+      "name": "reset",
       "title": {
-        "en": "Restart race",
-        "de": "Rennen neu starten"
+        "en": "Reset",
+        "de": "Reset"
       }
     },
     {

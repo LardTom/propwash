@@ -15,6 +15,14 @@
     "small": 800,
     "large": 1600
   },
+  "stick_mode": {
+    "name": "receiver-wizard-stick-mode",
+    "src": "receiver_wizard_stick_mode.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
   "freeform_gate": {
     "name": "freeform-gate-cave",
     "src": "freeform_gate_cave.png",
