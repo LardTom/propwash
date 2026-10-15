@@ -82,12 +82,20 @@
                   "de": "*Nick (Pitch) umkehren* im Tab *Empfänger* kehrt vor und zurück für die Maus und die Nick-Tasten um."
                 },
                 {
+                  "en": "*Stick mode* 1–4: pick it first in the receiver wizard or later in the *Receiver* tab – the wizard's prompts and animated radio, the OSD stick overlay, the Flight school and the radio in your hand follow your mode. Radios keep their channels, gamepad sticks follow the mode.",
+                  "de": "*Knüppel-Mode* 1–4: zuerst im Empfänger-Assistenten wählen oder später im Tab *Empfänger* – Anweisungen und animierte Funke des Assistenten, die Knüppelanzeige im OSD, die Flugschule und die Funke in deiner Hand folgen deinem Mode. Funken behalten ihre Kanäle, Gamepad-Sticks folgen dem Mode."
+                },
+                {
                   "en": "Action Cam (Flashback): OSD element *Flashback timeline*, a *Simplification* slider with a preview of the saved camera path that rings the spot where the two paths drift apart most, and *Check replays* to thin flights that are too long.",
                   "de": "Action-Cam (Flashback): OSD-Element *Flashback-Zeitleiste*, ein Regler *Vereinfachung* mit Vorschau des gespeicherten Kamerapfads, die die Stelle mit der größten Abweichung der beiden Pfade einkreist, und *Aufnahmen prüfen*, um zu lange Flüge auszudünnen."
                 },
                 {
                   "en": "Every drone remembers its GPS Rescue home point; server admins read and move it with `/data` (`HomePoint`).",
                   "de": "Jede Drohne merkt sich ihren GPS-Rescue-Homepoint; Server-Admins lesen und verschieben ihn mit `/data` (`HomePoint`)."
+                },
+                {
+                  "en": "*Reset* (Backspace or a radio switch) puts your drone back on its home point – level, disarmed and standing still, also from far away. It replaces *Restart race*; a running race is canceled. Server owners can switch it off with the world rule *Allow reset*.",
+                  "de": "*Reset* (Rücktaste oder ein Schalter der Funke) setzt deine Drohne auf ihren Homepoint zurück – gerade, entschärft und im Stillstand, auch aus großer Entfernung. Er ersetzt *Rennen neu starten*; ein laufendes Rennen wird abgebrochen. Serverbetreiber können ihn mit der Welt-Regel *Reset erlauben* abschalten."
                 },
                 {
                   "en": "For add-ons: a front mount under the nose (all frames except the Whoop), accessories with their own load (*Accessories* in the service menu) and *Accessory action 1–4* (switch functions and the keys numpad 9, 0, Enter and +).",
@@ -123,6 +131,10 @@
                   "de": "*Gate einstellen* zeigt oben im Panel, wie du die Maus benutzt: `Alt` halten (auf dem Mac `⌥ Wahltaste`)."
                 },
                 {
+                  "en": "Standing starts: after a *Reset*, arm at the start gate to line up – other pilots join by arming there too.",
+                  "de": "Stehende Starts: Nach einem *Reset* am Start-Gate scharf schalten, um dich aufzustellen – andere Piloten steigen ein, indem sie dort ebenfalls scharf schalten."
+                },
+                {
                   "en": "Better signal through walls: one block of stone, brick, planks or concrete dampens like one house wall, glass, leaves and wool much less, while hills, badlands mesas, sandstone cliffs, End islands and caves still cut the link. The picture breaks up gradually instead of going black behind a block – analog fades into static, digital gets softer, blockier and laggier like DJI or Walksnail (HDZero-like systems stay sharp and break up) and freezes on the last frame before *NO SIGNAL*.",
                   "de": "Besseres Signal durch Wände: Ein Block Stein, Ziegel, Bretter oder Beton dämpft wie eine Hauswand, Glas, Laub und Wolle viel weniger, Hügel, Tafelberge der Badlands, Sandsteinfelsen, End-Inseln und Höhlen trennen die Verbindung aber weiterhin. Das Bild zerfällt stufenweise, statt hinter einem Block schwarz zu werden – analog geht es in Rauschen über, digital wird es weicher, blockiger und träger wie bei DJI oder Walksnail (HDZero-artige Systeme bleiben scharf und zerfallen in Blöcke) und bleibt vor *KEIN SIGNAL* auf dem letzten Bild stehen."
                 },
@@ -135,6 +147,10 @@
             {
               "kind": "fixed",
               "items": [
+                {
+                  "en": "*Restart race* seemed to do nothing: it never moved the drone and did nothing away from the start gate. It is now *Reset*.",
+                  "de": "*Rennen neu starten* schien nichts zu tun: Es hat die Drohne nie versetzt und abseits des Start-Gates gar nichts getan. Jetzt heißt es *Reset*."
+                },
                 {
                   "en": "The locator beeper no longer stops when you leave the drone: it keeps beeping until you switch it off, pick the drone up or its battery runs flat, and everyone nearby hears it.",
                   "de": "Der Suchpiepser hört nicht mehr auf, wenn du die Drohne verlässt: Er piept weiter, bis du ihn ausschaltest, die Drohne aufhebst oder ihr Akku leer ist, und alle in der Nähe hören ihn."
@@ -173,8 +189,8 @@
                   "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · Client und Server brauchen beide 0.5.2 – 0.5.0 und 0.5.1 können einem 0.5.2-Server nicht beitreten und umgekehrt."
                 },
                 {
-                  "en": "Worlds, drones, courses, leaderboards and settings from 0.5.x load unchanged; drones without a VTX power setting start on *Auto*, and your Flashback keyframe setting carries over.",
-                  "de": "Welten, Drohnen, Kurse, Bestenlisten und Einstellungen aus 0.5.x laden unverändert; Drohnen ohne eingestellte VTX-Leistung starten mit *Auto*, und deine Keyframe-Einstellung für Flashback wird übernommen."
+                  "en": "Worlds, drones, courses, leaderboards and settings from 0.5.x load unchanged; drones without a VTX power setting start on *Auto*, your Flashback keyframe setting carries over, and everyone starts in stick mode 2 (the previous layout). Your *Restart race* key and switch become *Reset*.",
+                  "de": "Welten, Drohnen, Kurse, Bestenlisten und Einstellungen aus 0.5.x laden unverändert; Drohnen ohne eingestellte VTX-Leistung starten mit *Auto*, deine Keyframe-Einstellung für Flashback wird übernommen, und alle starten in Knüppel-Mode 2 (der bisherigen Belegung). Taste und Schalter für *Rennen neu starten* werden zu *Reset*."
                 },
                 {
                   "en": "*Propwash: Just More Parts* 1.1.1 and other add-ons made for 0.5.x keep working; new add-on features for accessories, flight assists, gimbal cameras and HUD elements.",
