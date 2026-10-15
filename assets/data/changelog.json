@@ -25,8 +25,8 @@
               "kind": "highlights",
               "items": [
                 {
-                  "en": "**A real FPV lens:** the FPV picture now looks through a fisheye like a real FPV camera – things ahead appear bigger and closer, the edges bend away, and speed feels like in a real feed.",
-                  "de": "**Ein echtes FPV-Objektiv:** Das FPV-Bild sieht jetzt durch ein Fisheye wie eine echte FPV-Kamera – Dinge voraus wirken größer und näher, die Ränder biegen sich weg, und Tempo fühlt sich an wie im echten Feed."
+                  "en": "**A real FPV lens:** the FPV picture now looks through a fisheye like a real FPV camera – things ahead appear bigger and closer, the edges bend away, and speed feels like in a real feed. A slider sets how strong it is.",
+                  "de": "**Ein echtes FPV-Objektiv:** Das FPV-Bild sieht jetzt durch ein Fisheye wie eine echte FPV-Kamera – Dinge voraus wirken größer und näher, die Ränder biegen sich weg, und Tempo fühlt sich an wie im echten Feed. Ein Regler stellt ein, wie stark."
                 },
                 {
                   "en": "**Waterproof drones and turtle mode:** spray a drone with waterproof coating and it flies in water; when it lands upside down, flip it back over with its own props, just like in Betaflight.",
@@ -42,8 +42,8 @@
               "kind": "new",
               "items": [
                 {
-                  "en": "*Lens: Fisheye / Flat* in the *Video* tab, fisheye by default – with interference, 4:3, the OSD, props in view and shader packs. *Flat* brings back the old picture.",
-                  "de": "*Objektiv: Fisheye / Flach* im Tab *Video*, Standard Fisheye – mit Störungen, 4:3, dem OSD, Props im Bild und Shaderpacks. *Flach* bringt das alte Bild zurück."
+                  "en": "*Fisheye* slider in the *Video* tab from 0 % (flat, the old picture) to 100 %, 80 % by default – interference, 4:3, the OSD, props in view and shader packs follow it.",
+                  "de": "Regler *Fisheye* im Tab *Video* von 0 % (flach, das alte Bild) bis 100 %, Standard 80 % – Störungen, 4:3, das OSD, Props im Bild und Shaderpacks folgen ihm."
                 },
                 {
                   "en": "Waterproof Coating spray can (iron nuggets, honeycomb, resin clump): right-click a placed drone or combine both in the crafting grid; one can coats ten drones. The world rule *Drones are waterproof* coats every drone (on in *Arcade*).",
@@ -58,8 +58,8 @@
                   "de": "Zonen entstehen im Tab *Welt-Regeln*, mit einem Zonen-Editor wie bei *Gate einstellen* oder mit `/propwash zone`; sie zeigen einen dezenten Rand, das OSD meldet Ein- und Ausfliegen, und Schwerkraft und Wind gleiten sanft über."
                 },
                 {
-                  "en": "VTX power from 25 mW up to 1600 mW in the *Video channel* tab, or step through it in flight with the *VTX power* switch or F10: more range and better penetration, but more battery drain and heat (*VTX OVERHEAT*). *Auto* for digital systems, *Low when disarmed* like in Betaflight, and an OSD element for the power.",
-                  "de": "VTX-Leistung von 25 mW bis 1600 mW im Tab *Videokanal* oder im Flug mit dem Schalter *VTX-Leistung* bzw. F10: mehr Reichweite und bessere Durchdringung, aber mehr Akkuverbrauch und Wärme (*VTX ÜBERHITZT*). *Auto* für digitale Systeme, *Niedrig, wenn unscharf* wie in Betaflight und ein OSD-Element für die Leistung."
+                  "en": "VTX power from 25 mW up to 1600 mW in the *Video channel* tab, or step through it in flight with the *VTX power* switch or F10: more range and better penetration, but more battery drain and heat (*VTX OVERHEAT*). *Auto* is the default for every drone – digital systems follow their video link, analog ones let the flight controller follow your radio link – plus *Low when disarmed* like in Betaflight and an OSD element for the power.",
+                  "de": "VTX-Leistung von 25 mW bis 1600 mW im Tab *Videokanal* oder im Flug mit dem Schalter *VTX-Leistung* bzw. F10: mehr Reichweite und bessere Durchdringung, aber mehr Akkuverbrauch und Wärme (*VTX ÜBERHITZT*). *Auto* ist der Standard jeder Drohne – digitale Systeme richten sich nach ihrer Videoverbindung, bei analogen richtet sich der Flugcontroller nach deiner Fernsteuerung –, dazu *Niedrig, wenn unscharf* wie in Betaflight und ein OSD-Element für die Leistung."
                 },
                 {
                   "en": "Bando maps: journeyman cartographers sell a map (10 emeralds and a compass) to the nearest unexplored bando; sometimes one lies in a bando chest or a village cartographer's house.",
@@ -82,8 +82,8 @@
                   "de": "*Nick (Pitch) umkehren* im Tab *Empfänger* kehrt vor und zurück für die Maus und die Nick-Tasten um."
                 },
                 {
-                  "en": "Action Cam (Flashback): OSD element *Flashback timeline*, a *Simplification* slider with a preview of the saved camera path, and *Check replays* to thin flights that are too long.",
-                  "de": "Action-Cam (Flashback): OSD-Element *Flashback-Zeitleiste*, ein Regler *Vereinfachung* mit Vorschau des gespeicherten Kamerapfads und *Aufnahmen prüfen*, um zu lange Flüge auszudünnen."
+                  "en": "Action Cam (Flashback): OSD element *Flashback timeline*, a *Simplification* slider with a preview of the saved camera path that rings the spot where the two paths drift apart most, and *Check replays* to thin flights that are too long.",
+                  "de": "Action-Cam (Flashback): OSD-Element *Flashback-Zeitleiste*, ein Regler *Vereinfachung* mit Vorschau des gespeicherten Kamerapfads, die die Stelle mit der größten Abweichung der beiden Pfade einkreist, und *Aufnahmen prüfen*, um zu lange Flüge auszudünnen."
                 },
                 {
                   "en": "Every drone remembers its GPS Rescue home point; server admins read and move it with `/data` (`HomePoint`).",
@@ -103,8 +103,8 @@
                   "de": "Akkus entladen sich wie echte Packs: fast flach über den größten Teil des Flugs, steiler Abfall in den letzten rund 10 %, und das Ende des Packs spürst du in jedem Punch. Die OSD-Spannung ist geglättet wie bei Betaflight und blinkt, solange sie unter die Warn- oder Abschaltspannung einbricht."
                 },
                 {
-                  "en": "Drones touch down on their real frame, battery, props and ducts and settle like a real quad.",
-                  "de": "Drohnen setzen auf ihrem echten Rahmen, Akku, Props und Ducts auf und kommen zur Ruhe wie ein echter Quad."
+                  "en": "Drones touch down on their real frame, battery, props and ducts and settle like a real quad, and crashes end like real ones: fast hits keep their bounce and props dig in, so nose-ins, wall hits and cartwheels can leave the drone upside down or on its side – ready for turtle mode.",
+                  "de": "Drohnen setzen auf ihrem echten Rahmen, Akku, Props und Ducts auf und kommen zur Ruhe wie ein echter Quad, und Abstürze enden wie echte: Schnelle Einschläge behalten ihren Rückprall und Props haken ein, sodass die Drohne nach Nasenlandungen, Wandtreffern und Überschlägen auch auf dem Kopf oder auf der Seite liegen kann – bereit für den Turtle-Modus."
                 },
                 {
                   "en": "Assisted laps name their exact reasons everywhere, for example \"Gravity 130 % instead of 100 %\" – also while a zone's gravity or wind is still fading out, for add-on flight assists and in heat results.",
@@ -115,18 +115,34 @@
                   "de": "Der 5″-Race-Rahmen ist ein True-X wie aktuelle Race-Quads, und die Racing-Drohne fliegt den neuen Race-Prop: rund 147 km/h Topspeed statt 168 – bau den 4,6″-Prop an, wenn du Topspeed willst."
                 },
                 {
-                  "en": "The rule that stops the motors after a crash is now called *Disarm on crash* and is easy to find – in the *Configuration* tab, the settings search and the Flight School.",
-                  "de": "Die Regel, die nach einem Absturz die Motoren anhält, heißt jetzt *Nach Absturz abschalten* und ist leicht zu finden – im Tab *Konfiguration*, in der Suche der Einstellungen und in der Flugschule."
+                  "en": "The rule that stops the motors after a crash is now called *Disarm on crash*; it lives in the *World rules* tab, and the settings search takes you there.",
+                  "de": "Die Regel, die nach einem Absturz die Motoren anhält, heißt jetzt *Nach Absturz abschalten*; sie steht im Tab *Welt-Regeln*, und die Suche der Einstellungen bringt dich hin."
                 },
                 {
                   "en": "*Adjust gate* shows at the top of its panel how to use the mouse: hold `Alt` (`⌥ Option` on a Mac).",
                   "de": "*Gate einstellen* zeigt oben im Panel, wie du die Maus benutzt: `Alt` halten (auf dem Mac `⌥ Wahltaste`)."
+                },
+                {
+                  "en": "Better signal through walls: one block of stone, brick, planks or concrete dampens like one house wall, glass, leaves and wool much less, while hills and caves still cut the link. The picture breaks up gradually instead of going black behind a block – analog fades into static, digital gets softer, blockier and laggier like DJI or Walksnail (HDZero-like systems stay sharp and break up) and freezes on the last frame before *NO SIGNAL*.",
+                  "de": "Besseres Signal durch Wände: Ein Block Stein, Ziegel, Bretter oder Beton dämpft wie eine Hauswand, Glas, Laub und Wolle viel weniger, Hügel und Höhlen trennen die Verbindung aber weiterhin. Das Bild zerfällt stufenweise, statt hinter einem Block schwarz zu werden – analog geht es in Rauschen über, digital wird es weicher, blockiger und träger wie bei DJI oder Walksnail (HDZero-artige Systeme bleiben scharf und zerfallen in Blöcke) und bleibt vor *KEIN SIGNAL* auf dem letzten Bild stehen."
+                },
+                {
+                  "en": "The radio link sees the same walls and terrain: RSSI drops behind obstacles, far behind a hill or deep underground the drone goes to failsafe, and VTX *Auto* reacts to obstacles also when you fly line of sight.",
+                  "de": "Die Fernsteuerung sieht dieselben Wände und dasselbe Gelände: Der RSSI sinkt hinter Hindernissen, weit hinter einem Hügel oder tief unter der Erde geht die Drohne in den Failsafe, und VTX-*Auto* reagiert auch im Sichtflug auf Hindernisse."
                 }
               ]
             },
             {
               "kind": "fixed",
               "items": [
+                {
+                  "en": "The locator beeper no longer stops when you leave the drone: it keeps beeping until you switch it off, pick the drone up or its battery runs flat, and everyone nearby hears it.",
+                  "de": "Der Suchpiepser hört nicht mehr auf, wenn du die Drohne verlässt: Er piept weiter, bis du ihn ausschaltest, die Drohne aufhebst oder ihr Akku leer ist, und alle in der Nähe hören ihn."
+                },
+                {
+                  "en": "OSD elements you switch on no longer land on top of others in the *Minimal*, *Standard* and *Race* layouts (Speed covered the new VTX power), and saved layouts move such elements to a free spot.",
+                  "de": "OSD-Elemente, die du einschaltest, landen in den Vorlagen *Minimal*, *Standard* und *Race* nicht mehr auf anderen (Geschwindigkeit verdeckte die neue VTX-Leistung), und gespeicherte Layouts setzen solche Elemente auf einen freien Platz."
+                },
                 {
                   "en": "Drones no longer end up upside down after gentle landings, on half slabs or when sliding off a step.",
                   "de": "Drohnen landen nach sanften Landungen, auf Halbblöcken oder beim Rutschen über eine Stufe nicht mehr auf dem Kopf."
@@ -157,8 +173,8 @@
                   "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · Client und Server brauchen beide 0.5.2 – 0.5.0 und 0.5.1 können einem 0.5.2-Server nicht beitreten und umgekehrt."
                 },
                 {
-                  "en": "Worlds, drones, courses, leaderboards and settings from 0.5.x load unchanged; drones keep their module's default VTX power, and your Flashback keyframe setting carries over.",
-                  "de": "Welten, Drohnen, Kurse, Bestenlisten und Einstellungen aus 0.5.x laden unverändert; Drohnen behalten die Standardleistung ihres Videomoduls, und deine Keyframe-Einstellung für Flashback wird übernommen."
+                  "en": "Worlds, drones, courses, leaderboards and settings from 0.5.x load unchanged; drones without a VTX power setting start on *Auto*, and your Flashback keyframe setting carries over.",
+                  "de": "Welten, Drohnen, Kurse, Bestenlisten und Einstellungen aus 0.5.x laden unverändert; Drohnen ohne eingestellte VTX-Leistung starten mit *Auto*, und deine Keyframe-Einstellung für Flashback wird übernommen."
                 },
                 {
                   "en": "*Propwash: Just More Parts* 1.1.1 and other add-ons made for 0.5.x keep working; new add-on features for accessories, flight assists, gimbal cameras and HUD elements.",
