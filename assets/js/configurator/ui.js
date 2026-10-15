@@ -1776,13 +1776,18 @@ function pickHint() {
   const mode = pickMode();
   hint.classList.remove('is-note');
   hint.hidden = !mode;
-  if (mode) hint.textContent = t(`ui.pickHint${mode === 'paint' ? 'Paint' : 'Parts'}${touchOnly ? 'Touch' : ''}`);
+  if (mode) setHintText(hint, t(`ui.pickHint${mode === 'paint' ? 'Paint' : 'Parts'}${touchOnly ? 'Touch' : ''}`));
+}
+
+/** The text sits in a span so the dark backing over the FPV image ends with the text, also when it wraps. */
+function setHintText(hint, text) {
+  hint.replaceChildren(el('span', {}, text));
 }
 
 /** A short message in place of the hint, e.g. for a part that can't be painted. */
 function pickNote(text) {
   const hint = $('[data-pick-hint]');
-  hint.textContent = text;
+  setHintText(hint, text);
   hint.classList.add('is-note');
   hint.hidden = false;
   clearTimeout(noteTimer);
@@ -1908,7 +1913,7 @@ function pickPaint(hit) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-// Screenshots:the drone alone as a transparent PNG (cover image of a forum post) or a detail card with name, class,
+// Screenshots: the drone alone as a transparent PNG (cover image of a forum post) or a detail card with name, class,
 // key figures and share code. Both go to the clipboard; where images can't be copied, the PNG is downloaded.
 
 const CARD_W = 1600;

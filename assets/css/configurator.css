@@ -386,13 +386,18 @@ button {
   color: var(--accent);
 }
 
-/* Over the bright FPV image the hint gets a dark backing. */
+/* Over the bright FPV image the hint gets a dark backing that follows each line of text. */
 .viewer.is-camera .viewer__hint {
   max-width: calc(100% - 28px);
+  color: var(--muted);
+}
+
+.viewer.is-camera .viewer__hint span {
   padding: 2px 7px;
   border-radius: 3px;
   background: rgba(18, 18, 18, 0.78);
-  color: var(--muted);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
 .viewer.is-camera .viewer__hint.is-note {
