@@ -212,6 +212,14 @@ export function batteryPiece(layout, frame, battery, env) {
 }
 
 /**
+ * Part category of a placed piece (the picker that chooses it); the top mount's base belongs to the top accessory.
+ * Every other role is its category.
+ */
+export function pieceCategory(piece) {
+  return piece.role === 'accessory_base' ? 'accessory' : piece.role;
+}
+
+/**
  * Places every part of a build. Parts that are unknown to the catalog are left out (listed in `missing`).
  * @returns {{layout: object|null, cameraTilt: number, pieces: object[], missing: string[]}}
  */

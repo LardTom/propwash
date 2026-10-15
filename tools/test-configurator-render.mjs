@@ -8,6 +8,8 @@
 //   - batteries under a frame (on_top false) hang from the battery point: top of the pack at the point (the strap of an
 //     "_under" model up to 4 mm through the plate), bottom below the battery plate, the "_under" model where the pack
 //     has one (DroneAssembly.batteryPart)
+//   - picking in the 3D view: every placed piece belongs to a part category, and its paint slots (per tint group and
+//     its main slot) are slots the build's paint panel shows; the clicks themselves: tools/test-configurator-pick.mjs
 //
 //   node tools/test-configurator-render.mjs [--export <web-export dir>]
 
@@ -15,8 +17,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createCatalog } from '../assets/js/configurator/data.js';
-import { assemble, frameLayout, proceduralFrame, proceduralAccessoryBase, SLOTS, MM_PER_MODEL_UNIT, batteryBelow } from '../assets/js/configurator/assembly.js';
-import { channelTint, rgbOf, paintTints, paintDefaults, paintAvailable } from '../assets/js/configurator/paint.js';
+import { assemble, frameLayout, proceduralFrame, proceduralAccessoryBase, pieceCategory, SLOTS, MM_PER_MODEL_UNIT, PROP_SLOTS, batteryBelow } from '../assets/js/configurator/assembly.js';
+import { channelTint, rgbOf, paintTints, paintDefaults, paintAvailable, groupsOf, pieceSlots } from '../assets/js/configurator/paint.js';
 import { PAINT_SLOTS } from '../assets/js/configurator/sharecode.js';
 import { exportDir } from './build-configurator-data.mjs';
 
@@ -87,6 +89,7 @@ if (fs.existsSync(path.join(dir, 'manifest.json'))) {
 }
 
 const env = { catalog, render, model: (id) => models.get(id) || null };
+const PICK_CATEGORIES = ['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory'];
 const finiteVec = (v) => Array.isArray(v) && v.length === 3 && v.every(Number.isFinite);
 
 // Built-in frames: layout from drone_layout.json.
@@ -141,7 +144,21 @@ for (const preset of catalog.presets) {
   const prop = models.get(build.prop);
   const tints = paintTints(prop.variants.paint.groups, { prop_fr: '#ff0000' }, 0, render.channels);
   check(tints === null, `${preset.id}: front-left prop unpainted when only front-right is painted`);
+  // Picking: what a click on each piece selects.
+  for (const piece of a.pieces) {
+    const label = `${preset.id}: pick ${piece.role} ${piece.id}`;
+    check(PICK_CATEGORIES.includes(pieceCategory(piece)), `${label}: category ${pieceCategory(piece)}`);
+    const { groups, main } = pieceSlots(piece, groupsOf(piece, modelOf(piece.id), render));
+    check(main !== null && available.has(main) && groups.every((slot) => available.has(slot)), `${label}: paint slots ${main} / ${groups}`);
+    if (piece.role === 'prop') check(main === PROP_SLOTS[piece.slot], `${label}: prop paint slot ${main} at position ${piece.slot}`);
+    if (piece.role === 'video') check(main === 'camera', `${label}: video paints the camera slot, not ${main}`);
+  }
 }
+check(pieceCategory({ role: 'accessory_base', mount: 'top' }) === 'accessory', 'top mount base belongs to the accessories');
+check(pieceSlots({ role: 'accessory_base' }, [['tpu', '#d6333a']]).main === 'tpu', 'top mount base paints TPU');
+check(pieceSlots({ role: 'accessory' }, [['tpu', '#000000'], ['accessory', '#111111']]).main === 'accessories', 'accessory with TPU parts paints the accessory slot');
+check(pieceSlots({ role: 'prop', paintPosition: 3 }, [['prop', '#000000']]).groups[0] === 'prop_rr', 'rear right prop paints prop_rr');
+check(pieceSlots({ role: 'frame' }, null).main === null, 'a frame without tint groups cannot be painted');
 
 // The camera preview draws the FPV rig of the analysis (fpv.js); its hubs must sit where the drone renderer puts the
 // props, for every frame with every preset's other parts (built-in layouts, arms, motor seats).

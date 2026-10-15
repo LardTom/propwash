@@ -2,7 +2,7 @@
 // group belongs to a paint channel with a reference grey. A painted part swaps to its "_paint" model and multiplies
 // each tint group with PaintChannel.tint(colour); parts without any painted group keep the unpainted model.
 
-import { PROP_SLOTS } from './assembly.js?v=6349ca95';
+import { PROP_SLOTS } from './assembly.js?v=ac181a91';
 
 const CHANNEL_SLOT = Object.freeze({
   frame: 'frame', tpu: 'tpu', motor: 'motors', stack: 'stack', battery: 'battery', camera: 'camera', antenna: 'antenna',
@@ -170,6 +170,24 @@ export function groupsOf(piece, model, render) {
   const plain = piece.variant && piece.variant !== 'base' && model.variants[piece.variant] ? piece.variant : 'base';
   const painted = model.variants[plain === 'base' ? 'paint' : `${plain}_paint`];
   return painted && painted.groups ? painted.groups : null;
+}
+
+// Paint channel each piece role stands for: a click on a face of the piece outside its tint groups paints this one.
+const ROLE_CHANNEL = Object.freeze({
+  frame: 'frame', stack: 'stack', battery: 'battery', video: 'camera', motor: 'motor', prop: 'prop', accessory: 'accessory',
+  accessory_base: 'tpu',
+});
+
+/**
+ * Paint slots of a placed piece for picking in the 3D view: the slot of every tint group (by tint index) and the
+ * piece's main slot (its role's channel when it has that group, else its first group's), main null when nothing on
+ * the piece can be painted.
+ * @param {Array<[string, string]>|null} groups tint groups of the piece (groupsOf)
+ */
+export function pieceSlots(piece, groups) {
+  const slots = (groups || []).map(([channel]) => slotOf(channel, piece.paintPosition || 0));
+  const own = (groups || []).findIndex(([channel]) => channel === ROLE_CHANNEL[piece.role]);
+  return { groups: slots, main: (own >= 0 ? slots[own] : slots.find(Boolean)) || null };
 }
 
 function paintOrder(pieces) {

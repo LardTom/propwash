@@ -5,18 +5,37 @@
 // Camera preview: the FPV image like Propwash 0.4.0 draws it (FpvProps): a 16:9 rectilinear view from the lens with
 // the drone's camera angle and the horizontal field of view of the video unit's camera, the own drone hidden except its props, spinning props as
 // translucent blur discs (three bands from the hub to the blade tip) or still blades, over a sky and ground backdrop.
+//
+// Picking: a click or tap on a part (not a drag, a long press or a pinch) reports the piece under it – part category,
+// part id, accessory mount, motor/prop position and the paint slot of the face hit – and the mouse pointer highlights
+// what a click would select (the whole category, or in paint mode every face of the paint slot). Every mesh carries its
+// source piece in userData.pick; the ray test runs on the CPU only on a click and on throttled pointer moves, against
+// the visible meshes as drawn (back faces culled, cutout texels let the ray through).
 
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Group, Mesh, BufferGeometry, BufferAttribute, ShaderMaterial, Texture,
   NearestFilter, LinearFilter, Vector3, Box3, Sphere, CanvasTexture, PlaneGeometry, MeshBasicMaterial, NoColorSpace,
   LinearSRGBColorSpace, OrbitControls,
 } from '../../vendor/three/three.min.js';
-import { assemble, proceduralFrame, proceduralAccessoryBase, MM_PER_MODEL_UNIT } from './assembly.js?v=6349ca95';
-import { paintTints, groupsOf, rgbOf, slotOf, shade } from './paint.js?v=a741176a';
+import { assemble, proceduralFrame, proceduralAccessoryBase, pieceCategory, MM_PER_MODEL_UNIT, PROP_SLOTS } from './assembly.js?v=ac181a91';
+import { paintTints, groupsOf, pieceSlots, rgbOf, slotOf, shade } from './paint.js?v=12d6a44c';
 import { discCenter, verticalFov, ASPECT as FPV_ASPECT, SLOTS } from './fpv.js?v=76cdbbe6';
 
 const MAX_TINTS = 8;
 const DEG = Math.PI / 180;
+// Picking: highlighted parts are drawn lighter and pulled towards the site's accent colour (so orange or yellow parts
+// stand out as well as dark ones), at HOVER_LEVEL under the mouse pointer and fully for a moment after a click (held,
+// then faded out). A click may move the pointer CLICK_SLOP_PX (CSS px) and last CLICK_MAX_MS at most; the hover pick
+// runs at most every HOVER_EVERY_MS.
+const HIGHLIGHT_GLSL = 'vec3(1.0, 0.733, 0.0)';
+const HOVER_LEVEL = 0.75;
+const FLASH_HOLD_MS = 650;
+const FLASH_FADE_MS = 650;
+const CLICK_SLOP_PX = { mouse: 5, pen: 8, touch: 12 };
+const CLICK_MAX_MS = 500;
+const HOVER_EVERY_MS = 60;
+// Cutout like the fragment shader: texels below this alpha are holes the pick ray goes through.
+const CUTOUT_ALPHA = 0.1 * 255;
 // Lighting.DIFFUSE_LIGHT_0 / _1 of Minecraft (world space).
 const LIGHT0 = new Vector3(0.2, 1.0, -0.7).normalize();
 const LIGHT1 = new Vector3(-0.2, 1.0, 0.7).normalize();
@@ -33,11 +52,15 @@ const UV_PICK = [[0, 1], [0, 3], [2, 3], [2, 1]];
 
 const VERTEX = /* glsl */ `
 attribute float tintIndex;
+attribute float pickGroup;
 attribute vec3 baseColor;
 uniform vec3 tints[${MAX_TINTS}];
+uniform float highlight[${MAX_TINTS}];
+uniform float highlightAll;
 varying vec2 vUv;
 varying vec3 vColor;
 varying vec3 vNormal;
+varying float vHighlight;
 void main() {
   vUv = uv;
   vec3 tint = vec3(1.0);
@@ -46,6 +69,12 @@ void main() {
     for (int i = 0; i < ${MAX_TINTS}; i++) { if (i == index) tint = tints[i]; }
   }
   vColor = baseColor * tint;
+  float lit = highlightAll;
+  int group = int(pickGroup + 0.5);
+  if (pickGroup > -0.5) {
+    for (int i = 0; i < ${MAX_TINTS}; i++) { if (i == group) lit = max(lit, highlight[i]); }
+  }
+  vHighlight = lit;
   vNormal = normalize(transpose(inverse(mat3(modelMatrix))) * normal);
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }`;
@@ -57,12 +86,15 @@ uniform vec3 light1;
 varying vec2 vUv;
 varying vec3 vColor;
 varying vec3 vNormal;
+varying float vHighlight;
 void main() {
   vec4 texel = texture2D(map, vUv);
   if (texel.a < 0.1) discard;
   vec3 n = normalize(vNormal);
   float light = min(1.0, (max(0.0, dot(light0, n)) + max(0.0, dot(light1, n))) * 0.6 + 0.4);
-  gl_FragColor = vec4(texel.rgb * vColor * light, 1.0);
+  vec3 color = texel.rgb * vColor * light;
+  vec3 lifted = color * (1.0 + 0.55 * vHighlight) + 0.08 * vHighlight;
+  gl_FragColor = vec4(mix(lifted, ${HIGHLIGHT_GLSL}, 0.28 * vHighlight), 1.0);
 }`;
 
 // FpvProps.buildBlur: bands [from, to] as share of the tip radius (null = hub), alpha at both edges; colour × 0.85.
@@ -101,6 +133,13 @@ const MARK_FRAGMENT = /* glsl */ `
 varying vec4 vColor;
 void main() {
   gl_FragColor = vec4(1.0, 0.733, 0.0, 0.62);
+}`;
+
+// Highlighted blur disc (picking): its own colour pulled towards the accent colour, a little more opaque.
+const DISC_HIGHLIGHT_FRAGMENT = /* glsl */ `
+varying vec4 vColor;
+void main() {
+  gl_FragColor = vec4(mix(vColor.rgb, ${HIGHLIGHT_GLSL}, 0.55), max(vColor.a, 0.3));
 }`;
 
 // Backdrop of the camera preview: every pixel's view ray (camera looking along −z, tilted up around x) meets either the
@@ -160,12 +199,16 @@ function rotationMatrix(ax, ay, az) {
 
 const apply = (m, x, y, z) => [m[0] * x + m[1] * y + m[2] * z, m[3] * x + m[4] * y + m[5] * z, m[6] * x + m[7] * y + m[8] * z];
 
-/** BufferGeometry of compact model elements in millimetres around the model point (8, 8, 8). */
-function modelGeometry(elements, tints) {
+/**
+ * BufferGeometry of compact model elements in millimetres around the model point (8, 8, 8). tints: tint index per
+ * face (painted model) or null; groups: tint group per face for picking (also on the plain model), or null.
+ */
+function modelGeometry(elements, tints, groups) {
   const pos = [];
   const nor = [];
   const uvs = [];
   const tin = [];
+  const grp = [];
   const index = [];
   let face = 0;
   for (const el of elements) {
@@ -178,6 +221,7 @@ function modelGeometry(elements, tints) {
       const uv = faces[f];
       if (!uv) continue;
       const tint = tints ? tints[face] : -1;
+      const group = groups ? groups[face] : -1;
       face++;
       const info = FACES[f];
       const normal = m ? apply(m, ...info.n) : info.n;
@@ -192,6 +236,7 @@ function modelGeometry(elements, tints) {
         nor.push(...normal);
         uvs.push(uv[UV_PICK[v][0]] / 16, uv[UV_PICK[v][1]] / 16);
         tin.push(tint);
+        grp.push(group);
       }
       index.push(base, base + 1, base + 2, base, base + 2, base + 3);
     }
@@ -201,6 +246,7 @@ function modelGeometry(elements, tints) {
   g.setAttribute('normal', new BufferAttribute(new Float32Array(nor), 3));
   g.setAttribute('uv', new BufferAttribute(new Float32Array(uvs), 2));
   g.setAttribute('tintIndex', new BufferAttribute(new Float32Array(tin), 1));
+  g.setAttribute('pickGroup', new BufferAttribute(new Float32Array(grp), 1));
   g.setAttribute('baseColor', new BufferAttribute(new Float32Array(tin.length * 3).fill(1), 3));
   g.setIndex(index);
   return g;
@@ -265,9 +311,115 @@ function shapeGeometry(shapes) {
   g.setAttribute('normal', new BufferAttribute(new Float32Array(nor), 3));
   g.setAttribute('uv', new BufferAttribute(new Float32Array((pos.length / 3) * 2).fill(0.5), 2));
   g.setAttribute('tintIndex', new BufferAttribute(new Float32Array(pos.length / 3).fill(-1), 1));
+  g.setAttribute('pickGroup', new BufferAttribute(new Float32Array(pos.length / 3).fill(-1), 1));
   g.setAttribute('baseColor', new BufferAttribute(new Float32Array(col), 3));
   g.setIndex(index);
   return g;
+}
+
+/**
+ * Tint group of every face for picking: the painted model's own tint indices, and on a plain model those of its
+ * "_paint" twin when that is drawn from the same elements; null when the model has none.
+ */
+function faceGroups(model, name) {
+  const variant = model.variants[name];
+  if (variant.tint) return variant.tint;
+  const painted = model.variants[name === 'base' ? 'paint' : `${name}_paint`];
+  return painted && painted.of === name && painted.tint ? painted.tint : null;
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Picking: ray tests on the CPU (only on a click and on throttled pointer moves)
+
+const alphaMaps = new WeakMap();
+
+/** Alpha of every texel of a loaded texture image, cached per image; null while it loads or for canvas textures. */
+function alphaOf(image) {
+  if (!image || !image.complete || !image.naturalWidth) return null;
+  let map = alphaMaps.get(image);
+  if (!map) {
+    try {
+      const c = document.createElement('canvas');
+      c.width = image.naturalWidth;
+      c.height = image.naturalHeight;
+      const ctx = c.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(image, 0, 0);
+      const data = ctx.getImageData(0, 0, c.width, c.height).data;
+      const alpha = new Uint8Array(c.width * c.height);
+      for (let i = 0; i < alpha.length; i++) alpha[i] = data[i * 4 + 3];
+      map = { width: c.width, height: c.height, alpha };
+    } catch {
+      map = { width: 0, height: 0, alpha: null };
+    }
+    alphaMaps.set(image, map);
+  }
+  return map.alpha ? map : null;
+}
+
+/** Whether the ray o + t·d (t ≥ 0) meets a sphere. */
+function raySphere(o, d, sphere) {
+  const ox = o.x - sphere.center.x;
+  const oy = o.y - sphere.center.y;
+  const oz = o.z - sphere.center.z;
+  const a = d.x * d.x + d.y * d.y + d.z * d.z;
+  const b = ox * d.x + oy * d.y + oz * d.z;
+  const c = ox * ox + oy * oy + oz * oz - sphere.radius * sphere.radius;
+  const disc = b * b - a * c;
+  return disc >= 0 && -b + Math.sqrt(disc) >= 0;
+}
+
+/**
+ * Nearest triangle of an indexed geometry the ray o + t·d meets (Möller–Trumbore), as {t, vertex} (t in units of d,
+ * vertex: first vertex of the triangle), or null. cull: back faces (clockwise seen from the ray) do not count;
+ * alpha: texel alphas of the texture, where a hit on a cutout texel lets the ray through like the fragment shader.
+ */
+function hitTriangles(geometry, o, d, cull, alpha) {
+  const pos = geometry.attributes.position.array;
+  const uv = geometry.attributes.uv ? geometry.attributes.uv.array : null;
+  const index = geometry.index.array;
+  let best = null;
+  for (let i = 0; i < index.length; i += 3) {
+    const a = index[i] * 3;
+    const b = index[i + 1] * 3;
+    const c = index[i + 2] * 3;
+    const e1x = pos[b] - pos[a];
+    const e1y = pos[b + 1] - pos[a + 1];
+    const e1z = pos[b + 2] - pos[a + 2];
+    const e2x = pos[c] - pos[a];
+    const e2y = pos[c + 1] - pos[a + 1];
+    const e2z = pos[c + 2] - pos[a + 2];
+    const px = d.y * e2z - d.z * e2y;
+    const py = d.z * e2x - d.x * e2z;
+    const pz = d.x * e2y - d.y * e2x;
+    const det = e1x * px + e1y * py + e1z * pz;
+    if (cull ? det < 1e-12 : Math.abs(det) < 1e-12) continue;
+    const inv = 1 / det;
+    const sx = o.x - pos[a];
+    const sy = o.y - pos[a + 1];
+    const sz = o.z - pos[a + 2];
+    const u = (sx * px + sy * py + sz * pz) * inv;
+    if (u < 0 || u > 1) continue;
+    const qx = sy * e1z - sz * e1y;
+    const qy = sz * e1x - sx * e1z;
+    const qz = sx * e1y - sy * e1x;
+    const v = (d.x * qx + d.y * qy + d.z * qz) * inv;
+    if (v < 0 || u + v > 1) continue;
+    const t = (e2x * qx + e2y * qy + e2z * qz) * inv;
+    if (t <= 0 || (best && t >= best.t)) continue;
+    if (alpha && uv) {
+      const ua = index[i] * 2;
+      const ub = index[i + 1] * 2;
+      const uc = index[i + 2] * 2;
+      const w = 1 - u - v;
+      const tu = uv[ua] * w + uv[ub] * u + uv[uc] * v;
+      const tv = uv[ua + 1] * w + uv[ub + 1] * u + uv[uc + 1] * v;
+      const x = Math.min(alpha.width - 1, Math.max(0, Math.floor(tu * alpha.width)));
+      const y = Math.min(alpha.height - 1, Math.max(0, Math.floor(tv * alpha.height)));
+      if (alpha.alpha[y * alpha.width + x] < CUTOUT_ALPHA) continue;
+    }
+    best = { t, vertex: index[i] };
+  }
+  return best;
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -325,10 +477,13 @@ export function webglAvailable() {
 }
 
 /**
- * Creates the viewer in a container element.
+ * Creates the viewer in a container element. onPick(hit) is called for a click or tap on a part while picking is on
+ * (setPicking), onHover(hit | null) when the part under the mouse pointer changes; hit = {category, id, mount,
+ * position (motor/prop 0–3 or null), paintSlot (slot of the face hit, else the piece's main slot; null when nothing
+ * on it can be painted), procedural (frame drawn without a model)}.
  * @param {HTMLElement} container
  * @param {{catalog: object, render: object, loadModel: (id: string) => Promise<object|null>, autoRotate?: boolean,
- *   reducedMotion?: boolean}} options
+ *   reducedMotion?: boolean, onPick?: (hit: object) => void, onHover?: (hit: object|null) => void}} options
  */
 export function createViewer(container, options) {
   const { catalog, render } = options;
@@ -360,6 +515,7 @@ export function createViewer(container, options) {
   scene.add(discs);
   const discMaterial = new ShaderMaterial({ vertexShader: DISC_VERTEX, fragmentShader: DISC_FRAGMENT, transparent: true, depthWrite: false, side: 2 });
   const markMaterial = new ShaderMaterial({ vertexShader: DISC_VERTEX, fragmentShader: MARK_FRAGMENT, transparent: true, depthWrite: false, side: 2 });
+  const litDiscMaterial = new ShaderMaterial({ vertexShader: DISC_VERTEX, fragmentShader: DISC_HIGHLIGHT_FRAGMENT, transparent: true, depthWrite: false, side: 2 });
 
   // Camera preview state: on, uptilt and camera FOV (degrees), spinning (blur discs) or still blades, frame shown,
   // discs marked.
@@ -446,7 +602,10 @@ export function createViewer(container, options) {
     return new ShaderMaterial({
       vertexShader: VERTEX,
       fragmentShader: FRAGMENT,
-      uniforms: { map: { value: map }, tints: { value: tints }, light0: { value: LIGHT0 }, light1: { value: LIGHT1 } },
+      uniforms: {
+        map: { value: map }, tints: { value: tints }, light0: { value: LIGHT0 }, light1: { value: LIGHT1 },
+        highlight: { value: new Array(MAX_TINTS).fill(0) }, highlightAll: { value: 0 },
+      },
     });
   }
 
@@ -456,15 +615,32 @@ export function createViewer(container, options) {
     if (!g) {
       const variant = model.variants[variantName];
       const source = variant.of ? model.variants[variant.of] : variant;
-      g = modelGeometry(source.el, variant.tint || null);
+      g = modelGeometry(source.el, variant.tint || null, faceGroups(model, variantName));
       geometryCache.set(key, g);
     }
     return g;
   }
 
+  // What a click on a piece picks (see createViewer); faces: the geometry carries the tint group of every face.
+  function pickInfo(piece, model, faces) {
+    const { groups, main } = pieceSlots(piece, groupsOf(piece, model || null, render));
+    const mount = piece.mount || null;
+    return {
+      category: pieceCategory(piece),
+      id: piece.role === 'accessory_base' ? (current.build.accessories || {})[mount] || null : piece.id,
+      mount,
+      position: piece.slot == null ? null : piece.slot,
+      groups,
+      main,
+      faces,
+      procedural: piece.procedural === 'frame',
+    };
+  }
+
   // One mesh per placed piece; painting swaps between the plain and the "_paint" model.
   function pieceMesh(piece, model, paint) {
     let mesh;
+    let faces = false;
     if (piece.procedural === 'accessory_base') {
       const groups = groupsOf(piece, null, render) || [['tpu', '#262628']];
       const tpu = (paint && paint.tpu) || groups[0][1];
@@ -487,8 +663,10 @@ export function createViewer(container, options) {
         });
       }
       mesh = new Mesh(geometryFor(model, piece.id, name), mat);
+      faces = !!faceGroups(model, name);
     }
     mesh.userData.role = piece.role;
+    mesh.userData.pick = pickInfo(piece, model, faces);
     const [x, y, z] = piece.position;
     mesh.position.set(x, y, z);
     if (piece.tiltX) mesh.rotation.x = piece.tiltX * DEG;
@@ -514,9 +692,11 @@ export function createViewer(container, options) {
       droneGroup.add(pieceMesh(piece, model, paint));
     }
     rebuildDiscs(paint);
+    applyHighlight();
     fpvVisibility();
     fit();
     requestRender();
+    if (pointerAt) queueHover();
   }
 
   function rebuildDiscs(paint) {
@@ -531,7 +711,11 @@ export function createViewer(container, options) {
     const model = current.models.get(prop.id);
     for (let slot = 0; slot < SLOTS; slot++) {
       const rgb = shade(discColor(prop, model, paint, slot), BLUR_SHADE);
-      discs.add(new Mesh(discGeometry(discCenter(rig, slot), rig.hubRadius, rig.radius, rgb), discMaterial));
+      const disc = new Mesh(discGeometry(discCenter(rig, slot), rig.hubRadius, rig.radius, rgb), discMaterial);
+      disc.userData.pick = {
+        category: 'prop', id: prop.id, mount: null, position: slot, groups: [], main: slotOf('prop', slot), faces: false, procedural: false,
+      };
+      discs.add(disc);
     }
   }
 
@@ -539,7 +723,7 @@ export function createViewer(container, options) {
   function fpvVisibility() {
     shadow.visible = !fpv.on;
     discs.visible = fpv.on && (fpv.spinning || fpv.mark);
-    for (const disc of discs.children) disc.material = fpv.mark ? markMaterial : discMaterial;
+    discMaterials();
     for (const child of droneGroup.children) {
       const role = child.userData.role;
       if (!fpv.on) child.visible = true;
@@ -562,6 +746,16 @@ export function createViewer(container, options) {
     return { x: Math.round((w - vw) / 2), y: Math.round((h - vh) / 2), w: Math.round(vw), h: Math.round(vh), cw: w, ch: h };
   }
 
+  // The FPV camera at the lens with the camera angle and field of view.
+  function aimFpvCamera(view) {
+    fpvCamera.fov = verticalFov(fpv.fov, FPV_ASPECT);
+    fpvCamera.aspect = FPV_ASPECT;
+    fpvCamera.position.set(view.lens_mm[0], view.lens_mm[1], view.lens_mm[2]);
+    fpvCamera.rotation.set(fpv.tilt * DEG, 0, 0);
+    fpvCamera.updateProjectionMatrix();
+    fpvCamera.updateMatrixWorld();
+  }
+
   function drawCamera() {
     const view = current && current.camera;
     const r = fpvRect();
@@ -570,12 +764,7 @@ export function createViewer(container, options) {
     renderer.clear();
     if (!view) return;
     const tanH = Math.tan((fpv.fov * DEG) / 2);
-    fpvCamera.fov = verticalFov(fpv.fov, FPV_ASPECT);
-    fpvCamera.aspect = FPV_ASPECT;
-    fpvCamera.position.set(view.lens_mm[0], view.lens_mm[1], view.lens_mm[2]);
-    fpvCamera.rotation.set(fpv.tilt * DEG, 0, 0);
-    fpvCamera.updateProjectionMatrix();
-    fpvCamera.updateMatrixWorld();
+    aimFpvCamera(view);
     backdropMaterial.uniforms.tanH.value = tanH;
     backdropMaterial.uniforms.tanV.value = tanH / FPV_ASPECT;
     backdropMaterial.uniforms.tilt.value = fpv.tilt * DEG;
@@ -643,11 +832,12 @@ export function createViewer(container, options) {
     if (!visible) return;
     const orbiting = !fpv.on;
     const moving = orbiting && controls.update();
+    const flashing = stepFlash(performance.now());
     if (needsRender || moving || (orbiting && controls.autoRotate)) {
       draw();
       needsRender = false;
     }
-    if (orbiting && (controls.autoRotate || moving)) loop();
+    if ((orbiting && (controls.autoRotate || moving)) || flashing) loop();
   }
 
   function loop() {
@@ -713,6 +903,241 @@ export function createViewer(container, options) {
     }
   });
 
+  // ---- Picking (see the header): click or tap selects, the mouse pointer highlights. ----
+  const picking = { mode: null, linkProps: true };
+  let hover = null;
+  let hoverKey = null;
+  let flash = null;
+  let flashLevel = 0;
+  let suppressed = false;
+  let pointerAt = null;
+  let hoverTimer = 0;
+  let hoverDone = 0;
+  let press = null;
+  let tapPicked = false;
+  const touches = new Set();
+
+  function pickables() {
+    const meshes = droneGroup.children.filter((mesh) => mesh.visible);
+    return discs.visible ? meshes.concat(discs.children) : meshes;
+  }
+
+  /** The view ray through a canvas point (CSS px) of the 3D view or of the FPV image; null outside the image. */
+  function viewRay(x, y) {
+    let cam = camera;
+    let nx;
+    let ny;
+    if (fpv.on) {
+      const view = current && current.camera;
+      const r = fpvRect();
+      if (!view || x < r.x || y < r.y || x > r.x + r.w || y > r.y + r.h) return null;
+      aimFpvCamera(view);
+      cam = fpvCamera;
+      nx = ((x - r.x) / r.w) * 2 - 1;
+      ny = 1 - ((y - r.y) / r.h) * 2;
+    } else {
+      camera.updateMatrixWorld();
+      nx = (x / (container.clientWidth || 1)) * 2 - 1;
+      ny = 1 - (y / (container.clientHeight || 1)) * 2;
+    }
+    const origin = new Vector3().setFromMatrixPosition(cam.matrixWorld);
+    return { origin, dir: new Vector3(nx, ny, 0.5).unproject(cam).sub(origin).normalize() };
+  }
+
+  // The ray in the mesh's own frame (d not normalised, so t stays the distance along the world ray).
+  function hitMesh(mesh, origin, dir) {
+    const g = mesh.geometry;
+    if (!g.boundingSphere) g.computeBoundingSphere();
+    const inverse = mesh.matrixWorld.clone().invert();
+    const o = origin.clone().applyMatrix4(inverse);
+    const d = origin.clone().add(dir).applyMatrix4(inverse).sub(o);
+    if (!raySphere(o, d, g.boundingSphere)) return null;
+    const map = mesh.material.uniforms.map;
+    const hit = hitTriangles(g, o, d, mesh.material.side === 0, map ? alphaOf(map.value.image) : null);
+    if (!hit) return null;
+    const groups = g.attributes.pickGroup;
+    return { mesh, t: hit.t, group: groups ? Math.round(groups.array[hit.vertex]) : -1 };
+  }
+
+  function nearestHit(x, y) {
+    const ray = viewRay(x, y);
+    if (!ray) return null;
+    scene.updateMatrixWorld();
+    let best = null;
+    for (const mesh of pickables()) {
+      const hit = hitMesh(mesh, ray.origin, ray.dir);
+      if (hit && (!best || hit.t < best.t)) best = hit;
+    }
+    return best;
+  }
+
+  function describe({ mesh, group }) {
+    const info = mesh.userData.pick;
+    return {
+      category: info.category, id: info.id, mount: info.mount, position: info.position,
+      paintSlot: (group >= 0 && info.groups[group]) || info.main, procedural: info.procedural,
+    };
+  }
+
+  function pickAt(x, y) {
+    const hit = nearestHit(x, y);
+    return hit ? describe(hit) : null;
+  }
+
+  // Paint slots a pick lights in paint mode (all four props while they are painted alike); null: the whole category.
+  function litSlots(hit) {
+    if (picking.mode !== 'paint' || !hit.paintSlot) return null;
+    return picking.linkProps && PROP_SLOTS.includes(hit.paintSlot) ? PROP_SLOTS : [hit.paintSlot];
+  }
+
+  // Highlight of the hovered and the clicked pick: in parts mode every mesh of its category (both pieces of the top
+  // accessory, all four motors or props), in paint mode the faces of its paint slot on every part.
+  function applyHighlight() {
+    const lights = [];
+    if (!suppressed && hover) lights.push([hover, litSlots(hover), HOVER_LEVEL]);
+    if (!suppressed && flash && flashLevel > 0) lights.push([flash, litSlots(flash), flashLevel]);
+    for (const mesh of [...droneGroup.children, ...discs.children]) {
+      const info = mesh.userData.pick;
+      const levels = new Array(MAX_TINTS).fill(0);
+      let all = 0;
+      for (const [hit, slots, level] of lights) {
+        if (!slots) {
+          if (info.category === hit.category && (hit.category !== 'accessory' || info.mount === hit.mount)) all = Math.max(all, level);
+        } else if (info.faces) {
+          info.groups.forEach((slot, i) => {
+            if (i < MAX_TINTS && slots.includes(slot)) levels[i] = Math.max(levels[i], level);
+          });
+        } else if (slots.includes(info.main)) {
+          all = Math.max(all, level);
+        }
+      }
+      const uniforms = mesh.material.uniforms;
+      if (uniforms.highlight) {
+        uniforms.highlight.value = levels;
+        uniforms.highlightAll.value = all;
+      } else {
+        mesh.userData.lit = all > 0;
+      }
+    }
+    discMaterials();
+  }
+
+  function discMaterials() {
+    for (const disc of discs.children) disc.material = disc.userData.lit ? litDiscMaterial : fpv.mark ? markMaterial : discMaterial;
+  }
+
+  // Click highlight: full for a moment, then faded out (held, then off with reduced motion); true while it lasts.
+  function stepFlash(now) {
+    if (!flash) return false;
+    const age = now - flash.start;
+    let level = age < FLASH_HOLD_MS ? 1 : Math.max(0, 1 - (age - FLASH_HOLD_MS) / FLASH_FADE_MS);
+    if (options.reducedMotion) level = age < FLASH_HOLD_MS + FLASH_FADE_MS ? 1 : 0;
+    if (level !== flashLevel) {
+      flashLevel = level;
+      applyHighlight();
+      needsRender = true;
+    }
+    if (level === 0) flash = null;
+    return !!flash;
+  }
+
+  function hoverKeyOf(hit) {
+    if (!hit) return null;
+    return [hit.category, hit.mount, hit.id, picking.mode === 'paint' ? hit.paintSlot : ''].join('|');
+  }
+
+  function setHover(hit) {
+    canvas.style.cursor = hit ? 'pointer' : '';
+    const key = hoverKeyOf(hit);
+    if (key === hoverKey) return;
+    hoverKey = key;
+    hover = hit;
+    applyHighlight();
+    requestRender();
+    if (options.onHover) options.onHover(hit);
+  }
+
+  // Throttled hover pick: at most every HOVER_EVERY_MS, always once more for the last pointer position.
+  function queueHover() {
+    if (hoverTimer || !pointerAt) return;
+    hoverTimer = setTimeout(() => {
+      hoverTimer = 0;
+      hoverDone = performance.now();
+      if (!disposed) setHover(picking.mode && pointerAt ? pickAt(pointerAt.x, pointerAt.y) : null);
+    }, Math.max(0, HOVER_EVERY_MS - (performance.now() - hoverDone)));
+  }
+
+  function endHover() {
+    pointerAt = null;
+    clearTimeout(hoverTimer);
+    hoverTimer = 0;
+    setHover(null);
+  }
+
+  const canvasPoint = (e) => {
+    const r = canvas.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top };
+  };
+  const slop = (type) => CLICK_SLOP_PX[type] || CLICK_SLOP_PX.pen;
+
+  // A click is a primary press that stays within a few pixels and is let go soon; a second finger (pinch) or a drag
+  // cancels it, so orbiting never selects.
+  canvas.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'touch') {
+      if (e.isPrimary) touches.clear();
+      touches.add(e.pointerId);
+    }
+    const primary = e.isPrimary && touches.size <= 1 && (e.pointerType !== 'mouse' || e.button === 0);
+    press = picking.mode && primary ? { id: e.pointerId, type: e.pointerType, x: e.clientX, y: e.clientY, time: e.timeStamp } : null;
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (press && e.pointerId === press.id && Math.hypot(e.clientX - press.x, e.clientY - press.y) > slop(press.type)) press = null;
+    if (e.pointerType !== 'mouse') return;
+    if (e.buttons) {
+      if (!press && (hover || pointerAt)) endHover();
+      return;
+    }
+    pointerAt = canvasPoint(e);
+    queueHover();
+  });
+  canvas.addEventListener('pointerup', (e) => {
+    touches.delete(e.pointerId);
+    const p = press;
+    press = null;
+    tapPicked = false;
+    if (e.pointerType === 'mouse') {
+      pointerAt = canvasPoint(e);
+      queueHover();
+    }
+    if (!p || p.id !== e.pointerId || !picking.mode || e.timeStamp - p.time > CLICK_MAX_MS) return;
+    if (Math.hypot(e.clientX - p.x, e.clientY - p.y) > slop(p.type)) return;
+    const { x, y } = canvasPoint(e);
+    const hit = pickAt(x, y);
+    if (!hit) return;
+    flash = { ...hit, start: performance.now() };
+    flashLevel = 1;
+    tapPicked = e.pointerType === 'touch';
+    applyHighlight();
+    requestRender();
+    if (options.onPick) options.onPick(hit);
+  });
+  // A tap that picked gets no emulated mouse events after it: their mousedown would take the focus back to the canvas.
+  canvas.addEventListener('touchend', (e) => {
+    if (tapPicked && e.cancelable) e.preventDefault();
+    tapPicked = false;
+  }, { passive: false });
+  canvas.addEventListener('pointercancel', (e) => {
+    touches.delete(e.pointerId);
+    press = null;
+  });
+  canvas.addEventListener('pointerleave', (e) => {
+    if (e.pointerType === 'mouse' && !e.buttons) endHover();
+  });
+  // The drone turns under a resting pointer (auto-rotate, damping, keys): pick again, throttled.
+  controls.addEventListener('change', () => {
+    if (pointerAt && picking.mode) queueHover();
+  });
+
   resize();
 
   return {
@@ -758,6 +1183,67 @@ export function createViewer(container, options) {
     },
     autoRotate: () => controls.autoRotate,
     /**
+     * Picking on or off: mode 'parts' (a pick lights its whole category), 'paint' (it lights the faces of its paint
+     * slot; linkProps: all four props together) or null (off, no highlight, the plain drag cursor).
+     */
+    setPicking({ mode = null, linkProps = true } = {}) {
+      picking.mode = mode;
+      picking.linkProps = !!linkProps;
+      flash = null;
+      flashLevel = 0;
+      hoverKey = null;
+      hover = null;
+      canvas.style.cursor = '';
+      applyHighlight();
+      requestRender();
+      if (options.onHover) options.onHover(null);
+      if (mode && pointerAt) queueHover();
+    },
+    /** The part under a point of the canvas (CSS px from its top left), as for a click; null for none. */
+    pickAt,
+    /**
+     * Where a click picks each visible part: per mesh and paint slot on it a canvas point (CSS px) with the pick there,
+     * {...hit, x, y, center}: the projected centre of the part when it is in front there (center true), else the
+     * centre of the first face of it that is. For tests and tools; parts hidden behind others are left out.
+     */
+    pickPoints() {
+      scene.updateMatrixWorld();
+      const view = current && current.camera;
+      if (fpv.on && !view) return [];
+      if (fpv.on) aimFpvCamera(view);
+      const cam = fpv.on ? fpvCamera : camera;
+      const r = fpv.on ? fpvRect() : { x: 0, y: 0, w: container.clientWidth, h: container.clientHeight };
+      const points = [];
+      for (const mesh of pickables()) {
+        const info = mesh.userData.pick;
+        const wanted = new Set(info.faces ? info.groups.concat(info.main) : [info.main]).size;
+        const g = mesh.geometry;
+        if (!g.boundingSphere) g.computeBoundingSphere();
+        const candidates = [g.boundingSphere.center.clone()];
+        const pos = g.attributes.position.array;
+        const index = g.index.array;
+        const step = Math.max(1, Math.floor(index.length / 3 / 400)) * 3;
+        for (let i = 0; i < index.length; i += step) {
+          const [a, b, c] = [index[i] * 3, index[i + 1] * 3, index[i + 2] * 3];
+          candidates.push(new Vector3((pos[a] + pos[b] + pos[c]) / 3, (pos[a + 1] + pos[b + 1] + pos[c + 1]) / 3, (pos[a + 2] + pos[b + 2] + pos[c + 2]) / 3));
+        }
+        const found = new Map();
+        for (let k = 0; k < candidates.length && found.size < wanted; k++) {
+          const p = candidates[k].applyMatrix4(mesh.matrixWorld).project(cam);
+          if (p.z < -1 || p.z > 1) continue;
+          const x = r.x + ((p.x + 1) / 2) * r.w;
+          const y = r.y + ((1 - p.y) / 2) * r.h;
+          if (x < r.x + 1 || y < r.y + 1 || x > r.x + r.w - 1 || y > r.y + r.h - 1) continue;
+          const hit = nearestHit(x, y);
+          if (!hit || hit.mesh !== mesh) continue;
+          const picked = describe(hit);
+          if (!found.has(picked.paintSlot)) found.set(picked.paintSlot, { ...picked, x, y, center: k === 0 });
+        }
+        points.push(...found.values());
+      }
+      return points;
+    },
+    /**
      * The drone alone on a transparent 2D canvas, always from the same view of the drone (SHOT_AZIMUTH,
      * SHOT_ELEVATION in its own frame, not the preview's), cropped to the drone plus pad (share of its longer side)
      * and as large as fits into maxWidth × maxHeight. Null when nothing is drawn.
@@ -781,6 +1267,8 @@ export function createViewer(container, options) {
       const ratio = renderer.getPixelRatio();
       const shadowVisible = shadow.visible;
       shadow.visible = false;
+      suppressed = true;
+      applyHighlight();
       renderer.setPixelRatio(1);
       const drawShot = (w, h) => {
         renderer.setSize(w, h, false);
@@ -824,6 +1312,8 @@ export function createViewer(container, options) {
         }
       } finally {
         shadow.visible = shadowVisible;
+        suppressed = false;
+        applyHighlight();
         renderer.setPixelRatio(ratio);
         resize();
         draw();
@@ -837,6 +1327,7 @@ export function createViewer(container, options) {
     },
     dispose() {
       disposed = true;
+      clearTimeout(hoverTimer);
       ro.disconnect();
       io.disconnect();
       controls.dispose();
@@ -844,6 +1335,7 @@ export function createViewer(container, options) {
       for (const child of discs.children) child.geometry.dispose();
       discMaterial.dispose();
       markMaterial.dispose();
+      litDiscMaterial.dispose();
       backdropMaterial.dispose();
       backdropQuad.geometry.dispose();
       renderer.dispose();
