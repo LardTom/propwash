@@ -163,8 +163,8 @@
 </article>
 <article class="docs-api">
 <h3 id="api-accessory-accessorybehavior" class="docs-api__name"><a class="docs-anchor" href="#api-accessory-accessorybehavior" aria-hidden="true" tabindex="-1">#</a><code>AccessoryBehavior</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
-<p lang="en" class="docs-api__desc">Code behind an add-on accessory: inventory size and filter, own payload weight, reaction to accessory actions and a server tick.</p>
-<p lang="de" class="docs-api__desc">Code hinter einem Zubehörteil eines Add-ons: Inventargröße und Filter, eigenes Beladungsgewicht, Reaktion auf Zubehör-Aktionen und ein Server-Tick.</p>
+<p lang="en" class="docs-api__desc">Code behind an add-on accessory: inventory size and filter (shulker boxes and drone items with accessory contents are never taken), own payload weight, reaction to accessory actions and a server tick.</p>
+<p lang="de" class="docs-api__desc">Code hinter einem Zubehörteil eines Add-ons: Inventargröße und Filter (Shulkerkisten und Drohnen-Items mit Zubehör-Inhalt nie), eigenes Beladungsgewicht, Reaktion auf Zubehör-Aktionen und ein Server-Tick.</p>
 <pre class="docs-api__sig"><code>interface AccessoryBehavior</code></pre>
 <ul class="docs-api__members"><li><code>int MAX_SLOTS = 9</code></li><li><code>default int slots()</code></li><li><code>default boolean accepts(int slot, ItemStack stack)</code></li><li><code>default int maxStackSize(int slot, ItemStack stack)</code></li><li><code>default OptionalDouble payloadGrams(List&lt;ItemStack&gt; contents)</code></li><li><code>default void onAction(AccessoryAction action)</code></li><li><code>default void tick(AccessoryContext context)</code></li></ul>
 
@@ -639,8 +639,8 @@
 </article>
 <article class="docs-api">
 <h3 id="api-flight-flightassist" class="docs-api__name"><a class="docs-anchor" href="#api-flight-flightassist" aria-hidden="true" tabindex="-1">#</a><code>FlightAssist</code> <span class="docs-badge"><span lang="en">interface</span><span lang="de">Interface</span></span></h3>
-<p lang="en" class="docs-api__desc">A flight controller extension running at 100 Hz inside the pilot’s flight model (position hold, cinematic smoothing, orbit, waypoints).</p>
-<p lang="de" class="docs-api__desc">Eine Erweiterung des Flight-Controllers, die mit 100 Hz im Flugmodell des Piloten läuft (Position halten, Kino-Glättung, Umkreisen, Wegpunkte).</p>
+<p lang="en" class="docs-api__desc">A flight controller extension running at 100 Hz inside the pilot’s flight model (position hold, cinematic smoothing, orbit, waypoints); while it outputs anything, a race lap counts as assisted.</p>
+<p lang="de" class="docs-api__desc">Eine Erweiterung des Flight-Controllers, die mit 100 Hz im Flugmodell des Piloten läuft (Position halten, Kino-Glättung, Umkreisen, Wegpunkte); solange sie etwas ausgibt, zählt eine Rennrunde als Runde mit Flughilfe.</p>
 <pre class="docs-api__sig"><code>interface FlightAssist</code></pre>
 <ul class="docs-api__members"><li><code>void update(FlightState state, AssistOutput output)</code></li><li><code>default double sensorRange()</code></li><li><code>default void reset()</code></li></ul>
 

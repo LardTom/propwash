@@ -517,7 +517,7 @@ ${ctx.images.zones ? figure(prefix, ctx.images.zones, { en: 'A zone in the world
 ${list([
     ['<strong>Race-legal</strong> zones turn special physics into a fair course element: laps through them are not assisted. Laps through other zones with changed physics count as assisted, and the reason names the zone.', '<strong>Rennfreie</strong> Zonen machen besondere Physik zu einem fairen Kurs-Element: Runden durch sie gelten nicht als unterstützt. Runden durch andere Zonen mit geänderter Physik gelten als unterstützt, und der Grund nennt die Zone.'],
     ['Zones show a subtle border (turquoise = race-legal, amber = assisted, grey = neutral), the OSD tells you when you fly in or out, and gravity and wind fade in over the transition time. Where zones overlap, the zone with the higher priority wins for each setting.', 'Zonen zeigen einen dezenten Rand (türkis = rennfrei, bernstein = Flughilfe, grau = neutral), das OSD meldet Ein- und Ausfliegen, und Schwerkraft und Wind gleiten über die Übergangszeit. Überlappen Zonen, gewinnt je Einstellung die mit der höheren Priorität.'],
-    ['Up to 128 zones per world, stored with the world; GPS rescue without a pilot flies with the same zones.', 'Bis zu 128 Zonen je Welt, gespeichert mit der Welt; GPS Rescue ohne Pilot fliegt mit denselben Zonen.'],
+    ['Up to 128 zones per dimension, stored with the world; GPS rescue without a pilot flies with the same zones.', 'Bis zu 128 Zonen je Dimension, gespeichert mit der Welt; GPS Rescue ohne Pilot fliegt mit denselben Zonen.'],
   ])}
 ${code(`/propwash zone create practice box 0 60 0 40 90 40
 /propwash zone set practice battery_scale 0

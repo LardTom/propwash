@@ -1,4 +1,4 @@
-// Flight analysis of a build, a port of Propwash 0.5.0 BuildAccess#analyze (BuildStats): airframe derivation,
+// Flight analysis of a build, a port of Propwash 0.5.2 BuildAccess#analyze (BuildStats): airframe derivation,
 // steady operating points of motors and battery, top speed, the energy balance of sim.EnergyModel (pack current with
 // drive losses, prop factor and avionics load, flight times for hover, cruise, mixed and aggressive flying down to the
 // landing voltage, motor heating) and camera occlusion (the FPV rig of the renderer, fpv.js).

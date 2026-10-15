@@ -23,7 +23,7 @@ This repository contains only the website, no mod source code.
 - `assets/js/configurator/` – the configurator as plain ES modules:
   - core: `data.js` (catalog), `sharecode.js` (PW1 share codes and the entry point; `SHARE_FORMAT` chooses what new
     codes use), `sharecode2.js` + `sharecode2-tables.js` (the shorter PW2 codes), `crc32.js`, `inflate.js`, `tune.js`,
-    `rules.js` (compatibility), `analysis.js` (flight analysis as in Propwash 0.5.0: energy balance and climb thrust), `fpv.js` (FPV camera rig and props in view),
+    `rules.js` (compatibility), `analysis.js` (flight analysis as in Propwash 0.5.2: energy balance, battery model and climb thrust), `fpv.js` (FPV camera rig and props in view),
     `tuning.js` (tune defaults and editing), `index.js`
   - page: `ui.js` (part pickers, paint, tune editor, OSD layer, stats, share code, import), `i18n.js` (texts),
     `assembly.js` (where every part sits on the drone), `paint.js` (paint tints), `viewer.js` (three.js viewer)
@@ -129,7 +129,7 @@ on hover and focus; without JavaScript narrow screens show the links as a row be
 - part pickers per category with search, a class filter (whoop, toothpick, cinewhoop, freestyle, race, long range,
   X-Class; video by link, accessories by mount), “only parts that fit”, fit badges and tips with pros, cons and what the
   part would change
-- live flight figures like the workbench of Propwash 0.5.0 (weight, thrust-to-weight, hover throttle, top speed and its
+- live flight figures like the workbench of Propwash 0.5.2 (weight, thrust-to-weight, hover throttle, top speed and its
   energy balance: flight times down to the landing voltage for mixed flying of the frame's class as the main value,
   aggressive/racing, hovering and cruising at the class's cruise speed, pack currents, landing voltage under load,
   base load of flight controller and video, motor temperature after 60 s full throttle and after a mixed flight) and
@@ -178,10 +178,10 @@ each one. The first is the 7″ deadcat whose props the game showed at the image
 0.0 %; its `game` entry holds what Propwash's self test counted in the rendered FPV image (2.01 % of 1708 × 960 pixels),
 and the test fails if the configurator ever shows 0 % for it again. The same code carries the second report (flight
 times and part stats a bit off, e.g. 24.2 min hovering and 124 °C at full throttle): `analysis` holds the figures of
-Propwash 0.5.0 and Just More Parts 1.1.0 (19.5 min hovering, 11.9 min cruising, 8.1 min mixed, 5.8 min aggressive,
-95 °C after 60 s full throttle), `analysis_before` the ones of an earlier pre-release build; the test checks that weight, thrust-to-weight, hover
-throttle, top speed and props in view stay unchanged (the flight physics is bit-identical) and that the energy figures
-changed.
+Propwash 0.5.2 and Just More Parts 1.1.1 (19.6 min hovering, 11.9 min cruising, 8.1 min mixed, 5.8 min aggressive,
+96 °C after 60 s full throttle), `analysis_before` the ones of an earlier pre-release build; the test checks that weight, thrust-to-weight, hover
+throttle and props in view stay unchanged (the flight physics is bit-identical; the top speed moves with the climb thrust
+of 0.5.0 and the battery model of 0.5.2) and that the energy figures changed.
 
 Render definitions may carry a vanilla `transformation` (Just More Parts shrinks the X-Class frame models to fit
 Minecraft's model limit and scales them back to real size this way); `build-configurator-models.mjs` bakes it into the

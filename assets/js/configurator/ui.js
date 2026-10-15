@@ -2,11 +2,11 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText } from './data.js?v=29a0a695';
+import { loadCatalog, localText } from './data.js?v=35a5dfd4';
 import { shareLink, codeFromHash, PAINT_SLOTS } from './sharecode.js?v=ff46f4e6';
-import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=7cb226f7';
+import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=89743f12';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
-import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=2f177e4b';
+import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=24407feb';
 import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
 import { batteryFit } from './rules.js?v=147e54d1';
 import { assemble, PROP_SLOTS } from './assembly.js?v=6349ca95';
