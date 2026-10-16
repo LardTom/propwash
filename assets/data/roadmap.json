@@ -17,10 +17,10 @@
         "de": "Alles hier steckt in der aktuellen Version – runterladen und losfliegen."
       },
       "link": {
-        "href": "https://www.curseforge.com/minecraft/mc-mods/propwash-fpv",
+        "href": "https://github.com/LardTom/propwash-fpv/releases/latest",
         "label": {
-          "en": "Download on CurseForge",
-          "de": "Download auf CurseForge"
+          "en": "Download on GitHub",
+          "de": "Download auf GitHub"
         }
       },
       "groups": [
