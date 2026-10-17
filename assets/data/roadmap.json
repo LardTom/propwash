@@ -47,8 +47,8 @@
                 "de": "Ein echtes FPV-Objektiv"
               },
               "text": {
-                "en": "The FPV picture looks through a fisheye like a real FPV camera – or flat, if you prefer.",
-                "de": "Das FPV-Bild sieht durch ein Fisheye wie eine echte FPV-Kamera – oder flach, wenn dir das lieber ist."
+                "en": "The FPV picture looks through a fisheye like a real FPV camera – a slider sets how strong.",
+                "de": "Das FPV-Bild sieht durch ein Fisheye wie eine echte FPV-Kamera – ein Regler stellt ein, wie stark."
               },
               "link": {
                 "href": "../docs/guide/#video-lens",
@@ -116,12 +116,64 @@
               "icon": "fov",
               "status": "done",
               "title": {
-                "en": "VTX power",
-                "de": "VTX-Leistung"
+                "en": "VTX power with Auto",
+                "de": "VTX-Leistung mit Auto"
               },
               "text": {
-                "en": "25 to 1600 mW: more range and penetration, but more heat and battery drain.",
-                "de": "25 bis 1600 mW: mehr Reichweite und Durchdringung, aber mehr Wärme und Akkuverbrauch."
+                "en": "25 to 1600 mW or Auto, which follows your link: more range and penetration, but more heat and battery drain.",
+                "de": "25 bis 1600 mW oder Auto nach deiner Verbindung: mehr Reichweite und Durchdringung, aber mehr Wärme und Akkuverbrauch."
+              }
+            },
+            {
+              "id": "signal-walls",
+              "icon": "bando",
+              "status": "done",
+              "title": {
+                "en": "Better signal through walls",
+                "de": "Besseres Signal durch Wände"
+              },
+              "text": {
+                "en": "Walls dampen video and radio by what they are made of, the picture breaks up gradually, and hills and caves still cut the link.",
+                "de": "Wände dämpfen Video und Funk je nach Material, das Bild zerfällt allmählich, und Hügel und Höhlen trennen die Verbindung weiter."
+              }
+            },
+            {
+              "id": "realistic-crashes",
+              "icon": "impact",
+              "status": "done",
+              "title": {
+                "en": "Crashes like real ones",
+                "de": "Crashes wie in echt"
+              },
+              "text": {
+                "en": "Drones land on their real frame and props, and nose-ins, wall hits and cartwheels end like on a real quad.",
+                "de": "Drohnen landen auf Rahmen und Props, und Nose-ins, Wandtreffer und Überschläge enden wie bei einem echten Quad."
+              }
+            },
+            {
+              "id": "stick-modes",
+              "icon": "wrench",
+              "status": "done",
+              "title": {
+                "en": "Stick modes 1–4",
+                "de": "Knüppel-Mode 1–4"
+              },
+              "text": {
+                "en": "Pick your stick mode in the receiver wizard – the OSD stick overlay, the flight school and the radio in your hand follow it.",
+                "de": "Wähl deinen Knüppel-Mode im Empfänger-Assistenten – Knüppelanzeige im OSD, Flugschule und die Funke in deiner Hand folgen ihm."
+              }
+            },
+            {
+              "id": "reset-home",
+              "icon": "replay",
+              "status": "done",
+              "title": {
+                "en": "Reset to home point",
+                "de": "Zurück zum Homepoint"
+              },
+              "text": {
+                "en": "One key or switch puts your drone back on its home point – level, disarmed and standing still, also from far away.",
+                "de": "Eine Taste oder ein Schalter setzt deine Drohne auf ihren Homepoint zurück – gerade, entschärft und ruhig, auch aus der Ferne."
               }
             },
             {
@@ -161,19 +213,6 @@
               "text": {
                 "en": "A flat discharge curve with a steep end you feel in every punch; the OSD voltage flashes when it sags.",
                 "de": "Eine flache Entladekurve mit steilem Ende, das du in jedem Punch spürst; die OSD-Spannung blinkt beim Einbruch."
-              }
-            },
-            {
-              "id": "landings",
-              "icon": "tilt",
-              "status": "done",
-              "title": {
-                "en": "Better landings",
-                "de": "Bessere Landungen"
-              },
-              "text": {
-                "en": "Drones touch down on their real frame, battery and props instead of ending upside down.",
-                "de": "Drohnen setzen auf Rahmen, Akku und Props auf, statt auf dem Kopf zu landen."
               }
             },
             {
@@ -700,19 +739,19 @@
       ]
     },
     {
-      "id": "now",
-      "icon": "prop",
+      "id": "next",
+      "icon": "arrow",
       "label": {
-        "en": "Now",
-        "de": "Jetzt"
+        "en": "Next",
+        "de": "Als Nächstes"
       },
       "title": {
-        "en": "In the next release",
-        "de": "Im nächsten Update"
+        "en": "Planned, no date yet",
+        "de": "Geplant, noch ohne Termin"
       },
       "intro": {
-        "en": "Planned for the next big update after 0.5.2.",
-        "de": "Geplant für das nächste große Update nach 0.5.2."
+        "en": "The next big update after 0.5.2 – together with two add-ons.",
+        "de": "Das nächste große Update nach 0.5.2 – zusammen mit zwei Add-ons."
       },
       "groups": [
         {
@@ -759,19 +798,6 @@
               "text": {
                 "en": "Clear guidelines for add-on makers, and the namespace “propwash” is reserved for Propwash itself.",
                 "de": "Klare Richtlinien für Add-on-Macher, und der Namensraum „propwash“ ist für Propwash selbst reserviert."
-              }
-            },
-            {
-              "id": "propwash-server",
-              "icon": "flag",
-              "status": "planned",
-              "title": {
-                "en": "Propwash: Server",
-                "de": "Propwash: Server"
-              },
-              "text": {
-                "en": "Game modes for your server: races, time trials and zone games, with their own maps and results.",
-                "de": "Spielmodi für deinen Server: Rennen, Zeitfahren und Zonen-Spiele, mit eigenen Maps und Ergebnissen."
               }
             },
             {
@@ -853,19 +879,6 @@
               }
             },
             {
-              "id": "jmp-whoop-motors",
-              "icon": "prop",
-              "status": "planned",
-              "title": {
-                "en": "More whoop motors in Just More Parts",
-                "de": "Mehr Whoop-Motoren in Just More Parts"
-              },
-              "text": {
-                "en": "More high-KV motors for whoops in the add-on Just More Parts.",
-                "de": "Mehr Motoren mit hoher KV für Whoops im Add-on Just More Parts."
-              }
-            },
-            {
               "id": "website-faq-languages",
               "icon": "chat",
               "status": "planned",
@@ -879,23 +892,57 @@
               }
             }
           ]
+        },
+        {
+          "title": {
+            "en": "Add-ons with 0.6.0",
+            "de": "Add-ons zu 0.6.0"
+          },
+          "items": [
+            {
+              "id": "propwash-server",
+              "icon": "flag",
+              "status": "planned",
+              "title": {
+                "en": "Propwash: Server",
+                "de": "Propwash: Server"
+              },
+              "text": {
+                "en": "The official server add-on with game modes: races, time trials and zone games, with their own maps and results.",
+                "de": "Das offizielle Server-Add-on mit Spielmodi: Rennen, Zeitfahren und Zonen-Spiele, mit eigenen Maps und Ergebnissen."
+              }
+            },
+            {
+              "id": "jmp-next",
+              "icon": "prop",
+              "status": "planned",
+              "title": {
+                "en": "Next version of Just More Parts",
+                "de": "Nächste Version von Just More Parts"
+              },
+              "text": {
+                "en": "More high-KV motors for whoops and the new share codes for drones with parts from every add-on.",
+                "de": "Mehr Motoren mit hoher KV für Whoops und die neuen Sharecodes für Drohnen mit Teilen aus jedem Add-on."
+              }
+            }
+          ]
         }
       ]
     },
     {
-      "id": "next",
-      "icon": "arrow",
+      "id": "later",
+      "icon": "port",
       "label": {
-        "en": "Next",
-        "de": "Als Nächstes"
+        "en": "Later",
+        "de": "Später"
       },
       "title": {
-        "en": "Planned, no date yet",
-        "de": "Geplant, noch ohne Termin"
+        "en": "After 0.6.0",
+        "de": "Nach 0.6.0"
       },
       "intro": {
-        "en": "Two official add-ons follow 0.6.0.",
-        "de": "Auf 0.6.0 folgen zwei offizielle Add-ons."
+        "en": "Two more official add-ons follow 0.6.0, then a version for Minecraft 1.21.1.",
+        "de": "Auf 0.6.0 folgen zwei weitere offizielle Add-ons, danach eine Version für Minecraft 1.21.1."
       },
       "groups": [
         {
@@ -913,8 +960,8 @@
                 "de": "Propwash: Mob Defense"
               },
               "text": {
-                "en": "A dispenser, spears and a rocket boost for your drone – and hostile mobs that react to drones.",
-                "de": "Dispenser, Speere und Raketen-Boost für deine Drohne – und feindliche Mobs, die auf Drohnen reagieren."
+                "en": "Drone accessories against mobs: a dispenser at the front, spears and a rocket boost – and mobs that react to drones.",
+                "de": "Drohnen-Zubehör gegen Mobs: Dispenser vorne, Speere und Raketen-Boost – und Mobs, die auf Drohnen reagieren."
               }
             },
             {
@@ -926,26 +973,12 @@
                 "de": "Programmierbare Kameradrohnen"
               },
               "text": {
-                "en": "Drones that fly on their own: waypoints, position hold, gimbal, follow me and point of interest.",
-                "de": "Drohnen, die selbst fliegen: Wegpunkte, Position halten, Gimbal, Follow me und Point of Interest."
+                "en": "Drones that fly on their own: waypoints, position hold, follow me, point of interest and a gimbal for a second pilot.",
+                "de": "Drohnen, die selbst fliegen: Wegpunkte, Position halten, Follow me, Point of Interest und ein Gimbal für einen zweiten Piloten."
               }
             }
           ]
-        }
-      ]
-    },
-    {
-      "id": "later",
-      "icon": "port",
-      "label": {
-        "en": "Later",
-        "de": "Später"
-      },
-      "title": {
-        "en": "After the add-ons",
-        "de": "Nach den Add-ons"
-      },
-      "groups": [
+        },
         {
           "title": {
             "en": "For more Minecraft versions",
@@ -977,8 +1010,8 @@
         "de": "Ideen"
       },
       "title": {
-        "en": "Being considered",
-        "de": "In Überlegung"
+        "en": "Maybe later",
+        "de": "Vielleicht später"
       },
       "intro": {
         "en": "Nothing here is promised yet. Tell us on the Discord what you would like to see.",
@@ -987,6 +1020,32 @@
       "groups": [
         {
           "items": [
+            {
+              "id": "fixed-wing",
+              "icon": "arrow",
+              "status": "idea",
+              "title": {
+                "en": "Fixed-wing add-on",
+                "de": "Add-on für Flächenflieger"
+              },
+              "text": {
+                "en": "Planes instead of quads: an add-on for flying fixed-wing FPV.",
+                "de": "Flugzeuge statt Quads: ein Add-on für FPV mit Flächenfliegern."
+              }
+            },
+            {
+              "id": "bullet-drones",
+              "icon": "prop",
+              "status": "idea",
+              "title": {
+                "en": "Slim bullet drones",
+                "de": "Schlanke Bullet-Drohnen"
+              },
+              "text": {
+                "en": "Long, slim “bullet” drones built for top speed – as a future add-on.",
+                "de": "Lange, schlanke „Bullet“-Drohnen für Topspeed – als künftiges Add-on."
+              }
+            },
             {
               "id": "community",
               "icon": "chat",
