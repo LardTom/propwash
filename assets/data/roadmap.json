@@ -13,14 +13,14 @@
         "de": "Schon da"
       },
       "intro": {
-        "en": "Everything here is in the current version – download it and fly.",
-        "de": "Alles hier steckt in der aktuellen Version – runterladen und losfliegen."
+        "en": "Everything here is in the current version. The newest 0.5.x versions are still in the platforms’ review and show up on CurseForge once it is through.",
+        "de": "Alles hier steckt in der aktuellen Version. Die neuesten 0.5.x-Versionen sind bei den Plattformen noch in Prüfung und erscheinen danach auf CurseForge."
       },
       "link": {
-        "href": "https://github.com/LardTom/propwash-fpv/releases/latest",
+        "href": "https://www.curseforge.com/minecraft/mc-mods/propwash-fpv",
         "label": {
-          "en": "Download on GitHub",
-          "de": "Download auf GitHub"
+          "en": "Download on CurseForge",
+          "de": "Download auf CurseForge"
         }
       },
       "groups": [
@@ -711,28 +711,171 @@
         "de": "Im nächsten Update"
       },
       "intro": {
-        "en": "Being built and tested right now for the next update.",
-        "de": "Wird gerade für das nächste Update gebaut und getestet."
+        "en": "Planned for the next big update after 0.5.2.",
+        "de": "Geplant für das nächste große Update nach 0.5.2."
       },
       "groups": [
         {
-          "version": "0.5.3",
+          "version": "0.6.0",
           "title": {
-            "en": "Bug fixes",
-            "de": "Fehlerbehebungen"
+            "en": "Servers, game modes and share codes",
+            "de": "Server, Spielmodi und Sharecodes"
           },
           "items": [
             {
-              "id": "fixes-053",
-              "icon": "bug",
+              "id": "sharecodes-pw3",
+              "icon": "code",
               "status": "planned",
               "title": {
-                "en": "Bug fix release",
-                "de": "Bugfix-Update"
+                "en": "Share codes for every add-on",
+                "de": "Sharecodes für alle Add-ons"
               },
               "text": {
-                "en": "Fixes for what you find and report after 0.5.2.",
-                "de": "Korrekturen für das, was du nach 0.5.2 findest und meldest."
+                "en": "One share code (PW3) for drones with parts from any add-on – your old codes are converted automatically.",
+                "de": "Ein Sharecode (PW3) für Drohnen mit Teilen aus jedem Add-on – deine alten Codes werden automatisch umgewandelt."
+              }
+            },
+            {
+              "id": "addon-api",
+              "icon": "puzzle",
+              "status": "planned",
+              "title": {
+                "en": "More add-on API",
+                "de": "Mehr Add-on-API"
+              },
+              "text": {
+                "en": "Switch functions, OSD elements and collision hooks for add-ons.",
+                "de": "Schalterfunktionen, OSD-Elemente und Kollisions-Haken für Add-ons."
+              }
+            },
+            {
+              "id": "addon-guidelines",
+              "icon": "book",
+              "status": "planned",
+              "title": {
+                "en": "Add-on guidelines",
+                "de": "Richtlinien für Add-ons"
+              },
+              "text": {
+                "en": "Clear guidelines for add-on makers, and the namespace “propwash” is reserved for Propwash itself.",
+                "de": "Klare Richtlinien für Add-on-Macher, und der Namensraum „propwash“ ist für Propwash selbst reserviert."
+              }
+            },
+            {
+              "id": "propwash-server",
+              "icon": "flag",
+              "status": "planned",
+              "title": {
+                "en": "Propwash: Server",
+                "de": "Propwash: Server"
+              },
+              "text": {
+                "en": "Game modes for your server: races, time trials and zone games, with their own maps and results.",
+                "de": "Spielmodi für deinen Server: Rennen, Zeitfahren und Zonen-Spiele, mit eigenen Maps und Ergebnissen."
+              }
+            },
+            {
+              "id": "flight-path-marker",
+              "icon": "compass",
+              "status": "planned",
+              "title": {
+                "en": "Velocity vector in the OSD",
+                "de": "Geschwindigkeitsvektor im OSD"
+              },
+              "text": {
+                "en": "A marker in the OSD that shows where your drone is really flying, not just where its nose points.",
+                "de": "Eine Markierung im OSD, die zeigt, wohin deine Drohne wirklich fliegt – nicht nur, wohin ihre Nase zeigt."
+              }
+            },
+            {
+              "id": "freecam-drone",
+              "icon": "cinema",
+              "status": "planned",
+              "title": {
+                "en": "Freecam drone",
+                "de": "Freecam-Drohne"
+              },
+              "text": {
+                "en": "A drone that flies through blocks like a free camera – for scouting, filming and looking around.",
+                "de": "Eine Drohne, die wie eine freie Kamera durch Blöcke fliegt – zum Erkunden, Filmen und Umschauen."
+              }
+            },
+            {
+              "id": "rx-block",
+              "icon": "gate",
+              "status": "planned",
+              "title": {
+                "en": "RX block",
+                "de": "RX-Block"
+              },
+              "text": {
+                "en": "A receiver block that turns one channel of your radio into a redstone signal – while you keep flying.",
+                "de": "Ein Empfänger-Block, der einen Kanal deiner Funke in ein Redstone-Signal verwandelt – während du weiterfliegst."
+              }
+            },
+            {
+              "id": "camera-angle-menu",
+              "icon": "tilt",
+              "status": "planned",
+              "title": {
+                "en": "Camera angle in the K menu",
+                "de": "Kamerawinkel im K-Menü"
+              },
+              "text": {
+                "en": "Set the camera angle in the configurator too, not only in the drone’s service menu.",
+                "de": "Den Kamerawinkel auch im Konfigurator einstellen, nicht nur im Wartungsmenü der Drohne."
+              }
+            },
+            {
+              "id": "gate-tutorial",
+              "icon": "school",
+              "status": "planned",
+              "title": {
+                "en": "Gate tutorial",
+                "de": "Gate-Tutorial"
+              },
+              "text": {
+                "en": "A short tutorial the first time you place a gate, so you find everything gates can do.",
+                "de": "Ein kurzes Tutorial, wenn du zum ersten Mal ein Gate setzt – damit du alles findest, was Gates können."
+              }
+            },
+            {
+              "id": "slime-wool",
+              "icon": "impact",
+              "status": "planned",
+              "title": {
+                "en": "Slime and wool",
+                "de": "Schleim und Wolle"
+              },
+              "text": {
+                "en": "Slime blocks bounce your drone back, wool catches it softly – and you can take off from wool.",
+                "de": "Schleimblöcke federn deine Drohne zurück, Wolle fängt sie weich ab – und von Wolle kannst du starten."
+              }
+            },
+            {
+              "id": "jmp-whoop-motors",
+              "icon": "prop",
+              "status": "planned",
+              "title": {
+                "en": "More whoop motors in Just More Parts",
+                "de": "Mehr Whoop-Motoren in Just More Parts"
+              },
+              "text": {
+                "en": "More high-KV motors for whoops in the add-on Just More Parts.",
+                "de": "Mehr Motoren mit hoher KV für Whoops im Add-on Just More Parts."
+              }
+            },
+            {
+              "id": "website-faq-languages",
+              "icon": "chat",
+              "status": "planned",
+              "title": {
+                "en": "More FAQ and languages on the website",
+                "de": "Mehr FAQ und Sprachen auf der Website"
+              },
+              "text": {
+                "en": "More answers in the FAQ and the website in more languages.",
+                "de": "Mehr Antworten in den FAQ und die Website in weiteren Sprachen."
               }
             }
           ]
@@ -750,6 +893,58 @@
         "en": "Planned, no date yet",
         "de": "Geplant, noch ohne Termin"
       },
+      "intro": {
+        "en": "Two official add-ons follow 0.6.0.",
+        "de": "Auf 0.6.0 folgen zwei offizielle Add-ons."
+      },
+      "groups": [
+        {
+          "title": {
+            "en": "Official add-ons",
+            "de": "Offizielle Add-ons"
+          },
+          "items": [
+            {
+              "id": "mob-defense",
+              "icon": "gripper",
+              "status": "planned",
+              "title": {
+                "en": "Propwash: Mob Defense",
+                "de": "Propwash: Mob Defense"
+              },
+              "text": {
+                "en": "A dispenser, spears and a rocket boost for your drone – and hostile mobs that react to drones.",
+                "de": "Dispenser, Speere und Raketen-Boost für deine Drohne – und feindliche Mobs, die auf Drohnen reagieren."
+              }
+            },
+            {
+              "id": "camera-drones",
+              "icon": "cinema",
+              "status": "planned",
+              "title": {
+                "en": "Programmable camera drones",
+                "de": "Programmierbare Kameradrohnen"
+              },
+              "text": {
+                "en": "Drones that fly on their own: waypoints, position hold, gimbal, follow me and point of interest.",
+                "de": "Drohnen, die selbst fliegen: Wegpunkte, Position halten, Gimbal, Follow me und Point of Interest."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "later",
+      "icon": "port",
+      "label": {
+        "en": "Later",
+        "de": "Später"
+      },
+      "title": {
+        "en": "After the add-ons",
+        "de": "Nach den Add-ons"
+      },
       "groups": [
         {
           "title": {
@@ -766,21 +961,8 @@
                 "de": "Minecraft 1.21.1"
               },
               "text": {
-                "en": "A backport to Minecraft 1.21.1 is coming. It gets less upkeep than the 26.3 version, with updates now and then.",
-                "de": "Ein Backport auf Minecraft 1.21.1 kommt. Er wird weniger gepflegt als die 26.3-Version, Updates gibt es gelegentlich."
-              }
-            },
-            {
-              "id": "port-26-2",
-              "icon": "port",
-              "status": "planned",
-              "title": {
-                "en": "Minecraft 26.2",
-                "de": "Minecraft 26.2"
-              },
-              "text": {
-                "en": "A port to Minecraft 26.2 is coming. It gets less upkeep than the 26.3 version too, with updates now and then.",
-                "de": "Ein Port auf Minecraft 26.2 kommt. Auch er wird weniger gepflegt als die 26.3-Version, Updates gibt es gelegentlich."
+                "en": "A backport to Minecraft 1.21.1 for Fabric and NeoForge – with less upkeep than the 26.3 version and updates now and then.",
+                "de": "Ein Backport auf Minecraft 1.21.1 für Fabric und NeoForge – weniger gepflegt als die 26.3-Version, mit gelegentlichen Updates."
               }
             }
           ]
