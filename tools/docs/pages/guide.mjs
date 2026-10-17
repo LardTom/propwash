@@ -118,6 +118,7 @@ export default function guidePage(ctx) {
     { id: 'start', title: { en: 'Before you start', de: 'Bevor es losgeht' } },
     { id: 'first-flight', title: { en: 'First flight', de: 'Erster Flug' } },
     { id: 'radio', title: { en: 'Radio, gamepad, keyboard', de: 'Funke, Gamepad, Tastatur' } },
+    { id: 'radio-not-detected', title: { en: 'Radio or controller not detected', de: 'Funke oder Controller wird nicht erkannt' } },
     { id: 'controls', title: { en: 'Keys', de: 'Tasten' } },
     { id: 'modes', title: { en: 'Flight modes and tuning', de: 'Flugmodi und Tuning' } },
     { id: 'racing', title: { en: 'Gates and courses', de: 'Gates und Kurse' } },
@@ -130,8 +131,8 @@ export default function guidePage(ctx) {
 
   const start = section('start', toc[0].title, `
 ${list([
-    [`Propwash FPV ${meta.propwash} runs on Minecraft ${meta.minecraft} with <strong>Fabric</strong> (with Fabric API) or <strong>NeoForge</strong>. Download it from <a href="https://github.com/LardTom/propwash-fpv/releases/latest" target="_blank" rel="noopener">GitHub</a>; <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> and <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a> are still reviewing the new versions.`,
-      `Propwash FPV ${meta.propwash} läuft auf Minecraft ${meta.minecraft} mit <strong>Fabric</strong> (mit Fabric API) oder <strong>NeoForge</strong>. Herunterladen auf <a href="https://github.com/LardTom/propwash-fpv/releases/latest" target="_blank" rel="noopener">GitHub</a>; <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> und <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a> prüfen die neuen Versionen noch.`],
+    [`Propwash FPV ${meta.propwash} runs on Minecraft ${meta.minecraft} with <strong>Fabric</strong> (with Fabric API) or <strong>NeoForge</strong>. Download it from <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> or <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a>; every new version goes through the platforms’ manual review first, which can take a while.`,
+      `Propwash FPV ${meta.propwash} läuft auf Minecraft ${meta.minecraft} mit <strong>Fabric</strong> (mit Fabric API) oder <strong>NeoForge</strong>. Herunterladen auf <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> oder <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a>; jede neue Version geht dort zuerst durch eine manuelle Prüfung, die eine Weile dauern kann.`],
     ['On a server, Propwash goes on the server <em>and</em> on every client. Add-ons such as Just More Parts also go on both sides.', 'Auf einem Server gehört Propwash auf den Server <em>und</em> auf jeden Client. Add-ons wie Just More Parts ebenfalls auf beide Seiten.'],
     ['In creative mode the <em>Propwash FPV</em> tab has five ready-to-fly drones (Whoop, Cinewhoop, Freestyle, Racer, Long Range) and every part. In survival you craft the parts or find them in chests.', 'Im Kreativmodus hat der Tab <em>Propwash FPV</em> fünf flugfertige Drohnen (Whoop, Cinewhoop, Freestyle, Racer, Long Range) und alle Teile. Im Überlebensmodus stellst du die Teile her oder findest sie in Truhen.'],
     ['A real RC radio is the best way to fly, but a gamepad or the keyboard work too.', 'Am besten fliegt es sich mit einer echten Funke, ein Gamepad oder die Tastatur gehen aber auch.'],
@@ -163,6 +164,8 @@ ${note('With an empty hand, right-clicking a drone picks it up; battery, tune an
 ${h3('radio-edgetx', 'EdgeTX and OpenTX radios', 'EdgeTX- und OpenTX-Funken')}
 ${P('Connect the radio by USB and choose <strong>USB Joystick (HID)</strong> on the radio. Propwash detects it on its own and starts with channel order AETR, AUX1 = arm, AUX2 = flight mode (low Acro, middle Horizon, high Angle), AUX3 = beeper, AUX4 = rescue and full-travel throttle.',
     'Die Funke per USB anschließen und an der Funke <strong>USB Joystick (HID)</strong> wählen. Propwash erkennt sie selbst und startet mit der Kanalreihenfolge AETR, AUX1 = Scharfschalten, AUX2 = Flugmodus (unten Acro, Mitte Horizon, oben Angle), AUX3 = Piepser, AUX4 = Rescue und Gas über den vollen Weg.')}
+${P('Radio not showing up? See <a href="#radio-not-detected">Radio or controller not detected</a>.',
+    'Die Funke taucht nicht auf? Siehe <a href="#radio-not-detected">Funke oder Controller wird nicht erkannt</a>.')}
 ${h3('radio-wizard', 'Setting up a new device', 'Ein neues Gerät einrichten')}
 ${P('The first time a radio or gamepad shows up, Propwash asks whether to set it up now (never mid-flight): <em>Set up</em>, <em>Later</em> or <em>Never for this device</em>. The receiver wizard (configurator <kbd>K</kbd> → <em>Receiver</em> → <em>Receiver wizard…</em>) then walks you through five steps:',
     'Taucht eine Funke oder ein Gamepad zum ersten Mal auf, fragt Propwash, ob es jetzt eingerichtet werden soll (nie mitten im Flug): <em>Einrichten</em>, <em>Später</em> oder <em>Nie für dieses Gerät</em>. Der Empfänger-Assistent (Konfigurator <kbd>K</kbd> → <em>Empfänger</em> → <em>Empfänger-Assistent…</em>) führt dann durch fünf Schritte:')}
@@ -229,7 +232,66 @@ ${note('The <em>Video</em> tab of the configurator shows exactly the settings of
 `);
 
   const keyHeaders = [['Action', 'Aktion'], ['Default key', 'Standardtaste']];
-  const controlsSection = section('controls', toc[3].title, `
+  const notDetected = section('radio-not-detected', toc[3].title, `
+${P('The receiver wizard says “No radio and no gamepad found.” or your radio is missing from the device list? Go through these points in order. Until it works, you can always fly with the keyboard.',
+    'Der Empfänger-Assistent meldet „Keine Funke und kein Gamepad gefunden.“, oder deine Funke fehlt in der Geräteliste? Geh diese Punkte der Reihe nach durch. Bis es klappt, kannst du immer mit der Tastatur fliegen.')}
+${h3('not-detected-usb', 'Radio: USB joystick mode and cable', 'Funke: USB-Joystick-Modus und Kabel')}
+${list([
+    ['When you plug the radio in, EdgeTX and OpenTX ask what the USB connection is for: choose <strong>USB Joystick (HID)</strong>. In storage (SD card) or serial mode, or while it only charges, the radio is no controller for the computer.',
+      'Beim Einstecken fragen EdgeTX und OpenTX, wofür die USB-Verbindung da ist: Wähl <strong>USB Joystick (HID)</strong>. Im Speicher- (SD-Karte) oder Seriell-Modus oder wenn sie nur lädt, ist die Funke für den Rechner kein Controller.'],
+    ['If the radio doesn’t ask, look for the setting <em>USB mode</em> in its system settings and set it to <em>Ask</em> or <em>Joystick</em>.',
+      'Fragt die Funke nicht, such in ihren Systemeinstellungen die Einstellung <em>USB mode</em> und stell sie auf <em>Ask</em> oder <em>Joystick</em>.'],
+    ['Use a USB cable that carries data – many cables that come with chargers only carry power. Try another cable and another USB port, preferably directly on the computer instead of a hub.',
+      'Nimm ein USB-Kabel, das Daten überträgt – viele Ladekabel übertragen nur Strom. Probier ein anderes Kabel und einen anderen USB-Anschluss, am besten direkt am Rechner statt an einem Hub.'],
+    ['The radio system inside doesn’t matter: over USB, a radio with ExpressLRS, Crossfire or FrSky sends its sticks and switches straight to the computer, no receiver needed. It sends the channels of the selected model, so its mixes and switches apply.',
+      'Das Funksystem darin spielt keine Rolle: Über USB schickt eine Funke mit ExpressLRS, Crossfire oder FrSky ihre Knüppel und Schalter direkt an den Rechner, ganz ohne Empfänger. Sie sendet die Kanäle des gewählten Modells, dessen Mischer und Schalter gelten also.'],
+  ])}
+${h3('not-detected-check', 'Check what Propwash sees', 'Prüfen, was Propwash sieht')}
+${list([
+    ['Open the configurator with <kbd>K</kbd> → <em>Receiver</em>. The <em>Device</em> list shows the radios and gamepads that are connected. <em>Automatic</em> takes the most recently used device that is set up, otherwise radios before gamepads; <em>Keyboard</em> always flies with the keyboard, even with a controller connected. If your radio is listed but not used, pick it there.',
+      'Öffne den Konfigurator mit <kbd>K</kbd> → <em>Empfänger</em>. Die Liste <em>Gerät</em> zeigt die angeschlossenen Funken und Gamepads. <em>Automatisch</em> nimmt das zuletzt benutzte eingerichtete Gerät, sonst Funken vor Gamepads; <em>Tastatur</em> fliegt immer mit der Tastatur, auch wenn ein Controller angeschlossen ist. Steht deine Funke in der Liste, wird aber nicht benutzt, wähl sie dort aus.'],
+    ['The receiver wizard (<em>Receiver wizard…</em> in the same tab) lists every device the game’s controller support reports, with its axes and buttons. If your radio is there, follow its <a href="#radio-wizard">five steps</a>.',
+      'Der Empfänger-Assistent (<em>Empfänger-Assistent…</em> im selben Tab) zeigt jedes Gerät, das die Controller-Unterstützung des Spiels meldet, mit seinen Achsen und Tasten. Ist deine Funke dabei, folge seinen <a href="#radio-wizard">fünf Schritten</a>.'],
+    ['Detected, but the sticks move the wrong things? That is the setup, not the detection: check the <a href="#radio-stick-mode">stick mode</a>, and for radios <em>Read as</em> → <em>Raw axes</em> in the <em>Receiver</em> tab (<em>Gamepad layout</em> is for gamepads).',
+      'Erkannt, aber die Knüppel steuern das Falsche? Das liegt an der Einrichtung, nicht an der Erkennung: Prüf den <a href="#radio-stick-mode">Knüppel-Mode</a> und bei Funken im Tab <em>Empfänger</em> <em>Lesart</em> → <em>Rohdaten</em> (<em>Gamepad-Layout</em> ist für Gamepads).'],
+  ])}
+${h3('not-detected-macos', 'macOS', 'macOS')}
+${list([
+    ['Propwash finds radios such as the Radiomaster Pocket without Apple’s GameController framework – that is the default. If <em>Apple GameController</em> under <em>Receiver → Advanced (macOS)</em> is on and your radio is missing, turn it off: otherwise macOS takes over some radios without passing them on. Propwash searches for controllers again right after saving.',
+      'Propwash findet Funken wie die Radiomaster Pocket ohne Apples GameController-Framework – so ist es voreingestellt. Ist <em>Apples GameController</em> unter <em>Empfänger → Erweitert (macOS)</em> an und fehlt deine Funke, schalte es aus: Sonst übernimmt macOS manche Funken, ohne sie weiterzugeben. Nach dem Speichern sucht Propwash die Controller sofort neu.'],
+    ['A pure MFi gamepad that only works through Apple’s GameController framework shows up once you turn <em>Apple GameController</em> on. PlayStation, Switch Pro and Xbox controllers work with it off.',
+      'Ein reines MFi-Gamepad, das nur über Apples GameController-Framework läuft, erscheint erst, wenn du <em>Apples GameController</em> einschaltest. PlayStation-, Switch-Pro- und Xbox-Controller laufen auch, wenn es aus ist.'],
+    ['If the switch is greyed out, your launcher sets the environment variable <code>SDL_JOYSTICK_MFI</code>, and that decides: <code>0</code> = framework off, better for radios. Remove the variable in the launcher instance (in Prism Launcher: edit instance → Settings → Environment variables) to switch it in the game. If another mod starts the controller support before Propwash, set <code>SDL_JOYSTICK_MFI=0</code> in the launcher.',
+      'Ist der Schalter ausgegraut, setzt dein Launcher die Umgebungsvariable <code>SDL_JOYSTICK_MFI</code>, und die entscheidet: <code>0</code> = Framework aus, besser für Funken. Entfern die Variable in der Launcher-Instanz (im Prism Launcher: Instanz bearbeiten → Einstellungen → Umgebungsvariablen), um im Spiel umzuschalten. Startet ein anderer Mod die Controller-Unterstützung vor Propwash, setz <code>SDL_JOYSTICK_MFI=0</code> im Launcher.'],
+    ['If macOS asks whether your launcher or Java may monitor input, allow it and restart Minecraft. You find the switch later under System Settings → Privacy &amp; Security → Input Monitoring.',
+      'Fragt macOS, ob dein Launcher oder Java Eingaben überwachen darf, erlaub es und starte Minecraft neu. Den Schalter findest du später unter Systemeinstellungen → Datenschutz &amp; Sicherheit → Eingabeüberwachung.'],
+  ])}
+${h3('not-detected-windows-linux', 'Windows and Linux', 'Windows und Linux')}
+${list([
+    ['<strong>Windows:</strong> a radio in joystick mode needs no driver, it shows up as a game controller. Check it in <em>Set up USB game controllers</em> (type <code>joy.cpl</code> into the Start menu): if it is missing there too, it is the cable, the port or the USB mode.',
+      '<strong>Windows:</strong> Eine Funke im Joystick-Modus braucht keinen Treiber, sie erscheint als Gamecontroller. Prüf das unter <em>USB-Gamecontroller einrichten</em> (<code>joy.cpl</code> ins Startmenü tippen): Fehlt sie auch dort, liegt es am Kabel, am Anschluss oder am USB-Modus.'],
+    ['<strong>Linux:</strong> the radio shows up as a joystick input device. If another program sees it but Minecraft doesn’t, check that your user may read input devices and that a sandboxed launcher (Flatpak, Snap) may access devices.',
+      '<strong>Linux:</strong> Die Funke erscheint als Joystick-Eingabegerät. Sieht ein anderes Programm sie, Minecraft aber nicht, prüf, ob dein Benutzer Eingabegeräte lesen darf und ob ein Launcher in einer Sandbox (Flatpak, Snap) auf Geräte zugreifen darf.'],
+  ])}
+${h3('not-detected-gamepads', 'Gamepads and Bluetooth', 'Gamepads und Bluetooth')}
+${list([
+    ['Gamepads are detected automatically, over USB or Bluetooth. Pair a Bluetooth gamepad in the system settings first; it then appears like a wired one.',
+      'Gamepads werden automatisch erkannt, per USB oder Bluetooth. Ein Bluetooth-Gamepad koppelst du zuerst in den Systemeinstellungen, danach erscheint es wie ein angeschlossenes.'],
+    ['A radio or ExpressLRS module that connects as a Bluetooth game controller (such as ExpressLRS’ <em>BLE Joystick</em>) is paired the same way. USB is the most reliable connection, though.',
+      'Eine Funke oder ein ExpressLRS-Modul, das sich als Bluetooth-Gamecontroller verbindet (etwa der <em>BLE Joystick</em> von ExpressLRS), koppelst du genauso. Am zuverlässigsten ist aber USB.'],
+    ['On macOS, a wired Xbox 360 controller needs the driver <em>360Controller</em>.',
+      'Auf macOS braucht ein Xbox-360-Controller per Kabel den Treiber <em>360Controller</em>.'],
+  ])}
+${h3('not-detected-still', 'Still not found', 'Immer noch nicht gefunden')}
+${list([
+    ['Fly with the keyboard in the meantime: turn on <em>Keyboard flight</em> in the <em>Receiver</em> tab.',
+      'Flieg so lange mit der Tastatur: Schalte im Tab <em>Empfänger</em> den <em>Tastaturflug</em> ein.'],
+    ['Propwash writes to <code>logs/latest.log</code> in your Minecraft folder: a line starting with <code>Propwash: Controller verbunden</code> for every device it sees, and <code>Propwash: SDL findet keine Controller</code> with your system when it sees none. Bring that line along when you ask on the <a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener">Propwash Discord</a>.',
+      'Propwash schreibt in <code>logs/latest.log</code> deines Minecraft-Ordners: für jedes erkannte Gerät eine Zeile, die mit <code>Propwash: Controller verbunden</code> beginnt, und <code>Propwash: SDL findet keine Controller</code> mit deinem System, wenn es keines findet. Bring diese Zeile mit, wenn du auf dem <a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener">Propwash-Discord</a> fragst.'],
+  ])}
+`);
+
+  const controlsSection = section('controls', toc[4].title, `
 ${P('Every function has its own key. Change them in the configurator’s <em>Keys</em> tab or under <em>Options → Controls → Key Binds → Propwash FPV</em>. The defaults are key positions on a US layout; the game shows them with your keyboard’s labels (on a German keyboard the arm key shows as <kbd>Y</kbd> and the stop key as <kbd>Z</kbd>).',
     'Jede Funktion hat ihre eigene Taste. Ändern im Konfigurator-Tab <em>Tasten</em> oder unter <em>Optionen → Steuerung → Tastenbelegung → Propwash FPV</em>. Die Standards sind Tastenpositionen auf einer US-Tastatur; das Spiel zeigt sie mit den Beschriftungen deiner Tastatur (auf einer deutschen Tastatur heißt die Arm-Taste <kbd>Y</kbd> und die Stopp-Taste <kbd>Z</kbd>).')}
 ${P('<strong>Search the configurator</strong> with <kbd>Ctrl</kbd>+<kbd>F</kbd> (<kbd>Cmd</kbd>+<kbd>F</kbd> on a Mac) or the search box at the top right: type in English or German, pick a suggestion and the configurator opens the tab, scrolls to the setting, world rule or key binding and highlights it.',
@@ -248,7 +310,7 @@ ${note('Right-clicking with the radio also ends a flight. The rotate-gate key sh
     'Rechtsklick mit der Funke beendet ebenfalls einen Flug. Die Taste „Gate drehen“ teilt sich <kbd>R</kbd> absichtlich mit dem Flugmodus: Die eine wirkt nur mit einem Gate in der Hand, die andere nur im Flug.')}
 `);
 
-  const modes = section('modes', toc[4].title, `
+  const modes = section('modes', toc[5].title, `
 ${list([
     ['<strong>Acro</strong> (rate mode) holds the angle you leave it at, like a real freestyle or racing quad. <strong>Angle</strong> levels itself and limits the tilt. <strong>Horizon</strong> levels near the centre and flips at full stick.', '<strong>Acro</strong> (Rate-Modus) hält den Winkel, in dem du sie lässt, wie ein echter Freestyle- oder Race-Quad. <strong>Angle</strong> richtet sich selbst gerade und begrenzt die Neigung. <strong>Horizon</strong> richtet sich in der Mitte gerade und flippt bei vollem Ausschlag.'],
     ['<strong>ALTHOLD</strong> and <strong>POSHOLD</strong> hold height and position on simulated barometer, GPS and compass, so they never hold perfectly. Without a GPS fix POSHOLD only holds the height.', '<strong>ALTHOLD</strong> und <strong>POSHOLD</strong> halten Höhe und Position mit simuliertem Barometer, GPS und Kompass, also nie perfekt. Ohne GPS-Fix hält POSHOLD nur die Höhe.'],
@@ -268,7 +330,7 @@ ${list([
   ])}
 `);
 
-  const racing = section('racing', toc[5].title, `
+  const racing = section('racing', toc[6].title, `
 ${P('Gates and course elements are placed like blocks and joined into a course with the <em>Course Tool</em>: click them in order, the first gate is start and finish. Laps, splits, ghosts, the race line and leaderboards work the same for every gate and element.',
     'Gates und Kurs-Elemente stellst du wie Blöcke auf und verbindest sie mit dem <em>Kurs-Werkzeug</em> zu einem Kurs: der Reihe nach anklicken, das erste Gate ist Start und Ziel. Runden, Splits, Geister, Ideallinie und Bestenlisten funktionieren für jedes Gate und Element gleich.')}
 ${h3('racing-gates', 'Turning gates freely', 'Gates frei drehen')}
@@ -348,7 +410,7 @@ ${list([
   ])}
 `);
 
-  const video = section('video', toc[6].title, `
+  const video = section('video', toc[7].title, `
 ${list([
     ['<strong>Image format</strong> (<em>Video</em> tab): <em>16:9</em> fills the whole window as before; <em>4:3</em> shows the picture like analog goggles, with black bars left and right, more view above and below and the OSD inside the 4:3 image; <em>Auto</em> picks 4:3 for analog and 16:9 for digital video, also while spectating. The setting is personal and changes nothing for the server or the flight model.', '<strong>Bildformat</strong> (Tab <em>Video</em>): <em>16:9</em> füllt wie bisher das ganze Fenster; <em>4:3</em> zeigt das Bild wie eine analoge Brille, mit schwarzen Rändern links und rechts, mehr Sicht oben und unten und dem OSD im 4:3-Bild; <em>Auto</em> nimmt 4:3 für analoges und 16:9 für digitales Video, auch beim Zuschauen. Die Einstellung ist persönlich und ändert nichts für Server oder Flugmodell.'],
     ['<strong>Video behind obstacles:</strong> blocks between you and the drone weaken analog and digital video like real walls: one block of stone, brick, planks or concrete dampens about like one house wall, a thick wall of building blocks at most like two; glass, leaves and wool cost much less. Hills of any kind (also badlands mesas, sandstone cliffs and End islands), caves, deep water and metal still cut the link, and around edges the signal bends, so the picture fades in and out at a house corner. With nothing in the way the range is the same as before.', '<strong>Video hinter Hindernissen:</strong> Blöcke zwischen dir und der Drohne schwächen analoges und digitales Video wie echte Wände: Ein Block Stein, Ziegel, Bretter oder Beton dämpft etwa wie eine Hauswand, eine dicke Wand aus Baublöcken höchstens wie zwei; Glas, Laub und Wolle kosten viel weniger. Hügel jeder Art (auch Tafelberge der Badlands, Sandsteinfelsen und End-Inseln), Höhlen, tiefes Wasser und Metall trennen die Verbindung weiterhin, um Kanten beugt sich das Signal, an einer Hausecke wird das Bild also schwächer und wieder besser. Ohne Hindernis ist die Reichweite dieselbe wie bisher.'],
@@ -451,7 +513,7 @@ ${P('With the Flashback replay mod, the action cam saves your flight as a camera
     'Mit der Replay-Mod Flashback speichert die Action-Cam deinen Flug als Kamerapfad. Flashbacks Zeitleiste kann je Szene nur eine begrenzte Zahl Keyframes zeichnen; deshalb dünnt die <em>Flashback-Obergrenze</em> im Tab <em>Action-Cam</em> (Standard an) lange Flüge beim Speichern aus, bis sie passen, und nennt, wie genau der Pfad geblieben ist. <em>Vereinfachung</em> legt fest, wie stark der Pfad vereinfacht werden darf, mit einer Vorschau des echten und des gespeicherten Pfads; <em>Aufnahmen prüfen</em> findet zu große Szenen und dünnt sie aus, mit Sicherung der alten Datei. Das OSD-Element <em>Flashback-Zeitleiste</em> (<code>FB 43%</code>) zeigt während der Aufnahme, wie voll die Zeitleiste wäre.')}
 `);
 
-  const creative = section('creative', toc[7].title, `
+  const creative = section('creative', toc[8].title, `
 ${P('The <em>Creative Flight Controller</em> is only in the creative inventory (or <code>/give @s propwash:creative_fc</code>), with no recipe and no loot. It fits every frame, also from add-ons, takes 1S to 12S and turns the drone into a creative drone. The configurator then has the <em>Drone Editor</em> tab:',
     'Den <em>Kreativ-Flugcontroller</em> gibt es nur im Kreativ-Inventar (oder mit <code>/give @s propwash:creative_fc</code>), ohne Rezept und ohne Beute. Er passt in jeden Rahmen, auch aus Add-ons, verträgt 1S bis 12S und macht die Drohne zur Kreativ-Drohne. Im Konfigurator erscheint dann der Tab <em>Drohnen-Editor</em>:')}
 ${list([
@@ -465,7 +527,7 @@ ${list([
     const d = SERVER_FIELDS[f.name];
     return [mono(f.name), L(serverValue(f, f.default, 'en'), serverValue(f, f.default, 'de')), L(serverRange(f, 'en'), serverRange(f, 'de')), L(d.en, d.de)];
   });
-  const world = section('world', toc[8].title, `
+  const world = section('world', toc[9].title, `
 ${h3('world-waterproof', 'Waterproof drones', 'Wasserdichte Drohnen')}
 ${P(`A drone sprayed with <em>Waterproof Coating</em> arms, flies and disarms in water: the props bog down, it swims slowly (a 5″ about 1.4 m/s at full throttle) and climbs back out with full throttle. Craft the spray can from iron nuggets, a honeycomb and a resin clump; right-click a placed drone or combine drone and can in the crafting grid. One can coats ten drones (free in creative with a right-click). The coating stays when you swap props or the battery in the workbench; new frame, stack, motors, video or accessories need a fresh coat. The world rule <a href="${prefix}docs/gamerules/#rule-waterproof_drones"><em>Drones are waterproof</em></a> coats every drone (on in <em>Arcade</em>). Uncoated drones still short out in water, and lava ends every flight.`,
     `Eine mit <em>Wasserschutz-Spray</em> beschichtete Drohne schaltet im Wasser scharf, fliegt und schaltet wieder ab: Die Props laufen schwer, sie schwimmt langsam (ein 5-Zöller mit Vollgas etwa 1,4 m/s) und steigt mit Vollgas wieder heraus. Die Sprühdose entsteht aus Eisennuggets, einer Honigwabe und einem Harzklumpen; Rechtsklick auf eine platzierte Drohne oder Drohne und Dose zusammen ins Handwerksraster. Eine Dose reicht für zehn Drohnen (im Kreativmodus per Rechtsklick kostenlos). Die Beschichtung bleibt, wenn du in der Werkbank Props oder Akku tauschst; neuer Rahmen, Stack, neue Motoren, Video oder neues Zubehör brauchen eine neue Schicht. Die Welt-Regel <a href="${prefix}docs/gamerules/#rule-waterproof_drones"><em>Drohnen sind wasserdicht</em></a> beschichtet jede Drohne (in <em>Arcade</em> an). Unbeschichtete Drohnen schließen im Wasser weiter kurz, und Lava beendet jeden Flug.`)}
@@ -482,7 +544,7 @@ ${P('Journeyman cartographers sell a <em>Bando Map</em> for 10 emeralds and a co
 ${ctx.images.bando_map ? figure(prefix, ctx.images.bando_map, { en: 'A bando map held in hand, showing the way to a bando marked with its own icon', de: 'Eine Bando-Karte in der Hand, sie zeigt den Weg zu einem Bando mit eigenem Symbol' }) : ''}
 `);
 
-  const servers = section('servers', toc[9].title, `
+  const servers = section('servers', toc[10].title, `
 ${P(`Install Propwash on the server and on every client. Client and server need the same network protocol (Propwash ${meta.propwash}: protocol ${meta.protocol}); a mismatch is reported with both versions when you connect, and different add-ons are listed one by one (see <a href="#servers-addons">below</a>).`,
     `Propwash gehört auf den Server und auf jeden Client. Client und Server brauchen dasselbe Netzwerkprotokoll (Propwash ${meta.propwash}: Protokoll ${meta.protocol}); passt es nicht, nennt die Meldung beim Verbinden beide Versionen, und abweichende Add-ons stehen einzeln da (siehe <a href="#servers-addons">unten</a>).`)}
 ${h3('servers-rules', 'World rules', 'Welt-Regeln')}
@@ -565,7 +627,7 @@ ${list([
   ])}
 `);
 
-  const help = section('help', toc[10].title, list([
+  const help = section('help', toc[11].title, list([
     ['<strong>Flight School:</strong> press <kbd>M</kbd> in the world for all lessons, or hold it over an item in your inventory for the matching one. Animated 3D lessons cover building, binding, batteries, racing, free gates, flags and slalom, tricks, video, the action cam, the gripper, the configurator, rescue, hold modes, 3D mode, crashes, repairs, survival and bandos.', '<strong>Flugschule:</strong> <kbd>M</kbd> in der Welt öffnet alle Lektionen, über einem Item im Inventar gehalten die passende. Animierte 3D-Lektionen erklären Bauen, Binden, Akkus, Rennen, freie Gates, Flaggen und Slalom, Tricks, Video, die Action-Cam, den Greifer, den Konfigurator, Rescue, Halte-Modi, 3D-Modus, Abstürze, Reparaturen, Überleben und Bandos.'],
     ['<strong>Flight training:</strong> 20 hands-on lessons in five chapters, flown with your own drone through a holographic course that only you see – in the Flight School or with <kbd>M</kbd> while flying.', '<strong>Flugtraining:</strong> 20 Übungen in fünf Kapiteln, geflogen mit deiner eigenen Drohne durch einen Hologramm-Kurs, den nur du siehst – in der Flugschule oder mit <kbd>M</kbd> im Flug.'],
     ['<strong>Tooltips:</strong> hold <kbd>Shift</kbd> over any Propwash item.', '<strong>Tooltips:</strong> <kbd>Shift</kbd> über einem Propwash-Item halten.'],
@@ -586,6 +648,6 @@ ${list([
       de: 'Von der Teilekiste zum ersten FPV-Flug, die Funke einrichten und was Server-Betreiber wissen müssen.',
     },
     toc,
-    body: [start, first, radio, controlsSection, modes, racing, video, creative, world, servers, help].join('\n'),
+    body: [start, first, radio, notDetected, controlsSection, modes, racing, video, creative, world, servers, help].join('\n'),
   };
 }
