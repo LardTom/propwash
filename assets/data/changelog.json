@@ -54,8 +54,8 @@
                   "de": "Turtle-Modus auf einem Funkenschalter oder einer Taste (Ziffernblock 8) im Tab *Modi*: scharf schalten, solange die Drohne auf dem Kopf liegt, und den Knüppel zu der Seite drücken, über die sie kippen soll."
                 },
                 {
-                  "en": "Zones are made in the *World rules* tab, with a zone editor like *Adjust gate* or with `/propwash zone`; they show a subtle border, the OSD tells you when you fly in or out, and gravity and wind fade in smoothly.",
-                  "de": "Zonen entstehen im Tab *Welt-Regeln*, mit einem Zonen-Editor wie bei *Gate einstellen* oder mit `/propwash zone`; sie zeigen einen dezenten Rand, das OSD meldet Ein- und Ausfliegen, und Schwerkraft und Wind gleiten sanft über."
+                  "en": "Zones are easy to find at the top of the *World rules* tab, right below the presets; make them there with a zone editor like *Adjust gate* or with `/propwash zone`. They show a subtle border, the OSD tells you when you fly in or out, and gravity and wind fade in smoothly.",
+                  "de": "Zonen sind leicht zu finden: oben im Tab *Welt-Regeln*, direkt unter den Voreinstellungen; dort entstehen sie mit einem Zonen-Editor wie bei *Gate einstellen* oder mit `/propwash zone`. Sie zeigen einen dezenten Rand, das OSD meldet Ein- und Ausfliegen, und Schwerkraft und Wind gleiten sanft über."
                 },
                 {
                   "en": "VTX power from 25 mW up to 1600 mW in the *Video channel* tab, or step through it in flight with the *VTX power* switch or F10: more range and better penetration, but more battery drain and heat (*VTX OVERHEAT*). *Auto* is the default for every drone – digital systems follow their video link, analog ones let the flight controller follow your radio link – plus *Low when disarmed* like in Betaflight and an OSD element for the power.",
