@@ -13,8 +13,8 @@
         "de": "Schon da"
       },
       "intro": {
-        "en": "Everything here is in the current version – download it and fly.",
-        "de": "Alles hier steckt in der aktuellen Version – runterladen und losfliegen."
+        "en": "Everything here is in the current version. The newest 0.5.x versions are still in the platforms’ review and show up on CurseForge once it is through.",
+        "de": "Alles hier steckt in der aktuellen Version. Die neuesten 0.5.x-Versionen sind bei den Plattformen noch in Prüfung und erscheinen danach auf CurseForge."
       },
       "link": {
         "href": "https://www.curseforge.com/minecraft/mc-mods/propwash-fpv",
@@ -736,16 +736,16 @@
               }
             },
             {
-              "id": "accessory-actions",
+              "id": "addon-api",
               "icon": "puzzle",
               "status": "planned",
               "title": {
-                "en": "Accessory actions and more add-on API",
-                "de": "Zubehör mit Aktion und mehr Add-on-API"
+                "en": "More add-on API",
+                "de": "Mehr Add-on-API"
               },
               "text": {
-                "en": "Accessories that do something at the press of a switch, and more ways for add-ons to build on Propwash.",
-                "de": "Zubehör, das auf Knopfdruck etwas tut, und mehr Möglichkeiten für Add-ons, auf Propwash aufzubauen."
+                "en": "Switch functions, OSD elements and collision hooks for add-ons.",
+                "de": "Schalterfunktionen, OSD-Elemente und Kollisions-Haken für Add-ons."
               }
             },
             {
@@ -757,8 +757,8 @@
                 "de": "Richtlinien für Add-ons"
               },
               "text": {
-                "en": "Clear guidelines for add-on makers and a name reserved for Propwash, so add-ons never get in each other’s way.",
-                "de": "Klare Richtlinien für Add-on-Macher und ein für Propwash reservierter Name, damit sich Add-ons nie in die Quere kommen."
+                "en": "Clear guidelines for add-on makers, and the namespace “propwash” is reserved for Propwash itself.",
+                "de": "Klare Richtlinien für Add-on-Macher, und der Namensraum „propwash“ ist für Propwash selbst reserviert."
               }
             },
             {
