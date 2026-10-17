@@ -739,19 +739,19 @@
       ]
     },
     {
-      "id": "next",
-      "icon": "arrow",
+      "id": "now",
+      "icon": "prop",
       "label": {
-        "en": "Next",
-        "de": "Als Nächstes"
+        "en": "Now",
+        "de": "Jetzt"
       },
       "title": {
-        "en": "Planned, no date yet",
-        "de": "Geplant, noch ohne Termin"
+        "en": "In the next release",
+        "de": "Im nächsten Update"
       },
       "intro": {
-        "en": "The next big update after 0.5.2 – together with two add-ons.",
-        "de": "Das nächste große Update nach 0.5.2 – zusammen mit zwei Add-ons."
+        "en": "What we're building now: the next big update after 0.5.2 – together with two add-ons.",
+        "de": "Daran bauen wir gerade: das nächste große Update nach 0.5.2 – zusammen mit zwei Add-ons."
       },
       "groups": [
         {
