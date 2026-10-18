@@ -1,0 +1,268 @@
+/* Language support (tools/i18n/): the banner of the translated pages, the hint to a translation on the English and
+   German pages, the language menu in the navigation and the Cyrillic fonts of the Russian pages. Loaded once
+   another language is active. */
+
+/* Saira has no Cyrillic: the Russian pages take the Cyrillic letters of headings and text from Exo 2 and those of
+   the monospaced text from JetBrains Mono. Only pages with html[lang="ru"] name the families, so no other page
+   loads them. */
+@font-face {
+  font-family: "PW Saira Cyrillic";
+  src: url("../fonts/exo2-cyrillic-var.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0400-04FF, U+2116;
+}
+
+@font-face {
+  font-family: "PW Mono Cyrillic";
+  src: url("../fonts/jetbrains-mono-cyrillic-var.woff2") format("woff2");
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0400-04FF, U+2116;
+}
+
+html[lang="ru"] {
+  --font: "PW Saira", "PW Saira Cyrillic", "Saira", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "PW Mono", "PW Mono Cyrillic", ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* Scripts that still draw both official languages show the English one on the translated pages. */
+html:is([lang="es"], [lang="fr"], [lang="pt-BR"], [lang="pl"], [lang="ru"]) [lang="de"]:not(.keep) {
+  display: none !important;
+}
+
+/* Longer words of the other languages: tabs and buttons break them (with hyphens where the browser knows the
+   language) instead of cutting them off. */
+html:is([lang="es"], [lang="fr"], [lang="pt-BR"], [lang="pl"], [lang="ru"]) :is(button, [role="tab"]) {
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+/* Banner: under the header of every translated page, cannot be closed. */
+.i18n-banner,
+.i18n-hint {
+  border-bottom: 1px solid var(--border-soft);
+  background: var(--panel);
+  color: var(--text-2);
+}
+
+.i18n-banner__inner,
+.i18n-hint__inner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding-block: 10px;
+  border-left: 3px solid var(--accent);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.i18n-banner p,
+.i18n-hint p {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.i18n-banner a,
+.i18n-hint a {
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.i18n-banner__tag {
+  flex: none;
+  padding: 1px 6px;
+  border: 1px solid var(--accent-dim);
+  border-radius: 3px;
+  color: var(--accent);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.6;
+}
+
+.i18n-banner__links {
+  display: inline-block;
+}
+
+.i18n-hint__inner {
+  align-items: center;
+  padding-block: 6px;
+}
+
+.i18n-hint__close {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.i18n-hint__close:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.i18n-hint__close svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: square;
+}
+
+/* Language menu: a menu like "Features"; in the header bar only the globe, in the small-screen menu with its name. */
+.i18n-globe {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+}
+
+.i18n-tag {
+  margin-left: 6px;
+  padding: 0 5px;
+  border: 1px solid var(--border-strong);
+  border-radius: 3px;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  vertical-align: 1px;
+}
+
+.nav-group--lang .nav-group__panel a[aria-current] .nav-group__title {
+  color: var(--accent);
+}
+
+@media (min-width: 1100px) {
+  .nav-group--lang {
+    margin-left: 4px;
+  }
+  .nav-group--lang .nav-group__toggle {
+    padding-inline: 8px;
+  }
+  html:not(.nav-folded) .nav-group--lang .i18n-menu__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  html:not(.nav-folded) .nav-group--lang .nav-group__panel {
+    left: auto;
+    right: -8px;
+    width: max-content;
+    min-width: 220px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 1099px) {
+  .site-nav.is-open .nav-group--lang .nav-group__toggle {
+    justify-content: flex-start;
+  }
+  .site-nav.is-open .nav-group--lang .nav-group__chev {
+    margin-left: auto;
+  }
+}
+
+/* Header bar folded into the small-screen menu (main.js sets html.nav-folded when the navigation does not fit
+   from 1100 px on): the rules of the small-screen menu in style.css, for wide windows. */
+@media (min-width: 1100px) {
+  html.nav-folded .site-nav {
+    display: none;
+  }
+  html.nav-folded .nav-toggle {
+    display: grid;
+  }
+  html.nav-folded .social {
+    margin-left: auto;
+  }
+  html.nav-folded .site-nav.is-open {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px 12px;
+    max-height: calc(100vh - var(--header-h));
+    max-height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+    margin: 0;
+    padding: 12px max(var(--gutter), calc((100vw - 1240px) / 2 + var(--gutter))) 18px;
+    border-bottom: 1px solid var(--border);
+    background: #171717;
+    box-shadow: 0 24px 40px -24px rgba(0, 0, 0, 0.9);
+  }
+  html.nav-folded .site-nav.is-open > a:not(.site-nav__cta),
+  html.nav-folded .site-nav.is-open .nav-group__toggle {
+    min-height: 48px;
+    padding: 8px 12px;
+    border: 1px solid var(--border-soft);
+    background: var(--panel-2);
+    color: var(--text);
+    font-size: 1rem;
+  }
+  html.nav-folded .site-nav.is-open > a[aria-current]:not(.site-nav__cta) {
+    color: var(--accent);
+  }
+  html.nav-folded .site-nav.is-open > .site-nav__social {
+    display: inline-flex !important;
+  }
+  html.nav-folded .site-nav.is-open .nav-group {
+    grid-column: 1 / -1;
+  }
+  html.nav-folded .site-nav.is-open .nav-group__toggle {
+    width: 100%;
+    justify-content: space-between;
+  }
+  html.nav-folded .site-nav.is-open .nav-group--lang .nav-group__toggle {
+    justify-content: flex-start;
+  }
+  html.nav-folded .site-nav.is-open .nav-group--lang .nav-group__chev {
+    margin-left: auto;
+  }
+  html.nav-folded .nav-group__panel {
+    position: static;
+    width: auto;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px 12px;
+    padding: 6px 0 4px;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+  html.nav-folded .nav-group__panel a {
+    min-height: 44px;
+    align-content: center;
+    padding: 8px 12px;
+    border-left: 2px solid var(--border);
+    border-radius: 0 4px 4px 0;
+  }
+  html.nav-folded .nav-group__text {
+    display: none;
+  }
+  html.nav-folded .site-nav.is-open .site-nav__cta {
+    grid-column: 1 / -1;
+    justify-content: center;
+    min-height: 52px;
+    margin-left: 0;
+    font-size: 1.05rem;
+  }
+}

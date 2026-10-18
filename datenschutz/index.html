@@ -21,14 +21,23 @@
 <link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="../assets/css/style.css?v=99b3d8b7">
 <link rel="stylesheet" href="../assets/css/docs.css?v=7504f024">
-<script>
+<meta name="pw-root" content="../">
+<script data-pw-head>
 (function () {
-  var d = document.documentElement, lang = null;
+  var d = document.documentElement, lang = null, q = /[?&]lang=(en|de)(?:&|$)/.exec(location.search);
   d.className = d.className.replace('no-js', 'js');
   try {
+    if (q) localStorage.setItem('propwash-lang', q[1]);
     lang = localStorage.getItem('propwash-lang');
     if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
   } catch (e) {}
+  if (q) {
+    lang = q[1];
+    try {
+      var s = location.search.slice(1).split('&').filter(function (p) { return p && !/^lang=/.test(p); }).join('&');
+      history.replaceState(history.state, '', location.pathname + (s ? '?' + s : '') + location.hash);
+    } catch (e) {}
+  }
   if (lang !== 'en' && lang !== 'de') {
     var langs = navigator.languages || [navigator.language || 'en'];
     lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
@@ -171,6 +180,6 @@
   </div>
 </footer>
 
-<script src="../assets/js/main.js?v=bfa9e1d4" defer></script>
+<script src="../assets/js/main.js?v=2c5dc92d" defer></script>
 </body>
 </html>

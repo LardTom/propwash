@@ -42,7 +42,8 @@ This repository contains only the website, no mod source code.
   previews, converted by `tools/build-landing-images.mjs` (see [Landing page](#landing-page)); `assets/img/docs/` – the
   pictures of the docs pages
 - `sitemap.xml` and `robots.txt` – every page for search engines (see [Link check](#link-check))
-- `assets/fonts/` – Saira and JetBrains Mono, both under the SIL Open Font License 1.1
+- `assets/fonts/` – Saira and JetBrains Mono (Latin with Latin Extended-A), Exo 2 and JetBrains Mono for the Cyrillic
+  letters of the Russian pages, all under the SIL Open Font License 1.1 (see [Languages](#languages))
 - `tools/site-nav.mjs` – the main navigation and the footer links of every page, defined once (see
   [Navigation](#navigation))
 - `tools/` – build and test scripts for the navigation, the landing page pictures, the configurator data and picture, the
@@ -386,6 +387,74 @@ pages keep current stamps without an extra step. After hand-editing any other HT
 `node tools/stamp-assets.mjs` before committing; `tools/test-stamp-assets.mjs` (part of the test suite) fails with
 the list of files to restamp until you do. `tools/test-links.mjs` and the other tests already ignore the `?v=` query
 when resolving a local reference.
+
+## Languages
+
+English and German are the official languages: every page carries both side by side and the EN/DE switch. Spanish,
+French, Portuguese (Brazil), Polish and Russian are **generated trees** `/es/`, `/fr/`, `/pt-br/`, `/pl/`, `/ru/`
+with one language per page, translated with AI. Every page of them has a banner under the header that says so and
+that only English and German are official, with links to the same page in English and German. The add-on developer
+docs (add-on API, API reference, parts format) and the legal pages stay English/German; links to them lead to the
+root version.
+
+```sh
+node tools/i18n/build-i18n.mjs                    # writes /<lang>/ and assets/i18n/<lang>.json for every active language
+node tools/i18n/build-i18n.mjs --check            # reports generated files that are out of date, writes nothing
+node tools/i18n/build-i18n.mjs --missing fr       # missing and stale texts of a language as JSON: the work list
+node tools/i18n/build-i18n.mjs --stats            # texts and words to translate, per source
+node tools/i18n/build-i18n.mjs --propwash <repo>  # tools/i18n/ui-terms.json from the mod's English language file
+node tools/i18n/build-i18n.mjs --out <dir> --lang fr,ru --pseudo   # preview of any language in another folder
+node tools/i18n/test-i18n.mjs                     # dictionaries, generated pages, fonts, denylist
+node tools/test-layout.mjs                        # every page × language × 360/768/1100/1280 px in headless Chrome
+```
+
+- **Languages:** `tools/i18n/languages.json` – code, `hreflang`, `og:locale`, name, `active` and the drafts of the
+  banner, the hint and the menu texts. A language goes live (`"active": true`) only when its dictionary covers every
+  text; the build stops otherwise. Then run `node tools/build-nav.mjs` (language menu and `hreflang` of the
+  hand-written pages), `node tools/build-docs.mjs --render-only`, `node tools/i18n/build-i18n.mjs` and
+  `node tools/test-links.mjs --write-sitemap`.
+- **What is translated:** `tools/i18n/pages.mjs` – the landing page, configurator, roadmap, changelog, the docs for
+  players (overview, player guide, world rules, blackbox tuning) and, once they exist, converter and add-on pages; and
+  the texts the scripts draw: roadmap, changelog, platforms and add-on data (every `{en, de}` pair), the part texts
+  of the configurator catalog (not the part names), `{ en: '…', de: '…' }` literals in the roadmap and changelog
+  scripts, the `['English', 'Deutsch']` texts of `assets/js/configurator/i18n.js` and the texts of `main.js`.
+- **Dictionaries:** `tools/i18n/dict/<lang>.json` – `{ "schema": 1, "lang": "fr", "source": "en", "entries": { … } }`,
+  the English text (whitespace collapsed, markup kept) as key, like `tools/changelog/de.json`; an optional `glossary`
+  holds fixed translations of that language. A changed English sentence is a new key: `--missing` lists it, and the old
+  one as stale.
+- **Terms that stay English:** `tools/i18n/glossary.json` (names, FPV words, share-code versions) and the names of the
+  game's tabs, buttons, keys and world rules in `tools/i18n/ui-terms.json` (from the mod: the game is only English and
+  German, players have to find the buttons). Part names stay English as well.
+- **A generated page:** navigation and footer links in the language (`tools/site-nav.mjs`), every `lang="en"`/`lang="de"`
+  pair becomes one element with the translation, translated `alt`/`aria-label`/`title`, title and meta texts, head
+  with `pw-lang`, `pw-root`, canonical, `og:locale` and every `hreflang`, the banner, links (translated pages stay in
+  the tree, everything else leads to the root), cache-busting stamps. Generated pages are never edited by hand.
+- **Scripts:** `assets/js/i18n.js` gives the scripts that draw content the site root (`root('assets/data/…')`), the
+  page language and the texts of a translated page (`load()`, `text()`, `spans()`, `href()`, `number()`): on the
+  English/German pages both languages as before, on the others one language from `assets/i18n/<lang>.json`.
+- **Head block:** `node tools/build-nav.mjs` also writes the head of the hand-written pages (`siteHead` in
+  `tools/site-nav.mjs`, found by its marker `<script data-pw-head>`): `pw-root`, and once another language is active
+  the `hreflang` lines and `assets/css/i18n.css`; the head script reads `?lang=en|de` (the links from the other
+  languages), keeps the choice and removes it from the address.
+- **Language menu and hint:** the globe in the navigation lists English, Deutsch and the active languages (with the
+  short “AI” in each language); a choice is kept in `propwash-lang` like EN/DE. There is no automatic redirect: on an
+  English/German page a browser in another language without a stored choice sees one line that the page exists in
+  that language; closing it keeps English or German. When the navigation does not fit in the header bar (longer words),
+  `main.js` folds it into the menu button.
+- **Fonts:** `saira-var.woff2` and `jetbrains-mono-var.woff2` cover Latin, Latin Extended-A (Polish) and the key
+  symbols; Saira has no Cyrillic, so the Russian pages take the Cyrillic letters from Exo 2
+  (`exo2-cyrillic-var.woff2`) and JetBrains Mono (`jetbrains-mono-cyrillic-var.woff2`), declared in
+  `assets/css/i18n.css` for `html[lang="ru"]` only. Cut from the OFL sources (google/fonts, `ofl/saira`,
+  `ofl/jetbrainsmono`, `ofl/exo2`) with `python3 tools/i18n/subset-fonts.py --src <folder>` (needs `fonttools` and
+  `brotli`); `test-i18n.mjs` reads the fonts' character maps and fails when a letter of a language is missing.
+- **Tests:** `test-i18n.mjs` checks the module, the sources, a pseudo build of all five languages and, per active
+  language, 100 % coverage, no stale entries, the same tags, links, numbers, units and code spans as the English text,
+  glossary and game terms unchanged, no English left, banner and `hreflang` of every page, and the local denylist (the
+  one of the mod's public export, plus `~/.config/propwash/i18n-denylist.txt` for names of models and providers, if
+  present; neither is in this repository). `test-layout.mjs` builds all five languages with pseudo translations where
+  a text has none (their letters, 20 to 30 % longer), opens every page in every language at 360, 768, 1100 and 1280
+  px and checks overflow, cut-off buttons, the header bar, the banner, the fonts actually drawn and the language
+  menu; it keeps screenshots for the reviewers in a temporary folder.
 
 ## Preview
 
