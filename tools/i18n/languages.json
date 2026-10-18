@@ -1,0 +1,70 @@
+{
+  "schema": 1,
+  "site": "https://propwashfpv.com/",
+  "official": [
+    { "code": "en", "hreflang": "en", "name": "English" },
+    { "code": "de", "hreflang": "de", "name": "Deutsch" }
+  ],
+  "languages": [
+    {
+      "code": "es", "hreflang": "es", "og": "es_ES", "name": "Español", "active": false,
+      "drafts": {
+        "AI": "IA",
+        "This page was translated with AI. Only the English and German versions are official.": "Esta página se ha traducido con IA. Solo el inglés y el alemán son oficiales.",
+        "English version": "Versión en inglés",
+        "German version": "Versión en alemán",
+        "This page is also available in <a>English</a> (AI translation).": "Esta página también está disponible en <a>español</a> (traducción con IA).",
+        "Close": "Cerrar",
+        "Languages": "Idiomas"
+      }
+    },
+    {
+      "code": "fr", "hreflang": "fr", "og": "fr_FR", "name": "Français", "active": false,
+      "drafts": {
+        "AI": "IA",
+        "This page was translated with AI. Only the English and German versions are official.": "Cette page a été traduite par IA. Seules les versions anglaise et allemande sont officielles.",
+        "English version": "Version anglaise",
+        "German version": "Version allemande",
+        "This page is also available in <a>English</a> (AI translation).": "Cette page existe aussi en <a>français</a> (traduction par IA).",
+        "Close": "Fermer",
+        "Languages": "Langues"
+      }
+    },
+    {
+      "code": "pt-br", "hreflang": "pt-BR", "og": "pt_BR", "name": "Português (Brasil)", "active": false,
+      "drafts": {
+        "AI": "IA",
+        "This page was translated with AI. Only the English and German versions are official.": "Esta página foi traduzida com IA. Somente as versões em inglês e alemão são oficiais.",
+        "English version": "Versão em inglês",
+        "German version": "Versão em alemão",
+        "This page is also available in <a>English</a> (AI translation).": "Esta página também está disponível em <a>português</a> (tradução com IA).",
+        "Close": "Fechar",
+        "Languages": "Idiomas"
+      }
+    },
+    {
+      "code": "pl", "hreflang": "pl", "og": "pl_PL", "name": "Polski", "active": false,
+      "drafts": {
+        "AI": "AI",
+        "This page was translated with AI. Only the English and German versions are official.": "Ta strona została przetłumaczona przy użyciu AI. Oficjalne są tylko wersje angielska i niemiecka.",
+        "English version": "Wersja angielska",
+        "German version": "Wersja niemiecka",
+        "This page is also available in <a>English</a> (AI translation).": "Ta strona jest dostępna także <a>po polsku</a> (tłumaczenie AI).",
+        "Close": "Zamknij",
+        "Languages": "Języki"
+      }
+    },
+    {
+      "code": "ru", "hreflang": "ru", "og": "ru_RU", "name": "Русский", "active": false,
+      "drafts": {
+        "AI": "ИИ",
+        "This page was translated with AI. Only the English and German versions are official.": "Эта страница переведена с помощью ИИ. Официальные версии — только английская и немецкая.",
+        "English version": "Английская версия",
+        "German version": "Немецкая версия",
+        "This page is also available in <a>English</a> (AI translation).": "Эта страница есть и <a>на русском</a> (перевод с помощью ИИ).",
+        "Close": "Закрыть",
+        "Languages": "Языки"
+      }
+    }
+  ]
+}
