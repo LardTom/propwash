@@ -1,0 +1,73 @@
+{
+  "schema": 1,
+  "products": {
+    "propwash": {
+      "name": "Propwash FPV",
+      "short": "Propwash FPV",
+      "version": "0.6.0",
+      "minecraft": "26.3",
+      "curseforge": {
+        "url": "https://www.curseforge.com/minecraft/mc-mods/propwash-fpv",
+        "status": "review"
+      },
+      "modrinth": {
+        "url": "https://modrinth.com/mod/propwash-fpv",
+        "status": "review"
+      }
+    },
+    "justmoreparts": {
+      "name": "Propwash: Just More Parts",
+      "short": "Just More Parts",
+      "version": "1.2.0",
+      "minecraft": "26.3",
+      "curseforge": {
+        "url": "https://www.curseforge.com/minecraft/mc-mods/propwash-just-more-parts",
+        "status": "review"
+      },
+      "modrinth": {
+        "url": "https://modrinth.com/mod/propwash-just-more-parts",
+        "status": "review"
+      }
+    }
+  },
+  "source": {
+    "propwash": "https://github.com/LardTom/propwash-fpv",
+    "justmoreparts": "https://github.com/LardTom/propwash-justmoreparts"
+  },
+  "labels": {
+    "live": {
+      "en": "Download on {platform}",
+      "de": "Download auf {platform}"
+    },
+    "review": {
+      "en": "{platform} · in review",
+      "de": "{platform} · in Prüfung"
+    },
+    "pending": {
+      "en": "Coming to {platforms}",
+      "de": "Erscheint auf {platforms}"
+    },
+    "and": {
+      "en": "{a} and {b}",
+      "de": "{a} und {b}"
+    },
+    "source": {
+      "en": "Source code of {name}",
+      "de": "Quellcode von {name}"
+    },
+    "status": {
+      "live": {
+        "en": "out now",
+        "de": "verfügbar"
+      },
+      "review": {
+        "en": "in review",
+        "de": "in Prüfung"
+      },
+      "pending": {
+        "en": "coming soon",
+        "de": "folgt"
+      }
+    }
+  }
+}

@@ -1,8 +1,12 @@
 // Roadmap page (roadmap/index.html): renders assets/data/roadmap.json into horizon sections, release groups with a
-// segmented progress ring, and item cards. Every text is written in both languages (lang="en"/"de" spans), so the
-// site's language switch works without re-rendering. Texts go in via textContent only.
+// segmented progress ring, and item cards; a horizon with "download" gets the download buttons of that product from
+// assets/data/platforms.json. On the English/German page every text is written in both languages (lang="en"/"de"
+// spans), so the site's language switch works without re-rendering; on the pages of the other languages
+// (assets/js/i18n.js) in that one language. Texts go in via textContent only.
 
-import { loadRoadmap, validateRoadmap, tally, allItems, currentRelease, STATUSES } from './data.js?v=3050ccc1';
+import { loadRoadmap, validateRoadmap, tally, allItems, currentRelease, STATUSES } from './data.js?v=6614ed1b';
+import { loadPlatforms, downloads } from './platforms.js?v=a8efd935';
+import { OFFICIAL, fill, lang, translated, load, text, spans, href } from '../i18n.js?v=6ae64da4';
 
 const doc = document;
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -22,10 +26,10 @@ const UI = {
     idea: { en: 'ideas', de: 'Ideen' }
   },
   ringDone: { en: 'done', de: 'fertig' },
-  ringOf: { en: (d, t) => `${d} of ${t} done`, de: (d, t) => `${d} von ${t} fertig` },
+  ringOf: { en: '{done} of {total} done', de: '{done} von {total} fertig' },
   ringMore: {
-    progress: { en: (n) => `${n} in progress`, de: (n) => `${n} in Arbeit` },
-    planned: { en: (n) => `${n} planned`, de: (n) => `${n} geplant` }
+    progress: { en: '{n} in progress', de: '{n} in Arbeit' },
+    planned: { en: '{n} planned', de: '{n} geplant' }
   },
   nowLive: { en: 'Now building', de: 'Im Bau' },
   nowJump: { en: 'What’s in it', de: 'Was drin ist' },
@@ -63,10 +67,14 @@ function icon(name, size = 20, cls = '') {
   return s;
 }
 
-/** Both languages of a {en, de} text (or of two functions' results) as lang spans. */
-function bi(text) {
+/** A {en, de} text as lang spans: both on the English/German page, the page's language on the others. */
+const bi = (value, values) => spans(value, values);
+
+/** A text put together from several {en, de} templates: build(pick) joins pick(template, values) in one language. */
+function compose(build) {
+  if (translated()) return el('span', { lang: lang() }, build((t, v) => text(t, v)));
   const frag = doc.createDocumentFragment();
-  frag.append(el('span', { lang: 'en' }, text?.en ?? ''), el('span', { lang: 'de' }, text?.de ?? ''));
+  for (const l of OFFICIAL) frag.append(el('span', { lang: l }, build((t, v) => fill(t[l] ?? t.en, v))));
   return frag;
 }
 
@@ -78,12 +86,9 @@ function chip(status) {
 }
 
 function ringSummary(count) {
-  const parts = (lang) => {
-    const out = [UI.ringOf[lang](count.done, count.total)];
-    for (const key of ['progress', 'planned']) if (count[key]) out.push(UI.ringMore[key][lang](count[key]));
-    return out.join(', ');
-  };
-  return { en: parts('en'), de: parts('de') };
+  const parts = [[UI.ringOf, { done: count.done, total: count.total }]];
+  for (const key of ['progress', 'planned']) if (count[key]) parts.push([UI.ringMore[key], { n: count[key] }]);
+  return compose((pick) => parts.map(([t, v]) => pick(t, v)).join(', '));
 }
 
 /** Segmented ring: one segment per item, ordered done → in progress → planned, so it fills clockwise. */
@@ -117,13 +122,33 @@ function ring(items, size) {
     el('span', { class: 'rm-ring__label' }, bi(UI.ringDone)));
   const complete = count.total > 0 && count.done === count.total;
   return el('div', { class: `rm-ring${complete ? ' rm-ring--complete' : ''}`, style: `--size:${size}px` },
-    graphic, center, el('span', { class: 'sr-only' }, bi(ringSummary(count))));
+    graphic, center, el('span', { class: 'sr-only' }, ringSummary(count)));
 }
 
 function linkButton(link, cls) {
   const external = /^https:/.test(link.href);
-  return el('a', { class: cls, href: link.href, target: external ? '_blank' : null, rel: external ? 'noopener' : null },
+  return el('a', { class: cls, href: href(link.href), target: external ? '_blank' : null, rel: external ? 'noopener' : null },
     bi(link.label), icon('arrow-right', 14));
+}
+
+/** The download buttons of a product (platforms.json): live "Download on …", in review with a dot, pending as one line. */
+function downloadButtons(platforms, product) {
+  if (!platforms || !platforms.products || !platforms.products[product]) return null;
+  const list = downloads(platforms, product);
+  const nodes = [];
+  for (const d of list) {
+    if (d.status === 'pending') continue;
+    nodes.push(el('a', { class: 'btn btn--ghost rm-horizon__link', href: d.url, target: '_blank', rel: 'noopener' },
+      d.status === 'review' ? el('span', { class: 'soon-dot', 'aria-hidden': 'true' }) : null,
+      bi(platforms.labels[d.status], { platform: d.name })), ' ');
+  }
+  const pending = list.filter((d) => d.status === 'pending').map((d) => d.name);
+  if (pending.length) {
+    const names = (pick) => (pending.length === 1 ? pending[0] : pick(platforms.labels.and, { a: pending.slice(0, -1).join(', '), b: pending[pending.length - 1] }));
+    nodes.push(el('span', { class: 'btn btn--ghost rm-horizon__link' }, el('span', { class: 'soon-dot', 'aria-hidden': 'true' }),
+      compose((pick) => pick(platforms.labels.pending, { platforms: names(pick) }))));
+  }
+  return nodes.length ? el('div', { class: 'rm-horizon__downloads' }, nodes) : null;
 }
 
 function card(item, index, headingTag) {
@@ -166,7 +191,7 @@ function group(groupData, horizon, g) {
       el('summary', { class: 'rm-older' },
         el('span', { class: 'rm-older__version' }, el('span', { class: 'rm-group__brand' }, 'Propwash '), groupData.version || bi(groupData.title)),
         groupData.version && groupData.title ? el('span', { class: 'rm-older__title' }, bi(groupData.title)) : null,
-        el('span', { class: 'rm-older__count' }, bi(ringSummary(count))),
+        el('span', { class: 'rm-older__count' }, ringSummary(count)),
         el('span', { class: 'rm-group__more' }, bi(UI.older), icon('chevron', 14))),
       grid,
       groupData.link ? el('div', { class: 'rm-older__foot' }, linkButton(groupData.link, 'btn btn--ghost rm-group__link')) : null);
@@ -174,7 +199,7 @@ function group(groupData, horizon, g) {
   return el('article', { class: cls, 'aria-labelledby': headingId, 'data-span': span }, headed ? groupHead(groupData, headingId) : null, grid);
 }
 
-function horizonSection(horizon, index) {
+function horizonSection(horizon, index, platforms) {
   const titleId = `rm-${horizon.id}-title`;
   const tone = index % 2 === 0 ? ' rm-horizon--panel' : '';
   const items = horizon.groups.reduce((n, g) => n + g.items.length, 0);
@@ -187,7 +212,8 @@ function horizonSection(horizon, index) {
           el('p', { class: 'kicker rm-horizon__label' }, bi(horizon.label)),
           el('h2', { id: titleId }, bi(horizon.title)),
           horizon.intro ? el('p', { class: 'section__intro' }, bi(horizon.intro)) : null,
-          horizon.link ? linkButton(horizon.link, 'btn btn--ghost rm-horizon__link') : null)),
+          horizon.link ? linkButton(horizon.link, 'btn btn--ghost rm-horizon__link') : null,
+          horizon.download ? downloadButtons(platforms, horizon.download) : null)),
       el('div', { class: 'rm-groups' }, horizon.groups.map((g, i) => group(g, horizon, i)))));
 }
 
@@ -249,11 +275,19 @@ async function main() {
   if (!root) return;
   root.setAttribute('aria-busy', 'true');
   try {
-    const roadmap = await loadRoadmap();
-    const problems = validateRoadmap(roadmap);
+    const [roadmap] = await Promise.all([loadRoadmap(), load()]);
+    let platforms = null;
+    if (roadmap.horizons.some((h) => h.download)) {
+      try {
+        platforms = await loadPlatforms();
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+    const problems = validateRoadmap(roadmap, { products: platforms ? new Set(Object.keys(platforms.products || {})) : null });
     if (problems.length) console.warn('roadmap.json:', problems);
     const horizons = roadmap.horizons.filter((h) => Array.isArray(h.groups) && h.groups.length);
-    const sections = horizons.map((h, i) => horizonSection(h, i));
+    const sections = horizons.map((h, i) => horizonSection(h, i, platforms));
     root.replaceChildren(...sections);
     root.classList.add('is-ready');
     const tallyHost = doc.querySelector('[data-rm-tally]');

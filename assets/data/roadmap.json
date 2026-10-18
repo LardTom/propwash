@@ -13,16 +13,10 @@
         "de": "Schon da"
       },
       "intro": {
-        "en": "Everything here is in the current version. The newest 0.5.x versions are still in the platforms’ review and show up on CurseForge once it is through.",
-        "de": "Alles hier steckt in der aktuellen Version. Die neuesten 0.5.x-Versionen sind bei den Plattformen noch in Prüfung und erscheinen danach auf CurseForge."
+        "en": "Everything here is in the current version. New versions show up on CurseForge and Modrinth once the platforms’ review is through.",
+        "de": "Alles hier steckt in der aktuellen Version. Neue Versionen erscheinen auf CurseForge und Modrinth, sobald die Prüfung der Plattformen durch ist."
       },
-      "link": {
-        "href": "https://www.curseforge.com/minecraft/mc-mods/propwash-fpv",
-        "label": {
-          "en": "Download on CurseForge",
-          "de": "Download auf CurseForge"
-        }
-      },
+      "download": "propwash",
       "groups": [
         {
           "version": "0.5.2",
@@ -589,8 +583,8 @@
               "link": {
                 "href": "https://github.com/LardTom/propwash-fpv",
                 "label": {
-                  "en": "Source code on GitHub",
-                  "de": "Quellcode auf GitHub"
+                  "en": "Source code",
+                  "de": "Quellcode"
                 }
               }
             }
