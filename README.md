@@ -28,10 +28,14 @@ This repository contains only the website, no mod source code.
   - page: `ui.js` (part pickers, paint, tune editor, OSD layer, stats, share code, import), `i18n.js` (texts),
     `assembly.js` (where every part sits on the drone), `paint.js` (paint tints), `viewer.js` (three.js viewer)
 - `assets/js/roadmap/` – the roadmap page: `data.js` (loading, status counts and the validation shared with the test),
-  `view.js` (horizons, release groups with progress rings, item cards)
+  `view.js` (horizons, release groups with progress rings, item cards, download buttons), `platforms.js` (the download
+  platforms, also used by `tools/build-platforms.mjs`)
 - `assets/js/changelog/` – the changelog page: `data.js` (loading, the entries' inline Markdown and the validation shared
   with the test), `view.js` (filter, version list, release cards, copy link)
 - `assets/data/roadmap.json` – what the roadmap shows (see [Roadmap](#roadmap))
+- `assets/data/platforms.json` – where Propwash and Just More Parts are downloaded and whether a version is still in
+  review (see [Platforms](#platforms)); `assets/js/roadmap/platforms.js` reads it for the build script, the roadmap
+  and the tests
 - `assets/data/changelog.json` – what the changelog shows, generated (see [Changelog](#changelog))
 - `assets/data/configurator/` – data from the Just More Parts web export: `catalog.json` (parts, presets, rules, paint,
   tune and share-code tables), `render.json` (frame layouts, motor seats, paint channels) and `models/` (one file per part:
@@ -72,17 +76,22 @@ this order (the ids are what the “Features” menu and older links use, so the
 | Survival | `#survival` | crafting, loot, batteries, wear and repair |
 | More details | `#extras` | six tiles: lights, action cams, paint, sound and dust, bandos, a world that reacts |
 | Screenshots | `#gallery` | pictures the page does not show elsewhere |
-| FAQ | `#faq` | questions before the download |
-| Download | `#download` (old: `#release`) | version, stores, compatibility, community (`#community`), add-on, source code (`#source`) |
+| FAQ | `#faq` | questions before the download, each with its own id (`#faq-goggles`, `#faq-license`, …) for links from the Discord |
+| Download | `#download` (old: `#release`) | version, platforms, compatibility, community (`#community`), add-on (`#addon`), source code and license (`#source`) |
 
 A new feature gets a line or a tile in the section it belongs to, not a section of its own; what only matters for one
 release goes into **What’s new** and moves into its section (or out) with the next release. For a release:
 
 - **What’s new** (`#new`) gets the three highlights of the release with one picture each and links to
   `changelog/#propwash-<version>`; the version line in the hero names the release and links to `#new`; numbers such as
-  tricks, lessons and world rules come from the mod's `CHANGELOG.md`
-- the download section names the version, the add-on Just More Parts with its version and part count, and the
-  compatibility lines of the changelog
+  tricks, lessons and world rules come from the mod's `CHANGELOG.md`. Before the release, the cards may stand without
+  pictures and link to `changelog/#propwash`: the pictures come from the screenshots of the release commit and the
+  anchor of the version only exists once `assets/data/changelog.json` has it (`tools/test-links.mjs` checks both)
+- the versions and the review status come from `assets/data/platforms.json` (see [Platforms](#platforms)); the
+  download section names the add-on Just More Parts with its version and part count, and the compatibility lines of
+  the changelog (`tools/test-platforms.mjs` checks that the version in “Install” and in the add-on block is current)
+- every FAQ question is a `<details>` with an id starting with `faq-`; `tools/test-platforms.mjs` knows the list of
+  ids, so a new question also goes there
 - the pictures are the mod's own screenshots of the release commit:
 
 ```sh
@@ -253,6 +262,50 @@ The header navigation and the footer links of the docs pages come from `tools/si
 [Navigation](#navigation)); after changing them, run `node tools/build-docs.mjs --render-only` (`test-docs.mjs` fails
 until then). The license note of the API page is `LICENSE_NOTE` in `tools/docs/pages/api.mjs`.
 
+## Platforms
+
+Propwash and its add-ons are downloaded only from **CurseForge and Modrinth**. GitHub is never a download: it only
+appears as the small source-code icon (named in `aria-label` and `title`, never in visible text), and nothing links to
+`…/releases`. `assets/data/platforms.json` is the one place for the download addresses and their state:
+
+```jsonc
+{
+  "schema": 1,
+  "products": {                         // the first product is the mod itself, the others are add-ons
+    "propwash": { "name": "Propwash FPV", "short": "Propwash FPV", "version": "0.6.0", "minecraft": "26.3",
+      "curseforge": { "url": "https://www.curseforge.com/minecraft/mc-mods/propwash-fpv", "status": "review" },
+      "modrinth":   { "url": "https://modrinth.com/mod/propwash-fpv", "status": "review" } }
+  },
+  "source": { "propwash": "https://github.com/LardTom/propwash-fpv" },   // repository addresses, for the icon
+  "labels": { … }                       // button and status texts in English and German, {placeholders}
+}
+```
+
+- **Status** per platform and product, for the version named: `live` – the button “Download on …” (the first live
+  platform of the mod is the highlighted one); `review` – a plain button with a dot “… · in review”, the platform still
+  checks the files (keep it until the platform has released them); `pending` – no link, the line “Coming to …”, for a
+  product that is not on the platform yet.
+- **Landing page:** `tools/build-platforms.mjs` writes the generated parts between `<!-- platforms:<kind> <product> -->`
+  and `<!-- /platforms -->`, so they are right without JavaScript: `hero` (the download button of the hero: the first
+  live platform, otherwise “Download” to `#download`), `buttons` (platform buttons and the source-code icon), `status`
+  (status line with the version), `faq-download` (the answer “Where can I download it?”) and `source` (the icon alone).
+  Any hand-written page can carry such regions.
+- **Roadmap:** a horizon with `"download": "<product>"` gets the buttons of that product, drawn at runtime from the same
+  file.
+
+```sh
+node tools/build-platforms.mjs           # after editing platforms.json: rewrites the regions of every page
+node tools/build-platforms.mjs --check   # lists out-of-date regions, writes nothing
+node tools/test-platforms.mjs            # data, regions, links on every page, versions, FAQ ids
+```
+
+For a release: set the new `version`, `status: "review"` for every platform, run the build; once a platform has
+released the files, set it to `live` and run the build again. `test-platforms.mjs` also checks every page, data file
+and script: Propwash pages on CurseForge and Modrinth only with the addresses of `platforms.json` (the footer constants
+in `tools/site-nav.mjs` and `SOURCE_JMP` of the docs included), repository links only below a `source` address, links
+saying “Download” only to a platform, and on the player pages (not the docs and legal pages) no visible “GitHub”. It
+also keeps the deferred server add-on off every page except the roadmap.
+
 ## Roadmap
 
 `roadmap/` shows what is out, what is being built and what comes later – with rough horizons, never dates. The page
@@ -293,7 +346,13 @@ only edits that file (no HTML).
   `version` under `now`; the status counts and the jump links are counted from the file as well.
 - **Releasing:** set the finished items of the release to `done`, move its group from `now` to the top of `released`
   (newest first – older releases then fold into one line), give it the link `../changelog/#propwash-<version>` (label
-  “Full changelog” / “Alle Änderungen”), move the next group up from `next` to `now`, and run the check below.
+  “Full changelog” / “Alle Änderungen”), move the next group up from `next` to `now`, and run the check below. Items
+  that would give away a release (new features nobody has announced) only appear once it is out.
+- **Download buttons:** `"download": "propwash"` on a horizon (the released one) draws the platform buttons of that
+  product from `assets/data/platforms.json` (see [Platforms](#platforms)); a horizon may also carry one `link`.
+- **Languages:** `view.js` draws every text through `assets/js/i18n.js` (`spans()`, `text()`, `href()`), so the
+  generated language pages show the roadmap in their language; texts of the script are `{ en: '…', de: '…' }`
+  literals with `{placeholders}`.
 - **Icons:** the names are the `ri-*` symbols in the sprite at the top of `roadmap/index.html` (16 × 16, drawn with
   strokes like the configurator's icons). A new icon is a new `<symbol id="ri-…">` there.
 - **Texts:** short and player-facing (title up to 48, text up to 130 characters), both languages, no HTML, no dates
