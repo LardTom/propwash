@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Propwash FPV – Real FPV drone racing in Minecraft</title>
-<meta name="description" content="Propwash FPV is an FPV drone racing and freestyle mod for Minecraft 26.3 on Fabric and NeoForge: build quadcopters from real parts, fly them with your RC transmitter, a gamepad or mouse and keyboard, learn it in 20 flight lessons and race through gates. Available on CurseForge, soon on Modrinth.">
+<meta name="description" content="Propwash FPV is an FPV drone racing and freestyle mod for Minecraft 26.3 on Fabric and NeoForge: build quadcopters from real parts, fly them with your RC transmitter, a gamepad or mouse and keyboard, learn it in 20 flight lessons and race through gates. Download on CurseForge and Modrinth.">
 <meta name="theme-color" content="#1A1A1A">
 <meta name="color-scheme" content="dark">
 <meta name="referrer" content="no-referrer">
@@ -13,7 +13,7 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Propwash FPV">
 <meta property="og:title" content="Propwash FPV – Real FPV drone racing in Minecraft">
-<meta property="og:description" content="Build quadcopters from real parts, put on your goggles and fly FPV with your RC transmitter, a gamepad or mouse and keyboard. Flight training, world rules, racing and freestyle. Available on CurseForge, soon on Modrinth.">
+<meta property="og:description" content="Build quadcopters from real parts, put on your goggles and fly FPV with your RC transmitter, a gamepad or mouse and keyboard. Flight training, world rules, racing and freestyle. Download on CurseForge and Modrinth.">
 <meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
@@ -21,7 +21,7 @@
 <meta property="og:image:alt" content="FPV view through the goggles in Propwash FPV: flying through the checkered start/finish gate with the Betaflight-style OSD">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Propwash FPV – Real FPV drone racing in Minecraft">
-<meta name="twitter:description" content="Build quadcopters from real parts, put on your goggles and fly FPV with your RC transmitter, a gamepad or mouse and keyboard. Flight training, world rules, racing and freestyle. Available on CurseForge, soon on Modrinth.">
+<meta name="twitter:description" content="Build quadcopters from real parts, put on your goggles and fly FPV with your RC transmitter, a gamepad or mouse and keyboard. Flight training, world rules, racing and freestyle. Download on CurseForge and Modrinth.">
 <meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
 <meta name="twitter:image:alt" content="FPV view through the goggles in Propwash FPV: flying through the checkered start/finish gate with the Betaflight-style OSD">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
@@ -110,14 +110,14 @@
       <p class="hero__lead" lang="en">Build a quadcopter from real-world parts, put on your goggles and fly it through the drone’s camera&nbsp;– with your own RC transmitter, a gamepad or mouse and keyboard. Its own flight model, a Betaflight-style flight controller, flight training, racing and freestyle, all playable in survival.</p>
       <p class="hero__lead" lang="de">Bau dir einen Quadcopter aus realen Bauteilen, setz die Brille auf und flieg durch die Kamera der Drohne&nbsp;– mit deiner eigenen Funke, einem Gamepad oder Maus und Tastatur. Eigenes Flugmodell, Flight-Controller im Betaflight-Stil, Flugtraining, Rennen und Freestyle, alles im Überlebensmodus spielbar.</p>
       <div class="hero__cta">
-        <a class="btn btn--primary" href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">
-          <span lang="en">Download on CurseForge</span><span lang="de">Download auf CurseForge</span>
-        </a>
+        <!-- platforms:hero propwash -->
+        <a class="btn btn--primary" href="#download"><span lang="en">Download</span><span lang="de">Download</span></a>
+        <!-- /platforms -->
         <a class="btn btn--config" href="configurator/">
           <svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18" class="quad-icon"><path d="M6.2 6.2l7.6 7.6M13.8 6.2l-7.6 7.6"/><circle cx="5" cy="5" r="3"/><circle cx="15" cy="5" r="3"/><circle cx="5" cy="15" r="3"/><circle cx="15" cy="15" r="3"/><rect x="8" y="8" width="4" height="4" rx="1"/></svg><span lang="en">Build a drone online</span><span lang="de">Drohne online bauen</span>
         </a>
       </div>
-      <p class="hero__version"><a href="#new"><span class="mono">0.5.2</span><span lang="en">New: fisheye lens, waterproof drones, zones</span><span lang="de">Neu: Fisheye-Objektiv, wasserdichte Drohnen, Zonen</span><svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></p>
+      <p class="hero__version"><a href="#new"><span class="mono">0.6.0</span><span lang="en">New: freecam drone, RX block, PW3 share codes</span><span lang="de">Neu: Freecam-Drohne, RX-Block, PW3-Sharecodes</span><svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a></p>
       <ul class="hero__specs" aria-label="Highlights" data-de-aria-label="Highlights">
         <li><span lang="en">5 frames, 65&nbsp;mm whoop to 7″ long range</span><span lang="de">5 Rahmen, 65-mm-Whoop bis 7-Zoll-Long-Range</span></li>
         <li><span lang="en">Analog + digital video</span><span lang="de">Analoges + digitales Video</span></li>
@@ -312,47 +312,38 @@
 <section class="section section--panel" id="new" aria-labelledby="new-title">
   <div class="wrap">
     <header class="section__head">
-      <p class="kicker"><span lang="en">New in Propwash 0.5.2</span><span lang="de">Neu in Propwash 0.5.2</span></p>
-      <h2 id="new-title"><span lang="en">Fisheye lens, waterproof drones and zones</span><span lang="de">Fisheye-Objektiv, wasserdichte Drohnen und Zonen</span></h2>
-      <p class="section__intro" lang="en">A real FPV lens, drones that fly in water and flip themselves back over, zones with their own physics&nbsp;– plus adjustable VTX power, bando maps, cobwebs and bells, batteries that discharge like real packs and better landings.</p>
-      <p class="section__intro" lang="de">Ein echtes FPV-Objektiv, Drohnen, die im Wasser fliegen und sich selbst wieder umdrehen, Zonen mit eigener Physik&nbsp;– dazu einstellbare VTX-Leistung, Bando-Karten, Spinnweben und Glocken, Akkus, die sich wie echte Packs entladen, und bessere Landungen.</p>
+      <p class="kicker"><span lang="en">New in Propwash 0.6.0</span><span lang="de">Neu in Propwash 0.6.0</span></p>
+      <h2 id="new-title"><span lang="en">Freecam drone, RX block and share codes for every add-on</span><span lang="de">Freecam-Drohne, RX-Block und Sharecodes für alle Add-ons</span></h2>
+      <p class="section__intro" lang="en">A drone that flies through walls for scouting and filming, a block that turns your radio into redstone and share codes that carry parts from any add-on&nbsp;– plus a flight path marker in the OSD, the camera angle in the K menu, slime that bounces your drone back and wool that catches it.</p>
+      <p class="section__intro" lang="de">Eine Drohne, die zum Erkunden und Filmen durch Wände fliegt, ein Block, der deine Funke zu Redstone macht, und Sharecodes, die Teile aus jedem Add-on mitnehmen&nbsp;– dazu ein Flugbahn-Marker im OSD, der Kamerawinkel im K-Menü, Schleim, der deine Drohne zurückfedert, und Wolle, die sie auffängt.</p>
     </header>
 
     <div class="trio trio--top">
       <figure>
-        <div class="shot shot--feed">
-          <img src="assets/img/docs/fisheye-fpv-800.webp" srcset="assets/img/docs/fisheye-fpv-800.webp 800w, assets/img/docs/fisheye-fpv-1600.webp 1600w" sizes="(min-width: 900px) 380px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="FPV view through the fisheye lens over a pool towards two gates: the horizon bends at the edges, the trees lean outwards" data-de-alt="FPV-Bild durch das Fisheye über ein Becken auf zwei Gates zu: der Horizont biegt sich an den Rändern, die Bäume neigen sich nach außen">
-        </div>
         <figcaption>
-          <h3><span lang="en">A real FPV lens</span><span lang="de">Ein echtes FPV-Objektiv</span></h3>
-          <p lang="en">The FPV picture now looks through a fisheye like a real FPV camera: things ahead appear bigger and closer, the edges bend away, and speed feels like in a real feed. Interference, 4:3, the OSD and shader packs follow the lens; <em>Flat</em> in the <em>Video</em> tab brings back the old picture.</p>
-          <p lang="de">Das FPV-Bild sieht jetzt durch ein Fisheye wie eine echte FPV-Kamera: Dinge voraus wirken größer und näher, die Ränder biegen sich weg, und Tempo fühlt sich an wie im echten Feed. Störungen, 4:3, das OSD und Shaderpacks folgen dem Objektiv; <em>Flach</em> im Tab <em>Video</em> bringt das alte Bild zurück.</p>
+          <h3><span lang="en">Freecam drone</span><span lang="de">Freecam-Drohne</span></h3>
+          <p lang="en">Fly a drone through blocks like a free camera, for scouting and filming&nbsp;– with real flight physics, wind and prop wash, but no crashes and no battery to watch. Pick a whoop, 3.5″, 5″ or 7″ and its own rates. It is off by default: a world rule switches it on.</p>
+          <p lang="de">Flieg eine Drohne wie eine freie Kamera durch Blöcke, zum Erkunden und Filmen&nbsp;– mit echter Flugphysik, Wind und Propwash, aber ohne Crashes und ohne Akku. Wähl Whoop, 3,5″, 5″ oder 7″ mit eigenen Rates. Standardmäßig ist sie aus, eine Welt-Regel schaltet sie ein.</p>
         </figcaption>
       </figure>
       <figure>
-        <div class="shot shot--feed">
-          <img src="assets/img/docs/waterproof-underwater-800.webp" srcset="assets/img/docs/waterproof-underwater-800.webp 800w, assets/img/docs/waterproof-underwater-1600.webp 1600w" sizes="(min-width: 900px) 380px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="FPV view of a coated drone flying under water" data-de-alt="FPV-Bild einer beschichteten Drohne unter Wasser">
-        </div>
         <figcaption>
-          <h3><span lang="en">Waterproof drones and turtle mode</span><span lang="de">Wasserdichte Drohnen und Turtle-Modus</span></h3>
-          <p lang="en">Spray a drone with waterproof coating and it arms, flies and disarms in water&nbsp;– the props bog down and it climbs back out with full throttle. Landed upside down? Turtle mode flips it back over with its own props, just like in Betaflight.</p>
-          <p lang="de">Mit Wasserschutz-Spray schaltet eine Drohne im Wasser scharf, fliegt und schaltet wieder ab&nbsp;– die Props laufen schwer, mit Vollgas steigt sie wieder heraus. Auf dem Kopf gelandet? Der Turtle-Modus dreht sie mit den eigenen Props wieder um, wie in Betaflight.</p>
+          <h3><span lang="en">RX block</span><span lang="de">RX-Block</span></h3>
+          <p lang="en">Bind it with your radio and it turns one channel&nbsp;– a stick, an AUX switch or a button&nbsp;– into a redstone signal from 0 to 15, up to 128 blocks away, while you keep flying your drone. Out of range, it keeps its last signal.</p>
+          <p lang="de">Mit der Funke gebunden, macht er einen Kanal&nbsp;– Knüppel, AUX-Schalter oder Taste&nbsp;– zu einem Redstone-Signal von 0 bis 15, bis zu 128 Blöcke weit, während du weiter deine Drohne fliegst. Außer Reichweite behält er sein letztes Signal.</p>
         </figcaption>
       </figure>
       <figure>
-        <div class="shot shot--feed">
-          <img src="assets/img/docs/zones-border-800.webp" srcset="assets/img/docs/zones-border-800.webp 800w, assets/img/docs/zones-border-1600.webp 1600w" sizes="(min-width: 900px) 380px, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="A zone in the world: a subtle turquoise border with a faint grid" data-de-alt="Eine Zone in der Welt: ein dezenter türkiser Rand mit blassem Raster">
-        </div>
         <figcaption>
-          <h3><span lang="en">Zones</span><span lang="de">Zonen</span></h3>
-          <p lang="en">Give part of your world its own simulation settings&nbsp;– infinite battery on a practice field, zero gravity in a race passage. Race-legal zones keep laps fair, other zones count as assisted and say why. Made in the <em>World rules</em> tab or with <code>/propwash zone</code>.</p>
-          <p lang="de">Ein Teil deiner Welt bekommt eigene Simulationswerte&nbsp;– unendlicher Akku auf dem Übungsplatz, Schwerelosigkeit in einer Rennpassage. Rennfreie Zonen halten Runden fair, andere gelten als Flughilfe und nennen den Grund. Angelegt im Tab <em>Welt-Regeln</em> oder mit <code>/propwash zone</code>.</p>
+          <h3><span lang="en">Share codes for every add-on</span><span lang="de">Sharecodes für alle Add-ons</span></h3>
+          <p lang="en">New PW3 codes carry parts from any add-on and tell you exactly which add-on is missing, in which version and where to get it. Old PW1 and PW2 codes still load, and the website converts them to PW3.</p>
+          <p lang="de">Neue PW3-Codes nehmen Teile aus jedem Add-on mit und sagen dir genau, welches Add-on fehlt, in welcher Version und wo du es bekommst. Alte PW1- und PW2-Codes laden weiter, und die Website rechnet sie in PW3 um.</p>
         </figcaption>
       </figure>
     </div>
 
     <div class="hero__cta new__cta">
-      <a class="btn btn--primary" href="changelog/#propwash-0.5.2"><span lang="en">Everything in 0.5.2</span><span lang="de">Alles in 0.5.2</span><svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
+      <a class="btn btn--primary" href="changelog/#propwash"><span lang="en">Everything in 0.6.0</span><span lang="de">Alles in 0.6.0</span><svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
       <a class="btn btn--ghost" href="docs/guide/"><span lang="en">Player guide</span><span lang="de">Spielerhandbuch</span></a>
       <a class="btn btn--ghost" href="#download"><span lang="en">Download</span><span lang="de">Download</span></a>
     </div>
@@ -752,55 +743,87 @@
       <h2 id="faq-title"><span lang="en">Questions before take-off</span><span lang="de">Fragen vor dem Start</span></h2>
     </header>
     <div class="faq__list">
-      <details>
+      <details id="faq-radio">
         <summary><span lang="en">Do I need a real RC transmitter?</span><span lang="de">Brauche ich eine echte Funke?</span></summary>
         <p lang="en">No. Gamepads are detected automatically, with mouse and keyboard the mouse steers like aiming in a shooter, and the keyboard alone always works. If you own an EdgeTX or OpenTX radio, plug it in over USB in joystick mode&nbsp;– Propwash recognizes it and sets it up once.</p>
         <p lang="de">Nein. Gamepads werden automatisch erkannt, mit Maus und Tastatur lenkt die Maus wie beim Zielen im Shooter, und die Tastatur allein funktioniert immer. Hast du eine EdgeTX- oder OpenTX-Funke, steck sie per USB im Joystick-Modus an&nbsp;– Propwash erkennt sie und richtet sie einmal ein.</p>
       </details>
-      <details>
+      <details id="faq-radio-not-detected">
         <summary><span lang="en">My radio or controller isn’t detected. What now?</span><span lang="de">Meine Funke oder mein Controller wird nicht erkannt. Was tun?</span></summary>
         <p lang="en">Most of the time the radio is not in joystick mode: when you plug it in, choose <strong>USB Joystick (HID)</strong> in EdgeTX or OpenTX&nbsp;– charging or USB storage is not enough&nbsp;– and use a USB cable that carries data. Everything else, from macOS and gamepads to wireless radios, is in the player guide: <a href="docs/guide/#radio-not-detected">Radio or controller not detected</a>.</p>
         <p lang="de">Meistens ist die Funke nicht im Joystick-Modus: Wähl beim Einstecken in EdgeTX oder OpenTX <strong>USB Joystick (HID)</strong>&nbsp;– Laden oder USB-Speicher reicht nicht&nbsp;– und nimm ein USB-Kabel, das Daten überträgt. Alles Weitere, von macOS über Gamepads bis zu kabellosen Funken, steht im Spielerhandbuch: <a href="docs/guide/#radio-not-detected">Funke oder Controller wird nicht erkannt</a>.</p>
       </details>
-      <details>
+      <details id="faq-goggles">
+        <summary><span lang="en">Can I use my real FPV goggles?</span><span lang="de">Kann ich meine echte FPV-Brille benutzen?</span></summary>
+        <p lang="en">You don’t need goggles: Propwash shows the FPV picture on your screen. A mod can’t send video to your goggles. If your goggles have an HDMI input, you can use them as a screen and mirror your desktop to them. Your radio, on the other hand, works directly over USB.</p>
+        <p lang="de">Du brauchst keine Brille: Propwash zeigt das FPV-Bild auf deinem Bildschirm. Eine Mod kann kein Video an deine Brille senden. Hat deine Brille einen HDMI-Eingang, kannst du sie als Bildschirm nutzen und den Desktop darauf spiegeln. Deine Funke dagegen geht direkt per USB.</p>
+      </details>
+      <details id="faq-realism">
         <summary><span lang="en">How realistic is it?</span><span lang="de">Wie realistisch ist das?</span></summary>
         <p lang="en">Propwash has its own flight model&nbsp;– rigid-body physics with motor, ESC and battery simulation, ground effect, prop wash, voltage sag and wind&nbsp;– and a Betaflight-style flight controller with rates, PID, filters and flight modes. How each drone flies follows from its parts, and the physics is checked against blackbox logs of real drones from a 65&nbsp;mm whoop to 7″. If you want it easier, the world rules have the presets <em>Training</em> and <em>Arcade</em>. The world around it is still Minecraft, of course.</p>
         <p lang="de">Propwash hat ein eigenes Flugmodell&nbsp;– Starrkörper-Physik mit Motor-, Regler- und Akkusimulation, Bodeneffekt, Prop-Wash, Spannungseinbruch und Wind&nbsp;– und einen Flight-Controller im Betaflight-Stil mit Rates, PID, Filtern und Flugmodi. Wie jede Drohne fliegt, folgt aus ihren Teilen, und die Physik ist mit Blackbox-Logs echter Drohnen vom 65-mm-Whoop bis 7&nbsp;Zoll abgeglichen. Wer es leichter mag, nimmt bei den Welt-Regeln die Voreinstellung <em>Training</em> oder <em>Arcade</em>. Die Welt drumherum bleibt natürlich Minecraft.</p>
       </details>
-      <details>
-        <summary><span lang="en">Does it work in multiplayer?</span><span lang="de">Funktioniert es im Mehrspielermodus?</span></summary>
-        <p lang="en">Yes. Install the same version on the server and on every client. The server streams and generates chunks around your drone, so your render distance doesn’t hold you back. Race together with start lights, watch other pilots’ feeds with <span class="nowrap"><kbd>F7</kbd>,</span> and set the <a href="docs/gamerules/">world rules</a> and permissions for your server. If add-ons don’t match when you join, an overview tells you which one, in which version and where to get it.</p>
-        <p lang="de">Ja. Installiere dieselbe Version auf dem Server und auf jedem Client. Der Server lädt und erzeugt die Chunks rund um deine Drohne, deine Sichtweite bremst dich also nicht aus. Tritt bei Rennen mit Startampel gegen andere an, sieh dir mit <kbd>F7</kbd> die Videobilder anderer Piloten an und leg die <a href="docs/gamerules/">Welt-Regeln</a> und Rechte für deinen Server fest. Passen Add-ons beim Beitritt nicht, zeigt dir eine Übersicht, welches, in welcher Version und woher du es bekommst.</p>
-      </details>
-      <details>
+      <details id="faq-learn">
         <summary><span lang="en">I’ve never flown FPV. Can I learn it here?</span><span lang="de">Ich bin noch nie FPV geflogen. Kann ich das hier lernen?</span></summary>
         <p lang="en">That’s what the Flight School is for: animated lessons explain building, binding, flying, racing and tuning right in the game, and the flight training takes you from hovering to gates and flips in 20 lessons you fly yourself. Angle mode keeps the drone level, keyboard flight starts in Angle mode, and GPS Rescue brings the drone home.</p>
         <p lang="de">Genau dafür gibt es die Flugschule: Animierte Lektionen erklären Bauen, Binden, Fliegen, Rennen und Tuning direkt im Spiel, und das Flugtraining führt dich in 20 Lektionen zum Selberfliegen vom Schweben bis zu Gates und Flips. Der Angle-Modus hält die Drohne gerade, Tastaturflug startet im Angle-Modus, und GPS Rescue holt die Drohne heim.</p>
       </details>
-      <details>
+      <details id="faq-multiplayer">
+        <summary><span lang="en">Does it work in multiplayer?</span><span lang="de">Funktioniert es im Mehrspielermodus?</span></summary>
+        <p lang="en">Yes. Install the same version on the server and on every client. The server streams and generates chunks around your drone, so your render distance doesn’t hold you back. Race together with start lights, watch other pilots’ feeds with <span class="nowrap"><kbd>F7</kbd>,</span> and set the <a href="docs/gamerules/">world rules</a> and permissions for your server. If add-ons don’t match when you join, an overview tells you which one, in which version and where to get it.</p>
+        <p lang="de">Ja. Installiere dieselbe Version auf dem Server und auf jedem Client. Der Server lädt und erzeugt die Chunks rund um deine Drohne, deine Sichtweite bremst dich also nicht aus. Tritt bei Rennen mit Startampel gegen andere an, sieh dir mit <kbd>F7</kbd> die Videobilder anderer Piloten an und leg die <a href="docs/gamerules/">Welt-Regeln</a> und Rechte für deinen Server fest. Passen Add-ons beim Beitritt nicht, zeigt dir eine Übersicht, welches, in welcher Version und woher du es bekommst.</p>
+      </details>
+      <details id="faq-survival">
         <summary><span lang="en">Survival or creative?</span><span lang="de">Überlebens- oder Kreativmodus?</span></summary>
         <p lang="en">Both. In survival you craft everything except the creative-only items and find parts in chests. In creative you get five ready-to-fly presets, the creative goggles with freely adjustable video and the Creative Flight Controller, whose <em>Drone Editor</em> sets masses, motors, props, battery and drag freely.</p>
         <p lang="de">Beides. Im Überlebensmodus stellst du alles außer den reinen Kreativ-Items selbst her und findest Teile in Truhen. Im Kreativmodus gibt es fünf flugfertige Vorlagen, die Kreativ-Brille mit frei einstellbarem Video und den Kreativ-Flugcontroller, dessen <em>Drohnen-Editor</em> Massen, Motoren, Props, Akku und Luftwiderstand frei einstellt.</p>
       </details>
-      <details>
+      <details id="faq-vr">
+        <summary><span lang="en">Is there VR?</span><span lang="de">Gibt es VR?</span></summary>
+        <p lang="en">No. Propwash doesn’t support VR, and it isn’t planned right now.</p>
+        <p lang="de">Nein. Propwash unterstützt kein VR, und das ist derzeit nicht geplant.</p>
+      </details>
+      <details id="faq-motion-blur">
+        <summary><span lang="en">Is there motion blur?</span><span lang="de">Gibt es Motion Blur?</span></summary>
+        <p lang="en">Motion blur isn’t a Propwash feature. Shader packs can add it: install Iris and a shader pack with motion blur. With an active shader pack, Propwash switches its video effect to a simpler overlay. Iris toggles shaders with <kbd>K</kbd> by default, which Propwash uses for its menu&nbsp;– change one of the two key bindings.</p>
+        <p lang="de">Motion Blur ist kein Propwash-Feature. Shaderpacks können es nachrüsten: Iris und ein Shaderpack mit Motion Blur installieren. Mit aktivem Shaderpack nutzt Propwash für den Videoeffekt ein einfacheres Overlay. Iris schaltet Shader standardmäßig mit <kbd>K</kbd> um, Propwash öffnet damit sein Menü&nbsp;– belege eine der beiden Tasten um.</p>
+      </details>
+      <details id="faq-old-codes">
+        <summary><span lang="en">My old share codes (PW1/PW2)&nbsp;– do they still work?</span><span lang="de">Meine alten Sharecodes (PW1/PW2)&nbsp;– gehen die noch?</span></summary>
+        <p lang="en">Yes. Propwash 0.6.0 and the configurator still read them. New codes start with PW3 and can carry parts from any add-on; they need Propwash 0.6.0 or newer. To share a build in the new format, convert the old code at propwashfpv.com/convert/ and post the PW3 code next to the old one, so players on 0.5 can still use it.</p>
+        <p lang="de">Ja. Propwash 0.6.0 und der Konfigurator lesen sie weiter. Neue Codes beginnen mit PW3 und können Teile aus jedem Add-on enthalten; sie brauchen Propwash 0.6.0 oder neuer. Um einen Build im neuen Format zu teilen, rechne den alten Code auf propwashfpv.com/convert/ um und poste den PW3-Code neben den alten, damit Spieler mit 0.5 ihn weiter nutzen können.</p>
+      </details>
+      <details id="faq-try">
         <summary><span lang="en">Can I try anything without installing the mod?</span><span lang="de">Kann ich etwas ausprobieren, ohne die Mod zu installieren?</span></summary>
         <p lang="en">Yes: the <a href="configurator/">online configurator</a> builds, paints and tunes any drone from Propwash and Just More Parts in your browser and shows its flight figures. Its share code loads the same drone in the game.</p>
         <p lang="de">Ja: Der <a href="configurator/">Online-Konfigurator</a> baut, lackiert und tunt jede Drohne aus Propwash und Just More Parts im Browser und zeigt ihre Flugwerte. Ihr Sharecode lädt dieselbe Drohne im Spiel.</p>
       </details>
-      <details>
+      <details id="faq-download">
         <summary><span lang="en">Where can I download it?</span><span lang="de">Wo kann ich die Mod herunterladen?</span></summary>
-        <p lang="en">On <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a>, for Minecraft 26.3 with Fabric and NeoForge; the current version is 0.5.2. The <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a> page follows once its review is through. Every new version goes through the platforms’ manual review first, which can take a while&nbsp;– if it is not listed there yet, it is still in review.</p>
-        <p lang="de">Auf <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a>, für Minecraft 26.3 mit Fabric und NeoForge; aktuell ist Version 0.5.2. Die <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a>-Seite folgt, sobald ihre Prüfung durch ist. Jede neue Version geht dort zuerst durch eine manuelle Prüfung, die eine Weile dauern kann&nbsp;– steht sie noch nicht dort, wird sie noch geprüft.</p>
+        <!-- platforms:faq-download propwash -->
+        <p lang="en">On <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> and <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a>, for Minecraft 26.3 with Fabric and NeoForge; the current version is 0.6.0. Every new version goes through the platforms’ manual review first, which can take a while&nbsp;– if it is not listed there yet, it is still in review.</p>
+        <p lang="de">Auf <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> und <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a>, für Minecraft 26.3 mit Fabric und NeoForge; aktuell ist Version 0.6.0. Jede neue Version geht dort zuerst durch eine manuelle Prüfung, die eine Weile dauern kann&nbsp;– steht sie noch nicht dort, wird sie noch geprüft.</p>
+        <!-- /platforms -->
       </details>
-      <details>
-        <summary><span lang="en">Is the source code available?</span><span lang="de">Ist der Quellcode einsehbar?</span></summary>
-        <p lang="en">Yes, from 0.5.0 on: <a href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener">Propwash FPV</a> and <a href="https://github.com/LardTom/propwash-justmoreparts" target="_blank" rel="noopener">Just More Parts</a> are on GitHub under the PolyForm Shield License 1.0.0. You may read the code, build it yourself, use the mods in modpacks and send pull requests; re-uploads and competing mods built from it are not allowed. The add-on API and the documentation are MIT licensed&nbsp;– <a href="#source">more on the license</a>.</p>
-        <p lang="de">Ja, ab 0.5.0: <a href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener">Propwash FPV</a> und <a href="https://github.com/LardTom/propwash-justmoreparts" target="_blank" rel="noopener">Just More Parts</a> liegen auf GitHub unter der PolyForm Shield License 1.0.0. Du darfst den Code lesen, selbst bauen, die Mods in Modpacks verwenden und Pull Requests schicken; erneutes Hochladen und daraus gebaute Konkurrenz-Mods sind nicht erlaubt. Die Add-on-API und die Doku stehen unter der MIT-Lizenz&nbsp;– <a href="#source">mehr zur Lizenz</a>.</p>
+      <details id="faq-license">
+        <summary><span lang="en">Is Propwash open source?</span><span lang="de">Ist Propwash Open Source?</span></summary>
+        <p lang="en">No. Propwash is source-available: the code is public, under the PolyForm Shield License 1.0.0. You may read it, build it yourself, put Propwash in modpacks and send pull requests. You may not re-upload it or build a competing drone mod from its code. The add-on API and the docs are MIT licensed, and add-ons follow the <a href="docs/api/">rules for add-ons</a>&nbsp;– <a href="#source">more on the license</a>.</p>
+        <p lang="de">Nein. Propwash ist source-available: Der Code ist öffentlich, unter der PolyForm Shield License 1.0.0. Du darfst ihn lesen, selbst bauen, Propwash in Modpacks aufnehmen und Pull Requests schicken. Nicht erlaubt sind erneutes Hochladen und eine konkurrierende Drohnen-Mod aus dem Code. Add-on-API und Doku stehen unter MIT, für Add-ons gelten die <a href="docs/api/">Regeln für Add-ons</a>&nbsp;– <a href="#source">mehr zur Lizenz</a>.</p>
+        <p>
+          <!-- platforms:source propwash -->
+          <a class="btn btn--ghost btn--icon" href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener" aria-label="Source code of Propwash FPV" data-de-aria-label="Quellcode von Propwash FPV" title="Source code of Propwash FPV" data-de-title="Quellcode von Propwash FPV"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg></a>
+          <!-- /platforms -->
+        </p>
       </details>
-      <details>
+      <details id="faq-addons">
         <summary><span lang="en">Can I make my own parts or add-ons?</span><span lang="de">Kann ich eigene Teile oder Add-ons bauen?</span></summary>
-        <p lang="en">Yes. The <a href="docs/api/">add-on API</a> lets other mods add frames, stacks, motors, props, batteries, video units and accessories in Java or JSON, plus presets, workbench buttons, configurator tabs and Flight School scenes; the <a href="docs/parts-format/">parts format</a> lists every field. The first add-on is Just More Parts.</p>
-        <p lang="de">Ja. Über die <a href="docs/api/">Add-on-API</a> bringen andere Mods Rahmen, Stacks, Motoren, Props, Akkus, Videoeinheiten und Zubehör in Java oder JSON mit, dazu Presets, Werkbank-Knöpfe, Konfigurator-Tabs und Flugschul-Szenen; das <a href="docs/parts-format/">Teile-Format</a> nennt jedes Feld. Das erste Add-on ist Just More Parts.</p>
+        <p lang="en">Yes. The <a href="docs/api/">add-on API</a> lets other mods add frames, stacks, motors, props, batteries, video units and accessories in Java or JSON, plus presets, workbench buttons, configurator tabs and Flight School scenes; the <a href="docs/parts-format/">parts format</a> lists every field. Every add-on uses its own namespace&nbsp;– “propwash” is reserved for Propwash itself&nbsp;– and follows the rules for add-ons, so its parts work in share codes. The first add-on is Just More Parts; official and reviewed add-ons are listed in the add-on directory on this website.</p>
+        <p lang="de">Ja. Über die <a href="docs/api/">Add-on-API</a> bringen andere Mods Rahmen, Stacks, Motoren, Props, Akkus, Videoeinheiten und Zubehör in Java oder JSON mit, dazu Presets, Werkbank-Knöpfe, Konfigurator-Tabs und Flugschul-Szenen; das <a href="docs/parts-format/">Teile-Format</a> nennt jedes Feld. Jedes Add-on nutzt seinen eigenen Namensraum&nbsp;– „propwash“ ist für Propwash selbst reserviert&nbsp;– und folgt den Regeln für Add-ons, damit seine Teile in Sharecodes funktionieren. Das erste Add-on ist Just More Parts; offizielle und geprüfte Add-ons stehen im Add-on-Verzeichnis auf dieser Website.</p>
+      </details>
+      <details id="faq-languages">
+        <summary><span lang="en">Which languages are there?</span><span lang="de">Welche Sprachen gibt es?</span></summary>
+        <p lang="en">The game is in English and German. This website is also available in Spanish, French, Brazilian Portuguese, Polish and Russian, translated with AI; only English and German are official.</p>
+        <p lang="de">Das Spiel gibt es auf Englisch und Deutsch. Diese Website gibt es außerdem auf Spanisch, Französisch, brasilianischem Portugiesisch, Polnisch und Russisch, mit KI übersetzt; offiziell sind nur Englisch und Deutsch.</p>
       </details>
     </div>
   </div>
@@ -813,16 +836,20 @@
     <div class="release__cta">
       <p class="kicker"><span lang="en">Download</span><span lang="de">Download</span></p>
       <h2 id="download-title"><span lang="en">Ready for take-off</span><span lang="de">Bereit zum Abheben</span></h2>
-      <p class="section__intro" lang="en">Get Propwash FPV on CurseForge, for Fabric and NeoForge; the Modrinth page follows once its review is through. Every new version goes through the platforms’ manual review first, which can take a while.</p>
-      <p class="section__intro" lang="de">Propwash FPV gibt es auf CurseForge, für Fabric und NeoForge; die Modrinth-Seite folgt, sobald ihre Prüfung durch ist. Jede neue Version geht dort zuerst durch eine manuelle Prüfung, die eine Weile dauern kann.</p>
+      <p class="section__intro" lang="en">Get Propwash FPV on CurseForge or Modrinth, for Fabric and NeoForge. Every new version goes through the platforms’ manual review first, which can take a while.</p>
+      <p class="section__intro" lang="de">Propwash FPV gibt es auf CurseForge und Modrinth, für Fabric und NeoForge. Jede neue Version geht dort zuerst durch eine manuelle Prüfung, die eine Weile dauern kann.</p>
       <div class="hero__cta">
-        <a class="btn btn--primary" href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener"><span lang="en">Download on CurseForge</span><span lang="de">Download auf CurseForge</span></a>
+        <!-- platforms:buttons propwash -->
+        <a class="btn btn--ghost" href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener"><span class="soon-dot" aria-hidden="true"></span><span lang="en">CurseForge · in review</span><span lang="de">CurseForge · in Prüfung</span></a>
         <a class="btn btn--ghost" href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener"><span class="soon-dot" aria-hidden="true"></span><span lang="en">Modrinth · in review</span><span lang="de">Modrinth · in Prüfung</span></a>
-        <a class="btn btn--ghost btn--icon" href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener" aria-label="Source code on GitHub" data-de-aria-label="Quellcode auf GitHub" title="Source code on GitHub" data-de-title="Quellcode auf GitHub"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg></a>
-        <a class="btn btn--ghost" href="changelog/#propwash-0.5.2"><span lang="en">What’s new in 0.5.2</span><span lang="de">Was in 0.5.2 neu ist</span></a>
+        <a class="btn btn--ghost btn--icon" href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener" aria-label="Source code of Propwash FPV" data-de-aria-label="Quellcode von Propwash FPV" title="Source code of Propwash FPV" data-de-title="Quellcode von Propwash FPV"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg></a>
+        <!-- /platforms -->
+        <a class="btn btn--ghost" href="#new"><span lang="en">What’s new in 0.6.0</span><span lang="de">Was in 0.6.0 neu ist</span></a>
         <a class="btn btn--ghost" href="roadmap/"><span lang="en">What’s coming next</span><span lang="de">Was als Nächstes kommt</span><svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><path d="M3 8h10M8.5 3.5 13 8l-4.5 4.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"/></svg></a>
       </div>
-      <p class="status"><span class="soon-dot" aria-hidden="true"></span><span class="mono">VERSION 0.5.2</span> <span lang="en">CurseForge and Modrinth: in review</span><span lang="de">CurseForge und Modrinth: in Prüfung</span></p>
+      <!-- platforms:status propwash -->
+      <p class="status"><span class="soon-dot" aria-hidden="true"></span><span class="mono">VERSION 0.6.0</span> <span lang="en">CurseForge and Modrinth: in review</span><span lang="de">CurseForge und Modrinth: in Prüfung</span></p>
+      <!-- /platforms -->
     </div>
 
     <div class="compat">
@@ -832,8 +859,9 @@
         <div><dt>Fabric</dt><dd><span lang="en">Fabric Loader 0.19.5+ and Fabric API 0.161.0+26.3 or newer</span><span lang="de">Fabric Loader 0.19.5+ und Fabric API 0.161.0+26.3 oder neuer</span></dd></div>
         <div><dt>NeoForge</dt><dd><span lang="en">26.3.0.10-beta or newer</span><span lang="de">26.3.0.10-beta oder neuer</span></dd></div>
         <div><dt>Java</dt><dd>25</dd></div>
-        <div><dt><span lang="en">Install</span><span lang="de">Installation</span></dt><dd><span lang="en">Required on client and server – both need 0.5.2</span><span lang="de">Auf Client und Server nötig – beide brauchen 0.5.2</span></dd></div>
+        <div><dt><span lang="en">Install</span><span lang="de">Installation</span></dt><dd><span lang="en">Required on client and server – both need 0.6.0</span><span lang="de">Auf Client und Server nötig – beide brauchen 0.6.0</span></dd></div>
         <div><dt><span lang="en">Worlds</span><span lang="de">Welten</span></dt><dd><span lang="en">Worlds, drones, gates, courses and leaderboards from 0.4.0 and 0.5.x load unchanged</span><span lang="de">Welten, Drohnen, Gates, Kurse und Bestenlisten aus 0.4.0 und 0.5.x laden unverändert</span></dd></div>
+        <div><dt><span lang="en">Share codes</span><span lang="de">Sharecodes</span></dt><dd><span lang="en">New codes (PW3) need 0.6.0 or newer; PW1 and PW2 codes still load</span><span lang="de">Neue Codes (PW3) brauchen 0.6.0 oder neuer; PW1- und PW2-Codes laden weiter</span></dd></div>
         <div><dt>Add-ons</dt><dd><span lang="en">Add-ons made for 0.4.0 and 0.5.x keep working. Add-ons on a server are needed by everyone who joins; add-ons only you have stay off there.</span><span lang="de">Add-ons für 0.4.0 und 0.5.x funktionieren weiter. Add-ons auf einem Server braucht jeder, der beitritt; Add-ons, die nur du hast, bleiben dort aus.</span></dd></div>
         <div><dt><span lang="en">Play</span><span lang="de">Spielen</span></dt><dd><span lang="en">Singleplayer and multiplayer</span><span lang="de">Einzel- und Mehrspieler</span></dd></div>
         <div><dt>Optional</dt><dd><span lang="en">LambDynamicLights&nbsp;– drones with LED strips become real light sources</span><span lang="de">LambDynamicLights&nbsp;– Drohnen mit LED-Streifen werden zu echten Lichtquellen</span></dd></div>
@@ -854,22 +882,27 @@
           <a class="btn btn--ghost" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg><span lang="en">Join the Discord</span><span lang="de">Discord beitreten</span></a>
         </div>
       </div>
-      <div class="community">
+      <div class="community" id="addon">
         <p class="kicker"><span lang="en">Add-on</span><span lang="de">Add-on</span></p>
-        <p lang="en"><strong>Propwash: Just More Parts 1.1.1</strong> adds 143 more realistic parts and 22 ready-to-fly presets, from 65&nbsp;mm whoops to 13″ X-Class, plus share codes for your builds&nbsp;– made for Propwash 0.4.0 to 0.5.2. On a server without it, it simply stays off while you play there.</p>
-        <p lang="de"><strong>Propwash: Just More Parts 1.1.1</strong> bringt 143 weitere realistische Teile und 22 flugfertige Presets mit, vom 65-mm-Whoop bis zur 13-Zoll-X-Class, dazu Sharecodes für deine Builds&nbsp;– gemacht für Propwash 0.4.0 bis 0.5.2. Auf einem Server ohne das Add-on bleibt es einfach aus, solange du dort spielst.</p>
+        <p lang="en"><strong>Propwash: Just More Parts 1.2.0</strong> adds more than 140 realistic parts and over 20 ready-to-fly presets, from 65&nbsp;mm whoops to 13″ X-Class, now with motors of very high KV for 1S race whoops&nbsp;– made for Propwash 0.6.0. Version 1.1 keeps working with Propwash 0.6.0, but 1.2.0 is recommended. On a server without the add-on, it simply stays off while you play there.</p>
+        <p lang="de"><strong>Propwash: Just More Parts 1.2.0</strong> bringt mehr als 140 realistische Teile und über 20 flugfertige Presets mit, vom 65-mm-Whoop bis zur 13-Zoll-X-Class, jetzt mit Motoren sehr hoher KV für 1S-Renn-Whoops&nbsp;– gemacht für Propwash 0.6.0. Version 1.1 läuft mit Propwash 0.6.0 weiter, empfohlen ist aber 1.2.0. Auf einem Server ohne das Add-on bleibt es einfach aus, solange du dort spielst.</p>
         <div class="hero__cta">
-          <a class="btn btn--ghost" href="https://www.curseforge.com/minecraft/mc-mods/propwash-just-more-parts" target="_blank" rel="noopener"><span lang="en">Just More Parts on CurseForge</span><span lang="de">Just More Parts auf CurseForge</span></a>
+          <!-- platforms:buttons justmoreparts -->
+          <a class="btn btn--ghost" href="https://www.curseforge.com/minecraft/mc-mods/propwash-just-more-parts" target="_blank" rel="noopener" aria-label="Just More Parts: CurseForge · in review" data-de-aria-label="Just More Parts: CurseForge · in Prüfung"><span class="soon-dot" aria-hidden="true"></span><span lang="en">CurseForge · in review</span><span lang="de">CurseForge · in Prüfung</span></a>
+          <a class="btn btn--ghost" href="https://modrinth.com/mod/propwash-just-more-parts" target="_blank" rel="noopener" aria-label="Just More Parts: Modrinth · in review" data-de-aria-label="Just More Parts: Modrinth · in Prüfung"><span class="soon-dot" aria-hidden="true"></span><span lang="en">Modrinth · in review</span><span lang="de">Modrinth · in Prüfung</span></a>
+          <a class="btn btn--ghost btn--icon" href="https://github.com/LardTom/propwash-justmoreparts" target="_blank" rel="noopener" aria-label="Source code of Propwash: Just More Parts" data-de-aria-label="Quellcode von Propwash: Just More Parts" title="Source code of Propwash: Just More Parts" data-de-title="Quellcode von Propwash: Just More Parts"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg></a>
+          <!-- /platforms -->
           <a class="btn btn--ghost" href="docs/api/"><span lang="en">Build your own add-on</span><span lang="de">Eigenes Add-on bauen</span></a>
         </div>
       </div>
       <div class="community" id="source">
         <p class="kicker"><span lang="en">Source code &amp; license</span><span lang="de">Quellcode &amp; Lizenz</span></p>
-        <p lang="en">From 0.5.0 on, the source code of Propwash FPV is public under the <a href="https://polyformproject.org/licenses/shield/1.0.0" target="_blank" rel="noopener">PolyForm Shield License 1.0.0</a>: read it, build it yourself, put Propwash in modpacks and send pull requests. The add-on API and the documentation are MIT licensed&nbsp;– <a href="docs/#source">what is allowed in detail</a>.</p>
-        <p lang="de">Ab 0.5.0 ist der Quellcode von Propwash FPV öffentlich, unter der <a href="https://polyformproject.org/licenses/shield/1.0.0" target="_blank" rel="noopener">PolyForm Shield License 1.0.0</a>: lesen, selbst bauen, Propwash in Modpacks aufnehmen und Pull Requests schicken. Die Add-on-API und die Doku stehen unter der MIT-Lizenz&nbsp;– <a href="docs/#source">was genau erlaubt ist</a>.</p>
+        <p lang="en">Propwash FPV and Just More Parts are source-available, not open source: the code is public under the <a href="https://polyformproject.org/licenses/shield/1.0.0" target="_blank" rel="noopener">PolyForm Shield License 1.0.0</a>. Read it, build it yourself, put Propwash in modpacks and send pull requests; re-uploads and competing drone mods built from the code are not allowed. The add-on API and the documentation are MIT licensed, and add-ons follow the rules for add-ons&nbsp;– <a href="docs/#source">what is allowed in detail</a>.</p>
+        <p lang="de">Propwash FPV und Just More Parts sind source-available, nicht Open Source: Der Code ist öffentlich, unter der <a href="https://polyformproject.org/licenses/shield/1.0.0" target="_blank" rel="noopener">PolyForm Shield License 1.0.0</a>. Lesen, selbst bauen, Propwash in Modpacks aufnehmen und Pull Requests schicken ist erlaubt; erneutes Hochladen und konkurrierende Drohnen-Mods aus dem Code nicht. Die Add-on-API und die Doku stehen unter der MIT-Lizenz, für Add-ons gelten die Regeln für Add-ons&nbsp;– <a href="docs/#source">was genau erlaubt ist</a>.</p>
         <div class="hero__cta">
-          <a class="btn btn--ghost" href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener"><span lang="en">Propwash FPV on GitHub</span><span lang="de">Propwash FPV auf GitHub</span></a>
-          <a class="btn btn--ghost" href="https://github.com/LardTom/propwash-justmoreparts" target="_blank" rel="noopener"><span lang="en">Just More Parts on GitHub</span><span lang="de">Just More Parts auf GitHub</span></a>
+          <!-- platforms:source propwash -->
+          <a class="btn btn--ghost btn--icon" href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener" aria-label="Source code of Propwash FPV" data-de-aria-label="Quellcode von Propwash FPV" title="Source code of Propwash FPV" data-de-title="Quellcode von Propwash FPV"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg></a>
+          <!-- /platforms -->
         </div>
       </div>
     </div>

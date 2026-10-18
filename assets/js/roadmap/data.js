@@ -61,9 +61,10 @@ function compareVersions(a, b) {
 
 /**
  * Checks the roadmap and returns a list of problems (empty when valid).
- * `icons`: optional set of icon names the page's sprite provides.
+ * `icons`: optional set of icon names the page's sprite provides; `products`: optional set of the product keys of
+ * assets/data/platforms.json (a horizon's "download" names one of them).
  */
-export function validateRoadmap(data, { icons = null } = {}) {
+export function validateRoadmap(data, { icons = null, products = null } = {}) {
   const errors = [];
   const err = (where, msg) => errors.push(`${where}: ${msg}`);
 
@@ -116,6 +117,10 @@ export function validateRoadmap(data, { icons = null } = {}) {
     text(horizon?.title, `${hw}.title`, { max: 40 });
     text(horizon?.intro, `${hw}.intro`, { required: false, max: 160 });
     link(horizon?.link, `${hw}.link`);
+    if (horizon?.download !== undefined) {
+      if (typeof horizon.download !== 'string' || !/^[a-z0-9]+$/.test(horizon.download)) err(`${hw}.download`, 'must be a product key of platforms.json');
+      else if (products && !products.has(horizon.download)) err(`${hw}.download`, `no product "${horizon.download}" in platforms.json`);
+    }
     if (!Array.isArray(horizon?.groups)) { err(`${hw}.groups`, 'must be a list'); return; }
 
     let lastVersion = null;
