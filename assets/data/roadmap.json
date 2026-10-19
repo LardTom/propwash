@@ -757,14 +757,14 @@
         {
           "version": "0.6.0",
           "title": {
-            "en": "Servers, game modes and share codes",
-            "de": "Server, Spielmodi und Sharecodes"
+            "en": "Share codes, race data and add-on API",
+            "de": "Sharecodes, Renndaten und Add-on-API"
           },
           "items": [
             {
               "id": "sharecodes-pw3",
               "icon": "code",
-              "status": "planned",
+              "status": "progress",
               "title": {
                 "en": "Share codes for every add-on",
                 "de": "Sharecodes für alle Add-ons"
@@ -777,7 +777,7 @@
             {
               "id": "addon-api",
               "icon": "puzzle",
-              "status": "planned",
+              "status": "progress",
               "title": {
                 "en": "More add-on API",
                 "de": "Mehr Add-on-API"
@@ -790,7 +790,7 @@
             {
               "id": "addon-guidelines",
               "icon": "book",
-              "status": "planned",
+              "status": "progress",
               "title": {
                 "en": "Add-on guidelines",
                 "de": "Richtlinien für Add-ons"
@@ -803,7 +803,7 @@
             {
               "id": "flight-path-marker",
               "icon": "compass",
-              "status": "planned",
+              "status": "progress",
               "title": {
                 "en": "Velocity vector in the OSD",
                 "de": "Geschwindigkeitsvektor im OSD"
@@ -816,7 +816,7 @@
             {
               "id": "freecam-drone",
               "icon": "cinema",
-              "status": "planned",
+              "status": "progress",
               "title": {
                 "en": "Freecam drone",
                 "de": "Freecam-Drohne"
@@ -829,7 +829,7 @@
             {
               "id": "rx-block",
               "icon": "gate",
-              "status": "planned",
+              "status": "progress",
               "title": {
                 "en": "RX block",
                 "de": "RX-Block"
@@ -840,9 +840,35 @@
               }
             },
             {
+              "id": "race-data",
+              "icon": "flag",
+              "status": "progress",
+              "title": {
+                "en": "Race data for servers and bots",
+                "de": "Renndaten für Server und Bots"
+              },
+              "text": {
+                "en": "Every course gets its own ID with its leaderboards – servers and Discord bots read them through the API.",
+                "de": "Jeder Kurs bekommt eine eigene ID mit seinen Bestenlisten – Server und Discord-Bots lesen sie über die API."
+              }
+            },
+            {
+              "id": "race-gates",
+              "icon": "gate",
+              "status": "progress",
+              "title": {
+                "en": "Better courses",
+                "de": "Bessere Kurse"
+              },
+              "text": {
+                "en": "Stacked gates count to the bottom, poles score, loops in a course, fine nudging and visible scoring areas.",
+                "de": "Gestapelte Gates zählen bis unten, Pfosten werten, Schleifen im Kurs, Gates fein verschieben, Wertungsflächen sichtbar."
+              }
+            },
+            {
               "id": "camera-angle-menu",
               "icon": "tilt",
-              "status": "planned",
+              "status": "progress",
               "title": {
                 "en": "Camera angle in the K menu",
                 "de": "Kamerawinkel im K-Menü"
@@ -855,7 +881,7 @@
             {
               "id": "gate-tutorial",
               "icon": "school",
-              "status": "planned",
+              "status": "progress",
               "title": {
                 "en": "Gate tutorial",
                 "de": "Gate-Tutorial"
@@ -868,7 +894,7 @@
             {
               "id": "slime-wool",
               "icon": "impact",
-              "status": "planned",
+              "status": "progress",
               "title": {
                 "en": "Slime and wool",
                 "de": "Schleim und Wolle"
@@ -881,7 +907,7 @@
             {
               "id": "website-faq-languages",
               "icon": "chat",
-              "status": "planned",
+              "status": "progress",
               "title": {
                 "en": "More FAQ and languages on the website",
                 "de": "Mehr FAQ und Sprachen auf der Website"
@@ -900,22 +926,9 @@
           },
           "items": [
             {
-              "id": "propwash-server",
-              "icon": "flag",
-              "status": "planned",
-              "title": {
-                "en": "Propwash: Server",
-                "de": "Propwash: Server"
-              },
-              "text": {
-                "en": "The official server add-on with game modes: races, time trials and zone games, with their own maps and results.",
-                "de": "Das offizielle Server-Add-on mit Spielmodi: Rennen, Zeitfahren und Zonen-Spiele, mit eigenen Maps und Ergebnissen."
-              }
-            },
-            {
               "id": "jmp-next",
               "icon": "prop",
-              "status": "planned",
+              "status": "progress",
               "title": {
                 "en": "Next version of Just More Parts",
                 "de": "Nächste Version von Just More Parts"
