@@ -9,7 +9,9 @@
 // still comes from the format-1 export of Propwash 0.5.2, so the heat figures of the game are kept here until the
 // catalog is built from a 0.6.0 export: every preset of the export, every one-part-swapped variant of its analysis files
 // and every share-code vector with an analysis, each with the three motor temperatures and the warnings, plus the
-// thermal data of every motor and the text of the heat warning.
+// thermal data of every motor and the text of the heat warning. Both are also written into
+// assets/data/configurator/catalog.json (0.6.0 gave the 1404 4600 KV motor of the Cinewhoop and the 1505 3600 KV motor
+// of Just More Parts their own cooling and the warning a new text); everything else of the catalog stays as it is.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -18,6 +20,7 @@ import { exportDir } from './build-configurator-data.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'tools/fixtures/heat-vectors.json');
+const CATALOG = path.join(ROOT, 'assets/data/configurator/catalog.json');
 
 export const HEAT_KEYS = Object.freeze(['sustained_motor_temp_c', 'motor_temp_minute_c', 'mixed_motor_temp_c']);
 
@@ -135,6 +138,24 @@ export function formatHeat(heat) {
   return lines.join('\n') + '\n';
 }
 
+/** Takes the thermal data of every motor and the text of the heat warning into the catalog; returns what changed. */
+export function refreshCatalog(catalog, heat) {
+  const changed = [];
+  for (const part of catalog.parts) {
+    const thermal = part.category === 'motor' ? heat.motors[part.id] : null;
+    if (thermal && JSON.stringify(part.data.thermal) !== JSON.stringify(thermal)) {
+      part.data.thermal = thermal;
+      changed.push(part.id);
+    }
+  }
+  const warning = catalog.rules.analysis_warnings.find((w) => w.key === 'motor_thermal');
+  if (warning && heat.motor_thermal && JSON.stringify(warning.text) !== JSON.stringify(heat.motor_thermal)) {
+    warning.text = heat.motor_thermal;
+    changed.push('analysis_warnings.motor_thermal');
+  }
+  return changed;
+}
+
 function main() {
   const dir = exportDir();
   if (!fs.existsSync(path.join(dir, 'manifest.json'))) {
@@ -143,9 +164,13 @@ function main() {
   }
   const heat = buildHeat(dir);
   fs.writeFileSync(OUT, formatHeat(heat));
+  const catalog = JSON.parse(fs.readFileSync(CATALOG, 'utf8'));
+  const changed = refreshCatalog(catalog, heat);
+  if (changed.length) fs.writeFileSync(CATALOG, JSON.stringify(catalog) + '\n');
   const variants = heat.presets.reduce((n, g) => n + g.variants.length, 0);
   console.log(`heat-vectors.json: ${heat.presets.length} presets, ${variants} variants, ${heat.builds.length} other builds, `
     + `${Object.keys(heat.motors).length} motors (${heat.source.generator}, ${heat.source.generated_at})`);
+  console.log(`catalog.json: ${changed.length ? `heat data taken over (${changed.join(', ')})` : 'heat data already current'}`);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
