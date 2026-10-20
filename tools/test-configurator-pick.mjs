@@ -9,6 +9,11 @@
 //   - a drag and a long press that start on a part select nothing; the FPV camera view picks the spinning prop discs
 //   - a part without a paint model (removed from the model file on its way to the page) gives the "can't be painted"
 //     hint instead of a paint target
+//   - paint tab, pointer on a face outside the part's tint groups (it paints the part's main slot): the label names the
+//     slot, the faces of the slot light up fully and the part under the pointer lights up a little as a whole
+//     (website design 0.6.0, fixes 3.E); the parts tab lights the whole category there as before
+//   - battery plugged in (Propwash 0.6.0): a click on the plug or lead selects the stack; in the paint tab they are not
+//     pickable
 //   - phone (390 × 844, touch): the hint fits beside the toolbar, a tap picks in both tabs, a one-finger drag and a
 //     two-finger pinch do not, the page does not scroll sideways
 //   - no console errors or uncaught exceptions anywhere
@@ -420,6 +425,80 @@ async function main() {
         check(s.targets.length === 0, `${label}: no paint row marked`);
       }
       stripPaintOf = null;
+      await hoverAway();
+    }
+
+    // ---- Paint tab: hover on a face outside the tint groups ----
+    {
+      const label = 'paint hover on a face without a tint group';
+      await open(`${base}/configurator/#${codeWith('propwash:freestyle', {})}`, DESKTOP, label);
+      await setTab('paint');
+      let bare = null;
+      for (const view of VIEWS) {
+        await turn(view);
+        await viewerToTop();
+        bare = (await evaluate('window.__viewer.pickPoints()')).find((p) => p.bare && p.paintSlot);
+        if (bare) break;
+      }
+      check(!!bare, `${label}: a visible face without a tint group`);
+      if (bare) {
+        const at = await client(bare);
+        await mouse('mouseMoved', at.x, at.y, false);
+        await sleep(HOVER_WAIT_MS);
+        let s = await ui();
+        const name = plain(catalog.paintSlotName(bare.paintSlot, 'en'));
+        check(s.label && plain(s.label.kind) === name, `${label}: the label names the slot ${name} (got ${JSON.stringify(s.label)})`);
+        let lights = await evaluate('window.__viewer.highlights()');
+        const mine = lights.find((l) => l.meshId === bare.meshId);
+        check(mine && Math.abs(mine.all - 0.75 * 0.6) < 1e-6 && mine.faces === 0.75,
+          `${label}: the ${bare.category} under the pointer lights up as a whole (${mine && mine.all}), its ${bare.paintSlot} faces fully (${mine && mine.faces})`);
+        check(lights.filter((l) => l.meshId !== bare.meshId).every((l) => l.all === 0), `${label}: no other part lights up as a whole`);
+        // The same point in the parts tab: the whole category, as before.
+        await setTab('parts');
+        await viewerToTop();
+        const at2 = await client(bare);
+        await mouse('mouseMoved', at2.x, at2.y, false);
+        await sleep(HOVER_WAIT_MS);
+        lights = await evaluate('window.__viewer.highlights()');
+        check(lights.filter((l) => l.category === bare.category).every((l) => l.all === 0.75), `${label}: parts tab lights the whole ${bare.category} category`);
+        s = await ui();
+        check(s.label && plain(s.label.kind) === kindOf(bare.category, bare.mount), `${label}: parts tab label (got ${JSON.stringify(s.label)})`);
+      }
+      await turn([]);
+      await hoverAway();
+    }
+
+    // ---- Battery plugged in: plug and lead belong to the stack ----
+    {
+      const label = 'battery plugged in';
+      await open(`${base}/configurator/#${codeWith('propwash:freestyle', {})}`, DESKTOP, label);
+      const roles = await evaluate('window.__viewer.highlights().map((l) => l.role)');
+      check(roles.filter((r) => r === 'power_lead').length === 1, `${label}: one plugged pair drawn (${roles})`);
+      check(await evaluate("window.__viewer.current().assembly.pieces.find((p) => p.role === 'stack').variant === 'mounted'"), `${label}: mounted stack drawn`);
+      await setTab('paint');
+      await viewerToTop();
+      const paintPoints = await evaluate('window.__viewer.pickPoints()');
+      const leadIds = await evaluate("window.__viewer.highlights().filter((l) => l.role === 'power_lead').map((l) => l.meshId)");
+      check(!paintPoints.some((p) => leadIds.includes(p.meshId)), `${label}: the lead can't be picked in the paint tab`);
+      await setTab('parts');
+      await setCategory('frame');
+      let leadPoint = null;
+      for (const view of VIEWS) {
+        await turn(view);
+        await viewerToTop();
+        leadPoint = (await evaluate('window.__viewer.pickPoints()')).find((p) => leadIds.includes(p.meshId));
+        if (leadPoint) break;
+      }
+      check(!!leadPoint, `${label}: a visible point on the plug or lead`);
+      if (leadPoint) {
+        const at = await client(leadPoint);
+        await mouse('mouseMoved', at.x, at.y, false);
+        await mouse('mousePressed', at.x, at.y, true);
+        await mouse('mouseReleased', at.x, at.y, false);
+        await sleep(120);
+        check((await ui()).category === 'stack', `${label}: a click on the lead opens the stack`);
+      }
+      await turn([]);
       await hoverAway();
     }
 
