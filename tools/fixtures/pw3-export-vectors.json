@@ -1,0 +1,3763 @@
+[
+ {
+  "name": "parts:propwash:whoop",
+  "format": "PW3",
+  "code": "PW3-02nGxWz4AvQoX",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "propwash:whoop_65",
+    "stack": "propwash:aio_whoop",
+    "motor": "propwash:m0802_22000",
+    "prop": "propwash:p31_4b",
+    "video": "propwash:analog_nano",
+    "battery": "propwash:b1s_300_hv",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 28.1,
+   "thrust_to_weight": 3.1835174544428653,
+   "hover_throttle_percent": 54.96432459884759,
+   "hover_flight_time_min": 3.9018000021047916,
+   "cruise_flight_time_min": 3.7566441315949977,
+   "mixed_flight_time_min": 2.8148885744423238,
+   "aggressive_flight_time_min": 2.345098368650486,
+   "cruise_speed_kmh": 18.499999999990024,
+   "hover_current_a": 3.5437764024896965,
+   "cruise_current_a": 4.0727839699588255,
+   "mixed_current_a": 5.435383886565096,
+   "landing_cell_voltage": 3.5189157529899653,
+   "avionics_power_w": 2.5,
+   "top_speed_kmh": 48.17493273623906,
+   "full_throttle_current_a": 10.553691353000577,
+   "esc_load_percent": 38.964366624914426,
+   "battery_load_percent": 78.17549150370797,
+   "motor_response_ms": 50.48499208949444,
+   "crash_speed_ms": 14,
+   "sustained_motor_temp_c": 55.409036223817104,
+   "motor_temp_minute_c": 55.409036223817104,
+   "mixed_motor_temp_c": 38.36964291176032,
+   "props_in_view_percent": 6.227636098067385,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:propwash:whoop",
+  "format": "PW3",
+  "code": "PW3-1hDVja67mWpdN3",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "propwash:whoop_65",
+    "stack": "propwash:aio_whoop",
+    "motor": "propwash:m0802_22000",
+    "prop": "propwash:p31_4b",
+    "video": "propwash:analog_nano",
+    "battery": "propwash:b1s_300_hv",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 28.1,
+   "thrust_to_weight": 3.1835174544428653,
+   "hover_throttle_percent": 54.96432459884759,
+   "hover_flight_time_min": 3.9018000021047916,
+   "cruise_flight_time_min": 3.7566441315949977,
+   "mixed_flight_time_min": 2.8148885744423238,
+   "aggressive_flight_time_min": 2.345098368650486,
+   "cruise_speed_kmh": 18.499999999990024,
+   "hover_current_a": 3.5437764024896965,
+   "cruise_current_a": 4.0727839699588255,
+   "mixed_current_a": 5.435383886565096,
+   "landing_cell_voltage": 3.5189157529899653,
+   "avionics_power_w": 2.5,
+   "top_speed_kmh": 48.17493273623906,
+   "full_throttle_current_a": 10.553691353000577,
+   "esc_load_percent": 38.964366624914426,
+   "battery_load_percent": 78.17549150370797,
+   "motor_response_ms": 50.48499208949444,
+   "crash_speed_ms": 14,
+   "sustained_motor_temp_c": 55.409036223817104,
+   "motor_temp_minute_c": 55.409036223817104,
+   "mixed_motor_temp_c": 38.36964291176032,
+   "props_in_view_percent": 6.227636098067385,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:propwash:cinewhoop",
+  "format": "PW3",
+  "code": "PW3-02fmWsZbhj6ZO",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "propwash:cinewhoop_3",
+    "stack": "propwash:aio_20",
+    "motor": "propwash:m1404_4600",
+    "prop": "propwash:p3_3b",
+    "video": "propwash:digital_lite",
+    "battery": "propwash:b4s_650",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 286.7,
+   "thrust_to_weight": 4.670636201567632,
+   "hover_throttle_percent": 36.39643136660272,
+   "hover_flight_time_min": 5.589436215782645,
+   "cruise_flight_time_min": 5.24249743252012,
+   "mixed_flight_time_min": 4.166526054757337,
+   "aggressive_flight_time_min": 2.698495016786265,
+   "cruise_speed_kmh": 30.00000000001165,
+   "hover_current_a": 5.162888513228614,
+   "cruise_current_a": 5.951361999046676,
+   "mixed_current_a": 7.488252705002497,
+   "landing_cell_voltage": 3.5848404565321568,
+   "avionics_power_w": 6.1,
+   "top_speed_kmh": 90.64190353499903,
+   "full_throttle_current_a": 67.37761267883346,
+   "esc_load_percent": 65.01958232562838,
+   "battery_load_percent": 109.1135427997303,
+   "motor_response_ms": 25.99126857715006,
+   "crash_speed_ms": 11,
+   "sustained_motor_temp_c": 60.90189521412086,
+   "motor_temp_minute_c": 60.90189521412086,
+   "mixed_motor_temp_c": 31.090102520203914,
+   "props_in_view_percent": 1.941569153709167,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:propwash:cinewhoop",
+  "format": "PW3",
+  "code": "PW3-1gia5XF0DxkbJG",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "propwash:cinewhoop_3",
+    "stack": "propwash:aio_20",
+    "motor": "propwash:m1404_4600",
+    "prop": "propwash:p3_3b",
+    "video": "propwash:digital_lite",
+    "battery": "propwash:b4s_650",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 286.7,
+   "thrust_to_weight": 4.670636201567632,
+   "hover_throttle_percent": 36.39643136660272,
+   "hover_flight_time_min": 5.589436215782645,
+   "cruise_flight_time_min": 5.24249743252012,
+   "mixed_flight_time_min": 4.166526054757337,
+   "aggressive_flight_time_min": 2.698495016786265,
+   "cruise_speed_kmh": 30.00000000001165,
+   "hover_current_a": 5.162888513228614,
+   "cruise_current_a": 5.951361999046676,
+   "mixed_current_a": 7.488252705002497,
+   "landing_cell_voltage": 3.5848404565321568,
+   "avionics_power_w": 6.1,
+   "top_speed_kmh": 90.64190353499903,
+   "full_throttle_current_a": 67.37761267883346,
+   "esc_load_percent": 65.01958232562838,
+   "battery_load_percent": 109.1135427997303,
+   "motor_response_ms": 25.99126857715006,
+   "crash_speed_ms": 11,
+   "sustained_motor_temp_c": 60.90189521412086,
+   "motor_temp_minute_c": 60.90189521412086,
+   "mixed_motor_temp_c": 31.090102520203914,
+   "props_in_view_percent": 1.941569153709167,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:propwash:freestyle",
+  "format": "PW3",
+  "code": "PW3-02lVAldkcxCBH",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "propwash:freestyle_5",
+    "stack": "propwash:stack_30",
+    "motor": "propwash:m2207_1750",
+    "prop": "propwash:p51_3b",
+    "video": "propwash:digital_hd",
+    "battery": "propwash:b6s_1300",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 525.2,
+   "thrust_to_weight": 10.642082130496298,
+   "hover_throttle_percent": 23.426346362684356,
+   "hover_flight_time_min": 11.138366431772965,
+   "cruise_flight_time_min": 8.015045040094419,
+   "mixed_flight_time_min": 5.718473419409578,
+   "aggressive_flight_time_min": 4.101225710663013,
+   "cruise_speed_kmh": 55.000000000070386,
+   "hover_current_a": 5.19384391168178,
+   "cruise_current_a": 7.785358620924845,
+   "mixed_current_a": 10.912003155982616,
+   "landing_cell_voltage": 3.642697094129207,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 141.78033693341644,
+   "full_throttle_current_a": 115.62100716258152,
+   "esc_load_percent": 49.70410943611077,
+   "battery_load_percent": 74.11603023242405,
+   "motor_response_ms": 12.333653659872153,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 100.37092967463713,
+   "motor_temp_minute_c": 100.37092967463713,
+   "mixed_motor_temp_c": 48.15444942251494,
+   "props_in_view_percent": 8.369925988399492,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:propwash:freestyle",
+  "format": "PW3",
+  "code": "PW3-1h6CQEc74GHNqK",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "propwash:freestyle_5",
+    "stack": "propwash:stack_30",
+    "motor": "propwash:m2207_1750",
+    "prop": "propwash:p51_3b",
+    "video": "propwash:digital_hd",
+    "battery": "propwash:b6s_1300",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 525.2,
+   "thrust_to_weight": 10.642082130496298,
+   "hover_throttle_percent": 23.426346362684356,
+   "hover_flight_time_min": 11.138366431772965,
+   "cruise_flight_time_min": 8.015045040094419,
+   "mixed_flight_time_min": 5.718473419409578,
+   "aggressive_flight_time_min": 4.101225710663013,
+   "cruise_speed_kmh": 55.000000000070386,
+   "hover_current_a": 5.19384391168178,
+   "cruise_current_a": 7.785358620924845,
+   "mixed_current_a": 10.912003155982616,
+   "landing_cell_voltage": 3.642697094129207,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 141.78033693341644,
+   "full_throttle_current_a": 115.62100716258152,
+   "esc_load_percent": 49.70410943611077,
+   "battery_load_percent": 74.11603023242405,
+   "motor_response_ms": 12.333653659872153,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 100.37092967463713,
+   "motor_temp_minute_c": 100.37092967463713,
+   "mixed_motor_temp_c": 48.15444942251494,
+   "props_in_view_percent": 8.369925988399492,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:propwash:racer",
+  "format": "PW3",
+  "code": "PW3-02lLrYGuu4OLL",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "propwash:race_5",
+    "stack": "propwash:stack_30",
+    "motor": "propwash:m2306_1860",
+    "prop": "propwash:p51_29_3b",
+    "video": "propwash:analog_race",
+    "battery": "propwash:b6s_1100",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.5.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 430.6,
+   "thrust_to_weight": 13.070229136678277,
+   "hover_throttle_percent": 19.01828602758937,
+   "hover_flight_time_min": 11.846766748467703,
+   "cruise_flight_time_min": 7.784157028490735,
+   "mixed_flight_time_min": 2.9265174552854254,
+   "aggressive_flight_time_min": 2.2476646878472835,
+   "cruise_speed_kmh": 59.08407298353819,
+   "hover_current_a": 4.133056971677067,
+   "cruise_current_a": 6.783008077399659,
+   "mixed_current_a": 18.041922116213847,
+   "landing_cell_voltage": 3.566008342124752,
+   "avionics_power_w": 4.1,
+   "top_speed_kmh": 147.7101824589974,
+   "full_throttle_current_a": 130.32874219249933,
+   "esc_load_percent": 56.175194214872256,
+   "battery_load_percent": 98.73389560037829,
+   "motor_response_ms": 15.239184175603306,
+   "crash_speed_ms": 7,
+   "sustained_motor_temp_c": 101.02897666764574,
+   "motor_temp_minute_c": 101.02897666764574,
+   "mixed_motor_temp_c": 58.08563936311578,
+   "props_in_view_percent": 6.397653125457752,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:propwash:racer",
+  "format": "PW3",
+  "code": "PW3-1h5ZytPpUvew0b",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "propwash:race_5",
+    "stack": "propwash:stack_30",
+    "motor": "propwash:m2306_1860",
+    "prop": "propwash:p51_29_3b",
+    "video": "propwash:analog_race",
+    "battery": "propwash:b6s_1100",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.5.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 430.6,
+   "thrust_to_weight": 13.070229136678277,
+   "hover_throttle_percent": 19.01828602758937,
+   "hover_flight_time_min": 11.846766748467703,
+   "cruise_flight_time_min": 7.784157028490735,
+   "mixed_flight_time_min": 2.9265174552854254,
+   "aggressive_flight_time_min": 2.2476646878472835,
+   "cruise_speed_kmh": 59.08407298353819,
+   "hover_current_a": 4.133056971677067,
+   "cruise_current_a": 6.783008077399659,
+   "mixed_current_a": 18.041922116213847,
+   "landing_cell_voltage": 3.566008342124752,
+   "avionics_power_w": 4.1,
+   "top_speed_kmh": 147.7101824589974,
+   "full_throttle_current_a": 130.32874219249933,
+   "esc_load_percent": 56.175194214872256,
+   "battery_load_percent": 98.73389560037829,
+   "motor_response_ms": 15.239184175603306,
+   "crash_speed_ms": 7,
+   "sustained_motor_temp_c": 101.02897666764574,
+   "motor_temp_minute_c": 101.02897666764574,
+   "mixed_motor_temp_c": 58.08563936311578,
+   "props_in_view_percent": 6.397653125457752,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:propwash:long_range",
+  "format": "PW3",
+  "code": "PW3-02gH8WeqtpDmd",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "propwash:long_range_7",
+    "stack": "propwash:stack_30",
+    "motor": "propwash:m2807_1300",
+    "prop": "propwash:p7_2b",
+    "video": "propwash:digital_hd",
+    "battery": "propwash:b6s_4000_lion",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": [
+    "battery_weak"
+   ]
+  },
+  "analysis": {
+   "mass_grams": 846.2,
+   "thrust_to_weight": 5.798665748746454,
+   "hover_throttle_percent": 27.67500330132969,
+   "hover_flight_time_min": 28.775807683597293,
+   "cruise_flight_time_min": 18.37791011785934,
+   "mixed_flight_time_min": 15.173475726754624,
+   "aggressive_flight_time_min": 10.122623201348144,
+   "cruise_speed_kmh": 59.42248525682296,
+   "hover_current_a": 6.467948959076409,
+   "cruise_current_a": 11.492057510650211,
+   "mixed_current_a": 13.919025792330599,
+   "landing_cell_voltage": 3.078175636667174,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 108.04088228521174,
+   "full_throttle_current_a": 84.29798011538705,
+   "esc_load_percent": 36.2081003142731,
+   "battery_load_percent": 191.58631844406148,
+   "motor_response_ms": 22.555375555448556,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 88.34634040487877,
+   "motor_temp_minute_c": 78.2499325852177,
+   "mixed_motor_temp_c": 44.40202309388298,
+   "props_in_view_percent": 9.471130336663856,
+   "warnings": [
+    "heavy_sag",
+    "battery_overload"
+   ]
+  }
+ },
+ {
+  "name": "preset:propwash:long_range",
+  "format": "PW3",
+  "code": "PW3-1gkcSykexv4zUd",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "propwash:long_range_7",
+    "stack": "propwash:stack_30",
+    "motor": "propwash:m2807_1300",
+    "prop": "propwash:p7_2b",
+    "video": "propwash:digital_hd",
+    "battery": "propwash:b6s_4000_lion",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": [
+    "battery_weak"
+   ]
+  },
+  "analysis": {
+   "mass_grams": 846.2,
+   "thrust_to_weight": 5.798665748746454,
+   "hover_throttle_percent": 27.67500330132969,
+   "hover_flight_time_min": 28.775807683597293,
+   "cruise_flight_time_min": 18.37791011785934,
+   "mixed_flight_time_min": 15.173475726754624,
+   "aggressive_flight_time_min": 10.122623201348144,
+   "cruise_speed_kmh": 59.42248525682296,
+   "hover_current_a": 6.467948959076409,
+   "cruise_current_a": 11.492057510650211,
+   "mixed_current_a": 13.919025792330599,
+   "landing_cell_voltage": 3.078175636667174,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 108.04088228521174,
+   "full_throttle_current_a": 84.29798011538705,
+   "esc_load_percent": 36.2081003142731,
+   "battery_load_percent": 191.58631844406148,
+   "motor_response_ms": 22.555375555448556,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 88.34634040487877,
+   "motor_temp_minute_c": 78.2499325852177,
+   "mixed_motor_temp_c": 44.40202309388298,
+   "props_in_view_percent": 9.471130336663856,
+   "warnings": [
+    "heavy_sag",
+    "battery_overload"
+   ]
+  }
+ },
+ {
+  "name": "parts:justmoreparts:whoop75_1s",
+  "format": "PW3",
+  "code": "PW3-07Z6WCyBan8Shj",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:whoop_75_duct",
+    "stack": "justmoreparts:aio_whoop_1s_6a",
+    "motor": "justmoreparts:m0802_19000",
+    "prop": "justmoreparts:p40_17_3b_pc",
+    "video": "justmoreparts:analog_whoop_25mw",
+    "battery": "justmoreparts:b1s_450_hv",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 32.879999999999995,
+   "thrust_to_weight": 4.772533251437264,
+   "hover_throttle_percent": 34.912888693280905,
+   "hover_flight_time_min": 7.082336788838346,
+   "cruise_flight_time_min": 6.685841100148737,
+   "mixed_flight_time_min": 4.687638304999164,
+   "aggressive_flight_time_min": 3.6090932293961733,
+   "cruise_speed_kmh": 18.500000000016403,
+   "hover_current_a": 2.932674100849204,
+   "cruise_current_a": 3.4326271977192877,
+   "mixed_current_a": 4.895855547456555,
+   "landing_cell_voltage": 3.541676065581773,
+   "avionics_power_w": 1.2999999999999998,
+   "top_speed_kmh": 58.658726808694055,
+   "full_throttle_current_a": 21.306833697087022,
+   "esc_load_percent": 75.92883423932763,
+   "battery_load_percent": 78.91419887810008,
+   "motor_response_ms": 48.97150856999316,
+   "crash_speed_ms": 13,
+   "sustained_motor_temp_c": 80.57036656130548,
+   "motor_temp_minute_c": 80.53008784839457,
+   "mixed_motor_temp_c": 38.00097950818488,
+   "props_in_view_percent": 6.0098750129176866,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:whoop75_1s",
+  "format": "PW3",
+  "code": "PW3-5HgEVAv9VYNRxKnQVK",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:whoop_75_duct",
+    "stack": "justmoreparts:aio_whoop_1s_6a",
+    "motor": "justmoreparts:m0802_19000",
+    "prop": "justmoreparts:p40_17_3b_pc",
+    "video": "justmoreparts:analog_whoop_25mw",
+    "battery": "justmoreparts:b1s_450_hv",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#3fb950",
+    "motors": "#e6edf3"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 32.879999999999995,
+   "thrust_to_weight": 4.772533251437264,
+   "hover_throttle_percent": 34.912888693280905,
+   "hover_flight_time_min": 7.082336788838346,
+   "cruise_flight_time_min": 6.685841100148737,
+   "mixed_flight_time_min": 4.687638304999164,
+   "aggressive_flight_time_min": 3.6090932293961733,
+   "cruise_speed_kmh": 18.500000000016403,
+   "hover_current_a": 2.932674100849204,
+   "cruise_current_a": 3.4326271977192877,
+   "mixed_current_a": 4.895855547456555,
+   "landing_cell_voltage": 3.541676065581773,
+   "avionics_power_w": 1.2999999999999998,
+   "top_speed_kmh": 58.658726808694055,
+   "full_throttle_current_a": 21.306833697087022,
+   "esc_load_percent": 75.92883423932763,
+   "battery_load_percent": 78.91419887810008,
+   "motor_response_ms": 48.97150856999316,
+   "crash_speed_ms": 13,
+   "sustained_motor_temp_c": 80.57036656130548,
+   "motor_temp_minute_c": 80.53008784839457,
+   "mixed_motor_temp_c": 38.00097950818488,
+   "props_in_view_percent": 6.0098750129176866,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:whoop85_2s",
+  "format": "PW3",
+  "code": "PW3-07XzppVOsqzzxp",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:whoop_85_duct",
+    "stack": "justmoreparts:aio_whoop_2s_12a",
+    "motor": "justmoreparts:m1102_13500",
+    "prop": "justmoreparts:p45_17_4b_bi",
+    "video": "justmoreparts:digital_micro",
+    "battery": "justmoreparts:b2s_450_hv",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 56.72,
+   "thrust_to_weight": 6.756502849382304,
+   "hover_throttle_percent": 27.77059524260974,
+   "hover_flight_time_min": 7.910513426529556,
+   "cruise_flight_time_min": 7.731085764616306,
+   "mixed_flight_time_min": 5.6004126255351325,
+   "aggressive_flight_time_min": 4.390457838586312,
+   "cruise_speed_kmh": 18.500000000002974,
+   "hover_current_a": 2.62785815931898,
+   "cruise_current_a": 2.9685351707049663,
+   "mixed_current_a": 4.097912338701485,
+   "landing_cell_voltage": 3.586624531268182,
+   "avionics_power_w": 5.699999999999999,
+   "top_speed_kmh": 78.68066845435565,
+   "full_throttle_current_a": 31.827540832246623,
+   "esc_load_percent": 58.80295613325743,
+   "battery_load_percent": 94.30382468813814,
+   "motor_response_ms": 44.731500950648766,
+   "crash_speed_ms": 12,
+   "sustained_motor_temp_c": 81.30799330716782,
+   "motor_temp_minute_c": 81.30799330716782,
+   "mixed_motor_temp_c": 37.77413492954845,
+   "props_in_view_percent": 7.414714219497688,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:whoop85_2s",
+  "format": "PW3",
+  "code": "PW3-5HeyWAHyKBA6jfqvov",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:whoop_85_duct",
+    "stack": "justmoreparts:aio_whoop_2s_12a",
+    "motor": "justmoreparts:m1102_13500",
+    "prop": "justmoreparts:p45_17_4b_bi",
+    "video": "justmoreparts:digital_micro",
+    "battery": "justmoreparts:b2s_450_hv",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#2f81f7",
+    "motors": "#f0f6fc"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 56.72,
+   "thrust_to_weight": 6.756502849382304,
+   "hover_throttle_percent": 27.77059524260974,
+   "hover_flight_time_min": 7.910513426529556,
+   "cruise_flight_time_min": 7.731085764616306,
+   "mixed_flight_time_min": 5.6004126255351325,
+   "aggressive_flight_time_min": 4.390457838586312,
+   "cruise_speed_kmh": 18.500000000002974,
+   "hover_current_a": 2.62785815931898,
+   "cruise_current_a": 2.9685351707049663,
+   "mixed_current_a": 4.097912338701485,
+   "landing_cell_voltage": 3.586624531268182,
+   "avionics_power_w": 5.699999999999999,
+   "top_speed_kmh": 78.68066845435565,
+   "full_throttle_current_a": 31.827540832246623,
+   "esc_load_percent": 58.80295613325743,
+   "battery_load_percent": 94.30382468813814,
+   "motor_response_ms": 44.731500950648766,
+   "crash_speed_ms": 12,
+   "sustained_motor_temp_c": 81.30799330716782,
+   "motor_temp_minute_c": 81.30799330716782,
+   "mixed_motor_temp_c": 37.77413492954845,
+   "props_in_view_percent": 7.414714219497688,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:toothpick2_2s",
+  "format": "PW3",
+  "code": "PW3-07feREO2Mmq0z2",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:tp_2_x",
+    "stack": "justmoreparts:aio_whoop_2s_12a",
+    "motor": "justmoreparts:m1103_11000",
+    "prop": "justmoreparts:p51_20_3b_pc",
+    "video": "justmoreparts:analog_whoop_25mw",
+    "battery": "justmoreparts:b2s_450_hv",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 57.1,
+   "thrust_to_weight": 6.275101430469364,
+   "hover_throttle_percent": 30.268321212394213,
+   "hover_flight_time_min": 8.668574005715861,
+   "cruise_flight_time_min": 6.961668569648554,
+   "mixed_flight_time_min": 4.971988544276372,
+   "aggressive_flight_time_min": 3.3276512625470014,
+   "cruise_speed_kmh": 33.356137162898214,
+   "hover_current_a": 2.396853312721903,
+   "cruise_current_a": 3.29662347042163,
+   "mixed_current_a": 4.615859388175675,
+   "landing_cell_voltage": 3.5357197699770495,
+   "avionics_power_w": 1.2999999999999998,
+   "top_speed_kmh": 74.12474925090419,
+   "full_throttle_current_a": 33.03256361555888,
+   "esc_load_percent": 59.229095757974044,
+   "battery_load_percent": 97.8742625646189,
+   "motor_response_ms": 31.612944949778434,
+   "crash_speed_ms": 9,
+   "sustained_motor_temp_c": 69.21563143406367,
+   "motor_temp_minute_c": 69.21563143406367,
+   "mixed_motor_temp_c": 36.60191369339505,
+   "props_in_view_percent": 4.249510768597062,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:toothpick2_2s",
+  "format": "PW3",
+  "code": "PW3-5HnfO5n4XsWuWKAGqp",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:tp_2_x",
+    "stack": "justmoreparts:aio_whoop_2s_12a",
+    "motor": "justmoreparts:m1103_11000",
+    "prop": "justmoreparts:p51_20_3b_pc",
+    "video": "justmoreparts:analog_whoop_25mw",
+    "battery": "justmoreparts:b2s_450_hv",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "motors": "#f5c518"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 57.1,
+   "thrust_to_weight": 6.275101430469364,
+   "hover_throttle_percent": 30.268321212394213,
+   "hover_flight_time_min": 8.668574005715861,
+   "cruise_flight_time_min": 6.961668569648554,
+   "mixed_flight_time_min": 4.971988544276372,
+   "aggressive_flight_time_min": 3.3276512625470014,
+   "cruise_speed_kmh": 33.356137162898214,
+   "hover_current_a": 2.396853312721903,
+   "cruise_current_a": 3.29662347042163,
+   "mixed_current_a": 4.615859388175675,
+   "landing_cell_voltage": 3.5357197699770495,
+   "avionics_power_w": 1.2999999999999998,
+   "top_speed_kmh": 74.12474925090419,
+   "full_throttle_current_a": 33.03256361555888,
+   "esc_load_percent": 59.229095757974044,
+   "battery_load_percent": 97.8742625646189,
+   "motor_response_ms": 31.612944949778434,
+   "crash_speed_ms": 9,
+   "sustained_motor_temp_c": 69.21563143406367,
+   "motor_temp_minute_c": 69.21563143406367,
+   "mixed_motor_temp_c": 36.60191369339505,
+   "props_in_view_percent": 4.249510768597062,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:toothpick3_4s",
+  "format": "PW3",
+  "code": "PW3-0FqKCbLX6cSqikbptOX",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:tp_3_x",
+    "stack": "justmoreparts:aio_tp_4s_20a",
+    "motor": "justmoreparts:m1404_3800",
+    "prop": "justmoreparts:p76_25_3b_hard",
+    "video": "justmoreparts:digital_micro",
+    "battery": "propwash:b4s_650",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   },
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 142.8,
+   "thrust_to_weight": 6.613981658026738,
+   "hover_throttle_percent": 32.97144610085992,
+   "hover_flight_time_min": 10.027921466541237,
+   "cruise_flight_time_min": 8.046546028745436,
+   "mixed_flight_time_min": 5.950215009310957,
+   "aggressive_flight_time_min": 4.141759586133467,
+   "cruise_speed_kmh": 40.00000000000809,
+   "hover_current_a": 2.8838597252999043,
+   "cruise_current_a": 3.8774400703781846,
+   "mixed_current_a": 5.243507999488745,
+   "landing_cell_voltage": 3.6412688806237203,
+   "avionics_power_w": 5.699999999999999,
+   "top_speed_kmh": 92.35576870048975,
+   "full_throttle_current_a": 40.7595679266017,
+   "esc_load_percent": 47.86161797794359,
+   "battery_load_percent": 66.00739745198656,
+   "motor_response_ms": 24.02176713420667,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 61.637085011848114,
+   "motor_temp_minute_c": 61.637085011848114,
+   "mixed_motor_temp_c": 32.736558777685886,
+   "props_in_view_percent": 5.353545710934741,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:toothpick3_4s",
+  "format": "PW3",
+  "code": "PW3-OPvqADctCvzHC4miamhWJ2Z",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:tp_3_x",
+    "stack": "justmoreparts:aio_tp_4s_20a",
+    "motor": "justmoreparts:m1404_3800",
+    "prop": "justmoreparts:p76_25_3b_hard",
+    "video": "justmoreparts:digital_micro",
+    "battery": "propwash:b4s_650",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "motors": "#a371f7"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   },
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 142.8,
+   "thrust_to_weight": 6.613981658026738,
+   "hover_throttle_percent": 32.97144610085992,
+   "hover_flight_time_min": 10.027921466541237,
+   "cruise_flight_time_min": 8.046546028745436,
+   "mixed_flight_time_min": 5.950215009310957,
+   "aggressive_flight_time_min": 4.141759586133467,
+   "cruise_speed_kmh": 40.00000000000809,
+   "hover_current_a": 2.8838597252999043,
+   "cruise_current_a": 3.8774400703781846,
+   "mixed_current_a": 5.243507999488745,
+   "landing_cell_voltage": 3.6412688806237203,
+   "avionics_power_w": 5.699999999999999,
+   "top_speed_kmh": 92.35576870048975,
+   "full_throttle_current_a": 40.7595679266017,
+   "esc_load_percent": 47.86161797794359,
+   "battery_load_percent": 66.00739745198656,
+   "motor_response_ms": 24.02176713420667,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 61.637085011848114,
+   "motor_temp_minute_c": 61.637085011848114,
+   "mixed_motor_temp_c": 32.736558777685886,
+   "props_in_view_percent": 5.353545710934741,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:toothpick35_6s",
+  "format": "PW3",
+  "code": "PW3-0VUE89mkr04DY7l",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:tp_35_stretched",
+    "stack": "justmoreparts:aio_tp_6s_20a",
+    "motor": "justmoreparts:m1505_2500",
+    "prop": "justmoreparts:p89_30_3b_pc",
+    "video": "justmoreparts:digital_micro",
+    "battery": "justmoreparts:b6s_750",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 222.5,
+   "thrust_to_weight": 8.827421074428408,
+   "hover_throttle_percent": 24.142703324060406,
+   "hover_flight_time_min": 15.06739108505409,
+   "cruise_flight_time_min": 12.98236579769727,
+   "mixed_flight_time_min": 9.437658789800327,
+   "aggressive_flight_time_min": 6.54404928100602,
+   "cruise_speed_kmh": 39.99999999994334,
+   "hover_current_a": 2.2144579326724605,
+   "cruise_current_a": 2.772992269743736,
+   "mixed_current_a": 3.814505355809929,
+   "landing_cell_voltage": 3.6425889366878277,
+   "avionics_power_w": 5.699999999999999,
+   "top_speed_kmh": 115.64043146571679,
+   "full_throttle_current_a": 55.46714353346615,
+   "esc_load_percent": 66.37248126810854,
+   "battery_load_percent": 82.1735459755054,
+   "motor_response_ms": 24.85949039255151,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 80.0776040916906,
+   "motor_temp_minute_c": 80.0776040916906,
+   "mixed_motor_temp_c": 34.07943877905713,
+   "props_in_view_percent": 6.131723224513548,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:toothpick35_6s",
+  "format": "PW3",
+  "code": "PW3-LpHjMCZGN2YaacvNIYy",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:tp_35_stretched",
+    "stack": "justmoreparts:aio_tp_6s_20a",
+    "motor": "justmoreparts:m1505_2500",
+    "prop": "justmoreparts:p89_30_3b_pc",
+    "video": "justmoreparts:digital_micro",
+    "battery": "justmoreparts:b6s_750",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "motors": "#19b3a6"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 222.5,
+   "thrust_to_weight": 8.827421074428408,
+   "hover_throttle_percent": 24.142703324060406,
+   "hover_flight_time_min": 15.06739108505409,
+   "cruise_flight_time_min": 12.98236579769727,
+   "mixed_flight_time_min": 9.437658789800327,
+   "aggressive_flight_time_min": 6.54404928100602,
+   "cruise_speed_kmh": 39.99999999994334,
+   "hover_current_a": 2.2144579326724605,
+   "cruise_current_a": 2.772992269743736,
+   "mixed_current_a": 3.814505355809929,
+   "landing_cell_voltage": 3.6425889366878277,
+   "avionics_power_w": 5.699999999999999,
+   "top_speed_kmh": 115.64043146571679,
+   "full_throttle_current_a": 55.46714353346615,
+   "esc_load_percent": 66.37248126810854,
+   "battery_load_percent": 82.1735459755054,
+   "motor_response_ms": 24.85949039255151,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 80.0776040916906,
+   "motor_temp_minute_c": 80.0776040916906,
+   "mixed_motor_temp_c": 34.07943877905713,
+   "props_in_view_percent": 6.131723224513548,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:cinewhoop25_4s",
+  "format": "PW3",
+  "code": "PW3-07WI3xBSVQHUjm",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:cw_25_duct",
+    "stack": "justmoreparts:aio_tp_4s_20a",
+    "motor": "justmoreparts:m1404_3800",
+    "prop": "justmoreparts:p65_22_4b_bi",
+    "video": "justmoreparts:digital_micro",
+    "battery": "justmoreparts:b4s_850",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 193.3,
+   "thrust_to_weight": 6.032962056211054,
+   "hover_throttle_percent": 33.098371113308104,
+   "hover_flight_time_min": 11.298433988985444,
+   "cruise_flight_time_min": 10.074917025950656,
+   "mixed_flight_time_min": 8.669202468242469,
+   "aggressive_flight_time_min": 6.515761563048668,
+   "cruise_speed_kmh": 30.000000000030834,
+   "hover_current_a": 3.345308084419917,
+   "cruise_current_a": 4.049661143105064,
+   "mixed_current_a": 4.706315275189495,
+   "landing_cell_voltage": 3.643946147922744,
+   "avionics_power_w": 5.699999999999999,
+   "top_speed_kmh": 88.92893437498388,
+   "full_throttle_current_a": 48.06583102658579,
+   "esc_load_percent": 55.922918309834586,
+   "battery_load_percent": 56.54803650186564,
+   "motor_response_ms": 19.344146998199186,
+   "crash_speed_ms": 12,
+   "sustained_motor_temp_c": 70.75858615388341,
+   "motor_temp_minute_c": 70.75858615388341,
+   "mixed_motor_temp_c": 32.876892283762274,
+   "props_in_view_percent": 2.391787399500043,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:cinewhoop25_4s",
+  "format": "PW3",
+  "code": "PW3-LonC0VoqbgucuiQruEE",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:cw_25_duct",
+    "stack": "justmoreparts:aio_tp_4s_20a",
+    "motor": "justmoreparts:m1404_3800",
+    "prop": "justmoreparts:p65_22_4b_bi",
+    "video": "justmoreparts:digital_micro",
+    "battery": "justmoreparts:b4s_850",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#e5534b",
+    "motors": "#c9d1d9"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 193.3,
+   "thrust_to_weight": 6.032962056211054,
+   "hover_throttle_percent": 33.098371113308104,
+   "hover_flight_time_min": 11.298433988985444,
+   "cruise_flight_time_min": 10.074917025950656,
+   "mixed_flight_time_min": 8.669202468242469,
+   "aggressive_flight_time_min": 6.515761563048668,
+   "cruise_speed_kmh": 30.000000000030834,
+   "hover_current_a": 3.345308084419917,
+   "cruise_current_a": 4.049661143105064,
+   "mixed_current_a": 4.706315275189495,
+   "landing_cell_voltage": 3.643946147922744,
+   "avionics_power_w": 5.699999999999999,
+   "top_speed_kmh": 88.92893437498388,
+   "full_throttle_current_a": 48.06583102658579,
+   "esc_load_percent": 55.922918309834586,
+   "battery_load_percent": 56.54803650186564,
+   "motor_response_ms": 19.344146998199186,
+   "crash_speed_ms": 12,
+   "sustained_motor_temp_c": 70.75858615388341,
+   "motor_temp_minute_c": 70.75858615388341,
+   "mixed_motor_temp_c": 32.876892283762274,
+   "props_in_view_percent": 2.391787399500043,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:cinewhoop35_6s",
+  "format": "PW3",
+  "code": "PW3-07YpLekytynjwi",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:cw_35_duct",
+    "stack": "justmoreparts:aio_20_6s_45a",
+    "motor": "justmoreparts:m2004_1700",
+    "prop": "justmoreparts:p89_25_5b_pc_duct",
+    "video": "justmoreparts:digital_hd_pro",
+    "battery": "justmoreparts:b6s_850",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 351.4,
+   "thrust_to_weight": 6.725542821494477,
+   "hover_throttle_percent": 29.148021766384392,
+   "hover_flight_time_min": 11.393137798064508,
+   "cruise_flight_time_min": 9.96598689230356,
+   "mixed_flight_time_min": 8.617723013151496,
+   "aggressive_flight_time_min": 6.48796378199349,
+   "cruise_speed_kmh": 30.000000000072554,
+   "hover_current_a": 3.316431850163724,
+   "cruise_current_a": 4.09392471020694,
+   "mixed_current_a": 4.734429261387861,
+   "landing_cell_voltage": 3.631532441151927,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 90.90625826700852,
+   "full_throttle_current_a": 63.376426052111455,
+   "esc_load_percent": 33.805351248619374,
+   "battery_load_percent": 74.56050123777818,
+   "motor_response_ms": 15.138065193080575,
+   "crash_speed_ms": 11,
+   "sustained_motor_temp_c": 81.17847716633729,
+   "motor_temp_minute_c": 81.17847716633729,
+   "mixed_motor_temp_c": 34.75593804625084,
+   "props_in_view_percent": 13.322690197655959,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:cinewhoop35_6s",
+  "format": "PW3",
+  "code": "PW3-1S6WEEt7scXTyc4Y9LPWb",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:cw_35_duct",
+    "stack": "justmoreparts:aio_20_6s_45a",
+    "motor": "justmoreparts:m2004_1700",
+    "prop": "justmoreparts:p89_25_5b_pc_duct",
+    "video": "justmoreparts:digital_hd_pro",
+    "battery": "justmoreparts:b6s_850",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#d29922",
+    "motors": "#30363d"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 351.4,
+   "thrust_to_weight": 6.725542821494477,
+   "hover_throttle_percent": 29.148021766384392,
+   "hover_flight_time_min": 11.393137798064508,
+   "cruise_flight_time_min": 9.96598689230356,
+   "mixed_flight_time_min": 8.617723013151496,
+   "aggressive_flight_time_min": 6.48796378199349,
+   "cruise_speed_kmh": 30.000000000072554,
+   "hover_current_a": 3.316431850163724,
+   "cruise_current_a": 4.09392471020694,
+   "mixed_current_a": 4.734429261387861,
+   "landing_cell_voltage": 3.631532441151927,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 90.90625826700852,
+   "full_throttle_current_a": 63.376426052111455,
+   "esc_load_percent": 33.805351248619374,
+   "battery_load_percent": 74.56050123777818,
+   "motor_response_ms": 15.138065193080575,
+   "crash_speed_ms": 11,
+   "sustained_motor_temp_c": 81.17847716633729,
+   "motor_temp_minute_c": 81.17847716633729,
+   "mixed_motor_temp_c": 34.75593804625084,
+   "props_in_view_percent": 13.322690197655959,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:bash5_6s",
+  "format": "PW3",
+  "code": "PW3-0Fg95II367JGnYSvwiF",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:fs_5_bash",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m2207_1950",
+    "prop": "justmoreparts:p130_41_3b_soft",
+    "video": "justmoreparts:digital_hd_pro",
+    "battery": "propwash:b6s_1300",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   },
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 541.8,
+   "thrust_to_weight": 11.480663827346397,
+   "hover_throttle_percent": 21.55230217118885,
+   "hover_flight_time_min": 11.123582350224599,
+   "cruise_flight_time_min": 7.747912244864495,
+   "mixed_flight_time_min": 5.618021913568592,
+   "aggressive_flight_time_min": 4.066781969366111,
+   "cruise_speed_kmh": 55.00000000000372,
+   "hover_current_a": 5.20070659579571,
+   "cruise_current_a": 8.053782493646628,
+   "mixed_current_a": 11.107112246980053,
+   "landing_cell_voltage": 3.6409463810289604,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 141.8828826845951,
+   "full_throttle_current_a": 131.30656146369108,
+   "esc_load_percent": 51.86596059834745,
+   "battery_load_percent": 84.17087273313531,
+   "motor_response_ms": 12.795598009799763,
+   "crash_speed_ms": 10,
+   "sustained_motor_temp_c": 99.25820519471603,
+   "motor_temp_minute_c": 99.25820519471603,
+   "mixed_motor_temp_c": 48.51652794979286,
+   "props_in_view_percent": 7.940767218189463,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:bash5_6s",
+  "format": "PW3",
+  "code": "PW3-OPkHaMuwG2EOibvlzeqlWsX",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:fs_5_bash",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m2207_1950",
+    "prop": "justmoreparts:p130_41_3b_soft",
+    "video": "justmoreparts:digital_hd_pro",
+    "battery": "propwash:b6s_1300",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#cf222e",
+    "motors": "#cf222e"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   },
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 541.8,
+   "thrust_to_weight": 11.480663827346397,
+   "hover_throttle_percent": 21.55230217118885,
+   "hover_flight_time_min": 11.123582350224599,
+   "cruise_flight_time_min": 7.747912244864495,
+   "mixed_flight_time_min": 5.618021913568592,
+   "aggressive_flight_time_min": 4.066781969366111,
+   "cruise_speed_kmh": 55.00000000000372,
+   "hover_current_a": 5.20070659579571,
+   "cruise_current_a": 8.053782493646628,
+   "mixed_current_a": 11.107112246980053,
+   "landing_cell_voltage": 3.6409463810289604,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 141.8828826845951,
+   "full_throttle_current_a": 131.30656146369108,
+   "esc_load_percent": 51.86596059834745,
+   "battery_load_percent": 84.17087273313531,
+   "motor_response_ms": 12.795598009799763,
+   "crash_speed_ms": 10,
+   "sustained_motor_temp_c": 99.25820519471603,
+   "motor_temp_minute_c": 99.25820519471603,
+   "mixed_motor_temp_c": 48.51652794979286,
+   "props_in_view_percent": 7.940767218189463,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:squashed5_6s",
+  "format": "PW3",
+  "code": "PW3-0FpjyeCPuec0E1Otjo9",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:fs_5_squashed",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m2207_1950",
+    "prop": "justmoreparts:p130_36_3b_bi",
+    "video": "justmoreparts:digital_hd_pro",
+    "battery": "propwash:b6s_1300",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   },
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 527,
+   "thrust_to_weight": 11.887477498638955,
+   "hover_throttle_percent": 21.952969695616094,
+   "hover_flight_time_min": 11.693371633645585,
+   "cruise_flight_time_min": 8.14652382029787,
+   "mixed_flight_time_min": 6.094025154831714,
+   "aggressive_flight_time_min": 4.522106531197432,
+   "cruise_speed_kmh": 55.00000000001667,
+   "hover_current_a": 4.947729809934685,
+   "cruise_current_a": 7.659708775971934,
+   "mixed_current_a": 10.239537647875558,
+   "landing_cell_voltage": 3.649074705889486,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 140.9701254902886,
+   "full_throttle_current_a": 118.75230279999118,
+   "esc_load_percent": 46.75581941892524,
+   "battery_load_percent": 76.12327102563538,
+   "motor_response_ms": 12.451952421841673,
+   "crash_speed_ms": 8.5,
+   "sustained_motor_temp_c": 97.17045424086832,
+   "motor_temp_minute_c": 97.17045424086832,
+   "mixed_motor_temp_c": 47.98166175262116,
+   "props_in_view_percent": 3.0314015764638844,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:squashed5_6s",
+  "format": "PW3",
+  "code": "PW3-OPvB28b9QfiPUL7nXd16DnS",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:fs_5_squashed",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m2207_1950",
+    "prop": "justmoreparts:p130_36_3b_bi",
+    "video": "justmoreparts:digital_hd_pro",
+    "battery": "propwash:b6s_1300",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#2d1b45",
+    "tpu": "#8250df",
+    "motors": "#8250df"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   },
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 527,
+   "thrust_to_weight": 11.887477498638955,
+   "hover_throttle_percent": 21.952969695616094,
+   "hover_flight_time_min": 11.693371633645585,
+   "cruise_flight_time_min": 8.14652382029787,
+   "mixed_flight_time_min": 6.094025154831714,
+   "aggressive_flight_time_min": 4.522106531197432,
+   "cruise_speed_kmh": 55.00000000001667,
+   "hover_current_a": 4.947729809934685,
+   "cruise_current_a": 7.659708775971934,
+   "mixed_current_a": 10.239537647875558,
+   "landing_cell_voltage": 3.649074705889486,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 140.9701254902886,
+   "full_throttle_current_a": 118.75230279999118,
+   "esc_load_percent": 46.75581941892524,
+   "battery_load_percent": 76.12327102563538,
+   "motor_response_ms": 12.451952421841673,
+   "crash_speed_ms": 8.5,
+   "sustained_motor_temp_c": 97.17045424086832,
+   "motor_temp_minute_c": 97.17045424086832,
+   "mixed_motor_temp_c": 47.98166175262116,
+   "props_in_view_percent": 3.0314015764638844,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:deadcat5_6s",
+  "format": "PW3",
+  "code": "PW3-0FjDrv768T1ZqHcaCAZ",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:deadcat_5",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m22075_1850",
+    "prop": "justmoreparts:p130_36_3b_bi",
+    "video": "justmoreparts:digital_hd_pro",
+    "battery": "propwash:b6s_1300",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   },
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 545.8,
+   "thrust_to_weight": 10.833830597110113,
+   "hover_throttle_percent": 23.95967186616813,
+   "hover_flight_time_min": 11.110215046719555,
+   "cruise_flight_time_min": 7.900064497805703,
+   "mixed_flight_time_min": 5.851184084279667,
+   "aggressive_flight_time_min": 4.311115944006707,
+   "cruise_speed_kmh": 53.49517946438017,
+   "hover_current_a": 5.207022225989718,
+   "cruise_current_a": 7.898669690270509,
+   "mixed_current_a": 10.664508089507837,
+   "landing_cell_voltage": 3.645475565563821,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 133.737948660757,
+   "full_throttle_current_a": 107.32255848898113,
+   "esc_load_percent": 42.12987952574688,
+   "battery_load_percent": 68.79651185191098,
+   "motor_response_ms": 12.06631328286593,
+   "crash_speed_ms": 8.5,
+   "sustained_motor_temp_c": 93.82613792066209,
+   "motor_temp_minute_c": 93.82613792066209,
+   "mixed_motor_temp_c": 48.18458500535316,
+   "props_in_view_percent": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:deadcat5_6s",
+  "format": "PW3",
+  "code": "PW3-1coXX2X8RdDSVLdDkz72qou8b",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:deadcat_5",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m22075_1850",
+    "prop": "justmoreparts:p130_36_3b_bi",
+    "video": "justmoreparts:digital_hd_pro",
+    "battery": "propwash:b6s_1300",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#1a7f37",
+    "motors": "#2da44e"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   },
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 545.8,
+   "thrust_to_weight": 10.833830597110113,
+   "hover_throttle_percent": 23.95967186616813,
+   "hover_flight_time_min": 11.110215046719555,
+   "cruise_flight_time_min": 7.900064497805703,
+   "mixed_flight_time_min": 5.851184084279667,
+   "aggressive_flight_time_min": 4.311115944006707,
+   "cruise_speed_kmh": 53.49517946438017,
+   "hover_current_a": 5.207022225989718,
+   "cruise_current_a": 7.898669690270509,
+   "mixed_current_a": 10.664508089507837,
+   "landing_cell_voltage": 3.645475565563821,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 133.737948660757,
+   "full_throttle_current_a": 107.32255848898113,
+   "esc_load_percent": 42.12987952574688,
+   "battery_load_percent": 68.79651185191098,
+   "motor_response_ms": 12.06631328286593,
+   "crash_speed_ms": 8.5,
+   "sustained_motor_temp_c": 93.82613792066209,
+   "motor_temp_minute_c": 93.82613792066209,
+   "mixed_motor_temp_c": 48.18458500535316,
+   "props_in_view_percent": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:race5_4s",
+  "format": "PW3",
+  "code": "PW3-07avqWIzzP9xCj",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:race_5_stretched",
+    "stack": "justmoreparts:stack_30_4s_55a",
+    "motor": "justmoreparts:m23065_2450",
+    "prop": "justmoreparts:p130_46_3b_hard",
+    "video": "justmoreparts:digital_low_latency",
+    "battery": "justmoreparts:b4s_1500",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 413.1,
+   "thrust_to_weight": 11.084079875659839,
+   "hover_throttle_percent": 21.933865617176856,
+   "hover_flight_time_min": 11.579795814424823,
+   "cruise_flight_time_min": 8.421689087606786,
+   "mixed_flight_time_min": 2.965056786950993,
+   "aggressive_flight_time_min": 2.252807802847724,
+   "cruise_speed_kmh": 60.000000000035996,
+   "hover_current_a": 5.764006790916135,
+   "cruise_current_a": 8.549353847074926,
+   "mixed_current_a": 24.282840152292177,
+   "landing_cell_voltage": 3.5201454017993994,
+   "avionics_power_w": 6.3999999999999995,
+   "top_speed_kmh": 156.17600109562156,
+   "full_throttle_current_a": 133.044032783681,
+   "esc_load_percent": 56.578198336672706,
+   "battery_load_percent": 73.91335154648944,
+   "motor_response_ms": 13.027568245074802,
+   "crash_speed_ms": 6.5,
+   "sustained_motor_temp_c": 79.17940690551434,
+   "motor_temp_minute_c": 79.17940690551434,
+   "mixed_motor_temp_c": 50.56774630616655,
+   "props_in_view_percent": 11.076672475856606,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:race5_4s",
+  "format": "PW3",
+  "code": "PW3-1S7AyLvyJQhw30CaYEzkk",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:race_5_stretched",
+    "stack": "justmoreparts:stack_30_4s_55a",
+    "motor": "justmoreparts:m23065_2450",
+    "prop": "justmoreparts:p130_46_3b_hard",
+    "video": "justmoreparts:digital_low_latency",
+    "battery": "justmoreparts:b4s_1500",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#0b3d91",
+    "tpu": "#0969da",
+    "motors": "#54aeff"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 413.1,
+   "thrust_to_weight": 11.084079875659839,
+   "hover_throttle_percent": 21.933865617176856,
+   "hover_flight_time_min": 11.579795814424823,
+   "cruise_flight_time_min": 8.421689087606786,
+   "mixed_flight_time_min": 2.965056786950993,
+   "aggressive_flight_time_min": 2.252807802847724,
+   "cruise_speed_kmh": 60.000000000035996,
+   "hover_current_a": 5.764006790916135,
+   "cruise_current_a": 8.549353847074926,
+   "mixed_current_a": 24.282840152292177,
+   "landing_cell_voltage": 3.5201454017993994,
+   "avionics_power_w": 6.3999999999999995,
+   "top_speed_kmh": 156.17600109562156,
+   "full_throttle_current_a": 133.044032783681,
+   "esc_load_percent": 56.578198336672706,
+   "battery_load_percent": 73.91335154648944,
+   "motor_response_ms": 13.027568245074802,
+   "crash_speed_ms": 6.5,
+   "sustained_motor_temp_c": 79.17940690551434,
+   "motor_temp_minute_c": 79.17940690551434,
+   "mixed_motor_temp_c": 50.56774630616655,
+   "props_in_view_percent": 11.076672475856606,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:race5_6s",
+  "format": "PW3",
+  "code": "PW3-0FmFQuIpV7p3B4i6a6R",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:race_5_stretched",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m23065_2020",
+    "prop": "justmoreparts:p130_50_3b_gfn",
+    "video": "justmoreparts:analog_race_800",
+    "battery": "propwash:b6s_1300",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   },
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 468.9,
+   "thrust_to_weight": 13.872232615021163,
+   "hover_throttle_percent": 17.60283570985385,
+   "hover_flight_time_min": 12.944066816185122,
+   "cruise_flight_time_min": 10.010865296698693,
+   "mixed_flight_time_min": 3.2698019898327058,
+   "aggressive_flight_time_min": 2.479406923098364,
+   "cruise_speed_kmh": 60.000000000001464,
+   "hover_current_a": 4.47041175715324,
+   "cruise_current_a": 6.233227413476216,
+   "mixed_current_a": 19.083724394941914,
+   "landing_cell_voltage": 3.568797333321679,
+   "avionics_power_w": 5.6,
+   "top_speed_kmh": 188.51530784716502,
+   "full_throttle_current_a": 161.61190524560345,
+   "esc_load_percent": 64.11743092495682,
+   "battery_load_percent": 103.59737515743811,
+   "motor_response_ms": 13.21921014439464,
+   "crash_speed_ms": 6.5,
+   "sustained_motor_temp_c": 100.56112571604913,
+   "motor_temp_minute_c": 100.56112571604913,
+   "mixed_motor_temp_c": 57.216982931061004,
+   "props_in_view_percent": 11.734983445828757,
+   "warnings": [
+    "heavy_sag"
+   ]
+  }
+ },
+ {
+  "name": "preset:justmoreparts:race5_6s",
+  "format": "PW3",
+  "code": "PW3-1coliMxRkG8SuSbqTvUQ7KVDe",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:race_5_stretched",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m23065_2020",
+    "prop": "justmoreparts:p130_50_3b_gfn",
+    "video": "justmoreparts:analog_race_800",
+    "battery": "propwash:b6s_1300",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#ff7b29",
+    "motors": "#ff7b29"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   },
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 468.9,
+   "thrust_to_weight": 13.872232615021163,
+   "hover_throttle_percent": 17.60283570985385,
+   "hover_flight_time_min": 12.944066816185122,
+   "cruise_flight_time_min": 10.010865296698693,
+   "mixed_flight_time_min": 3.2698019898327058,
+   "aggressive_flight_time_min": 2.479406923098364,
+   "cruise_speed_kmh": 60.000000000001464,
+   "hover_current_a": 4.47041175715324,
+   "cruise_current_a": 6.233227413476216,
+   "mixed_current_a": 19.083724394941914,
+   "landing_cell_voltage": 3.568797333321679,
+   "avionics_power_w": 5.6,
+   "top_speed_kmh": 188.51530784716502,
+   "full_throttle_current_a": 161.61190524560345,
+   "esc_load_percent": 64.11743092495682,
+   "battery_load_percent": 103.59737515743811,
+   "motor_response_ms": 13.21921014439464,
+   "crash_speed_ms": 6.5,
+   "sustained_motor_temp_c": 100.56112571604913,
+   "motor_temp_minute_c": 100.56112571604913,
+   "mixed_motor_temp_c": 57.216982931061004,
+   "props_in_view_percent": 11.734983445828757,
+   "warnings": [
+    "heavy_sag"
+   ]
+  }
+ },
+ {
+  "name": "parts:justmoreparts:hframe5_6s",
+  "format": "PW3",
+  "code": "PW3-0FlnG40IsQApZxwbvZo",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:hframe_5",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m2207_1950",
+    "prop": "justmoreparts:p130_35_4b_pc",
+    "video": "justmoreparts:digital_hd_pro",
+    "battery": "propwash:b6s_1300",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   },
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 552,
+   "thrust_to_weight": 11.886515081919374,
+   "hover_throttle_percent": 21.12165164295886,
+   "hover_flight_time_min": 11.369970982791152,
+   "cruise_flight_time_min": 7.550307362703758,
+   "mixed_flight_time_min": 5.640536734563649,
+   "aggressive_flight_time_min": 4.1565751646887845,
+   "cruise_speed_kmh": 51.495556642482214,
+   "hover_current_a": 5.088208427168043,
+   "cruise_current_a": 8.264564209430361,
+   "mixed_current_a": 11.062776990287126,
+   "landing_cell_voltage": 3.641646905289155,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 128.73889160628576,
+   "full_throttle_current_a": 132.094224288247,
+   "esc_load_percent": 52.163445230246545,
+   "battery_load_percent": 84.67578480015834,
+   "motor_response_ms": 14.478064687784332,
+   "crash_speed_ms": 9,
+   "sustained_motor_temp_c": 99.37118645222256,
+   "motor_temp_minute_c": 99.37118645222256,
+   "mixed_motor_temp_c": 48.86190410523225,
+   "props_in_view_percent": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:hframe5_6s",
+  "format": "PW3",
+  "code": "PW3-OPqhB19IbpnAvFD6kG8almD",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:hframe_5",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m2207_1950",
+    "prop": "justmoreparts:p130_35_4b_pc",
+    "video": "justmoreparts:digital_hd_pro",
+    "battery": "propwash:b6s_1300",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#bf8700",
+    "motors": "#bf8700"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   },
+   {
+    "key": "propwash",
+    "short_id": 1,
+    "table": true,
+    "min_version": "0.4.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 552,
+   "thrust_to_weight": 11.886515081919374,
+   "hover_throttle_percent": 21.12165164295886,
+   "hover_flight_time_min": 11.369970982791152,
+   "cruise_flight_time_min": 7.550307362703758,
+   "mixed_flight_time_min": 5.640536734563649,
+   "aggressive_flight_time_min": 4.1565751646887845,
+   "cruise_speed_kmh": 51.495556642482214,
+   "hover_current_a": 5.088208427168043,
+   "cruise_current_a": 8.264564209430361,
+   "mixed_current_a": 11.062776990287126,
+   "landing_cell_voltage": 3.641646905289155,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 128.73889160628576,
+   "full_throttle_current_a": 132.094224288247,
+   "esc_load_percent": 52.163445230246545,
+   "battery_load_percent": 84.67578480015834,
+   "motor_response_ms": 14.478064687784332,
+   "crash_speed_ms": 9,
+   "sustained_motor_temp_c": 99.37118645222256,
+   "motor_temp_minute_c": 99.37118645222256,
+   "mixed_motor_temp_c": 48.86190410523225,
+   "props_in_view_percent": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:lr4_6s_lion",
+  "format": "PW3",
+  "code": "PW3-07feRKwFmTnNEr",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:lr_4_x",
+    "stack": "justmoreparts:aio_20_6s_45a",
+    "motor": "justmoreparts:m2004_1700",
+    "prop": "justmoreparts:p102_30_3b_gfn",
+    "video": "justmoreparts:digital_micro",
+    "battery": "justmoreparts:b6s_3000_lion",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": [
+    "battery_weak"
+   ]
+  },
+  "analysis": {
+   "mass_grams": 442.79999999999995,
+   "thrust_to_weight": 4.538953761408868,
+   "hover_throttle_percent": 36.95700269575933,
+   "hover_flight_time_min": 32.95657546942872,
+   "cruise_flight_time_min": 23.846249621031703,
+   "mixed_flight_time_min": 17.380151845840086,
+   "aggressive_flight_time_min": 11.179706809383045,
+   "cruise_speed_kmh": 53.233237220649904,
+   "hover_current_a": 4.225378026387841,
+   "cruise_current_a": 6.642553966234413,
+   "mixed_current_a": 9.113844424662654,
+   "landing_cell_voltage": 2.982341006169221,
+   "avionics_power_w": 5.699999999999999,
+   "top_speed_kmh": 96.7877040374976,
+   "full_throttle_current_a": 46.99170717498821,
+   "esc_load_percent": 24.8996333991409,
+   "battery_load_percent": 130.5325199305228,
+   "motor_response_ms": 16.84609699159642,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 66.13889206934834,
+   "motor_temp_minute_c": 66.13889206934834,
+   "mixed_motor_temp_c": 35.28458308380128,
+   "props_in_view_percent": 6.083360813668831,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:lr4_6s_lion",
+  "format": "PW3",
+  "code": "PW3-5HnfODEILQxhI3HiFo",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:lr_4_x",
+    "stack": "justmoreparts:aio_20_6s_45a",
+    "motor": "justmoreparts:m2004_1700",
+    "prop": "justmoreparts:p102_30_3b_gfn",
+    "video": "justmoreparts:digital_micro",
+    "battery": "justmoreparts:b6s_3000_lion",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "motors": "#54aeff"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": [
+    "battery_weak"
+   ]
+  },
+  "analysis": {
+   "mass_grams": 442.79999999999995,
+   "thrust_to_weight": 4.538953761408868,
+   "hover_throttle_percent": 36.95700269575933,
+   "hover_flight_time_min": 32.95657546942872,
+   "cruise_flight_time_min": 23.846249621031703,
+   "mixed_flight_time_min": 17.380151845840086,
+   "aggressive_flight_time_min": 11.179706809383045,
+   "cruise_speed_kmh": 53.233237220649904,
+   "hover_current_a": 4.225378026387841,
+   "cruise_current_a": 6.642553966234413,
+   "mixed_current_a": 9.113844424662654,
+   "landing_cell_voltage": 2.982341006169221,
+   "avionics_power_w": 5.699999999999999,
+   "top_speed_kmh": 96.7877040374976,
+   "full_throttle_current_a": 46.99170717498821,
+   "esc_load_percent": 24.8996333991409,
+   "battery_load_percent": 130.5325199305228,
+   "motor_response_ms": 16.84609699159642,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 66.13889206934834,
+   "motor_temp_minute_c": 66.13889206934834,
+   "mixed_motor_temp_c": 35.28458308380128,
+   "props_in_view_percent": 6.083360813668831,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:lr6_6s",
+  "format": "PW3",
+  "code": "PW3-07anbVT5dLQ36e",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:lr_6_x",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m2507_1500",
+    "prop": "justmoreparts:p152_33_3b_pc",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b6s_2200",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 693.2,
+   "thrust_to_weight": 10.131988433320846,
+   "hover_throttle_percent": 25.456453502222786,
+   "hover_flight_time_min": 16.923476419489237,
+   "cruise_flight_time_min": 9.532262860414864,
+   "mixed_flight_time_min": 7.014571171389008,
+   "aggressive_flight_time_min": 5.168545443589903,
+   "cruise_speed_kmh": 62.99999999996452,
+   "hover_current_a": 5.7864188750516785,
+   "cruise_current_a": 11.078167015151324,
+   "mixed_current_a": 15.054377155758376,
+   "landing_cell_voltage": 3.6388219085508227,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 128.32423237774123,
+   "full_throttle_current_a": 114.35690063024771,
+   "esc_load_percent": 45.41173732089071,
+   "battery_load_percent": 69.30721250318042,
+   "motor_response_ms": 17.234498236487433,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 100.12380207259214,
+   "motor_temp_minute_c": 97.60728786697715,
+   "mixed_motor_temp_c": 47.22215401400011,
+   "props_in_view_percent": 8.077638218954357,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:lr6_6s",
+  "format": "PW3",
+  "code": "PW3-Lp8KXPsV6gRDYZlrY6g",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:lr_6_x",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m2507_1500",
+    "prop": "justmoreparts:p152_33_3b_pc",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b6s_2200",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#fb8f44",
+    "motors": "#fb8f44"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 693.2,
+   "thrust_to_weight": 10.131988433320846,
+   "hover_throttle_percent": 25.456453502222786,
+   "hover_flight_time_min": 16.923476419489237,
+   "cruise_flight_time_min": 9.532262860414864,
+   "mixed_flight_time_min": 7.014571171389008,
+   "aggressive_flight_time_min": 5.168545443589903,
+   "cruise_speed_kmh": 62.99999999996452,
+   "hover_current_a": 5.7864188750516785,
+   "cruise_current_a": 11.078167015151324,
+   "mixed_current_a": 15.054377155758376,
+   "landing_cell_voltage": 3.6388219085508227,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 128.32423237774123,
+   "full_throttle_current_a": 114.35690063024771,
+   "esc_load_percent": 45.41173732089071,
+   "battery_load_percent": 69.30721250318042,
+   "motor_response_ms": 17.234498236487433,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 100.12380207259214,
+   "motor_temp_minute_c": 97.60728786697715,
+   "mixed_motor_temp_c": 47.22215401400011,
+   "props_in_view_percent": 8.077638218954357,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:lr7_deadcat_lion",
+  "format": "PW3",
+  "code": "PW3-0VK4Xqu8EgBhiDM",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:lr_7_deadcat",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m28065_1300",
+    "prop": "justmoreparts:p178_40_2b_cfn",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b6s_4500_lion",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": [
+    "battery_weak"
+   ]
+  },
+  "analysis": {
+   "mass_grams": 881.7,
+   "thrust_to_weight": 5.174034099691465,
+   "hover_throttle_percent": 27.728879440669452,
+   "hover_flight_time_min": 31.913561833530213,
+   "cruise_flight_time_min": 21.593292025754444,
+   "mixed_flight_time_min": 16.52260902840148,
+   "aggressive_flight_time_min": 11.291774135165536,
+   "cruise_speed_kmh": 57.16358645212229,
+   "hover_current_a": 6.545310116025171,
+   "cruise_current_a": 11.003417159209125,
+   "mixed_current_a": 14.38029548430144,
+   "landing_cell_voltage": 2.9679358563607026,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 103.93379354930818,
+   "full_throttle_current_a": 78.05203568258439,
+   "esc_load_percent": 30.5557762378444,
+   "battery_load_percent": 173.44896818352086,
+   "motor_response_ms": 24.37836932479739,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 77.04956699814191,
+   "motor_temp_minute_c": 69.51514685277331,
+   "mixed_motor_temp_c": 41.478224784166486,
+   "props_in_view_percent": 1.8411821224951799,
+   "warnings": [
+    "heavy_sag",
+    "battery_overload"
+   ]
+  }
+ },
+ {
+  "name": "preset:justmoreparts:lr7_deadcat_lion",
+  "format": "PW3",
+  "code": "PW3-1S6zbh2HKd96SMDMEXiyX",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:lr_7_deadcat",
+    "stack": "justmoreparts:stack_30_6s_60a",
+    "motor": "justmoreparts:m28065_1300",
+    "prop": "justmoreparts:p178_40_2b_cfn",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b6s_4500_lion",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#2da44e",
+    "motors": "#7ee787"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": [
+    "battery_weak"
+   ]
+  },
+  "analysis": {
+   "mass_grams": 881.7,
+   "thrust_to_weight": 5.174034099691465,
+   "hover_throttle_percent": 27.728879440669452,
+   "hover_flight_time_min": 31.913561833530213,
+   "cruise_flight_time_min": 21.593292025754444,
+   "mixed_flight_time_min": 16.52260902840148,
+   "aggressive_flight_time_min": 11.291774135165536,
+   "cruise_speed_kmh": 57.16358645212229,
+   "hover_current_a": 6.545310116025171,
+   "cruise_current_a": 11.003417159209125,
+   "mixed_current_a": 14.38029548430144,
+   "landing_cell_voltage": 2.9679358563607026,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 103.93379354930818,
+   "full_throttle_current_a": 78.05203568258439,
+   "esc_load_percent": 30.5557762378444,
+   "battery_load_percent": 173.44896818352086,
+   "motor_response_ms": 24.37836932479739,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 77.04956699814191,
+   "motor_temp_minute_c": 69.51514685277331,
+   "mixed_motor_temp_c": 41.478224784166486,
+   "props_in_view_percent": 1.8411821224951799,
+   "warnings": [
+    "heavy_sag",
+    "battery_overload"
+   ]
+  }
+ },
+ {
+  "name": "parts:justmoreparts:lr7_8s",
+  "format": "PW3",
+  "code": "PW3-0VDzMTIMAm4jZ9F",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:lr_7_deadcat",
+    "stack": "justmoreparts:stack_30_8s_65a",
+    "motor": "justmoreparts:m2807_1100",
+    "prop": "justmoreparts:p178_40_2b_cfn",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b8s_2200",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 896.9000000000001,
+   "thrust_to_weight": 11.657691876325174,
+   "hover_throttle_percent": 21.736347122910306,
+   "hover_flight_time_min": 19.581317115826565,
+   "cruise_flight_time_min": 11.941452214933882,
+   "mixed_flight_time_min": 8.09327025345364,
+   "aggressive_flight_time_min": 5.778925318854872,
+   "cruise_speed_kmh": 63.00000000001344,
+   "hover_current_a": 5.001811666564954,
+   "cruise_current_a": 8.843145548741338,
+   "mixed_current_a": 13.047877643148922,
+   "landing_cell_voltage": 3.651345957934625,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 146.6698405163153,
+   "full_throttle_current_a": 140.96235728137754,
+   "esc_load_percent": 52.78676283881359,
+   "battery_load_percent": 64.07379876426252,
+   "motor_response_ms": 22.98397382115879,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 98.28023271131654,
+   "motor_temp_minute_c": 98.28023271131654,
+   "mixed_motor_temp_c": 38.64637225002489,
+   "props_in_view_percent": 2.016540184661153,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:lr7_8s",
+  "format": "PW3",
+  "code": "PW3-602ycIkcbPLYyyWQ1lB9Jj",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:lr_7_deadcat",
+    "stack": "justmoreparts:stack_30_8s_65a",
+    "motor": "justmoreparts:m2807_1100",
+    "prop": "justmoreparts:p178_40_2b_cfn",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b8s_2200",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#1f6feb",
+    "motors": "#79c0ff"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 896.9000000000001,
+   "thrust_to_weight": 11.657691876325174,
+   "hover_throttle_percent": 21.736347122910306,
+   "hover_flight_time_min": 19.581317115826565,
+   "cruise_flight_time_min": 11.941452214933882,
+   "mixed_flight_time_min": 8.09327025345364,
+   "aggressive_flight_time_min": 5.778925318854872,
+   "cruise_speed_kmh": 63.00000000001344,
+   "hover_current_a": 5.001811666564954,
+   "cruise_current_a": 8.843145548741338,
+   "mixed_current_a": 13.047877643148922,
+   "landing_cell_voltage": 3.651345957934625,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 146.6698405163153,
+   "full_throttle_current_a": 140.96235728137754,
+   "esc_load_percent": 52.78676283881359,
+   "battery_load_percent": 64.07379876426252,
+   "motor_response_ms": 22.98397382115879,
+   "crash_speed_ms": 8,
+   "sustained_motor_temp_c": 98.28023271131654,
+   "motor_temp_minute_c": 98.28023271131654,
+   "mixed_motor_temp_c": 38.64637225002489,
+   "props_in_view_percent": 2.016540184661153,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:lr8_6s_lion",
+  "format": "PW3",
+  "code": "PW3-0VcjcTcs8lqEASW",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:lr_8_x",
+    "stack": "justmoreparts:stack_30_8s_65a",
+    "motor": "justmoreparts:m2807_1100",
+    "prop": "justmoreparts:p203_45_2b_cfn",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b6s_8400_lion",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": [
+    "battery_weak"
+   ]
+  },
+  "analysis": {
+   "mass_grams": 1329.7,
+   "thrust_to_weight": 4.909695848211494,
+   "hover_throttle_percent": 32.92562454867502,
+   "hover_flight_time_min": 41.06150444268128,
+   "cruise_flight_time_min": 28.225143641525605,
+   "mixed_flight_time_min": 18.809613265413784,
+   "aggressive_flight_time_min": 12.64311487630848,
+   "cruise_speed_kmh": 60.35490108457906,
+   "hover_current_a": 9.503365659239963,
+   "cruise_current_a": 15.713648994419332,
+   "mixed_current_a": 23.5794321627826,
+   "landing_cell_voltage": 2.959719166068242,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 109.73618379010557,
+   "full_throttle_current_a": 108.87639468289845,
+   "esc_load_percent": 41.39745699121246,
+   "battery_load_percent": 129.6147555748791,
+   "motor_response_ms": 32.62691000550204,
+   "crash_speed_ms": 7.5,
+   "sustained_motor_temp_c": 95.31263176896715,
+   "motor_temp_minute_c": 91.788745946734,
+   "mixed_motor_temp_c": 42.03545333947346,
+   "props_in_view_percent": 6.607485224384866,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:lr8_6s_lion",
+  "format": "PW3",
+  "code": "PW3-1S8P6EP1TqTt6IpNDfZha",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:lr_8_x",
+    "stack": "justmoreparts:stack_30_8s_65a",
+    "motor": "justmoreparts:m2807_1100",
+    "prop": "justmoreparts:p203_45_2b_cfn",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b6s_8400_lion",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#e16f24",
+    "motors": "#e16f24"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": [
+    "battery_weak"
+   ]
+  },
+  "analysis": {
+   "mass_grams": 1329.7,
+   "thrust_to_weight": 4.909695848211494,
+   "hover_throttle_percent": 32.92562454867502,
+   "hover_flight_time_min": 41.06150444268128,
+   "cruise_flight_time_min": 28.225143641525605,
+   "mixed_flight_time_min": 18.809613265413784,
+   "aggressive_flight_time_min": 12.64311487630848,
+   "cruise_speed_kmh": 60.35490108457906,
+   "hover_current_a": 9.503365659239963,
+   "cruise_current_a": 15.713648994419332,
+   "mixed_current_a": 23.5794321627826,
+   "landing_cell_voltage": 2.959719166068242,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 109.73618379010557,
+   "full_throttle_current_a": 108.87639468289845,
+   "esc_load_percent": 41.39745699121246,
+   "battery_load_percent": 129.6147555748791,
+   "motor_response_ms": 32.62691000550204,
+   "crash_speed_ms": 7.5,
+   "sustained_motor_temp_c": 95.31263176896715,
+   "motor_temp_minute_c": 91.788745946734,
+   "mixed_motor_temp_c": 42.03545333947346,
+   "props_in_view_percent": 6.607485224384866,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:xclass10_6s",
+  "format": "PW3",
+  "code": "PW3-0VaJJaRHhdY0X7Y",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:xclass_10",
+    "stack": "justmoreparts:stack_30_8s_100a",
+    "motor": "justmoreparts:m3115_900",
+    "prop": "justmoreparts:p254_50_2b_carbon",
+    "video": "justmoreparts:digital_hd_pro",
+    "battery": "justmoreparts:b6s_5000",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 1704,
+   "thrust_to_weight": 8.510756385873146,
+   "hover_throttle_percent": 25.68349623538054,
+   "hover_flight_time_min": 21.631738793812364,
+   "cruise_flight_time_min": 12.907024162302632,
+   "mixed_flight_time_min": 6.613909293371292,
+   "aggressive_flight_time_min": 4.527036047270652,
+   "cruise_speed_kmh": 62.473984159364086,
+   "hover_current_a": 10.281058030647456,
+   "cruise_current_a": 18.59452628135342,
+   "mixed_current_a": 36.28716230513426,
+   "landing_cell_voltage": 3.5315826052706054,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 124.94796831879893,
+   "full_throttle_current_a": 210.86810154530423,
+   "esc_load_percent": 55.08498059922381,
+   "battery_load_percent": 70.28936718176807,
+   "motor_response_ms": 21.54373431706989,
+   "crash_speed_ms": 7,
+   "sustained_motor_temp_c": 100.35730786011396,
+   "motor_temp_minute_c": 92.81891258253047,
+   "mixed_motor_temp_c": 47.565813436961484,
+   "props_in_view_percent": 7.067321109813139,
+   "warnings": [
+    "motor_thermal"
+   ]
+  }
+ },
+ {
+  "name": "preset:justmoreparts:xclass10_6s",
+  "format": "PW3",
+  "code": "PW3-LpOdcHKZqyvA3jGsz4B",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:xclass_10",
+    "stack": "justmoreparts:stack_30_8s_100a",
+    "motor": "justmoreparts:m3115_900",
+    "prop": "justmoreparts:p254_50_2b_carbon",
+    "video": "justmoreparts:digital_hd_pro",
+    "battery": "justmoreparts:b6s_5000",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#3fb950",
+    "motors": "#3fb950"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 1704,
+   "thrust_to_weight": 8.510756385873146,
+   "hover_throttle_percent": 25.68349623538054,
+   "hover_flight_time_min": 21.631738793812364,
+   "cruise_flight_time_min": 12.907024162302632,
+   "mixed_flight_time_min": 6.613909293371292,
+   "aggressive_flight_time_min": 4.527036047270652,
+   "cruise_speed_kmh": 62.473984159364086,
+   "hover_current_a": 10.281058030647456,
+   "cruise_current_a": 18.59452628135342,
+   "mixed_current_a": 36.28716230513426,
+   "landing_cell_voltage": 3.5315826052706054,
+   "avionics_power_w": 9.6,
+   "top_speed_kmh": 124.94796831879893,
+   "full_throttle_current_a": 210.86810154530423,
+   "esc_load_percent": 55.08498059922381,
+   "battery_load_percent": 70.28936718176807,
+   "motor_response_ms": 21.54373431706989,
+   "crash_speed_ms": 7,
+   "sustained_motor_temp_c": 100.35730786011396,
+   "motor_temp_minute_c": 92.81891258253047,
+   "mixed_motor_temp_c": 47.565813436961484,
+   "props_in_view_percent": 7.067321109813139,
+   "warnings": [
+    "motor_thermal"
+   ]
+  }
+ },
+ {
+  "name": "parts:justmoreparts:xclass12_8s",
+  "format": "PW3",
+  "code": "PW3-0VFacdYuPgtD1ke",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:xclass_12",
+    "stack": "justmoreparts:stack_30_8s_100a",
+    "motor": "justmoreparts:m4214_400",
+    "prop": "justmoreparts:p305_60_2b_cfn",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b8s_5000",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 2629.7,
+   "thrust_to_weight": 5.470678480758321,
+   "hover_throttle_percent": 39.19690143927517,
+   "hover_flight_time_min": 18.527513899466562,
+   "cruise_flight_time_min": 14.279881132897897,
+   "mixed_flight_time_min": 6.012508713194802,
+   "aggressive_flight_time_min": 4.6959994280641535,
+   "cruise_speed_kmh": 56.79339692779867,
+   "hover_current_a": 11.999584964696844,
+   "cruise_current_a": 16.806862589849537,
+   "mixed_current_a": 39.91678207023732,
+   "landing_cell_voltage": 3.5211738364790834,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 113.58679385553764,
+   "full_throttle_current_a": 116.7228606468051,
+   "esc_load_percent": 30.32198802106642,
+   "battery_load_percent": 38.9076202156017,
+   "motor_response_ms": 13.50795793667192,
+   "crash_speed_ms": 6.5,
+   "sustained_motor_temp_c": 93.76843192534275,
+   "motor_temp_minute_c": 74.57627692849977,
+   "mixed_motor_temp_c": 57.29679321588619,
+   "props_in_view_percent": 3.3184215511330373,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:xclass12_8s",
+  "format": "PW3",
+  "code": "PW3-1S6eakWvJi6L3OSCAHblw",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:xclass_12",
+    "stack": "justmoreparts:stack_30_8s_100a",
+    "motor": "justmoreparts:m4214_400",
+    "prop": "justmoreparts:p305_60_2b_cfn",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b8s_5000",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#f778ba",
+    "motors": "#f778ba"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 2629.7,
+   "thrust_to_weight": 5.470678480758321,
+   "hover_throttle_percent": 39.19690143927517,
+   "hover_flight_time_min": 18.527513899466562,
+   "cruise_flight_time_min": 14.279881132897897,
+   "mixed_flight_time_min": 6.012508713194802,
+   "aggressive_flight_time_min": 4.6959994280641535,
+   "cruise_speed_kmh": 56.79339692779867,
+   "hover_current_a": 11.999584964696844,
+   "cruise_current_a": 16.806862589849537,
+   "mixed_current_a": 39.91678207023732,
+   "landing_cell_voltage": 3.5211738364790834,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 113.58679385553764,
+   "full_throttle_current_a": 116.7228606468051,
+   "esc_load_percent": 30.32198802106642,
+   "battery_load_percent": 38.9076202156017,
+   "motor_response_ms": 13.50795793667192,
+   "crash_speed_ms": 6.5,
+   "sustained_motor_temp_c": 93.76843192534275,
+   "motor_temp_minute_c": 74.57627692849977,
+   "mixed_motor_temp_c": 57.29679321588619,
+   "props_in_view_percent": 3.3184215511330373,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:xclass13_8s",
+  "format": "PW3",
+  "code": "PW3-0VLlTgmPWOOwr1i",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:xclass_13",
+    "stack": "justmoreparts:stack_30_8s_100a",
+    "motor": "justmoreparts:m4214_400",
+    "prop": "justmoreparts:p330_70_2b_carbon",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b8s_5000",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 3123.7,
+   "thrust_to_weight": 5.916579588740291,
+   "hover_throttle_percent": 35.73811549732366,
+   "hover_flight_time_min": 17.141212942753025,
+   "cruise_flight_time_min": 12.56168898665527,
+   "mixed_flight_time_min": 5.21628844807708,
+   "aggressive_flight_time_min": 3.7504171454772997,
+   "cruise_speed_kmh": 58.64395830779057,
+   "hover_current_a": 12.967254456182426,
+   "cruise_current_a": 19.105711043710798,
+   "mixed_current_a": 46.009725571919425,
+   "landing_cell_voltage": 3.4800456236656925,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 117.28791661561928,
+   "full_throttle_current_a": 153.1653912484735,
+   "esc_load_percent": 40.04599779382788,
+   "battery_load_percent": 51.05513041615783,
+   "motor_response_ms": 18.87529281104635,
+   "crash_speed_ms": 6,
+   "sustained_motor_temp_c": 105.36904870772193,
+   "motor_temp_minute_c": 85.45169634873945,
+   "mixed_motor_temp_c": 60.80590912656511,
+   "props_in_view_percent": 2.323858402909941,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:xclass13_8s",
+  "format": "PW3",
+  "code": "PW3-1S77XdMsvtKdmoa2AbPRi",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:xclass_13",
+    "stack": "justmoreparts:stack_30_8s_100a",
+    "motor": "justmoreparts:m4214_400",
+    "prop": "justmoreparts:p330_70_2b_carbon",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b8s_5000",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#ffd33d",
+    "motors": "#ffd33d"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 3123.7,
+   "thrust_to_weight": 5.916579588740291,
+   "hover_throttle_percent": 35.73811549732366,
+   "hover_flight_time_min": 17.141212942753025,
+   "cruise_flight_time_min": 12.56168898665527,
+   "mixed_flight_time_min": 5.21628844807708,
+   "aggressive_flight_time_min": 3.7504171454772997,
+   "cruise_speed_kmh": 58.64395830779057,
+   "hover_current_a": 12.967254456182426,
+   "cruise_current_a": 19.105711043710798,
+   "mixed_current_a": 46.009725571919425,
+   "landing_cell_voltage": 3.4800456236656925,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 117.28791661561928,
+   "full_throttle_current_a": 153.1653912484735,
+   "esc_load_percent": 40.04599779382788,
+   "battery_load_percent": 51.05513041615783,
+   "motor_response_ms": 18.87529281104635,
+   "crash_speed_ms": 6,
+   "sustained_motor_temp_c": 105.36904870772193,
+   "motor_temp_minute_c": 85.45169634873945,
+   "mixed_motor_temp_c": 60.80590912656511,
+   "props_in_view_percent": 2.323858402909941,
+   "warnings": []
+  }
+ },
+ {
+  "name": "parts:justmoreparts:xclass13h_8s",
+  "format": "PW3",
+  "code": "PW3-0V9mSFzJZrnwPtK",
+  "status": "OK",
+  "layers": [
+   "parts"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:xclass_13_h",
+    "stack": "justmoreparts:stack_30_8s_100a",
+    "motor": "justmoreparts:m4214_400",
+    "prop": "justmoreparts:p330_60_3b_cfn",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b8s_5000",
+    "accessories": {}
+   },
+   "paint": null,
+   "tune": null,
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 3355.7,
+   "thrust_to_weight": 5.691047197382991,
+   "hover_throttle_percent": 35.36969937450515,
+   "hover_flight_time_min": 15.528856413663057,
+   "cruise_flight_time_min": 11.532179663373022,
+   "mixed_flight_time_min": 4.457136585927382,
+   "aggressive_flight_time_min": 3.3414879770847397,
+   "cruise_speed_kmh": 53.71077112477802,
+   "hover_current_a": 14.309323597249207,
+   "cruise_current_a": 20.81133029536958,
+   "mixed_current_a": 53.84622960798583,
+   "landing_cell_voltage": 3.4350568896921474,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 107.42154224962007,
+   "full_throttle_current_a": 172.33010311360448,
+   "esc_load_percent": 45.19091112602444,
+   "battery_load_percent": 57.44336770453483,
+   "motor_response_ms": 23.46651076795276,
+   "crash_speed_ms": 7,
+   "sustained_motor_temp_c": 112.48098969254478,
+   "motor_temp_minute_c": 92.41894720892876,
+   "mixed_motor_temp_c": 66.07073866443018,
+   "props_in_view_percent": 0,
+   "warnings": []
+  }
+ },
+ {
+  "name": "preset:justmoreparts:xclass13h_8s",
+  "format": "PW3",
+  "code": "PW3-1S6DMENWdvUnenBkma0Xy",
+  "status": "OK",
+  "layers": [
+   "parts",
+   "paint",
+   "tune"
+  ],
+  "decoded": {
+   "build": {
+    "frame": "justmoreparts:xclass_13_h",
+    "stack": "justmoreparts:stack_30_8s_100a",
+    "motor": "justmoreparts:m4214_400",
+    "prop": "justmoreparts:p330_60_3b_cfn",
+    "video": "justmoreparts:digital_lr",
+    "battery": "justmoreparts:b8s_5000",
+    "accessories": {}
+   },
+   "paint": {
+    "frame": "#1b1d20",
+    "tpu": "#ff4d4d",
+    "motors": "#ff4d4d"
+   },
+   "tune": {},
+   "osd": null,
+   "name": null
+  },
+  "namespaces": [
+   {
+    "key": "justmoreparts",
+    "short_id": 2,
+    "table": true,
+    "min_version": "1.0.0",
+    "result": "MATCH"
+   }
+  ],
+  "skipped": [],
+  "unknown_parts": [],
+  "check": {
+   "problems": [],
+   "warnings": []
+  },
+  "analysis": {
+   "mass_grams": 3355.7,
+   "thrust_to_weight": 5.691047197382991,
+   "hover_throttle_percent": 35.36969937450515,
+   "hover_flight_time_min": 15.528856413663057,
+   "cruise_flight_time_min": 11.532179663373022,
+   "mixed_flight_time_min": 4.457136585927382,
+   "aggressive_flight_time_min": 3.3414879770847397,
+   "cruise_speed_kmh": 53.71077112477802,
+   "hover_current_a": 14.309323597249207,
+   "cruise_current_a": 20.81133029536958,
+   "mixed_current_a": 53.84622960798583,
+   "landing_cell_voltage": 3.4350568896921474,
+   "avionics_power_w": 10.6,
+   "top_speed_kmh": 107.42154224962007,
+   "full_throttle_current_a": 172.33010311360448,
+   "esc_load_percent": 45.19091112602444,
+   "battery_load_percent": 57.44336770453483,
+   "motor_response_ms": 23.46651076795276,
+   "crash_speed_ms": 7,
+   "sustained_motor_temp_c": 112.48098969254478,
+   "motor_temp_minute_c": 92.41894720892876,
+   "mixed_motor_temp_c": 66.07073866443018,
+   "props_in_view_percent": 0,
+   "warnings": []
+  }
+ }
+]

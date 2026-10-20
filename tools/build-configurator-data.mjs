@@ -1,19 +1,26 @@
 #!/usr/bin/env node
-// Builds the lean configurator catalog from the "Propwash: Just More Parts" web export.
+// Builds the lean configurator catalog from the web export of Propwash (format 2, Propwash 0.6.0 and later), made
+// with Just More Parts installed (`/propwash webexport all`).
 //
-//   node tools/build-configurator-data.mjs [--export <web-export dir>]
+//   node tools/build-configurator-data.mjs [--export <web-export dir>] [--goldens <dir>]
 //
 // Default export location: the newest ../propwash-justmoreparts/release/<version>/web-export (sibling checkout),
-// or the JMP_WEB_EXPORT environment variable.
+// or the JMP_WEB_EXPORT environment variable. --goldens (or PROPWASH_SHARECODE_GOLDENS) names the folder with the
+// share-code golden files of Propwash (common/src/test/resources/sharecode/); they are copied unchanged, so the mod's
+// JUnit tests and tools/test-configurator.mjs check the very same files.
 //
 // Writes:
-//   assets/data/configurator/catalog.json   everything the configurator needs at runtime (incl. the FPV layout data
-//                                           of every drone_layout.json for the camera rig of the analysis)
-//   tools/fixtures/sharecode-vectors.json   the exported PW1 test vectors (used by tools/test-configurator.mjs)
+//   assets/data/configurator/catalog.json      everything the configurator needs at runtime: the parts, presets,
+//                                              chemistries and mounts of every namespace of the export, rules, paint,
+//                                              tune, the FPV layout data of every drone_layout.json, and for share
+//                                              codes the parts table of every namespace and the add-on directory
+//   tools/fixtures/pw3-export-vectors.json     the PW3 vectors of the export (base/sharecode/vectors.json): a code per
+//                                              preset (parts only, and with paint and tune), with check and analysis
+//   tools/fixtures/sharecode/*.json            the golden files of Propwash (only with --goldens)
 //
-// Only data from the web export is used. Model and texture files are referenced by their export paths
-// (model.drone / model.variants / model.textures, relative to the export root); worn, damaged and broken
-// variants are dropped because the configurator only shows new parts.
+// Only data from the web export is used. Model and texture files are referenced by their export paths below the
+// namespace folder (model.drone / model.variants / model.textures); worn, damaged and broken variants are dropped
+// because the configurator only shows new parts.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -22,6 +29,9 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const RELEASES = path.resolve(ROOT, '../propwash-justmoreparts/release');
+const CATEGORIES = ['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory'];
+export const GOLDEN_FILES = ['pw1-vectors.json', 'pw2-vectors.json', 'pw3-vectors.json', 'pw3-conversions.json', 'tablechecksum-vectors.json',
+  'propwash-baseline.json', 'directory-baseline.json'];
 
 const versionParts = (v) => v.split('.').map((n) => Number.parseInt(n, 10) || 0);
 
@@ -45,7 +55,7 @@ export function newestExport() {
     versions = [];
   }
   versions.sort(compareVersions);
-  return path.join(RELEASES, versions.length ? versions[versions.length - 1] : '1.0.0', 'web-export');
+  return path.join(RELEASES, versions.length ? versions[versions.length - 1] : '1.2.0', 'web-export');
 }
 
 export function exportDir(argv = process.argv.slice(2)) {
@@ -55,8 +65,22 @@ export function exportDir(argv = process.argv.slice(2)) {
   return newestExport();
 }
 
+function argValue(argv, name, env) {
+  const i = argv.indexOf(name);
+  if (i >= 0 && argv[i + 1]) return path.resolve(argv[i + 1]);
+  return env && process.env[env] ? path.resolve(process.env[env]) : null;
+}
+
 function read(dir, file) {
   return JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
+}
+
+/** Manifest of a format-2 export and its namespaces, Propwash first (the base), then the add-ons in export order. */
+export function readExport(dir) {
+  const manifest = read(dir, 'manifest.json');
+  if (manifest.format !== 2) throw new Error(`web export format ${manifest.format}, expected 2 (Propwash 0.6.0 or later)`);
+  const namespaces = [...manifest.namespaces].sort((a, b) => (a === 'propwash' ? -1 : b === 'propwash' ? 1 : 0));
+  return { manifest, namespaces };
 }
 
 const DROP_VARIANT = /_(worn|damaged|broken)(_|\.json$|\.png$)/;
@@ -94,7 +118,7 @@ export function tuneGroup(key) {
 }
 
 function flightOnly(values, flight) {
-  return Object.fromEntries(Object.entries(values).filter(([key]) => flight.includes(tuneGroup(key))));
+  return Object.fromEntries(Object.entries(values || {}).filter(([key]) => flight.includes(tuneGroup(key))));
 }
 
 function part(p) {
@@ -112,7 +136,7 @@ function part(p) {
   if (b.render_model) out.basics.render_model = b.render_model;
   out.data = p.data;
   out.derived = p.derived;
-  out.paint = p.paint;
+  out.paint = { slots: p.paint.slots, paintable_model: p.paint.paintable_model };
   const m = p.model || {};
   out.model = {
     kind: m.kind,
@@ -183,43 +207,102 @@ export function fpvLayout(json, namespace) {
   return { seats, frames };
 }
 
-function fpvLayouts(dir) {
-  const layouts = {};
-  const assets = path.join(dir, 'assets');
-  for (const namespace of fs.readdirSync(assets).sort()) {
-    const file = path.join(assets, namespace, 'drone_layout.json');
-    if (!fs.existsSync(file)) continue;
-    let json = null;
-    try {
-      json = JSON.parse(fs.readFileSync(file, 'utf8'));
-    } catch {
-      json = null;
+/** The drone_layout.json of every namespace folder (format 2: <ns>/assets/<ns>/drone_layout.json). */
+export function layoutFiles(dir, namespaces) {
+  const out = {};
+  for (const ns of namespaces) {
+    const assets = path.join(dir, ns, 'assets');
+    if (!fs.existsSync(assets)) continue;
+    for (const owner of fs.readdirSync(assets).sort()) {
+      const file = path.join(assets, owner, 'drone_layout.json');
+      if (!fs.existsSync(file) || owner in out) continue;
+      let json = null;
+      try {
+        json = JSON.parse(fs.readFileSync(file, 'utf8'));
+      } catch {
+        json = null;
+      }
+      out[owner] = json;
     }
-    layouts[namespace] = fpvLayout(json, namespace);
   }
-  return layouts;
+  return out;
+}
+
+/** Texts of the mod's language files (en_us, de_de) for a translation key, or null. */
+function langText(lang, key) {
+  const en = lang.en_us[key];
+  const de = lang.de_de[key];
+  if (en == null && de == null) return null;
+  return { de_de: de ?? en, en_us: en ?? de };
+}
+
+const partOrder = (a, b) => (CATEGORIES.indexOf(a.category) - CATEGORIES.indexOf(b.category))
+  || (a.basics.sort - b.basics.sort) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
+
+/** The add-on directory of the export without the part names of its tables (the catalog names every loaded part). */
+function compactDirectory(directory) {
+  return {
+    format: directory.format,
+    source: directory.source,
+    addons: (directory.addons || []).map((a) => {
+      const out = { ...a };
+      if (a.table) {
+        out.table = { ...a.table, parts: Object.fromEntries(Object.entries(a.table.parts || {}).map(([kind, entries]) => [kind,
+          entries.map(({ name, ...rest }) => rest)])) };
+      }
+      return out;
+    }),
+  };
 }
 
 export function buildCatalog(dir) {
-  const manifest = read(dir, 'manifest.json');
-  if (manifest.format !== 1) throw new Error(`unsupported web-export format ${manifest.format}`);
-  const parts = read(dir, 'parts.json');
-  const chemistries = read(dir, 'chemistries.json');
-  const mounts = read(dir, 'mounts.json');
-  const rules = read(dir, 'rules.json');
-  const paint = read(dir, 'paint.json');
-  const tune = read(dir, 'tune.json');
-  const presets = read(dir, 'presets.json');
-  const spec = read(dir, 'sharecode/spec.json');
-
-  const mountNames = {};
-  for (const [kind, list] of Object.entries(mounts)) {
-    mountNames[kind] = {};
-    for (const m of list) mountNames[kind][m.id] = m.name;
+  const { manifest, namespaces } = readExport(dir);
+  const rules = read(dir, 'base/rules.json');
+  const paint = read(dir, 'base/paint.json');
+  const tune = read(dir, 'base/tune.json');
+  const spec = read(dir, 'base/sharecode/spec.json');
+  const lang = { en_us: {}, de_de: {} };
+  const parts = [];
+  const presets = [];
+  const chemistries = new Map();
+  const mounts = {};
+  const tables = {};
+  const info = [];
+  for (const ns of namespaces) {
+    const nsManifest = read(dir, `${ns}/manifest.json`);
+    for (const l of ['en_us', 'de_de']) {
+      const file = path.join(dir, ns, 'lang', `${l}.json`);
+      if (fs.existsSync(file)) Object.assign(lang[l], JSON.parse(fs.readFileSync(file, 'utf8')));
+    }
+    parts.push(...read(dir, `${ns}/parts.json`));
+    presets.push(...read(dir, `${ns}/presets.json`));
+    for (const c of read(dir, `${ns}/chemistries.json`)) if (!chemistries.has(c.id)) chemistries.set(c.id, c);
+    for (const [kind, list] of Object.entries(read(dir, `${ns}/mounts.json`))) {
+      mounts[kind] = mounts[kind] || {};
+      for (const m of list) if (!(m.id in mounts[kind])) mounts[kind][m.id] = m.name;
+    }
+    if (fs.existsSync(path.join(dir, ns, 'share_table.json'))) tables[ns] = read(dir, `${ns}/share_table.json`);
+    info.push({
+      namespace: ns,
+      name: nsManifest.mod.name,
+      version: nsManifest.mod.version,
+      short_id: nsManifest.short_id ?? null,
+      table_source: nsManifest.table_source ?? null,
+      table_entries: nsManifest.table_entries ?? 0,
+      table_crc: nsManifest.table_crc ?? null,
+      requires: nsManifest.requires || {},
+    });
   }
+  parts.sort(partOrder);
+
+  const defaultColors = {};
+  for (const p of parts) if (p.paint && p.paint.default_colors && Object.keys(p.paint.default_colors).length) defaultColors[p.id] = p.paint.default_colors;
+
+  const layouts = {};
+  for (const [owner, json] of Object.entries(layoutFiles(dir, namespaces))) layouts[owner] = fpvLayout(json, owner);
 
   return {
-    format: 1,
+    format: 2,
     source: {
       web_export_format: manifest.format,
       generator: manifest.generator,
@@ -231,19 +314,20 @@ export function buildCatalog(dir) {
       fingerprint: manifest.fingerprint,
       counts: manifest.counts,
     },
-    categories: ['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory'],
+    namespaces: info,
+    categories: CATEGORIES,
     parts: parts.map(part),
-    chemistries: chemistries.map(({ used_by, ...c }) => c),
-    mounts: mountNames,
+    chemistries: [...chemistries.values()].map(({ used_by, ...c }) => c),
+    mounts,
     rules,
-    paint,
+    paint: { slots: paint.slots, default_colors: defaultColors },
     tune: {
       groups: tune.groups,
       group_names: tune.group_names,
       pw1_keys: tune.pw1_keys,
-      defaults: Object.fromEntries(Object.entries(tune.defaults).map(([id, values]) => [id, flightOnly(values, tune.groups.flight)])),
+      defaults: Object.fromEntries(presets.map((p) => [p.id, flightOnly(p.default_tune, tune.groups.flight)])),
     },
-    fpv: { layouts: fpvLayouts(dir) },
+    fpv: { layouts },
     presets: presets.map((p) => ({
       id: p.id,
       name: p.name,
@@ -256,19 +340,31 @@ export function buildCatalog(dir) {
       analysis: p.analysis,
     })),
     sharecode: {
-      format: spec.format,
+      format: spec.code_format,
       prefix: spec.prefix,
       revision: spec.revision,
-      layers: spec.layers,
-      statuses: spec.statuses,
+      reads: manifest.sharecode && manifest.sharecode.reads,
+      layers: spec.layers.map((l) => ({ bit: l.bit, key: l.key, default: l.default, name: langText(lang, l.translation_key) })),
+      statuses: spec.statuses.map((s) => ({ key: s.key, text: langText(lang, s.translation_key) })),
+      namespace_results: spec.namespace_results.map((key) => ({ key, text: langText(lang, `propwash.share.namespace.${key.toLowerCase()}`) })),
       limits: spec.limits,
-      aliases: spec.aliases,
+      tables,
+      directory: compactDirectory(spec.directory),
     },
   };
 }
 
+/** Copies the golden files of Propwash into tools/fixtures/sharecode/ (unchanged). */
+export function copyGoldens(from) {
+  const to = path.join(ROOT, 'tools/fixtures/sharecode');
+  fs.mkdirSync(to, { recursive: true });
+  for (const file of GOLDEN_FILES) fs.copyFileSync(path.join(from, file), path.join(to, file));
+  return to;
+}
+
 function main() {
-  const dir = exportDir();
+  const argv = process.argv.slice(2);
+  const dir = exportDir(argv);
   if (!fs.existsSync(path.join(dir, 'manifest.json'))) {
     console.error(`web export not found in ${path.relative(ROOT, dir) || dir} (use --export <dir> or JMP_WEB_EXPORT)`);
     process.exit(1);
@@ -281,11 +377,13 @@ function main() {
 
   const fixtures = path.join(ROOT, 'tools/fixtures');
   fs.mkdirSync(fixtures, { recursive: true });
-  const vectors = read(dir, 'sharecode/vectors.json');
-  fs.writeFileSync(path.join(fixtures, 'sharecode-vectors.json'), JSON.stringify(vectors, null, 1) + '\n');
+  const vectors = read(dir, 'base/sharecode/vectors.json');
+  fs.writeFileSync(path.join(fixtures, 'pw3-export-vectors.json'), JSON.stringify(vectors, null, 1) + '\n');
 
-  console.log(`catalog.json: ${catalog.parts.length} parts, ${catalog.presets.length} presets, ${(text.length / 1024).toFixed(1)} KiB`);
-  console.log(`sharecode-vectors.json: ${vectors.length} vectors`);
+  console.log(`catalog.json: ${catalog.parts.length} parts, ${catalog.presets.length} presets, namespaces ${catalog.namespaces.map((n) => `${n.namespace} ${n.version}`).join(', ')}, ${(text.length / 1024).toFixed(1)} KiB`);
+  console.log(`pw3-export-vectors.json: ${vectors.length} vectors`);
+  const goldens = argValue(argv, '--goldens', 'PROPWASH_SHARECODE_GOLDENS');
+  if (goldens) console.log(`golden files copied to ${path.relative(ROOT, copyGoldens(goldens))}: ${GOLDEN_FILES.join(', ')}`);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
