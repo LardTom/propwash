@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="Convert old share codes – Propwash FPV" data-title-de="Alte Sharecodes umrechnen – Propwash FPV" data-description-en="Paste a whole post: every old PW1 and PW2 share code of Propwash in it becomes a PW3 code for Propwash 0.6.0, right in your browser – nothing is uploaded." data-description-de="Füg einen ganzen Beitrag ein: Jeder alte PW1- und PW2-Sharecode von Propwash darin wird zum PW3-Code für Propwash 0.6.0, direkt in deinem Browser – nichts wird hochgeladen.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Convert old share codes – Propwash FPV</title>
+<meta name="description" content="Paste a whole post: every old PW1 and PW2 share code of Propwash in it becomes a PW3 code for Propwash 0.6.0, right in your browser – nothing is uploaded.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<link rel="canonical" href="https://propwashfpv.com/convert/">
+<meta property="og:url" content="https://propwashfpv.com/convert/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="Convert old share codes – Propwash FPV">
+<meta property="og:description" content="Convert old PW1 and PW2 share codes of Propwash to PW3 – a whole Discord post at once, right in your browser.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/css/style.css?v=99b3d8b7">
+<link rel="stylesheet" href="../assets/css/configurator.css?v=2570525b">
+<link rel="modulepreload" href="../assets/js/configurator/convert-page.js?v=4ee8c870">
+<meta name="pw-root" content="../">
+<script data-pw-head>
+(function () {
+  var d = document.documentElement, lang = null, q = /[?&]lang=(en|de)(?:&|$)/.exec(location.search);
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    if (q) localStorage.setItem('propwash-lang', q[1]);
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (q) {
+    lang = q[1];
+    try {
+      var s = location.search.slice(1).split('&').filter(function (p) { return p && !/^lang=/.test(p); }).join('&');
+      history.replaceState(history.state, '', location.pathname + (s ? '?' + s : '') + location.hash);
+    } catch (e) {}
+  }
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="cfg-page cv-page">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 16 16"><path d="M5.5 5.5h8v8h-8z M10.5 5.5v-3h-8v8h3" fill="none" stroke="currentColor" stroke-width="1.6"/></symbol>
+</svg>
+<a class="skip" href="#cv"><span lang="en">Skip to the converter</span><span lang="de">Zum Umrechner springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Main" data-de-aria-label="Hauptmenü">
+      <div class="nav-group" data-nav-group>
+        <button type="button" class="nav-group__toggle" aria-expanded="false" aria-controls="nav-features" data-nav-group-toggle><span lang="en">Features</span><span lang="de">Funktionen</span><svg class="nav-group__chev" aria-hidden="true" viewBox="0 0 12 12" width="12" height="12"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+        <ul class="nav-group__panel" id="nav-features">
+          <li><a href="../#how"><span class="nav-group__title"><span lang="en">Get started</span><span lang="de">Loslegen</span></span><span class="nav-group__text"><span lang="en">Build, bind, fly and race in four steps</span><span lang="de">Bauen, binden, fliegen, rennen in vier Schritten</span></span></a></li>
+          <li><a href="../#new"><span class="nav-group__title"><span lang="en">What’s new</span><span lang="de">Neuigkeiten</span></span><span class="nav-group__text"><span lang="en">The highlights of the latest update</span><span lang="de">Die Highlights des neuesten Updates</span></span></a></li>
+          <li><a href="../#flight"><span class="nav-group__title"><span lang="en">Flight &amp; tuning</span><span lang="de">Flug &amp; Tuning</span></span><span class="nav-group__text"><span lang="en">Flight model, Betaflight-style tuning, radio or gamepad</span><span lang="de">Flugmodell, Tuning wie in Betaflight, Funke oder Gamepad</span></span></a></li>
+          <li><a href="../#video"><span class="nav-group__title">Video</span><span class="nav-group__text"><span lang="en">Analog or digital, and how the picture breaks up</span><span lang="de">Analog oder digital, und wie das Bild zerfällt</span></span></a></li>
+          <li><a href="../#racing"><span class="nav-group__title"><span lang="en">Racing &amp; freestyle</span><span lang="de">Rennen &amp; Freestyle</span></span><span class="nav-group__text"><span lang="en">Gates, ghosts, leaderboards and tricks</span><span lang="de">Gates, Geister, Bestenlisten und Tricks</span></span></a></li>
+          <li><a href="../#survival"><span class="nav-group__title"><span lang="en">Survival</span><span lang="de">Überlebensmodus</span></span><span class="nav-group__text"><span lang="en">Crafting, loot, batteries and part wear</span><span lang="de">Herstellen, Beute, Akkus und Verschleiß</span></span></a></li>
+          <li><a href="../#extras"><span class="nav-group__title"><span lang="en">More details</span><span lang="de">Mehr Details</span></span><span class="nav-group__text"><span lang="en">Lights, action cams, paint, sound and bandos</span><span lang="de">Licht, Action-Cams, Lack, Sound und Bandos</span></span></a></li>
+          <li><a href="../#gallery"><span class="nav-group__title">Screenshots</span><span class="nav-group__text"><span lang="en">Straight from the game</span><span lang="de">Direkt aus dem Spiel</span></span></a></li>
+          <li><a href="../#faq"><span class="nav-group__title">FAQ</span><span class="nav-group__text"><span lang="en">Questions before take-off</span><span lang="de">Fragen vor dem Start</span></span></a></li>
+        </ul>
+      </div>
+      <a href="../docs/"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a href="../changelog/">Changelog</a>
+      <a href="../roadmap/">Roadmap</a>
+      <a href="../#download">Download</a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a>
+      <a class="site-nav__cta" href="../configurator/"><svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18" class="quad-icon"><path d="M6.2 6.2l7.6 7.6M13.8 6.2l-7.6 7.6"/><circle cx="5" cy="5" r="3"/><circle cx="15" cy="5" r="3"/><circle cx="5" cy="15" r="3"/><circle cx="15" cy="15" r="3"/><rect x="8" y="8" width="4" height="4" rx="1"/></svg><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="cfg-intro" aria-labelledby="cv-title">
+    <div class="wrap cfg-intro__inner">
+      <div class="cfg-intro__copy">
+        <p class="kicker">Propwash FPV<span aria-hidden="true"> · </span>PW3</p>
+        <h1 id="cv-title" class="cfg-title"><span lang="en">Convert old share codes</span><span lang="de">Alte Sharecodes umrechnen</span></h1>
+        <p class="cfg-lead" lang="en">Since Propwash 0.6.0, share codes start with <span class="mono">PW3-</span>. Paste your old code here – or a whole Discord post: every <span class="mono">PW1-…</span> and <span class="mono">PW2…</span> code in it becomes PW3 in place, links included.</p>
+        <p class="cfg-lead" lang="de">Seit Propwash 0.6.0 beginnen Sharecodes mit <span class="mono">PW3-</span>. Füg hier deinen alten Code ein – oder einen ganzen Discord-Beitrag: Jeder <span class="mono">PW1-…</span>- und <span class="mono">PW2…</span>-Code darin wird an Ort und Stelle zu PW3, auch in Links.</p>
+      </div>
+    </div>
+  </section>
+  <noscript>
+    <div class="wrap"><p class="cfg-note cfg-note--problem"><span lang="en">The converter needs JavaScript.</span><span lang="de">Der Umrechner braucht JavaScript.</span></p></div>
+  </noscript>
+  <div class="wrap cv needs-js" id="cv" data-cv aria-busy="true">
+    <div class="cv__io">
+      <label class="field field--grow">
+        <span class="field__label"><span lang="en">Your post or codes</span><span lang="de">Dein Beitrag oder deine Codes</span></span>
+        <textarea class="field__control cv__input" rows="9" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="PW2… / PW1-… / https://propwashfpv.com/configurator/#PW2…" data-cv-input></textarea>
+      </label>
+      <p class="cv__private"><span lang="en">The conversion runs in your browser. Nothing you paste is uploaded or stored.</span><span lang="de">Die Umrechnung läuft in deinem Browser. Nichts, was du einfügst, wird hochgeladen oder gespeichert.</span></p>
+      <p class="cv__status" data-cv-status role="status" aria-live="polite"></p>
+      <div class="cv__output" data-cv-output hidden>
+        <div class="cv__output-head">
+          <h2 class="cv__subtitle" id="cv-result-title"><span lang="en">Converted text</span><span lang="de">Umgerechneter Text</span></h2>
+          <button type="button" class="btn btn--primary btn--small" data-cv-copy-all><svg aria-hidden="true" width="16" height="16"><use href="#i-copy"/></svg><span lang="en">Copy all</span><span lang="de">Alles kopieren</span></button>
+          <span class="cv__flash" data-cv-flash role="status" aria-live="polite"></span>
+        </div>
+        <textarea class="field__control cv__result" rows="9" readonly spellcheck="false" aria-labelledby="cv-result-title" data-cv-result></textarea>
+        <p class="cv__hint"><span lang="en">Players still on Propwash 0.5 can only read the old codes: when you edit your post, you can also keep them and add the PW3 code below each one – copy it from the list.</span><span lang="de">Wer noch Propwash 0.5 spielt, kann nur die alten Codes lesen: Beim Bearbeiten deines Beitrags kannst du sie auch stehen lassen und den PW3-Code jeweils darunter setzen – kopier ihn aus der Liste.</span></p>
+      </div>
+    </div>
+    <section class="cv__list" aria-labelledby="cv-list-title" data-cv-list hidden>
+      <h2 class="cv__subtitle" id="cv-list-title"><span lang="en">Codes in the text</span><span lang="de">Codes im Text</span></h2>
+      <ol class="cv__codes" data-cv-codes></ol>
+    </section>
+  </div>
+  <section class="wrap cfg-about" aria-labelledby="about-title">
+    <h2 id="about-title" class="cfg-about__title"><span lang="en">About the conversion</span><span lang="de">Zur Umrechnung</span></h2>
+    <p lang="en">The converter works like <span class="mono">/propwash code convert</span> in the game: an old code becomes exactly the PW3 code the game writes, with the frozen parts tables of Propwash and Just More Parts. PW3 codes are only checked. A code that a person put together by hand can name parts no version knows; it can’t be converted. Open a code in the <a href="../configurator/">configurator</a> to see the drone, its flight figures and its paint.</p>
+    <p lang="de">Der Umrechner arbeitet wie <span class="mono">/propwash code convert</span> im Spiel: Ein alter Code wird genau zu dem PW3-Code, den das Spiel schreibt, mit den eingefrorenen Teile-Tabellen von Propwash und Just More Parts. PW3-Codes werden nur geprüft. Ein von Hand gebauter Code kann Teile nennen, die keine Version kennt; er lässt sich nicht umrechnen. Öffne einen Code im <a href="../configurator/">Konfigurator</a>, um die Drohne, ihre Flugwerte und ihren Lack zu sehen.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a> · <a href="../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a> · <a href="../docs/"><span lang="en">Docs</span><span lang="de">Doku</span></a> · <a href="../changelog/">Changelog</a> · <a href="../roadmap/">Roadmap</a> · <a href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener"><span lang="en">Source code</span><span lang="de">Quellcode</span></a> · <a href="../impressum/"><span lang="en">Legal notice</span><span lang="de">Impressum</span></a> · <a href="../datenschutz/"><span lang="en">Privacy policy</span><span lang="de">Datenschutz</span></a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice and whether you paused the animations are kept in your browser. The codes you paste stay in this page and are never uploaded. Fonts: <a href="../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (both SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl und ob du die Animationen angehalten hast, bleiben in deinem Browser. Die eingefügten Codes bleiben in dieser Seite und werden nie hochgeladen. Schriften: <a href="../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (beide SIL Open Font License), direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<div class="toast-host" data-toast role="status" aria-live="polite"></div>
+
+<script src="../assets/js/main.js?v=2c5dc92d" defer></script>
+<script type="module" src="../assets/js/configurator/convert-page.js?v=4ee8c870"></script>
+</body>
+</html>
