@@ -8,17 +8,23 @@
 //
 // Picking: a click or tap on a part (not a drag, a long press or a pinch) reports the piece under it – part category,
 // part id, accessory mount, motor/prop position and the paint slot of the face hit – and the mouse pointer highlights
-// what a click would select (the whole category, or in paint mode every face of the paint slot). Every mesh carries its
-// source piece in userData.pick; the ray test runs on the CPU only on a click and on throttled pointer moves, against
-// the visible meshes as drawn (back faces culled, cutout texels let the ray through).
+// what a click would select (the whole category, or in paint mode every face of the paint slot; a face outside the
+// part's tint groups paints the part's main slot, so then the part under the pointer lights up a little as a whole,
+// too). Every mesh carries its source piece in userData.pick; the ray test runs on the CPU only on a click and on
+// throttled pointer moves, against the visible meshes as drawn (back faces culled, cutout texels let the ray through).
+//
+// Battery plugged in (Propwash 0.6.0): the stack is drawn as its mounted variant and the plug and leads as boxes
+// (assembly.js powerLeadRoute); they belong to the stack and cannot be painted.
 
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Group, Mesh, BufferGeometry, BufferAttribute, ShaderMaterial, Texture,
   NearestFilter, LinearFilter, Vector3, Box3, Sphere, CanvasTexture, PlaneGeometry, MeshBasicMaterial, NoColorSpace,
   LinearSRGBColorSpace, OrbitControls,
 } from '../../vendor/three/three.min.js';
-import { assemble, proceduralFrame, proceduralAccessoryBase, pieceCategory, MM_PER_MODEL_UNIT, PROP_SLOTS } from './assembly.js?v=ac181a91';
-import { paintTints, groupsOf, pieceSlots, rgbOf, slotOf, shade } from './paint.js?v=12d6a44c';
+import {
+  assemble, proceduralFrame, proceduralAccessoryBase, powerLeadShapes, pieceCategory, MM_PER_MODEL_UNIT, PROP_SLOTS,
+} from './assembly.js?v=e8018744';
+import { paintTints, groupsOf, pieceSlots, rgbOf, slotOf, shade } from './paint.js?v=320ddce0';
 import { discCenter, verticalFov, ASPECT as FPV_ASPECT, SLOTS } from './fpv.js?v=76cdbbe6';
 
 const MAX_TINTS = 8;
@@ -29,6 +35,9 @@ const DEG = Math.PI / 180;
 // runs at most every HOVER_EVERY_MS.
 const HIGHLIGHT_GLSL = 'vec3(1.0, 0.733, 0.0)';
 const HOVER_LEVEL = 0.75;
+// Paint mode, pointer on a face outside the part's tint groups (it paints the part's main slot): the part under the
+// pointer as a whole at this share of the level, the faces of the slot fully (website design 0.6.0, fixes 3.E).
+const BARE_FACE_SHARE = 0.6;
 const FLASH_HOLD_MS = 650;
 const FLASH_FADE_MS = 650;
 const CLICK_SLOP_PX = { mouse: 5, pen: 8, touch: 12 };
@@ -650,6 +659,9 @@ export function createViewer(container, options) {
       const frame = catalog.part(piece.id);
       mesh = new Mesh(shapeGeometry(proceduralFrame(frame, current.layout, catalog)), material(whiteTexture()));
       mesh.userData.dispose = true;
+    } else if (piece.procedural === 'power_lead') {
+      mesh = new Mesh(shapeGeometry(powerLeadShapes(piece.route)), material(whiteTexture()));
+      mesh.userData.dispose = true;
     } else {
       const plain = piece.variant && piece.variant !== 'base' && model.variants[piece.variant] ? piece.variant : 'base';
       const painted = plain === 'base' ? 'paint' : `${plain}_paint`;
@@ -917,8 +929,9 @@ export function createViewer(container, options) {
   let tapPicked = false;
   const touches = new Set();
 
+  // The plugged lead is not pickable in paint mode, like in the game's paint picker; a click goes to what is behind it.
   function pickables() {
-    const meshes = droneGroup.children.filter((mesh) => mesh.visible);
+    const meshes = droneGroup.children.filter((mesh) => mesh.visible && !(picking.mode === 'paint' && mesh.userData.role === 'power_lead'));
     return discs.visible ? meshes.concat(discs.children) : meshes;
   }
 
@@ -971,11 +984,14 @@ export function createViewer(container, options) {
     return best;
   }
 
+  // bare: the face hit has no tint group of a paintable part (its main slot paints it); meshId: the mesh under the
+  // pointer, for the highlight of such a face.
   function describe({ mesh, group }) {
     const info = mesh.userData.pick;
     return {
       category: info.category, id: info.id, mount: info.mount, position: info.position,
       paintSlot: (group >= 0 && info.groups[group]) || info.main, procedural: info.procedural,
+      bare: group < 0 && !!info.faces && !!info.main, meshId: mesh.id,
     };
   }
 
@@ -991,7 +1007,8 @@ export function createViewer(container, options) {
   }
 
   // Highlight of the hovered and the clicked pick: in parts mode every mesh of its category (both pieces of the top
-  // accessory, all four motors or props), in paint mode the faces of its paint slot on every part.
+  // accessory, all four motors or props), in paint mode the faces of its paint slot on every part, and for a face
+  // without a tint group also the part under the pointer as a whole, a little.
   function applyHighlight() {
     const lights = [];
     if (!suppressed && hover) lights.push([hover, litSlots(hover), HOVER_LEVEL]);
@@ -1007,6 +1024,7 @@ export function createViewer(container, options) {
           info.groups.forEach((slot, i) => {
             if (i < MAX_TINTS && slots.includes(slot)) levels[i] = Math.max(levels[i], level);
           });
+          if (hit.bare && hit.meshId === mesh.id) all = Math.max(all, level * BARE_FACE_SHARE);
         } else if (slots.includes(info.main)) {
           all = Math.max(all, level);
         }
@@ -1043,7 +1061,8 @@ export function createViewer(container, options) {
 
   function hoverKeyOf(hit) {
     if (!hit) return null;
-    return [hit.category, hit.mount, hit.id, picking.mode === 'paint' ? hit.paintSlot : ''].join('|');
+    const paint = picking.mode === 'paint';
+    return [hit.category, hit.mount, hit.id, paint ? hit.paintSlot : '', paint && hit.bare ? hit.meshId : ''].join('|');
   }
 
   function setHover(hit) {
@@ -1202,6 +1221,19 @@ export function createViewer(container, options) {
     /** The part under a point of the canvas (CSS px from its top left), as for a click; null for none. */
     pickAt,
     /**
+     * How every drawn mesh is highlighted now, for tests: {meshId, role, category, all (the whole mesh), faces (highest
+     * level of a tint group)}.
+     */
+    highlights() {
+      return droneGroup.children.map((mesh) => {
+        const u = mesh.material.uniforms || {};
+        return {
+          meshId: mesh.id, role: mesh.userData.role, category: mesh.userData.pick.category,
+          all: u.highlightAll ? u.highlightAll.value : 0, faces: u.highlight ? Math.max(0, ...u.highlight.value) : 0,
+        };
+      });
+    },
+    /**
      * Where a click picks each visible part: per mesh and paint slot on it a canvas point (CSS px) with the pick there,
      * {...hit, x, y, center}: the projected centre of the part when it is in front there (center true), else the
      * centre of the first face of it that is. For tests and tools; parts hidden behind others are left out.
@@ -1216,7 +1248,9 @@ export function createViewer(container, options) {
       const points = [];
       for (const mesh of pickables()) {
         const info = mesh.userData.pick;
-        const wanted = new Set(info.faces ? info.groups.concat(info.main) : [info.main]).size;
+        // One point per paint slot, and in paint mode one more for a face outside the tint groups (it paints the main slot).
+        const bareToo = picking.mode === 'paint' && info.faces && info.main ? 1 : 0;
+        const wanted = new Set(info.faces ? info.groups.concat(info.main) : [info.main]).size + bareToo;
         const g = mesh.geometry;
         if (!g.boundingSphere) g.computeBoundingSphere();
         const candidates = [g.boundingSphere.center.clone()];
@@ -1237,7 +1271,8 @@ export function createViewer(container, options) {
           const hit = nearestHit(x, y);
           if (!hit || hit.mesh !== mesh) continue;
           const picked = describe(hit);
-          if (!found.has(picked.paintSlot)) found.set(picked.paintSlot, { ...picked, x, y, center: k === 0 });
+          const key = `${picked.paintSlot}${bareToo && picked.bare ? '|bare' : ''}`;
+          if (!found.has(key)) found.set(key, { ...picked, x, y, center: k === 0 });
         }
         points.push(...found.values());
       }
