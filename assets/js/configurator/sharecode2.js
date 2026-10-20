@@ -1,11 +1,14 @@
-// PW2 share codes: encoder and decoder, a port of Pw2Codec in "Propwash: Just More Parts" (spec: sharecode.md,
-// PW2 revision 2.0). Every code is byte-identical to the mod's; the OSD layer uses the vendored zlib port (level 9,
-// raw, preset dictionary) like java.util.zip.Deflater.
+// PW2 share codes (pw2.md of Propwash, PW2 revision 2.0, frozen): the reader of Propwash 0.6.0 (share.legacy.Pw2Reader)
+// and the encoder of Just More Parts 1.1 (only for the tests: the site writes PW3), plus the bit stream, Base62 frame
+// and the layers paint, tune, OSD and name, which PW3 (sharecode3.js) writes bit for bit like PW2 (LayerCodec). Every
+// code is byte-identical to the mod's; the OSD layer uses the vendored zlib port (level 9, raw, preset dictionary)
+// like java.util.zip.Deflater.
 //
 // Layout: 'PW2' + base62 of [bit stream, padded to whole bytes] + [low 16 bits of the CRC-32 of those bytes].
 // The bit stream holds the layer flags, the parts as short table numbers (Exp-Golomb), the paint with a colour table
 // and repeats, the tune as index gaps and decimal values, the OSD layout (deflated against the preset layouts) and
-// the name. Content shape and decode result are the same as for PW1 (sharecode.js).
+// the name. Content shape and decode result are the same as for PW1 (sharecode.js). Part numbers beyond the frozen
+// tables read as 'pw2.unknown:<kind>.<n>', like the mod.
 
 import { crc32 } from './crc32.js?v=62ad0fa2';
 import { inflateRaw } from './inflate.js?v=f04f9641';
@@ -13,9 +16,9 @@ import { TUNE_KEYS as PW1_TUNE_KEYS, isSharedKey } from './tune.js?v=f4084d0e';
 import { deflateRaw } from '../../vendor/pako/deflate.js';
 import { PW2_PARTS, PW2_COLORS, PW2_OSD_DICTIONARY } from './sharecode2-tables.js?v=1e97a115';
 import {
-  Fail, utf8Encode, javaStrip, validPath, validNamespace, unknownNamespaceIndex, LIMITS, ACCESSORY_SLOTS, PAINT_SLOTS,
+  Fail, utf8Encode, javaStrip, validPath, validNamespace, LIMITS, ACCESSORY_SLOTS, PAINT_SLOTS,
   BUILD_FIELDS,
-} from './sharecode.js?v=ff46f4e6';
+} from './sharecode.js?v=594888f1';
 
 export const PW2_FORMAT = 'PW2';
 export const PW2_PREFIX = 'PW2';
@@ -27,9 +30,8 @@ export const PW2_KINDS = Object.freeze(['frame', 'stack', 'motor', 'prop', 'vide
 export const PW2_PARAMS = Object.freeze({
   part: 4, color: 5, paintSlots: 2, tuneCount: 2, tuneGap: 0, value: 7, text: 3, osdBytes: 8, extensionBits: 6,
 });
-const UNKNOWN_NAMESPACE = 'pw2.unknown';
-const UNKNOWN_PART = /^\?(frame|stack|motor|prop|video|battery|accessory)\.([1-9][0-9]{0,9})$/;
-const PW1_UNKNOWN_NAMESPACE = /^pw1\.unknown\.([0-9]{1,10})$/;
+export const PW2_UNKNOWN_NAMESPACE = 'pw2.unknown';
+const UNKNOWN_PART = /^pw2\.unknown:(frame|stack|motor|prop|video|battery|accessory)\.([1-9][0-9]{0,9})$/;
 const CHECKSUM_BYTES = 2;
 const MIN_FRAME_BYTES = 3;
 const MAX_PAINT_SLOT_BITS = 64;
@@ -48,7 +50,7 @@ const PART_INDEX = Object.fromEntries(PW2_KINDS.map((kind) => [kind, new Map(PW2
 // ---------------------------------------------------------------------------------------------------------------
 // Bits (MSB first)
 
-class BitWriter {
+export class BitWriter {
   constructor() {
     this.bitsOut = [];
   }
@@ -89,7 +91,7 @@ class BitWriter {
   }
 }
 
-function bitLength(value) {
+export function bitLength(value) {
   let n = 0;
   let v = value;
   while (v >= 1) {
@@ -99,11 +101,11 @@ function bitLength(value) {
   return n;
 }
 
-function golombLength(value, k) {
+export function golombLength(value, k) {
   return 2 * bitLength(value + 2 ** k) - k - 1;
 }
 
-class BitReader {
+export class BitReader {
   constructor(data, byteLength) {
     this.data = data;
     this.end = byteLength * 8;
@@ -198,7 +200,7 @@ const BASE62_VALUES = (() => {
   return values;
 })();
 
-function base62Decode(symbols) {
+export function base62Decode(symbols) {
   for (let i = 0; i < symbols.length; i++) {
     const c = symbols.charCodeAt(i);
     if (c >= 128 || BASE62_VALUES[c] < 0) throw new Fail('BAD_CHARACTER');
@@ -223,7 +225,7 @@ function checksum(bytes, length) {
   return crc32(bytes, 0, length) & 0xffff;
 }
 
-function textMode(text) {
+export function textMode(text) {
   let table = true;
   let ascii = true;
   for (let i = 0; i < text.length; i++) {
@@ -234,7 +236,7 @@ function textMode(text) {
   return table ? 0 : ascii ? 1 : 2;
 }
 
-function textBits(text) {
+export function textBits(text) {
   const mode = textMode(text);
   if (mode === 0) return 1 + golombLength(text.length, PW2_PARAMS.text) + 6 * text.length;
   if (mode === 1) return 2 + golombLength(text.length, PW2_PARAMS.text) + 7 * text.length;
@@ -242,7 +244,7 @@ function textBits(text) {
   return 2 + golombLength(bytes, PW2_PARAMS.text) + 8 * bytes;
 }
 
-function writeText(out, text) {
+export function writeText(out, text) {
   const mode = textMode(text);
   if (mode === 0) {
     out.bits(0, 1).golomb(text.length, PW2_PARAMS.text);
@@ -265,7 +267,7 @@ function splitId(id) {
 function writeRef(out, kind, id) {
   const table = PW2_PARTS[kind];
   const marker = UNKNOWN_PART.exec(id);
-  if (marker || (typeof id === 'string' && id.startsWith(`${UNKNOWN_NAMESPACE}:`))) {
+  if (marker || (typeof id === 'string' && id.startsWith(`${PW2_UNKNOWN_NAMESPACE}:`))) {
     const value = marker && marker[1] === kind ? Number(marker[2]) : -1;
     if (value <= table.length || value > 0x7fffffff) throw new Error(`part id not PW2-safe: ${id}`);
     out.golomb(value, PW2_PARAMS.part);
@@ -276,15 +278,7 @@ function writeRef(out, kind, id) {
     out.golomb(index, PW2_PARAMS.part);
     return;
   }
-  let namespace;
-  let path;
-  const unknown = unknownNamespaceIndex(id);
-  if (unknown >= 0) {
-    namespace = `pw1.unknown.${unknown}`;
-    path = id.slice(id.indexOf(':') + 1);
-  } else {
-    [namespace, path] = splitId(id);
-  }
+  const [namespace, path] = splitId(id);
   if (!validPath(path)) throw new Error(`part id not PW2-safe: ${id}`);
   if (!validNamespace(namespace)) throw new Error(`namespace not PW2-safe: ${id}`);
   out.golomb(0, PW2_PARAMS.part);
@@ -292,11 +286,32 @@ function writeRef(out, kind, id) {
   writeText(out, path);
 }
 
-function indexBits(count) {
+/** Frame of a payload: the bytes, then the low 16 bits of their CRC-32, big-endian (LayerCodec.frame). */
+export function frameOf(payload) {
+  const frame = new Uint8Array(payload.length + CHECKSUM_BYTES);
+  frame.set(payload);
+  const check = checksum(payload, payload.length);
+  frame[payload.length] = check >>> 8;
+  frame[payload.length + 1] = check & 0xff;
+  return frame;
+}
+
+/** LayerCodec.openFrame: Base62 symbols to a bit reader over the payload; throws Fail. */
+export function openFrame(symbols) {
+  const frame = base62Decode(symbols);
+  if (frame.length > LIMITS.frameBytes) throw new Fail('TOO_LARGE');
+  if (frame.length < MIN_FRAME_BYTES) throw new Fail('TRUNCATED');
+  const body = frame.length - CHECKSUM_BYTES;
+  const stored = (frame[body] << 8) | frame[body + 1];
+  if (checksum(frame, body) !== stored) throw new Fail('CHECKSUM');
+  return new BitReader(frame, body);
+}
+
+export function indexBits(count) {
   return count <= 1 ? 0 : bitLength(count - 1);
 }
 
-function writePaint(out, paint) {
+export function writePaint(out, paint) {
   let length = 0;
   PAINT_SLOTS.forEach((slot, i) => {
     if (paint[slot] != null) length = i + 1;
@@ -375,7 +390,7 @@ function writeValue(out, value, seen) {
   out.bits(raw, 32);
 }
 
-function writeTune(out, tune) {
+export function writeTune(out, tune) {
   const indexed = [];
   const literal = [];
   for (const key of Object.keys(tune)) {
@@ -400,7 +415,7 @@ function writeTune(out, tune) {
   }
 }
 
-function writeOsd(out, osd) {
+export function writeOsd(out, osd) {
   out.golomb(osd.version - 1, 0);
   const text = Uint8Array.from(utf8Encode(osd.json));
   const packed = deflateRaw(text, PW2_OSD_DICTIONARY);
@@ -434,19 +449,14 @@ export function encodePw2(content) {
   if (content.tune) writeTune(out, content.tune);
   if (content.osd) writeOsd(out, content.osd);
   if (content.name) writeText(out, content.name);
-  const payload = out.toBytes();
-  const frame = new Uint8Array(payload.length + CHECKSUM_BYTES);
-  frame.set(payload);
-  const check = checksum(payload, payload.length);
-  frame[payload.length] = check >>> 8;
-  frame[payload.length + 1] = check & 0xff;
+  const frame = frameOf(out.toBytes());
   return PW2_PREFIX + base62Encode(frame);
 }
 
 // ---------------------------------------------------------------------------------------------------------------
 // Decoding
 
-function utf8(bytes) {
+export function utf8(bytes) {
   try {
     return UTF8.decode(bytes);
   } catch {
@@ -454,7 +464,7 @@ function utf8(bytes) {
   }
 }
 
-function readText(r, maxSymbols) {
+export function readText(r, maxSymbols) {
   const mode = r.bit() ? (r.bit() ? 2 : 1) : 0;
   const width = mode === 0 ? 6 : mode === 1 ? 7 : 8;
   const count = r.golomb(PW2_PARAMS.text);
@@ -479,7 +489,7 @@ function readText(r, maxSymbols) {
   return out;
 }
 
-function skipOnce(parsed, marker) {
+export function skipOnce(parsed, marker) {
   if (!parsed.skipped.includes(marker)) parsed.skipped.push(marker);
 }
 
@@ -488,19 +498,14 @@ function readRef(r, kind, parsed) {
   if (value === 0) {
     const namespace = readText(r, LIMITS.namespaceChars);
     const path = readText(r, LIMITS.pathChars);
-    if (!validNamespace(namespace) || !validPath(path) || namespace === UNKNOWN_NAMESPACE) throw new Fail('CORRUPT');
-    const pw1 = PW1_UNKNOWN_NAMESPACE.exec(namespace);
-    if (pw1) {
-      const ns = Number(pw1[1]);
-      if (ns >= 3 && ns <= 0xffffffff) return `?${ns}:${path}`;
-    }
+    if (!validNamespace(namespace) || !validPath(path) || namespace === PW2_UNKNOWN_NAMESPACE) throw new Fail('CORRUPT');
     return `${namespace}:${path}`;
   }
   const table = PW2_PARTS[kind];
   if (value <= table.length) return table[value - 1];
   const path = `${kind}.${value}`;
   skipOnce(parsed, `part_index:${path}`);
-  return `?${path}`;
+  return `${PW2_UNKNOWN_NAMESPACE}:${path}`;
 }
 
 function readParts(r, parsed) {
@@ -523,7 +528,7 @@ function readParts(r, parsed) {
   parsed.accessories = accessories;
 }
 
-function readPaint(r, parsed) {
+export function readPaint(r, parsed) {
   const length = r.golombInt(PW2_PARAMS.paintSlots, MAX_PAINT_SLOT_BITS);
   const present = [];
   for (let i = 0; i < length; i++) present.push(r.bit());
@@ -591,7 +596,7 @@ function putTune(values, key, value, parsed) {
   values.set(key, value);
 }
 
-function readTune(r, parsed) {
+export function readTune(r, parsed) {
   const indexed = r.golombInt(PW2_PARAMS.tuneCount, LIMITS.tuneEntries);
   const values = new Map();
   const seen = [];
@@ -617,7 +622,7 @@ function readTune(r, parsed) {
   parsed.tune = tune;
 }
 
-function readOsd(r, parsed) {
+export function readOsd(r, parsed) {
   const version = r.golomb(0) + 1;
   if (version > 0x7fffffff) throw new Fail('CORRUPT');
   let json;
@@ -641,13 +646,7 @@ function readOsd(r, parsed) {
  * (aliases, unknown and wrong-kind parts). Throws Fail.
  */
 export function parsePw2(symbols) {
-  const frame = base62Decode(symbols);
-  if (frame.length > LIMITS.frameBytes) throw new Fail('TOO_LARGE');
-  if (frame.length < MIN_FRAME_BYTES) throw new Fail('TRUNCATED');
-  const body = frame.length - CHECKSUM_BYTES;
-  const stored = (frame[body] << 8) | frame[body + 1];
-  if (checksum(frame, body) !== stored) throw new Fail('CHECKSUM');
-  const r = new BitReader(frame, body);
+  const r = openFrame(symbols);
   const hasPaint = r.bit();
   const hasTune = r.bit();
   const hasOsd = r.bit();
@@ -655,25 +654,31 @@ export function parsePw2(symbols) {
   const hasExtensions = r.bit();
   const parsed = { layers: ['parts'], skipped: [], parts: null, accessories: {}, paint: null, tune: null, osd: null, name: null };
   readParts(r, parsed);
-  if (hasPaint) {
+  readLayers(r, parsed, { paint: hasPaint, tune: hasTune, osd: hasOsd, name: hasName, extensions: hasExtensions });
+  return parsed;
+}
+
+/** The layers after the parts, the same for PW2 and PW3 (LayerCodec), and the zero padding at the end; throws Fail. */
+export function readLayers(r, parsed, has) {
+  if (has.paint) {
     parsed.layers.push('paint');
     readPaint(r, parsed);
   }
-  if (hasTune) {
+  if (has.tune) {
     parsed.layers.push('tune');
     readTune(r, parsed);
   }
-  if (hasOsd) {
+  if (has.osd) {
     parsed.layers.push('osd');
     readOsd(r, parsed);
   }
-  if (hasName) {
+  if (has.name) {
     parsed.layers.push('name');
     const name = javaStrip(readText(r, LIMITS.nameChars * 4));
     if (name.length === 0 || name.length > LIMITS.nameChars) throw new Fail('CORRUPT');
     parsed.name = name;
   }
-  if (hasExtensions) {
+  if (has.extensions) {
     const count = r.golombInt(0, MAX_EXTENSIONS);
     for (let i = 0; i < count; i++) {
       const layer = FIRST_EXTENSION_LAYER + r.golombInt(0, 1024);
@@ -683,5 +688,4 @@ export function parsePw2(symbols) {
     }
   }
   if (!r.paddingOnly()) throw new Fail('CORRUPT');
-  return parsed;
 }

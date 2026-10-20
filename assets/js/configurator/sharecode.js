@@ -1,30 +1,34 @@
-// Share codes: PW1 encoder and tolerant decoder, a port of the codec in "Propwash: Just More Parts"
-// (spec: sharecode.md, PW1 revision 1.2), and the entry point for the shorter PW2 codes (sharecode2.js, revision 2.0).
-// Decoding reads both formats; SHARE_FORMAT chooses what encode() writes. Uncompressed PW1 codes are byte-identical
-// to the mod's; compressed codes too, because the vendored deflate is a zlib port (level 9, raw).
+// Share codes: the entry point that reads PW1, PW2 and PW3 and writes PW3 (ShareFormat of Propwash 0.6.0), and the
+// PW1 codec (pw1.md of Propwash, revision 1.2, frozen): the reader of Propwash (share.legacy.Pw1Reader) and the encoder
+// of Just More Parts 1.0 (only for the tests). PW2 lives in sharecode2.js, PW3 in sharecode3.js. Uncompressed PW1 codes
+// are byte-identical to the mod's; compressed codes too, because the vendored deflate is a zlib port (level 9, raw).
 //
 // Content shape used by encode() and returned by decode():
 //   {
-//     build: { frame, stack, motor, prop, video, battery, accessories: { top?, bottom? } },   // part ids
+//     build: { frame, stack, motor, prop, video, battery, accessories: { top?, bottom?, front? } },   // part ids
 //     paint: { <slot>: '#rrggbb' } | null,      // encode also accepts 0xRRGGBB numbers
 //     tune:  { <flight or camera key>: number } | null,   // float32 values, keys sorted
 //     osd:   { version, json } | null,
 //     name:  string | null,
 //   }
-// Ids from a namespace number this decoder does not know appear as '?<ns>:<path>' and are written back with the
-// same number.
+// Parts the reader cannot resolve keep the mod's marker ids: 'pw1.unknown.<n>:<path>' (PW1 namespace number n),
+// 'pw2.unknown:<kind>.<n>' (PW2 table number n) and 'pw3.unknown:<namespace>/<kind>/<n>' (sharecode3.js); displayId()
+// shows them as '?…'. PW3 needs the parts tables of the installed namespaces (createShareTables in sharecode3.js, the
+// catalog builds them from the web export); without tables every part is written by name.
 
 import { crc32 } from './crc32.js?v=62ad0fa2';
 import { inflateRaw } from './inflate.js?v=f04f9641';
 import { TUNE_KEYS, tuneIndex, isSharedKey } from './tune.js?v=f4084d0e';
 import { deflateRaw } from '../../vendor/pako/deflate.js';
-import { encodePw2, parsePw2, PW2_FORMAT } from './sharecode2.js?v=ff46f4e6';
+import { encodePw2, parsePw2, PW2_FORMAT } from './sharecode2.js?v=594888f1';
+import {
+  encodePw3, parsePw3, createShareTables, ShareError, unknownMarker, base62Only, displayId, PW3_FORMAT, PW3_PREFIX, splitId as idParts,
+} from './sharecode3.js?v=594888f1';
 
-/**
- * Format of new codes: 'PW1' or 'PW2'. Decoding always reads both. Switch to 'PW2' once Just More Parts with PW2
- * is out (the mod writes PW2 from then on, older versions only read PW1).
- */
-export const SHARE_FORMAT = 'PW2';
+export { displayId, createShareTables, frozenTables, ShareError, PW3_FORMAT, PW3_PREFIX } from './sharecode3.js?v=594888f1';
+
+/** Format of new codes. Decoding reads PW1, PW2 and PW3; the site writes PW3 only (Propwash 0.6.0). */
+export const SHARE_FORMAT = 'PW3';
 
 export const FORMAT = 'PW1';
 export const PREFIX = 'PW1-';
@@ -33,7 +37,7 @@ export const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 export const GROUP_LENGTH = 5;
 export const LAYERS = Object.freeze(['parts', 'paint', 'tune', 'osd', 'name']);
 export const NAMESPACES = Object.freeze(['', 'propwash', 'justmoreparts']);
-export const ACCESSORY_SLOTS = Object.freeze(['top', 'bottom']);
+export const ACCESSORY_SLOTS = Object.freeze(['top', 'bottom', 'front']);
 export const PAINT_SLOTS = Object.freeze(['frame', 'tpu', 'motors', 'prop_fl', 'prop_fr', 'prop_rl', 'prop_rr', 'stack', 'battery',
   'camera', 'antenna', 'accessories']);
 export const BUILD_FIELDS = Object.freeze(['frame', 'stack', 'motor', 'prop', 'video', 'battery']);
@@ -50,14 +54,16 @@ export const LIMITS = Object.freeze({
   namespaceChars: 64,
 });
 export const STATUSES = Object.freeze(['OK', 'EMPTY', 'INVALID_PREFIX', 'BAD_CHARACTER', 'TOO_LONG', 'TRUNCATED', 'CHECKSUM',
-  'UNSUPPORTED_VERSION', 'TOO_LARGE', 'CORRUPT']);
+  'UNSUPPORTED_VERSION', 'TOO_LARGE', 'CORRUPT', 'OTHER_CODE', 'NOT_CONVERTIBLE', 'UNKNOWN_ENTRIES']);
+/** Other codes of Propwash that are no share codes (ShareFormat.TUNE_PRESET, DRONE_EDITOR). */
+export const OTHER_CODES = Object.freeze(['PWT1', 'PWD1']);
 
 const FRAME_VERSION = 1;
 const FLAG_DEFLATE = 1;
 const PAINT_SLOT_BITS = 16;
 const HARD_INPUT_LIMIT = 65536;
 const TWO_31 = 2147483648;
-const UNKNOWN_ID = /^\?(\d{1,10}):(.+)$/;
+const UNKNOWN_ID = /^pw1\.unknown\.(\d{1,10}):(.+)$/;
 
 // ---------------------------------------------------------------------------------------------------------------
 // Text helpers with Java semantics
@@ -121,7 +127,7 @@ export function validNamespace(namespace) {
     && onlyIdChars(namespace) && namespace !== '..';
 }
 
-/** Namespace number of an id read from an unknown namespace ('?<ns>:<path>'), else -1. */
+/** Namespace number of an id read from an unknown PW1 namespace ('pw1.unknown.<ns>:<path>'), else -1. */
 export function unknownNamespaceIndex(id) {
   const m = UNKNOWN_ID.exec(id);
   if (!m) return -1;
@@ -203,8 +209,12 @@ class Writer {
 export class Fail {
   constructor(status) {
     this.status = status;
+    this.shareFail = true;
   }
 }
+
+/** A Fail of any copy of this module (the tests load the modules with and without the cache-busting stamps). */
+const isFail = (e) => !!(e && e.shareFail === true);
 
 class Reader {
   constructor(data, start = 0, end = data.length) {
@@ -531,12 +541,16 @@ function payload(content) {
 /**
  * Encodes content as a share code in SHARE_FORMAT (or the given format).
  * @param {object} content see the shape at the top of this file (normalised first)
- * @param {{format?: 'PW1' | 'PW2', compression?: 'auto' | 'never' | 'always'}} [options] compression only applies
- *   to PW1 (PW2 deflates the OSD layout by itself when that is shorter)
- * @returns {string} 'PW2…' or 'PW1-XXXXX-…'
+ * @param {{format?: 'PW3' | 'PW2' | 'PW1', tables?: object, info?: 'AUTO' | 'ALWAYS' | 'NEVER', carry?: Map,
+ *   compression?: 'auto' | 'never' | 'always'}} [options] tables, info and carry only apply to PW3 (sharecode3.js
+ *   encodePw3), compression only to PW1 (PW2 and PW3 deflate the OSD layout by themselves when that is shorter); PW1
+ *   and PW2 are written only for the tests
+ * @returns {string} 'PW3-…', 'PW2…' or 'PW1-XXXXX-…'
+ * @throws {ShareError|Error} for content the mod could not encode
  */
-export function encode(content, { format = SHARE_FORMAT, compression = 'auto' } = {}) {
+export function encode(content, { format = SHARE_FORMAT, tables = null, info = 'AUTO', carry = null, compression = 'auto' } = {}) {
   const normal = normalizeContent(content);
+  if (format === PW3_FORMAT) return encodePw3(normal, tables || noTables(), { info, carry });
   if (format === PW2_FORMAT) return encodePw2(normal);
   if (format !== FORMAT) throw new Error(`unknown share code format: ${format}`);
   const data = payload(normal);
@@ -584,7 +598,7 @@ function readRef(r, parsed) {
   if (namespace === null) {
     const marker = `namespace:${ns}`;
     if (!parsed.skipped.includes(marker)) parsed.skipped.push(marker);
-    return `?${ns}:${path}`;
+    return `pw1.unknown.${ns}:${path}`;
   }
   return `${namespace}:${path}`;
 }
@@ -669,79 +683,114 @@ function readName(r, parsed) {
 
 const READERS = [readParts, readPaint, readTune, readOsd, readName];
 
-function resolveAlias(id, aliases) {
-  let current = id;
-  for (let i = 0; i < 8; i++) {
-    const next = aliases.get(current);
-    if (next == null || next === current) return current;
-    current = next;
-  }
-  return current;
+// Tables of a reader without any parts table (lazy: sharecode3.js may not be evaluated yet while the modules load).
+let emptyTables = null;
+const noTables = () => emptyTables || (emptyTables = createShareTables());
+
+function failed(status, format = '') {
+  return {
+    status, ok: false, format, content: null, layers: [], namespaces: [], unknownParts: [], wrongKind: [], renamed: [], skipped: [],
+    inactiveParts: [], carry: new Map(),
+  };
 }
 
-function failed(status) {
-  return { status, ok: false, content: null, layers: [], unknownParts: [], wrongKind: [], renamed: [], skipped: [] };
+/** ShareFormat.compact: the text without blanks (Character.isWhitespace or isSpaceChar). */
+export function compact(code) {
+  return String(code).replace(INPUT_SPACE, '');
 }
 
-function toAliasMap(aliases) {
-  if (!aliases) return new Map();
-  if (aliases instanceof Map) return aliases;
-  if (Array.isArray(aliases)) return new Map(aliases.map((a) => [a.from, a.to]));
-  return new Map(Object.entries(aliases));
+function withoutDashes(text, from) {
+  return text.slice(from).replace(/-/g, '');
+}
+
+// 'PW4…' and later: a code from a newer version.
+function newerFormat(upper) {
+  const m = /^PW([0-9]{1,3})/.exec(upper);
+  return !!m && Number(m[1]) > 3;
 }
 
 /**
- * Decodes a share code (tolerant: whitespace, lower case, O/I/L and missing dashes are fine). Never throws.
- * @param {string} code
- * @param {{lookup?: (id: string) => string | null, aliases?: Map|Array|object}} [options]
- *   lookup returns the category of a known part id ('frame', 'motor', …) or null; aliases are old id → new id.
- * @returns {{status: string, ok: boolean, content: object|null, layers: string[], unknownParts: string[],
- *   wrongKind: string[], renamed: {from: string, to: string}[], skipped: string[]}}
+ * ShareFormat.detect: what a text is, before reading it: {status ('OK', 'EMPTY', 'TOO_LONG', 'OTHER_CODE',
+ * 'UNSUPPORTED_VERSION', 'INVALID_PREFIX'), format ('PW1', 'PW2', 'PW3', 'PWT1', 'PWD1' or ''), symbols (the body)}.
+ * A bare Base62 body counts as PW3.
  */
-export function decode(code, { lookup = () => null, aliases = null } = {}) {
+export function detect(code) {
+  if (code == null) return { status: 'EMPTY', format: '', symbols: '' };
+  const input = String(code);
+  if (input.length > HARD_INPUT_LIMIT) return { status: 'TOO_LONG', format: '', symbols: '' };
+  const text = compact(input);
+  if (!text) return { status: 'EMPTY', format: '', symbols: '' };
+  if (text.length > LIMITS.inputChars) return { status: 'TOO_LONG', format: '', symbols: '' };
+  const upper = text.toUpperCase();
+  if (upper.startsWith(PW3_FORMAT)) return { status: 'OK', format: PW3_FORMAT, symbols: withoutDashes(text, PW3_FORMAT.length) };
+  if (upper.startsWith(PW2_FORMAT)) return { status: 'OK', format: PW2_FORMAT, symbols: withoutDashes(text, PW2_FORMAT.length) };
+  if (upper.startsWith(FORMAT)) return { status: 'OK', format: FORMAT, symbols: withoutDashes(upper, FORMAT.length) };
+  for (const other of OTHER_CODES) if (upper.startsWith(other)) return { status: 'OTHER_CODE', format: other, symbols: '' };
+  if (newerFormat(upper)) return { status: 'UNSUPPORTED_VERSION', format: '', symbols: '' };
+  if (base62Only(text)) return { status: 'OK', format: PW3_FORMAT, symbols: text };
+  return { status: 'INVALID_PREFIX', format: '', symbols: '' };
+}
+
+/**
+ * Decodes a share code (tolerant: whitespace, dashes, a bare PW3 body; PW1 also lower case and O/I/L). Never throws.
+ * @param {string} code
+ * @param {{tables?: object, renames?: boolean}} [options] tables: what the reader knows (sharecode3.js
+ *   createShareTables: parts tables, directory, versions and the part lookup); renames: follow replaced_by of
+ *   deprecated table entries (ShareFormat.decode)
+ * @returns {{status: string, ok: boolean, format: string, content: object|null, layers: string[],
+ *   namespaces: object[], unknownParts: string[], wrongKind: string[], renamed: {from: string, to: string}[],
+ *   skipped: string[], inactiveParts: string[], carry: Map}} namespaces: PW3 only, one report per namespace of the
+ *   code as in the golden files (index, namespace, short_id, table, checksum, min_version, name, link_type, link,
+ *   installed_version, result, used); carry: the heads to write unknown parts back (encode's carry)
+ */
+export function decode(code, { tables = null, renames = true } = {}) {
+  const t = tables || noTables();
+  const detected = detect(code);
+  if (detected.status !== 'OK') return failed(detected.status, detected.format);
+  const whole = compact(code);
+  const result = decodeDetected(detected, t, renames);
+  if (!result.ok && detected.symbols !== whole && base62Only(whole)) {
+    const bare = decodeDetected({ status: 'OK', format: PW3_FORMAT, symbols: whole }, t, renames);
+    if (bare.ok) return bare;
+  }
+  if (!result.ok && detected.format === PW3_FORMAT && detected.symbols === whole) return failed('INVALID_PREFIX');
+  return result;
+}
+
+function decodeDetected(detected, tables, renames) {
   try {
-    return decodeChecked(code, lookup, toAliasMap(aliases));
+    if (detected.format === PW3_FORMAT) {
+      const { parsed, reports, carry } = parsePw3(detected.symbols, tables);
+      return finish(parsed, PW3_FORMAT, tables, reports, carry, true);
+    }
+    if (detected.format === PW2_FORMAT) return finish(parsePw2(detected.symbols), PW2_FORMAT, tables, [], new Map(), renames);
+    return finish(readPw1(detected.symbols), FORMAT, tables, [], new Map(), renames);
   } catch (e) {
-    if (e instanceof Fail) return failed(e.status);
-    return failed('CORRUPT');
+    if (isFail(e)) return failed(e.status, detected.format);
+    return failed('CORRUPT', detected.format);
   }
 }
 
-function decodeChecked(code, lookup, aliases) {
-  if (code == null) return failed('EMPTY');
-  const input = String(code);
-  if (input.length > HARD_INPUT_LIMIT) return failed('TOO_LONG');
-  const compact = input.replace(INPUT_SPACE, '');
-  const s = compact.toUpperCase();
-  if (!s) return failed('EMPTY');
-  if (s.length > LIMITS.inputChars) return failed('TOO_LONG');
-  if (s.startsWith(PW2_FORMAT)) return finish(parsePw2(compact.slice(PW2_FORMAT.length).replace(/-/g, '')), lookup, aliases);
-  if (!s.startsWith(FORMAT)) return failed(newerFormat(s) ? 'UNSUPPORTED_VERSION' : 'INVALID_PREFIX');
-  const frame = base32Decode(s.slice(FORMAT.length).replace(/-/g, ''));
-  if (frame.length > LIMITS.frameBytes) return failed('TOO_LARGE');
-  if (frame.length < LIMITS.minFrameBytes) return failed('TRUNCATED');
+function readPw1(symbols) {
+  const frame = base32Decode(symbols);
+  if (frame.length > LIMITS.frameBytes) throw new Fail('TOO_LARGE');
+  if (frame.length < LIMITS.minFrameBytes) throw new Fail('TRUNCATED');
   const bodyEnd = frame.length - 4;
   const stored = ((frame[bodyEnd] << 24) | (frame[bodyEnd + 1] << 16) | (frame[bodyEnd + 2] << 8) | frame[bodyEnd + 3]) >>> 0;
-  if (crc32(frame, 0, bodyEnd) !== stored) return failed('CHECKSUM');
-  if (frame[0] !== FRAME_VERSION || (frame[1] & ~FLAG_DEFLATE) !== 0) return failed('UNSUPPORTED_VERSION');
+  if (crc32(frame, 0, bodyEnd) !== stored) throw new Fail('CHECKSUM');
+  if (frame[0] !== FRAME_VERSION || (frame[1] & ~FLAG_DEFLATE) !== 0) throw new Fail('UNSUPPORTED_VERSION');
   let data = frame.slice(2, bodyEnd);
   if (frame[1] & FLAG_DEFLATE) {
     const inflated = inflateRaw(data, LIMITS.payloadBytes);
-    if (!inflated.bytes) return failed(inflated.status);
+    if (!inflated.bytes) throw new Fail(inflated.status);
     data = inflated.bytes;
   } else if (data.length > LIMITS.payloadBytes) {
-    return failed('TOO_LARGE');
+    throw new Fail('TOO_LARGE');
   }
-  return parse(data, lookup, aliases);
+  return parse(data);
 }
 
-// 'PW3…' and later: a code from a newer version.
-function newerFormat(upper) {
-  const m = /^PW([0-9]{1,3})/.exec(upper);
-  return !!m && Number(m[1]) > 2;
-}
-
-function parse(data, lookup, aliases) {
+function parse(data) {
   const reader = new Reader(data);
   const mask = reader.varint();
   if ((mask & 1) === 0) throw new Fail('CORRUPT');
@@ -758,48 +807,45 @@ function parse(data, lookup, aliases) {
     if (!block.atEnd()) throw new Fail('CORRUPT');
   }
   if (!reader.atEnd()) throw new Fail('CORRUPT');
-  return finish(parsed, lookup, aliases);
+  return parsed;
 }
 
-// Aliases, unknown and wrong-kind parts and the result object, shared by PW1 and PW2 (ShareCodec.finish).
-function finish(parsed, lookup, aliases) {
+// Renames, unknown, wrong-kind and inactive parts and the result object, shared by PW1, PW2 and PW3 (ShareFormat.finish).
+function finish(parsed, format, tables, reports, carry, renames) {
   if (!parsed.parts) throw new Fail('CORRUPT');
 
   const renamed = new Map();
-  const alias = (id) => {
-    if (unknownNamespaceIndex(id) >= 0) return id;
-    const resolved = resolveAlias(id, aliases);
+  const rename = (id) => {
+    if (!renames || unknownMarker(id)) return id;
+    const resolved = tables.replacement(id);
     if (resolved !== id && !renamed.has(id)) renamed.set(id, { from: id, to: resolved });
     return resolved;
   };
-  const ids = parsed.parts.map(alias);
+  const ids = parsed.parts.map(rename);
   const build = {};
   BUILD_FIELDS.forEach((field, i) => {
     build[field] = ids[i];
   });
   build.accessories = {};
   for (const slot of ACCESSORY_SLOTS) {
-    if (slot in parsed.accessories) build.accessories[slot] = alias(parsed.accessories[slot]);
+    if (slot in parsed.accessories) build.accessories[slot] = rename(parsed.accessories[slot]);
   }
 
   const unknown = [];
   const wrong = [];
+  const inactive = [];
+  const add = (list, id) => {
+    if (!list.includes(id)) list.push(id);
+  };
   const classify = (id, expected) => {
-    if (unknownNamespaceIndex(id) >= 0) {
-      if (!unknown.includes(id)) unknown.push(id);
+    if (unknownMarker(id)) {
+      add(unknown, id);
       return;
     }
-    let kind = null;
-    try {
-      kind = lookup(id) || null;
-    } catch {
-      kind = null;
-    }
-    if (!kind) {
-      if (!unknown.includes(id)) unknown.push(id);
-    } else if (kind !== expected) {
-      if (!wrong.includes(id)) wrong.push(id);
-    }
+    const kind = tables.kind(id);
+    if (!kind) add(unknown, id);
+    else if (kind !== expected) add(wrong, id);
+    else if (!tables.active(id)) add(inactive, id);
   };
   BUILD_FIELDS.forEach((field) => classify(build[field], field));
   for (const slot of ACCESSORY_SLOTS) {
@@ -813,34 +859,85 @@ function finish(parsed, lookup, aliases) {
     // An empty PAINT block means "original colours" (ShareContent drops it).
     if (Object.keys(colors).length) paint = colors;
   }
+  let tune = null;
+  if (parsed.tune) {
+    tune = {};
+    for (const key of Object.keys(parsed.tune)) if (isSharedKey(key)) tune[key] = parsed.tune[key];
+  }
 
   return {
     status: 'OK',
     ok: true,
-    content: { build, paint, tune: parsed.tune, osd: parsed.osd, name: parsed.name },
+    format,
+    content: { build, paint, tune, osd: parsed.osd, name: parsed.name },
     layers: parsed.layers,
+    namespaces: reports,
     unknownParts: unknown,
     wrongKind: wrong,
     renamed: [...renamed.values()],
     skipped: parsed.skipped,
+    inactiveParts: inactive,
+    carry,
   };
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Conversion (ShareConvert)
+
+/** Why a part of an old code cannot become PW3 (ShareConvert.notConvertible), or null. */
+function notConvertible(id) {
+  const [namespace, path] = idParts(id);
+  if (namespace === 'pw2.unknown') return `pw2_unknown:${path}`;
+  if (namespace.startsWith('pw1.unknown.')) return `pw1_unknown:${namespace.slice('pw1.unknown.'.length)}`;
+  if (namespace.startsWith('pw3.')) return `reserved_namespace:${namespace}`;
+  return null;
+}
+
+/**
+ * ShareConvert.toPw3: a PW1 or PW2 code as PW3 with the frozen data only (sharecode3.js frozenTables: the Propwash
+ * table and the tables of the add-on directory, no versions, no add-on info), so the result depends on the old code
+ * alone and equals the mod's byte for byte. A PW3 code comes back as 'PW3-<body>'.
+ * @returns {{status: string, format: string, code: string|null, reason: string|null, converted: boolean}}
+ */
+export function convert(code, frozen) {
+  const detected = detect(code);
+  const result = (status, format, out = null, reason = null) => ({ status, format, code: out, reason, converted: status === 'OK' && format !== PW3_FORMAT });
+  if (detected.status !== 'OK') return result(detected.status, detected.format);
+  const decoded = decode(code, { tables: frozen, renames: false });
+  if (!decoded.ok) return result(decoded.status, decoded.format);
+  if (decoded.format === PW3_FORMAT) {
+    const body = decode(PW3_PREFIX + detected.symbols, { tables: frozen, renames: false }).ok ? detected.symbols : compact(code);
+    return result('OK', PW3_FORMAT, PW3_PREFIX + body);
+  }
+  const b = decoded.content.build;
+  for (const id of [...BUILD_FIELDS.map((f) => b[f]), ...ACCESSORY_SLOTS.filter((s) => b.accessories[s] != null).map((s) => b.accessories[s])]) {
+    const reason = notConvertible(id);
+    if (reason) return result('NOT_CONVERTIBLE', decoded.format, null, reason);
+  }
+  try {
+    return result('OK', decoded.format, encode(decoded.content, { format: PW3_FORMAT, tables: frozen, info: 'NEVER' }));
+  } catch (e) {
+    if (e && e.shareError === true) return result('NOT_CONVERTIBLE', decoded.format, null, e.key);
+    throw e;
+  }
 }
 
 // ---------------------------------------------------------------------------------------------------------------
 // Links
 
-/** Format of a code: 'PW2' for codes starting with PW2, otherwise 'PW1'. */
+/** Format of a code: 'PW3', 'PW2' or 'PW1' by its prefix (a bare body counts as PW3), '' for anything else. */
 export function formatOf(code) {
-  return /^\s*pw2/i.test(String(code)) ? PW2_FORMAT : FORMAT;
+  const d = detect(code);
+  return ['PW1', 'PW2', 'PW3'].includes(d.format) ? d.format : '';
 }
 
-/** Share link for a code: '<page>#PW2…' or '<page>#PW1-…'. */
+/** Share link for a code: '<page>#PW3-…' (old links: '#PW2…', '#PW1-…'). */
 export function shareLink(code, pageUrl) {
   const base = String(pageUrl).split('#')[0];
   return `${base}#${code}`;
 }
 
-/** The code in a location hash ('#PW2…' or '#PW1-…', also URL-encoded; PW1 also in lower case), or null. */
+/** The code in a location hash ('#PW3-…', '#PW2…' or '#PW1-…', also URL-encoded and in lower case), or null. */
 export function codeFromHash(hash) {
   if (!hash) return null;
   let text = String(hash).replace(/^#/, '');
@@ -850,5 +947,5 @@ export function codeFromHash(hash) {
     return null;
   }
   text = text.trim();
-  return /^pw[12]/i.test(text) ? text : null;
+  return /^pw[123]/i.test(text) ? text : null;
 }
