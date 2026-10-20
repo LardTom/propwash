@@ -1,12 +1,16 @@
-// Catalog of all parts (Propwash + Just More Parts) for the configurator, built from the mod's web export by
-// tools/build-configurator-data.mjs. loadCatalog() fetches assets/data/configurator/catalog.json (same origin, no
-// external requests); createCatalog() wraps already parsed JSON (used by the node tests).
+// Catalog of all parts (Propwash + Just More Parts) for the configurator, built from the web export of Propwash
+// (format 2) by tools/build-configurator-data.mjs. loadCatalog() fetches assets/data/configurator/catalog.json (same
+// origin, no external requests); createCatalog() wraps already parsed JSON (used by the node tests). Share codes: the
+// catalog reads PW1, PW2 and PW3 with the parts tables of its namespaces and the add-on directory of the export, writes
+// PW3 like the game with these add-ons installed, and converts old codes with the frozen data like the mod.
 
-import { check as checkBuild } from './rules.js?v=147e54d1';
-import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=b089a0c4';
-import { encode as encodeCode, decode as decodeCode, hexColor } from './sharecode.js?v=ff46f4e6';
+import { check as checkBuild } from './rules.js?v=e77905ee';
+import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=c64a5c0d';
+import {
+  encode as encodeCode, decode as decodeCode, convert as convertCode, hexColor, createShareTables, frozenTables, displayId,
+} from './sharecode.js?v=594888f1';
 import { sharedOnly } from './tune.js?v=f4084d0e';
-import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=ddb9460a';
+import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=6fae3e31';
 
 export const CATALOG_URL = new URL('../../data/configurator/catalog.json', import.meta.url);
 export const CATEGORIES = Object.freeze(['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory']);
@@ -50,7 +54,7 @@ export function loadCatalog(url = CATALOG_URL) {
  * @param {object} json content of catalog.json
  */
 export function createCatalog(json) {
-  if (!json || json.format !== 1) throw new Error(`catalog: unsupported format ${json && json.format}`);
+  if (!json || json.format !== 2) throw new Error(`catalog: unsupported format ${json && json.format}`);
   const byId = new Map(json.parts.map((p) => [p.id, p]));
   const byCategory = new Map(CATEGORIES.map((c) => [c, []]));
   for (const p of json.parts) (byCategory.get(p.category) || byCategory.set(p.category, []).get(p.category)).push(p);
@@ -60,7 +64,12 @@ export function createCatalog(json) {
   const rules = new Map(json.rules.rules.map((r) => [r.key, r]));
   const analysisWarnings = new Map(json.rules.analysis_warnings.map((w) => [w.key, w.text]));
   const paintSlots = new Map(json.paint.slots.map((s) => [s.key, s]));
-  const aliases = new Map((json.sharecode.aliases || []).map((a) => [a.from, a.to]));
+  const results = new Map((json.sharecode.namespace_results || []).map((r) => [r.key, r.text]));
+  const layerNames = new Map((json.sharecode.layers || []).map((l) => [l.key, l.name]));
+  const namespaces = new Map((json.namespaces || []).map((n) => [n.namespace, n]));
+  const versions = Object.fromEntries([...namespaces.values()].map((n) => [n.namespace, n.version]));
+  let shareTables = null;
+  let frozen = null;
 
   const catalog = {
     json,
@@ -115,6 +124,31 @@ export function createCatalog(json) {
       return p ? localText(p.name, lang) : String(id);
     },
     statusText: (status, lang) => localText(statuses.get(status), lang) || status,
+    /** Text of a namespace result of a PW3 code (MATCH, MISMATCH, NEWER, MISSING, NO_TABLE). */
+    resultText: (result, lang) => localText(results.get(result), lang) || result,
+    /** Name of a share-code layer (parts, paint, tune, osd, name). */
+    layerName: (key, lang) => localText(layerNames.get(key), lang) || key,
+    /** The namespaces of the export: {namespace, name, version, short_id, table_crc, …}. */
+    namespaces: [...namespaces.values()],
+    /** Namespace of the export by id, or null. */
+    namespace: (ns) => namespaces.get(ns) || null,
+    /**
+     * Name of an add-on for texts: the loaded export, else the add-on directory, else the code's own info; null when
+     * nothing names it.
+     */
+    addonName(ns, lang, codeName = null) {
+      if (namespaces.has(ns)) return namespaces.get(ns).name;
+      const addon = ns && (json.sharecode.directory.addons || []).find((a) => a.namespace === ns);
+      if (addon && addon.name) return localText(addon.name, lang);
+      return codeName || null;
+    },
+    /** The directory entry of an add-on (namespace, short_id, name, modrinth, curseforge, version), or null. */
+    directoryEntry: (ns) => (json.sharecode.directory.addons || []).find((a) => a.namespace === ns) || null,
+    /** A part id as the page shows it: the part's name, or '?…' for a part a code could not resolve. */
+    displayName(id, lang) {
+      const part = byId.get(id);
+      return part ? localText(part.name, lang) : displayId(id);
+    },
     /** Text of a build problem/warning key (rules.json). */
     issueText: (key, lang) => (rules.has(key) ? localText(rules.get(key).text, lang) : key),
     /** 'problem' or 'warning'. */
@@ -160,10 +194,26 @@ export function createCatalog(json) {
     normalizeTune: (tune, build) => normalizeTune(tune, build, catalog),
     /** Applies edited values like the mod's configurator and returns the new stored tune. */
     applyTuneEdit: (stored, edited, build) => applyTuneEdit(stored, edited, build, catalog),
-    /** Share code of a content object (sharecode.js). */
-    encode: (content, options) => encodeCode(content, options),
-    /** Tolerant share code decoding with this catalog's part lookup and alias table. */
-    decode: (code) => decodeCode(code, { lookup: catalog.category, aliases }),
+    /** What the share codes of this catalog know: the parts tables, the directory, versions and the part lookup. */
+    shareTables() {
+      if (!shareTables) {
+        shareTables = createShareTables({
+          tables: Object.values(json.sharecode.tables || {}), directory: json.sharecode.directory, versions, lookup: catalog.category,
+        });
+      }
+      return shareTables;
+    },
+    /** The frozen data of the conversion of old codes (the Propwash table and the tables of the directory). */
+    frozenTables() {
+      if (!frozen) frozen = frozenTables(json.sharecode.tables.propwash, json.sharecode.directory);
+      return frozen;
+    },
+    /** PW3 share code of a content object (sharecode.js); options as for sharecode.js encode (format, carry). */
+    encode: (content, options = {}) => encodeCode(content, { tables: catalog.shareTables(), ...options }),
+    /** Tolerant share code decoding (PW1, PW2, PW3) with this catalog's tables and part lookup. */
+    decode: (code) => decodeCode(code, { tables: catalog.shareTables() }),
+    /** An old code (PW1, PW2) as PW3, byte for byte like the mod (ShareConvert); a PW3 code is only checked. */
+    convert: (code) => convertCode(code, catalog.frozenTables()),
 
     /** Build of a preset as a fresh object. */
     presetBuild(presetId) {

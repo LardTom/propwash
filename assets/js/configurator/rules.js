@@ -32,7 +32,8 @@ export function resolveBuild(build, catalog) {
   }
   let misplaced = false;
   const accessories = build.accessories || {};
-  for (const slot of ['top', 'bottom']) {
+  // Accessory mounts of a share code: top and bottom, and front (PW1–PW3 carry it; no part uses it yet).
+  for (const slot of ['top', 'bottom', 'front']) {
     const id = accessories[slot];
     if (id == null) continue;
     const part = catalog.part(id);

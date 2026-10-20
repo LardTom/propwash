@@ -5,13 +5,12 @@
 //   node tools/build-configurator-heat.mjs --export <web-export dir>     (or JMP_WEB_EXPORT)
 //
 // 0.6.0 changed the workbench heat model (20 °C instead of 25 °C, motor cooling by the bell size, eddy-current losses,
-// the ESC heats up and its temperature counts for the heat warning) and nothing else of the analysis. catalog.json
-// still comes from the format-1 export of Propwash 0.5.2, so the heat figures of the game are kept here until the
-// catalog is built from a 0.6.0 export: every preset of the export, every one-part-swapped variant of its analysis files
-// and every share-code vector with an analysis, each with the three motor temperatures and the warnings, plus the
-// thermal data of every motor and the text of the heat warning. Both are also written into
-// assets/data/configurator/catalog.json (0.6.0 gave the 1404 4600 KV motor of the Cinewhoop and the 1505 3600 KV motor
-// of Just More Parts their own cooling and the warning a new text); everything else of the catalog stays as it is.
+// the ESC heats up and its temperature counts for the heat warning) and nothing else of the analysis. The file keeps
+// the heat figures of the game so tools/test-configurator.mjs checks them without the export: every preset of the
+// export, every one-part-swapped variant of its analysis files and every share-code vector with an analysis, each with
+// the three motor temperatures and the warnings, plus the thermal data of every motor and the text of the heat warning.
+// Both are also taken into assets/data/configurator/catalog.json if it differs (it does not when the catalog is built
+// from the same export by tools/build-configurator-data.mjs); everything else of the catalog stays as it is.
 
 import fs from 'node:fs';
 import path from 'node:path';

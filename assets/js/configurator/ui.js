@@ -2,19 +2,22 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText } from './data.js?v=5708ea76';
-import { shareLink, codeFromHash, PAINT_SLOTS } from './sharecode.js?v=ff46f4e6';
-import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=ddb9460a';
+import { loadCatalog, localText } from './data.js?v=1b38e3f7';
+import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=594888f1';
+import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=6fae3e31';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
-import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=b089a0c4';
+import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=c64a5c0d';
 import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
-import { batteryFit } from './rules.js?v=147e54d1';
-import { assemble, PROP_SLOTS } from './assembly.js?v=ac181a91';
-import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=12d6a44c';
-import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=6636e110';
+import { batteryFit } from './rules.js?v=e77905ee';
+import { assemble, PROP_SLOTS } from './assembly.js?v=e8018744';
+import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=320ddce0';
+import { reasonText, addonNote } from './convert.js?v=33934759';
+import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=66dd0144';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
+const DATA_ROOT = new URL('../../data/configurator/', import.meta.url);
+const SITE_ROOT = new URL('../../../', import.meta.url);
 const DEFAULT_PRESET = 'justmoreparts:deadcat5_6s';
 const FIELDS = ['frame', 'stack', 'motor', 'prop', 'video', 'battery'];
 const SLOT_CATEGORIES = [...FIELDS, 'accessory'];
@@ -79,6 +82,8 @@ const state = {
   tab: 'parts',
   filters: {},
   linkProps: true,
+  // Heads of the opened PW3 code for its unknown parts, so they are written back as they were (sharecode3.js carry).
+  carry: new Map(),
 };
 
 let derived = { check: null, analysis: null, camera: null, defaults: null, effective: null, assembly: null, paintDefaults: {}, available: new Set() };
@@ -89,11 +94,13 @@ let lastHashCode = null;
 let undoSnapshot = null;
 
 function snapshot() {
-  return JSON.stringify({ build: state.build, paint: state.paint, tune: state.tune, name: state.name, layers: state.layers, osd: state.osd, presetId: state.presetId });
+  return JSON.stringify({ build: state.build, paint: state.paint, tune: state.tune, name: state.name, layers: state.layers, osd: state.osd, presetId: state.presetId,
+    carry: [...state.carry] });
 }
 
 function restore(json) {
-  Object.assign(state, JSON.parse(json));
+  const saved = JSON.parse(json);
+  Object.assign(state, saved, { carry: new Map(saved.carry || []) });
 }
 
 function loadModel(id) {
@@ -181,9 +188,11 @@ function content() {
 
 function currentCode() {
   try {
-    return { code: catalog.encode(content()), error: null };
+    return { code: catalog.encode(content(), { carry: state.carry }), error: null };
   } catch (e) {
-    return { code: null, error: e.message || String(e) };
+    const messages = { UNKNOWN_ENTRIES: 'ui.encodeUnknownEntries', NOT_CONVERTIBLE: 'ui.encodeLegacyUnknown', TOO_LARGE: 'ui.encodeTooLarge', CORRUPT: 'ui.encodeBadId' };
+    const key = e && messages[e.status];
+    return { code: null, error: key ? t(key) : (e && e.message) || String(e) };
   }
 }
 
@@ -263,15 +272,16 @@ function slotRows() {
     let unknown = false;
     if (category === 'accessory') {
       const acc = state.build.accessories || {};
-      const names = ['top', 'bottom'].filter((m) => acc[m]).map((m) => (catalog.part(acc[m]) ? catalog.partName(acc[m], lang()) : acc[m]));
-      unknown = ['top', 'bottom'].some((m) => acc[m] && !partOf(acc[m], 'accessory'));
+      const mounts = ['top', 'bottom', 'front'];
+      const names = mounts.filter((m) => acc[m]).map((m) => (catalog.part(acc[m]) ? catalog.partName(acc[m], lang()) : displayId(acc[m])));
+      unknown = mounts.some((m) => acc[m] && !partOf(acc[m], 'accessory'));
       value = names.length ? names.join(' + ') : t('ui.none');
       full = value;
     } else {
       const id = state.build[category];
       const p = partOf(id, category);
       unknown = !p;
-      value = p ? catalog.shortName(id, lang()) : `${t('ui.unknownPart')}: ${id}`;
+      value = p ? catalog.shortName(id, lang()) : `${t('ui.unknownPart')}: ${displayId(id)}`;
       full = p ? catalog.partName(id, lang()) : value;
     }
     const related = issues.filter((k) => (INVOLVED[k] || []).includes(category));
@@ -580,22 +590,157 @@ function unitText(unit) {
   return unit.startsWith(':') ? unit : `${NB}${unit}`;
 }
 
+// Explanations of the figures (website design 0.6.0, 3.5.1): an info button per figure opens the text on hover, focus
+// or a tap, with the typical range of the frame's class (assets/data/configurator/stathelp.json); a value outside it
+// gets a quiet mark (no error: errors are the compatibility check's).
+let statHelp = { stats: {} };
+
+function frameRole() {
+  const frame = partOf(state.build.frame, 'frame');
+  return frame ? frame.data.role : null;
+}
+
+/** Typical range [low, high] of a figure for the class of the current frame, or null. */
+function statRange(key) {
+  const role = frameRole();
+  const table = statHelp.stats && statHelp.stats[key];
+  return role && table && Array.isArray(table[role]) ? table[role] : null;
+}
+
+const rangeNumber = (v) => num(v, Number.isInteger(v) ? 0 : 1);
+
+function rangeText(key, range) {
+  const [, , unit] = entry(`stats.${key}`);
+  return `${rangeNumber(range[0])}–${rangeNumber(range[1])}${unitText(unit)}`;
+}
+
+/** True if the value lies outside the range by more than the display rounding. */
+function outsideRange(value, range, decimals) {
+  if (!range || !Number.isFinite(value)) return false;
+  const slack = 0.5 * 10 ** -decimals;
+  return value < range[0] - slack || value > range[1] + slack;
+}
+
+/** Text of a figure's explanation: what it means, the class range and, outside it, a note. */
+function statHelpLines(key, analysis) {
+  const [, , , decimals] = entry(`stats.${key}`);
+  const range = statRange(key);
+  const cls = frameRole() ? t(`roles.${frameRole()}`) : '';
+  const lines = [t(`statHelp.${key}`)];
+  if (range) lines.push(t('ui.statRange', { class: cls, range: rangeText(key, range) }));
+  if (analysis && outsideRange(analysis[key], range, decimals)) lines.push(t('ui.statOutsideLong', { class: cls }));
+  return lines;
+}
+
 function statRow(key, analysis, cls) {
   const [, , unit, decimals] = entry(`stats.${key}`);
   const value = analysis ? analysis[key] : NaN;
-  return el('div', { class: cls },
-    el('dt', null, cls === 'keystat' ? t(`keyStats.${key}`).split('/').flatMap((w, i) => (i ? ['/', el('wbr'), w] : [w])) : statLabel(key, analysis)),
-    el('dd', null, el('span', { class: 'stat__value' }, num(value, decimals)), Number.isFinite(value) ? el('span', { class: 'stat__unit' }, unitText(unit)) : null));
+  const label = cls === 'keystat' ? t(`keyStats.${key}`) : statLabel(key, analysis);
+  const id = `stat-help-${cls}-${key}`;
+  const odd = outsideRange(value, statRange(key), decimals);
+  const info = el('button', {
+    type: 'button', class: 'stat__info', 'aria-label': t('ui.statInfo', { stat: label.replace(/\u00AD/g, '') }), 'aria-describedby': id,
+    'aria-expanded': 'false', dataset: { statHelp: key },
+  }, useIcon('i-info'));
+  return el('div', { class: `${cls}${odd ? ' is-odd' : ''}` },
+    el('dt', null, cls === 'keystat' ? label.split('/').flatMap((w, i) => (i ? ['/', el('wbr'), w] : [w])) : label, ' ', info,
+      el('span', { class: 'visually-hidden', id }, statHelpLines(key, analysis).join(' '))),
+    el('dd', null, el('span', { class: 'stat__value' }, num(value, decimals)), Number.isFinite(value) ? el('span', { class: 'stat__unit' }, unitText(unit)) : null,
+      odd ? el('span', { class: 'stat__odd', title: t('ui.statOutside') }, el('span', { class: 'visually-hidden' }, ` (${t('ui.statOutside')})`)) : null));
 }
 
 function renderStats() {
   const a = derived.analysis;
+  hideStatTip();
   $('[data-keystats]').replaceChildren(...KEY_STATS.map((k) => statRow(k, a, 'keystat')));
   $('[data-stats]').replaceChildren(...STAT_ROWS.map((k) => statRow(k, a, 'stat')));
   const note = $('[data-stats-note]');
   note.textContent = a ? '' : t('ui.noAnalysis');
   note.hidden = !!a;
   renderCamera();
+}
+
+// The floating explanation of a figure (one for the page, aria-hidden: buttons carry the text via aria-describedby).
+let statTipFor = null;
+
+function showStatTip(button, pinned) {
+  const tip = $('[data-stat-tip]');
+  const key = button.dataset.statHelp;
+  if (!tip || !key) return;
+  if (statTipFor && statTipFor !== button) statTipFor.setAttribute('aria-expanded', 'false');
+  statTipFor = button;
+  button.setAttribute('aria-expanded', 'true');
+  tip.dataset.pinned = pinned ? 'true' : '';
+  const [first, ...rest] = statHelpLines(key, derived.analysis);
+  tip.replaceChildren(el('p', null, first), ...rest.map((line) => el('p', { class: 'stat-tip__range' }, line)));
+  tip.hidden = false;
+  placeStatTip();
+}
+
+/** Puts the explanation under its button (above it near the bottom of the window); hides it once the button is gone. */
+function placeStatTip() {
+  const tip = $('[data-stat-tip]');
+  if (!tip || tip.hidden || !statTipFor) return;
+  const r = statTipFor.getBoundingClientRect();
+  if (!statTipFor.isConnected || r.bottom < 0 || r.top > window.innerHeight) {
+    hideStatTip();
+    return;
+  }
+  const w = tip.offsetWidth;
+  const h = tip.offsetHeight;
+  const left = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), window.innerWidth - w - 8);
+  let top = r.bottom + 8;
+  if (top + h > window.innerHeight - 8) top = Math.max(8, r.top - h - 8);
+  tip.style.left = `${left}px`;
+  tip.style.top = `${top}px`;
+}
+
+function hideStatTip() {
+  const tip = $('[data-stat-tip]');
+  if (tip) tip.hidden = true;
+  if (statTipFor) statTipFor.setAttribute('aria-expanded', 'false');
+  statTipFor = null;
+}
+
+function wireStatHelp() {
+  const owner = (e) => e.target.closest && e.target.closest('[data-stat-help]');
+  for (const box of [$('[data-keystats]'), $('[data-stats]')]) {
+    box.addEventListener('mouseover', (e) => {
+      const b = owner(e);
+      if (b && b !== statTipFor) showStatTip(b, false);
+    });
+    box.addEventListener('mouseout', (e) => {
+      const b = owner(e);
+      const tip = $('[data-stat-tip]');
+      if (b && b === statTipFor && tip.dataset.pinned !== 'true' && !b.contains(e.relatedTarget)) hideStatTip();
+    });
+    box.addEventListener('focusin', (e) => {
+      const b = owner(e);
+      if (b) showStatTip(b, false);
+    });
+    box.addEventListener('focusout', (e) => {
+      if (owner(e) && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('[data-stat-help]'))) hideStatTip();
+    });
+    box.addEventListener('click', (e) => {
+      const b = owner(e);
+      if (!b) return;
+      const tip = $('[data-stat-tip]');
+      if (b === statTipFor && tip.dataset.pinned === 'true') hideStatTip();
+      else showStatTip(b, true);
+    });
+  }
+  doc.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && statTipFor) {
+      const b = statTipFor;
+      hideStatTip();
+      b.focus();
+    }
+  });
+  doc.addEventListener('pointerdown', (e) => {
+    if (statTipFor && !(e.target.closest && (e.target.closest('[data-stat-help]') || e.target.closest('[data-stat-tip]')))) hideStatTip();
+  });
+  window.addEventListener('scroll', placeStatTip, { passive: true });
+  window.addEventListener('resize', placeStatTip);
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -1422,11 +1567,25 @@ function scheduleHash() {
 // ---------------------------------------------------------------------------------------------------------------
 // Import
 
-/** What a decoded code brings along: [text, bad] per line (layers first). */
+/** A line about an add-on a PW3 code names that this page can't match, with its safe links (convert.js addonNote), or null. */
+function addonLine(report) {
+  const note = addonNote(report, catalog, lang(), new URL('addons/', SITE_ROOT).href);
+  if (!note) return null;
+  const line = el('span', { class: 'addon-line' }, note.text,
+    ...note.links.flatMap(([label, href]) => [' ', el('a', { href, target: '_blank', rel: 'noopener noreferrer' }, label)]));
+  if (note.free) line.append(' ', el('span', { class: 'addon-line__free' }, note.free));
+  return line;
+}
+
+/** What a decoded code brings along: [text or node, bad] per line (layers first). */
 function importDetails(result) {
   const layers = result.layers.map((l) => t(`ui.layers.${l}`)).join(', ');
   const lines = [[t('ui.importLayers', { layers }), false]];
-  if (result.unknownParts.length) lines.push([t('ui.importUnknown', { ids: result.unknownParts.join(', ') }), true]);
+  for (const report of result.namespaces || []) {
+    const line = addonLine(report);
+    if (line) lines.push([line, true]);
+  }
+  if (result.unknownParts.length) lines.push([t('ui.importUnknown', { ids: result.unknownParts.map(displayId).join(', ') }), true]);
   if (result.wrongKind.length) lines.push([t('ui.wrongKindExplain') + result.wrongKind.join(', '), true]);
   if (result.renamed.length) lines.push([t('ui.importRenamed', { n: result.renamed.length }), false]);
   if (result.skipped.length) lines.push([t('ui.importSkipped', { n: result.skipped.length }), false]);
@@ -1455,15 +1614,35 @@ function decodeField(raw) {
   return { code, result: catalog.decode(code) };
 }
 
+/** The banner's text for an opened code: what it brought along joined by ' · ' (nodes stay nodes). */
+function joined(prefix, lines) {
+  const out = [prefix];
+  for (const [text] of lines) out.push(' · ', text);
+  return out;
+}
+
+/** Old code opened (PW1, PW2): the conversion to PW3 as the banner's first sentence and its copy button. */
+function conversionNote(result, conversion) {
+  if (!conversion || result.format === 'PW3') return { text: null, action: null };
+  if (conversion.status === 'OK') {
+    return {
+      text: () => t('convert.converted', { format: result.format }),
+      action: { label: () => t('convert.copyPw3'), run: () => copyToast(conversion.code, t('convert.pw3Copied')) },
+    };
+  }
+  return { text: () => t('convert.notConvertible', { reason: reasonText(conversion.reason) }), action: null };
+}
+
 /** Banner for a build opened from a link: what it brought along, or why it could not be read. The import field
     shows an unreadable code so it can be fixed there; after a readable link it is emptied, so nothing stale stays. */
-function linkResult(code, result) {
+function linkResult(code, result, conversion = null) {
   const input = $('[data-import]');
   if (result.ok) {
     input.value = '';
     importPreview(null);
-    const warn = result.unknownParts.length || result.wrongKind.length;
-    banner(() => `${t('ui.linkLoaded')} ${importDetails(result).map(([text]) => text).join(' · ')}`, warn ? 'warn' : 'ok', false);
+    const warn = result.unknownParts.length || result.wrongKind.length || (conversion && conversion.status !== 'OK');
+    const note = conversionNote(result, conversion);
+    banner(() => [...(note.text ? [note.text(), ' '] : []), ...joined(t('ui.linkLoaded'), importDetails(result))], warn ? 'warn' : 'ok', false, note.action);
   } else {
     input.value = code;
     importPreview(result);
@@ -1485,18 +1664,24 @@ function applyDecoded(result) {
   };
   state.osd = { ...state.osd, imported: c.osd || null, source: c.osd ? 'imported' : 'preset' };
   state.presetId = null;
+  state.carry = result.carry || new Map();
 }
 
 let lastBanner = null;
 
-/** Banner above the panel. message is text or a function giving the text (re-rendered on a language switch). */
-function banner(message, level, withUndo) {
+/**
+ * Banner above the panel. message is text, nodes or a function giving them (re-rendered on a language switch);
+ * action: an extra button {label: () => text, run}.
+ */
+function banner(message, level, withUndo, action = null) {
   const host = $('[data-banner]');
   host.replaceChildren();
-  lastBanner = message ? { message, level, withUndo } : null;
+  lastBanner = message ? { message, level, withUndo, action } : null;
   if (!message) return;
+  const content = typeof message === 'function' ? message() : message;
   host.append(el('p', { class: `banner is-${level}` },
-    el('span', null, typeof message === 'function' ? message() : message),
+    el('span', null, ...(Array.isArray(content) ? content : [content])),
+    action ? el('button', { type: 'button', class: 'banner__btn', onclick: action.run }, action.label()) : null,
     withUndo && undoSnapshot ? el('button', {
       type: 'button', class: 'banner__btn',
       onclick: () => {
@@ -1510,6 +1695,23 @@ function banner(message, level, withUndo) {
     el('button', { type: 'button', class: 'banner__btn banner__close', 'aria-label': t('ui.dismiss'), onclick: () => banner('') }, '×')));
 }
 
+/**
+ * The conversion of an opened old code (PW1, PW2) like the mod's, or null for PW3. The address and “Copy PW3” get the
+ * code the share box shows for the loaded build (the same as the mod's conversion unless the old code named a part
+ * that has been replaced since).
+ */
+function convertOpened(code, result) {
+  if (!result.ok || result.format === 'PW3') return null;
+  const conversion = catalog.convert(code);
+  if (conversion.status === 'OK') {
+    const shown = currentCode().code;
+    if (shown) conversion.code = shown;
+    lastHashCode = conversion.code;
+    history.replaceState(null, '', `#${conversion.code}`);
+  }
+  return conversion;
+}
+
 function loadCode(code, source) {
   const result = catalog.decode(code);
   if (!result.ok) return result;
@@ -1518,9 +1720,15 @@ function loadCode(code, source) {
   $('[data-preset]').value = '';
   refreshAll();
   lastHashCode = null;
-  scheduleHash();
-  if (source === 'link') linkResult(code, result);
-  else banner(() => t('ui.importLoaded'), result.unknownParts.length || result.wrongKind.length ? 'warn' : 'ok', true);
+  const conversion = convertOpened(code, result);
+  if (!conversion || conversion.status !== 'OK') scheduleHash();
+  if (source === 'link') {
+    linkResult(code, result, conversion);
+  } else {
+    const note = conversionNote(result, conversion);
+    const warn = result.unknownParts.length || result.wrongKind.length || (conversion && conversion.status !== 'OK');
+    banner(() => (note.text ? [note.text(), ' ', t('ui.importLoaded')] : t('ui.importLoaded')), warn ? 'warn' : 'ok', true, note.action);
+  }
   return result;
 }
 
@@ -1548,10 +1756,88 @@ function loadPreset(id, announce) {
   state.tune = c.tune ? { ...c.tune } : {};
   state.name = '';
   state.presetId = id;
+  state.carry = new Map();
   state.layers = { ...state.layers, paint: true, tune: true, name: true };
   refreshAll();
   scheduleHash();
   if (announce) banner(() => t('ui.presetLoaded', { name: catalog.presetName(id, lang()) }), 'ok', true);
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Builds for beginners (website design 0.6.0, 3.5.2): three Propwash presets with a picture, their key figures, "Load"
+// and "Copy code" (PW3, written now, so it stays right when a table grows), and the hint to start in Angle mode.
+
+let beginner = { builds: [] };
+
+function renderBeginner() {
+  const box = $('[data-beginner]');
+  if (!box) return;
+  const builds = (beginner.builds || []).filter((b) => catalog.preset(b.preset));
+  box.hidden = !builds.length;
+  if (!builds.length) return;
+  const head = el('div', { class: 'beginner__head' },
+    el('h3', { class: 'beginner__title', id: 'beginner-title' }, t('beginner.title')),
+    el('p', { class: 'beginner__hint' }, t('beginner.angle'), ' ', el('a', { href: new URL(beginner.school || '#learn', SITE_ROOT).href }, t('beginner.school'))));
+  const list = el('ul', { class: 'beginner__cards' });
+  for (const b of builds) {
+    const preset = catalog.preset(b.preset);
+    const name = catalog.presetName(b.preset, lang());
+    const a = preset.analysis || {};
+    const figures = el('dl', { class: 'beginner__figures' }, (beginner.figures || []).map((key) => {
+      const [, , unit, decimals] = entry(`stats.${key}`);
+      return el('div', null, el('dt', null, t(`keyStats.${key}`)), el('dd', null, num(a[key], decimals), el('span', { class: 'stat__unit' }, unitText(unit))));
+    }));
+    list.append(el('li', { class: `beginner__card${state.presetId === b.preset ? ' is-current' : ''}` },
+      el('div', { class: 'beginner__picture' }, el('img', {
+        src: new URL(b.image, DATA_ROOT).href, alt: t('beginner.picture', { name }), width: 480, height: 300, loading: 'lazy', decoding: 'async',
+      })),
+      el('div', { class: 'beginner__body' },
+        el('p', { class: 'beginner__name' }, name),
+        el('p', { class: 'beginner__text' }, t(`beginner.${b.preset}`)),
+        figures,
+        el('div', { class: 'beginner__actions' },
+          el('button', {
+            type: 'button', class: 'btn btn--primary btn--small', 'aria-label': t('beginner.loadLabel', { name }),
+            onclick: () => {
+              loadPreset(b.preset, true);
+              $('[data-preset]').value = b.preset;
+            },
+          }, t('beginner.load')),
+          el('button', {
+            type: 'button', class: 'btn btn--ghost btn--small', 'aria-label': t('beginner.copyLabel', { name }),
+            onclick: () => {
+              let code = null;
+              try {
+                code = catalog.encode(catalog.presetContent(b.preset));
+              } catch {
+                code = null;
+              }
+              if (code) copyToast(code, t('ui.copied'));
+            },
+          }, useIcon('i-copy'), el('span', null, t('beginner.copy')))))));
+  }
+  box.replaceChildren(head, list);
+}
+
+/** Copies text and says so in a toast (for buttons away from the share card). */
+async function copyToast(text, message) {
+  let ok = false;
+  try {
+    await navigator.clipboard.writeText(text);
+    ok = true;
+  } catch {
+    const area = el('textarea', { class: 'visually-hidden', readonly: true });
+    area.value = text;
+    doc.body.append(area);
+    area.select();
+    try {
+      ok = doc.execCommand('copy');
+    } catch {
+      ok = false;
+    }
+    area.remove();
+  }
+  toast(ok ? message : t('ui.copyFailed'), ok ? 'ok' : 'bad');
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -1616,7 +1902,9 @@ function setBuild(build, { keepFocus } = {}) {
     state.tune = tune;
   }
   state.build = build;
+  const before = state.presetId;
   syncPreset();
+  if (state.presetId !== before) renderBeginner();
   recompute();
   slotRows();
   picker();
@@ -1642,6 +1930,7 @@ function refreshAll() {
   $('[data-name]').value = state.name;
   $('[data-name]').placeholder = t('ui.namePlaceholder');
   presetSelect();
+  renderBeginner();
   slotRows();
   picker();
   renderStats();
@@ -1694,7 +1983,7 @@ async function startViewer() {
   const button = $('[data-autorotate]');
   let mod;
   try {
-    mod = await import('./viewer.js?v=759013f2');
+    mod = await import('./viewer.js?v=1bd88c6a');
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;
@@ -2182,15 +2471,21 @@ function keepUnitsTogether(c) {
 async function boot() {
   const cfg = $('[data-cfg]');
   try {
-    const [c, r] = await Promise.all([
+    const optional = (file, fallback) => fetch(new URL(file, DATA_ROOT), { credentials: 'same-origin' })
+      .then((res) => (res.ok ? res.json() : fallback)).catch(() => fallback);
+    const [c, r, help, starters] = await Promise.all([
       loadCatalog(),
       fetch(RENDER_URL, { credentials: 'same-origin' }).then((res) => {
         if (!res.ok) throw new Error(`render.json: HTTP ${res.status}`);
         return res.json();
       }),
+      optional('stathelp.json', { stats: {} }),
+      optional('beginner.json', { builds: [] }),
     ]);
     catalog = keepUnitsTogether(c);
     render = r;
+    statHelp = help;
+    beginner = starters;
   } catch {
     $('[data-loading]').textContent = t('ui.loadFailed');
     return;
@@ -2222,10 +2517,11 @@ async function boot() {
 
   wireTabs();
   wireEvents();
+  wireStatHelp();
   refreshAll();
   if (fromLink) {
     if (fromLink.ok) lastHashCode = hashCode;
-    linkResult(hashCode, fromLink);
+    linkResult(hashCode, fromLink, convertOpened(hashCode, fromLink));
   }
   startViewer();
 }
@@ -2274,6 +2570,8 @@ function wireEvents() {
   });
   const input = $('[data-import]');
   let importTimer = 0;
+  // The code last loaded from the field: typing around it (blanks, a line break) does not load it again.
+  let fieldCode = null;
   const tryImport = () => {
     const raw = input.value.trim();
     if (!raw) {
@@ -2282,10 +2580,13 @@ function wireEvents() {
     }
     const { code, result } = decodeField(raw);
     importPreview(result);
+    const key = compact(code);
+    if (result.ok && key === fieldCode) return;
+    if (result.ok) fieldCode = key;
     if (result.ok) {
       let again = null;
       try {
-        again = catalog.encode(result.content);
+        again = catalog.encode(result.content, { carry: result.carry });
       } catch {
         again = null;
       }
@@ -2311,7 +2612,7 @@ function wireEvents() {
     pickHint();
     const raw = $('[data-import]').value.trim();
     importPreview(raw ? decodeField(raw).result : null);
-    if (lastBanner) banner(lastBanner.message, lastBanner.level, lastBanner.withUndo);
+    if (lastBanner) banner(lastBanner.message, lastBanner.level, lastBanner.withUndo, lastBanner.action);
   });
   window.addEventListener('scroll', () => {
     hideTip();

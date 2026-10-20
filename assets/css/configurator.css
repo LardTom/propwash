@@ -2512,3 +2512,414 @@ button {
   font-size: 1rem;
   font-weight: 700;
 }
+
+/* ---------- Figure explanations (info button, floating text, value outside the class range) ---------- */
+
+.stat__info {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin: -4px -4px -4px 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--faint);
+  vertical-align: middle;
+  cursor: help;
+}
+
+.stat__info svg {
+  width: 14px;
+  height: 14px;
+}
+
+.stat__info:hover,
+.stat__info[aria-expanded="true"] {
+  color: var(--accent);
+}
+
+/* Touch screens: a finger-sized target without moving the label. */
+@media (pointer: coarse) {
+  .stat__info {
+    width: 32px;
+    height: 32px;
+    margin: -8px -8px -8px -4px;
+  }
+}
+
+.stat-tip {
+  position: fixed;
+  z-index: 60;
+  width: min(320px, calc(100vw - 16px));
+  padding: 10px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 6px;
+  background: #151515;
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, 0.9);
+  color: var(--text-2);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  pointer-events: none;
+}
+
+.stat-tip p + p {
+  margin-top: 6px;
+}
+
+.stat-tip__range {
+  color: var(--accent);
+  font-size: 0.82rem;
+}
+
+/* A quiet ring after a value outside the typical range of the class (no error). */
+.stat__odd {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-left: 6px;
+  border: 1.5px solid var(--accent-dim);
+  border-radius: 50%;
+  vertical-align: 0.15em;
+}
+
+.is-odd .stat__value {
+  text-decoration: underline dotted var(--accent-dim);
+  text-underline-offset: 4px;
+}
+
+/* ---------- Builds for beginners ---------- */
+
+.beginner {
+  container-type: inline-size;
+  margin-bottom: 14px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel-2);
+}
+
+.beginner__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+  margin-bottom: 10px;
+}
+
+.beginner__title {
+  color: var(--accent);
+  font: 600 0.72rem/1.3 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.beginner__hint {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.beginner__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.beginner__card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  background: var(--field);
+}
+
+.beginner__card.is-current {
+  border-color: var(--accent-dim);
+}
+
+.beginner__picture {
+  aspect-ratio: 16 / 10;
+  border-bottom: 1px solid var(--border-soft);
+  background: radial-gradient(ellipse at 50% 40%, rgba(255, 187, 0, 0.08), transparent 65%);
+}
+
+.beginner__picture img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.beginner__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+}
+
+.beginner__name {
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.beginner__text {
+  flex: 1;
+  color: var(--text-2);
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.beginner__figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 2px 0 0;
+}
+
+.beginner__figures dt {
+  color: var(--faint);
+  font: 600 0.62rem/1.3 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.beginner__figures dd {
+  margin: 0;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.beginner__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.beginner__actions .btn {
+  flex: 1 1 auto;
+  justify-content: center;
+}
+
+/* In a narrow panel (phones, and next to the 3D view on wide screens) the three cards scroll side by side instead of
+   squeezing. */
+@container (max-width: 639px) {
+  .beginner__cards {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+  }
+  .beginner__card {
+    flex: 0 0 min(76%, 230px);
+    scroll-snap-align: start;
+  }
+}
+
+/* ---------- Add-ons named by a code ---------- */
+
+.addon-line a {
+  white-space: nowrap;
+}
+
+.addon-line__free {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Converter page (/convert/) ---------- */
+
+.cv {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+@media (min-width: 1060px) {
+  .cv {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.cv__io {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cv__input,
+.cv__result {
+  width: 100%;
+  min-height: 9.5em;
+  font: 0.86rem/1.5 var(--mono);
+  overflow-wrap: anywhere;
+  resize: vertical;
+}
+
+.cv__private,
+.cv__hint {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.cv__status:empty {
+  display: none;
+}
+
+.cv__status {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gate);
+  border-radius: 4px;
+  background: var(--panel);
+  font-size: 0.93rem;
+}
+
+.cv__status.is-warn {
+  border-left-color: var(--accent);
+}
+
+.cv__status.is-bad {
+  border-left-color: var(--danger);
+}
+
+.cv__output {
+  display: grid;
+  gap: 8px;
+}
+
+.cv__output-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.cv__subtitle {
+  color: var(--accent);
+  font: 600 0.74rem/1.3 var(--mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cv__output-head .cv__subtitle {
+  flex: 1 1 auto;
+}
+
+.cv__flash {
+  flex-basis: 100%;
+  font-size: 0.86rem;
+}
+
+.cv__flash:empty {
+  display: none;
+}
+
+.cv__flash.is-ok {
+  color: var(--gate);
+}
+
+.cv__flash.is-bad {
+  color: var(--danger);
+}
+
+.cv__list {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+}
+
+.cv__codes {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cv-code {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gate);
+  border-radius: 4px;
+  background: var(--panel);
+}
+
+.cv-code.is-unknown,
+.cv-code.is-not_convertible {
+  border-left-color: var(--accent);
+}
+
+.cv-code.is-damaged {
+  border-left-color: var(--danger);
+}
+
+.cv-code__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+}
+
+.cv-code__badge {
+  color: var(--faint);
+  font: 600 0.66rem/1.3 var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cv-code__name {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.cv-code__meta {
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.cv-code__row {
+  display: grid;
+  grid-template-columns: 6.5em minmax(0, 1fr);
+  gap: 8px;
+  font-size: 0.86rem;
+}
+
+.cv-code__label {
+  color: var(--faint);
+}
+
+.cv-code__text {
+  overflow-wrap: anywhere;
+  color: var(--text-2);
+}
+
+.cv-code__row--new .cv-code__text {
+  color: var(--text);
+}
+
+.cv-code__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.cv-code__note {
+  font-size: 0.86rem;
+  overflow-wrap: anywhere;
+}
+
+.cv-code__note.is-bad {
+  color: var(--accent);
+}

@@ -1,36 +1,45 @@
 #!/usr/bin/env node
-// Builds the 3D data of the configurator's drone viewer from the "Propwash: Just More Parts" web export.
+// Builds the 3D data of the configurator's drone viewer from the web export of Propwash (format 2).
 //
-//   node tools/build-configurator-models.mjs [--export <web-export dir>]
+//   node tools/build-configurator-models.mjs [--export <web-export dir>] [--resources <mod resources dir> …]
 //
 // Same export location rules as tools/build-configurator-data.mjs (sibling checkout, JMP_WEB_EXPORT or --export).
 //
 // Writes:
-//   assets/data/configurator/render.json                        frame layouts (drone_layout.json), motor seats,
-//                                                               paint channel references, accessory base tints
+//   assets/data/configurator/render.json                        frame layouts (drone_layout.json, with the optional
+//                                                               power_lead bend point), motor seats, paint channel
+//                                                               references, accessory base tints
 //   assets/data/configurator/models/<ns>/<category>/<path>.json one file per part with a model: the block-model
 //                                                               elements in a compact form plus the textures as
-//                                                               data URLs (base, paint, ccw and battery under variants)
+//                                                               data URLs (base, paint, ccw, battery under and stack
+//                                                               mounted variants) and the plug anchors (see below)
 //
-// Only files from the web export are used. The block models keep Minecraft's model units (0–16 per model block);
-// worn, damaged, broken and blur variants are left out because the configurator shows new parts at rest.
-// A render definition may carry a vanilla "transformation" (JMP X-Class frames: the model is shrunk to fit the
-// −16…32 model limit and scaled back to real size); it is baked into the element coordinates here.
+// Only files from the web export are used, with one exception: a stack's "_mounted" variant (battery plugged in,
+// Propwash 0.6.0) that the export lacks is taken from a mod's resource folder given with --resources (a folder with
+// assets/<namespace>/…, e.g. common/src/main/resources of Propwash or Just More Parts; PROPWASH_MOD_RESOURCES may list
+// several, separated like PATH) – and only if that folder's render definition and model of the stack's base variant
+// are byte-identical to the export's, the way the game only plugs a stack whose "_mounted" comes from the same pack as
+// its base model. The block models keep Minecraft's model units (0–16 per model block); worn, damaged, broken and blur
+// variants are left out because the configurator shows new parts at rest. A render definition may carry a vanilla
+// "transformation" (JMP X-Class frames: the model is shrunk to fit the −16…32 model limit and scaled back to real
+// size); it is baked into the element coordinates here.
+//
+// Plug anchors (battery plugged in, like PlugAnchors in Propwash), in millimetres around the part's position, measured
+// in the drawn space (after the transformation): every battery variant gets `socket` (the box of its connector or
+// bt_connector elements, the box of connector_grip, bt for a BT2.0 socket), the stack's mounted variant `pigtail` (the
+// two pigtail ends: red first, [x, y, end z, diameter]) and every frame `rear` (the rearmost z of its body near the
+// centre line, arms, motors, props and ducts left out).
 
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { exportDir } from './build-configurator-data.mjs';
+import { exportDir, readExport } from './build-configurator-data.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'assets/data/configurator');
 const DIRS = ['down', 'up', 'north', 'south', 'west', 'east'];
 
 const round = (v) => Math.round(v * 10000) / 10000;
-
-function readJson(dir, file) {
-  return JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
-}
 
 function modelFile(id) {
   const colon = id.indexOf(':');
@@ -57,7 +66,7 @@ function rotationOf(r) {
   return [...o, round(r.x || 0), round(r.y || 0), round(r.z || 0)];
 }
 
-// Element corners after rotation, in model units (for the bounding box).
+// Element corners after rotation, in model units (for the bounding box and the plug anchors).
 function corners(e) {
   const pts = [];
   for (const x of [e.from[0], e.to[0]]) for (const y of [e.from[1], e.to[1]]) for (const z of [e.from[2], e.to[2]]) pts.push([x, y, z]);
@@ -146,19 +155,101 @@ function compactModel(model, where) {
   return { texture: textureFile(textures[0][1]), elements, tints, box: box.map(round) };
 }
 
+// ---------------------------------------------------------------------------------------------------------------
+// Plug anchors (PlugAnchors): named element boxes in millimetres around the model point (8, 8, 8)
+
+const PLUG_ELEMENTS = new Set(['connector', 'connector_grip', 'bt_connector']);
+const NOT_BODY = ['arm', 'motor', 'prop', 'duct'];
+const BODY_STRIP_MM = 10;
+const mm = (v) => (v - 8) * 8;
+
+/** Every element with its name and the box of its (rotated, transformed) corners in millimetres. */
+export function namedBoxes(model) {
+  return (model.elements || []).map((e) => {
+    const box = [Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity];
+    for (const p of corners(e)) {
+      for (let i = 0; i < 3; i++) {
+        box[i] = Math.min(box[i], mm(p[i]));
+        box[i + 3] = Math.max(box[i + 3], mm(p[i]));
+      }
+    }
+    return { name: typeof e.name === 'string' ? e.name : '', box };
+  });
+}
+
+const union = (a, b) => (a ? [Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.min(a[2], b[2]), Math.max(a[3], b[3]), Math.max(a[4], b[4]), Math.max(a[5], b[5])] : b.slice());
+
+/** PlugAnchors.socket: the battery's half of the pair, or null. */
+export function socketOf(elements) {
+  let body = null;
+  let grip = null;
+  let bt = false;
+  for (const { name, box } of elements) {
+    if (name === 'connector') body = union(body, box);
+    else if (name === 'bt_connector') {
+      body = union(body, box);
+      bt = true;
+    } else if (name === 'connector_grip') grip = union(grip, box);
+  }
+  if (!body || !(body[3] - body[0] > 0 && body[4] - body[1] > 0 && body[5] - body[2] > 0)) return null;
+  return { body: body.map(round), grip: grip ? grip.map(round) : null, bt };
+}
+
+/** PlugAnchors.pigtail: the two pigtail ends of a mounted stack ([x, y, end z, diameter], red = smaller x first), or null. */
+export function pigtailOf(elements) {
+  if (elements.some((e) => PLUG_ELEMENTS.has(e.name))) return null;
+  const leads = [];
+  for (const { name, box } of elements) {
+    if (name !== 'pigtail') continue;
+    const diameter = Math.min(box[3] - box[0], box[4] - box[1]);
+    if (!(diameter > 0)) return null;
+    leads.push([(box[0] + box[3]) / 2, (box[1] + box[4]) / 2, box[5], diameter]);
+  }
+  if (leads.length !== 2) return null;
+  const [first, second] = leads;
+  return (second[0] < first[0] ? [second, first] : [first, second]).map((lead) => lead.map(round));
+}
+
+/** PlugAnchors.bodyRearZ: rearmost z of the body near the centre line, or NaN. */
+export function bodyRearZ(elements) {
+  let rear = -Infinity;
+  for (const { name, box } of elements) {
+    if (NOT_BODY.some((prefix) => name.startsWith(prefix))) continue;
+    if (box[3] >= -BODY_STRIP_MM && box[0] <= BODY_STRIP_MM) rear = Math.max(rear, box[5]);
+  }
+  return Number.isFinite(rear) ? round(rear) : NaN;
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+
+function resourceDirs(argv) {
+  const out = [];
+  argv.forEach((a, i) => {
+    if (a === '--resources' && argv[i + 1]) out.push(path.resolve(argv[i + 1]));
+  });
+  if (process.env.PROPWASH_MOD_RESOURCES) out.push(...process.env.PROPWASH_MOD_RESOURCES.split(path.delimiter).filter(Boolean).map((d) => path.resolve(d)));
+  return out;
+}
+
 function main() {
-  const dir = exportDir();
-  const manifest = readJson(dir, 'manifest.json');
-  if (manifest.format !== 1) throw new Error(`web export format ${manifest.format} not supported`);
-  const parts = readJson(dir, 'parts.json');
+  const argv = process.argv.slice(2);
+  const dir = exportDir(argv);
+  const { manifest, namespaces } = readExport(dir);
+  const resources = resourceDirs(argv);
+  const parts = [];
+  for (const ns of namespaces) for (const p of JSON.parse(fs.readFileSync(path.join(dir, ns, 'parts.json'), 'utf8'))) parts.push(p);
 
   const paintFiles = {};
   const layoutFiles = {};
-  for (const ns of fs.readdirSync(path.join(dir, 'assets'))) {
-    const paint = path.join(dir, 'assets', ns, 'drone_paint.json');
-    const layout = path.join(dir, 'assets', ns, 'drone_layout.json');
-    if (fs.existsSync(paint)) paintFiles[ns] = JSON.parse(fs.readFileSync(paint, 'utf8'));
-    if (fs.existsSync(layout)) layoutFiles[ns] = JSON.parse(fs.readFileSync(layout, 'utf8'));
+  for (const ns of namespaces) {
+    const assets = path.join(dir, ns, 'assets');
+    if (!fs.existsSync(assets)) continue;
+    for (const owner of fs.readdirSync(assets).sort()) {
+      const paint = path.join(assets, owner, 'drone_paint.json');
+      const layout = path.join(assets, owner, 'drone_layout.json');
+      if (fs.existsSync(paint) && !(owner in paintFiles)) paintFiles[owner] = JSON.parse(fs.readFileSync(paint, 'utf8'));
+      if (fs.existsSync(layout) && !(owner in layoutFiles)) layoutFiles[owner] = JSON.parse(fs.readFileSync(layout, 'utf8'));
+    }
   }
 
   const channels = {};
@@ -171,9 +262,25 @@ function main() {
     return groups ? groups.map((g) => [g.channel, g.base]) : null;
   }
 
-  // Render definitions of an export path, e.g. assets/propwash/items/drone_render/prop/p31_4b.json.
-  function renderModel(defPath) {
-    const def = readJson(dir, defPath).model;
+  // A file of the export below the part's namespace folder, or (fallback) of a resource folder: {file, from}.
+  const exportPath = (scope, rel) => path.join(dir, scope, rel);
+  function locate(scope, rel, fallback) {
+    const own = exportPath(scope, rel);
+    if (fs.existsSync(own)) return { file: own, from: 'export' };
+    if (fallback) {
+      for (const res of resources) {
+        const file = path.join(res, rel);
+        if (fs.existsSync(file)) return { file, from: res };
+      }
+    }
+    return null;
+  }
+  const readAt = (where) => JSON.parse(fs.readFileSync(where.file, 'utf8'));
+  const sameBytes = (a, b) => !!a && !!b && fs.readFileSync(a).equals(fs.readFileSync(b));
+
+  // Render definition of an export path, e.g. assets/propwash/items/drone_render/prop/p31_4b.json.
+  function renderModel(where, defPath) {
+    const def = readAt(where).model;
     if (!def || def.type !== 'minecraft:model') throw new Error(`${defPath}: plain minecraft:model expected`);
     return { model: def.model, transform: transformOf(def.transformation, defPath) };
   }
@@ -183,9 +290,11 @@ function main() {
   let files = 0;
   let bytes = 0;
   const withModel = [];
+  const counts = { sockets: 0, mounted: 0, mountedFromResources: 0, mountedMissing: [], rears: 0 };
   for (const p of parts) {
     const m = p.model || {};
     if (m.kind !== 'model' || !m.drone) continue;
+    const scope = p.id.slice(0, p.id.indexOf(':'));
     const defPath = m.drone;
     const match = /^assets\/([^/]+)\/items\/drone_render\/(.+)\.json$/.exec(defPath);
     if (!match) throw new Error(`${p.id}: unexpected render definition ${defPath}`);
@@ -195,7 +304,7 @@ function main() {
 
     const textures = [];
     const textureIndex = (file) => {
-      let i = textures.indexOf(file);
+      let i = textures.findIndex((t) => t.rel === file.rel);
       if (i < 0) {
         textures.push(file);
         i = textures.length - 1;
@@ -204,12 +313,24 @@ function main() {
     };
 
     const variants = {};
-    const add = (name, suffix, geometryOf) => {
+    const raw = {};
+    const add = (name, suffix, geometryOf, fallback = false) => {
       const def = variantPath(suffix);
-      if (!available.has(def)) return false;
-      const render = renderModel(def);
-      const model = compactModel(applyTransform(readJson(dir, modelFile(render.model)), render.transform, def), def);
-      const entry = { tex: textureIndex(model.texture) };
+      let where = available.has(def) ? { file: exportPath(scope, def), from: 'export' } : null;
+      if (!where && fallback) {
+        where = locate(scope, def, true);
+        if (where && where.from === 'export') where = null;
+      }
+      if (!where) return false;
+      const render = renderModel(where, def);
+      const modelRel = modelFile(render.model);
+      const modelAt = where.from === 'export' ? { file: exportPath(scope, modelRel), from: 'export' } : locate(scope, modelRel, true);
+      if (!modelAt) throw new Error(`${def}: model ${render.model} not found`);
+      const transformed = applyTransform(readAt(modelAt), render.transform, def);
+      const model = compactModel(transformed, def);
+      const texture = locate(scope, model.texture, where.from !== 'export');
+      if (!texture) throw new Error(`${def}: texture ${model.texture} not found`);
+      const entry = { tex: textureIndex({ rel: model.texture, file: texture.file }) };
       if (geometryOf) {
         const base = variants[geometryOf];
         if (JSON.stringify(base.el) !== JSON.stringify(model.elements)) throw new Error(`${def}: geometry differs from ${geometryOf}`);
@@ -223,23 +344,61 @@ function main() {
       const groups = tintGroups(ns, `${local}${geometryOf ? suffix.replace(/_paint$/, '') : suffix}`);
       if (groups) entry.groups = groups;
       variants[name] = entry;
+      raw[name] = { elements: namedBoxes(transformed), where, model: modelAt, def };
       return true;
     };
 
     add('base', '', null);
     if (p.category === 'prop' && add('ccw', '_ccw', null)) add('ccw_paint', '_ccw_paint', 'ccw');
     if (p.category === 'battery' && add('under', '_under', null)) add('under_paint', '_under_paint', 'under');
+    if (p.category === 'stack') {
+      // Battery plugged in: the stack drawn without its own plug ("_mounted"), the same pack as the base variant only.
+      const fromExport = available.has(variantPath('_mounted'));
+      if (add('mounted', '_mounted', null, true)) {
+        const r = raw.mounted;
+        const sameSource = r.where.from === 'export'
+          || (sameBytes(raw.base.where.file, path.join(r.where.from, raw.base.def)) && sameBytes(raw.base.model.file, path.join(r.where.from, path.relative(path.join(dir, scope), raw.base.model.file))));
+        const pigtail = sameSource ? pigtailOf(r.elements) : null;
+        if (pigtail) {
+          variants.mounted.pigtail = pigtail;
+          add('mounted_paint', '_mounted_paint', 'mounted', !fromExport);
+          counts.mounted++;
+          if (r.where.from !== 'export') counts.mountedFromResources++;
+        } else {
+          delete variants.mounted;
+          counts.mountedMissing.push(`${p.id} (${sameSource ? 'no pigtail pair' : 'other source than the base model'})`);
+        }
+      } else {
+        counts.mountedMissing.push(`${p.id} (no _mounted)`);
+      }
+    }
     add('paint', '_paint', 'base');
     // Paint groups belong to the unpainted model (DroneRenderResources#paintGroups); keep them on the paint entry.
-    for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint']]) {
+    for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint'], ['mounted', 'mounted_paint']]) {
       if (variants[plain] && variants[plain].groups) {
         if (variants[painted]) variants[painted].groups = variants[plain].groups;
         delete variants[plain].groups;
       }
       if (variants[painted] && !variants[painted].groups) delete variants[painted];
     }
+    if (p.category === 'battery') {
+      for (const name of ['base', 'under']) {
+        const socket = variants[name] && socketOf(raw[name].elements);
+        if (socket) {
+          variants[name].socket = socket;
+          counts.sockets++;
+        }
+      }
+    }
+    if (p.category === 'frame') {
+      const rear = bodyRearZ(raw.base.elements);
+      if (Number.isFinite(rear)) {
+        variants.base.rear = rear;
+        counts.rears++;
+      }
+    }
 
-    const tex = textures.map((file) => `data:image/png;base64,${fs.readFileSync(path.join(dir, file)).toString('base64')}`);
+    const tex = textures.map((t) => `data:image/png;base64,${fs.readFileSync(t.file).toString('base64')}`);
     const out = { format: 1, id: p.id, tex, variants };
     const [pns, ppath] = p.id.split(':');
     const target = path.join(outModels, pns, p.category, `${ppath}.json`);
@@ -281,6 +440,9 @@ function main() {
   fs.writeFileSync(path.join(OUT, 'render.json'), JSON.stringify(render) + '\n');
   console.log(`models: ${files} files, ${(bytes / 1024).toFixed(0)} KiB; render.json: ${Object.keys(layouts).length} layouts, `
     + `${Object.keys(motorSeats).length} motor seats`);
+  console.log(`battery plugged in: ${counts.sockets} battery sockets, ${counts.rears} frame rears, ${counts.mounted} mounted stacks`
+    + `${counts.mountedFromResources ? ` (${counts.mountedFromResources} from the mod resources, the export lacks them)` : ''}`
+    + `${counts.mountedMissing.length ? `; drawn unplugged: ${counts.mountedMissing.join(', ')}` : ''}`);
 }
 
-main();
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
