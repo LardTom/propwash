@@ -1,0 +1,11 @@
+{
+ "schema": 1,
+ "about": "Builds recommended for beginners: built-in Propwash presets (no add-on needed), in this order. Their share codes are written at runtime (PW3), so they stay right when a table grows; the pictures come from tools/build-configurator-beginner.mjs, the texts from assets/js/configurator/i18n.js (beginner).",
+ "school": "#learn",
+ "figures": ["mass_grams", "thrust_to_weight", "mixed_flight_time_min"],
+ "builds": [
+  {"preset": "propwash:whoop", "image": "beginner/whoop.webp"},
+  {"preset": "propwash:cinewhoop", "image": "beginner/cinewhoop.webp"},
+  {"preset": "propwash:freestyle", "image": "beginner/freestyle.webp"}
+ ]
+}
