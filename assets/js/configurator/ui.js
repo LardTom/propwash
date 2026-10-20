@@ -2,13 +2,13 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText } from './data.js?v=1dd0de36';
+import { loadCatalog, localText } from './data.js?v=1b38e3f7';
 import { shareLink, codeFromHash, PAINT_SLOTS, displayId } from './sharecode.js?v=594888f1';
-import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=ddb9460a';
+import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=6fae3e31';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
-import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=b089a0c4';
+import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=c64a5c0d';
 import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
-import { batteryFit } from './rules.js?v=147e54d1';
+import { batteryFit } from './rules.js?v=e77905ee';
 import { assemble, PROP_SLOTS } from './assembly.js?v=e8018744';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=320ddce0';
 import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=45b39bbd';
@@ -272,15 +272,16 @@ function slotRows() {
     let unknown = false;
     if (category === 'accessory') {
       const acc = state.build.accessories || {};
-      const names = ['top', 'bottom'].filter((m) => acc[m]).map((m) => (catalog.part(acc[m]) ? catalog.partName(acc[m], lang()) : acc[m]));
-      unknown = ['top', 'bottom'].some((m) => acc[m] && !partOf(acc[m], 'accessory'));
+      const mounts = ['top', 'bottom', 'front'];
+      const names = mounts.filter((m) => acc[m]).map((m) => (catalog.part(acc[m]) ? catalog.partName(acc[m], lang()) : displayId(acc[m])));
+      unknown = mounts.some((m) => acc[m] && !partOf(acc[m], 'accessory'));
       value = names.length ? names.join(' + ') : t('ui.none');
       full = value;
     } else {
       const id = state.build[category];
       const p = partOf(id, category);
       unknown = !p;
-      value = p ? catalog.shortName(id, lang()) : `${t('ui.unknownPart')}: ${id}`;
+      value = p ? catalog.shortName(id, lang()) : `${t('ui.unknownPart')}: ${displayId(id)}`;
       full = p ? catalog.partName(id, lang()) : value;
     }
     const related = issues.filter((k) => (INVOLVED[k] || []).includes(category));

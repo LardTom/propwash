@@ -4,13 +4,13 @@
 // catalog reads PW1, PW2 and PW3 with the parts tables of its namespaces and the add-on directory of the export, writes
 // PW3 like the game with these add-ons installed, and converts old codes with the frozen data like the mod.
 
-import { check as checkBuild } from './rules.js?v=147e54d1';
-import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=b089a0c4';
+import { check as checkBuild } from './rules.js?v=e77905ee';
+import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=c64a5c0d';
 import {
   encode as encodeCode, decode as decodeCode, convert as convertCode, hexColor, createShareTables, frozenTables, displayId,
 } from './sharecode.js?v=594888f1';
 import { sharedOnly } from './tune.js?v=f4084d0e';
-import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=ddb9460a';
+import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=6fae3e31';
 
 export const CATALOG_URL = new URL('../../data/configurator/catalog.json', import.meta.url);
 export const CATEGORIES = Object.freeze(['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory']);
