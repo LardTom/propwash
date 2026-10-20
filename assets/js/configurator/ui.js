@@ -3,7 +3,7 @@
 // site's own data files.
 
 import { loadCatalog, localText } from './data.js?v=1b38e3f7';
-import { shareLink, codeFromHash, PAINT_SLOTS, displayId } from './sharecode.js?v=594888f1';
+import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=594888f1';
 import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=6fae3e31';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
 import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=c64a5c0d';
@@ -11,7 +11,8 @@ import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe
 import { batteryFit } from './rules.js?v=e77905ee';
 import { assemble, PROP_SLOTS } from './assembly.js?v=e8018744';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=320ddce0';
-import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=45b39bbd';
+import { reasonText, addonNote } from './convert.js?v=33934759';
+import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=66dd0144';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
@@ -189,10 +190,9 @@ function currentCode() {
   try {
     return { code: catalog.encode(content(), { carry: state.carry }), error: null };
   } catch (e) {
-    let error = (e && e.message) || String(e);
-    if (e && e.status === 'UNKNOWN_ENTRIES') error = t('ui.encodeUnknownEntries');
-    else if (e && e.status === 'NOT_CONVERTIBLE') error = t('ui.encodeLegacyUnknown');
-    return { code: null, error };
+    const messages = { UNKNOWN_ENTRIES: 'ui.encodeUnknownEntries', NOT_CONVERTIBLE: 'ui.encodeLegacyUnknown', TOO_LARGE: 'ui.encodeTooLarge', CORRUPT: 'ui.encodeBadId' };
+    const key = e && messages[e.status];
+    return { code: null, error: key ? t(key) : (e && e.message) || String(e) };
   }
 }
 
@@ -1567,38 +1567,13 @@ function scheduleHash() {
 // ---------------------------------------------------------------------------------------------------------------
 // Import
 
-/** Why an old code can't become PW3, as text (ShareConvert reasons). */
-function reasonText(reason) {
-  const [kind, value] = String(reason || '').split(/:(.*)/s);
-  if (kind === 'pw2_unknown') return t('convert.reasonPw2', { part: `?${value}` });
-  if (kind === 'pw1_unknown') return t('convert.reasonPw1', { n: value });
-  if (kind === 'reserved_namespace') return t('convert.reasonReserved', { ns: value });
-  return t('convert.reasonOther', { key: reason });
-}
-
-/**
- * A line about an add-on a PW3 code names that this page can't match (missing, newer, other version), with links to
- * get it, or null. Links are clickable only for Modrinth and CurseForge (from the add-on directory, else from the
- * code); a free address from the code is shown as text only.
- */
+/** A line about an add-on a PW3 code names that this page can't match, with its safe links (convert.js addonNote), or null. */
 function addonLine(report) {
-  if (!['MISSING', 'NEWER', 'MISMATCH'].includes(report.result)) return null;
-  const ns = report.namespace;
-  const name = ns ? catalog.addonName(ns, lang(), report.name) || ns : t('addons.number', { n: report.short_id });
-  const version = report.min_version ? t('addons.from', { version: report.min_version }) : '';
-  const loaded = ns && catalog.namespace(ns) ? catalog.namespace(ns).version : '';
-  const key = report.result === 'MISMATCH' ? 'addons.mismatch' : report.result === 'NEWER' ? 'addons.newer' : 'addons.missing';
-  const text = t(key, { name, version, installed: loaded }).replace(/ {2,}/g, ' ');
-  const dir = ns ? catalog.directoryEntry(ns) : null;
-  const links = [];
-  const modrinth = dir ? dir.modrinth : report.link_type === 1 ? report.link : null;
-  const curseforge = dir ? dir.curseforge : report.link_type === 2 ? report.link : null;
-  if (modrinth) links.push(['Modrinth', `https://modrinth.com/mod/${modrinth}`]);
-  if (curseforge) links.push(['CurseForge', `https://www.curseforge.com/minecraft/mc-mods/${curseforge}`]);
-  if (!ns) links.push([t('addons.directory'), new URL('addons/', SITE_ROOT).href]);
-  const line = el('span', { class: 'addon-line' }, text,
-    ...links.flatMap(([label, href]) => [' ', el('a', { href, target: '_blank', rel: 'noopener noreferrer' }, label)]));
-  if (!dir && report.link_type === 3 && report.link) line.append(' ', el('span', { class: 'addon-line__free' }, t('addons.free', { link: report.link })));
+  const note = addonNote(report, catalog, lang(), new URL('addons/', SITE_ROOT).href);
+  if (!note) return null;
+  const line = el('span', { class: 'addon-line' }, note.text,
+    ...note.links.flatMap(([label, href]) => [' ', el('a', { href, target: '_blank', rel: 'noopener noreferrer' }, label)]));
+  if (note.free) line.append(' ', el('span', { class: 'addon-line__free' }, note.free));
   return line;
 }
 
@@ -1720,11 +1695,17 @@ function banner(message, level, withUndo, action = null) {
     el('button', { type: 'button', class: 'banner__btn banner__close', 'aria-label': t('ui.dismiss'), onclick: () => banner('') }, '×')));
 }
 
-/** The conversion of an opened old code (PW1, PW2) like the mod's, or null for PW3; the address gets the PW3 code. */
+/**
+ * The conversion of an opened old code (PW1, PW2) like the mod's, or null for PW3. The address and “Copy PW3” get the
+ * code the share box shows for the loaded build (the same as the mod's conversion unless the old code named a part
+ * that has been replaced since).
+ */
 function convertOpened(code, result) {
   if (!result.ok || result.format === 'PW3') return null;
   const conversion = catalog.convert(code);
   if (conversion.status === 'OK') {
+    const shown = currentCode().code;
+    if (shown) conversion.code = shown;
     lastHashCode = conversion.code;
     history.replaceState(null, '', `#${conversion.code}`);
   }
@@ -2589,6 +2570,8 @@ function wireEvents() {
   });
   const input = $('[data-import]');
   let importTimer = 0;
+  // The code last loaded from the field: typing around it (blanks, a line break) does not load it again.
+  let fieldCode = null;
   const tryImport = () => {
     const raw = input.value.trim();
     if (!raw) {
@@ -2597,6 +2580,9 @@ function wireEvents() {
     }
     const { code, result } = decodeField(raw);
     importPreview(result);
+    const key = compact(code);
+    if (result.ok && key === fieldCode) return;
+    if (result.ok) fieldCode = key;
     if (result.ok) {
       let again = null;
       try {

@@ -816,10 +816,13 @@ function crcOf(bytes) {
     `broken one: ${damaged.from} and a hand-made one (${handMade.from}).`,
     `Already new: ${p1.code} — have fun!`,
     'Not a code: aPW2xyz inside a word, xPW1-AAAAA.',
+    'Hier mein PW3-Code und die PW2-Codes, siehe PW3-Sharecode-Format und PW1-Codes.',
   ].join('\n');
-  const found = findCodes(post);
+  const found = findCodes(post).filter((f) => !f.word);
   ok(same(found.map((f) => f.code), [oldPw2.from, oldPw2.from, oldPw1.from, damaged.from, handMade.from, p1.code]),
     `codes found in a post: ${found.map((f) => f.code).join(' ')}`);
+  ok(same(findCodes(post).filter((f) => f.word).map((f) => f.code), ['PW2-Codes', 'PW3-Sharecode-Format', 'PW1-Codes']),
+    'hyphenated words that start like a code are marked as words');
   const r = convertText(post, catalog);
   const expected = post.split(oldPw2.from).join(oldPw2.pw3).replace(oldPw1.from, oldPw1.pw3);
   ok(r.text === expected, `post converted in place:\n${r.text}`);
@@ -840,6 +843,16 @@ function crcOf(bytes) {
   ok(capped.found === MAX_CODES + 7 && capped.skipped === 7 && capped.text.split(oldPw1.pw3).length - 1 === MAX_CODES
     && capped.text.split(oldPw1.from).length - 1 === 7, `at most ${MAX_CODES} codes per pass`);
   ok(convertText('', catalog).found === 0 && convertText('no codes here', catalog).found === 0, 'text without codes');
+  ok(convertText('Mein PW3-Code folgt, die alten PW2-Codes gelten weiter.', catalog).found === 0, 'words like “PW3-Code” are no codes');
+  // Every golden code is found as exactly itself in running text (also those whose body happens to look like words).
+  let goldenFound = 0;
+  const allCodes = [...golden['pw1-vectors.json'].vectors, ...golden['pw2-vectors.json'].vectors, ...goldenPw3.vectors].map((v) => v.code)
+    .filter((c) => /^PW[123]/.test(c));
+  for (const code of allCodes) {
+    const r = convertText(`Code: ${code}!`, catalog);
+    const wanted = catalog.decode(code).ok || !findCodes(code)[0].word;
+    if (ok(r.found === (wanted ? 1 : 0) && (!wanted || r.codes[0].from === code), `golden code found in text: ${code.slice(0, 20)}…`)) goldenFound++;
+  }
   // Real codes (local file, never in the repository).
   const realFile = process.env.PROPWASH_DISCORD_CODES;
   let real = 0;
@@ -854,7 +867,8 @@ function crcOf(bytes) {
       real++;
     }
   }
-  console.log(`Converter: ${failed === before ? 'codes found, converted in place, idempotent' : 'FAILED'}${real ? `; ${real} real codes converted with the same build` : ''}`);
+  console.log(`Converter: ${failed === before ? `codes found (${goldenFound} golden codes in running text), converted in place, idempotent` : 'FAILED'}`
+    + `${real ? `; ${real} real codes converted with the same build` : ''}`);
 }
 
 // 8. Figure explanations and builds for beginners

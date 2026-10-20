@@ -127,7 +127,7 @@ const TEXT = {
     reasonPw2: ['it names part {part}, which no version of the tables knows', 'er nennt Teil {part}, das keine Version der Tabellen kennt'],
     reasonPw1: ['it names namespace number {n}, which no version knows', 'er nennt die Namensraum-Nummer {n}, die keine Version kennt'],
     reasonReserved: ['it uses the reserved namespace {ns}', 'er nutzt den reservierten Namensraum {ns}'],
-    reasonOther: ['the parts can’t be written ({key})', 'die Teile lassen sich nicht schreiben ({key})'],
+    reasonOther: ['its parts can’t be written as PW3', 'seine Teile lassen sich nicht als PW3 schreiben'],
     status: {
       converted: ['Converted', 'Umgerechnet'], pw3: ['Already PW3', 'Schon PW3'], unknown: ['Unknown parts', 'Unbekannte Teile'],
       not_convertible: ['Can’t be converted', 'Nicht umrechenbar'], damaged: ['Damaged', 'Beschädigt'],
@@ -225,6 +225,8 @@ const TEXT = {
     statRange: ['Typical for the class {class}: {range}', 'Typisch für die Klasse {class}: {range}'],
     statOutside: ['unusual for the class', 'untypisch für die Klasse'],
     statOutsideLong: ['Outside the usual range of the class {class} – not an error, just unusual.', 'Außerhalb des üblichen Bereichs der Klasse {class} – kein Fehler, nur ungewöhnlich.'],
+    encodeTooLarge: ['it would be too large (at most 2500 bytes and 16 add-ons)', 'er würde zu groß (höchstens 2500 Byte und 16 Add-ons)'],
+    encodeBadId: ['a part id contains characters a share code can’t hold', 'eine Teile-Id enthält Zeichen, die ein Sharecode nicht aufnehmen kann'],
     encodeLegacyUnknown: ['it contains parts of an old code that no version knows', 'er enthält Teile eines alten Codes, die keine Version kennt'],
     encodeUnknownEntries: ['it contains parts from a newer version of an add-on that this page can’t write back', 'er enthält Teile aus einer neueren Version eines Add-ons, die diese Seite nicht zurückschreiben kann'],
     wrongKindExplain: ['These parts sit in the wrong place: ', 'Diese Teile stecken am falschen Platz: '],

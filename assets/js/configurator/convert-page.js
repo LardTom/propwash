@@ -3,9 +3,9 @@
 // view. Everything runs in the browser; the only request goes to this site's catalog.
 
 import { loadCatalog } from './data.js?v=1b38e3f7';
-import { convertText, MAX_CODES } from './convert.js?v=b17adfa0';
+import { convertText, reasonText, addonNote, MAX_CODES } from './convert.js?v=33934759';
 import { displayId } from './sharecode.js?v=594888f1';
-import { t, lang } from './i18n.js?v=45b39bbd';
+import { t, lang } from './i18n.js?v=66dd0144';
 
 const doc = document;
 const $ = (sel, ctx = doc) => ctx.querySelector(sel);
@@ -55,33 +55,15 @@ async function copy(text, message) {
   copy.timer = setTimeout(() => { status.textContent = ''; }, 4000);
 }
 
-function reasonText(reason) {
-  const [kind, value] = String(reason || '').split(/:(.*)/s);
-  if (kind === 'pw2_unknown') return t('convert.reasonPw2', { part: `?${value}` });
-  if (kind === 'pw1_unknown') return t('convert.reasonPw1', { n: value });
-  if (kind === 'reserved_namespace') return t('convert.reasonReserved', { ns: value });
-  return t('convert.reasonOther', { key: reason });
-}
-
 /** Add-ons of a PW3 code this page cannot match, as lines with safe links (Modrinth/CurseForge only). */
 function addonLines(r) {
   const out = [];
   for (const report of r.missing) {
-    const ns = report.namespace;
-    const name = ns ? catalog.addonName(ns, lang(), report.name) || ns : t('addons.number', { n: report.short_id });
-    const version = report.min_version ? t('addons.from', { version: report.min_version }) : '';
-    const loaded = ns && catalog.namespace(ns) ? catalog.namespace(ns).version : '';
-    const key = report.result === 'MISMATCH' ? 'addons.mismatch' : report.result === 'NEWER' ? 'addons.newer' : 'addons.missing';
-    const dir = ns ? catalog.directoryEntry(ns) : null;
-    const modrinth = dir ? dir.modrinth : report.link_type === 1 ? report.link : null;
-    const curseforge = dir ? dir.curseforge : report.link_type === 2 ? report.link : null;
-    const links = [];
-    if (modrinth) links.push(['Modrinth', `https://modrinth.com/mod/${modrinth}`]);
-    if (curseforge) links.push(['CurseForge', `https://www.curseforge.com/minecraft/mc-mods/${curseforge}`]);
-    if (!ns) links.push([t('addons.directory'), ADDONS.href]);
-    const line = el('p', { class: 'cv-code__note' }, t(key, { name, version, installed: loaded }).replace(/ {2,}/g, ' '),
-      ...links.flatMap(([label, href]) => [' ', el('a', { href, target: '_blank', rel: 'noopener noreferrer' }, label)]));
-    if (!dir && report.link_type === 3 && report.link) line.append(' ', el('span', { class: 'addon-line__free' }, t('addons.free', { link: report.link })));
+    const note = addonNote(report, catalog, lang(), ADDONS.href);
+    if (!note) continue;
+    const line = el('p', { class: 'cv-code__note' }, note.text,
+      ...note.links.flatMap(([label, href]) => [' ', el('a', { href, target: '_blank', rel: 'noopener noreferrer' }, label)]));
+    if (note.free) line.append(' ', el('span', { class: 'addon-line__free' }, note.free));
     out.push(line);
   }
   return out;

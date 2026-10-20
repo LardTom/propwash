@@ -136,7 +136,7 @@ function part(p) {
   if (b.render_model) out.basics.render_model = b.render_model;
   out.data = p.data;
   out.derived = p.derived;
-  out.paint = { slots: p.paint.slots, paintable_model: p.paint.paintable_model };
+  out.paint = p.paint ? { slots: p.paint.slots, paintable_model: p.paint.paintable_model } : { slots: [], paintable_model: false };
   const m = p.model || {};
   out.model = {
     kind: m.kind,
