@@ -1,7 +1,8 @@
-// Flight analysis of a build, a port of Propwash 0.5.2 BuildAccess#analyze (BuildStats): airframe derivation,
+// Flight analysis of a build, a port of Propwash 0.6.0 BuildAccess#analyze (BuildStats): airframe derivation,
 // steady operating points of motors and battery, top speed, the energy balance of sim.EnergyModel (pack current with
 // drive losses, prop factor and avionics load, flight times for hover, cruise, mixed and aggressive flying down to the
-// landing voltage, motor heating) and camera occlusion (the FPV rig of the renderer, fpv.js).
+// landing voltage), the heat model of sim.Thermal (motor and ESC temperatures at 20 °C, heat warning from either) and
+// camera occlusion (the FPV rig of the renderer, fpv.js).
 // Only the parts of the model that BuildStats needs are ported; every formula keeps the mod's operation order so
 // the numbers match the mod's (the web export's test vectors) to the last digits.
 //
@@ -97,8 +98,23 @@ const AIRFLOW_COOLING = 0.6;
 const AIRFLOW_REFERENCE_MS = 10.0;
 
 const MOTOR_HEAT_CAPACITY = 0.5;
-const MOTOR_CONDUCTANCE_BASE = 0.075;
-const MOTOR_CONDUCTANCE_PER_OMEGA = 1.5e-4;
+const MOTOR_CONDUCTANCE_BASE = 0.1;
+const MOTOR_CONDUCTANCE_PER_SPEED = 0.0105;
+const BELL_RADIUS_PER_STATOR = 0.625;
+const MOTOR_EDDY_LOSS = 0.35;
+const ESC_HEAT_CAPACITY = 0.5;
+const ESC_CONDUCTANCE = 0.0275;
+const ESC_REFERENCE_BOARD_MM = 36.0;
+const ESC_REFERENCE_GRAMS = 18.0;
+const ESC_BOARD_WHOOP_MM = 25.5;
+const ESC_BOARD_20_MM = 26.0;
+const ESC_PROP_WASH = 0.2;
+const ESC_DUCTED = 0.6;
+const ESC_SWITCHING = 0.002;
+const ESC_LIMIT_C = 140.0;
+const STACK_S30 = 'propwash:s30';
+const STACK_S20 = 'propwash:s20';
+const STACK_WHOOP_AIO = 'propwash:whoop_aio';
 
 const FLEX_LOSS = 0.04;
 const FLEX_LOAD_CAP = 4.0;
@@ -132,7 +148,7 @@ const toRadians = (deg) => deg * DEGREES_TO_RADIANS;
 const MAX_TILT = toRadians(89.0);
 const DEFAULT_ANGLE_LIMIT = toRadians(60.0);
 const TOP_SPEED_SOC = 0.8;
-const REFERENCE_AMBIENT_C = 25.0;
+const REFERENCE_AMBIENT_C = 20.0;
 const MOTOR_TEMP_WINDOW_S = 60.0;
 /** BuildWarning.PROPS_IN_VIEW: warning above this share of the FPV image (Propwash 0.4.0). */
 export const PROPS_IN_VIEW_WARNING = 30.0;
@@ -347,7 +363,7 @@ function deriveAirframe(parts, catalog) {
   p.escMaxCells = sd.cells[1];
   p.escOvervoltage = bd.cells > sd.cells[1];
 
-  thermal(p, motor);
+  thermal(p, motor, stack);
 
   const az = fd.aero.frontal_area_m2 + accessoryArea;
   p.areaZ = az;
@@ -389,22 +405,39 @@ function footOffset(motorY, bottom, batteryFace, lowPoint) {
 
 const batteryFace = (body, com) => (body.batteryOnTop ? body.batteryY + body.bh / 2.0 : body.batteryY - body.bh / 2.0) - com;
 
-function thermal(p, motor) {
+// Board size of the ESC from the stack mount, otherwise from the stack mass (ParamDerivation.escBoardMm).
+function escBoardMm(stack) {
+  const mount = stack.data.mount;
+  if (mount === STACK_S30) return ESC_REFERENCE_BOARD_MM;
+  if (mount === STACK_S20) return ESC_BOARD_20_MM;
+  if (mount === STACK_WHOOP_AIO) return ESC_BOARD_WHOOP_MM;
+  return ESC_REFERENCE_BOARD_MM * Math.cbrt(Math.max(stack.basics.mass_g, 0.5) / ESC_REFERENCE_GRAMS);
+}
+
+// Motor and ESC heat parameters (ParamDerivation.thermal, Thermal.escStillAir, bellRadius, eddyLoss).
+function thermal(p, motor, stack) {
+  const size = escBoardMm(stack) / ESC_REFERENCE_BOARD_MM;
+  p.escCooling = ESC_CONDUCTANCE * size * size;
+  p.stackMassKg = stack.basics.mass_g / 1000.0;
   const t = motor.data.thermal;
   const motorGrams = p.motorMassKg * 1000.0;
   p.motorHeatCapacity = t.heat_capacity_j_per_k != null ? t.heat_capacity_j_per_k : MOTOR_HEAT_CAPACITY * motorGrams;
   const sizeFactor = Math.pow(motorGrams / 33.0, 2.0 / 3.0);
+  const statorDiameter = motor.data.stator_mm[0] / 1000.0;
+  const perOmega = MOTOR_CONDUCTANCE_PER_SPEED * (BELL_RADIUS_PER_STATOR * statorDiameter);
   const baseSet = t.cooling_w_per_k != null;
   const omegaSet = t.cooling_w_per_k_per_rad_s != null;
   if (!baseSet && !omegaSet) {
     p.motorCoolingBase = MOTOR_CONDUCTANCE_BASE;
-    p.motorCoolingPerOmega = MOTOR_CONDUCTANCE_PER_OMEGA;
+    p.motorCoolingPerOmega = perOmega;
     p.motorCoolingScale = sizeFactor;
   } else {
     p.motorCoolingBase = baseSet ? t.cooling_w_per_k : MOTOR_CONDUCTANCE_BASE * sizeFactor;
-    p.motorCoolingPerOmega = omegaSet ? t.cooling_w_per_k_per_rad_s : MOTOR_CONDUCTANCE_PER_OMEGA * sizeFactor;
+    p.motorCoolingPerOmega = omegaSet ? t.cooling_w_per_k_per_rad_s : perOmega * sizeFactor;
     p.motorCoolingScale = 1.0;
   }
+  const statorHeight = motor.data.stator_mm[1] / 1000.0;
+  p.motorEddyLoss = MOTOR_EDDY_LOSS * 0.25 * Math.PI * statorDiameter * statorDiameter * statorHeight;
   p.motorDerateStartC = t.derate_start_c;
   p.motorMaxTempC = t.max_temp_c;
 }
@@ -1124,8 +1157,36 @@ function loadedVoltage(p, soc, current) {
   return emf(p, soc) - r * current;
 }
 
+// Heat of a motor: copper, iron (no-load current) and eddy-current losses (Thermal.motorLoss).
 function motorHeat(p, pt) {
-  return pt.phaseCurrent * pt.phaseCurrent * p.motorResistance + p.kt * p.idleCurrent * pt.omega;
+  const w = Math.abs(pt.omega);
+  return pt.phaseCurrent * pt.phaseCurrent * p.motorResistance + p.kt * p.idleCurrent * w + p.motorEddyLoss * w * w;
+}
+
+// Cooling of a motor, more with its speed and bell size (Thermal.motorCooling).
+function motorCooling(p, omega) {
+  return (p.motorCoolingBase + p.motorCoolingPerOmega * Math.abs(omega)) * p.motorCoolingScale;
+}
+
+// Cooling factor of the airflow at a speed (Thermal.airflow).
+function airflow(speed) {
+  const v = speed > 0.0 ? speed : 0.0;
+  return 1.0 + AIRFLOW_COOLING * Math.sqrt(Math.min(v, 100.0) / AIRFLOW_REFERENCE_MS);
+}
+
+// Heat of one ESC channel: conduction and switching losses (Thermal.escLoss).
+function escHeat(p, current, busVoltage) {
+  return current * current * p.escResistance + ESC_SWITCHING * Math.max(busVoltage, 0.0) * Math.abs(current);
+}
+
+// Cooling of the ESC: still air of its board, a little prop wash, less in a ducted frame (Thermal.escCooling).
+function escCooling(p, omega) {
+  const wash = 1.0 + ESC_PROP_WASH * Math.abs(omega) / p.hoverOmega;
+  return p.escCooling * wash * (p.ducted ? ESC_DUCTED : 1.0);
+}
+
+function escHeatCapacity(p) {
+  return ESC_HEAT_CAPACITY * Math.max(p.stackMassKg * 1000.0, 0.5) / 4.0;
 }
 
 // Flying styles from calm to aggressive (EnergyModel.Profile).
@@ -1268,8 +1329,7 @@ class EnergyPoints {
       omega = m.cruise * this.cruiseOmega + (1.0 - m.cruise) * p.hoverOmega;
     }
     const speed = profile === 'hover' ? 0.0 : this.cruiseSpeed;
-    const airflow = 1.0 + AIRFLOW_COOLING * Math.sqrt(speed / AIRFLOW_REFERENCE_MS);
-    return (p.motorCoolingBase + p.motorCoolingPerOmega * omega) * p.motorCoolingScale * airflow;
+    return motorCooling(p, omega) * airflow(speed);
   }
 }
 
@@ -1315,12 +1375,16 @@ function fly(pts, profile, ambient) {
   return { minutes: seconds / MINUTE_S, averageCurrent: used * 3.6 / seconds, landingCellVoltage: landed / p.cells, motorTempC: temp };
 }
 
-// Motor temperature at full throttle in place: after the time window (60 s) and until the pack is empty.
+// Motor temperature at full throttle in place: after the time window (60 s) and until the pack is empty; the hottest
+// ESC temperature on the way.
 function fullThrottleMotorTemp(p, ambient, windowSeconds) {
   const pt = newPoint();
   const capacity = p.capacityMah;
   let temp = ambient;
   let max = ambient;
+  let esc = ambient;
+  let escMax = ambient;
+  const escC = escHeatCapacity(p);
   let minute = NaN;
   let seconds = 0.0;
   const step = capacity / HEAT_SEGMENTS;
@@ -1330,18 +1394,22 @@ function fullThrottleMotorTemp(p, ambient, windowSeconds) {
     const current = Math.max(packCurrent(p, pt), 1e-3);
     const dt = step * 3.6 / current;
     const power = motorHeat(p, pt);
-    const g = (p.motorCoolingBase + p.motorCoolingPerOmega * pt.omega) * p.motorCoolingScale;
+    const g = motorCooling(p, pt.omega);
     const inf = ambient + power / g;
     if (Number.isNaN(minute) && seconds + dt >= windowSeconds) {
       const partial = inf + (temp - inf) * Math.exp(-(windowSeconds - seconds) * g / p.motorHeatCapacity);
       minute = Math.max(max, partial);
     }
     temp = inf + (temp - inf) * Math.exp(-dt * g / p.motorHeatCapacity);
-    if (!Number.isFinite(temp)) return { minute: NaN, sustained: NaN };
+    const ge = escCooling(p, pt.omega);
+    const infE = ambient + escHeat(p, pt.phaseCurrent, pt.busVoltage) / ge;
+    esc = infE + (esc - infE) * Math.exp(-dt * ge / escC);
+    if (!Number.isFinite(temp + esc)) return { minute: NaN, sustained: NaN, escSustained: NaN };
     max = Math.max(max, temp);
+    escMax = Math.max(escMax, esc);
     seconds += dt;
   }
-  return { minute: Number.isNaN(minute) ? max : minute, sustained: max };
+  return { minute: Number.isNaN(minute) ? max : minute, sustained: max, escSustained: escMax };
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -1395,7 +1463,7 @@ function compute(p) {
 
   const heat = fullThrottleMotorTemp(p, REFERENCE_AMBIENT_C, MOTOR_TEMP_WINDOW_S);
   const motorTemp = heat.sustained;
-  if (motorTemp > p.motorDerateStartC) warnings.add('motor_thermal');
+  if (motorTemp > p.motorDerateStartC || heat.escSustained > ESC_LIMIT_C) warnings.add('motor_thermal');
   const propsInView = occlusionPercent(p.fpv);
   if (propsInView > PROPS_IN_VIEW_WARNING) warnings.add('props_in_view');
   if (p.escOvervoltage) warnings.add('esc_overvoltage');

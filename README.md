@@ -23,7 +23,7 @@ This repository contains only the website, no mod source code.
 - `assets/js/configurator/` – the configurator as plain ES modules:
   - core: `data.js` (catalog), `sharecode.js` (PW1 share codes and the entry point; `SHARE_FORMAT` chooses what new
     codes use), `sharecode2.js` + `sharecode2-tables.js` (the shorter PW2 codes), `crc32.js`, `inflate.js`, `tune.js`,
-    `rules.js` (compatibility), `analysis.js` (flight analysis as in Propwash 0.5.2: energy balance, battery model and climb thrust), `fpv.js` (FPV camera rig and props in view),
+    `rules.js` (compatibility), `analysis.js` (flight analysis as in Propwash 0.6.0: energy balance, battery model, climb thrust and the heat model of motors and ESC), `fpv.js` (FPV camera rig and props in view),
     `tuning.js` (tune defaults and editing), `index.js`
   - page: `ui.js` (part pickers, paint, tune editor, OSD layer, stats, share code, import), `i18n.js` (texts),
     `assembly.js` (where every part sits on the drone), `paint.js` (paint tints), `viewer.js` (three.js viewer)
@@ -139,10 +139,11 @@ on hover and focus; without JavaScript narrow screens show the links as a row be
 - part pickers per category with search, a class filter (whoop, toothpick, cinewhoop, freestyle, race, long range,
   X-Class; video by link, accessories by mount), “only parts that fit”, fit badges and tips with pros, cons and what the
   part would change
-- live flight figures like the workbench of Propwash 0.5.2 (weight, thrust-to-weight, hover throttle, top speed and its
+- live flight figures like the workbench of Propwash 0.6.0 (weight, thrust-to-weight, hover throttle, top speed and its
   energy balance: flight times down to the landing voltage for mixed flying of the frame's class as the main value,
   aggressive/racing, hovering and cruising at the class's cruise speed, pack currents, landing voltage under load,
-  base load of flight controller and video, motor temperature after 60 s full throttle and after a mixed flight) and
+  base load of flight controller and video, motor temperature after 60 s full throttle and after a mixed flight at
+  20 °C, heat warning when the motors or the ESC overheat at full throttle in place) and
   the compatibility check (voltage, prop size vs. frame, battery fit, mounts, ESC and battery load)
 - paint for every paint slot the build shows, like the paint screen in the game: the 16 dye colours, the 5 finishes
   (carbon, gunmetal, aluminium, gold, copper) and a custom colour; a swatch paints exactly its RGB value, as in the mod;
@@ -186,14 +187,21 @@ node tools/test-configurator-render.mjs    # model files, paint tints, frame lay
 node tools/test-configurator-pick.mjs      # clicks and taps on the parts in the 3D view (headless Chrome, ~1 min)
 ```
 
+The heat model of the workbench changed in Propwash 0.6.0 (20 °C, motor cooling by the bell size, eddy-current losses,
+the ESC heats up and counts for the heat warning); the rest of the analysis did not. Until `catalog.json` is built from
+a 0.6.0 export, `node tools/build-configurator-heat.mjs --export <0.6.0 web export>` writes the game's heat figures of
+every preset and one-part-swapped variant into `tools/fixtures/heat-vectors.json` and takes the thermal data of the
+motors and the text of the heat warning into `catalog.json`. `tools/test-configurator.mjs` checks every build of that
+file against the game and compares the figures of an older catalog without the motor temperatures and the heat warning.
+
 `tools/fixtures/report-vectors.json` keeps share codes from bug reports with the build, analysis and FPV camera the
 mod gives for them (hand-maintained, not overwritten by the build scripts); the test decodes, re-encodes and analyses
 each one. The first is the 7″ deadcat whose props the game showed at the image edges while the old calculation said
 0.0 %; its `game` entry holds what Propwash's self test counted in the rendered FPV image (2.01 % of 1708 × 960 pixels),
 and the test fails if the configurator ever shows 0 % for it again. The same code carries the second report (flight
 times and part stats a bit off, e.g. 24.2 min hovering and 124 °C at full throttle): `analysis` holds the figures of
-Propwash 0.5.2 and Just More Parts 1.1.1 (19.6 min hovering, 11.9 min cruising, 8.1 min mixed, 5.8 min aggressive,
-96 °C after 60 s full throttle), `analysis_before` the ones of an earlier pre-release build; the test checks that weight, thrust-to-weight, hover
+Propwash 0.5.2 and Just More Parts 1.1.1 (19.6 min hovering, 11.9 min cruising, 8.1 min mixed, 5.8 min aggressive)
+with the motor temperatures of Propwash 0.6.0 (98 °C after 60 s full throttle), `analysis_before` the ones of an earlier pre-release build; the test checks that weight, thrust-to-weight, hover
 throttle and props in view stay unchanged (the flight physics is bit-identical; the top speed moves with the climb thrust
 of 0.5.0 and the battery model of 0.5.2) and that the energy figures changed.
 
