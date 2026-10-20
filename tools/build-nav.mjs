@@ -23,6 +23,7 @@ export const HAND_PAGES = [
   ['changelog/index.html', '../', 'changelog'],
   ['impressum/index.html', '../', 'impressum'],
   ['datenschutz/index.html', '../', 'datenschutz'],
+  ['convert/index.html', '../', 'convert'],
 ];
 
 /** A page with the current navigation and footer links (options as for siteNav). */
