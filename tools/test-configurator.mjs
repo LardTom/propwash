@@ -16,6 +16,11 @@
 // 4. If the web export is available (default: newest ../propwash-justmoreparts/release/<version>/web-export, or
 //    JMP_WEB_EXPORT / --export): the one-part-swapped analysis variants of every preset (analysis/<preset>.json) and the
 //    FPV camera of every preset and variant (camera_view).
+// 5. Heat model of Propwash 0.6.0 (tools/fixtures/heat-vectors.json, node tools/build-configurator-heat.mjs from a 0.6.0
+//    web export): the three motor temperatures and the warnings of every preset and one-part-swapped variant of the
+//    game, the thermal data of every motor and the text of the heat warning. While catalog.json still comes from an
+//    export before 0.6.0, sections 1, 2 and 4 compare its figures without the motor temperatures and the heat warning:
+//    they are the old heat model, the rest of the analysis is unchanged.
 // Exit code 0 only if every check passes.
 
 import fs from 'node:fs';
@@ -30,6 +35,7 @@ import { occlusionPercent, cameraFov, mountRange, droneUptilt } from '../assets/
 import { TUNE_PARAMS, sanitizeTuneValue } from '../assets/js/configurator/tuning.js';
 import { PAINT_SWATCHES, swatchOf, randomPaint } from '../assets/js/configurator/paint.js';
 import { exportDir } from './build-configurator-data.mjs';
+import { HEAT_KEYS, atLeast } from './build-configurator-heat.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const argv = process.argv.slice(2);
@@ -43,6 +49,10 @@ const ABS_TOL = 1e-9;
 const catalog = createCatalog(JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/configurator/catalog.json'), 'utf8')));
 const vectors = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/fixtures/sharecode-vectors.json'), 'utf8'));
 const reportVectors = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/fixtures/report-vectors.json'), 'utf8'));
+const heatVectors = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/fixtures/heat-vectors.json'), 'utf8'));
+// Heat model of the game since Propwash 0.6.0; figures of older exports are compared without it.
+const HEAT_SINCE = '0.6.0';
+const catalogHeat = atLeast(catalog.source.mods.propwash, HEAT_SINCE);
 
 let passed = 0;
 let failed = 0;
@@ -79,12 +89,29 @@ function sameNumber(actual, expected, where) {
   return ok(diff <= ABS_TOL || rel <= REL_TOL, `${where}: ${actual} vs ${expected} (rel ${rel.toExponential(2)})`);
 }
 
-function compareAnalysis(actual, expected, where) {
+const withoutHeat = (warnings) => warnings.filter((w) => w !== 'motor_thermal');
+
+function compareAnalysis(actual, expected, where, heat = true) {
   if (expected === null) return ok(actual === null, `${where}: analysis expected null`);
   if (!ok(actual !== null, `${where}: analysis missing`)) return false;
   let good = true;
-  for (const key of STAT_KEYS) good = sameNumber(actual[key], expected[key], `${where}.${key}`) && good;
-  good = ok(same(actual.warnings, expected.warnings), `${where}.warnings ${JSON.stringify(actual.warnings)} vs ${JSON.stringify(expected.warnings)}`) && good;
+  for (const key of STAT_KEYS) {
+    if (heat || !HEAT_KEYS.includes(key)) good = sameNumber(actual[key], expected[key], `${where}.${key}`) && good;
+  }
+  const a = heat ? actual.warnings : withoutHeat(actual.warnings);
+  const e = heat ? expected.warnings : withoutHeat(expected.warnings);
+  good = ok(same(a, e), `${where}.warnings ${JSON.stringify(a)} vs ${JSON.stringify(e)}`) && good;
+  return good;
+}
+
+/** Motor temperatures and warnings of a build against the game's (heat-vectors.json). */
+function compareHeat(actual, heat, warnings, where) {
+  if (!ok(actual !== null, `${where}: analysis missing`)) return false;
+  let good = true;
+  HEAT_KEYS.forEach((key, i) => {
+    good = sameNumber(actual[key], heat[i], `${where}.${key}`) && good;
+  });
+  good = ok(same(actual.warnings, warnings), `${where}.warnings ${JSON.stringify(actual.warnings)} vs ${JSON.stringify(warnings)}`) && good;
   return good;
 }
 
@@ -199,7 +226,7 @@ for (const v of vectors) {
   if (v.check) compareCheck(catalog.check(v.decoded.build), v.check, v.name);
   if (v.analysis) {
     analysed++;
-    compareAnalysis(catalog.analyze(v.decoded.build), v.analysis, v.name);
+    compareAnalysis(catalog.analyze(v.decoded.build), v.analysis, v.name, catalogHeat);
   } else if (d.ok && v.unknown_parts.length === 0 && v.wrong_kind.length === 0) {
     ok(catalog.analyze(d.content.build) === null, `${v.name}: analysis should be null`);
   }
@@ -219,7 +246,7 @@ for (const preset of catalog.presets) {
   ok(share.encode(content, { format: share.formatOf(preset.sharecode) }) === preset.sharecode, `preset ${preset.id}: share code`);
   compareContent(catalog.decode(share.encode(content, { format: 'PW2' })).content, catalog.decode(preset.sharecode).content, `preset ${preset.id}: PW2`);
   compareCheck(catalog.check(content.build), preset.check, `preset ${preset.id}`);
-  compareAnalysis(catalog.analyze(content.build), preset.analysis, `preset ${preset.id}`);
+  compareAnalysis(catalog.analyze(content.build), preset.analysis, `preset ${preset.id}`, catalogHeat);
   if (failed === before) presetPass++;
 }
 console.log(`Presets: ${presetPass}/${catalog.presets.length} (share code, check, analysis)`);
@@ -526,6 +553,7 @@ function crcOf(bytes) {
   const analysisDir = path.join(dir, 'analysis');
   if (fs.existsSync(analysisDir)) {
     const before = failed;
+    const exportHeat = atLeast(JSON.parse(fs.readFileSync(path.join(dir, 'manifest.json'), 'utf8')).mods.propwash, HEAT_SINCE);
     let count = 0;
     let cameraViews = 0;
     const presetsFile = JSON.parse(fs.readFileSync(path.join(dir, 'presets.json'), 'utf8'));
@@ -544,7 +572,7 @@ function crcOf(bytes) {
         else build[variant.category] = variant.id;
         const where = `${preset.id} + ${variant.id}`;
         compareCheck(catalog.check(build), variant.check, where);
-        compareAnalysis(catalog.analyze(build), variant.analysis, where);
+        compareAnalysis(catalog.analyze(build), variant.analysis, where, exportHeat);
         if (variant.camera_view) {
           compareCameraView(catalog.cameraView(build), variant.camera_view, where);
           cameraViews++;
@@ -556,6 +584,55 @@ function crcOf(bytes) {
   } else {
     console.log('Analysis variants: web export not found, skipped (use --export <dir> or JMP_WEB_EXPORT)');
   }
+}
+
+// 5. Heat model of Propwash 0.6.0 against the game
+{
+  const before = failed;
+  const src = heatVectors.source;
+  ok(src.web_export_format === 2 && atLeast(src.mods.propwash, HEAT_SINCE), `heat vectors from a web export of Propwash ${HEAT_SINCE} or later (${src.generator})`);
+  ok(same(heatVectors.keys, HEAT_KEYS), 'heat vectors: keys');
+  const text = catalog.rules.analysis_warnings.find((w) => w.key === 'motor_thermal');
+  ok(text && same(text.text, heatVectors.motor_thermal), `heat warning text of the game: ${text && JSON.stringify(text.text)}`);
+  let motors = 0;
+  for (const motor of catalog.partsIn('motor')) {
+    const expected = heatVectors.motors[motor.id];
+    if (!ok(expected, `${motor.id}: thermal data in the heat vectors`)) continue;
+    ok(same(motor.data.thermal, expected), `${motor.id}: thermal data ${JSON.stringify(motor.data.thermal)} vs the game's ${JSON.stringify(expected)}`);
+    motors++;
+  }
+  for (const preset of catalog.presets) {
+    const group = heatVectors.presets.find((g) => g.id === preset.id);
+    ok(group && same(group.build, catalog.presetBuild(preset.id)), `${preset.id}: preset in the heat vectors with the same build`);
+  }
+  let builds = 0;
+  let hot = 0;
+  let escOnly = 0;
+  const count = (build, heat, warnings) => {
+    builds++;
+    if (!warnings.includes('motor_thermal')) return;
+    hot++;
+    if (!(heat[0] > heatVectors.motors[build.motor].derate_start_c)) escOnly++;
+  };
+  for (const group of heatVectors.presets) {
+    compareHeat(catalog.analyze(group.build), group.heat, group.warnings, `heat ${group.id}`);
+    count(group.build, group.heat, group.warnings);
+    for (const [category, id, ...rest] of group.variants) {
+      const build = structuredClone(group.build);
+      if (category === 'accessory') build.accessories[catalog.part(id).data.slot] = id;
+      else build[category] = id;
+      const warnings = rest.pop();
+      compareHeat(catalog.analyze(build), rest, warnings, `heat ${group.id} + ${id}`);
+      count(build, rest, warnings);
+    }
+  }
+  for (const b of heatVectors.builds) {
+    compareHeat(catalog.analyze(b.build), b.heat, b.warnings, `heat ${b.name}`);
+    count(b.build, b.heat, b.warnings);
+  }
+  ok(hot > 0 && escOnly > 0, `heat vectors cover the warning from the motors (${hot - escOnly}) and from the ESC alone (${escOnly})`);
+  console.log(`Heat (${src.generator}, ${src.generated_at}): ${builds} builds, ${hot} with the heat warning (${escOnly} from the ESC alone), `
+    + `${motors} motors, ${failed === before ? 'all like the game' : 'FAILED'}${catalogHeat ? '' : `; catalog from Propwash ${catalog.source.mods.propwash}: its figures compared without the heat model`}`);
 }
 
 console.log(`Analysis figures: ${stats.analysisValues} compared, ${stats.exactValues} bit-identical, max relative deviation ${stats.maxRel.toExponential(2)}${stats.maxRel ? ` at ${stats.maxRelAt}` : ''}`);
