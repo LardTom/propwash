@@ -11,9 +11,9 @@ import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe
 import { batteryFit } from './rules.js?v=e77905ee';
 import { assemble, PROP_SLOTS } from './assembly.js?v=e8018744';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=320ddce0';
-import { reasonText, addonNote } from './convert.js?v=64c744aa';
-import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=c9b8f0b5';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=efc839db';
+import { reasonText, addonNote } from './convert.js?v=4e275873';
+import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=75a1b774';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=4e942aef';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);

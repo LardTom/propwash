@@ -147,16 +147,6 @@ const TEXT = {
     old: ['Old code', 'Alter Code'], code: ['PW3 code', 'PW3-Code'],
     loadFailed: ['The parts data could not be loaded, so nothing can be converted. Please reload the page.', 'Die Teiledaten konnten nicht geladen werden, darum lässt sich nichts umrechnen. Bitte lade die Seite neu.'],
   },
-  // Add-ons named by a PW3 code.
-  addons: {
-    number: ['add-on no. {n} of the official directory (newer than this page)', 'Add-on Nr. {n} aus dem offiziellen Verzeichnis (neuer als diese Seite)'],
-    from: ['from {version}', 'ab {version}'],
-    missing: ['Needs {name} {version} – not loaded on this page, its parts stay unknown.', 'Braucht {name} {version} – auf dieser Seite nicht geladen, seine Teile bleiben unbekannt.'],
-    newer: ['Needs {name} {version}; this page has {installed}.', 'Braucht {name} {version}; diese Seite hat {installed}.'],
-    mismatch: ['The code doesn’t match the loaded version of {name} ({installed}).', 'Der Code passt nicht zur geladenen Version von {name} ({installed}).'],
-    free: ['Address in the code, not checked: {link} – load add-ons only from Modrinth or CurseForge.', 'Adresse im Code, nicht geprüft: {link} – lade Add-ons nur von Modrinth oder CurseForge.'],
-    directory: ['Add-on directory', 'Add-on-Verzeichnis'],
-  },
   keyStats: {
     mass_grams: ['Weight', 'Gewicht'], thrust_to_weight: ['Thrust/weight', 'Schub/Gewicht'], hover_throttle_percent: ['Hover throttle', 'Schwebegas'],
     mixed_flight_time_min: ['Flight time (mixed)', 'Flugzeit gemischt'], top_speed_kmh: ['Top speed', 'Höchst\u00ADtempo'],
@@ -227,6 +217,12 @@ const TEXT = {
     buildSwitched: ['The build used parts of an add-on that is off now; the preset “{name}” is loaded instead.',
       'Der Bauplan nutzte Teile eines Add-ons, das jetzt aus ist; stattdessen ist das Preset „{name}“ geladen.'],
     shown: ['{name} is on: its parts are in the pickers.', '{name} ist an: Seine Teile stehen in der Auswahl.'],
+    number: ['add-on no. {n} of the official directory (newer than this page)', 'Add-on Nr. {n} aus dem offiziellen Verzeichnis (neuer als diese Seite)'],
+    from: ['from {version}', 'ab {version}'],
+    missing: ['Needs {name} {version} – not loaded on this page, its parts stay unknown.', 'Braucht {name} {version} – auf dieser Seite nicht geladen, seine Teile bleiben unbekannt.'],
+    newer: ['Needs {name} {version}; this page has {installed}.', 'Braucht {name} {version}; diese Seite hat {installed}.'],
+    mismatch: ['The code doesn’t match the loaded version of {name} ({installed}).', 'Der Code passt nicht zur geladenen Version von {name} ({installed}).'],
+    free: ['Address in the code, not checked: {link} – load add-ons only from Modrinth or CurseForge.', 'Adresse im Code, nicht geprüft: {link} – lade Add-ons nur von Modrinth oder CurseForge.'],
     problems: {
       jar: {
         too_big: ['The file is larger than {limit} MB – an add-on jar this big is refused.', 'Die Datei ist größer als {limit} MB – ein so großes Add-on-Jar wird abgelehnt.'],
