@@ -7,7 +7,7 @@
 //   - wrong files: the jar of another mod (no data/*/propwash_parts), a PNG renamed to .jar, a file over 64 MB – each
 //     gives a message that says why, and the page stays usable
 //   - the switches of the add-on bar: Just More Parts off takes its parts out of every picker, on brings them back;
-//     official add-ons are on by default, a community add-on from a jar only when the opened code needs it
+//     official add-ons are on by default, a community jar opened on purpose is on at once (decision of 21.10.)
 //
 //   node tools/test-cov-jarload.mjs [--jmp-jar <jar>] [--foreign-jar <jar>] [--shots <dir>] [--chrome <path>]
 //
@@ -25,7 +25,7 @@ import { JAR_LIMITS } from '../assets/js/configurator/jar.js';
 import { entry } from '../assets/js/configurator/i18n.js';
 import { startBrowser, counter, arg, readJson, CFG_READY, sleep } from './fixtures/cov/browser.mjs';
 
-const { check, lock, note, finish } = counter('cov jar');
+const { check, note, finish } = counter('cov jar');
 const base = readJson('assets/data/configurator/catalog.json');
 const catalog = createCatalog(base);
 const text = (key, lang) => entry(key)[lang === 'de' ? 1 : 0];
@@ -220,7 +220,7 @@ async function main() {
       s = await bar(p);
       const own = s.rows.find((r) => r.ns === NS);
       check(own && own.source === 'local', `no. 79 ${lang}: the community jar is listed as local (${JSON.stringify(own)})`);
-      lock('cov-site-a-4', own && own.on === 'false', `no. 79 ${lang}: a community add-on from a jar is off while no opened code needs it (switch ${own && own.on})`);
+      check(own && own.on === 'true', `no. 79 ${lang}: a community jar opened on purpose is on at once, even when no opened code needs it (switch ${own && own.on})`);
       await shot(p, `jar-community-${lang}`);
       await p.open(`/configurator/#${communityCode}`, { width: 1280, ready: CFG_READY });
       await load(p, f.community);
