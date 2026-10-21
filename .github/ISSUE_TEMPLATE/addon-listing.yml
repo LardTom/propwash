@@ -1,0 +1,48 @@
+name: Add-on listing
+description: Ask for your released Propwash add-on to be listed in the add-on directory on propwashfpv.com/addons/
+title: "Add-on listing: "
+labels: ["add-on listing"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The directory lists released add-ons that follow the rules for add-ons (docs on propwashfpv.com: add-on API). lardtom checks every request; a ticket on the Propwash Discord works just as well.
+  - type: input
+    id: namespace
+    attributes:
+      label: Namespace
+      description: Your mod id, which is also the namespace of your parts (a–z, 0–9, _ . -). The namespace propwash belongs to Propwash.
+      placeholder: myparts
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      description: The name of the add-on, like “X for Propwash”.
+    validations:
+      required: true
+  - type: input
+    id: license
+    attributes:
+      label: License
+      placeholder: MIT
+    validations:
+      required: true
+  - type: textarea
+    id: links
+    attributes:
+      label: Links
+      description: The pages of the add-on on CurseForge and/or Modrinth (downloads are only linked there), and its source code if it is public.
+    validations:
+      required: true
+  - type: input
+    id: short-id
+    attributes:
+      label: Wished short id (optional)
+      description: A whole number for share codes; every short id is given only once and never again. 1 and 2 are taken.
+  - type: textarea
+    id: web-export
+    attributes:
+      label: Web export (optional)
+      description: A web export of your add-on (/propwash webexport <namespace>, Propwash 0.6.0 or newer), so the configurator can show your parts.
