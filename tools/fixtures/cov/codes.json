@@ -1,0 +1,20 @@
+{
+  "about": "Test codes of the check plan 0.6.0, part 3.1, with the PW3 text the game writes for them (golden data of Propwash).",
+  "pw3": {
+    "freestyle": "PW3-02lVAldkcxCBH",
+    "bash": "PW3-012k1VwVtRUzVyI1ZQauW",
+    "damaged": "PW3-02lVAldkcxCHB",
+    "other_addon": "PW3-010jAYacJ38fVu40Zz9pApW4lyh7M6hWQZ8mgZf1ZcTjOV2d3E4JNqb2gaxn",
+    "beta_addon": "PW3-01UGzfP0BfrHj4LpqhcBALwLIO6RPjOdz5HydV1OE15PxTSQkX6LxC2vKLodhYDxD9Mp",
+    "free_addon": "PW3-066SQPqXhiAfElYWMN0al3PTQdNnLd1pL23zjZSNGes8tmJdkOaMg9Mb5feZmT6FYeM8LpRK8",
+    "deadcat": "PW3-2qPtCOkzoxBOhgMjapC4t6uesyMUi5NVglyKJqEgUBbJ006KypJFTwxBPV2G7IDh7nhPm5lPwL31h5SzJjmmH2u8ygEEEeMIGkvcOE251edzGBz2wX5LuS5yokD"
+  },
+  "old": [
+    { "code": "PW205zwQGOoau", "pw3": "PW3-02lVAldkcxCBH", "kind": "converted" },
+    { "code": "PW1-04002-GG11D-K74SB-5EDT7-JV35B-WTG22-3KEHG-P6TTZ-6CR02-2KD68-S30DT-Z64VK-AC010-SR3AC-AZ6DH-022K4-D5KPJ-X31DH-FPGS0-111H3-CWTZ6-4SK0C-004Q7-EDH8", "pw3": "PW3-02lVAldkcxCBH", "kind": "converted" },
+    { "code": "PW208LrQdBpLr", "pw3": "PW3-0Fg95II367JGnYSvwiF", "kind": "converted" },
+    { "code": "PW212KGWQIN1GW7R9JE1YsNIWICI5XA0IsMdUktENKanC0oBmkCiuQD", "pw3": "PW3-1BzMi8JWKNu3GMiJvyjvbgcC0SDmDZX1iIlBdtKbv46j7sJb8Iod50Mx", "kind": "converted", "name": "Night Ripper" },
+    { "code": "PW23bHSN9mtpDv0SxAlRviw2Jx8gpfHXadF9WUchzdWVlstEpnQM", "pw3": null, "kind": "not_convertible" },
+    { "code": "PW205zwQCrAS4", "pw3": null, "kind": "damaged" }
+  ]
+}
