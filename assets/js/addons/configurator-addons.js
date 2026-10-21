@@ -12,7 +12,7 @@
 import { readAddon } from '../configurator/addon-catalog.js?v=486b5c3a';
 import { JAR_LIMITS } from '../configurator/jar.js?v=01790790';
 import { composeCatalog, composeRender } from '../configurator/data.js?v=b9037dd0';
-import { t, lang, num } from '../configurator/i18n.js?v=c9b8f0b5';
+import { t, lang, num } from '../configurator/i18n.js?v=75a1b774';
 
 const MiB = 1024 * 1024;
 const local = [];

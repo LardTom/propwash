@@ -6,7 +6,8 @@
 //     page has its regions: hero, download buttons and status line, FAQ answer, add-on, source-code icons
 //   - on every page and in the data and scripts: no link to github.com/…/releases, every link to a CurseForge or
 //     Modrinth page of Propwash is an address from platforms.json, every link to a repository of LardTom starts with a
-//     source address, links that say "Download" lead to a platform or stay on the site, and no GitHub link says
+//     source address (or is the issue template "Add-on listing" of this website's repository, website design 0.6.0,
+//     3.6), links that say "Download" lead to a platform or stay on the site, and no GitHub link says
 //     "GitHub" or "Download" in its visible text
 //   - the pages for players (all but the docs and the legal pages) name GitHub only in aria-label/title of the icon
 //   - the footer constants of tools/site-nav.mjs and the docs use the same addresses as platforms.json
@@ -144,12 +145,14 @@ const LANG_TREE = /^(es|fr|pt-br|pl|ru)\//;
 const legal = (page) => /^(?:(?:es|fr|pt-br|pl|ru)\/)?(impressum|datenschutz)\//.test(page);
 const docs = (page) => /^(?:(?:es|fr|pt-br|pl|ru)\/)?docs\//.test(page);
 
+const LISTING_ISSUE = /^https:\/\/github\.com\/LardTom\/propwash\/issues\/new\?template=addon-listing\.yml$/;
+
 function urlRules(url, where) {
   check(!/github\.com\/[^\s"'<>)]*\/releases\b/i.test(url), `${where}: links to GitHub releases (${url}) – downloads only on CurseForge and Modrinth`);
   if (/^https:\/\/(?:www\.)?(?:curseforge\.com|modrinth\.com)\//.test(url) && /propwash/i.test(url)) {
     check(platformUrls.has(url), `${where}: ${url} is not an address from ${DATA}`);
   }
-  if (/^https:\/\/github\.com\/LardTom\//i.test(url)) {
+  if (/^https:\/\/github\.com\/LardTom\//i.test(url) && !LISTING_ISSUE.test(url)) {
     check(sources.some((s) => url === s || url.startsWith(`${s}/`)), `${where}: ${url} is not below a source address of ${DATA}`);
   }
 }

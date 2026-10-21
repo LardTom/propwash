@@ -27,6 +27,7 @@ import { outOfDate, context, versionDir, REGISTRY, PLATFORMS } from './build-add
 import { LINKS } from './site-nav.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const SITE_REPOSITORY = 'https://github.com/LardTom/propwash';
 const argv = process.argv.slice(2);
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 const exists = (rel) => fs.existsSync(path.join(ROOT, rel));
@@ -189,9 +190,15 @@ if (jmp) {
     ['the battery plugged in', /Battery plugged in/.test(en), /Akku gesteckt/.test(de)],
     ['share codes from Propwash', /Share codes from Propwash/.test(en), /Sharecodes von Propwash/.test(de)],
     [`Propwash ${jmp.requires.propwash} needed`, en.includes(`Propwash ${jmp.requires.propwash}`), de.includes(`Propwash ${jmp.requires.propwash}`) || de.includes(`Propwash ab ${jmp.requires.propwash}`)],
-    ['Propwash 0.6.0 with Just More Parts 1.1', /Just More Parts 1\.1/.test(en), /Just More Parts 1\.1/.test(de)],
   ];
   for (const [what, inEn, inDe] of wants) check(inEn && inDe, `JMP page: says ${what} in English (${inEn}) and German (${inDe})`);
+  const oldJmp = (lang) => [...html.matchAll(new RegExp(`<li lang="${lang}">([\\s\\S]*?)</li>`, 'g'))].map((m) => m[1].replace(/<[^>]+>/g, '')).find((s) => /Just More Parts 1\.1\b/.test(s)) || '';
+  const oldEn = oldJmp('en');
+  const oldDe = oldJmp('de');
+  check(/Propwash 0\.6\.0/.test(oldEn) && /refuses|does not start|won’t start|stops/.test(oldEn) && /1\.2\.0/.test(oldEn) && !/also (?:starts|runs)|(?:starts|runs) with Just More Parts 1\.1/.test(oldEn),
+    `JMP page: Propwash 0.6.0 refuses Just More Parts 1.1 and asks for 1.2.0, in English (“${oldEn}”)`);
+  check(/Propwash 0\.6\.0/.test(oldDe) && /lehnt|bricht|startet nicht/.test(oldDe) && /1\.2\.0/.test(oldDe) && !/startet auch mit|läuft (?:auch )?mit Just More Parts 1\.1/.test(oldDe),
+    `JMP page: Propwash 0.6.0 refuses Just More Parts 1.1 and asks for 1.2.0, in German (“${oldDe}”)`);
   check(/configurator\/\?addon=justmoreparts/.test(html) && /configurator\/\?addon=justmoreparts/.test(dirHtml), '“Show in the configurator” on the card and the page');
   check(!/<a\b[^>]*href="https:\/\/github\.com[^"]*"[^>]*>[^<]*\w/.test(html.replace(/<svg[\s\S]*?<\/svg>/g, '')), 'JMP page: GitHub only as an icon');
 }
@@ -204,6 +211,21 @@ for (const page of ['addons/index.html', ...pages.map((p) => `${p}index.html`)])
     check(ok, `${page}: external link ${url} – downloads only on CurseForge and Modrinth`);
   }
   check(!/\bdownload\b[^<]*github|github[^<]*\bdownload\b/i.test(html), `${page}: no GitHub download`);
+}
+
+{
+  const html = read('addons/index.html');
+  const section = (/<section[^>]*\bid="listing"[\s\S]*?<\/section>/.exec(html) || [''])[0];
+  const dir = '.github/ISSUE_TEMPLATE';
+  const template = exists(dir) ? fs.readdirSync(path.join(ROOT, dir)).find((f) => /\.ya?ml$/.test(f) && /^name:\s*Add-on listing\s*$/m.test(read(`${dir}/${f}`))) : null;
+  const hrefs = [...section.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
+  const issue = `${SITE_REPOSITORY}/issues/new?template=${template}`;
+  check(!!template, `${dir}: the issue template “Add-on listing” exists`);
+  check(hrefs.includes(issue), `/addons/#listing: links the issue template “Add-on listing” (${issue}; links: ${hrefs.join(', ')})`);
+  check(hrefs.some((h) => /^https:\/\/discord\.gg\//.test(h)), `/addons/#listing: links the Discord (${hrefs.join(', ')})`);
+  const said = (lang) => [...section.matchAll(new RegExp(`<([a-z]+)[^>]*lang="${lang}"[^>]*>([\\s\\S]*?)</\\1>`, 'g'))].map((m) => m[2].replace(/<[^>]+>/g, '')).join(' ');
+  check(/ticket/i.test(said('en')) && /\bissue\b/i.test(said('en')) && said('en').includes('Add-on listing'), `/addons/#listing: names the Discord ticket and the issue with the template in English (“${said('en').slice(0, 200)}”)`);
+  check(/Ticket/.test(said('de')) && /\bIssue\b/.test(said('de')) && said('de').includes('Add-on listing'), `/addons/#listing: names the Discord ticket and the issue with the template in German (“${said('de').slice(0, 200)}”)`);
 }
 
 // 6. Navigation, sitemap, privacy policy.

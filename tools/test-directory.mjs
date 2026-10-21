@@ -252,7 +252,7 @@ async function browserTests() {
         check(page.current === './', `/addons/ ${tag}: the navigation marks Add-ons (${page.current})`);
         for (const l of page.links) {
           const ok = /^https:\/\/(www\.curseforge\.com|modrinth\.com)\//.test(l.href) || (/^https:\/\/github\.com\/LardTom\//.test(l.href) && !l.text && l.label)
-            || /^https:\/\/discord\.gg\//.test(l.href);
+            || /^https:\/\/discord\.gg\//.test(l.href) || /^https:\/\/github\.com\/LardTom\/propwash\/issues\/new\?template=[\w.-]+$/.test(l.href);
           check(ok, `/addons/ ${tag}: link ${l.href} “${l.text}”`);
         }
         await shot(`addons-${tag}`);

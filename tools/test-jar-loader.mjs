@@ -34,6 +34,7 @@ import { decodePart, bundledParts, parseStatorLabel } from '../assets/js/configu
 import { composeCatalog, createCatalog } from '../assets/js/configurator/data.js';
 import { ROOT, CHROME, serve, launch, cdp, sleep } from './headless-chrome.mjs';
 import { entry } from '../assets/js/configurator/i18n.js';
+import { addonNote } from '../assets/js/configurator/convert.js';
 
 const argv = process.argv.slice(2);
 const arg = (name, env) => {
@@ -512,11 +513,165 @@ function testExample() {
   notes.push(`example add-on: ${r.fragment.parts.length} parts, ${r.fragment.chemistries.length} chemistries, led_ring with ${ring ? ring.data.led_path.length : 0} points`);
 }
 
+const text = (key, lang) => {
+  const node = entry(key);
+  return Array.isArray(node) ? node[lang === 'de' ? 1 : 0] : key;
+};
+
+function textTree(src) {
+  const stack = [];
+  const twice = [];
+  const groups = [];
+  let i = src.indexOf('{', src.indexOf('const TEXT = {'));
+  while (i >= 0 && i < src.length) {
+    const c = src[i];
+    if (c === '/' && src[i + 1] === '/') {
+      i = src.indexOf('\n', i);
+      continue;
+    }
+    if (c === '/' && src[i + 1] === '*') {
+      i = src.indexOf('*/', i) + 2;
+      continue;
+    }
+    if (/\s/.test(c)) {
+      i++;
+      continue;
+    }
+    const top = stack[stack.length - 1];
+    if ('{[('.includes(c)) {
+      stack.push({ c, keys: new Set(), expect: c === '{', at: top ? top.last : '' });
+      i++;
+      continue;
+    }
+    if ('}])'.includes(c)) {
+      stack.pop();
+      i++;
+      if (!stack.length) break;
+      continue;
+    }
+    if (c === ',') {
+      if (top.c === '{') top.expect = true;
+      i++;
+      continue;
+    }
+    let token = null;
+    let j = i + 1;
+    if (c === "'" || c === '"' || c === '`') {
+      while (j < src.length && src[j] !== c) j += src[j] === '\\' ? 2 : 1;
+      token = src.slice(i + 1, j);
+      j++;
+    } else {
+      const m = /^[\w$]+/.exec(src.slice(i, i + 120));
+      if (m) {
+        token = m[0];
+        j = i + token.length;
+      }
+    }
+    if (top.c === '{' && top.expect && token != null) {
+      let k = j;
+      while (/\s/.test(src[k])) k++;
+      if (src[k] === ':') {
+        const key = top.at ? `${top.at}.${token}` : token;
+        if (top.keys.has(token)) twice.push(key);
+        top.keys.add(token);
+        if (stack.length === 1) groups.push(token);
+        top.last = key;
+        top.expect = false;
+        i = k + 1;
+        continue;
+      }
+    }
+    if (top.c === '{') top.expect = false;
+    i = j;
+  }
+  return { twice, groups };
+}
+
+function scriptsIn(dir, out = []) {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) scriptsIn(p, out);
+    else if (e.name.endsWith('.js')) out.push(p);
+  }
+  return out;
+}
+
+/** The texts of the configurator: no group or key given twice in i18n.js, every text key a script names is there. */
+function testTexts() {
+  const tree = textTree(fs.readFileSync(path.join(ROOT, 'assets/js/configurator/i18n.js'), 'utf8'));
+  check(tree.groups.length > 10, `i18n.js: the text groups are read (${tree.groups.length})`);
+  check(!tree.twice.length, `i18n.js: a text group or key is given twice, the second hides the first: ${tree.twice.join(', ')}`);
+  const groups = new Set(tree.groups);
+  let named = 0;
+  for (const file of scriptsIn(path.join(ROOT, 'assets/js'))) {
+    const src = fs.readFileSync(file, 'utf8');
+    if (file === path.join(ROOT, 'assets/js/configurator/i18n.js') || !/from '(?:\.\/|\.\.\/configurator\/)i18n\.js(?:\?v=\w+)?'/.test(src)) continue;
+    for (const m of src.matchAll(/'([a-zA-Z]+)\.([\w.]+)'/g)) {
+      if (!groups.has(m[1]) || /^(?:json|js|css|png|svg|html)$/.test(m[2])) continue;
+      named++;
+      const node = entry(`${m[1]}.${m[2]}`);
+      check(node != null && typeof node === 'object', `${path.relative(ROOT, file)}: the text ${m[1]}.${m[2]} is missing in i18n.js`);
+    }
+  }
+  notes.push(`texts: ${tree.groups.length} groups in i18n.js, ${named} text keys named by the scripts`);
+}
+
+/** The line about an add-on a code needs (convert.js addonNote, configurator and /convert/): name, version, links. */
+function testAddonLines() {
+  const table = (frames) => ({ name: `data/${NS}/propwash_share/table.json`, data: JSON.stringify({ format: 1, namespace: NS, parts: { frame: frames.map(([id, since]) => ({ id, since })) } }) });
+  const addon = (extra, frames) => readAddon(zip([fabric(NS, extra), ...frames.map(([id]) => part('frame', id, FRAME)), table(frames)]), { base: catalog });
+  const reader = (a) => createCatalog(a ? composeCatalog(catalog, { fragments: [a.fragment] }) : catalog);
+  const both = [['old_frame', '0.1.0'], ['tiny_frame', '0.3.0']];
+  const codeWith = (a) => {
+    const c = reader(a);
+    return c.encode({ build: { ...c.presetBuild('propwash:whoop'), frame: `${NS}:tiny_frame` }, paint: null, tune: null, osd: null, name: null });
+  };
+  const listedCode = codeWith(addon({}, both));
+  const freeCode = codeWith(addon({ contact: { homepage: 'https://example.org/free-addon' } }, both));
+  const cases = [
+    ['missing', listedCode, null, 'MISSING', 'addons.missing'],
+    ['free address', freeCode, null, 'MISSING', 'addons.missing'],
+    ['newer', listedCode, addon({ version: '0.2.0' }, both.slice(0, 1)), 'NEWER', 'addons.newer'],
+    ['mismatch', listedCode, addon({}, [...both].reverse()), 'MISMATCH', 'addons.mismatch'],
+  ];
+  const had = Object.getOwnPropertyDescriptor(globalThis, 'document');
+  try {
+    for (const lang of ['en', 'de']) {
+      globalThis.document = { documentElement: { lang } };
+      const say = (key, args) => Object.entries(args).reduce((s, [k, v]) => s.split(`{${k}}`).join(String(v)), text(key, lang));
+      for (const [label, code, loaded, result, key] of cases) {
+        const c = reader(loaded);
+        const report = (c.decode(code).namespaces || []).find((n) => n.namespace === NS);
+        if (!check(report && report.result === result, `add-on line ${label} ${lang}: the code reads as ${result} (${report && report.result})`)) continue;
+        const note = addonNote(report, c, lang, '../addons/');
+        const installed = c.namespace(NS) ? c.namespace(NS).version : '';
+        const want = say(key, { name: 'Test Add-on for Propwash', version: say('addons.from', { version: '0.3.0' }), installed }).replace(/ {2,}/g, ' ');
+        check(note && note.text === want, `add-on line ${label} ${lang}: “${note && note.text}”, wanted “${want}”`);
+        check(note && note.text.includes('Test Add-on for Propwash') && (result === 'MISMATCH' ? note.text.includes(installed) : note.text.includes('0.3.0')) && !/\baddons\.\w/.test(note.text),
+          `add-on line ${label} ${lang}: names the add-on and its version, no bare text key (“${note && note.text}”)`);
+        if (label === 'free address') {
+          check(note && note.links.length === 0 && note.free === say('addons.free', { link: 'example.org/free-addon' }) && note.free.includes('example.org/free-addon'),
+            `add-on line ${label} ${lang}: the address only as text (“${note && note.free}”, links ${note && JSON.stringify(note.links)})`);
+        } else {
+          check(note && note.free == null && note.links.length === 1 && note.links[0][1] === 'https://modrinth.com/mod/test-addon', `add-on line ${label} ${lang}: the Modrinth link (${note && JSON.stringify(note.links)})`);
+        }
+      }
+      const unknown = addonNote({ result: 'MISSING', namespace: null, short_id: 77, min_version: '1.0.0', name: null }, reader(null), lang, '../addons/');
+      const number = say('addons.number', { n: 77 });
+      check(unknown && unknown.text.includes(number) && unknown.text.includes(say('addons.from', { version: '1.0.0' })) && !/\baddons\.\w/.test(unknown.text),
+        `add-on line short id 77 ${lang}: “${unknown && unknown.text}” names “${number}”`);
+      check(unknown && unknown.links.length === 1 && unknown.links[0][0] === text('addons.directory', lang) && unknown.links[0][1] === '../addons/', `add-on line short id 77 ${lang}: links the add-on directory (${unknown && JSON.stringify(unknown.links)})`);
+    }
+  } finally {
+    if (had) Object.defineProperty(globalThis, 'document', had);
+    else delete globalThis.document;
+  }
+}
+
 // ---------------------------------------------------------------------------------------------------------------
 // Headless Chrome
 
 const VIEWPORTS = { 1280: { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false }, 390: { width: 390, height: 844, deviceScaleFactor: 2, mobile: true } };
-const text = (key, lang) => entry(key)[lang === 'de' ? 1 : 0];
 
 async function browserTests(jars) {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'pw-jars-'));
@@ -687,6 +842,9 @@ async function browserTests(jars) {
     await sleep(700);
     const offer = await evaluate("[...document.querySelectorAll('.addon-line__jar')].map((b) => b.textContent)");
     check(offer.includes(text('addons.open', 'en')), `a code with a missing add-on offers “${text('addons.open', 'en')}” (${offer})`);
+    const line = await evaluate("[...document.querySelectorAll('.addon-line')].map((l) => l.textContent).join(' | ')");
+    const needs = text('addons.missing', 'en').split('{name}')[0];
+    check(line.includes(`${needs}Test Add-on for Propwash ${text('addons.from', 'en').replace('{version}', '0.1.0')}`) && !/\baddons\.\w/.test(line), `a code with a missing add-on: the line names the add-on and its version (“${line}”)`);
     check(errors.length === 0, `no console errors or exceptions: ${errors.slice(0, 5).join(' | ')}`);
   } finally {
     browser.close();
@@ -707,6 +865,8 @@ async function main() {
   testMadeUp(jars);
   const summary = testRealJars();
   testExample();
+  testTexts();
+  testAddonLines();
   if (BROWSER) await browserTests(jars);
   else notes.push('headless Chrome skipped (--no-browser)');
   for (const line of summary) console.log(line);
