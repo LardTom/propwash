@@ -42,7 +42,7 @@ import { createCatalog } from '../assets/js/configurator/data.js';
 import * as share from '../assets/js/configurator/sharecode.js';
 import * as pw2 from '../assets/js/configurator/sharecode2.js';
 import * as pw3 from '../assets/js/configurator/sharecode3.js';
-import { findCodes, convertText, MAX_CODES } from '../assets/js/configurator/convert.js';
+import { findCodes, convertText, MAX_CODES, codeAddons, withCodeAddons } from '../assets/js/configurator/convert.js';
 import { PW2_PARTS, PW2_COLORS, PW2_OSD_DICTIONARY } from '../assets/js/configurator/sharecode2-tables.js';
 import { STAT_KEYS } from '../assets/js/configurator/analysis.js';
 import { occlusionPercent, cameraFov, mountRange, droneUptilt } from '../assets/js/configurator/fpv.js';
@@ -869,6 +869,40 @@ function crcOf(bytes) {
   }
   console.log(`Converter: ${failed === before ? `codes found (${goldenFound} golden codes in running text), converted in place, idempotent` : 'FAILED'}`
     + `${real ? `; ${real} real codes converted with the same build` : ''}`);
+}
+
+// 7b. Add-ons an opened PW3 code needs that this page has not loaded: written again with what the code says about them
+{
+  const before = failed;
+  const tables = catalog.shareTables();
+  const missing = (d) => d.namespaces.filter((n) => n.result === 'MISSING').map((n) => [n.namespace, n.min_version, n.name, n.link_type, n.link]);
+  let kept = 0;
+  const names = ['P4_', 'P5_', 'P8_', 'P9_'];
+  for (const prefix of names) {
+    const v = goldenPw3.vectors.find((x) => x.name.startsWith(prefix));
+    const d = catalog.decode(v.code);
+    const write = (content) => catalog.encode(content, { carry: d.carry, tables: withCodeAddons(tables, codeAddons(d.namespaces)) });
+    ok(d.ok && missing(d).length === 1, `${v.name}: one add-on missing on this page (${JSON.stringify(missing(d))})`);
+    if (ok(write(d.content) === v.code, `${v.name}: written again on this page ${write(d.content)} vs ${v.code}`)) kept++;
+    const changed = catalog.decode(write({ ...d.content, name: 'Cov Kept' }));
+    ok(changed.ok && changed.content.name === 'Cov Kept' && same(missing(changed), missing(d)),
+      `${v.name}: a changed build still names ${JSON.stringify(missing(d))} (${JSON.stringify(missing(changed))})`);
+  }
+  const p4 = goldenPw3.vectors.find((x) => x.name.startsWith('P4_'));
+  const d4 = catalog.decode(p4.code);
+  ok(same([...codeAddons(d4.namespaces)], [['otheraddon', { version: '2.1.0', name: 'Other Addon', homepage: 'https://modrinth.com/mod/other-addon' }]]),
+    `P4: the add-on of the code ${JSON.stringify([...codeAddons(d4.namespaces)])}`);
+  const p9 = catalog.decode(goldenPw3.vectors.find((x) => x.name.startsWith('P9_')).code);
+  ok(same([...codeAddons(p9.namespaces)], [['betaaddon', { version: '1.3.0-beta.1', name: 'Beta Addon', homepage: 'https://www.curseforge.com/minecraft/mc-mods/beta-addon' }]]),
+    `P9: the add-on of the code ${JSON.stringify([...codeAddons(p9.namespaces)])}`);
+  const p8 = catalog.decode(goldenPw3.vectors.find((x) => x.name.startsWith('P8_')).code);
+  ok(same([...codeAddons(p8.namespaces)], [['freeaddon', { version: '0.3.0', name: 'Free Addon', homepage: 'https://example.org/free-addon' }]]),
+    `P8: the add-on of the code ${JSON.stringify([...codeAddons(p8.namespaces)])}`);
+  const stale = new Map([['otheraddon', { version: '9.9.9', name: 'Stale Name', homepage: null }]]);
+  ok(share.encode(p4.encode_content, { tables: withCodeAddons(goldenContext('extra'), stale) }) === p4.code, 'a loaded add-on keeps the version and name of the page');
+  ok(withCodeAddons(tables, new Map()) === tables && withCodeAddons(tables, null) === tables, 'no add-ons from a code: the tables as they are');
+  ok(codeAddons(catalog.decode(goldenPw3.vectors.find((x) => x.name.startsWith('P1_')).code).namespaces).size === 0, 'a code without missing add-ons brings none along');
+  console.log(`Add-ons of an opened code: ${failed === before ? `${kept}/${names.length} codes written again byte-identically, also after a change` : 'FAILED'}`);
 }
 
 // 8. Figure explanations and builds for beginners

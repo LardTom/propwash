@@ -4,7 +4,8 @@
 //     (read from the clipboard), and the link opened in a new tab shows the same build with parts, paint and tuning
 //   - a code with a missing add-on (test code P4, “Other Addon” 2.1.0 with a Modrinth link): the line names the add-on
 //     and its version, links only to Modrinth or CurseForge, offers “Open add-on jar”, the other parts are normal;
-//     P8: the free address stays text; opening the code keeps what it says about the add-on
+//     P8: the free address stays text; opening the code keeps what it says about the add-on, in the address, in
+//     “Copy share link” and after a change to the build
 //   - every copy and export way of the configurator and of /convert/ gives PW3, and no page script writes PW1 or PW2
 //   - the text under the configurator names the versions of platforms.json and PW3, nowhere the texts of 0.5.0
 //
@@ -29,6 +30,14 @@ const text = (key, lang) => entry(key)[lang === 'de' ? 1 : 0];
 const SHOTS = arg('--shots');
 const OTHER = { name: 'Other Addon', version: '2.1.0', modrinth: 'https://modrinth.com/mod/other-addon' };
 const SAFE_HOSTS = ['modrinth.com', 'www.curseforge.com'];
+const OTHER_HEAD = { name: OTHER.name, min: OTHER.version, type: 1, link: 'other-addon' };
+const FREE_HEAD = { name: 'Free Addon', min: '0.3.0', type: 3, link: 'example.org/free-addon' };
+
+function addonOf(code, namespace) {
+  const d = catalog.decode(code);
+  const n = d.ok ? d.namespaces.find((x) => x.namespace === namespace) : null;
+  return n ? { name: n.name, min: n.min_version, type: n.link_type, link: n.link } : null;
+}
 
 function staticChecks() {
   check(share.SHARE_FORMAT === 'PW3', `no. 65: SHARE_FORMAT is ${share.SHARE_FORMAT}`);
@@ -223,8 +232,24 @@ async function browserTests() {
       lock('cov-site-a-2', frameSlot && frameSlot.text.includes(OTHER.name), `no. 63 ${lang}: the frame row names the add-on it needs (“${frameSlot && frameSlot.text}”)`);
       const kept = catalog.decode(p4.hash);
       const ns = kept.ok ? kept.namespaces.find((n) => n.namespace === 'otheraddon') : null;
-      lock('cov-site-a-3', ns && ns.name === OTHER.name && ns.min_version === OTHER.version && ns.link === 'other-addon', `no. 63 ${lang}: the address after opening P4 still says ${OTHER.name} ${OTHER.version} with its link (${p4.hash.slice(0, 40)}…: ${JSON.stringify(ns && { name: ns.name, min: ns.min_version, link: ns.link })})`);
+      check(ns && ns.name === OTHER.name && ns.min_version === OTHER.version && ns.link === 'other-addon', `no. 63 ${lang}: the address after opening P4 still says ${OTHER.name} ${OTHER.version} with its link (${p4.hash.slice(0, 40)}…: ${JSON.stringify(ns && { name: ns.name, min: ns.min_version, link: ns.link })})`);
+      check(p4.hash === fixture.pw3.other_addon, `no. 63 ${lang}: the address after opening P4 is the opened code (${p4.hash.length} of ${fixture.pw3.other_addon.length} characters)`);
       await shot(m, `configurator-p4-${lang}`);
+      await clickOn(m, '[data-copy-link]');
+      await sleep(300);
+      const p4link = await m.clipboard();
+      const p4linked = p4link.includes('#') ? addonOf(p4link.slice(p4link.indexOf('#') + 1), 'otheraddon') : null;
+      check(p4link === `${b.base}/configurator/#${fixture.pw3.other_addon}` && JSON.stringify(p4linked) === JSON.stringify(OTHER_HEAD),
+        `no. 63 ${lang}: “${lang === 'de' ? 'Link kopieren' : 'Copy share link'}” after opening P4 passes on ${OTHER.name} ${OTHER.version} with its link (${p4link.slice(0, 70)}…: ${JSON.stringify(p4linked)})`);
+      await m.evaluate(setInput('[data-name]', 'Cov P4'));
+      await sleep(600);
+      await clickOn(m, '[data-copy-code]');
+      await sleep(300);
+      const p4edited = await m.clipboard();
+      const p4editedHash = await m.evaluate('location.hash.slice(1)');
+      const p4editedBuild = catalog.decode(p4edited);
+      check(p4editedBuild.ok && p4editedBuild.content.name === 'Cov P4' && p4editedHash === p4edited && JSON.stringify(addonOf(p4edited, 'otheraddon')) === JSON.stringify(OTHER_HEAD),
+        `no. 63 ${lang}: after a change to the build opened from P4, code and address still say ${OTHER.name} ${OTHER.version} with its link (${p4edited.slice(0, 40)}…: ${JSON.stringify(addonOf(p4edited, 'otheraddon'))})`);
 
       await m.evaluate(setInput('[data-import]', fixture.pw3.free_addon));
       await sleep(900);
@@ -237,6 +262,9 @@ async function browserTests() {
       check(p8.free.some((f) => f.includes('example.org/free-addon')) && p8.text.includes(lang === 'de' ? 'nur von Modrinth oder CurseForge' : 'only from Modrinth or CurseForge'),
         `no. 63 P8 ${lang}: the address stands as text with the hint on Modrinth and CurseForge (${JSON.stringify(p8.free)})`);
       await shot(m, `configurator-p8-${lang}`);
+      const p8hash = await m.evaluate('location.hash.slice(1)');
+      check(p8hash === fixture.pw3.free_addon && JSON.stringify(addonOf(p8hash, 'freeaddon')) === JSON.stringify(FREE_HEAD),
+        `no. 63 P8 ${lang}: the address after opening P8 still says Free Addon 0.3.0 with its free address (${p8hash.slice(0, 40)}…: ${JSON.stringify(addonOf(p8hash, 'freeaddon'))})`);
       check(m.errors.length === 0, `no. 63 ${lang}: no console errors (${m.errors.slice(0, 3).join(' | ')})`);
       await m.close();
 
