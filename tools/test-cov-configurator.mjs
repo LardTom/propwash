@@ -212,8 +212,8 @@ async function browserTests() {
           hash: location.hash.slice(1),
         };
       })()`);
-      lock('cov-site-a-1', p4.line.includes(OTHER.name) && p4.line.includes(OTHER.version), `no. 63 ${lang}: the add-on line names ${OTHER.name} ${OTHER.version} (“${p4.line.slice(0, 80)}”)`);
-      lock('cov-site-a-1', !/\baddons\.[a-z]+\b/.test(p4.line), `no. 63 ${lang}: the add-on line shows no bare text key (“${p4.line.slice(0, 60)}”)`);
+      check(p4.line.includes(OTHER.name) && p4.line.includes(OTHER.version), `no. 63 ${lang}: the add-on line names ${OTHER.name} ${OTHER.version} (“${p4.line.slice(0, 80)}”)`);
+      check(!/\baddons\.[a-z]+\b/.test(p4.line), `no. 63 ${lang}: the add-on line shows no bare text key (“${p4.line.slice(0, 60)}”)`);
       check(p4.links.includes(OTHER.modrinth), `no. 63 ${lang}: link to ${OTHER.modrinth} (${p4.links})`);
       check(p4.links.length > 0 && p4.links.every((h) => SAFE_HOSTS.includes(new URL(h).host)), `no. 63 ${lang}: links only to Modrinth and CurseForge (${p4.links})`);
       check(p4.jar && p4.jar.text === text('addons.open', lang) && p4.jar.visible, `no. 63 ${lang}: “${text('addons.open', lang)}” is visible (${JSON.stringify(p4.jar)})`);
@@ -234,7 +234,7 @@ async function browserTests() {
           free: [...box.querySelectorAll('.addon-line__free')].map((n) => n.textContent) };
       })()`);
       check(p8.links.length === 0, `no. 63 P8 ${lang}: the free address is no link (${p8.links})`);
-      lock('cov-site-a-1', p8.free.some((f) => f.includes('example.org/free-addon')) && p8.text.includes(lang === 'de' ? 'nur von Modrinth oder CurseForge' : 'only from Modrinth or CurseForge'),
+      check(p8.free.some((f) => f.includes('example.org/free-addon')) && p8.text.includes(lang === 'de' ? 'nur von Modrinth oder CurseForge' : 'only from Modrinth or CurseForge'),
         `no. 63 P8 ${lang}: the address stands as text with the hint on Modrinth and CurseForge (${JSON.stringify(p8.free)})`);
       await shot(m, `configurator-p8-${lang}`);
       check(m.errors.length === 0, `no. 63 ${lang}: no console errors (${m.errors.slice(0, 3).join(' | ')})`);
@@ -245,7 +245,7 @@ async function browserTests() {
       await c.evaluate(setInput('[data-cv-input]', `Fremdes Add-on: ${fixture.pw3.other_addon}`));
       await sleep(800);
       const cvNote = await c.evaluate("[...document.querySelectorAll('[data-cv-codes] .cv-code__note')].map((n) => n.textContent).join(' | ')");
-      lock('cov-site-a-1', cvNote.includes(OTHER.name) && cvNote.includes(OTHER.version), `no. 63 /convert/ ${lang}: the row names ${OTHER.name} ${OTHER.version} (“${cvNote.slice(0, 80)}”)`);
+      check(cvNote.includes(OTHER.name) && cvNote.includes(OTHER.version), `no. 63 /convert/ ${lang}: the row names ${OTHER.name} ${OTHER.version} (“${cvNote.slice(0, 80)}”)`);
       await c.close();
     }
   } finally {
