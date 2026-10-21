@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="Propwash: Just More Parts – Propwash FPV" data-title-de="Propwash: Just More Parts – Propwash FPV" data-description-en="Propwash: Just More Parts, the official parts add-on of Propwash FPV: many more realistic parts from 65 mm whoops to 13″ X-Class, for Propwash 0.6.0." data-description-de="Propwash: Just More Parts, das offizielle Teile-Add-on von Propwash FPV: viele weitere realistische Teile vom 65-mm-Whoop bis zur 13-Zoll-X-Class, für Propwash 0.6.0.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propwash: Just More Parts – Propwash FPV</title>
+<meta name="description" content="Propwash: Just More Parts, the official parts add-on of Propwash FPV: many more realistic parts from 65 mm whoops to 13″ X-Class, for Propwash 0.6.0.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<link rel="canonical" href="https://propwashfpv.com/addons/just-more-parts/">
+<meta property="og:url" content="https://propwashfpv.com/addons/just-more-parts/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="Propwash: Just More Parts – Propwash FPV">
+<meta property="og:description" content="The official parts add-on of Propwash FPV, from 65 mm whoops to 13″ X-Class.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../../assets/css/style.css?v=99b3d8b7">
+<link rel="stylesheet" href="../../assets/css/addons.css?v=74bccdd3">
+<meta name="pw-root" content="../../">
+<script data-pw-head>
+(function () {
+  var d = document.documentElement, lang = null, q = /[?&]lang=(en|de)(?:&|$)/.exec(location.search);
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    if (q) localStorage.setItem('propwash-lang', q[1]);
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (q) {
+    lang = q[1];
+    try {
+      var s = location.search.slice(1).split('&').filter(function (p) { return p && !/^lang=/.test(p); }).join('&');
+      history.replaceState(history.state, '', location.pathname + (s ? '?' + s : '') + location.hash);
+    } catch (e) {}
+  }
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="addons-page addons-page--addon">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+</svg>
+<a class="skip" href="#parts"><span lang="en">Skip to the parts</span><span lang="de">Zu den Teilen springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Main" data-de-aria-label="Hauptmenü">
+      <div class="nav-group" data-nav-group>
+        <button type="button" class="nav-group__toggle" aria-expanded="false" aria-controls="nav-features" data-nav-group-toggle><span lang="en">Features</span><span lang="de">Funktionen</span><svg class="nav-group__chev" aria-hidden="true" viewBox="0 0 12 12" width="12" height="12"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+        <ul class="nav-group__panel" id="nav-features">
+          <li><a href="../../#how"><span class="nav-group__title"><span lang="en">Get started</span><span lang="de">Loslegen</span></span><span class="nav-group__text"><span lang="en">Build, bind, fly and race in four steps</span><span lang="de">Bauen, binden, fliegen, rennen in vier Schritten</span></span></a></li>
+          <li><a href="../../#new"><span class="nav-group__title"><span lang="en">What’s new</span><span lang="de">Neuigkeiten</span></span><span class="nav-group__text"><span lang="en">The highlights of the latest update</span><span lang="de">Die Highlights des neuesten Updates</span></span></a></li>
+          <li><a href="../../#flight"><span class="nav-group__title"><span lang="en">Flight &amp; tuning</span><span lang="de">Flug &amp; Tuning</span></span><span class="nav-group__text"><span lang="en">Flight model, Betaflight-style tuning, radio or gamepad</span><span lang="de">Flugmodell, Tuning wie in Betaflight, Funke oder Gamepad</span></span></a></li>
+          <li><a href="../../#video"><span class="nav-group__title">Video</span><span class="nav-group__text"><span lang="en">Analog or digital, and how the picture breaks up</span><span lang="de">Analog oder digital, und wie das Bild zerfällt</span></span></a></li>
+          <li><a href="../../#racing"><span class="nav-group__title"><span lang="en">Racing &amp; freestyle</span><span lang="de">Rennen &amp; Freestyle</span></span><span class="nav-group__text"><span lang="en">Gates, ghosts, leaderboards and tricks</span><span lang="de">Gates, Geister, Bestenlisten und Tricks</span></span></a></li>
+          <li><a href="../../#survival"><span class="nav-group__title"><span lang="en">Survival</span><span lang="de">Überlebensmodus</span></span><span class="nav-group__text"><span lang="en">Crafting, loot, batteries and part wear</span><span lang="de">Herstellen, Beute, Akkus und Verschleiß</span></span></a></li>
+          <li><a href="../../#extras"><span class="nav-group__title"><span lang="en">More details</span><span lang="de">Mehr Details</span></span><span class="nav-group__text"><span lang="en">Lights, action cams, paint, sound and bandos</span><span lang="de">Licht, Action-Cams, Lack, Sound und Bandos</span></span></a></li>
+          <li><a href="../../#gallery"><span class="nav-group__title">Screenshots</span><span class="nav-group__text"><span lang="en">Straight from the game</span><span lang="de">Direkt aus dem Spiel</span></span></a></li>
+          <li><a href="../../#faq"><span class="nav-group__title">FAQ</span><span class="nav-group__text"><span lang="en">Questions before take-off</span><span lang="de">Fragen vor dem Start</span></span></a></li>
+        </ul>
+      </div>
+      <a href="../../docs/"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a href="../../addons/">Add-ons</a>
+      <a href="../../changelog/">Changelog</a>
+      <a href="../../roadmap/">Roadmap</a>
+      <a href="../../#download">Download</a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a>
+      <a class="site-nav__cta" href="../../configurator/"><svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18" class="quad-icon"><path d="M6.2 6.2l7.6 7.6M13.8 6.2l-7.6 7.6"/><circle cx="5" cy="5" r="3"/><circle cx="15" cy="5" r="3"/><circle cx="5" cy="15" r="3"/><circle cx="15" cy="15" r="3"/><rect x="8" y="8" width="4" height="4" rx="1"/></svg><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="addons-intro" aria-labelledby="jmp-title">
+    <div class="wrap">
+      <p class="kicker"><a href="../">Add-ons</a><span aria-hidden="true"> · </span><span lang="en">Official add-on</span><span lang="de">Offizielles Add-on</span></p>
+      <h1 id="jmp-title" class="addons-title">Propwash: Just More Parts</h1>
+      <p class="addons-lead" lang="en">Many more realistic parts for Propwash FPV, from 65&nbsp;mm whoops to 13″ X-Class: frames in new shapes (stretched, squashed, deadcat, H-frame, ducts), motors, props, stacks, cameras and batteries with their own pros and cons, plus ready-to-fly presets. Every part flies with Propwash’s physics, shows up in the workbench and the creative tab and travels in share codes.</p>
+      <p class="addons-lead" lang="de">Viele weitere realistische Teile für Propwash FPV, vom 65-mm-Whoop bis zur 13-Zoll-X-Class: Rahmen in neuen Formen (Stretched, Squashed, Deadcat, H-Frame, Ducts), Motoren, Props, Stacks, Kameras und Akkus mit eigenen Stärken und Schwächen, dazu flugfertige Presets. Jedes Teil fliegt mit der Physik von Propwash, erscheint in der Werkbank und im Kreativ-Tab und reist in Sharecodes mit.</p>
+      <!-- addons:facts justmoreparts -->
+      <dl class="addon-facts">
+        <div><dt>Version</dt><dd><span class="mono">1.2.0</span></dd></div>
+        <div><dt><span lang="en">Needs</span><span lang="de">Braucht</span></dt><dd><span lang="en">Propwash 0.6.0 or newer</span><span lang="de">Propwash 0.6.0 oder neuer</span></dd></div>
+        <div><dt>Minecraft</dt><dd>26.3 <span class="addon-facts__soft">· Fabric · NeoForge</span></dd></div>
+        <div><dt><span lang="en">Parts</span><span lang="de">Teile</span></dt><dd><span class="mono" data-addon-parts-total>143</span> <span class="addon-facts__soft">(22&nbsp;<span lang="en">frames</span><span lang="de">Rahmen</span> · 12&nbsp;<span lang="en">stacks</span><span lang="de">Stacks</span> · 34&nbsp;<span lang="en">motors</span><span lang="de">Motoren</span> · 38&nbsp;<span lang="en">props</span><span lang="de">Props</span> · 7&nbsp;<span lang="en">video systems</span><span lang="de">Videosysteme</span> · 30&nbsp;<span lang="en">batteries</span><span lang="de">Akkus</span>)</span></dd></div>
+        <div><dt><span lang="en">Short id</span><span lang="de">Kurzkennung</span></dt><dd><span class="mono">2</span></dd></div>
+        <div><dt><span lang="en">License</span><span lang="de">Lizenz</span></dt><dd>PolyForm Shield 1.0.0</dd></div>
+      </dl>
+      <!-- /addons -->
+      <div class="addons-actions">
+        <!-- platforms:buttons justmoreparts -->
+        <a class="btn btn--ghost" href="https://www.curseforge.com/minecraft/mc-mods/propwash-just-more-parts" target="_blank" rel="noopener" aria-label="Just More Parts: CurseForge · in review" data-de-aria-label="Just More Parts: CurseForge · in Prüfung"><span class="soon-dot" aria-hidden="true"></span><span lang="en">CurseForge · in review</span><span lang="de">CurseForge · in Prüfung</span></a>
+        <a class="btn btn--ghost" href="https://modrinth.com/mod/propwash-just-more-parts" target="_blank" rel="noopener" aria-label="Just More Parts: Modrinth · in review" data-de-aria-label="Just More Parts: Modrinth · in Prüfung"><span class="soon-dot" aria-hidden="true"></span><span lang="en">Modrinth · in review</span><span lang="de">Modrinth · in Prüfung</span></a>
+        <a class="btn btn--ghost btn--icon" href="https://github.com/LardTom/propwash-justmoreparts" target="_blank" rel="noopener" aria-label="Source code of Propwash: Just More Parts" data-de-aria-label="Quellcode von Propwash: Just More Parts" title="Source code of Propwash: Just More Parts" data-de-title="Quellcode von Propwash: Just More Parts"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg></a>
+        <!-- /platforms -->
+        <a class="btn btn--ghost" href="../../configurator/?addon=justmoreparts"><span lang="en">Show in the configurator</span><span lang="de">Im Konfigurator zeigen</span></a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap addon-page">
+    <section class="addons-group" id="new" aria-labelledby="new-title">
+      <h2 id="new-title" class="addons-h2"><span lang="en">New in 1.2.0</span><span lang="de">Neu in 1.2.0</span></h2>
+      <ul class="addons-list">
+        <li lang="en"><strong>Race whoop motors:</strong> motors of very high KV for 1S race whoops, and a 65&nbsp;mm race whoop preset that is very lively but still flyable.</li>
+        <li lang="de"><strong>Renn-Whoop-Motoren:</strong> Motoren sehr hoher KV für 1S-Renn-Whoops und ein Preset „65-mm-Renn-Whoop“, sehr spritzig, aber gut fliegbar.</li>
+        <li lang="en"><strong>Battery plugged in:</strong> with Propwash 0.6.0 the battery plug sits in the stack’s plug on every frame of the add-on, on top of the frame and below it, with the lead along the frame.</li>
+        <li lang="de"><strong>Akku gesteckt:</strong> Mit Propwash 0.6.0 steckt der Akku-Stecker an jedem Rahmen des Add-ons im Stecker des Stacks, oben auf dem Rahmen und darunter, mit dem Kabel am Rahmen entlang.</li>
+        <li lang="en"><strong>Share codes from Propwash:</strong> codes are now Propwash’s PW3 codes; the add-on only brings its parts table. <span class="mono">/jmp code</span> points to <span class="mono">/propwash code</span>, and old codes keep working: the game and the <a href="../../convert/">converter</a> turn them into PW3.</li>
+        <li lang="de"><strong>Sharecodes von Propwash:</strong> Codes sind jetzt die PW3-Codes von Propwash; das Add-on bringt nur seine Teile-Tabelle mit. <span class="mono">/jmp code</span> verweist auf <span class="mono">/propwash code</span>, und alte Codes gehen weiter: Das Spiel und der <a href="../../convert/">Umrechner</a> machen PW3 daraus.</li>
+      </ul>
+      <!-- addons:new justmoreparts -->
+      <!-- /addons -->
+    </section>
+
+    <section class="addons-group" id="compatibility" aria-labelledby="compatibility-title">
+      <h2 id="compatibility-title" class="addons-h2"><span lang="en">Versions and servers</span><span lang="de">Versionen und Server</span></h2>
+      <ul class="addons-list">
+        <li lang="en">Just More Parts 1.2.0 needs Propwash 0.6.0 or newer, on Fabric or NeoForge.</li>
+        <li lang="de">Just More Parts 1.2.0 braucht Propwash ab 0.6.0, auf Fabric oder NeoForge.</li>
+        <li lang="en">Propwash 0.6.0 also starts with Just More Parts 1.1: the parts are there, share codes come from Propwash, and the game recommends updating to 1.2.0.</li>
+        <li lang="de">Propwash 0.6.0 startet auch mit Just More Parts 1.1: Die Teile sind da, Sharecodes kommen von Propwash, und das Spiel empfiehlt das Update auf 1.2.0.</li>
+        <li lang="en">On a server without the add-on it simply stays off while you play there; a server with Just More Parts needs it on your side too.</li>
+        <li lang="de">Auf einem Server ohne das Add-on bleibt es einfach aus, solange du dort spielst; ein Server mit Just More Parts braucht es auch bei dir.</li>
+      </ul>
+    </section>
+
+    <section class="addons-group" id="parts" aria-labelledby="parts-title">
+      <h2 id="parts-title" class="addons-h2"><span lang="en">All parts</span><span lang="de">Alle Teile</span></h2>
+      <!-- addons:parts justmoreparts -->
+      <details class="addon-parts" data-category="frame">
+        <summary><span lang="en">Frames</span><span lang="de">Rahmen</span> <span class="addon-parts__count">22</span></summary>
+        <ul class="addon-parts__list">
+          <li data-part="justmoreparts:whoop_65_lite"><span lang="en">65 mm Whoop Frame (Lite)</span><span lang="de">65-mm-Whoop-Rahmen (Lite)</span></li>
+          <li data-part="justmoreparts:whoop_75_duct"><span lang="en">75 mm Whoop Frame</span><span lang="de">75-mm-Whoop-Rahmen</span></li>
+          <li data-part="justmoreparts:whoop_85_duct"><span lang="en">85 mm Whoop Frame</span><span lang="de">85-mm-Whoop-Rahmen</span></li>
+          <li data-part="justmoreparts:tp_2_x"><span lang="en">2″ Toothpick Frame</span><span lang="de">2-Zoll-Toothpick-Rahmen</span></li>
+          <li data-part="justmoreparts:tp_25_x"><span lang="en">2.5″ Toothpick Frame</span><span lang="de">2,5-Zoll-Toothpick-Rahmen</span></li>
+          <li data-part="justmoreparts:cw_25_duct"><span lang="en">2.5″ Cinewhoop Frame</span><span lang="de">2,5-Zoll-Cinewhoop-Rahmen</span></li>
+          <li data-part="justmoreparts:tp_3_x"><span lang="en">3″ Toothpick Frame</span><span lang="de">3-Zoll-Toothpick-Rahmen</span></li>
+          <li data-part="justmoreparts:cw_35_duct"><span lang="en">3.5″ Cinewhoop Frame</span><span lang="de">3,5-Zoll-Cinewhoop-Rahmen</span></li>
+          <li data-part="justmoreparts:tp_35_stretched"><span lang="en">3.5″ Toothpick Frame (stretched X)</span><span lang="de">3,5-Zoll-Toothpick-Rahmen (Stretched-X)</span></li>
+          <li data-part="justmoreparts:lr_4_x"><span lang="en">4″ Long Range Frame</span><span lang="de">4-Zoll-Long-Range-Rahmen</span></li>
+          <li data-part="justmoreparts:deadcat_5"><span lang="en">5″ Freestyle Frame (deadcat)</span><span lang="de">5-Zoll-Freestyle-Rahmen (Deadcat)</span></li>
+          <li data-part="justmoreparts:fs_5_bash"><span lang="en">5″ Freestyle Frame (Bash)</span><span lang="de">5-Zoll-Freestyle-Rahmen (Bash)</span></li>
+          <li data-part="justmoreparts:race_5_stretched"><span lang="en">5″ Race Frame (Slim)</span><span lang="de">5-Zoll-Race-Rahmen (Slim)</span></li>
+          <li data-part="justmoreparts:fs_5_squashed"><span lang="en">5″ Freestyle Frame (squashed X)</span><span lang="de">5-Zoll-Freestyle-Rahmen (Squashed-X)</span></li>
+          <li data-part="justmoreparts:hframe_5"><span lang="en">5″ Freestyle Frame (H-frame)</span><span lang="de">5-Zoll-Freestyle-Rahmen (H-Frame)</span></li>
+          <li data-part="justmoreparts:lr_6_x"><span lang="en">6″ Long Range Frame</span><span lang="de">6-Zoll-Long-Range-Rahmen</span></li>
+          <li data-part="justmoreparts:lr_7_deadcat"><span lang="en">7″ Long Range Frame (deadcat)</span><span lang="de">7-Zoll-Long-Range-Rahmen (Deadcat)</span></li>
+          <li data-part="justmoreparts:lr_8_x"><span lang="en">8″ Long Range Frame</span><span lang="de">8-Zoll-Long-Range-Rahmen</span></li>
+          <li data-part="justmoreparts:xclass_10"><span lang="en">10″ X-Class Frame</span><span lang="de">10-Zoll-X-Class-Rahmen</span></li>
+          <li data-part="justmoreparts:xclass_12"><span lang="en">12″ X-Class Frame</span><span lang="de">12-Zoll-X-Class-Rahmen</span></li>
+          <li data-part="justmoreparts:xclass_13"><span lang="en">13″ X-Class Frame</span><span lang="de">13-Zoll-X-Class-Rahmen</span></li>
+          <li data-part="justmoreparts:xclass_13_h"><span lang="en">13″ X-Class Frame (H-frame)</span><span lang="de">13-Zoll-X-Class-Rahmen (H-Frame)</span></li>
+        </ul>
+      </details>
+      <details class="addon-parts" data-category="stack">
+        <summary>Stacks <span class="addon-parts__count">12</span></summary>
+        <ul class="addon-parts__list">
+          <li data-part="justmoreparts:aio_whoop_1s_6a"><span lang="en">Whoop AIO Board (1S, 6 A)</span><span lang="de">Whoop-AIO-Board (1S, 6 A)</span></li>
+          <li data-part="justmoreparts:aio_whoop_2s_12a"><span lang="en">Whoop AIO Board (1–2S, 12 A)</span><span lang="de">Whoop-AIO-Board (1–2S, 12 A)</span></li>
+          <li data-part="justmoreparts:aio_tp_4s_20a"><span lang="en">Toothpick AIO Board (2–4S, 20 A)</span><span lang="de">Toothpick-AIO-Board (2–4S, 20 A)</span></li>
+          <li data-part="justmoreparts:aio_20_4s_35a"><span lang="en">20×20 AIO Board (2–4S, 35 A)</span><span lang="de">20×20-AIO-Board (2–4S, 35 A)</span></li>
+          <li data-part="justmoreparts:stack_30_4s_55a"><span lang="en">30×30 FC/ESC Stack (2–4S, 55 A)</span><span lang="de">30×30-FC/ESC-Stack (2–4S, 55 A)</span></li>
+          <li data-part="justmoreparts:aio_tp_6s_20a"><span lang="en">Toothpick AIO Board (2–6S, 20 A)</span><span lang="de">Toothpick-AIO-Board (2–6S, 20 A)</span></li>
+          <li data-part="justmoreparts:stack_20_6s_40a"><span lang="en">20×20 FC/ESC Stack (3–6S, 40 A)</span><span lang="de">20×20-FC/ESC-Stack (3–6S, 40 A)</span></li>
+          <li data-part="justmoreparts:aio_20_6s_45a"><span lang="en">20×20 AIO Board (3–6S, 45 A)</span><span lang="de">20×20-AIO-Board (3–6S, 45 A)</span></li>
+          <li data-part="justmoreparts:stack_30_6s_60a"><span lang="en">30×30 FC/ESC Stack (3–6S, 60 A)</span><span lang="de">30×30-FC/ESC-Stack (3–6S, 60 A)</span></li>
+          <li data-part="justmoreparts:stack_30_6s_80a"><span lang="en">30×30 FC/ESC Stack (3–6S, 80 A)</span><span lang="de">30×30-FC/ESC-Stack (3–6S, 80 A)</span></li>
+          <li data-part="justmoreparts:stack_30_8s_65a"><span lang="en">30×30 FC/ESC Stack (3–8S, 65 A)</span><span lang="de">30×30-FC/ESC-Stack (3–8S, 65 A)</span></li>
+          <li data-part="justmoreparts:stack_30_8s_100a"><span lang="en">30×30 FC/ESC Stack (4–8S, 100 A)</span><span lang="de">30×30-FC/ESC-Stack (4–8S, 100 A)</span></li>
+        </ul>
+      </details>
+      <details class="addon-parts" data-category="motor">
+        <summary><span lang="en">Motors</span><span lang="de">Motoren</span> <span class="addon-parts__count">34</span></summary>
+        <ul class="addon-parts__list">
+          <li data-part="justmoreparts:m0702_23000"><span lang="en">0702 Motor, 23000 KV</span><span lang="de">0702-Motor, 23000 KV</span></li>
+          <li data-part="justmoreparts:m0702_27000"><span lang="en">0702 Motor, 27000 KV</span><span lang="de">0702-Motor, 27000 KV</span></li>
+          <li data-part="justmoreparts:m0802_15500"><span lang="en">0802 Motor, 15500 KV</span><span lang="de">0802-Motor, 15500 KV</span></li>
+          <li data-part="justmoreparts:m0802_19000"><span lang="en">0802 Motor, 19000 KV</span><span lang="de">0802-Motor, 19000 KV</span></li>
+          <li data-part="justmoreparts:m1102_13500"><span lang="en">1102 Motor, 13500 KV</span><span lang="de">1102-Motor, 13500 KV</span></li>
+          <li data-part="justmoreparts:m1102_18000"><span lang="en">1102 Motor, 18000 KV</span><span lang="de">1102-Motor, 18000 KV</span></li>
+          <li data-part="justmoreparts:m1103_8000"><span lang="en">1103 Motor, 8000 KV</span><span lang="de">1103-Motor, 8000 KV</span></li>
+          <li data-part="justmoreparts:m1103_11000"><span lang="en">1103 Motor, 11000 KV</span><span lang="de">1103-Motor, 11000 KV</span></li>
+          <li data-part="justmoreparts:m12025_5500"><span lang="en">1202.5 Motor, 5500 KV</span><span lang="de">1202,5-Motor, 5500 KV</span></li>
+          <li data-part="justmoreparts:m12025_11500"><span lang="en">1202.5 Motor, 11500 KV</span><span lang="de">1202,5-Motor, 11500 KV</span></li>
+          <li data-part="justmoreparts:m1404_2750"><span lang="en">1404 Motor, 2750 KV</span><span lang="de">1404-Motor, 2750 KV</span></li>
+          <li data-part="justmoreparts:m1404_3800"><span lang="en">1404 Motor, 3800 KV</span><span lang="de">1404-Motor, 3800 KV</span></li>
+          <li data-part="justmoreparts:m1505_2500"><span lang="en">1505 Motor, 2500 KV</span><span lang="de">1505-Motor, 2500 KV</span></li>
+          <li data-part="justmoreparts:m1505_3600"><span lang="en">1505 Motor, 3600 KV</span><span lang="de">1505-Motor, 3600 KV</span></li>
+          <li data-part="justmoreparts:m2004_1700"><span lang="en">2004 Motor, 1700 KV</span><span lang="de">2004-Motor, 1700 KV</span></li>
+          <li data-part="justmoreparts:m2207_1500"><span lang="en">2207 Motor, 1500 KV</span><span lang="de">2207-Motor, 1500 KV</span></li>
+          <li data-part="justmoreparts:m2207_1950"><span lang="en">2207 Motor, 1950 KV</span><span lang="de">2207-Motor, 1950 KV</span></li>
+          <li data-part="justmoreparts:m2207_2550"><span lang="en">2207 Motor, 2550 KV</span><span lang="de">2207-Motor, 2550 KV</span></li>
+          <li data-part="justmoreparts:m22075_1850"><span lang="en">2207.5 Motor, 1850 KV</span><span lang="de">2207,5-Motor, 1850 KV</span></li>
+          <li data-part="justmoreparts:m22075_2700"><span lang="en">2207.5 Motor, 2700 KV</span><span lang="de">2207,5-Motor, 2700 KV</span></li>
+          <li data-part="justmoreparts:m23065_2020"><span lang="en">2306.5 Motor, 2020 KV</span><span lang="de">2306,5-Motor, 2020 KV</span></li>
+          <li data-part="justmoreparts:m23065_2450"><span lang="en">2306.5 Motor, 2450 KV</span><span lang="de">2306,5-Motor, 2450 KV</span></li>
+          <li data-part="justmoreparts:m2507_1500"><span lang="en">2507 Motor, 1500 KV</span><span lang="de">2507-Motor, 1500 KV</span></li>
+          <li data-part="justmoreparts:m2507_1800"><span lang="en">2507 Motor, 1800 KV</span><span lang="de">2507-Motor, 1800 KV</span></li>
+          <li data-part="justmoreparts:m28065_1050"><span lang="en">2806.5 Motor, 1050 KV</span><span lang="de">2806,5-Motor, 1050 KV</span></li>
+          <li data-part="justmoreparts:m28065_1300"><span lang="en">2806.5 Motor, 1300 KV</span><span lang="de">2806,5-Motor, 1300 KV</span></li>
+          <li data-part="justmoreparts:m2807_1100"><span lang="en">2807 Motor, 1100 KV</span><span lang="de">2807-Motor, 1100 KV</span></li>
+          <li data-part="justmoreparts:m2807_1500"><span lang="en">2807 Motor, 1500 KV</span><span lang="de">2807-Motor, 1500 KV</span></li>
+          <li data-part="justmoreparts:m3115_640"><span lang="en">3115 Motor, 640 KV</span><span lang="de">3115-Motor, 640 KV</span></li>
+          <li data-part="justmoreparts:m3115_900"><span lang="en">3115 Motor, 900 KV</span><span lang="de">3115-Motor, 900 KV</span></li>
+          <li data-part="justmoreparts:m3115_1050"><span lang="en">3115 Motor, 1050 KV</span><span lang="de">3115-Motor, 1050 KV</span></li>
+          <li data-part="justmoreparts:m4214_330"><span lang="en">4214 Motor, 330 KV</span><span lang="de">4214-Motor, 330 KV</span></li>
+          <li data-part="justmoreparts:m4214_400"><span lang="en">4214 Motor, 400 KV</span><span lang="de">4214-Motor, 400 KV</span></li>
+          <li data-part="justmoreparts:m4214_530"><span lang="en">4214 Motor, 530 KV</span><span lang="de">4214-Motor, 530 KV</span></li>
+        </ul>
+      </details>
+      <details class="addon-parts" data-category="prop">
+        <summary>Props <span class="addon-parts__count">38</span></summary>
+        <ul class="addon-parts__list">
+          <li data-part="justmoreparts:p31_12_4b_hard"><span lang="en">31 mm Propeller (4-blade, 1.2″ pitch, hard PC)</span><span lang="de">31-mm-Propeller (4 Blätter, 1,2″ Steigung, hartes PC)</span></li>
+          <li data-part="justmoreparts:p31_14_3b_bi"><span lang="en">31 mm Propeller (3-blade, 1.4″ pitch, bi-blend)</span><span lang="de">31-mm-Propeller (3 Blätter, 1,4″ Steigung, Bi-Blend)</span></li>
+          <li data-part="justmoreparts:p31_16_2b_pc"><span lang="en">31 mm Propeller (2-blade, 1.6″ pitch, PC)</span><span lang="de">31-mm-Propeller (2 Blätter, 1,6″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p40_14_5b_soft"><span lang="en">40 mm Propeller (5-blade, 1.4″ pitch, soft PC)</span><span lang="de">40-mm-Propeller (5 Blätter, 1,4″ Steigung, weiches PC)</span></li>
+          <li data-part="justmoreparts:p40_15_4b_pc"><span lang="en">40 mm Propeller (4-blade, 1.5″ pitch, PC)</span><span lang="de">40-mm-Propeller (4 Blätter, 1,5″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p40_17_3b_pc"><span lang="en">40 mm Propeller (3-blade, 1.7″ pitch, PC)</span><span lang="de">40-mm-Propeller (3 Blätter, 1,7″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p40_20_2b_pc"><span lang="en">40 mm Propeller (2-blade, 2.0″ pitch, PC)</span><span lang="de">40-mm-Propeller (2 Blätter, 2,0″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p45_17_4b_bi"><span lang="en">45 mm Propeller (4-blade, 1.7″ pitch, bi-blend)</span><span lang="de">45-mm-Propeller (4 Blätter, 1,7″ Steigung, Bi-Blend)</span></li>
+          <li data-part="justmoreparts:p45_19_3b_pc"><span lang="en">45 mm Propeller (3-blade, 1.9″ pitch, PC)</span><span lang="de">45-mm-Propeller (3 Blätter, 1,9″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p51_18_4b_pc"><span lang="en">2″ Propeller (4-blade, 1.8″ pitch, PC)</span><span lang="de">2-Zoll-Propeller (4 Blätter, 1,8″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p51_20_3b_pc"><span lang="en">2″ Propeller (3-blade, 2.0″ pitch, PC)</span><span lang="de">2-Zoll-Propeller (3 Blätter, 2,0″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p65_22_4b_bi"><span lang="en">2.6″ Propeller (4-blade, 2.2″ pitch, bi-blend)</span><span lang="de">2,6-Zoll-Propeller (4 Blätter, 2,2″ Steigung, Bi-Blend)</span></li>
+          <li data-part="justmoreparts:p65_25_3b_pc"><span lang="en">2.6″ Propeller (3-blade, 2.5″ pitch, PC)</span><span lang="de">2,6-Zoll-Propeller (3 Blätter, 2,5″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p76_24_5b_pc_duct"><span lang="en">3″ Propeller (5-blade, 2.4″ pitch, PC, for ducts)</span><span lang="de">3-Zoll-Propeller (5 Blätter, 2,4″ Steigung, PC, für Ducts)</span></li>
+          <li data-part="justmoreparts:p76_25_3b_hard"><span lang="en">3″ Propeller (3-blade, 2.5″ pitch, hard PC)</span><span lang="de">3-Zoll-Propeller (3 Blätter, 2,5″ Steigung, hartes PC)</span></li>
+          <li data-part="justmoreparts:p76_30_2b_pc"><span lang="en">3″ Propeller (2-blade, 3.0″ pitch, PC)</span><span lang="de">3-Zoll-Propeller (2 Blätter, 3,0″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p89_25_5b_pc_duct"><span lang="en">3.5″ Propeller (5-blade, 2.5″ pitch, PC, for ducts)</span><span lang="de">3,5-Zoll-Propeller (5 Blätter, 2,5″ Steigung, PC, für Ducts)</span></li>
+          <li data-part="justmoreparts:p89_30_3b_pc"><span lang="en">3.5″ Propeller (3-blade, 3.0″ pitch, PC)</span><span lang="de">3,5-Zoll-Propeller (3 Blätter, 3,0″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p102_25_2b_pc"><span lang="en">4″ Propeller (2-blade, 2.5″ pitch, PC)</span><span lang="de">4-Zoll-Propeller (2 Blätter, 2,5″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p102_30_3b_gfn"><span lang="en">4″ Propeller (3-blade, 3.0″ pitch, glass-fiber nylon)</span><span lang="de">4-Zoll-Propeller (3 Blätter, 3,0″ Steigung, Glasfaser-Nylon)</span></li>
+          <li data-part="justmoreparts:p130_35_4b_pc"><span lang="en">5.1″ Propeller (4-blade, 3.5″ pitch, PC)</span><span lang="de">5,1-Zoll-Propeller (4 Blätter, 3,5″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p130_36_3b_bi"><span lang="en">5.1″ Propeller (3-blade, 3.6″ pitch, bi-blend)</span><span lang="de">5,1-Zoll-Propeller (3 Blätter, 3,6″ Steigung, Bi-Blend)</span></li>
+          <li data-part="justmoreparts:p130_40_2b_pc"><span lang="en">5.1″ Propeller (2-blade, 4.0″ pitch, PC)</span><span lang="de">5,1-Zoll-Propeller (2 Blätter, 4,0″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p130_41_3b_soft"><span lang="en">5.1″ Propeller (3-blade, 4.1″ pitch, soft PC)</span><span lang="de">5,1-Zoll-Propeller (3 Blätter, 4,1″ Steigung, weiches PC)</span></li>
+          <li data-part="justmoreparts:p130_46_3b_hard"><span lang="en">5.1″ Propeller (3-blade, 4.6″ pitch, hard PC)</span><span lang="de">5,1-Zoll-Propeller (3 Blätter, 4,6″ Steigung, hartes PC)</span></li>
+          <li data-part="justmoreparts:p130_50_3b_gfn"><span lang="en">5.1″ Propeller (3-blade, 5.0″ pitch, glass-fiber nylon)</span><span lang="de">5,1-Zoll-Propeller (3 Blätter, 5,0″ Steigung, Glasfaser-Nylon)</span></li>
+          <li data-part="justmoreparts:p152_33_3b_pc"><span lang="en">6″ Propeller (3-blade, 3.3″ pitch, PC)</span><span lang="de">6-Zoll-Propeller (3 Blätter, 3,3″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p152_40_2b_gfn"><span lang="en">6″ Propeller (2-blade, 4.0″ pitch, glass-fiber nylon)</span><span lang="de">6-Zoll-Propeller (2 Blätter, 4,0″ Steigung, Glasfaser-Nylon)</span></li>
+          <li data-part="justmoreparts:p178_35_3b_pc"><span lang="en">7″ Propeller (3-blade, 3.5″ pitch, PC)</span><span lang="de">7-Zoll-Propeller (3 Blätter, 3,5″ Steigung, PC)</span></li>
+          <li data-part="justmoreparts:p178_40_2b_cfn"><span lang="en">7″ Propeller (2-blade, 4.0″ pitch, carbon-fiber nylon)</span><span lang="de">7-Zoll-Propeller (2 Blätter, 4,0″ Steigung, Carbonfaser-Nylon)</span></li>
+          <li data-part="justmoreparts:p178_45_3b_gfn"><span lang="en">7″ Propeller (3-blade, 4.5″ pitch, glass-fiber nylon)</span><span lang="de">7-Zoll-Propeller (3 Blätter, 4,5″ Steigung, Glasfaser-Nylon)</span></li>
+          <li data-part="justmoreparts:p203_40_3b_gfn"><span lang="en">8″ Propeller (3-blade, 4.0″ pitch, glass-fiber nylon)</span><span lang="de">8-Zoll-Propeller (3 Blätter, 4,0″ Steigung, Glasfaser-Nylon)</span></li>
+          <li data-part="justmoreparts:p203_45_2b_cfn"><span lang="en">8″ Propeller (2-blade, 4.5″ pitch, carbon-fiber nylon)</span><span lang="de">8-Zoll-Propeller (2 Blätter, 4,5″ Steigung, Carbonfaser-Nylon)</span></li>
+          <li data-part="justmoreparts:p254_45_3b_cfn"><span lang="en">10″ Propeller (3-blade, 4.5″ pitch, carbon-fiber nylon)</span><span lang="de">10-Zoll-Propeller (3 Blätter, 4,5″ Steigung, Carbonfaser-Nylon)</span></li>
+          <li data-part="justmoreparts:p254_50_2b_carbon"><span lang="en">10″ Propeller (2-blade, 5.0″ pitch, carbon)</span><span lang="de">10-Zoll-Propeller (2 Blätter, 5,0″ Steigung, Carbon)</span></li>
+          <li data-part="justmoreparts:p305_60_2b_cfn"><span lang="en">12″ Propeller (2-blade, 6.0″ pitch, carbon-fiber nylon)</span><span lang="de">12-Zoll-Propeller (2 Blätter, 6,0″ Steigung, Carbonfaser-Nylon)</span></li>
+          <li data-part="justmoreparts:p330_60_3b_cfn"><span lang="en">13″ Propeller (3-blade, 6.0″ pitch, carbon-fiber nylon)</span><span lang="de">13-Zoll-Propeller (3 Blätter, 6,0″ Steigung, Carbonfaser-Nylon)</span></li>
+          <li data-part="justmoreparts:p330_70_2b_carbon"><span lang="en">13″ Propeller (2-blade, 7.0″ pitch, carbon)</span><span lang="de">13-Zoll-Propeller (2 Blätter, 7,0″ Steigung, Carbon)</span></li>
+        </ul>
+      </details>
+      <details class="addon-parts" data-category="video">
+        <summary>Video <span class="addon-parts__count">7</span></summary>
+        <ul class="addon-parts__list">
+          <li data-part="justmoreparts:analog_whoop_25mw"><span lang="en">Analog Whoop Camera + VTX (Firefly Nano)</span><span lang="de">Analoge Whoop-Kamera mit Sender (Firefly Nano)</span></li>
+          <li data-part="justmoreparts:analog_race_800"><span lang="en">Analog Race Camera + VTX (Racecore 800)</span><span lang="de">Analoge Race-Kamera mit Sender (Racecore 800)</span></li>
+          <li data-part="justmoreparts:analog_lr_1600"><span lang="en">Analog Long Range Camera + VTX (Longshot 1600)</span><span lang="de">Analoge Long-Range-Kamera mit Sender (Longshot 1600)</span></li>
+          <li data-part="justmoreparts:digital_micro"><span lang="en">Digital Micro Video System (Pixel Micro)</span><span lang="de">Digitales Micro-Videosystem (Pixel Micro)</span></li>
+          <li data-part="justmoreparts:digital_low_latency"><span lang="en">Digital Race Video System (Swift Link)</span><span lang="de">Digitales Race-Videosystem (Swift Link)</span></li>
+          <li data-part="justmoreparts:digital_hd_pro"><span lang="en">Digital HD Video System (Clarity HD Pro)</span><span lang="de">Digitales HD-Videosystem (Clarity HD Pro)</span></li>
+          <li data-part="justmoreparts:digital_lr"><span lang="en">Digital Long Range Video System (Horizon LR)</span><span lang="de">Digitales Long-Range-Videosystem (Horizon LR)</span></li>
+        </ul>
+      </details>
+      <details class="addon-parts" data-category="battery">
+        <summary><span lang="en">Batteries</span><span lang="de">Akkus</span> <span class="addon-parts__count">30</span></summary>
+        <ul class="addon-parts__list">
+          <li data-part="justmoreparts:b1s_250_hv"><span lang="en">1S 250 mAh Battery (LiHV)</span><span lang="de">1S-Akku 250 mAh (LiHV)</span></li>
+          <li data-part="justmoreparts:b1s_380_hv"><span lang="en">1S 380 mAh Battery (LiHV)</span><span lang="de">1S-Akku 380 mAh (LiHV)</span></li>
+          <li data-part="justmoreparts:b1s_450_hv"><span lang="en">1S 450 mAh Battery (LiHV)</span><span lang="de">1S-Akku 450 mAh (LiHV)</span></li>
+          <li data-part="justmoreparts:b1s_550_hv"><span lang="en">1S 550 mAh Battery (LiHV)</span><span lang="de">1S-Akku 550 mAh (LiHV)</span></li>
+          <li data-part="justmoreparts:b1s_750_hv"><span lang="en">1S 750 mAh Battery (LiHV)</span><span lang="de">1S-Akku 750 mAh (LiHV)</span></li>
+          <li data-part="justmoreparts:b2s_300_hv"><span lang="en">2S 300 mAh Battery (LiHV)</span><span lang="de">2S-Akku 300 mAh (LiHV)</span></li>
+          <li data-part="justmoreparts:b2s_450_hv"><span lang="en">2S 450 mAh Battery (LiHV)</span><span lang="de">2S-Akku 450 mAh (LiHV)</span></li>
+          <li data-part="justmoreparts:b2s_650"><span lang="en">2S 650 mAh Battery</span><span lang="de">2S-Akku 650 mAh</span></li>
+          <li data-part="justmoreparts:b3s_450"><span lang="en">3S 450 mAh Battery</span><span lang="de">3S-Akku 450 mAh</span></li>
+          <li data-part="justmoreparts:b3s_650"><span lang="en">3S 650 mAh Battery</span><span lang="de">3S-Akku 650 mAh</span></li>
+          <li data-part="justmoreparts:b4s_450"><span lang="en">4S 450 mAh Battery</span><span lang="de">4S-Akku 450 mAh</span></li>
+          <li data-part="justmoreparts:b4s_850"><span lang="en">4S 850 mAh Battery</span><span lang="de">4S-Akku 850 mAh</span></li>
+          <li data-part="justmoreparts:b4s_1100"><span lang="en">4S 1100 mAh Battery</span><span lang="de">4S-Akku 1100 mAh</span></li>
+          <li data-part="justmoreparts:b4s_1500"><span lang="en">4S 1500 mAh Battery</span><span lang="de">4S-Akku 1500 mAh</span></li>
+          <li data-part="justmoreparts:b4s_1800"><span lang="en">4S 1800 mAh Battery</span><span lang="de">4S-Akku 1800 mAh</span></li>
+          <li data-part="justmoreparts:b6s_550"><span lang="en">6S 550 mAh Battery</span><span lang="de">6S-Akku 550 mAh</span></li>
+          <li data-part="justmoreparts:b6s_750"><span lang="en">6S 750 mAh Battery</span><span lang="de">6S-Akku 750 mAh</span></li>
+          <li data-part="justmoreparts:b6s_850"><span lang="en">6S 850 mAh Battery</span><span lang="de">6S-Akku 850 mAh</span></li>
+          <li data-part="justmoreparts:b6s_1500"><span lang="en">6S 1500 mAh Battery</span><span lang="de">6S-Akku 1500 mAh</span></li>
+          <li data-part="justmoreparts:b6s_1800"><span lang="en">6S 1800 mAh Battery</span><span lang="de">6S-Akku 1800 mAh</span></li>
+          <li data-part="justmoreparts:b6s_2200"><span lang="en">6S 2200 mAh Battery</span><span lang="de">6S-Akku 2200 mAh</span></li>
+          <li data-part="justmoreparts:b6s_3000_lion"><span lang="en">6S 3000 mAh Battery (Li-Ion)</span><span lang="de">6S-Akku 3000 mAh (Li-Ion)</span></li>
+          <li data-part="justmoreparts:b6s_3000_ss"><span lang="en">6S 3000 mAh Battery (semi-solid LiHV)</span><span lang="de">6S-Akku 3000 mAh (Semi-Solid-LiHV)</span></li>
+          <li data-part="justmoreparts:b6s_4500_lion"><span lang="en">6S 4500 mAh Battery (Li-Ion)</span><span lang="de">6S-Akku 4500 mAh (Li-Ion)</span></li>
+          <li data-part="justmoreparts:b6s_5000"><span lang="en">6S 5000 mAh Battery</span><span lang="de">6S-Akku 5000 mAh</span></li>
+          <li data-part="justmoreparts:b6s_8400_lion"><span lang="en">6S 8400 mAh Battery (Li-Ion)</span><span lang="de">6S-Akku 8400 mAh (Li-Ion)</span></li>
+          <li data-part="justmoreparts:b8s_2200"><span lang="en">8S 2200 mAh Battery</span><span lang="de">8S-Akku 2200 mAh</span></li>
+          <li data-part="justmoreparts:b8s_4500_lion"><span lang="en">8S 4500 mAh Battery (Li-Ion)</span><span lang="de">8S-Akku 4500 mAh (Li-Ion)</span></li>
+          <li data-part="justmoreparts:b8s_5000"><span lang="en">8S 5000 mAh Battery</span><span lang="de">8S-Akku 5000 mAh</span></li>
+          <li data-part="justmoreparts:b8s_5000_ss"><span lang="en">8S 5000 mAh Battery (semi-solid LiHV)</span><span lang="de">8S-Akku 5000 mAh (Semi-Solid-LiHV)</span></li>
+        </ul>
+      </details>
+      <!-- /addons -->
+    </section>
+
+    <section class="addons-group" id="license" aria-labelledby="license-title">
+      <h2 id="license-title" class="addons-h2"><span lang="en">License and source code</span><span lang="de">Lizenz und Quellcode</span></h2>
+      <p lang="en">Just More Parts is source-available under the <a href="https://polyformproject.org/licenses/shield/1.0.0" target="_blank" rel="noopener">PolyForm Shield License 1.0.0</a>, like Propwash FPV.</p>
+      <p lang="de">Just More Parts ist wie Propwash FPV source-available, unter der <a href="https://polyformproject.org/licenses/shield/1.0.0" target="_blank" rel="noopener">PolyForm Shield License 1.0.0</a>.</p>
+      <div class="addons-actions">
+        <!-- platforms:source justmoreparts -->
+        <a class="btn btn--ghost btn--icon" href="https://github.com/LardTom/propwash-justmoreparts" target="_blank" rel="noopener" aria-label="Source code of Propwash: Just More Parts" data-de-aria-label="Quellcode von Propwash: Just More Parts" title="Source code of Propwash: Just More Parts" data-de-title="Quellcode von Propwash: Just More Parts"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg></a>
+        <!-- /platforms -->
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a> · <a href="../../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a> · <a href="../../docs/"><span lang="en">Docs</span><span lang="de">Doku</span></a> · <a href="../../changelog/">Changelog</a> · <a href="../../roadmap/">Roadmap</a> · <a href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener"><span lang="en">Source code</span><span lang="de">Quellcode</span></a> · <a href="../../impressum/"><span lang="en">Legal notice</span><span lang="de">Impressum</span></a> · <a href="../../datenschutz/"><span lang="en">Privacy policy</span><span lang="de">Datenschutz</span></a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice and whether you paused the animations are kept in your browser. An add-on jar you open in the configurator is only read in your browser and never uploaded. Fonts: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (both SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl und ob du die Animationen angehalten hast, bleiben in deinem Browser. Ein Add-on-Jar, das du im Konfigurator öffnest, liest nur dein Browser; es wird nie hochgeladen. Schriften: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (beide SIL Open Font License), direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js?v=2c5dc92d" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="Add-ons – Propwash FPV" data-title-de="Add-ons – Propwash FPV" data-description-en="The official add-ons of Propwash FPV: what they bring, which Propwash they need and where to download them – only from CurseForge and Modrinth." data-description-de="Die offiziellen Add-ons von Propwash FPV: was sie mitbringen, welches Propwash sie brauchen und wo du sie lädst – nur von CurseForge und Modrinth.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add-ons – Propwash FPV</title>
+<meta name="description" content="The official add-ons of Propwash FPV: what they bring, which Propwash they need and where to download them – only from CurseForge and Modrinth.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<link rel="canonical" href="https://propwashfpv.com/addons/">
+<meta property="og:url" content="https://propwashfpv.com/addons/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="Add-ons – Propwash FPV">
+<meta property="og:description" content="The official add-ons of Propwash FPV, with downloads from CurseForge and Modrinth.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/css/style.css?v=99b3d8b7">
+<link rel="stylesheet" href="../assets/css/addons.css?v=74bccdd3">
+<meta name="pw-root" content="../">
+<script data-pw-head>
+(function () {
+  var d = document.documentElement, lang = null, q = /[?&]lang=(en|de)(?:&|$)/.exec(location.search);
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    if (q) localStorage.setItem('propwash-lang', q[1]);
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (q) {
+    lang = q[1];
+    try {
+      var s = location.search.slice(1).split('&').filter(function (p) { return p && !/^lang=/.test(p); }).join('&');
+      history.replaceState(history.state, '', location.pathname + (s ? '?' + s : '') + location.hash);
+    } catch (e) {}
+  }
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="addons-page addons-page--directory">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+</svg>
+<a class="skip" href="#addons"><span lang="en">Skip to the add-ons</span><span lang="de">Zu den Add-ons springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Main" data-de-aria-label="Hauptmenü">
+      <div class="nav-group" data-nav-group>
+        <button type="button" class="nav-group__toggle" aria-expanded="false" aria-controls="nav-features" data-nav-group-toggle><span lang="en">Features</span><span lang="de">Funktionen</span><svg class="nav-group__chev" aria-hidden="true" viewBox="0 0 12 12" width="12" height="12"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+        <ul class="nav-group__panel" id="nav-features">
+          <li><a href="../#how"><span class="nav-group__title"><span lang="en">Get started</span><span lang="de">Loslegen</span></span><span class="nav-group__text"><span lang="en">Build, bind, fly and race in four steps</span><span lang="de">Bauen, binden, fliegen, rennen in vier Schritten</span></span></a></li>
+          <li><a href="../#new"><span class="nav-group__title"><span lang="en">What’s new</span><span lang="de">Neuigkeiten</span></span><span class="nav-group__text"><span lang="en">The highlights of the latest update</span><span lang="de">Die Highlights des neuesten Updates</span></span></a></li>
+          <li><a href="../#flight"><span class="nav-group__title"><span lang="en">Flight &amp; tuning</span><span lang="de">Flug &amp; Tuning</span></span><span class="nav-group__text"><span lang="en">Flight model, Betaflight-style tuning, radio or gamepad</span><span lang="de">Flugmodell, Tuning wie in Betaflight, Funke oder Gamepad</span></span></a></li>
+          <li><a href="../#video"><span class="nav-group__title">Video</span><span class="nav-group__text"><span lang="en">Analog or digital, and how the picture breaks up</span><span lang="de">Analog oder digital, und wie das Bild zerfällt</span></span></a></li>
+          <li><a href="../#racing"><span class="nav-group__title"><span lang="en">Racing &amp; freestyle</span><span lang="de">Rennen &amp; Freestyle</span></span><span class="nav-group__text"><span lang="en">Gates, ghosts, leaderboards and tricks</span><span lang="de">Gates, Geister, Bestenlisten und Tricks</span></span></a></li>
+          <li><a href="../#survival"><span class="nav-group__title"><span lang="en">Survival</span><span lang="de">Überlebensmodus</span></span><span class="nav-group__text"><span lang="en">Crafting, loot, batteries and part wear</span><span lang="de">Herstellen, Beute, Akkus und Verschleiß</span></span></a></li>
+          <li><a href="../#extras"><span class="nav-group__title"><span lang="en">More details</span><span lang="de">Mehr Details</span></span><span class="nav-group__text"><span lang="en">Lights, action cams, paint, sound and bandos</span><span lang="de">Licht, Action-Cams, Lack, Sound und Bandos</span></span></a></li>
+          <li><a href="../#gallery"><span class="nav-group__title">Screenshots</span><span class="nav-group__text"><span lang="en">Straight from the game</span><span lang="de">Direkt aus dem Spiel</span></span></a></li>
+          <li><a href="../#faq"><span class="nav-group__title">FAQ</span><span class="nav-group__text"><span lang="en">Questions before take-off</span><span lang="de">Fragen vor dem Start</span></span></a></li>
+        </ul>
+      </div>
+      <a href="../docs/"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a href="./" aria-current="page">Add-ons</a>
+      <a href="../changelog/">Changelog</a>
+      <a href="../roadmap/">Roadmap</a>
+      <a href="../#download">Download</a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a>
+      <a class="site-nav__cta" href="../configurator/"><svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18" class="quad-icon"><path d="M6.2 6.2l7.6 7.6M13.8 6.2l-7.6 7.6"/><circle cx="5" cy="5" r="3"/><circle cx="15" cy="5" r="3"/><circle cx="5" cy="15" r="3"/><circle cx="15" cy="15" r="3"/><rect x="8" y="8" width="4" height="4" rx="1"/></svg><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="addons-intro" aria-labelledby="addons-title">
+    <div class="wrap">
+      <p class="kicker">Propwash FPV<span aria-hidden="true"> · </span>Add-ons</p>
+      <h1 id="addons-title" class="addons-title">Add-ons</h1>
+      <p class="addons-lead" lang="en">Add-ons bring more parts, game modes, accessories and tools to Propwash. This directory lists the official add-ons and, later, community add-ons that were checked against the rules for add-ons. Every add-on here is released and downloads only from CurseForge and Modrinth.</p>
+      <p class="addons-lead" lang="de">Add-ons bringen mehr Teile, Spielmodi, Zubehör und Werkzeuge zu Propwash. Dieses Verzeichnis führt die offiziellen Add-ons und später Add-ons der Community, die nach den Regeln für Add-ons geprüft sind. Jedes Add-on hier ist erschienen und wird nur von CurseForge und Modrinth geladen.</p>
+    </div>
+  </section>
+
+  <div class="wrap addons" id="addons">
+    <div class="addons-filter needs-js" role="group" aria-label="Show add-ons of a kind" data-de-aria-label="Add-ons einer Art zeigen" data-addons-filter>
+      <button type="button" class="addons-filter__button" aria-pressed="true" data-kind="all"><span lang="en">All</span><span lang="de">Alle</span></button>
+      <button type="button" class="addons-filter__button" aria-pressed="false" data-kind="parts"><span lang="en">Parts</span><span lang="de">Teile</span></button>
+      <button type="button" class="addons-filter__button" aria-pressed="false" data-kind="modes"><span lang="en">Game modes</span><span lang="de">Spielmodi</span></button>
+      <button type="button" class="addons-filter__button" aria-pressed="false" data-kind="accessories"><span lang="en">Accessories</span><span lang="de">Zubehör</span></button>
+      <button type="button" class="addons-filter__button" aria-pressed="false" data-kind="tools"><span lang="en">Tools</span><span lang="de">Werkzeuge</span></button>
+    </div>
+    <p class="addons-empty" data-addons-none hidden><span lang="en">No add-on of this kind is listed yet.</span><span lang="de">Von dieser Art ist noch kein Add-on eingetragen.</span></p>
+
+    <section class="addons-group" aria-labelledby="official-title">
+      <h2 id="official-title" class="addons-h2"><span lang="en">Official add-ons</span><span lang="de">Offizielle Add-ons</span></h2>
+      <!-- addons:cards official -->
+      <ul class="addons-cards" data-addons-cards>
+        <li class="addon-card" id="addon-justmoreparts" data-addon="justmoreparts" data-kinds="parts">
+          <div class="addon-card__head">
+            <h3 class="addon-card__name"><a href="just-more-parts/">Propwash: Just More Parts</a></h3>
+            <p class="addon-card__badges"><span class="addons-badge addons-badge--official"><span lang="en">Official</span><span lang="de">Offiziell</span></span> <span class="addons-badge"><span lang="en">Parts</span><span lang="de">Teile</span></span></p>
+          </div>
+          <p class="addon-card__text" lang="en">Many more realistic parts for Propwash, from 65 mm whoops to 13″ X-Class: frames in new shapes (stretched, squashed, deadcat, H-frame, ducts), motors, props, stacks, cameras and batteries, plus ready-to-fly presets.</p>
+          <p class="addon-card__text" lang="de">Viele weitere realistische Teile für Propwash, vom 65-mm-Whoop bis zur 13-Zoll-X-Class: Rahmen in neuen Formen (Stretched, Squashed, Deadcat, H-Frame, Ducts), Motoren, Props, Stacks, Kameras und Akkus, dazu flugfertige Presets.</p>
+          <dl class="addon-facts">
+            <div><dt>Version</dt><dd><span class="mono">1.2.0</span></dd></div>
+            <div><dt><span lang="en">Needs</span><span lang="de">Braucht</span></dt><dd><span lang="en">Propwash 0.6.0 or newer</span><span lang="de">Propwash 0.6.0 oder neuer</span></dd></div>
+            <div><dt><span lang="en">Parts</span><span lang="de">Teile</span></dt><dd><span class="mono" data-addon-parts-total>143</span></dd></div>
+            <div><dt><span lang="en">Short id</span><span lang="de">Kurzkennung</span></dt><dd><span class="mono">2</span></dd></div>
+          </dl>
+          <div class="addons-actions">
+            <!-- platforms:buttons justmoreparts -->
+            <a class="btn btn--ghost" href="https://www.curseforge.com/minecraft/mc-mods/propwash-just-more-parts" target="_blank" rel="noopener" aria-label="Just More Parts: CurseForge · in review" data-de-aria-label="Just More Parts: CurseForge · in Prüfung"><span class="soon-dot" aria-hidden="true"></span><span lang="en">CurseForge · in review</span><span lang="de">CurseForge · in Prüfung</span></a>
+            <a class="btn btn--ghost" href="https://modrinth.com/mod/propwash-just-more-parts" target="_blank" rel="noopener" aria-label="Just More Parts: Modrinth · in review" data-de-aria-label="Just More Parts: Modrinth · in Prüfung"><span class="soon-dot" aria-hidden="true"></span><span lang="en">Modrinth · in review</span><span lang="de">Modrinth · in Prüfung</span></a>
+            <a class="btn btn--ghost btn--icon" href="https://github.com/LardTom/propwash-justmoreparts" target="_blank" rel="noopener" aria-label="Source code of Propwash: Just More Parts" data-de-aria-label="Quellcode von Propwash: Just More Parts" title="Source code of Propwash: Just More Parts" data-de-title="Quellcode von Propwash: Just More Parts"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg></a>
+            <!-- /platforms -->
+            <a class="btn btn--ghost" href="../configurator/?addon=justmoreparts"><span lang="en">Show in the configurator</span><span lang="de">Im Konfigurator zeigen</span></a>
+            <a class="btn btn--ghost" href="just-more-parts/"><span lang="en">About the add-on</span><span lang="de">Mehr zum Add-on</span></a>
+          </div>
+        </li>
+      </ul>
+      <!-- /addons -->
+    </section>
+
+    <section class="addons-group" aria-labelledby="community-title">
+      <h2 id="community-title" class="addons-h2"><span lang="en">Community add-ons</span><span lang="de">Add-ons der Community</span></h2>
+      <p class="addons-note"><span class="addons-badge addons-badge--checked"><span lang="en">Checked</span><span lang="de">Geprüft</span></span> <span lang="en">Community add-ons are listed after lardtom checked them against the <a href="../docs/api/">rules for add-ons</a>: their own namespace (the mod id), a name like “X for Propwash”, a license and downloads on CurseForge or Modrinth.</span><span lang="de">Add-ons der Community stehen hier, nachdem lardtom sie nach den <a href="../docs/api/">Regeln für Add-ons</a> geprüft hat: eigener Namensraum (die Mod-Id), ein Name wie „X for Propwash“, eine Lizenz und Downloads auf CurseForge oder Modrinth.</span></p>
+      <!-- addons:cards community -->
+      <p class="addons-empty"><span lang="en">No community add-on is listed yet. Yours could be the first – see below how to get it listed.</span><span lang="de">Noch ist kein Add-on der Community eingetragen. Deins könnte das erste sein – unten steht, wie du es eintragen lässt.</span></p>
+      <!-- /addons -->
+    </section>
+
+    <section class="addons-group" id="listing" aria-labelledby="listing-title">
+      <h2 id="listing-title" class="addons-h2"><span lang="en">Get your add-on listed</span><span lang="de">Add-on eintragen lassen</span></h2>
+      <p lang="en">Your add-on is released on CurseForge or Modrinth and follows the rules for add-ons? Open a ticket on the Propwash Discord and send lardtom:</p>
+      <p lang="de">Dein Add-on ist auf CurseForge oder Modrinth erschienen und hält sich an die Regeln für Add-ons? Öffne ein Ticket im Propwash-Discord und schick lardtom:</p>
+      <ul class="addons-list">
+        <li><span lang="en">the namespace (your mod id) and the name</span><span lang="de">den Namensraum (deine Mod-Id) und den Namen</span></li>
+        <li><span lang="en">the license and the links to CurseForge and Modrinth</span><span lang="de">die Lizenz und die Links zu CurseForge und Modrinth</span></li>
+        <li><span lang="en">optionally the short id you would like for share codes (every short id is given only once and never again)</span><span lang="de">optional die Kurzkennung, die du dir für Sharecodes wünschst (jede Kurzkennung wird nur einmal und nie wieder vergeben)</span></li>
+        <li><span lang="en">optionally a web export (<span class="mono">/propwash webexport &lt;namespace&gt;</span>), so the configurator can show your parts</span><span lang="de">optional einen Web-Export (<span class="mono">/propwash webexport &lt;namensraum&gt;</span>), damit der Konfigurator deine Teile zeigen kann</span></li>
+      </ul>
+      <p class="addons-actions"><a class="btn btn--ghost" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" width="18" height="18"><use href="#i-discord"/></svg> <span lang="en">Open a ticket on Discord</span><span lang="de">Ticket im Discord öffnen</span></a></p>
+    </section>
+
+    <section class="addons-group" id="short-ids" aria-labelledby="short-ids-title">
+      <h2 id="short-ids-title" class="addons-h2"><span lang="en">Short ids in share codes</span><span lang="de">Kurzkennungen in Sharecodes</span></h2>
+      <p lang="en">A PW3 share code names every add-on it uses. Add-ons of this directory get a short id, so their codes stay short; everyone else is written with the full namespace. The list only grows: a short id is never given again.</p>
+      <p lang="de">Ein PW3-Sharecode nennt jedes Add-on, das er benutzt. Add-ons dieses Verzeichnisses bekommen eine Kurzkennung, damit ihre Codes kurz bleiben; alle anderen stehen mit dem vollen Namensraum darin. Die Liste wächst nur: Eine Kurzkennung wird nie wieder vergeben.</p>
+      <!-- addons:short-ids -->
+      <div class="addons-table-wrap">
+        <table class="addons-table">
+          <thead><tr><th scope="col"><span lang="en">Short id</span><span lang="de">Kurzkennung</span></th><th scope="col"><span lang="en">Namespace</span><span lang="de">Namensraum</span></th><th scope="col">Add-on</th><th scope="col">Status</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">1</td><td class="mono">propwash</td><td>Propwash FPV</td><td><span lang="en">Propwash itself</span><span lang="de">Propwash selbst</span></td></tr>
+            <tr><td class="mono">2</td><td class="mono">justmoreparts</td><td>Propwash: Just More Parts</td><td><span lang="en">listed</span><span lang="de">eingetragen</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- /addons -->
+    </section>
+
+    <section class="addons-group" id="jar" aria-labelledby="jar-title">
+      <h2 id="jar-title" class="addons-h2"><span lang="en">Try an add-on in the configurator</span><span lang="de">Ein Add-on im Konfigurator ausprobieren</span></h2>
+      <p lang="en">The <a href="../configurator/">configurator</a> shows the parts of the official add-ons. Any other add-on with parts in data files you can open there as a jar file: your browser reads it only locally, nothing is uploaded or stored, and after a reload it is gone.</p>
+      <p lang="de">Der <a href="../configurator/">Konfigurator</a> zeigt die Teile der offiziellen Add-ons. Jedes andere Add-on mit Teilen in Datendateien kannst du dort als Jar-Datei öffnen: Dein Browser liest sie nur lokal, nichts wird hochgeladen oder gespeichert, und nach dem Neuladen ist sie weg.</p>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a> · <a href="../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a> · <a href="../docs/"><span lang="en">Docs</span><span lang="de">Doku</span></a> · <a href="../changelog/">Changelog</a> · <a href="../roadmap/">Roadmap</a> · <a href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener"><span lang="en">Source code</span><span lang="de">Quellcode</span></a> · <a href="../impressum/"><span lang="en">Legal notice</span><span lang="de">Impressum</span></a> · <a href="../datenschutz/"><span lang="en">Privacy policy</span><span lang="de">Datenschutz</span></a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice and whether you paused the animations are kept in your browser. An add-on jar you open in the configurator is only read in your browser and never uploaded. Fonts: <a href="../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (both SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl und ob du die Animationen angehalten hast, bleiben in deinem Browser. Ein Add-on-Jar, das du im Konfigurator öffnest, liest nur dein Browser; es wird nie hochgeladen. Schriften: <a href="../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (beide SIL Open Font License), direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js?v=2c5dc92d" defer></script>
+<script type="module" src="../assets/js/addons/directory-page.js?v=28c358ec"></script>
+</body>
+</html>
