@@ -2,7 +2,7 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText } from './data.js?v=1b38e3f7';
+import { loadCatalog, localText, createCatalog } from './data.js?v=b9037dd0';
 import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=594888f1';
 import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=6fae3e31';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
@@ -11,8 +11,9 @@ import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe
 import { batteryFit } from './rules.js?v=e77905ee';
 import { assemble, PROP_SLOTS } from './assembly.js?v=e8018744';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=320ddce0';
-import { reasonText, addonNote } from './convert.js?v=33934759';
-import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=66dd0144';
+import { reasonText, addonNote } from './convert.js?v=64c744aa';
+import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=c9b8f0b5';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=efc839db';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
@@ -104,6 +105,8 @@ function restore(json) {
 }
 
 function loadModel(id) {
+  const fromJar = localModel(id);
+  if (fromJar) return Promise.resolve(fromJar);
   if (!render || !render.models.includes(id)) return Promise.resolve(null);
   if (!models.has(id)) {
     const [ns, path] = id.split(':');
@@ -1574,7 +1577,28 @@ function addonLine(report) {
   const line = el('span', { class: 'addon-line' }, note.text,
     ...note.links.flatMap(([label, href]) => [' ', el('a', { href, target: '_blank', rel: 'noopener noreferrer' }, label)]));
   if (note.free) line.append(' ', el('span', { class: 'addon-line__free' }, note.free));
+  line.append(' ', el('button', { type: 'button', class: 'btn btn--ghost btn--small addon-line__jar', onclick: openJarPicker }, t('addons.open')));
   return line;
+}
+
+/**
+ * The catalog with the add-ons of the add-on bar (assets/js/addons/configurator-addons.js): pickers, figures, codes and
+ * the viewer follow it. A build that loses a part gets a preset of what is left.
+ */
+function applyAddons(json, nextRender) {
+  catalog = keepUnitsTogether(createCatalog(json));
+  render = nextRender;
+  computeRoles();
+  if (!knownBuild(state.build)) {
+    const preset = catalog.presetContent(DEFAULT_PRESET) ? DEFAULT_PRESET
+      : (catalog.presets.find((p) => p.id === 'propwash:freestyle') || catalog.presets[0]).id;
+    undoSnapshot = null;
+    loadPreset(preset, false);
+    $('[data-preset]').value = preset;
+    banner(() => t('addons.buildSwitched', { name: catalog.presetName(preset, lang()) }), 'warn', false);
+    return;
+  }
+  refreshAll();
 }
 
 /** What a decoded code brings along: [text or node, bad] per line (layers first). */
@@ -2518,6 +2542,10 @@ async function boot() {
   wireTabs();
   wireEvents();
   wireStatHelp();
+  mountAddonBar({
+    host: $('[data-panel-parts]'), before: $('[data-slots]'), base: catalog.json, render, apply: applyAddons,
+    directoryUrl: new URL('addons/', SITE_ROOT).href,
+  });
   refreshAll();
   if (fromLink) {
     if (fromLink.ok) lastHashCode = hashCode;

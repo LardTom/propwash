@@ -3,6 +3,8 @@
 // origin, no external requests); createCatalog() wraps already parsed JSON (used by the node tests). Share codes: the
 // catalog reads PW1, PW2 and PW3 with the parts tables of its namespaces and the add-on directory of the export, writes
 // PW3 like the game with these add-ons installed, and converts old codes with the frozen data like the mod.
+// composeCatalog() and composeRender() put add-ons into the catalog (an add-on jar read in the browser,
+// addon-catalog.js) or take them out (the switches of the add-on bar), like installing or removing the mod in the game.
 
 import { check as checkBuild } from './rules.js?v=e77905ee';
 import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=c64a5c0d';
@@ -11,6 +13,7 @@ import {
 } from './sharecode.js?v=594888f1';
 import { sharedOnly } from './tune.js?v=f4084d0e';
 import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=6fae3e31';
+import { catalogOrder } from './catalog-build.js?v=860a85ee';
 
 export const CATALOG_URL = new URL('../../data/configurator/catalog.json', import.meta.url);
 export const CATEGORIES = Object.freeze(['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory']);
@@ -68,6 +71,9 @@ export function createCatalog(json) {
   const layerNames = new Map((json.sharecode.layers || []).map((l) => [l.key, l.name]));
   const namespaces = new Map((json.namespaces || []).map((n) => [n.namespace, n]));
   const versions = Object.fromEntries([...namespaces.values()].map((n) => [n.namespace, n.version]));
+  // Add-ons read in the browser are not in the directory: their codes carry the mod's name and link, like the game's.
+  const mods = Object.fromEntries([...namespaces.values()].filter((n) => n.source === 'local' && n.name)
+    .map((n) => [n.namespace, { name: n.name, homepage: n.homepage || null }]));
   let shareTables = null;
   let frozen = null;
 
@@ -198,7 +204,7 @@ export function createCatalog(json) {
     shareTables() {
       if (!shareTables) {
         shareTables = createShareTables({
-          tables: Object.values(json.sharecode.tables || {}), directory: json.sharecode.directory, versions, lookup: catalog.category,
+          tables: Object.values(json.sharecode.tables || {}), directory: json.sharecode.directory, versions, mods, lookup: catalog.category,
         });
       }
       return shareTables;
@@ -234,6 +240,75 @@ export function createCatalog(json) {
     },
   };
   return catalog;
+}
+
+const namespaceOf = (id) => String(id).slice(0, Math.max(0, String(id).indexOf(':')));
+
+/** The ids a preset's build uses. */
+function presetIds(preset) {
+  const b = preset.build || {};
+  return [...BUILD_FIELDS.map((f) => b[f]), ...Object.values(b.accessories || {})].filter(Boolean);
+}
+
+/**
+ * The catalog JSON with add-ons put in and taken out: `fragments` are pieces of catalogs (addon-catalog.js readAddon
+ * → fragment; a fragment of a namespace the base already has replaces it), `off` the namespaces switched off. A
+ * namespace that is off loses its parts, presets, chemistries, parts table and version, as if the mod were not
+ * installed: codes with its parts then read as from a missing add-on. Propwash itself can not be switched off.
+ */
+export function composeCatalog(base, { fragments = [], off = [] } = {}) {
+  const replaced = new Set(fragments.flatMap((f) => (f.namespaces || []).map((n) => n.namespace)));
+  const gone = new Set([...off, ...replaced].filter((ns) => ns !== 'propwash'));
+  const offSet = new Set(off.filter((ns) => ns !== 'propwash'));
+  const keep = (id) => !gone.has(namespaceOf(id));
+  const active = fragments.filter((f) => !(f.namespaces || []).some((n) => offSet.has(n.namespace)));
+  const parts = [...base.parts.filter((p) => keep(p.id)), ...active.flatMap((f) => f.parts || [])].sort(catalogOrder);
+  const ids = new Set(parts.map((p) => p.id));
+  const chemistries = base.chemistries.filter((c) => keep(c.id));
+  for (const f of active) for (const c of f.chemistries || []) if (!chemistries.some((x) => x.id === c.id)) chemistries.push(c);
+  const mounts = {};
+  for (const source of [base.mounts || {}, ...active.map((f) => f.mounts || {})]) {
+    for (const [kind, names] of Object.entries(source)) {
+      mounts[kind] = mounts[kind] || {};
+      for (const [id, name] of Object.entries(names)) if (!(id in mounts[kind])) mounts[kind][id] = name;
+    }
+  }
+  const presets = [...base.presets, ...active.flatMap((f) => f.presets || [])]
+    .filter((p) => keep(p.id) && presetIds(p).every((id) => ids.has(id)));
+  const defaultColors = Object.fromEntries(Object.entries(base.paint.default_colors || {}).filter(([id]) => keep(id)));
+  for (const f of active) Object.assign(defaultColors, f.default_colors || {});
+  const layouts = Object.fromEntries(Object.entries((base.fpv && base.fpv.layouts) || {}).filter(([ns]) => !gone.has(ns)));
+  for (const f of active) Object.assign(layouts, (f.fpv) || {});
+  const tables = Object.fromEntries(Object.entries(base.sharecode.tables || {}).filter(([ns]) => !gone.has(ns)));
+  for (const f of active) Object.assign(tables, f.tables || {});
+  return {
+    ...base,
+    namespaces: [...(base.namespaces || []).filter((n) => !gone.has(n.namespace)), ...active.flatMap((f) => f.namespaces || [])],
+    parts,
+    chemistries,
+    mounts,
+    presets,
+    paint: { ...base.paint, default_colors: defaultColors },
+    fpv: { ...(base.fpv || {}), layouts },
+    sharecode: { ...base.sharecode, tables },
+  };
+}
+
+/** render.json with the frame layouts, motor seats, paint channels and model list of the add-ons (as composeCatalog). */
+export function composeRender(base, { renders = [], off = [], replaced = [] } = {}) {
+  const gone = new Set([...off, ...replaced].filter((ns) => ns !== 'propwash'));
+  const keep = (id) => !gone.has(namespaceOf(id));
+  const layouts = Object.fromEntries(Object.entries(base.layouts || {}).filter(([id]) => keep(id)));
+  const seats = Object.fromEntries(Object.entries(base.motor_seats || {}).filter(([id]) => keep(id)));
+  const channels = { ...(base.channels || {}) };
+  const models = (base.models || []).filter(keep);
+  for (const r of renders) {
+    Object.assign(layouts, r.layouts || {});
+    Object.assign(seats, r.motor_seats || {});
+    for (const [k, v] of Object.entries(r.channels || {})) if (!(k in channels)) channels[k] = v;
+    for (const id of r.models || []) if (!models.includes(id)) models.push(id);
+  }
+  return { ...base, layouts, motor_seats: seats, channels, models };
 }
 
 export { hexColor };

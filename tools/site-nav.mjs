@@ -39,6 +39,7 @@ export const FEATURES = [
 // Plain links after the menu. "current" is the page key that marks the link as the current page.
 export const LINKS = [
   { href: 'docs/', label: { en: 'Docs', de: 'Doku' }, current: 'docs' },
+  { href: 'addons/', label: { en: 'Add-ons', de: 'Add-ons' }, current: 'addons' },
   { href: 'changelog/', label: { en: 'Changelog', de: 'Changelog' }, current: 'changelog' },
   { href: 'roadmap/', label: { en: 'Roadmap', de: 'Roadmap' }, current: 'roadmap' },
   { href: '#download', label: { en: 'Download', de: 'Download' } },

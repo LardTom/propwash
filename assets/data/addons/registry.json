@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "note": "Allocation list of the official add-on directory (propwashfpv.com/addons/): append only. A namespace and its short id are never given again; an add-on that leaves the directory stays with status withdrawn. Short id 1 is Propwash itself.",
+  "base": {
+    "namespace": "propwash",
+    "short_id": 1,
+    "name": "Propwash FPV",
+    "platforms": "propwash"
+  },
+  "addons": [
+    {
+      "namespace": "justmoreparts",
+      "short_id": 2,
+      "name": "Propwash: Just More Parts",
+      "author": "lardtom",
+      "official": true,
+      "status": "listed",
+      "since": "2026-10",
+      "kinds": ["parts"],
+      "page": "addons/just-more-parts/",
+      "license": "PolyForm-Shield-1.0.0",
+      "requires": { "propwash": "0.6.0" },
+      "platforms": "justmoreparts",
+      "web_export": { "version": "1.2.0", "path": "assets/data/addons/justmoreparts/1.2.0/" },
+      "versions": ["1.2.0"],
+      "text": {
+        "en": "Many more realistic parts for Propwash, from 65 mm whoops to 13″ X-Class: frames in new shapes (stretched, squashed, deadcat, H-frame, ducts), motors, props, stacks, cameras and batteries, plus ready-to-fly presets.",
+        "de": "Viele weitere realistische Teile für Propwash, vom 65-mm-Whoop bis zur 13-Zoll-X-Class: Rahmen in neuen Formen (Stretched, Squashed, Deadcat, H-Frame, Ducts), Motoren, Props, Stacks, Kameras und Akkus, dazu flugfertige Presets."
+      }
+    }
+  ]
+}
