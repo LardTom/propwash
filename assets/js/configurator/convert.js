@@ -68,6 +68,37 @@ export function addonNote(report, catalog, lang, addonsPage) {
   return { text: t(key, { name, version, installed: loaded }).replace(/ {2,}/g, ' '), links, free };
 }
 
+const HOMEPAGES = { 1: 'https://modrinth.com/mod/', 2: 'https://www.curseforge.com/minecraft/mc-mods/', 3: 'https://' };
+
+/**
+ * The add-ons a decoded PW3 code needs that the page has not loaded (result MISSING), as the code describes them:
+ * namespace → {version, name, homepage}. withCodeAddons writes them back into the codes of the build.
+ */
+export function codeAddons(reports) {
+  const out = new Map();
+  for (const r of reports || []) {
+    if (r.result !== 'MISSING' || !r.namespace) continue;
+    const homepage = r.link && HOMEPAGES[r.link_type] ? HOMEPAGES[r.link_type] + r.link : null;
+    out.set(r.namespace, { version: r.min_version, name: r.name, homepage });
+  }
+  return out;
+}
+
+/**
+ * Share tables for writing a build that holds parts of add-ons from codeAddons: for a namespace the tables don't have,
+ * the version, name and link of the code, so the new code still says what the build needs (like the game, which
+ * passes such a code on unchanged). A loaded add-on keeps the page's own data.
+ */
+export function withCodeAddons(tables, addons) {
+  if (!addons || !addons.size) return tables;
+  const remembered = (ns) => (addons.has(ns) && !tables.installed(ns) ? addons.get(ns) : null);
+  return {
+    ...tables,
+    version: (ns) => (remembered(ns) ? remembered(ns).version : tables.version(ns)),
+    mod: (ns) => (remembered(ns) && remembered(ns).name ? { name: remembered(ns).name, homepage: remembered(ns).homepage } : tables.mod(ns)),
+  };
+}
+
 /**
  * Outcome of one code: kind 'converted' (old code, new PW3 code in code), 'pw3' (already PW3 and readable),
  * 'unknown' (readable, but with parts this site does not know, e.g. of an add-on that is not loaded), 'not_convertible'
