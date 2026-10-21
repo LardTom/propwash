@@ -3,7 +3,7 @@
 // view. Everything runs in the browser; the only request goes to this site's catalog.
 
 import { loadCatalog } from './data.js?v=b9037dd0';
-import { convertText, reasonText, addonNote, MAX_CODES } from './convert.js?v=4e275873';
+import { convertText, reasonText, addonNote, MAX_CODES } from './convert.js?v=51be8283';
 import { displayId } from './sharecode.js?v=594888f1';
 import { t, lang } from './i18n.js?v=75a1b774';
 

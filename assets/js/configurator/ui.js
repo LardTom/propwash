@@ -11,7 +11,7 @@ import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe
 import { batteryFit } from './rules.js?v=e77905ee';
 import { assemble, PROP_SLOTS } from './assembly.js?v=e8018744';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=320ddce0';
-import { reasonText, addonNote } from './convert.js?v=4e275873';
+import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=51be8283';
 import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=75a1b774';
 import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=4e942aef';
 
@@ -85,6 +85,8 @@ const state = {
   linkProps: true,
   // Heads of the opened PW3 code for its unknown parts, so they are written back as they were (sharecode3.js carry).
   carry: new Map(),
+  // Add-ons the opened PW3 code needs that this page has not loaded, so its codes still name them (convert.js codeAddons).
+  addons: new Map(),
 };
 
 let derived = { check: null, analysis: null, camera: null, defaults: null, effective: null, assembly: null, paintDefaults: {}, available: new Set() };
@@ -96,12 +98,12 @@ let undoSnapshot = null;
 
 function snapshot() {
   return JSON.stringify({ build: state.build, paint: state.paint, tune: state.tune, name: state.name, layers: state.layers, osd: state.osd, presetId: state.presetId,
-    carry: [...state.carry] });
+    carry: [...state.carry], addons: [...state.addons] });
 }
 
 function restore(json) {
   const saved = JSON.parse(json);
-  Object.assign(state, saved, { carry: new Map(saved.carry || []) });
+  Object.assign(state, saved, { carry: new Map(saved.carry || []), addons: new Map(saved.addons || []) });
 }
 
 function loadModel(id) {
@@ -189,9 +191,14 @@ function content() {
   };
 }
 
+/** PW3 code of content with the heads of an opened code (carry) and the add-ons it needs that this page has not loaded. */
+function encodeBuild(c, carry, addons) {
+  return catalog.encode(c, { carry, tables: withCodeAddons(catalog.shareTables(), addons) });
+}
+
 function currentCode() {
   try {
-    return { code: catalog.encode(content(), { carry: state.carry }), error: null };
+    return { code: encodeBuild(content(), state.carry, state.addons), error: null };
   } catch (e) {
     const messages = { UNKNOWN_ENTRIES: 'ui.encodeUnknownEntries', NOT_CONVERTIBLE: 'ui.encodeLegacyUnknown', TOO_LARGE: 'ui.encodeTooLarge', CORRUPT: 'ui.encodeBadId' };
     const key = e && messages[e.status];
@@ -1689,6 +1696,7 @@ function applyDecoded(result) {
   state.osd = { ...state.osd, imported: c.osd || null, source: c.osd ? 'imported' : 'preset' };
   state.presetId = null;
   state.carry = result.carry || new Map();
+  state.addons = codeAddons(result.namespaces);
 }
 
 let lastBanner = null;
@@ -1781,6 +1789,7 @@ function loadPreset(id, announce) {
   state.name = '';
   state.presetId = id;
   state.carry = new Map();
+  state.addons = new Map();
   state.layers = { ...state.layers, paint: true, tune: true, name: true };
   refreshAll();
   scheduleHash();
@@ -2614,7 +2623,7 @@ function wireEvents() {
     if (result.ok) {
       let again = null;
       try {
-        again = catalog.encode(result.content, { carry: result.carry });
+        again = encodeBuild(result.content, result.carry, codeAddons(result.namespaces));
       } catch {
         again = null;
       }
