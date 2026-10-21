@@ -27,6 +27,7 @@ import { outOfDate, context, versionDir, REGISTRY, PLATFORMS } from './build-add
 import { LINKS } from './site-nav.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const SITE_REPOSITORY = 'https://github.com/LardTom/propwash';
 const argv = process.argv.slice(2);
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
 const exists = (rel) => fs.existsSync(path.join(ROOT, rel));
@@ -210,6 +211,21 @@ for (const page of ['addons/index.html', ...pages.map((p) => `${p}index.html`)])
     check(ok, `${page}: external link ${url} – downloads only on CurseForge and Modrinth`);
   }
   check(!/\bdownload\b[^<]*github|github[^<]*\bdownload\b/i.test(html), `${page}: no GitHub download`);
+}
+
+{
+  const html = read('addons/index.html');
+  const section = (/<section[^>]*\bid="listing"[\s\S]*?<\/section>/.exec(html) || [''])[0];
+  const dir = '.github/ISSUE_TEMPLATE';
+  const template = exists(dir) ? fs.readdirSync(path.join(ROOT, dir)).find((f) => /\.ya?ml$/.test(f) && /^name:\s*Add-on listing\s*$/m.test(read(`${dir}/${f}`))) : null;
+  const hrefs = [...section.matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
+  const issue = `${SITE_REPOSITORY}/issues/new?template=${template}`;
+  check(!!template, `${dir}: the issue template “Add-on listing” exists`);
+  check(hrefs.includes(issue), `/addons/#listing: links the issue template “Add-on listing” (${issue}; links: ${hrefs.join(', ')})`);
+  check(hrefs.some((h) => /^https:\/\/discord\.gg\//.test(h)), `/addons/#listing: links the Discord (${hrefs.join(', ')})`);
+  const said = (lang) => [...section.matchAll(new RegExp(`<([a-z]+)[^>]*lang="${lang}"[^>]*>([\\s\\S]*?)</\\1>`, 'g'))].map((m) => m[2].replace(/<[^>]+>/g, '')).join(' ');
+  check(/ticket/i.test(said('en')) && /\bissue\b/i.test(said('en')) && said('en').includes('Add-on listing'), `/addons/#listing: names the Discord ticket and the issue with the template in English (“${said('en').slice(0, 200)}”)`);
+  check(/Ticket/.test(said('de')) && /\bIssue\b/.test(said('de')) && said('de').includes('Add-on listing'), `/addons/#listing: names the Discord ticket and the issue with the template in German (“${said('de').slice(0, 200)}”)`);
 }
 
 // 6. Navigation, sitemap, privacy policy.

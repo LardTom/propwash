@@ -123,7 +123,7 @@ function listing() {
   }
   const links = [...section[0].matchAll(/href="([^"]+)"/g)].map((m) => m[1]);
   const issue = links.find((h) => /^https:\/\/github\.com\/[^/]+\/[^/]+\/issues\/new\b/.test(h) && (!listingTpl || h.includes(`template=${listingTpl}`) || h.includes(`template=${listingTpl.replace(/\.ya?ml$/, '')}`)));
-  lock('cov-site-a-9', !!issue, `no. 37: the section links the issue template (${links.join(', ')})`);
+  check(!!issue, `no. 37: the section links the issue template (${links.join(', ')})`);
   if (issue && repo) check(issue.includes(`github.com/${repo}/`), `no. 37: the issue link goes to this repository (${repo})`);
 }
 
