@@ -142,7 +142,7 @@ function jmpPage() {
   check(text.includes(`Propwash ${need} or newer`) && text.includes(`Propwash ${need} oder neuer`), `no. 39: “Propwash ${need}” as in registry.json, English and German`);
   check(need === platforms.products.propwash.version, `no. 39: the requirement ${need} is the Propwash of platforms.json (${platforms.products.propwash.version})`);
   const old = /(?:starts|runs) with Just More Parts 1\.1|startet auch mit Just More Parts 1\.1|läuft (?:auch )?mit Just More Parts 1\.1/.exec(text);
-  lock('cov-site-a-10', !old, `no. 39: the page does not say that Propwash 0.6.0 starts with Just More Parts 1.1 (“${old && text.slice(Math.max(0, old.index - 10), old.index + 140)}”)`);
+  check(!old, `no. 39: the page does not say that Propwash 0.6.0 starts with Just More Parts 1.1 (“${old && text.slice(Math.max(0, old.index - 10), old.index + 140)}”)`);
   if (JMP_JAR && fs.existsSync(JMP_JAR)) {
     const jar = readAddon(new Uint8Array(fs.readFileSync(JMP_JAR)), { base: readJson('assets/data/configurator/catalog.json'), fileName: path.basename(JMP_JAR) });
     const jarMotors = jar.ok ? jar.fragment.parts.filter((p) => /^justmoreparts:m0[78]02_/.test(p.id)) : [];

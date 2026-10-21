@@ -189,9 +189,15 @@ if (jmp) {
     ['the battery plugged in', /Battery plugged in/.test(en), /Akku gesteckt/.test(de)],
     ['share codes from Propwash', /Share codes from Propwash/.test(en), /Sharecodes von Propwash/.test(de)],
     [`Propwash ${jmp.requires.propwash} needed`, en.includes(`Propwash ${jmp.requires.propwash}`), de.includes(`Propwash ${jmp.requires.propwash}`) || de.includes(`Propwash ab ${jmp.requires.propwash}`)],
-    ['Propwash 0.6.0 with Just More Parts 1.1', /Just More Parts 1\.1/.test(en), /Just More Parts 1\.1/.test(de)],
   ];
   for (const [what, inEn, inDe] of wants) check(inEn && inDe, `JMP page: says ${what} in English (${inEn}) and German (${inDe})`);
+  const oldJmp = (lang) => [...html.matchAll(new RegExp(`<li lang="${lang}">([\\s\\S]*?)</li>`, 'g'))].map((m) => m[1].replace(/<[^>]+>/g, '')).find((s) => /Just More Parts 1\.1\b/.test(s)) || '';
+  const oldEn = oldJmp('en');
+  const oldDe = oldJmp('de');
+  check(/Propwash 0\.6\.0/.test(oldEn) && /refuses|does not start|won’t start|stops/.test(oldEn) && /1\.2\.0/.test(oldEn) && !/also (?:starts|runs)|(?:starts|runs) with Just More Parts 1\.1/.test(oldEn),
+    `JMP page: Propwash 0.6.0 refuses Just More Parts 1.1 and asks for 1.2.0, in English (“${oldEn}”)`);
+  check(/Propwash 0\.6\.0/.test(oldDe) && /lehnt|bricht|startet nicht/.test(oldDe) && /1\.2\.0/.test(oldDe) && !/startet auch mit|läuft (?:auch )?mit Just More Parts 1\.1/.test(oldDe),
+    `JMP page: Propwash 0.6.0 refuses Just More Parts 1.1 and asks for 1.2.0, in German (“${oldDe}”)`);
   check(/configurator\/\?addon=justmoreparts/.test(html) && /configurator\/\?addon=justmoreparts/.test(dirHtml), '“Show in the configurator” on the card and the page');
   check(!/<a\b[^>]*href="https:\/\/github\.com[^"]*"[^>]*>[^<]*\w/.test(html.replace(/<svg[\s\S]*?<\/svg>/g, '')), 'JMP page: GitHub only as an icon');
 }
