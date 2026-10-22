@@ -26,8 +26,8 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { startBrowser, counter, arg, flag, read, readJson, ROOT, sleep } from './fixtures/cov/browser.mjs';
-import { docSection, ids, langHtml, plain, linkTarget, gitShow, gitHasRef, siblingRepo, buildPreview, byId } from './fixtures/cov/site-b.mjs';
+import { startBrowser, counter, arg, flag, read, ROOT, sleep } from './fixtures/cov/browser.mjs';
+import { docSection, langHtml, plain, linkTarget, gitShow, gitHasRef, siblingRepo, buildPreview, byId } from './fixtures/cov/site-b.mjs';
 import { LANGUAGES } from './i18n/languages.mjs';
 import { SITE } from './docs/html.mjs';
 
