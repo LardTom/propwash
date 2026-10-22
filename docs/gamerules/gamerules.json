@@ -1,7 +1,7 @@
 {
   "format": 1,
   "mod": "propwash",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "command": "/gamerule <id> <value>",
   "category": {
     "de": "Propwash FPV",
@@ -72,7 +72,8 @@
         "de": "Schwerkraft für Drohnen in Prozent der Erdschwerkraft (100 = 9,81 m/s², 0 = schwerelos). Mehr: Drohnen fallen schneller und brauchen mehr Gas zum Schweben; sie heben nur ab, solange ihr Schub/Gewicht aus der Werkbank über dem Faktor liegt. Werkbank und Übersicht rechnen immer mit der echten Erdschwerkraft.",
         "en": "Gravity for drones in percent of Earth's gravity (100 = 9.81 m/s², 0 = weightless). Higher: drones fall faster and need more throttle to hover; they only take off while their thrust-to-weight ratio from the workbench is above the factor. The workbench and overview always calculate with real Earth gravity."
       },
-      "example": "/gamerule propwash:gravity_scale 101"
+      "example": "/gamerule propwash:gravity_scale 101",
+      "race_relevant": true
     },
     {
       "id": "propwash:prop_wash",
@@ -90,7 +91,8 @@
         "de": "Turbulenzen, wenn eine Drohne durch ihren eigenen Abwind sinkt.",
         "en": "Turbulence when a drone descends through its own downwash."
       },
-      "example": "/gamerule propwash:prop_wash false"
+      "example": "/gamerule propwash:prop_wash false",
+      "race_relevant": true
     },
     {
       "id": "propwash:ground_effect",
@@ -108,7 +110,8 @@
         "de": "Mehr Auftrieb dicht über dem Boden.",
         "en": "Extra lift close to the ground."
       },
-      "example": "/gamerule propwash:ground_effect false"
+      "example": "/gamerule propwash:ground_effect false",
+      "race_relevant": true
     },
     {
       "id": "propwash:hardware_limits",
@@ -123,10 +126,11 @@
         "en": "Hardware limits"
       },
       "description": {
-        "de": "An: Heiße Motoren drosseln die Leistung und nutzen sich ab, ein ESC brennt beim Scharfschalten durch, wenn der Akku mehr Zellen hat als erlaubt. Aus: keine Hitzedrosselung, kein Hitzeverschleiß, kein durchgebrannter ESC.",
-        "en": "On: hot motors throttle back and wear out, and an ESC burns out on arming when the battery has more cells than it allows. Off: no thermal throttling, no heat wear, no burnt ESC."
+        "de": "An: Sehr heiße Motoren verlieren Leistung und nutzen sich ab, ein überhitzter ESC regelt zum Selbstschutz ab, und ein ESC brennt beim Scharfschalten durch, wenn der Akku mehr Zellen hat als erlaubt. Aus: Heiße Motoren behalten ihre volle Leistung und nutzen sich nicht ab, kein ESC regelt ab, kein durchgebrannter ESC.",
+        "en": "On: very hot motors lose power and wear out, an overheating ESC throttles back to protect itself, and an ESC burns out on arming when the battery has more cells than it allows. Off: hot motors keep their full power and do not wear, no ESC throttles back, no burnt ESC."
       },
-      "example": "/gamerule propwash:hardware_limits false"
+      "example": "/gamerule propwash:hardware_limits false",
+      "race_relevant": true
     },
     {
       "id": "propwash:wind",
@@ -165,7 +169,8 @@
           "en": "Storm"
         }
       },
-      "example": "/gamerule propwash:wind 2"
+      "example": "/gamerule propwash:wind 2",
+      "race_relevant": true
     },
     {
       "id": "propwash:turbulence",
@@ -183,7 +188,8 @@
         "de": "Unruhige Luft: Böen und das Rütteln im eigenen Abwind. Aus: Der Wind weht gleichmäßig.",
         "en": "Rough air: gusts and the shaking in the drone's own downwash. Off: the wind blows steadily."
       },
-      "example": "/gamerule propwash:turbulence false"
+      "example": "/gamerule propwash:turbulence false",
+      "race_relevant": true
     },
     {
       "id": "propwash:battery_scale",
@@ -211,7 +217,8 @@
           "en": "Infinite"
         }
       },
-      "example": "/gamerule propwash:battery_scale 110"
+      "example": "/gamerule propwash:battery_scale 110",
+      "race_relevant": true
     },
     {
       "id": "propwash:battery_sag",
@@ -229,7 +236,8 @@
         "de": "An: Die Akkuspannung sinkt mit der Ladung, ein fast leerer Akku bricht bei Vollgas viel stärker ein und die Drohne wird gegen Ende träger. Aus: Der Akku verhält sich bis zuletzt wie ein voller. Der Einbruch unter Last durch den Innenwiderstand bleibt in beiden Fällen.",
         "en": "On: battery voltage falls as the pack drains, a nearly empty pack sags much harder on a punch, and the drone gets weaker towards the end. Off: the pack behaves like a full one until it is empty. Load sag from the internal resistance stays either way."
       },
-      "example": "/gamerule propwash:battery_sag false"
+      "example": "/gamerule propwash:battery_sag false",
+      "race_relevant": true
     },
     {
       "id": "propwash:crash_damage",
@@ -247,7 +255,8 @@
         "de": "Abstürze nutzen die Bauteile ab: Props zuerst, Motoren, Kamera und Rahmen viel später. Gilt auch für Hitzeverschleiß und durchgebrannte ESCs. Aus: Teile nutzen sich nie ab.",
         "en": "Crashes wear the parts down: props first, motors, camera and frame much later. Also covers heat wear and burnt ESCs. Off: parts never wear."
       },
-      "example": "/gamerule propwash:crash_damage false"
+      "example": "/gamerule propwash:crash_damage false",
+      "race_relevant": true
     },
     {
       "id": "propwash:crash_damage_scale",
@@ -269,7 +278,8 @@
         "de": "Wie stark Abstürze die Teile abnutzen, in Prozent; 100 ist normal. Wirkt nur mit eingeschaltetem Crash-Schaden.",
         "en": "How much crashes wear the parts, in percent; 100 is normal. Only with crash damage on."
       },
-      "example": "/gamerule propwash:crash_damage_scale 105"
+      "example": "/gamerule propwash:crash_damage_scale 105",
+      "race_relevant": true
     },
     {
       "id": "propwash:crash_tolerance",
@@ -291,7 +301,8 @@
         "de": "Ab welcher Aufprallgeschwindigkeit ein Aufprall als Absturz zählt, in Prozent; 100 ist normal, höher ist nachsichtiger.",
         "en": "The impact speed from which a hit counts as a crash, in percent; 100 is normal, higher is more forgiving."
       },
-      "example": "/gamerule propwash:crash_tolerance 105"
+      "example": "/gamerule propwash:crash_tolerance 105",
+      "race_relevant": true
     },
     {
       "id": "propwash:crash_disarm",
@@ -309,7 +320,8 @@
         "de": "An: Nach einem harten Aufprall schaltet der Flugcontroller die Motoren ab, wie die Absturzerkennung einer echten Drohne. Aus: Die Drohne bleibt nach Abstürzen scharf – weiterfliegen oder sie mit dem Turtle-Modus wieder umdrehen, wenn sie kopfüber liegt.",
         "en": "On: after a hard impact the flight controller shuts the motors off, like crash detection on a real quad. Off: the drone stays armed after crashes – fly on, or flip it back over with turtle mode while it lies upside down."
       },
-      "example": "/gamerule propwash:crash_disarm false"
+      "example": "/gamerule propwash:crash_disarm false",
+      "race_relevant": false
     },
     {
       "id": "propwash:prop_strikes",
@@ -327,7 +339,8 @@
         "de": "Streift ein Propeller ein Hindernis, bremst der Motor ab und die Drohne gerät ins Taumeln.",
         "en": "A prop clipping an obstacle slows its motor and sends the drone tumbling."
       },
-      "example": "/gamerule propwash:prop_strikes false"
+      "example": "/gamerule propwash:prop_strikes false",
+      "race_relevant": true
     },
     {
       "id": "propwash:infinite_range_analog",
@@ -345,7 +358,8 @@
         "de": "Drohnen mit analogem Video: Bild und Funk reißen nie ab – weder durch Entfernung noch durch Hindernisse. Die Entfernungsgrenze des Servers gilt weiter.",
         "en": "Drones with analog video: picture and radio link never drop – neither with distance nor behind obstacles. The server's distance limit still applies."
       },
-      "example": "/gamerule propwash:infinite_range_analog true"
+      "example": "/gamerule propwash:infinite_range_analog true",
+      "race_relevant": true
     },
     {
       "id": "propwash:infinite_range_digital",
@@ -363,7 +377,8 @@
         "de": "Drohnen mit digitalem Video: Bild und Funk reißen nie ab – weder durch Entfernung noch durch Hindernisse. Die Entfernungsgrenze des Servers gilt weiter.",
         "en": "Drones with digital video: picture and radio link never drop – neither with distance nor behind obstacles. The server's distance limit still applies."
       },
-      "example": "/gamerule propwash:infinite_range_digital true"
+      "example": "/gamerule propwash:infinite_range_digital true",
+      "race_relevant": true
     },
     {
       "id": "propwash:max_video_channels",
@@ -390,7 +405,8 @@
           "en": "Unlimited"
         }
       },
-      "example": "/gamerule propwash:max_video_channels 1"
+      "example": "/gamerule propwash:max_video_channels 1",
+      "race_relevant": false
     },
     {
       "id": "propwash:signal_repeaters",
@@ -417,7 +433,8 @@
           "en": "Off"
         }
       },
-      "example": "/gamerule propwash:signal_repeaters 0"
+      "example": "/gamerule propwash:signal_repeaters 0",
+      "race_relevant": false
     },
     {
       "id": "propwash:drone_hits_entities",
@@ -435,7 +452,8 @@
         "de": "Fliegende Drohnen prallen an Tieren, Monstern und Spielern ab und verletzen sie je nach Wucht (Masse × Tempo, höchstens 5 Herzen). Spieler nur mit PvP. Aus: Drohnen fliegen durch Lebewesen hindurch.",
         "en": "Flying drones bounce off animals, monsters and players and hurt them by the force of the impact (mass × speed, at most 5 hearts). Players only with PvP. Off: drones fly through living things."
       },
-      "example": "/gamerule propwash:drone_hits_entities false"
+      "example": "/gamerule propwash:drone_hits_entities false",
+      "race_relevant": true
     },
     {
       "id": "propwash:drones_break_blocks",
@@ -453,7 +471,8 @@
         "de": "Schnelle Drohnen zerbrechen Glas, Glasscheiben und verzierte Töpfe (Block-Tag propwash:drone_breakable), wenn die Wucht des Aufpralls (Masse × Tempo²) reicht, und fliegen langsamer weiter. Ein Whoop prallt ab, ein 5-Zoll durchschlägt eine Scheibe ab etwa 42 km/h. Zählt wie Abbauen durch den Piloten: Spawn-Schutz, Abenteuermodus und Schutz-Mods gelten, Glas lässt nichts fallen. Aus: Blöcke bleiben immer ganz.",
         "en": "Fast drones smash glass, glass panes and decorated pots (block tag propwash:drone_breakable) when the impact is strong enough (mass × speed²) and fly on slower. A whoop bounces off, a 5″ goes through a pane from about 42 km/h. Counts as the pilot breaking the block: spawn protection, adventure mode and protection mods apply, glass drops nothing. Off: blocks always stay intact."
       },
-      "example": "/gamerule propwash:drones_break_blocks true"
+      "example": "/gamerule propwash:drones_break_blocks true",
+      "race_relevant": true
     },
     {
       "id": "propwash:break_impact_scale",
@@ -481,7 +500,8 @@
           "en": "No kick"
         }
       },
-      "example": "/gamerule propwash:break_impact_scale 110"
+      "example": "/gamerule propwash:break_impact_scale 110",
+      "race_relevant": true
     },
     {
       "id": "propwash:allow_3d_mode",
@@ -499,7 +519,8 @@
         "de": "Piloten dürfen den 3D-Modus benutzen (umkehrbare Motoren, Gasmitte = Nullschub), wenn sie ihn für sich freigeschaltet haben. Aus: Propwash lässt ihn niemanden einschalten, etwa auf Rennservern, auf denen niemand mit Umkehrschub bremsen soll. Wie das Flugmodell setzt das Spiel jedes Piloten die Regel um.",
         "en": "Pilots may use 3D mode (reversible motors, throttle center = zero thrust) once they have unlocked it for themselves. Off: Propwash doesn't let anyone switch it on, for example on race servers where nobody should brake with reverse thrust. Like the flight model, the rule is applied by each pilot's game."
       },
-      "example": "/gamerule propwash:allow_3d_mode false"
+      "example": "/gamerule propwash:allow_3d_mode false",
+      "race_relevant": false
     },
     {
       "id": "propwash:part_compatibility",
@@ -517,7 +538,8 @@
         "de": "An: Werkbank, Import und Wartung bauen nur Drohnen aus Teilen, die auch in echt zusammenpassen (Halterungen, Propellergröße, Akku zum Rahmen, Zubehör-Halterung). Aus: Jedes Teil passt zu jedem. Die Hinweise bleiben sichtbar, die Drohne fliegt mit den echten Daten ihrer Teile und zählt nicht für Bestenlisten. Überspannung regelt weiter „Hardware-Grenzen“.",
         "en": "On: the workbench, imports and field service only build drones from parts that would fit together in reality (mounts, prop size, battery for the frame, accessory mounts). Off: every part fits every other. The notes stay visible, the drone flies with the real data of its parts and doesn't count for leaderboards. Overvoltage is still governed by “Hardware limits”."
       },
-      "example": "/gamerule propwash:part_compatibility false"
+      "example": "/gamerule propwash:part_compatibility false",
+      "race_relevant": false
     },
     {
       "id": "propwash:autonomous_rescue",
@@ -535,7 +557,8 @@
         "de": "Läuft der Heimflug (GPS Rescue) und der Pilot steigt aus – Funke weggesteckt, Flug beendet oder Spiel verlassen –, fliegt die Drohne allein weiter und landet am Homepoint. Der Server hält dafür nur die Chunks um die Drohne geladen und fliegt nie in unerforschtes Gebiet. Aus: Ohne Pilot gehen die Motoren aus, wie bisher.",
         "en": "If the return to home (GPS rescue) is running when the pilot leaves – remote put away, flight stopped or game left – the drone keeps flying on its own and lands at the home point. The server only keeps the chunks around the drone loaded and never flies into unexplored terrain. Off: without a pilot the motors stop, as before."
       },
-      "example": "/gamerule propwash:autonomous_rescue false"
+      "example": "/gamerule propwash:autonomous_rescue false",
+      "race_relevant": false
     },
     {
       "id": "propwash:freeform_gate_max_size",
@@ -556,7 +579,8 @@
         "de": "Wie groß die Öffnung eines Freiform-Gates höchstens sein darf, in Blöcken je Richtung: 20 = höchstens 20 × 20 Blöcke. Gilt beim Setzen und beim Neu-Abtasten; gesetzte Gates bleiben, wie sie sind. Größere Werte erlauben weite Hallen und Höhlen, kleinere halten Kurse eng.",
         "en": "How large the opening of a freeform gate may be, in blocks per direction: 20 = at most 20 × 20 blocks. Applies when placing and rescanning; placed gates stay as they are. Larger values allow wide halls and caves, smaller ones keep courses tight."
       },
-      "example": "/gamerule propwash:freeform_gate_max_size 21"
+      "example": "/gamerule propwash:freeform_gate_max_size 21",
+      "race_relevant": false
     },
     {
       "id": "propwash:drones_generate_chunks",
@@ -574,7 +598,8 @@
         "de": "An: Fliegt eine Drohne über den Rand der bisher erzeugten Welt hinaus, entsteht dort neues Gelände – wie wenn ein Spieler hinläuft (wie bisher). Aus: Drohnen laden nur Gelände, das es schon gibt. Am Rand bremst die Drohne sanft ab und bleibt kurz davor stehen, das OSD zeigt „WELTRAND“, das FPV-Bild bleibt ohne Löcher. Spart Rechenzeit auf dem Server; GPS Rescue ohne Pilot fliegt ohnehin nie in unerforschtes Gebiet. Die Server-Config (server.json) kann das Erzeugen zusätzlich auf Rechtestufen beschränken.",
         "en": "On: when a drone flies past the edge of the world generated so far, new terrain is created there – as if a player walked there (as before). Off: drones only load terrain that already exists. At the edge the drone brakes gently and stops just short of it, the OSD shows “WORLD EDGE” and the FPV view has no holes. Saves server time; GPS rescue without pilot never flies into unexplored terrain anyway. The server config (server.json) can additionally limit generation to permission levels."
       },
-      "example": "/gamerule propwash:drones_generate_chunks false"
+      "example": "/gamerule propwash:drones_generate_chunks false",
+      "race_relevant": false
     },
     {
       "id": "propwash:save_assisted_laps",
@@ -592,7 +617,8 @@
         "de": "An: Runden und Rennen mit Flughilfe – Höhe oder Position halten, GPS Rescue, veränderte Welt-Regeln, Kreativ-Drohne, Teile, die nur ohne „Teile müssen zusammenpassen“ gehen, oder eine Brillen-Latenz unter der des Videosenders – werden trotzdem gespeichert: Bestenliste, persönliche Bestzeit, Geist und Rennanzeige zeigen sie mit dem Abzeichen „Flughilfe“ und dem Grund. In der Bestenliste stehen sie in einem eigenen Abschnitt unter den Zeiten ohne Flughilfe und werden nie Rekord. Aus: Runden mit Flughilfe zählen nicht (wie bisher).",
         "en": "On: laps and races flown with a flight aid – altitude or position hold, GPS rescue, changed world rules, creative drone, parts that only fit with “Parts must fit” off, or a goggles latency below the video transmitter's – are saved anyway: the leaderboard, personal best, ghost and race display show them with the badge “Assisted” and the reason. In the leaderboard they get their own section below the unassisted times and never become a record. Off: assisted laps don't count (as before)."
       },
-      "example": "/gamerule propwash:save_assisted_laps true"
+      "example": "/gamerule propwash:save_assisted_laps true",
+      "race_relevant": false
     },
     {
       "id": "propwash:drone_trails",
@@ -610,7 +636,8 @@
         "de": "An: Hinter jeder fliegenden Drohne zieht eine dünne, verblassende Spur in der Farbe der Drohne (LED-Streifen oder Lackierung) – so sieht man andere Piloten auch im FPV-Bild. Gelandete und entschärfte Drohnen ziehen keine Spur. Jeder Spieler kann die Trails für sich im Tab „Darstellung“ ausschalten. Ändert keine Physik.",
         "en": "On: every flying drone draws a thin, fading trail in its own color (LED strip or paint) – so you can see other pilots even in the FPV view. Landed and disarmed drones draw no trail. Every player can turn the trails off for themselves in the Display tab. Does not change the physics."
       },
-      "example": "/gamerule propwash:drone_trails true"
+      "example": "/gamerule propwash:drone_trails true",
+      "race_relevant": false
     },
     {
       "id": "propwash:invulnerable_pilots",
@@ -628,7 +655,8 @@
         "de": "An: Wer gerade eine Drohne steuert, nimmt keinen Schaden – für Events, bei denen Piloten geschützt am Rand stehen sollen. Aus (Standard): Der Körper des Piloten bleibt ein normaler Spieler; Schwerkraft, Mobs, andere Spieler, Stürze, Lava, Ertrinken und Hunger wirken wie sonst. Die Leere und /kill wirken immer.",
         "en": "On: whoever is flying a drone takes no damage – for events where pilots should stand protected at the side. Off (default): the pilot's body stays a normal player; gravity, mobs, other players, falls, lava, drowning and hunger work as usual. The void and /kill always apply."
       },
-      "example": "/gamerule propwash:invulnerable_pilots true"
+      "example": "/gamerule propwash:invulnerable_pilots true",
+      "race_relevant": false
     },
     {
       "id": "propwash:waterproof_drones",
@@ -646,7 +674,8 @@
         "de": "An: Jede Drohne verhält sich, als hätte sie eine wasserdichte Beschichtung – sie lässt sich im Wasser scharf schalten, fliegen und entschärfen, statt einen Kurzschluss zu bekommen. Aus (Standard): Nur mit Wasserschutz-Spray beschichtete Drohnen überstehen Wasser. Lava beendet jeden Flug.",
         "en": "On: every drone behaves as if it had a waterproof coating – it can arm, fly and disarm in water instead of shorting out. Off (default): only drones sprayed with waterproof coating survive water. Lava always ends a flight."
       },
-      "example": "/gamerule propwash:waterproof_drones true"
+      "example": "/gamerule propwash:waterproof_drones true",
+      "race_relevant": true
     },
     {
       "id": "propwash:allow_reset",
@@ -664,7 +693,65 @@
         "de": "An (Standard): Piloten setzen ihre Drohne mit dem Reset-Schalter oder der Taste (Rücktaste) auf ihren Homepoint zurück – gerade, entschärft und im Stillstand. Ein laufendes Rennen wird abgebrochen, Fracht fällt dort ab, wo die Drohne war. Aus: Reset wird mit einer Meldung abgelehnt, Piloten fliegen oder laufen zurück.",
         "en": "On (default): pilots put their drone back on its home point with the Reset switch or key (Backspace) – level, disarmed and standing still. A running race is canceled and cargo drops where the drone was. Off: Reset is refused with a message, pilots fly or walk back."
       },
-      "example": "/gamerule propwash:allow_reset false"
+      "example": "/gamerule propwash:allow_reset false",
+      "race_relevant": false
+    },
+    {
+      "id": "propwash:allow_freecam",
+      "name": "allow_freecam",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": false,
+      "changes_physics": false,
+      "title": {
+        "de": "Freecam-Drohne erlauben",
+        "en": "Allow freecam drone"
+      },
+      "description": {
+        "de": "An: Spieler können eine freie Kamera-Drohne fliegen, die es nur auf ihrem eigenen Bildschirm gibt – ohne Kollision, Modell und Akku. Sie reicht nur so weit, wie ihr Spiel die Welt geladen hat, und sieht durch Wände. Standardmäßig aus. Veränderte Clients können diese Einstellung umgehen.",
+        "en": "On: players can fly a free camera drone that exists only on their own screen – no collision, no model, no battery. It reaches only the area their game has loaded and can look through walls. Off by default. Modified clients can ignore this setting."
+      },
+      "example": "/gamerule propwash:allow_freecam true",
+      "race_relevant": false
+    },
+    {
+      "id": "propwash:players_create_zones",
+      "name": "players_create_zones",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": true,
+      "changes_physics": false,
+      "title": {
+        "de": "Spieler dürfen Zonen anlegen",
+        "en": "Players may create zones"
+      },
+      "description": {
+        "de": "An: Jeder Spieler kann mit dem Zonen-Markierer Zonen anlegen und seine eigenen ändern oder löschen. Aus: Nur Operatoren legen Zonen an, ändern und löschen sie; Zonen, die Spieler vorher angelegt haben, wirken weiter.",
+        "en": "On: every player can mark zones with the Zone Marker and change or delete their own zones. Off: only operators create, change and delete zones; zones that players created before keep working."
+      },
+      "example": "/gamerule propwash:players_create_zones false",
+      "race_relevant": false
+    },
+    {
+      "id": "propwash:free_course_placement",
+      "name": "free_course_placement",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": false,
+      "changes_physics": false,
+      "title": {
+        "de": "Kurs-Elemente frei platzieren",
+        "en": "Free course placement"
+      },
+      "description": {
+        "de": "An: Gates, Fahnen, Stangen und andere Kurs-Elemente dürfen ineinander oder überlappend stehen – für Gate-in-Gate-Aufbauten und enge Kurse. Jedes Element wertet und kollidiert weiter für sich. Aus (Standard): Ein Element lässt sich nicht dort setzen, wo es ein anderes überlappen würde. Blöcke müssen in beiden Fällen frei sein.",
+        "en": "On: gates, flags, poles and other course elements may be placed inside or overlapping each other – for gate-in-gate builds and tight layouts. Each element still scores and collides on its own. Off (default): an element can't be placed where it would overlap another one. Blocks still have to be free either way."
+      },
+      "example": "/gamerule propwash:free_course_placement true",
+      "race_relevant": false
     }
   ],
   "presets": [
@@ -709,7 +796,10 @@
         "drone_trails": false,
         "invulnerable_pilots": false,
         "waterproof_drones": false,
-        "allow_reset": true
+        "allow_reset": true,
+        "allow_freecam": false,
+        "players_create_zones": true,
+        "free_course_placement": false
       },
       "differs_from_default": [],
       "command": "/propwash rules preset realistic"
@@ -755,7 +845,10 @@
         "drone_trails": true,
         "invulnerable_pilots": false,
         "waterproof_drones": false,
-        "allow_reset": true
+        "allow_reset": true,
+        "allow_freecam": false,
+        "players_create_zones": true,
+        "free_course_placement": false
       },
       "differs_from_default": [
         "hardware_limits",
@@ -809,7 +902,10 @@
         "drone_trails": true,
         "invulnerable_pilots": false,
         "waterproof_drones": true,
-        "allow_reset": true
+        "allow_reset": true,
+        "allow_freecam": false,
+        "players_create_zones": true,
+        "free_course_placement": false
       },
       "differs_from_default": [
         "prop_wash",
