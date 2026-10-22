@@ -751,8 +751,8 @@
         {
           "version": "0.6.0",
           "title": {
-            "en": "Share codes and add-ons",
-            "de": "Sharecodes und Add-ons"
+            "en": "Share codes, race data and add-on API",
+            "de": "Sharecodes, Renndaten und Add-on-API"
           },
           "items": [
             {
@@ -777,8 +777,138 @@
                 "de": "Mehr Add-on-API"
               },
               "text": {
-                "en": "Switch functions, OSD elements and collision hooks for add-ons, plus clear rules for add-on makers.",
-                "de": "Schalterfunktionen, OSD-Elemente und Kollisions-Haken für Add-ons, dazu klare Regeln für Add-on-Macher."
+                "en": "Switch functions, OSD elements and collision hooks for add-ons.",
+                "de": "Schalterfunktionen, OSD-Elemente und Kollisions-Haken für Add-ons."
+              }
+            },
+            {
+              "id": "addon-guidelines",
+              "icon": "book",
+              "status": "progress",
+              "title": {
+                "en": "Add-on guidelines",
+                "de": "Richtlinien für Add-ons"
+              },
+              "text": {
+                "en": "Clear guidelines for add-on makers, and the namespace “propwash” is reserved for Propwash itself.",
+                "de": "Klare Richtlinien für Add-on-Macher, und der Namensraum „propwash“ ist für Propwash selbst reserviert."
+              }
+            },
+            {
+              "id": "flight-path-marker",
+              "icon": "compass",
+              "status": "progress",
+              "title": {
+                "en": "Velocity vector in the OSD",
+                "de": "Geschwindigkeitsvektor im OSD"
+              },
+              "text": {
+                "en": "A marker in the OSD that shows where your drone is really flying, not just where its nose points.",
+                "de": "Eine Markierung im OSD, die zeigt, wohin deine Drohne wirklich fliegt – nicht nur, wohin ihre Nase zeigt."
+              }
+            },
+            {
+              "id": "freecam-drone",
+              "icon": "cinema",
+              "status": "progress",
+              "title": {
+                "en": "Freecam drone",
+                "de": "Freecam-Drohne"
+              },
+              "text": {
+                "en": "A drone that flies through blocks like a free camera – for scouting, filming and looking around.",
+                "de": "Eine Drohne, die wie eine freie Kamera durch Blöcke fliegt – zum Erkunden, Filmen und Umschauen."
+              }
+            },
+            {
+              "id": "rx-block",
+              "icon": "gate",
+              "status": "progress",
+              "title": {
+                "en": "RX block",
+                "de": "RX-Block"
+              },
+              "text": {
+                "en": "A receiver block that turns one channel of your radio into a redstone signal – while you keep flying.",
+                "de": "Ein Empfänger-Block, der einen Kanal deiner Funke in ein Redstone-Signal verwandelt – während du weiterfliegst."
+              }
+            },
+            {
+              "id": "race-data",
+              "icon": "flag",
+              "status": "progress",
+              "title": {
+                "en": "Race data for servers and bots",
+                "de": "Renndaten für Server und Bots"
+              },
+              "text": {
+                "en": "Every course gets its own ID with its leaderboards – servers and Discord bots read them through the API.",
+                "de": "Jeder Kurs bekommt eine eigene ID mit seinen Bestenlisten – Server und Discord-Bots lesen sie über die API."
+              }
+            },
+            {
+              "id": "race-gates",
+              "icon": "gate",
+              "status": "progress",
+              "title": {
+                "en": "Better courses",
+                "de": "Bessere Kurse"
+              },
+              "text": {
+                "en": "Stacked gates count to the bottom, poles score, loops in a course, fine nudging and visible scoring areas.",
+                "de": "Gestapelte Gates zählen bis unten, Pfosten werten, Schleifen im Kurs, Gates fein verschieben, Wertungsflächen sichtbar."
+              }
+            },
+            {
+              "id": "camera-angle-menu",
+              "icon": "tilt",
+              "status": "progress",
+              "title": {
+                "en": "Camera angle in the K menu",
+                "de": "Kamerawinkel im K-Menü"
+              },
+              "text": {
+                "en": "Set the camera angle in the configurator too, not only in the drone’s service menu.",
+                "de": "Den Kamerawinkel auch im Konfigurator einstellen, nicht nur im Wartungsmenü der Drohne."
+              }
+            },
+            {
+              "id": "gate-tutorial",
+              "icon": "school",
+              "status": "progress",
+              "title": {
+                "en": "Gate tutorial",
+                "de": "Gate-Tutorial"
+              },
+              "text": {
+                "en": "A short tutorial the first time you place a gate, so you find everything gates can do.",
+                "de": "Ein kurzes Tutorial, wenn du zum ersten Mal ein Gate setzt – damit du alles findest, was Gates können."
+              }
+            },
+            {
+              "id": "slime-wool",
+              "icon": "impact",
+              "status": "progress",
+              "title": {
+                "en": "Slime and wool",
+                "de": "Schleim und Wolle"
+              },
+              "text": {
+                "en": "Slime blocks bounce your drone back, wool catches it softly – and you can take off from wool.",
+                "de": "Schleimblöcke federn deine Drohne zurück, Wolle fängt sie weich ab – und von Wolle kannst du starten."
+              }
+            },
+            {
+              "id": "website-faq-languages",
+              "icon": "chat",
+              "status": "progress",
+              "title": {
+                "en": "More FAQ and languages on the website",
+                "de": "Mehr FAQ und Sprachen auf der Website"
+              },
+              "text": {
+                "en": "More answers in the FAQ and the website in more languages.",
+                "de": "Mehr Antworten in den FAQ und die Website in weiteren Sprachen."
               }
             }
           ]
@@ -792,7 +922,7 @@
             {
               "id": "jmp-next",
               "icon": "prop",
-              "status": "planned",
+              "status": "progress",
               "title": {
                 "en": "Next version of Just More Parts",
                 "de": "Nächste Version von Just More Parts"
@@ -818,8 +948,8 @@
         "de": "Nach 0.6.0"
       },
       "intro": {
-        "en": "Two official add-ons and a version for Minecraft 1.21.1 come after 0.6.0. The server add-on follows later, without a date yet.",
-        "de": "Nach 0.6.0 kommen zwei offizielle Add-ons und eine Version für Minecraft 1.21.1. Das Server-Add-on folgt später, noch ohne Termin."
+        "en": "Two more official add-ons follow 0.6.0, then a version for Minecraft 1.21.1.",
+        "de": "Auf 0.6.0 folgen zwei weitere offizielle Add-ons, danach eine Version für Minecraft 1.21.1."
       },
       "groups": [
         {
@@ -873,27 +1003,6 @@
               "text": {
                 "en": "A version for Minecraft 1.21.1 on Fabric and NeoForge: without the add-on API, with selected add-on content, updates now and then.",
                 "de": "Eine Version für Minecraft 1.21.1 auf Fabric und NeoForge: ohne Add-on-API, mit ausgewählten Add-on-Inhalten, Updates ab und zu."
-              }
-            }
-          ]
-        },
-        {
-          "title": {
-            "en": "Server add-on",
-            "de": "Server-Add-on"
-          },
-          "items": [
-            {
-              "id": "propwash-server",
-              "icon": "flag",
-              "status": "planned",
-              "title": {
-                "en": "Propwash: Server",
-                "de": "Propwash: Server"
-              },
-              "text": {
-                "en": "The official server add-on with game modes: races, time trials and zone games, with their own maps and results.",
-                "de": "Das offizielle Server-Add-on mit Spielmodi: Rennen, Zeitfahren und Zonen-Spiele, mit eigenen Maps und Ergebnissen."
               }
             }
           ]
