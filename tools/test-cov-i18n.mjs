@@ -282,7 +282,10 @@ async function inBrowser(dir) {
     for (const [k, tr] of Object.entries(dict.entries)) {
       const en = plain(k);
       const out = plain(tr);
-      if (en.split(/\s+/).length < 2 || en.length < 8 || en.toLowerCase() === out.toLowerCase() || KEEP.has(en) || PART_NAMES.includes(en)) continue;
+      const words = en.toLowerCase().split(/[^\p{L}']+/u).filter(Boolean);
+      const same = en.toLowerCase() === out.toLowerCase();
+      if (words.length < 2 || en.length < 8 || KEEP.has(en) || PART_NAMES.includes(en)) continue;
+      if (same && !(words.length >= 4 && words.some((w) => ENGLISH.has(w)))) continue;
       sources.set(en.toLowerCase(), en);
     }
     const visit = async (pathPart, ready, prepare) => {

@@ -131,7 +131,7 @@ export function gitHasRef(repo, ref) {
 export function siblingRepo(folder) {
   const candidates = [path.join(ROOT, '..', folder)];
   try {
-    const common = execFileSync('git', ['-C', ROOT, 'rev-parse', '--path-format=absolute', '--git-common-dir'], { encoding: 'utf8' }).trim();
+    const common = execFileSync('git', ['-C', ROOT, 'rev-parse', '--path-format=absolute', '--git-common-dir'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
     candidates.push(path.join(path.dirname(common), '..', folder));
   } catch {
     /* not a git checkout */
@@ -147,7 +147,7 @@ export function unlistedAddons(listed, dirsArg) {
   let dirs = (dirsArg || '').split(',').filter(Boolean);
   if (!dirs.length) {
     try {
-      const common = execFileSync('git', ['-C', ROOT, 'rev-parse', '--path-format=absolute', '--git-common-dir'], { encoding: 'utf8' }).trim();
+      const common = execFileSync('git', ['-C', ROOT, 'rev-parse', '--path-format=absolute', '--git-common-dir'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
       const parent = path.dirname(path.dirname(common));
       dirs = fs.readdirSync(parent).filter((d) => d.startsWith('propwash-')).map((d) => path.join(parent, d));
     } catch {
