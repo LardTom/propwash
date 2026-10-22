@@ -14,7 +14,11 @@
 //   - the status lines match the versions, the version in the compatibility list and in the add-on block is current,
 //     and the version of "What's new" belongs to the current release line
 //   - the roadmap draws download buttons only for products of platforms.json, through assets/js/i18n.js
-//   - the FAQ has an id on every question (the 15 of 0.6.0, in order) and no page names the deferred server add-on
+//   - the FAQ has an id on every question (the 15 of 0.6.0, in order) and no page, not even the roadmap data, names
+//     the deferred server add-on
+//   - the landing page links the pages of 0.6.0: "What's new" the changelog of the release, the converter (convert/),
+//     the add-on directory (addons/) and the rules for add-ons (docs/api/#rules); every card of "What's new" has a
+//     picture; the add-on texts say that Propwash 0.6.0 needs Just More Parts 1.2.0; no "race restart" (now Reset)
 //
 //   node tools/test-platforms.mjs
 
@@ -249,12 +253,44 @@ const details = [...faqHtml.matchAll(/<details(?:\s+id="([^"]*)")?[^>]*>/g)].map
 check(details.every(Boolean), `index.html: every FAQ question has an id (${details.filter((d) => !d).length} without)`);
 check(details.join() === FAQ.join(), `index.html: FAQ ids in this order: ${FAQ.join(', ')} (found ${details.join(', ')})`);
 check(new Set(details).size === details.length, 'index.html: FAQ ids are unique');
-for (const page of pages.filter((p) => !p.startsWith('roadmap/') && !LANG_TREE.test(p))) {
+for (const page of pages.filter((p) => !LANG_TREE.test(p))) {
   const text = visible(read(page));
   check(!/Propwash: Server|server add-on|Server-Add-on|Server-Mod\b|server mod\b/i.test(text), `${page}: names the deferred server add-on`);
   check(!/href="[^"]*(?:addons|docs)\/server\//.test(read(page)), `${page}: links to a server page`);
 }
 check(!exists('addons/server') && !exists('docs/server'), 'no page for the deferred server add-on (addons/server/, docs/server/)');
+const roadmapItems = roadmap.horizons.flatMap((h) => (h.groups || []).flatMap((g) => g.items || []));
+check(!roadmapItems.some((item) => item.id === 'propwash-server'), 'roadmap.json: no item for the deferred server add-on (propwash-server)');
+check(!/Propwash: Server|server add-on|Server-Add-on|Server-Mod\b|server mod\b/i.test(JSON.stringify(roadmap)), 'roadmap.json: names the deferred server add-on');
+
+// 8. Links of the landing page to the pages of 0.6.0, pictures of "What's new", add-on texts.
+const part = (id) => {
+  const s = section(id);
+  return s ? home.slice(s.start, s.end) : '';
+};
+const hrefs = (fragment) => [...fragment.replace(/<!--[\s\S]*?-->/g, '').matchAll(/<a\b[^>]*\shref="([^"]*)"/g)].map((m) => decode(m[1]));
+const count = (list, href) => list.filter((h) => h === href).length;
+const newPart = part('new');
+const releaseAnchor = `changelog/#propwash-${versionOf(main)}`;
+check(count(hrefs(newPart), releaseAnchor) === 1, `index.html: "What's new" links to ${releaseAnchor}`);
+check(!hrefs(home).includes('changelog/#propwash'), 'index.html: links to changelog/#propwash instead of the release');
+const cards = [...newPart.matchAll(/<figure>([\s\S]*?)<\/figure>/g)].map((m) => m[1]);
+const pictured = cards.filter((c) => /^\s*<div class="shot[^"]*">\s*<img\s[^>]*\salt="[^"]+"[^>]*\sdata-de-alt="[^"]+"/.test(c));
+check(cards.length === 3 && pictured.length === 3, `index.html: every card of "What's new" starts with a picture with alt and data-de-alt (${pictured.length} of ${cards.length})`);
+check(count(hrefs(newPart), 'convert/') === 2, 'index.html: the share-code card of "What\'s new" links the converter (convert/) in English and German');
+check(count(hrefs(part('faq-old-codes')), 'convert/') === 2, 'index.html: the FAQ about old share codes links the converter (convert/) in English and German');
+check(count(hrefs(part('faq-addons')), 'addons/') === 2, 'index.html: the FAQ about add-ons links the add-on directory (addons/) in English and German');
+for (const id of ['faq-license', 'faq-addons', 'source']) {
+  check(count(hrefs(part(id)), 'docs/api/#rules') === 2, `index.html: #${id} links the rules for add-ons (docs/api/#rules) in English and German`);
+}
+const jmp = data.products.justmoreparts?.version;
+for (const [id, fragment] of [['addon', part('addon')], ['compat-title', compat]]) {
+  const text = visible(fragment);
+  check(!/\b1\.1\b[^.]*(keeps working|läuft[^.]*weiter)/.test(text), `index.html: #${id} says Just More Parts 1.1 keeps working with Propwash ${versionOf(main)}`);
+  check(jmp && (text.match(new RegExp(`(needs|braucht) (version )?${jmp.replace(/\./g, '\\.')}`, 'gi')) || []).length === 2,
+    `index.html: #${id} says in English and German that Propwash ${versionOf(main)} needs Just More Parts ${jmp}`);
+}
+check(!/race restart|Renn-Neustart/i.test(visible(home)), 'index.html: names the race restart, which is called Reset since 0.5.2');
 
 if (failures.length) {
   console.log(`platforms: ${failures.length} of ${checks} checks FAILED`);

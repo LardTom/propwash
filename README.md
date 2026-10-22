@@ -371,7 +371,10 @@ released the files, set it to `live` and run the build again. `test-platforms.mj
 and script: Propwash pages on CurseForge and Modrinth only with the addresses of `platforms.json` (the footer constants
 in `tools/site-nav.mjs` and `SOURCE_JMP` of the docs included), repository links only below a `source` address, links
 saying “Download” only to a platform, and on the player pages (not the docs and legal pages) no visible “GitHub”. It
-also keeps the deferred server add-on off every page except the roadmap.
+also keeps the deferred server add-on off every page and out of the roadmap data, and checks the landing page: “What’s
+new” links to `changelog/#propwash-<version>` and every card has a picture, the converter (`convert/`), the add-on
+directory (`addons/`) and the rules for add-ons (`docs/api/#rules`) are linked where the FAQ and the license name them,
+and the add-on block and the compatibility list say which version of Just More Parts the release needs.
 
 ## Add-on directory
 
