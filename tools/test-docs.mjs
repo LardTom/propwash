@@ -7,7 +7,8 @@
 //    stale, no leftover files).
 // 2. Completeness against the mod's code: every API type has a description, every field the part reader reads is
 //    documented (and nothing else), every server.json setting and every event is explained, the API history covers
-//    the current API version, the world rules carry both languages and every example command is valid.
+//    the current API version, the world rules carry both languages and their race classification, every example
+//    command is valid, and the German rules for add-ons follow the current ADDONS.md (hash and block structure).
 // 3. Every page: unique ids, every in-page anchor and every relative link or image exists, English and German texts
 //    come in pairs, tags are balanced, German texts use real umlauts, no local paths, and no term of the local
 //    denylist (the same file the mod's public export uses: PROPWASH_EXPORT_DENYLIST, otherwise
@@ -23,7 +24,7 @@ import { computeHashes, stampHtml } from './stamp-assets.mjs';
 import { checkGamerules } from './docs/extract.mjs';
 import { RECIPES, checkCommand } from './docs/pages/gamerules.mjs';
 import { SERVER_FIELDS } from './docs/pages/guide.mjs';
-import { EVENT_INFO, apiHistoryProblem } from './docs/pages/api.mjs';
+import { EVENT_INFO, apiHistoryProblem, addonRulesProblem } from './docs/pages/api.mjs';
 import { referenceProblems } from './docs/pages/reference.mjs';
 import { partsFormatProblems } from './docs/pages/parts-format.mjs';
 
@@ -96,6 +97,9 @@ try {
   ok(false, `Welt-Regeln: ${e.message}`);
 }
 ok(data.gamerules.version === data.meta.propwash, `Welt-Regeln-Export aus Propwash ${data.meta.propwash}`);
+none(data.gamerules.rules.filter((r) => typeof r.race_relevant !== 'boolean').map((r) => `${r.id} ohne Einordnung fürs Rennen (race_relevant aus WorldRuleSpecs)`), 'Welt-Regeln rennrelevant oder neutral');
+const rulesProblem = addonRulesProblem(data.addons);
+none(rulesProblem ? [rulesProblem] : [], 'Regeln für Add-ons: deutsche Fassung passt zu ADDONS.md');
 none(data.gamerules.rules.map((r) => checkCommand(data.gamerules.rules, r.example)).filter(Boolean), 'Beispielbefehle der Regeln gültig');
 none(RECIPES.flatMap((r) => r.commands.map((c) => checkCommand(data.gamerules.rules, c))).filter(Boolean), 'Befehle der Rezepte gültig');
 none(data.controls.keys.filter((k) => !k.title || !k.title.en || !k.title.de).map((k) => `Taste ${k.name} ohne Text`), 'Tasten mit Texten en/de');

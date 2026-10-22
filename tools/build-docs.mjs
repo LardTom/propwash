@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 // Builds the documentation under docs/ (propwashfpv.com/docs) from a Propwash checkout.
 //
-//   node tools/build-docs.mjs [--propwash <dir>] [--gamerules <file>] [--version <x.y.z>] [--images] [--render-only]
+//   node tools/build-docs.mjs [--propwash <dir>] [--gamerules <file>] [--version <x.y.z>] [--images] [--image <key>]
+//                             [--screenshots <dir>] [--render-only]
 //
 // 1. Extract (skipped with --render-only): reads the Propwash sources, resources and language files of <dir>
 //    (default: PROPWASH_SRC, or the folder "propwash" next to this repository) and the world-rules export
 //    (default: <dir>/build/web-export/gamerules.json, written by tools/export_rules.sh in the Propwash repository) and
 //    writes tools/docs/data/*.json. --version overrides the mod version from gradle.properties (only for previews of a
 //    release that has not been versioned yet).
-// 2. Images (--images): converts the in-game screenshots the pages use from <dir>/docs/screenshots to WebP
-//    (assets/img/docs/, 800 and 1600 px wide, needs cwebp).
+// 2. Images (--images): converts the in-game screenshots the pages use from <dir>/docs/screenshots (or --screenshots
+//    <dir>, e.g. the screenshots of a release self-test run) to WebP (assets/img/docs/, 800 and 1600 px wide, never
+//    wider than the screenshot; needs cwebp). --image <key> (repeatable) converts only these entries of IMAGES and keeps
+//    the others as recorded in tools/docs/data/images.json.
 // 3. Render: writes docs/**/index.html (and docs/gamerules/gamerules.json) from tools/docs/data and the texts in
 //    tools/docs/pages/; the header navigation comes from tools/site-nav.mjs (rebuild after changing it there). Rendering only needs the data files, so the pages can be rebuilt without a Propwash checkout.
 
@@ -30,7 +33,7 @@ import blackboxPage from './docs/pages/blackbox.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const DATA_DIR = path.join(ROOT, 'tools/docs/data');
-const DATA_FILES = ['meta', 'api', 'parts', 'controls', 'server', 'gamerules', 'images'];
+const DATA_FILES = ['meta', 'api', 'parts', 'controls', 'server', 'gamerules', 'addons', 'images'];
 
 export const IMAGES = {
   world_rules: { src: 'configurator_world_rules.png', name: 'world-rules-tab' },
@@ -53,6 +56,16 @@ export const IMAGES = {
   waterproof: { src: 'waterproof_underwater_fpv.png', name: 'waterproof-underwater' },
   bando_map: { src: 'bando_map_hand.png', name: 'bando-map' },
   zones: { src: 'zones_border.png', name: 'zones-border' },
+  freecam: { src: 'freecam_menu.png', name: 'freecam-menu' },
+  rx_block: { src: 'rx_block_window.png', name: 'rx-block-window' },
+  flight_path_marker: { src: 'osd_flight_path_marker.png', name: 'flight-path-marker' },
+  motor_heat_osd: { src: 'motor_heat_osd_esc.png', name: 'motor-heat-esc-overheat' },
+  motor_heat_workbench: { src: 'motor_heat_workbench.png', name: 'motor-heat-workbench' },
+  gate_stacks: { src: 'gate_stacks.png', name: 'gate-stacks' },
+  gate_hint: { src: 'gate_hint_window.png', name: 'gate-hint-window' },
+  share_chat: { src: 'share-chat/share_chat_named_854x480_en.png', name: 'share-code-chat' },
+  share_import: { src: 'share/share_missing_addons_854x480_en.png', name: 'share-code-missing-addon' },
+  camera_angle: { src: 'configurator_video_camera_angle.png', name: 'camera-angle-video-tab' },
 };
 const SIZES = [800, 1600];
 
@@ -69,6 +82,10 @@ const BUILDERS = {
 function arg(name) {
   const i = process.argv.indexOf(name);
   return i >= 0 ? process.argv[i + 1] : undefined;
+}
+
+function args(name) {
+  return process.argv.flatMap((a, i) => (a === name && process.argv[i + 1] ? [process.argv[i + 1]] : []));
 }
 
 export function defaultPropwashDir() {
@@ -106,20 +123,26 @@ function pngSize(file) {
   return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
 }
 
-function buildImages(propwash) {
+function buildImages(screenshots, previous = {}, only = null) {
   const out = {};
   const dir = path.join(ROOT, 'assets/img/docs');
   fs.mkdirSync(dir, { recursive: true });
+  for (const key of only || []) if (!IMAGES[key]) throw new Error(`--image ${key}: kein Eintrag in IMAGES (tools/build-docs.mjs)`);
   for (const [key, img] of Object.entries(IMAGES)) {
-    const src = path.join(propwash, 'docs/screenshots', img.src);
-    if (!fs.existsSync(src)) throw new Error(`Bildschirmfoto fehlt: docs/screenshots/${img.src}`);
+    if (only && !only.includes(key)) {
+      if (previous[key]) out[key] = previous[key];
+      continue;
+    }
+    const src = path.join(screenshots, img.src);
+    if (!fs.existsSync(src)) throw new Error(`Bildschirmfoto fehlt: ${img.src} in ${screenshots}`);
     const size = pngSize(src);
-    for (const w of SIZES) {
+    const widths = [...new Set(SIZES.map((w) => Math.min(w, size.width)))];
+    for (const w of widths) {
       const target = path.join(dir, `${img.name}-${w}.webp`);
       const h = Math.round(w * size.height / size.width);
       execFileSync('cwebp', ['-quiet', '-q', '82', '-m', '6', '-metadata', 'none', '-resize', String(w), String(h), src, '-o', target]);
     }
-    out[key] = { name: img.name, src: img.src, width: size.width, height: size.height, small: SIZES[0], large: SIZES[1] };
+    out[key] = { name: img.name, src: img.src, width: size.width, height: size.height, small: widths[0], large: widths[widths.length - 1] };
   }
   return out;
 }
@@ -146,10 +169,14 @@ function main() {
       throw new Error(`Welt-Regeln-Export fehlt: ${gamerules}\n  im Propwash-Repository zuerst tools/export_rules.sh ausführen (oder --gamerules <datei>)`);
     }
     const extracted = extractAll(propwash, { gamerules, version: arg('--version') });
+    const screenshots = path.resolve(arg('--screenshots') || path.join(propwash, 'docs/screenshots'));
+    const recorded = path.join(DATA_DIR, 'images.json');
+    const previous = fs.existsSync(recorded) ? JSON.parse(fs.readFileSync(recorded, 'utf8')) : null;
+    const only = args('--image');
     let images;
-    if (process.argv.includes('--images')) images = buildImages(propwash);
-    else if (fs.existsSync(path.join(DATA_DIR, 'images.json'))) images = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'images.json'), 'utf8'));
-    else images = buildImages(propwash);
+    if (process.argv.includes('--images') || !previous) images = buildImages(screenshots);
+    else if (only.length) images = buildImages(screenshots, previous, only);
+    else images = previous;
     writeData(extracted, images);
     console.log(`Daten aus Propwash ${extracted.meta.propwash} (API ${extracted.meta.api}, Protokoll ${extracted.meta.protocol}, ${extracted.gamerules.rules.length} Welt-Regeln)`);
   }
