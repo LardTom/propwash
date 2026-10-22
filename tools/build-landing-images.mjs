@@ -56,6 +56,8 @@ export const IMAGES = [
   ['course-elements', 'course_elements', FULL],
   ['bando-coast-platform', 'bando_coast_platform_aerial', FULL],
   ['bando-field-barn', 'bando_field_barn_aerial', FULL],
+  ['freecam-osd', 'freecam_osd', FULL],
+  ['rx-block-scene', 'rx_block_scene', FULL],
 
   ['drone-closeup', 'drone_closeup', [800, 1120], DRONE],
   ['drone-closeup-action-cam-heavy', 'drone_closeup_action_cam_heavy', [800, 1120], DRONE],
