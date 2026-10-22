@@ -18,16 +18,16 @@ export default function indexPage(ctx) {
   ];
   const CARDS = [
     card('docs/guide/', { en: 'Player guide', de: 'Spielerhandbuch' },
-      { en: `First flight, binding the radio and wearing matching goggles, radio and gamepad setup, all ${controls.keys.length} keys and what server owners need.`, de: `Erster Flug, Funke binden und passende Brille aufsetzen, Funke und Gamepad einrichten, alle ${controls.keys.length} Tasten und was Server-Betreiber brauchen.` },
+      { en: `First flight, binding the radio and wearing matching goggles, radio and gamepad setup, all ${controls.keys.length} keys, share codes, races, the freecam drone, the RX block and what server owners need.`, de: `Erster Flug, Funke binden und passende Brille aufsetzen, Funke und Gamepad einrichten, alle ${controls.keys.length} Tasten, Sharecodes, Rennen, die Freecam-Drohne, der RX-Block und was Server-Betreiber brauchen.` },
       { en: 'Players', de: 'Spieler' }),
     card('docs/blackbox/', { en: 'Blackbox tuning', de: 'Tuning mit der Blackbox' },
       { en: 'Record every flight as a Betaflight blackbox log and tune your drone with Blackbox Explorer and PIDtoolbox.', de: 'Jeden Flug als Betaflight-Blackbox-Log aufzeichnen und die Drohne mit Blackbox Explorer und PIDtoolbox tunen.' },
       { en: 'Players', de: 'Spieler' }),
     card('docs/gamerules/', { en: 'World rules', de: 'Welt-Regeln' },
-      { en: `All ${gamerules.rules.length} gamerules: gravity, wind, battery life, crash damage, video range and channels, with commands and recipes.`, de: `Alle ${gamerules.rules.length} Gamerules: Schwerkraft, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Kanäle, mit Befehlen und Rezepten.` },
+      { en: `All ${gamerules.rules.length} gamerules: gravity, wind, battery life, crash damage, video range and channels, which are race-relevant, with commands and recipes.`, de: `Alle ${gamerules.rules.length} Gamerules: Schwerkraft, Wind, Akkulaufzeit, Crash-Schaden, Videoreichweite und Kanäle, welche rennrelevant sind, mit Befehlen und Rezepten.` },
       { en: 'Players and server owners', de: 'Spieler und Server-Betreiber' }),
     card('docs/api/', { en: 'Add-on API', de: 'Add-on-API' },
-      { en: 'Add parts, presets, creative tabs, workbench buttons, configurator tabs and Flight School scenes from your own mod.', de: 'Teile, Presets, Kreativ-Tabs, Werkbank-Knöpfe, Konfigurator-Tabs und Flugschul-Szenen aus dem eigenen Mod hinzufügen.' },
+      { en: 'Add parts, presets, creative tabs, workbench buttons, configurator tabs, Flight School scenes, switches, OSD elements and collision rules from your own mod – and the rules for add-ons.', de: 'Teile, Presets, Kreativ-Tabs, Werkbank-Knöpfe, Konfigurator-Tabs, Flugschul-Szenen, Schalter, OSD-Elemente und Kollisionsregeln aus dem eigenen Mod hinzufügen – und die Regeln für Add-ons.' },
       { en: 'Mod authors', de: 'Mod-Autoren' }),
     card('docs/api/reference/', { en: 'API reference', de: 'API-Referenz' },
       { en: `All ${typeCount} public types of API ${api.version} with every component and method.`, de: `Alle ${typeCount} öffentlichen Typen der API ${api.version} mit jeder Komponente und Methode.` },
@@ -54,6 +54,7 @@ ${list([
     ['the world rules from the game’s own rule catalogue, with the same texts as in the game,', 'die Welt-Regeln aus dem Regel-Katalog des Spiels, mit denselben Texten wie im Spiel,'],
     ['the keys and switch functions from the key defaults and language files,', 'die Tasten und Schalter-Funktionen aus den Standardbelegungen und Sprachdateien,'],
     ['the API reference from the API sources, and the parts format checked against the part reader,', 'die API-Referenz aus den API-Quellen und das Teile-Format geprüft gegen den Teile-Leser,'],
+    ['the rules for add-ons from <code>ADDONS.md</code> in the source repository,', 'die Regeln für Add-ons aus <code>ADDONS.md</code> im Quellcode-Repository,'],
     ['the server.json settings with their defaults and limits from the server configuration.', 'die server.json-Einstellungen mit Standards und Grenzen aus der Server-Konfiguration.'],
   ])}
 ${P('The explanations around them are written by hand. Found something wrong? Tell us on <a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener">Discord</a>.',

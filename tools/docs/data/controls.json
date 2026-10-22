@@ -393,6 +393,16 @@
         "de": "Zubehör-Aktion 4"
       },
       "sharedWith": []
+    },
+    {
+      "name": "freecam",
+      "key": "F6",
+      "flightStick": false,
+      "title": {
+        "en": "Toggle freecam drone",
+        "de": "Freecam-Drohne an/aus"
+      },
+      "sharedWith": []
     }
   ],
   "switches": [

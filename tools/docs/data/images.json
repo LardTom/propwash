@@ -158,5 +158,85 @@
     "height": 1080,
     "small": 800,
     "large": 1600
+  },
+  "freecam": {
+    "name": "freecam-menu",
+    "src": "freecam_menu.png",
+    "width": 1708,
+    "height": 960,
+    "small": 800,
+    "large": 1600
+  },
+  "rx_block": {
+    "name": "rx-block-window",
+    "src": "rx_block_window.png",
+    "width": 1708,
+    "height": 960,
+    "small": 800,
+    "large": 1600
+  },
+  "flight_path_marker": {
+    "name": "flight-path-marker",
+    "src": "osd_flight_path_marker.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "motor_heat_osd": {
+    "name": "motor-heat-esc-overheat",
+    "src": "motor_heat_osd_esc.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "motor_heat_workbench": {
+    "name": "motor-heat-workbench",
+    "src": "motor_heat_workbench.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "gate_stacks": {
+    "name": "gate-stacks",
+    "src": "gate_stacks.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "gate_hint": {
+    "name": "gate-hint-window",
+    "src": "gate_hint_window.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "share_chat": {
+    "name": "share-code-chat",
+    "src": "share-chat/share_chat_named_854x480_en.png",
+    "width": 854,
+    "height": 480,
+    "small": 800,
+    "large": 854
+  },
+  "share_import": {
+    "name": "share-code-missing-addon",
+    "src": "share/share_missing_addons_854x480_en.png",
+    "width": 854,
+    "height": 480,
+    "small": 800,
+    "large": 854
+  },
+  "camera_angle": {
+    "name": "camera-angle-video-tab",
+    "src": "configurator_video_camera_angle.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
   }
 }

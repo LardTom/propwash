@@ -89,6 +89,75 @@ export function table(headers, rows, cls = '') {
   return `<div class="docs-table-wrap" tabindex="0"><table class="docs-table ${cls}">\n<thead><tr>${head}</tr></thead>\n<tbody>\n${body}\n</tbody>\n</table></div>`;
 }
 
+// A small Markdown reader for repository texts the pages show (ADDONS.md): "#"/"##" headings, a line in **bold** on its
+// own (a numbered rule), paragraphs, "- " lists with one nested level, and inline `code`, **bold**, *emphasis* and
+// [links](target). link(target) turns repository paths into addresses. Returns blocks
+// { type: 'title' | 'heading' | 'rule' | 'p' | 'ul', … } so that two languages can be paired block by block.
+export function markdownBlocks(markdown) {
+  const blocks = [];
+  let para = null;
+  let listBlock = null;
+  const flush = () => {
+    if (para) blocks.push({ type: 'p', text: para.join(' ') });
+    para = null;
+    listBlock = null;
+  };
+  for (const raw of markdown.replace(/\r\n/g, '\n').split('\n')) {
+    const line = raw.replace(/\s+$/, '');
+    if (!line.trim()) { flush(); continue; }
+    let m;
+    if ((m = /^(#{1,2})\s+(.*)$/.exec(line))) {
+      flush();
+      blocks.push({ type: m[1].length === 1 ? 'title' : 'heading', text: m[2] });
+    } else if ((m = /^\*\*([^*].*)\*\*$/.exec(line)) && !para) {
+      flush();
+      blocks.push({ type: 'rule', text: m[1] });
+    } else if ((m = /^(\s*)- (.*)$/.exec(line))) {
+      if (para) { blocks.push({ type: 'p', text: para.join(' ') }); para = null; }
+      if (!listBlock) { listBlock = { type: 'ul', items: [] }; blocks.push(listBlock); }
+      if (m[1].length >= 2 && listBlock.items.length) listBlock.items[listBlock.items.length - 1].children.push(m[2]);
+      else listBlock.items.push({ text: m[2], children: [] });
+    } else {
+      if (listBlock) {
+        const last = listBlock.items[listBlock.items.length - 1];
+        if (/^\s{2,}/.test(line) && last) {
+          if (last.children.length) last.children[last.children.length - 1] += ` ${line.trim()}`;
+          else last.text += ` ${line.trim()}`;
+          continue;
+        }
+        listBlock = null;
+      }
+      (para ||= []).push(line.trim());
+    }
+  }
+  flush();
+  return blocks;
+}
+
+export function inlineMarkdown(text, link = (t) => t) {
+  let out = '';
+  const re = /`([^`]+)`|\*\*(.+?)\*\*|\*([^*]+)\*|\[([^\]]+)\]\(([^)\s]+)\)/g;
+  let last = 0;
+  let m;
+  while ((m = re.exec(text))) {
+    out += esc(text.slice(last, m.index));
+    if (m[1] !== undefined) out += `<code>${esc(m[1])}</code>`;
+    else if (m[2] !== undefined) out += `<strong>${inlineMarkdown(m[2], link)}</strong>`;
+    else if (m[3] !== undefined) out += `<em>${inlineMarkdown(m[3], link)}</em>`;
+    else {
+      const href = link(m[5]);
+      const external = /^https?:/.test(href) ? ' target="_blank" rel="noopener"' : '';
+      out += `<a href="${esc(href)}"${external}>${inlineMarkdown(m[4], link)}</a>`;
+    }
+    last = re.lastIndex;
+  }
+  return out + esc(text.slice(last));
+}
+
+export function markdownShape(blocks) {
+  return blocks.map((b) => (b.type === 'ul' ? `ul(${b.items.map((i) => i.children.length).join(',')})` : b.type)).join(' ');
+}
+
 export const mono = (s) => `<code>${esc(s)}</code>`;
 export const kbd = (s) => (s ? `<kbd>${esc(s)}</kbd>` : '–');
 

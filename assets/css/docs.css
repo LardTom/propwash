@@ -404,7 +404,8 @@ html[lang="de"] .docs-body :is(ul, ol) + p[lang="en"] + p[lang="de"] {
   white-space: nowrap;
 }
 
-.docs-badge--physics {
+.docs-badge--physics,
+.docs-badge--race {
   border-color: rgba(91, 200, 91, 0.45);
   color: var(--gate);
 }

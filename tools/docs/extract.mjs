@@ -4,6 +4,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { createHash } from 'node:crypto';
 import { parseJava, memberDisplay } from './java-api.mjs';
 
 const JAVA = 'common/src/main/java/de/lardtom/propwash';
@@ -295,6 +296,33 @@ export function checkGamerules(data) {
   return data;
 }
 
+// The race classification of every built-in world rule (RuleSpec#neutral() in WorldRuleSpecs): race-relevant rules make
+// a lap assisted when they differ from the world's race standard, neutral rules never do.
+export function extractRaceRelevance(root) {
+  const text = read(root, `${JAVA}/server/rules/WorldRuleSpecs.java`);
+  const out = {};
+  for (const m of text.matchAll(/RuleSpec\.[a-z]+\("([a-z0-9_]+)"[^;]*;/g)) out[m[1]] = !/\.neutral\(\)/.test(m[0]);
+  if (!Object.keys(out).length) throw new Error('WorldRuleSpecs: keine Regeln gefunden');
+  return out;
+}
+
+export function applyRaceRelevance(gamerules, relevance) {
+  for (const rule of gamerules.rules) {
+    if (relevance[rule.name] === undefined) throw new Error(`gamerules.json: ${rule.id} fehlt in WorldRuleSpecs (Einordnung fürs Rennen)`);
+    rule.race_relevant = relevance[rule.name];
+  }
+  const missing = Object.keys(relevance).filter((name) => !gamerules.rules.some((r) => r.name === name));
+  if (missing.length) throw new Error(`gamerules.json ohne ${missing.join(', ')} – tools/export_rules.sh neu ausführen`);
+  return gamerules;
+}
+
+// The rules for add-ons (ADDONS.md in the Propwash repository, English, authoritative). The page shows them with the
+// German version from tools/docs/pages/api.mjs; the hash tells the test when the German text has to follow a change.
+export function extractAddonRules(root) {
+  const markdown = read(root, 'ADDONS.md').replace(/\r\n/g, '\n').trim() + '\n';
+  return { file: 'ADDONS.md', sha256: createHash('sha256').update(markdown).digest('hex'), markdown };
+}
+
 export function extractAll(root, { gamerules, version } = {}) {
   if (!exists(root, `${JAVA}/api/PropwashApi.java`)) throw new Error(`kein Propwash-Quellbaum: ${root}`);
   const lang = loadLang(root);
@@ -304,9 +332,10 @@ export function extractAll(root, { gamerules, version } = {}) {
     parts: extractParts(root, lang),
     controls: extractControls(root, lang),
     server: extractServerConfig(root),
+    addons: extractAddonRules(root),
   };
   if (gamerules) {
-    out.gamerules = checkGamerules(JSON.parse(fs.readFileSync(gamerules, 'utf8')));
+    out.gamerules = applyRaceRelevance(checkGamerules(JSON.parse(fs.readFileSync(gamerules, 'utf8'))), extractRaceRelevance(root));
     if (version) {
       out.gamerules.version = version;
     } else if (out.gamerules.version !== out.meta.propwash) {

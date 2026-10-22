@@ -282,10 +282,14 @@ node tools/test-docs.mjs
 ```
 
 `--propwash` defaults to `PROPWASH_SRC` or the folder `propwash` next to this repository; `--gamerules <file>` points to
-another export. `--images` converts the in-game screenshots the pages use (`docs/screenshots/` of the mod) to WebP in
-`assets/img/docs/` (needs `cwebp`). `--version <x.y.z>` overrides the version from `gradle.properties` for a preview of
-a release that is not versioned yet; the real release build runs without it. `--render-only` rebuilds the pages from
-`tools/docs/data/` alone, without a Propwash checkout.
+another export. `--images` converts the in-game screenshots the pages use (`IMAGES` in `tools/build-docs.mjs`, taken from
+`docs/screenshots/` of the mod) to WebP in `assets/img/docs/`, 800 and 1600 px wide but never wider than the screenshot
+(needs `cwebp`); `--image <key>` (repeatable) converts only these entries and keeps the others, and `--screenshots <dir>`
+takes the screenshots from another folder, for example the unpacked screenshots of a release self-test run. Look at every
+picture before it goes on the site. `--version <x.y.z>` overrides the version from `gradle.properties` for a preview of
+a release that is not versioned yet (the docs of 0.6.0 were built from a `0.6.0-dev` checkout with `--version 0.6.0`);
+the real release build runs without it. `--render-only` rebuilds the pages from `tools/docs/data/` alone, without a
+Propwash checkout.
 
 What comes from the code (`tools/docs/extract.mjs`, written to `tools/docs/data/*.json`):
 
@@ -298,12 +302,18 @@ What comes from the code (`tools/docs/extract.mjs`, written to `tools/docs/data/
   built-in mounts, parts and chemistries, and real part files as examples
 - **keys and switch functions**: `KeyDefaults`, `SwitchFunction` and the language files
 - **server.json**: settings, defaults and limits from `ServerRulesConfig`
+- **race classification**: whether each world rule is race-relevant or neutral (`WorldRuleSpecs`), added to the world
+  rules as `race_relevant`
+- **rules for add-ons**: `ADDONS.md` of the mod (English, authoritative), shown as the section `#rules` of the add-on API
+  page; the German version is `ADDON_RULES_DE` in `tools/docs/pages/api.mjs`, written in the same block structure and
+  tied to the SHA-256 of the `ADDONS.md` it translates
 - **versions**: mod, Minecraft, API, network protocol and parts format
 
 The explanations are written in `tools/docs/pages/*.mjs` (English and German side by side). `tools/test-docs.mjs`
 checks that the pages match the renderer, that every API type, part field, server setting and event has its
 explanation (and none is left for something that is gone), that the API history covers the current API version, that
-every example command is valid, and on every page: unique ids, working anchors and local links, English and German in
+every example command is valid, that every world rule is classified for races, that the German rules for add-ons
+follow the current `ADDONS.md` (hash and structure), and on every page: unique ids, working anchors and local links, English and German in
 pairs, balanced tags, real umlauts in German, and no local paths or terms from the local denylist. When a release adds
 something, the test names the file and the entry to write. The denylist is not part of this repository: the test reads
 the same local file as the mod's public export (`PROPWASH_EXPORT_DENYLIST`, otherwise
@@ -497,6 +507,13 @@ node tools/test-changelog.mjs
 The repositories default to `PROPWASH_SRC` / `JMP_SRC`, otherwise `propwash` and `propwash-justmoreparts` next to this
 repository (or next to its main checkout when you work in a worktree); `--propwash <dir>`, `--jmp <dir>`,
 `--propwash-ref <ref>` and `--jmp-ref <ref>` override them, `--check` only reports whether the JSON is up to date.
+
+A coming release is shown before its tag by reading `CHANGELOG.md` from the commit of the release candidate
+(`--propwash-ref <commit>`; the JSON records the full hash). `test-changelog.mjs` accepts that only while the version
+shown is not tagged: once `v<x.y.z>` exists it fails until the page is rebuilt from the tag (plain
+`node tools/build-changelog.mjs`). Links to repository files in a changelog (`[ADDONS.md](ADDONS.md)`) lead to this site
+where the file has a place (`REPO_LINKS` in `tools/build-changelog.mjs`: `ADDONS.md` → `docs/api/#rules`) and otherwise
+to the file in the public source repository.
 
 `CHANGELOG.md` format: `## [x.y.z] — Title` per release (`## [Unreleased]` and other non-version headings are skipped),
 `### Highlights|New|Improved|Fixed|Compatibility|Known issues` and `- ` bullets with `**bold**`, `*emphasis*`, `` `code` ``
