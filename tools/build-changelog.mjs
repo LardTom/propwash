@@ -9,7 +9,10 @@
 //   --propwash / --jmp     the repositories (default: PROPWASH_SRC / JMP_SRC, otherwise the folders "propwash" and
 //                          "propwash-justmoreparts" next to this repository or next to its main checkout)
 //   --propwash-ref / --jmp-ref
-//                          tag, branch or commit to read CHANGELOG.md from (default: the newest v<x.y.z> tag)
+//                          tag, branch or commit to read CHANGELOG.md from (default: the newest v<x.y.z> tag). For a
+//                          release that is not tagged yet (the website of a coming release), pass the commit of the
+//                          release candidate: the JSON records its full hash, and tools/test-changelog.mjs fails once
+//                          the tag v<x.y.z> of that release exists, so the page is rebuilt from the tag.
 //   --add-missing          adds every entry that has no German text yet to tools/changelog/de.json with an empty
 //                          value, ready to be filled in
 //   --check                writes nothing; exits with 1 when assets/data/changelog.json is not up to date
@@ -17,6 +20,9 @@
 // CHANGELOG.md format: "## [x.y.z] — Title" per release (other "## [...]" headings such as [Unreleased] are skipped),
 // "### Highlights|New|Improved|Fixed|Compatibility|Known issues" sections and "- " bullets with inline Markdown
 // (**strong**, *emphasis*, `code`, [text](https://…)). Anything else inside a release stops the build with the line.
+//
+// Links to files of the repository ([`ADDONS.md`](ADDONS.md)) become addresses on this site where one exists
+// (REPO_LINKS) and otherwise links to the file in the public source repository.
 //
 // German: tools/changelog/de.json maps the English source text of every title and bullet to its German text, per
 // product and version. A bullet that repeats word for word in another release of the same product reuses its
@@ -41,7 +47,8 @@ export const PRODUCTS = [
     folder: 'propwash',
     firstPublic: '0.3.2',
     env: 'PROPWASH_SRC',
-    option: 'propwash'
+    option: 'propwash',
+    source: 'https://github.com/LardTom/propwash-fpv'
   },
   {
     id: 'jmp',
@@ -50,9 +57,26 @@ export const PRODUCTS = [
     tagline: { en: 'The add-on with real-world parts', de: 'Das Add-on mit echten Teilen' },
     folder: 'propwash-justmoreparts',
     env: 'JMP_SRC',
-    option: 'jmp'
+    option: 'jmp',
+    source: 'https://github.com/LardTom/propwash-justmoreparts'
   }
 ];
+
+// Repository files that have their own place on this site; the page lives in changelog/, so paths are relative to it.
+export const REPO_LINKS = {
+  propwash: { 'ADDONS.md': '../docs/api/#rules' }
+};
+
+/** Rewrites Markdown links to repository files ([text](ADDONS.md), [text](docs/x.md)) into site or source addresses. */
+export function repoLinks(meta, text) {
+  if (typeof text !== 'string') return text;
+  return text.replace(/\]\(([^)\s]+)\)/g, (all, target) => {
+    if (/^(?:https?:|mailto:|#|\.{0,2}\/)/.test(target)) return all;
+    const clean = target.replace(/^\.\//, '');
+    const mapped = REPO_LINKS[meta.id]?.[clean] || `${meta.source}/blob/main/${clean}`;
+    return `](${mapped})`;
+  });
+}
 
 const SECTION_KINDS = {
   highlights: 'highlights',
@@ -215,7 +239,7 @@ export function buildProduct(meta, releases, ref, de) {
       title: { en: capitalize(r.title), de: german(r.version, r.title) },
       sections: r.sections.map((s) => ({
         kind: s.kind,
-        items: s.items.map((item) => ({ en: item, de: german(r.version, item) }))
+        items: s.items.map((item) => ({ en: repoLinks(meta, item), de: repoLinks(meta, german(r.version, item)) }))
       }))
     }))
   };
@@ -243,7 +267,8 @@ export function resolveSources(options = {}) {
     if (!dir || !isRepo(dir)) {
       throw new Error(`${meta.name}: repository not found – pass --${meta.option} <dir> or set ${meta.env}`);
     }
-    const ref = options[`${meta.option}Ref`] || releaseTags(dir)[0];
+    let ref = options[`${meta.option}Ref`] || releaseTags(dir)[0];
+    if (ref && !/^v\d+\.\d+\.\d+$/.test(ref) && ref !== 'main') ref = git(dir, ['rev-parse', '--verify', `${ref}^{commit}`]).trim();
     if (!ref) throw new Error(`${meta.name}: no release tag v<x.y.z> in ${path.basename(dir)} – pass --${meta.option}-ref <ref>`);
     return { meta, dir, ref };
   });

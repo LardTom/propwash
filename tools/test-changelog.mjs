@@ -6,7 +6,10 @@
 //   - the validator itself rejects broken copies (order, missing German, unclosed Markdown, javascript: links, …)
 //   - every German text of tools/changelog/de.json is still used, German uses real umlauts
 //   - when the Propwash and Just More Parts repositories are next to this one (or PROPWASH_SRC / JMP_SRC are set): the
-//     data equals a fresh build from CHANGELOG.md at the recorded refs, and no newer release tag is missing
+//     data equals a fresh build from CHANGELOG.md at the recorded refs, and no newer release tag is missing; a release
+//     read from a commit (the website of a coming release) must not be tagged yet – once v<x.y.z> exists, the page is
+//     rebuilt from the tag
+//   - links to repository files in CHANGELOG.md lead to this site or to the public source repository
 //   - the page loads its script, styles and data; every page links to it in the main navigation and the footer;
 //     the released groups of the roadmap link to their changelog anchor
 //   - no local paths, no term of the local denylist (as test-docs), no foreign hosts
@@ -17,9 +20,9 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { validateChangelog, parseInline, plainText, CHANGELOG_URL, KINDS, tally } from '../assets/js/changelog/data.js';
+import { validateChangelog, parseInline, plainText, CHANGELOG_URL, KINDS, tally, compareVersions } from '../assets/js/changelog/data.js';
 import {
-  PRODUCTS, buildChangelog, defaultRepo, loadTranslations, parseChangelog, releaseTags, serialize, unusedTranslations
+  PRODUCTS, buildChangelog, defaultRepo, loadTranslations, parseChangelog, releaseTags, repoLinks, serialize, unusedTranslations
 } from './build-changelog.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -45,10 +48,11 @@ check(raw === serialize(data), 'assets/data/changelog.json is formatted like the
 check(JSON.stringify(data.products.map((p) => p.id)) === JSON.stringify(PRODUCTS.map((p) => p.id)), `products are ${PRODUCTS.map((p) => p.id).join(', ')} in this order`);
 for (const p of data.products) {
   check(p.releases.length > 0, `${p.id}: has releases`);
-  check(/^v\d+\.\d+\.\d+$/.test(p.source.ref) || p.source.ref === 'main', `${p.id}: read from a release tag (or main), not "${p.source.ref}"`);
+  check(/^v\d+\.\d+\.\d+$/.test(p.source.ref) || p.source.ref === 'main' || /^[0-9a-f]{40}$/.test(p.source.ref), `${p.id}: read from a release tag, main or the full hash of a release candidate commit, not "${p.source.ref}"`);
   if (/^v\d+\.\d+\.\d+$/.test(p.source.ref)) check(p.releases[0].version === p.source.ref.slice(1), `${p.id}: newest release ${p.releases[0].version} matches the tag ${p.source.ref}`);
 }
 const propwash = data.products.find((p) => p.id === 'propwash');
+check(propwash?.releases.some((r) => r.version === '0.6.0'), 'propwash 0.6.0 is on the page (anchor propwash-0.6.0)');
 for (const v of ['0.3.2', '0.4.0']) {
   check(propwash?.releases.some((r) => r.version === v), `propwash ${v} is on the page`);
 }
@@ -120,14 +124,21 @@ for (const [what, text, expected] of [
   check(message.includes(expected), `parser rejects ${what} (got "${message || 'nothing'}")`);
 }
 
+// Links to repository files are rewritten (ADDONS.md → the rules on the add-on API page)
+check(repoLinks(PRODUCTS[0], 'see [`ADDONS.md`](ADDONS.md)') === 'see [`ADDONS.md`](../docs/api/#rules)', 'ADDONS.md links lead to the rules for add-ons on the API page');
+check(repoLinks(PRODUCTS[0], '[notes](docs/RELEASE-NOTES.md)') === '[notes](https://github.com/LardTom/propwash-fpv/blob/main/docs/RELEASE-NOTES.md)', 'other repository files link to the public source repository');
+check(repoLinks(PRODUCTS[0], '[x](https://modrinth.com/) and [y](../convert/)') === '[x](https://modrinth.com/) and [y](../convert/)', 'addresses and site paths stay as they are');
+
 // 3. German texts
 const used = new Set();
 for (const p of data.products) {
   for (const r of p.releases) {
     const texts = de[p.id]?.[r.version] || {};
+    const meta = PRODUCTS.find((m) => m.id === p.id);
     const raws = [r.title.en, ...r.sections.flatMap((s) => s.items.map((i) => i.en))];
     for (const english of Object.keys(texts)) {
-      if (raws.includes(english) || raws.some((x) => x.toLowerCase() === english.toLowerCase())) used.add(`${p.id}|${r.version}|${english}`);
+      const shown = meta ? repoLinks(meta, english) : english;
+      if (raws.includes(shown) || raws.some((x) => x.toLowerCase() === shown.toLowerCase())) used.add(`${p.id}|${r.version}|${english}`);
     }
   }
 }
@@ -149,9 +160,15 @@ for (const meta of PRODUCTS) {
   const product = data.products.find((p) => p.id === meta.id);
   if (!dir || !product) { notes.push(`${meta.name}: repository not found, freshness not checked (set ${meta.env})`); continue; }
   sources.push({ meta, dir, ref: product.source.ref });
-  const newest = releaseTags(dir)[0];
+  const tags = releaseTags(dir);
+  const newest = tags[0];
   if (newest && /^v\d+\.\d+\.\d+$/.test(product.source.ref)) {
     check(newest === product.source.ref, `${meta.name}: newest release tag is ${newest}, the page shows ${product.source.ref} – run node tools/build-changelog.mjs`);
+  }
+  if (/^[0-9a-f]{40}$/.test(product.source.ref)) {
+    const shown = product.releases[0]?.version;
+    check(!tags.includes(`v${shown}`), `${meta.name}: ${shown} is tagged now (v${shown}) – rebuild from the tag: node tools/build-changelog.mjs`);
+    check(!newest || compareVersions(shown, newest.slice(1)) > 0, `${meta.name}: the page reads ${shown} from a commit, but the newest tag ${newest} is not older`);
   }
 }
 if (sources.length === PRODUCTS.length) {
