@@ -1,0 +1,352 @@
+{
+ "schema": 1,
+ "about": "Saved answers of a broken upload for the dry run of tools/test-live.mjs (made up in the format of the Modrinth API v2 and the CurseForge API v1): every fault listed under expect must be found.",
+ "expect": [
+  "Modrinth Propwash FPV 0.6.0+neoforge is listed",
+  "Modrinth Just More Parts 1.2.0+neoforge requires propwash-fpv",
+  "Modrinth Just More Parts 1.2.0+fabric is published after Propwash FPV 0.6.0+fabric",
+  "CurseForge Just More Parts justmoreparts-fabric-26.3-1.2.0.jar is approved",
+  "CurseForge Just More Parts justmoreparts-neoforge-26.3-1.2.0.jar requires Propwash FPV",
+  "download button Just More Parts on Modrinth answers 200"
+ ],
+ "responses": {
+  "https://api.modrinth.com/v2/project/propwash-fpv": {
+   "status": 200,
+   "json": {
+    "id": "pwFpv0Aa",
+    "slug": "propwash-fpv",
+    "title": "Propwash FPV",
+    "status": "approved",
+    "project_type": "mod"
+   }
+  },
+  "https://api.modrinth.com/v2/project/propwash-just-more-parts": {
+   "status": 200,
+   "json": {
+    "id": "pwJmp1Bb",
+    "slug": "propwash-just-more-parts",
+    "title": "Propwash: Just More Parts",
+    "status": "approved",
+    "project_type": "mod"
+   }
+  },
+  "https://api.modrinth.com/v2/project/propwash-fpv/version": {
+   "status": 200,
+   "json": [
+    {
+     "id": "pwFpv0Aa",
+     "project_id": "pwFpv0Aa",
+     "version_number": "0.6.0+fabric",
+     "name": "0.6.0+fabric",
+     "status": "listed",
+     "version_type": "release",
+     "date_published": "2026-11-02T09:00:00.000000Z",
+     "loaders": [
+      "fabric"
+     ],
+     "game_versions": [
+      "26.3"
+     ],
+     "dependencies": [
+      {
+       "project_id": "P7dR8mSH",
+       "version_id": null,
+       "dependency_type": "required"
+      }
+     ],
+     "files": [
+      {
+       "url": "https://cdn.modrinth.com/data/pwFpv0Aa/versions/0.6.0+fabric/file.jar",
+       "primary": true,
+       "filename": "file.jar"
+      }
+     ]
+    },
+    {
+     "id": "pwFpv0Aa",
+     "project_id": "pwFpv0Aa",
+     "version_number": "0.6.0+neoforge",
+     "name": "0.6.0+neoforge",
+     "status": "unlisted",
+     "version_type": "release",
+     "date_published": "2026-11-02T09:01:00.000000Z",
+     "loaders": [
+      "neoforge"
+     ],
+     "game_versions": [
+      "26.3"
+     ],
+     "dependencies": [],
+     "files": [
+      {
+       "url": "https://cdn.modrinth.com/data/pwFpv0Aa/versions/0.6.0+neoforge/file.jar",
+       "primary": true,
+       "filename": "file.jar"
+      }
+     ]
+    },
+    {
+     "id": "pwFpv0Aa",
+     "project_id": "pwFpv0Aa",
+     "version_number": "0.5.2+fabric",
+     "name": "0.5.2+fabric",
+     "status": "listed",
+     "version_type": "release",
+     "date_published": "2026-10-12T09:00:00.000000Z",
+     "loaders": [
+      "fabric"
+     ],
+     "game_versions": [
+      "26.3"
+     ],
+     "dependencies": [
+      {
+       "project_id": "P7dR8mSH",
+       "version_id": null,
+       "dependency_type": "required"
+      }
+     ],
+     "files": [
+      {
+       "url": "https://cdn.modrinth.com/data/pwFpv0Aa/versions/0.5.2+fabric/file.jar",
+       "primary": true,
+       "filename": "file.jar"
+      }
+     ]
+    }
+   ]
+  },
+  "https://api.modrinth.com/v2/project/propwash-just-more-parts/version": {
+   "status": 200,
+   "json": [
+    {
+     "id": "pwJmp1Bb",
+     "project_id": "pwJmp1Bb",
+     "version_number": "1.2.0+fabric",
+     "name": "1.2.0+fabric",
+     "status": "listed",
+     "version_type": "release",
+     "date_published": "2026-11-01T08:00:00.000000Z",
+     "loaders": [
+      "fabric"
+     ],
+     "game_versions": [
+      "26.3"
+     ],
+     "dependencies": [
+      {
+       "project_id": "pwFpv0Aa",
+       "version_id": null,
+       "dependency_type": "required"
+      },
+      {
+       "project_id": "P7dR8mSH",
+       "version_id": null,
+       "dependency_type": "required"
+      }
+     ],
+     "files": [
+      {
+       "url": "https://cdn.modrinth.com/data/pwJmp1Bb/versions/1.2.0+fabric/file.jar",
+       "primary": true,
+       "filename": "file.jar"
+      }
+     ]
+    },
+    {
+     "id": "pwJmp1Bb",
+     "project_id": "pwJmp1Bb",
+     "version_number": "1.2.0+neoforge",
+     "name": "1.2.0+neoforge",
+     "status": "listed",
+     "version_type": "release",
+     "date_published": "2026-11-02T11:01:00.000000Z",
+     "loaders": [
+      "neoforge"
+     ],
+     "game_versions": [
+      "26.3"
+     ],
+     "dependencies": [
+      {
+       "project_id": "pwFpv0Aa",
+       "version_id": null,
+       "dependency_type": "optional"
+      }
+     ],
+     "files": [
+      {
+       "url": "https://cdn.modrinth.com/data/pwJmp1Bb/versions/1.2.0+neoforge/file.jar",
+       "primary": true,
+       "filename": "file.jar"
+      }
+     ]
+    },
+    {
+     "id": "pwJmp1Bb",
+     "project_id": "pwJmp1Bb",
+     "version_number": "1.1.1+fabric",
+     "name": "1.1.1+fabric",
+     "status": "listed",
+     "version_type": "release",
+     "date_published": "2026-10-12T11:00:00.000000Z",
+     "loaders": [
+      "fabric"
+     ],
+     "game_versions": [
+      "26.3"
+     ],
+     "dependencies": [
+      {
+       "project_id": "pwFpv0Aa",
+       "version_id": null,
+       "dependency_type": "required"
+      }
+     ],
+     "files": [
+      {
+       "url": "https://cdn.modrinth.com/data/pwJmp1Bb/versions/1.1.1+fabric/file.jar",
+       "primary": true,
+       "filename": "file.jar"
+      }
+     ]
+    }
+   ]
+  },
+  "https://api.curseforge.com/v1/mods/search?gameId=432&classId=6&slug=propwash-fpv": {
+   "status": 200,
+   "json": {
+    "data": [
+     {
+      "id": 1711041,
+      "slug": "propwash-fpv",
+      "name": "Propwash FPV",
+      "links": {
+       "websiteUrl": "https://www.curseforge.com/minecraft/mc-mods/propwash-fpv"
+      }
+     }
+    ]
+   }
+  },
+  "https://api.curseforge.com/v1/mods/search?gameId=432&classId=6&slug=propwash-just-more-parts": {
+   "status": 200,
+   "json": {
+    "data": [
+     {
+      "id": 1729135,
+      "slug": "propwash-just-more-parts",
+      "name": "Propwash: Just More Parts",
+      "links": {
+       "websiteUrl": "https://www.curseforge.com/minecraft/mc-mods/propwash-just-more-parts"
+      }
+     }
+    ]
+   }
+  },
+  "https://api.curseforge.com/v1/mods/1711041/files?pageSize=50": {
+   "status": 200,
+   "json": {
+    "data": [
+     {
+      "id": 7100002,
+      "displayName": "propwash-fabric-26.3-0.6.0.jar",
+      "fileName": "propwash-fabric-26.3-0.6.0.jar",
+      "fileDate": "2026-11-02T09:00:00Z",
+      "fileStatus": 4,
+      "isAvailable": true,
+      "releaseType": 1,
+      "gameVersions": [
+       "26.3",
+       "Fabric"
+      ],
+      "dependencies": [
+       {
+        "modId": 306612,
+        "relationType": 3
+       }
+      ]
+     },
+     {
+      "id": 7100003,
+      "displayName": "propwash-neoforge-26.3-0.6.0.jar",
+      "fileName": "propwash-neoforge-26.3-0.6.0.jar",
+      "fileDate": "2026-11-02T09:01:00Z",
+      "fileStatus": 4,
+      "isAvailable": true,
+      "releaseType": 1,
+      "gameVersions": [
+       "26.3",
+       "NeoForge"
+      ],
+      "dependencies": []
+     }
+    ]
+   }
+  },
+  "https://api.curseforge.com/v1/mods/1729135/files?pageSize=50": {
+   "status": 200,
+   "json": {
+    "data": [
+     {
+      "id": 7200002,
+      "displayName": "justmoreparts-fabric-26.3-1.2.0.jar",
+      "fileName": "justmoreparts-fabric-26.3-1.2.0.jar",
+      "fileDate": "2026-11-02T11:00:00Z",
+      "fileStatus": 3,
+      "isAvailable": false,
+      "releaseType": 1,
+      "gameVersions": [
+       "26.3",
+       "Fabric"
+      ],
+      "dependencies": [
+       {
+        "modId": 1711041,
+        "relationType": 3
+       },
+       {
+        "modId": 306612,
+        "relationType": 3
+       }
+      ]
+     },
+     {
+      "id": 7200003,
+      "displayName": "justmoreparts-neoforge-26.3-1.2.0.jar",
+      "fileName": "justmoreparts-neoforge-26.3-1.2.0.jar",
+      "fileDate": "2026-11-02T11:01:00Z",
+      "fileStatus": 4,
+      "isAvailable": true,
+      "releaseType": 1,
+      "gameVersions": [
+       "26.3",
+       "NeoForge"
+      ],
+      "dependencies": [
+       {
+        "modId": 1711041,
+        "relationType": 2
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "https://www.curseforge.com/minecraft/mc-mods/propwash-fpv": {
+   "status": 200,
+   "text": "<html><head><title>Propwash FPV</title></head></html>"
+  },
+  "https://modrinth.com/mod/propwash-fpv": {
+   "status": 200,
+   "text": "<html><head><title>Propwash FPV</title></head></html>"
+  },
+  "https://www.curseforge.com/minecraft/mc-mods/propwash-just-more-parts": {
+   "status": 200,
+   "text": "<html><head><title>Propwash: Just More Parts</title></head></html>"
+  },
+  "https://modrinth.com/mod/propwash-just-more-parts": {
+   "status": 404,
+   "text": "<html><head><title>Propwash: Just More Parts</title></head></html>"
+  }
+ }
+}
