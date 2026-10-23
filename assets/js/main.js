@@ -594,6 +594,20 @@
     });
   });
 
+  /* ---------- A direct link to an FAQ question opens it ---------- */
+
+  (function directLinks() {
+    function openTarget() {
+      var id = location.hash.slice(1);
+      if (!id) return;
+      try { id = decodeURIComponent(id); } catch (e) { return; }
+      var target = doc.getElementById(id);
+      if (target && target.tagName === 'DETAILS') target.open = true;
+    }
+    openTarget();
+    window.addEventListener('hashchange', openTarget);
+  })();
+
   /* ---------- Lightbox ---------- */
 
   (function lightbox() {
