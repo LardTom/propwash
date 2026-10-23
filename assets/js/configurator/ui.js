@@ -1588,15 +1588,52 @@ function addonLine(report) {
   return line;
 }
 
+/** True if the build has a part the catalog before knew that the current catalog does not know. */
+function lostPart(before, build) {
+  const known = (c, id, category) => {
+    const p = c.part(id);
+    return !!p && p.category === category;
+  };
+  return [...FIELDS.map((f) => [build[f], f]), ...Object.values(build.accessories || {}).map((id) => [id, 'accessory'])]
+    .some(([id, category]) => id && known(before, id, category) && !known(catalog, id, category));
+}
+
+/**
+ * Parts of an opened code that were unknown, once their add-on is here: the build is written with the heads of that
+ * code (carry) and read again with the current catalog, like opening the code now. Returns the decoded result if a
+ * part was resolved (state takes its build, carry and add-ons), else null and the state stays.
+ */
+function resolveUnknown(before) {
+  const unknown = (c) => buildIds(state.build).filter((id) => id && !c.part(id)).length;
+  const was = unknown(before);
+  if (!was) return null;
+  let result;
+  try {
+    result = catalog.decode(encodeBuild({ build: state.build, paint: null, tune: null, osd: null, name: null }, state.carry, state.addons));
+  } catch {
+    return null;
+  }
+  if (!result.ok) return null;
+  const b = result.content.build;
+  const still = buildIds(b).filter((id) => id && !catalog.part(id)).length;
+  if (still >= was) return null;
+  state.build = { ...b, accessories: { ...(b.accessories || {}) } };
+  state.carry = result.carry || new Map();
+  state.addons = codeAddons(result.namespaces);
+  return result;
+}
+
 /**
  * The catalog with the add-ons of the add-on bar (assets/js/addons/configurator-addons.js): pickers, figures, codes and
- * the viewer follow it. A build that loses a part gets a preset of what is left.
+ * the viewer follow it. Unknown parts of an opened code resolve once their add-on is here; a build that loses a part
+ * it had gets a preset of what is left.
  */
 function applyAddons(json, nextRender) {
+  const before = catalog;
   catalog = keepUnitsTogether(createCatalog(json));
   render = nextRender;
   computeRoles();
-  if (!knownBuild(state.build)) {
+  if (lostPart(before, state.build)) {
     const preset = catalog.presetContent(DEFAULT_PRESET) ? DEFAULT_PRESET
       : (catalog.presets.find((p) => p.id === 'propwash:freestyle') || catalog.presets[0]).id;
     undoSnapshot = null;
@@ -1605,7 +1642,16 @@ function applyAddons(json, nextRender) {
     banner(() => t('addons.buildSwitched', { name: catalog.presetName(preset, lang()) }), 'warn', false);
     return;
   }
+  const resolved = resolveUnknown(before);
   refreshAll();
+  if (!resolved) return;
+  scheduleHash();
+  const raw = $('[data-import]').value.trim();
+  if (raw) importPreview(decodeField(raw).result);
+  if (shownLink && lastBanner && lastBanner.message === shownLink.message) {
+    const again = catalog.decode(shownLink.code);
+    if (again.ok) linkBanner(shownLink.code, again, shownLink.conversion);
+  }
 }
 
 /** What a decoded code brings along: [text or node, bad] per line (layers first). */
@@ -1664,6 +1710,17 @@ function conversionNote(result, conversion) {
   return { text: () => t('convert.notConvertible', { reason: reasonText(conversion.reason) }), action: null };
 }
 
+/** The banner of a code opened from a link, while it is shown (applyAddons renews it when its add-on comes). */
+let shownLink = null;
+
+/** Banner of a readable code opened from a link: what it brought along. */
+function linkBanner(code, result, conversion) {
+  const warn = result.unknownParts.length || result.wrongKind.length || (conversion && conversion.status !== 'OK');
+  const note = conversionNote(result, conversion);
+  banner(() => [...(note.text ? [note.text(), ' '] : []), ...joined(t('ui.linkLoaded'), importDetails(result))], warn ? 'warn' : 'ok', false, note.action);
+  shownLink = { code, conversion, message: lastBanner.message };
+}
+
 /** Banner for a build opened from a link: what it brought along, or why it could not be read. The import field
     shows an unreadable code so it can be fixed there; after a readable link it is emptied, so nothing stale stays. */
 function linkResult(code, result, conversion = null) {
@@ -1671,9 +1728,7 @@ function linkResult(code, result, conversion = null) {
   if (result.ok) {
     input.value = '';
     importPreview(null);
-    const warn = result.unknownParts.length || result.wrongKind.length || (conversion && conversion.status !== 'OK');
-    const note = conversionNote(result, conversion);
-    banner(() => [...(note.text ? [note.text(), ' '] : []), ...joined(t('ui.linkLoaded'), importDetails(result))], warn ? 'warn' : 'ok', false, note.action);
+    linkBanner(code, result, conversion);
   } else {
     input.value = code;
     importPreview(result);
