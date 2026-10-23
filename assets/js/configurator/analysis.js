@@ -14,7 +14,7 @@
 //     motor_temp_minute_c, mixed_motor_temp_c, props_in_view_percent, warnings }
 // NaN (e.g. flight times of a build that cannot hover) means "no value".
 
-import { resolveBuild, batteryContinuousCurrent } from './rules.js?v=e77905ee';
+import { resolveBuild, batteryContinuousCurrent } from './rules.js?v=c16cd6c9';
 import { rig as fpvRig, occlusionPercent, cameraView as rigCameraView } from './fpv.js?v=76cdbbe6';
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -191,6 +191,7 @@ function anchorOf(frame, slot) {
   if (spec) return { x: spec.pos[0], y: spec.pos[1], z: spec.pos[2], tilt: spec.tilt_deg, length: spec.length_mm };
   const wheelbase = frame.data.wheelbase_mm;
   if (slot === 'top') return { x: 0.0, y: 0.16 * wheelbase, z: -0.23 * wheelbase, tilt: 15.0, length: 0.0 };
+  if (slot === 'front') return { x: 0.0, y: 0.0, z: -0.3 * wheelbase, tilt: 0.0, length: 0.0 };
   return { x: 0.0, y: -3.0, z: -0.25 * wheelbase, tilt: 30.0, length: 0.15 * wheelbase };
 }
 
@@ -204,6 +205,7 @@ function anchorToFrame(anchor, lx, ly, lz) {
 function accessoryBox(acc, slot) {
   const [w, h, d] = acc.data.size_mm;
   if (slot === 'top') return { min: [-w / 2.0, HINGE_CLEARANCE_MM, -d / 2.0], max: [w / 2.0, HINGE_CLEARANCE_MM + h, d / 2.0] };
+  if (slot === 'front') return { min: [-w / 2.0, -h, -d], max: [w / 2.0, 0.0, 0.0] };
   return { min: [-w / 2.0, -h, -d / 2.0], max: [w / 2.0, 0.0, d / 2.0] };
 }
 
@@ -225,7 +227,7 @@ function deriveAirframe(parts, catalog) {
   const bd = battery.data;
   const chem = catalog.chemistry(bd.chemistry);
   if (!chem) return null;
-  const slots = ['top', 'bottom'].filter((slot) => parts.accessories[slot]);
+  const slots = ['top', 'bottom', 'front'].filter((slot) => parts.accessories[slot]);
 
   let accessoryMassGrams = 0.0;
   let accessoryWatts = 0.0;

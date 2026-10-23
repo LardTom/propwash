@@ -2,7 +2,7 @@
 // group belongs to a paint channel with a reference grey. A painted part swaps to its "_paint" model and multiplies
 // each tint group with PaintChannel.tint(colour); parts without any painted group keep the unpainted model.
 
-import { PROP_SLOTS } from './assembly.js?v=e8018744';
+import { PROP_SLOTS } from './assembly.js?v=4c1a9532';
 
 const CHANNEL_SLOT = Object.freeze({
   frame: 'frame', tpu: 'tpu', motor: 'motors', stack: 'stack', battery: 'battery', camera: 'camera', antenna: 'antenna',

@@ -6,13 +6,13 @@
 // composeCatalog() and composeRender() put add-ons into the catalog (an add-on jar read in the browser,
 // addon-catalog.js) or take them out (the switches of the add-on bar), like installing or removing the mod in the game.
 
-import { check as checkBuild } from './rules.js?v=e77905ee';
-import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=c64a5c0d';
+import { check as checkBuild } from './rules.js?v=c16cd6c9';
+import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=94cae39b';
 import {
   encode as encodeCode, decode as decodeCode, convert as convertCode, hexColor, createShareTables, frozenTables, displayId,
 } from './sharecode.js?v=594888f1';
 import { sharedOnly } from './tune.js?v=f4084d0e';
-import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=6fae3e31';
+import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=87906fc9';
 import { catalogOrder } from './catalog-build.js?v=860a85ee';
 
 export const CATALOG_URL = new URL('../../data/configurator/catalog.json', import.meta.url);

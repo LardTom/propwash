@@ -46,6 +46,7 @@ const TEXT = {
     whoop: ['Whoop', 'Whoop'], toothpick: ['Toothpick', 'Toothpick'], cinewhoop: ['Cinewhoop', 'Cinewhoop'],
     freestyle: ['Freestyle', 'Freestyle'], race: ['Race', 'Race'], long_range: ['Long range', 'Long Range'], x_class: ['X-Class', 'X-Class'],
     analog: ['Analog', 'Analog'], digital: ['Digital', 'Digital'], top: ['Top mount', 'Halter oben'], bottom: ['Bottom mount', 'Halter unten'],
+    front: ['Front mount', 'Halter vorne'],
   },
   mounts: { top: ['Top', 'Oben'], bottom: ['Bottom', 'Unten'], front: ['Front', 'Vorne'] },
   stats: {

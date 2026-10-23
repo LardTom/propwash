@@ -2,10 +2,10 @@
 // included; PW3 codes are only checked. The same modules as the configurator (catalog, share codes, convert.js), no 3D
 // view. Everything runs in the browser; the only request goes to this site's catalog.
 
-import { loadCatalog } from './data.js?v=b9037dd0';
-import { convertText, reasonText, addonNote, MAX_CODES } from './convert.js?v=3a0c5124';
+import { loadCatalog } from './data.js?v=9b4be038';
+import { convertText, reasonText, addonNote, MAX_CODES } from './convert.js?v=943f706f';
 import { displayId } from './sharecode.js?v=594888f1';
-import { t, lang, tr, loadTexts, pageHref } from './i18n.js?v=06e639ed';
+import { t, lang, tr, loadTexts, pageHref } from './i18n.js?v=2b17041c';
 
 const doc = document;
 const $ = (sel, ctx = doc) => ctx.querySelector(sel);

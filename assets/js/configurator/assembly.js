@@ -65,9 +65,9 @@ export function accessoryAnchor(frame, mount) {
     return { position: vec(table.pos), tilt: table.tilt_deg || 0, length: table.length_mm || 0 };
   }
   const wb = frame.data.wheelbase_mm;
-  return mount === 'top'
-    ? { position: [0, 0.16 * wb, -0.23 * wb], tilt: 15, length: 0 }
-    : { position: [0, -3, -0.25 * wb], tilt: 30, length: 0.15 * wb };
+  if (mount === 'top') return { position: [0, 0.16 * wb, -0.23 * wb], tilt: 15, length: 0 };
+  if (mount === 'front') return { position: [0, 0, -0.3 * wb], tilt: 0, length: 0 };
+  return { position: [0, -3, -0.25 * wb], tilt: 30, length: 0.15 * wb };
 }
 
 function defaultAccessories(frame) {
@@ -286,7 +286,7 @@ export function assemble(build, env) {
     }
   }
 
-  for (const mount of ['top', 'bottom']) {
+  for (const mount of ['top', 'bottom', 'front']) {
     const id = build.accessories && build.accessories[mount];
     if (id == null) continue;
     const type = catalog.part(id);

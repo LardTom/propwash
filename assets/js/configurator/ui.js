@@ -2,18 +2,18 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText, createCatalog } from './data.js?v=b9037dd0';
+import { loadCatalog, localText, createCatalog } from './data.js?v=9b4be038';
 import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=594888f1';
-import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=6fae3e31';
+import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=87906fc9';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
-import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=c64a5c0d';
+import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=94cae39b';
 import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
-import { batteryFit } from './rules.js?v=e77905ee';
-import { assemble, PROP_SLOTS } from './assembly.js?v=e8018744';
-import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=320ddce0';
-import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=3a0c5124';
-import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=06e639ed';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=86ec53f6';
+import { batteryFit } from './rules.js?v=c16cd6c9';
+import { assemble, PROP_SLOTS } from './assembly.js?v=4c1a9532';
+import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=41b84300';
+import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=943f706f';
+import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=2b17041c';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=8547a2a1';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
@@ -21,6 +21,7 @@ const DATA_ROOT = new URL('../../data/configurator/', import.meta.url);
 const DEFAULT_PRESET = 'justmoreparts:deadcat5_6s';
 const FIELDS = ['frame', 'stack', 'motor', 'prop', 'video', 'battery'];
 const SLOT_CATEGORIES = [...FIELDS, 'accessory'];
+const ACCESSORY_MOUNTS = ['top', 'bottom', 'front'];
 const ROLE_ORDER = ['whoop', 'toothpick', 'cinewhoop', 'freestyle', 'race', 'long_range', 'x_class'];
 const KEY_STATS = ['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'mixed_flight_time_min', 'top_speed_kmh'];
 // Rows of the flight analysis, ordered like the workbench in the game (Propwash 0.4.0): main figures, the four flight
@@ -232,7 +233,7 @@ function computeRoles() {
 function classesOf(category) {
   const set = new Set();
   for (const p of catalog.partsIn(category)) for (const r of partRoles.get(p.id)) set.add(r);
-  const order = category === 'video' ? ['analog', 'digital'] : category === 'accessory' ? ['top', 'bottom'] : ROLE_ORDER;
+  const order = category === 'video' ? ['analog', 'digital'] : category === 'accessory' ? ACCESSORY_MOUNTS : ROLE_ORDER;
   return order.filter((r) => set.has(r));
 }
 
@@ -281,7 +282,7 @@ function slotRows() {
     let unknown = false;
     if (category === 'accessory') {
       const acc = state.build.accessories || {};
-      const mounts = ['top', 'bottom', 'front'];
+      const mounts = ACCESSORY_MOUNTS;
       const names = mounts.filter((m) => acc[m]).map((m) => (catalog.part(acc[m]) ? catalog.partName(acc[m], lang()) : displayId(acc[m])));
       unknown = mounts.some((m) => acc[m] && !partOf(acc[m], 'accessory'));
       value = names.length ? names.join(' + ') : t('ui.none');
@@ -452,7 +453,9 @@ function picker() {
     list.replaceChildren();
     let shown = 0;
     if (chips) for (const chip of chips.children) chip.setAttribute('aria-pressed', String(chip.dataset.cls === classOf(category, filter)));
-    const groups = category === 'accessory' ? ['top', 'bottom'] : [null];
+    const fitted = state.build.accessories || {};
+    const groups = category === 'accessory'
+      ? ACCESSORY_MOUNTS.filter((m) => m !== 'front' || fitted.front || parts.some((p) => p.data.slot === 'front')) : [null];
     for (const mount of groups) {
       const container = mount ? el('div', { role: 'group', 'aria-labelledby': `grp-${mount}`, class: 'part-group' },
         el('p', { class: 'part-group__title', id: `grp-${mount}`, role: 'presentation' }, t(`roles.${mount}`))) : list;
@@ -1593,6 +1596,7 @@ function addonLine(report) {
 function applyAddons(json, nextRender) {
   catalog = pageTexts(createCatalog(json));
   render = nextRender;
+  if (viewer) viewer.setData(catalog, render);
   computeRoles();
   if (!knownBuild(state.build)) {
     const preset = catalog.presetContent(DEFAULT_PRESET) ? DEFAULT_PRESET
@@ -2014,7 +2018,7 @@ async function startViewer() {
   const button = $('[data-autorotate]');
   let mod;
   try {
-    mod = await import('./viewer.js?v=1bd88c6a');
+    mod = await import('./viewer.js?v=d786e196');
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;
