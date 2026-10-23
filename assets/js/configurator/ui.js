@@ -9,8 +9,8 @@ import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
 import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=94cae39b';
 import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
 import { batteryFit } from './rules.js?v=c16cd6c9';
-import { assemble, PROP_SLOTS } from './assembly.js?v=4c1a9532';
-import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=41b84300';
+import { assemble, PROP_SLOTS } from './assembly.js?v=6f42a16f';
+import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=e94a5904';
 import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=dd4ad593';
 import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=9294ec03';
 import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=8c3ec805';
@@ -2080,7 +2080,7 @@ async function startViewer() {
   const button = $('[data-autorotate]');
   let mod;
   try {
-    mod = await import('./viewer.js?v=d786e196');
+    mod = await import('./viewer.js?v=599d717f');
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;

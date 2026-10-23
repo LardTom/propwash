@@ -2,7 +2,7 @@
 // group belongs to a paint channel with a reference grey. A painted part swaps to its "_paint" model and multiplies
 // each tint group with PaintChannel.tint(colour); parts without any painted group keep the unpainted model.
 
-import { PROP_SLOTS } from './assembly.js?v=4c1a9532';
+import { PROP_SLOTS } from './assembly.js?v=6f42a16f';
 
 const CHANNEL_SLOT = Object.freeze({
   frame: 'frame', tpu: 'tpu', motor: 'motors', stack: 'stack', battery: 'battery', camera: 'camera', antenna: 'antenna',
@@ -162,8 +162,6 @@ export function paintTints(groups, paint, propPosition, channels) {
 
 /** Tint groups of a placed piece (from its model file or, for the top mount, render.json). */
 export function groupsOf(piece, model, render) {
-  // The plugged battery's lead and plug are not paintable (the game's paint picker leaves them out).
-  if (piece.procedural === 'power_lead') return null;
   if (piece.role === 'accessory_base') {
     const base = render.accessory_bases && render.accessory_bases[piece.mount];
     return base ? base.groups : null;
