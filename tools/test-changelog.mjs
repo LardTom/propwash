@@ -12,6 +12,9 @@
 //   - links to repository files in CHANGELOG.md lead to this site or to the public source repository
 //   - the page loads its script, styles and data; every page links to it in the main navigation and the footer;
 //     the released groups of the roadmap link to their changelog anchor
+//   - the other languages (/es/changelog/ …): view.js draws its texts through assets/js/i18n.js and has no texts as
+//     functions (counts are {en, de} templates with {placeholders}), and every text of changelog.json and view.js has
+//     a translation in every dictionary tools/i18n/dict/<lang>.json
 //   - no local paths, no term of the local denylist (as test-docs), no foreign hosts
 //
 //   node tools/test-changelog.mjs
@@ -24,6 +27,10 @@ import { validateChangelog, parseInline, plainText, CHANGELOG_URL, KINDS, tally,
 import {
   PRODUCTS, buildChangelog, defaultRepo, loadTranslations, parseChangelog, releaseTags, repoLinks, serialize, unusedTranslations
 } from './build-changelog.mjs';
+import { runtimeTexts } from './i18n/extract.mjs';
+import { RUNTIME } from './i18n/pages.mjs';
+import { LANGUAGES, loadDict } from './i18n/languages.mjs';
+import { normalize } from '../assets/js/i18n.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
@@ -259,6 +266,24 @@ for (const file of scanned) {
   check(foreign.length === 0, `${file}: other hosts ${[...new Set(foreign)].join(', ')}`);
 }
 check(!/<script[^>]+src="https?:|rel="stylesheet"[^>]+href="https?:/.test(page), 'changelog/index.html: no external scripts or styles');
+
+// 7. The other languages
+check(/from '\.\.\/i18n\.js(\?v=[0-9a-f]+)?'/.test(view) && /\bspans\(/.test(view) && /\bload\(\)/.test(view) && /\bhref\(/.test(view),
+  'view.js draws its texts and links through assets/js/i18n.js (spans, text, load, href), so /es/changelog/ and the other language pages show the changelog in their language');
+const functionTexts = [...view.matchAll(/\b(?:en|de)\s*:\s*(?:\([^)]*\)|[a-z]+)\s*=>/g)].map((m) => m[0]);
+check(!functionTexts.length, `view.js has no texts as functions, tools/i18n only finds {en, de} strings (${functionTexts.length}: ${functionTexts.slice(0, 2).join(' | ')})`);
+for (const file of ['assets/data/changelog.json', 'assets/js/changelog/view.js']) {
+  const source = RUNTIME.find((s) => s.file === file);
+  check(!!source, `tools/i18n/pages.mjs hands ${file} to the other languages`);
+  if (!source) continue;
+  const texts = [...new Set(runtimeTexts(source).map(normalize))].filter((k) => /\p{L}/u.test(k));
+  check(texts.length > 0, `${file}: texts for the other languages found (${texts.length})`);
+  for (const l of LANGUAGES) {
+    const dict = loadDict(l.code);
+    const missing = texts.filter((k) => !Object.prototype.hasOwnProperty.call(dict.entries, k));
+    check(!missing.length, `${file}: every text has a translation in tools/i18n/dict/${l.code}.json – missing ${missing.length} (${missing.slice(0, 3).join(' | ')})`);
+  }
+}
 
 if (failures.length) {
   console.log(`changelog: ${failures.length} of ${checks} checks FAILED`);
