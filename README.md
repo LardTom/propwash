@@ -624,7 +624,11 @@ node tools/test-layout.mjs                        # every page × language × 36
   the tree, everything else leads to the root), cache-busting stamps. Generated pages are never edited by hand.
 - **Scripts:** `assets/js/i18n.js` gives the scripts that draw content the site root (`root('assets/data/…')`), the
   page language and the texts of a translated page (`load()`, `text()`, `spans()`, `href()`, `number()`): on the
-  English/German pages both languages as before, on the others one language from `assets/i18n/<lang>.json`.
+  English/German pages both languages as before, on the others one language from `assets/i18n/<lang>.json`. The
+  configurator and the converter go through `assets/js/configurator/i18n.js`: on a translated page `t()` gives the
+  translation of the English text, `tr()` that of a text from the web export (help, rules, warnings, statuses, tune
+  groups; part and preset names stay English), `num()` writes numbers in the language and `pageHref()` keeps links to
+  translated pages in the language tree; both pages call `loadTexts()` before their first text.
 - **Head block:** `node tools/build-nav.mjs` also writes the head of the hand-written pages (`siteHead` in
   `tools/site-nav.mjs`, found by its marker `<script data-pw-head>`): `pw-root`, and once another language is active
   the `hreflang` lines and `assets/css/i18n.css`; the head script reads `?lang=en|de` (the links from the other

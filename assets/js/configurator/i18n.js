@@ -1,6 +1,26 @@
-// Texts of the configurator page that are not in the web export (EN/DE).
+// Texts of the configurator page that are not in the web export (EN/DE). On the pages of the other languages (/es/,
+// /fr/, /pt-br/, /pl/, /ru/) every text is the translation of its English text from assets/i18n/<lang>.json
+// (assets/js/i18n.js; the page calls loadTexts() before its first text), numbers follow that language.
 
+import { translated, lookup, load, locale, root, href, lang as pageLang } from '../i18n.js?v=6ae64da4';
+
+/** Language of the bilingual texts (web export, catalog, this file): 'de' on the German page, else 'en'. */
 export const lang = () => (document.documentElement.lang === 'de' ? 'de' : 'en');
+
+/** Loads the texts of a translated page once; resolves at once on the English/German page. */
+export const loadTexts = () => load();
+
+/** An English text from the web export or the catalog in the page's language: its translation on a translated page. */
+export const tr = (text) => (typeof text === 'string' && translated() ? lookup(text) : text);
+
+/** Address of a page of this site ('addons/', '#learn' for the landing page): in the language tree if translated there. */
+export function pageHref(path) {
+  if (!translated()) return root(path);
+  const url = new URL(root(`${pageLang()}/${path}`));
+  return new URL(href(url.pathname + url.search + url.hash), url).href;
+}
+
+const pick = (node) => (translated() ? lookup(node[0]) : node[lang() === 'de' ? 1 : 0]);
 
 /** No-break space: keeps a number and its unit on one line ("4,0 g", "2200 mAh"). */
 export const NB = '\u00A0';
@@ -188,10 +208,10 @@ const TEXT = {
     copper: ['Copper', 'Kupfer'],
   },
   osdPresets: {
-    minimal: ['Minimal', 'Minimal', 'Only the essentials along the edges; the middle of the picture stays clear.', 'Nur das Nötigste am Rand, die Bildmitte bleibt frei.'],
-    standard: ['Standard', 'Standard', 'The usual flight data: battery, speed, altitude, throttle, flight time and race info.', 'Die üblichen Flugdaten: Akku, Tempo, Höhe, Gas, Flugzeit und Renn-Infos.'],
-    full: ['Full / telemetry', 'Voll / Telemetrie', 'Every element, including artificial horizon, compass, current and stick overlay.', 'Alle Elemente, auch künstlicher Horizont, Kompass, Strom und Stick-Anzeige.'],
-    race: ['Race', 'Rennen', 'For racing: laps, lap times, split delta and gate counter.', 'Fürs Rennen: Runden, Rundenzeiten, Split-Delta und Gate-Zähler.'],
+    minimal: { title: ['Minimal', 'Minimal'], text: ['Only the essentials along the edges; the middle of the picture stays clear.', 'Nur das Nötigste am Rand, die Bildmitte bleibt frei.'] },
+    standard: { title: ['Standard', 'Standard'], text: ['The usual flight data: battery, speed, altitude, throttle, flight time and race info.', 'Die üblichen Flugdaten: Akku, Tempo, Höhe, Gas, Flugzeit und Renn-Infos.'] },
+    full: { title: ['Full / telemetry', 'Voll / Telemetrie'], text: ['Every element, including artificial horizon, compass, current and stick overlay.', 'Alle Elemente, auch künstlicher Horizont, Kompass, Strom und Stick-Anzeige.'] },
+    race: { title: ['Race', 'Rennen'], text: ['For racing: laps, lap times, split delta and gate counter.', 'Fürs Rennen: Runden, Rundenzeiten, Split-Delta und Gate-Zähler.'] },
   },
   // The add-on bar above the part pickers and the add-on jar read in the browser (website design 0.6.0, 3.5.4, 3.5.5).
   addons: {
@@ -372,7 +392,7 @@ const TEXT = {
 export function t(path, vars) {
   let node = TEXT;
   for (const key of path.split('.')) node = node == null ? undefined : node[key];
-  let text = Array.isArray(node) ? node[lang() === 'de' ? 1 : 0] : path;
+  let text = Array.isArray(node) ? pick(node) : path;
   if (vars) text = text.replace(/\{(\w+)\}/g, (m, k) => (k in vars ? String(vars[k]) : m));
   return text;
 }
@@ -380,7 +400,7 @@ export function t(path, vars) {
 /** Text of a key that itself contains dots (tune keys): tk('tune', 'rates.type'). */
 export function tk(group, key) {
   const node = TEXT[group] && TEXT[group][key];
-  return Array.isArray(node) ? node[lang() === 'de' ? 1 : 0] : null;
+  return Array.isArray(node) ? pick(node) : null;
 }
 
 export function entry(path) {
@@ -392,7 +412,7 @@ export function entry(path) {
 /** Number in the page language with fixed decimals; NaN/null gives '–'. */
 export function num(value, decimals = 1) {
   if (value == null || !Number.isFinite(value)) return '–';
-  return new Intl.NumberFormat(lang() === 'de' ? 'de-DE' : 'en-US', {
+  return new Intl.NumberFormat(translated() ? locale() : (lang() === 'de' ? 'de-DE' : 'en-US'), {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   }).format(value);

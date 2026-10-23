@@ -11,14 +11,13 @@ import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe
 import { batteryFit } from './rules.js?v=e77905ee';
 import { assemble, PROP_SLOTS } from './assembly.js?v=e8018744';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=320ddce0';
-import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=51be8283';
-import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=75a1b774';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=4e942aef';
+import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=3a0c5124';
+import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=06e639ed';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=86ec53f6';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
 const DATA_ROOT = new URL('../../data/configurator/', import.meta.url);
-const SITE_ROOT = new URL('../../../', import.meta.url);
 const DEFAULT_PRESET = 'justmoreparts:deadcat5_6s';
 const FIELDS = ['frame', 'stack', 'motor', 'prop', 'video', 'battery'];
 const SLOT_CATEGORIES = [...FIELDS, 'accessory'];
@@ -933,7 +932,7 @@ function renderPaint() {
         el('div', { class: 'paint-row__label' },
           el('span', { class: 'paint-row__name', id: `paint-${slot}-name` }, name),
           el('span', { class: 'paint-row__hint' }, off ? t(slot === 'frame' && derived.proceduralFrame ? 'ui.paintHidden' : 'ui.notOnBuild')
-            : localText(info && info.hint, lang()))),
+            : tr(localText(info && info.hint, lang())))),
         el('span', { class: 'paint-row__hex mono' }, paintValueText(value, painted), el('span', { class: 'visually-hidden' }, ` (${painted ? t('ui.painted') : t('ui.original')})`)),
         el('button', {
           type: 'button', class: 'icon-btn icon-btn--small', title: t('ui.resetSlot'), 'aria-label': `${t('ui.resetSlot')}: ${name}`,
@@ -1457,8 +1456,7 @@ function renderOsd() {
   };
   if (state.osd.imported) options.append(radio('imported', t('ui.osdImported'), importedOsdInfo()));
   for (const p of OSD_PRESETS) {
-    const [en, de, den, dde] = entry(`osdPresets.${p}`);
-    options.append(radio(p, lang() === 'de' ? de : en, lang() === 'de' ? dde : den));
+    options.append(radio(p, t(`osdPresets.${p}.title`), t(`osdPresets.${p}.text`)));
   }
   panel.replaceChildren(el('p', { class: 'panel-intro' }, t('ui.osdIntro')), include, options, el('p', { class: 'tune-note' }, t('ui.osdPresetNote')));
 }
@@ -1579,7 +1577,7 @@ function scheduleHash() {
 
 /** A line about an add-on a PW3 code names that this page can't match, with its safe links (convert.js addonNote), or null. */
 function addonLine(report) {
-  const note = addonNote(report, catalog, lang(), new URL('addons/', SITE_ROOT).href);
+  const note = addonNote(report, catalog, lang(), pageHref('addons/'));
   if (!note) return null;
   const line = el('span', { class: 'addon-line' }, note.text,
     ...note.links.flatMap(([label, href]) => [' ', el('a', { href, target: '_blank', rel: 'noopener noreferrer' }, label)]));
@@ -1593,7 +1591,7 @@ function addonLine(report) {
  * the viewer follow it. A build that loses a part gets a preset of what is left.
  */
 function applyAddons(json, nextRender) {
-  catalog = keepUnitsTogether(createCatalog(json));
+  catalog = pageTexts(createCatalog(json));
   render = nextRender;
   computeRoles();
   if (!knownBuild(state.build)) {
@@ -1810,7 +1808,7 @@ function renderBeginner() {
   if (!builds.length) return;
   const head = el('div', { class: 'beginner__head' },
     el('h3', { class: 'beginner__title', id: 'beginner-title' }, t('beginner.title')),
-    el('p', { class: 'beginner__hint' }, t('beginner.angle'), ' ', el('a', { href: new URL(beginner.school || '#learn', SITE_ROOT).href }, t('beginner.school'))));
+    el('p', { class: 'beginner__hint' }, t('beginner.angle'), ' ', el('a', { href: pageHref(beginner.school || '#learn') }, t('beginner.school'))));
   const list = el('ul', { class: 'beginner__cards' });
   for (const b of builds) {
     const preset = catalog.preset(b.preset);
@@ -2487,16 +2485,29 @@ function toast(message, level) {
 // ---------------------------------------------------------------------------------------------------------------
 // Boot
 
-/** Texts from the web export (names, help, rules) with no-break spaces between numbers and units. */
-function keepUnitsTogether(c) {
-  for (const name of ['partName', 'shortName', 'presetName', 'issueText', 'analysisWarningText']) {
+/**
+ * Texts from the web export (names, help, rules) with no-break spaces between numbers and units; on a translated page
+ * help, rules, warnings, statuses and tune groups in its language (part and preset names stay English, website design
+ * 0.6.0, 3.2.5).
+ */
+function pageTexts(c) {
+  for (const name of ['partName', 'shortName', 'presetName']) {
     const get = c[name];
     c[name] = (...args) => glue(get(...args));
   }
+  for (const name of ['issueText', 'analysisWarningText']) {
+    const get = c[name];
+    c[name] = (...args) => glue(tr(get(...args)));
+  }
+  for (const name of ['statusText', 'tuneGroupName']) {
+    const get = c[name];
+    c[name] = (...args) => tr(get(...args));
+  }
   const help = c.help;
+  const local = (text) => glue(tr(text));
   c.help = (...args) => {
     const h = help(...args);
-    return h && { summary: glue(h.summary), what: h.what.map(glue), use: h.use.map(glue) };
+    return h && { summary: local(h.summary), what: h.what.map(local), use: h.use.map(local) };
   };
   return c;
 }
@@ -2514,8 +2525,9 @@ async function boot() {
       }),
       optional('stathelp.json', { stats: {} }),
       optional('beginner.json', { builds: [] }),
+      loadTexts(),
     ]);
-    catalog = keepUnitsTogether(c);
+    catalog = pageTexts(c);
     render = r;
     statHelp = help;
     beginner = starters;
@@ -2553,7 +2565,7 @@ async function boot() {
   wireStatHelp();
   mountAddonBar({
     host: $('[data-panel-parts]'), before: $('[data-slots]'), base: catalog.json, render, apply: applyAddons,
-    directoryUrl: new URL('addons/', SITE_ROOT).href,
+    directoryUrl: pageHref('addons/'),
   });
   refreshAll();
   if (fromLink) {
