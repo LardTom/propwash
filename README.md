@@ -221,6 +221,7 @@ node tools/test-configurator.mjs           # share codes, conversion, presets, a
 node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts, assembly, plugged battery, FPV hubs
 node tools/test-configurator-pick.mjs      # clicks and taps on the parts in the 3D view (headless Chrome, ~1 min)
 node tools/test-configurator-flows.mjs     # converter, old links, explanations, builds for beginners (headless Chrome)
+node tools/test-plug-texts.mjs             # battery plugged in: texts, dictionaries and model data say plugs are hidden
 ```
 
 `--goldens` copies the share-code golden files of Propwash (`pw1-vectors.json`, `pw2-vectors.json`, `pw3-vectors.json`,
