@@ -1,9 +1,12 @@
 // Changelog page (changelog/index.html): renders assets/data/changelog.json – a filter (all / one product), a version
 // list with anchors, and one card per release with highlights and the sections New, Improved, Fixed, Compatibility and
-// Known issues. Every text is written in both languages (lang="en"/"de" spans), so the site's language switch works
-// without re-rendering. Texts go in via textContent only; the entries' inline Markdown is turned into elements.
+// Known issues. On the English/German page every text is written in both languages (lang="en"/"de" spans), so the
+// site's language switch works without re-rendering; on the pages of the other languages (assets/js/i18n.js) in that
+// one language, entries included (their translations come from assets/i18n/<lang>.json). Texts go in via textContent
+// only; the entries' inline Markdown is turned into elements.
 
 import { loadChangelog, validateChangelog, parseInline, tally, KINDS } from './data.js?v=7e0fef0c';
+import { OFFICIAL, fill, lang, translated, load, text, spans, href } from '../i18n.js?v=6ae64da4';
 
 const doc = document;
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -37,14 +40,13 @@ const UI = {
   read: { en: 'Read the notes', de: 'Zu den Änderungen' },
   copy: { en: 'Copy link', de: 'Link kopieren' },
   copied: { en: 'Copied', de: 'Kopiert' },
-  copyLabel: { en: (name) => `Copy link to ${name}`, de: (name) => `Link zu ${name} kopieren` },
-  copiedLive: { en: (name) => `Link to ${name} copied`, de: (name) => `Link zu ${name} kopiert` },
+  copyLabel: { en: 'Copy link to {name}', de: 'Link zu {name} kopieren' },
+  copiedLive: { en: 'Link to {name} copied', de: 'Link zu {name} kopiert' },
   copyFailed: { en: 'The link is in the address bar now', de: 'Der Link steht jetzt in der Adresszeile' },
-  releases: { en: (n) => `${n} ${n === 1 ? 'release' : 'releases'}`, de: (n) => `${n} ${n === 1 ? 'Version' : 'Versionen'}` },
-  showing: {
-    en: (n, what) => `Showing ${n} ${n === 1 ? 'release' : 'releases'} of ${what}`,
-    de: (n, what) => `${n} ${n === 1 ? 'Version' : 'Versionen'} von ${what}`
-  },
+  releases: { en: '{n} releases', de: '{n} Versionen' },
+  releaseOne: { en: '1 release', de: '1 Version' },
+  showing: { en: 'Showing {n} releases of {what}', de: '{n} Versionen von {what}' },
+  showingOne: { en: 'Showing 1 release of {what}', de: '1 Version von {what}' },
   everything: { en: 'all products', de: 'allen Produkten' },
   tally: {
     releases: { en: 'releases', de: 'Versionen' },
@@ -83,15 +85,24 @@ function icon(name, size = 16, cls = '') {
   return s;
 }
 
-function bi(text) {
+/** A {en, de} text as lang spans: both on the English/German page, the page's language on the others. */
+const bi = (value, values) => spans(value, values);
+
+/** A text put together from several {en, de} templates: build(pick) joins pick(template, values) in one language. */
+function compose(build) {
+  if (translated()) return el('span', { lang: lang() }, build((t, v) => text(t, v)));
   const frag = doc.createDocumentFragment();
-  frag.append(el('span', { lang: 'en' }, text?.en ?? ''), el('span', { lang: 'de' }, text?.de ?? ''));
+  for (const l of OFFICIAL) frag.append(el('span', { lang: l }, build((t, v) => fill(t[l] ?? t.en, v))));
   return frag;
 }
 
-function biFn(fn, ...args) {
-  return { en: fn.en(...args), de: fn.de(...args) };
+/** A text attribute: English plus data-de-… on the English/German page (main.js switches it), else the page's language. */
+function label(name, value, values) {
+  if (translated()) return { [name]: text(value, values) };
+  return { [name]: fill(value.en, values), [`data-de-${name}`]: fill(value.de ?? value.en, values) };
 }
+
+const releasesText = (n) => (n === 1 ? UI.releaseOne : UI.releases);
 
 /** Links to propwashfpv.com stay on this copy of the site (also on the fallback address and in a local preview). */
 function localHref(href) {
@@ -107,21 +118,39 @@ function inline(nodes) {
       case 'strong': return el('strong', null, inline(n.c));
       case 'em': return el('em', null, inline(n.c));
       case 'link': {
-        const href = localHref(n.href);
-        const external = /^https:/.test(href);
-        return el('a', { href, target: external ? '_blank' : null, rel: external ? 'noopener' : null }, inline(n.c));
+        const target = href(localHref(n.href));
+        const external = /^https:/.test(target);
+        return el('a', { href: target, target: external ? '_blank' : null, rel: external ? 'noopener' : null }, inline(n.c));
       }
       default: return doc.createTextNode('');
     }
   });
 }
 
-/** One entry in both languages; without a German text the English one stands in (marked as English). */
-function entry(item) {
-  const en = el('span', { lang: 'en' }, inline(parseInline(item.en).nodes));
+const entryNodes = (src) => inline(parseInline(src).nodes);
+
+/**
+ * Emphasised words a translation keeps exactly as in the English entry (names in the game's interface, which is
+ * English or German only) are marked as English.
+ */
+function markKept(nodes, englishNodes) {
+  const emphasised = (list) => list.filter((n) => n.nodeType === 1)
+    .flatMap((n) => [n, ...n.querySelectorAll('em, strong')]).filter((n) => n.matches('em, strong'));
+  const kept = new Set(emphasised(englishNodes).map((n) => n.textContent.trim()));
+  for (const n of emphasised(nodes)) if (kept.has(n.textContent.trim())) n.setAttribute('lang', 'en');
+  return nodes;
+}
+
+/**
+ * One entry in both languages; without a German text the English one stands in (marked as English). On the pages of
+ * the other languages the entry in that language (its translation of the English Markdown).
+ */
+function entry(item, render = entryNodes) {
+  if (translated()) return [el('span', { lang: lang() }, markKept(render(text(item)), render(item.en)))];
+  const en = el('span', { lang: 'en' }, render(item.en));
   const de = item.de
-    ? el('span', { lang: 'de' }, inline(parseInline(item.de).nodes))
-    : el('span', { lang: 'de' }, el('span', { lang: 'en', class: 'keep' }, inline(parseInline(item.en).nodes)));
+    ? el('span', { lang: 'de' }, render(item.de))
+    : el('span', { lang: 'de' }, el('span', { lang: 'en', class: 'keep' }, render(item.en)));
   return [en, de];
 }
 
@@ -132,8 +161,8 @@ function releaseName(product, release) {
 /* ---------- Release cards ---------- */
 
 /** A highlight starts with its name in bold ("**Flight training:** …"); on the card the name is the title. */
-function highlightNodes(text) {
-  const nodes = parseInline(text).nodes;
+function highlightNodes(src) {
+  const nodes = parseInline(src).nodes;
   const first = nodes[0];
   if (first?.t !== 'strong') return inline(nodes);
   const lead = first.c.map((n, i) => (i === first.c.length - 1 && n.t === 'text' ? { ...n, v: n.v.replace(/:\s*$/, '') } : n));
@@ -146,11 +175,7 @@ function highlightNodes(text) {
 }
 
 function highlightEntry(item) {
-  const en = el('span', { lang: 'en' }, highlightNodes(item.en));
-  const de = item.de
-    ? el('span', { lang: 'de' }, highlightNodes(item.de))
-    : el('span', { lang: 'de' }, el('span', { lang: 'en', class: 'keep' }, highlightNodes(item.en)));
-  return [en, de];
+  return entry(item, highlightNodes);
 }
 
 function highlights(section) {
@@ -171,14 +196,12 @@ function section(sectionData, headingId) {
 
 function copyButton(product, release) {
   const name = releaseName(product, release);
-  const label = biFn(UI.copyLabel, name);
   return el('button', {
     type: 'button',
     class: 'cl-copy',
     'data-copy-link': release.id,
     'data-name': name,
-    'aria-label': label.en,
-    'data-de-aria-label': label.de
+    ...label('aria-label', UI.copyLabel, { name })
   },
   icon('link', 15, 'cl-copy__icon'), icon('check', 15, 'cl-copy__done'),
   el('span', { class: 'cl-copy__text', 'aria-hidden': 'true' }, bi(UI.copy)),
@@ -211,7 +234,7 @@ function productSection(product) {
       el('span', { class: 'cl-product__badge', 'aria-hidden': 'true' }, icon(UI.productIcon[product.id] || 'list', 22)),
       el('div', { class: 'cl-product__words' },
         el('h2', { class: 'cl-product__name', id: titleId }, product.name),
-        el('p', { class: 'cl-product__meta' }, bi(product.tagline), el('span', { class: 'cl-product__sep', 'aria-hidden': 'true' }, ' · '), bi(biFn(UI.releases, product.releases.length))))),
+        el('p', { class: 'cl-product__meta' }, bi(product.tagline), el('span', { class: 'cl-product__sep', 'aria-hidden': 'true' }, ' · '), bi(releasesText(product.releases.length), { n: product.releases.length })))),
     product.releases.map((r, i) => releaseCard(product, r, i)));
 }
 
@@ -219,7 +242,7 @@ function productSection(product) {
 
 function filterBar(products) {
   const options = [{ id: 'all', label: UI.all }, ...products.map((p) => ({ id: p.id, label: { en: p.short, de: p.short } }))];
-  return el('div', { class: 'cl-filter', role: 'group', 'aria-label': UI.show.en, 'data-de-aria-label': UI.show.de, 'data-cl-filter': true },
+  return el('div', { class: 'cl-filter', role: 'group', ...label('aria-label', UI.show), 'data-cl-filter': true },
     options.map((o) => el('button', { type: 'button', class: `cl-filter__btn cl-filter__btn--${o.id}`, 'data-filter': o.id, 'aria-pressed': o.id === 'all' ? 'true' : 'false' }, bi(o.label))));
 }
 
@@ -232,7 +255,7 @@ function toc(products) {
         el('a', { href: `#${r.id}`, 'data-toc': r.id },
           el('span', { class: 'cl-toc__version' }, r.version),
           el('span', { class: 'cl-toc__title' }, bi(r.title))))))));
-  return el('nav', { class: 'cl-toc', 'aria-label': UI.versions.en, 'data-de-aria-label': UI.versions.de },
+  return el('nav', { class: 'cl-toc', ...label('aria-label', UI.versions) },
     el('details', { class: 'cl-toc__fold', 'data-cl-fold': true },
       el('summary', { class: 'cl-toc__summary' },
         icon('list', 16), el('span', null, bi(UI.versions)), el('span', { class: 'cl-toc__total' }, String(total)), icon('chevron', 14, 'cl-toc__chevron')),
@@ -290,8 +313,8 @@ function copyText(text) {
   });
 }
 
-function announce(live, text) {
-  live.replaceChildren(bi(text));
+function announce(live, value, values) {
+  live.replaceChildren(bi(value, values));
 }
 
 function setup(data, root) {
@@ -322,8 +345,9 @@ function setup(data, root) {
     if (tallyHost) renderTally(shown, tallyHost);
     requestMark();
     if (!quiet) {
-      const what = id === 'all' ? UI.everything : { en: products.find((p) => p.id === id).name, de: products.find((p) => p.id === id).name };
-      announce(live, { en: UI.showing.en(shown.length, what.en), de: UI.showing.de(shown.length, what.de) });
+      const name = id === 'all' ? null : products.find((p) => p.id === id).name;
+      const n = shown.length;
+      live.replaceChildren(compose((pick) => pick(n === 1 ? UI.showingOne : UI.showing, { n, what: name ?? pick(UI.everything) })));
     }
   }
   filter.addEventListener('click', (e) => {
@@ -348,7 +372,7 @@ function setup(data, root) {
     const url = `${location.origin}${location.pathname}#${id}`;
     copyText(url).then(() => {
       btn.classList.add('is-done');
-      announce(live, biFn(UI.copiedLive, btn.dataset.name));
+      announce(live, UI.copiedLive, { name: btn.dataset.name });
       window.setTimeout(() => btn.classList.remove('is-done'), 1600);
     }, () => {
       history.replaceState(null, '', `#${id}`);
@@ -406,7 +430,7 @@ async function main() {
   if (!root) return;
   root.setAttribute('aria-busy', 'true');
   try {
-    const data = await loadChangelog();
+    const [data] = await Promise.all([loadChangelog(), load()]);
     const problems = validateChangelog(data);
     if (problems.length) console.warn('changelog.json:', problems);
     setup(data, root);
