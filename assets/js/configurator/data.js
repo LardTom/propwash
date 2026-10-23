@@ -13,7 +13,7 @@ import {
 } from './sharecode.js?v=594888f1';
 import { sharedOnly } from './tune.js?v=f4084d0e';
 import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=87906fc9';
-import { catalogOrder } from './catalog-build.js?v=860a85ee';
+import { catalogOrder } from './catalog-build.js?v=a65b55f8';
 
 export const CATALOG_URL = new URL('../../data/configurator/catalog.json', import.meta.url);
 export const CATEGORIES = Object.freeze(['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory']);

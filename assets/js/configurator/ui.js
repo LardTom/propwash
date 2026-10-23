@@ -2,7 +2,7 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText, createCatalog } from './data.js?v=9b4be038';
+import { loadCatalog, localText, createCatalog } from './data.js?v=82113fee';
 import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=594888f1';
 import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=87906fc9';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
@@ -13,7 +13,7 @@ import { assemble, PROP_SLOTS } from './assembly.js?v=6f42a16f';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=e94a5904';
 import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=dd4ad593';
 import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=9294ec03';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=8c3ec805';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=d29c4a2c';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);

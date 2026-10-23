@@ -10,7 +10,7 @@
         "de": "Die FPV-Drohnen-Mod für Minecraft"
       },
       "source": {
-        "ref": "c2dcd83d333b8c92e1a804458b6401948c1d8756"
+        "ref": "896257b0883a711b629f8043043421480fa51584"
       },
       "releases": [
         {
@@ -143,8 +143,8 @@
                   "de": "Motor-Hitze wie bei echten Koptern: Nur ein ESC über etwa 140 °C regelt ab (wie BLHeli_32), mit der neuen OSD-Warnung *ESC ÜBERHITZT*. Heiße Motoren drosseln sich nicht mehr selbst – sie verlieren etwas Drehmoment und verschleißen. Whoops werden bei Dauervollgas richtig heiß, ein 7″ mit LiPo kämpft bei Dauervollgas weiter mit der Hitze, Vorwärtsflug kühlt Motoren und ESCs, und die 1404-Motoren des eingebauten Cinewhoops kühlen wie echte."
                 },
                 {
-                  "en": "Batteries are plugged in: the battery plug (XT60, XT30 or BT2.0) now sits in the drone's plug instead of two loose plugs side by side – on every frame, with the battery on top or underneath, and in the web configurator.",
-                  "de": "Akkus sind eingesteckt: Der Akkustecker (XT60, XT30 oder BT2.0) sitzt jetzt in der Buchse der Drohne statt zwei lose Stecker nebeneinander – an jedem Rahmen, mit dem Akku oben oder unten, und im Web-Konfigurator."
+                  "en": "Plugged-in batteries no longer show plugs or cables: with the battery in, the drone hides the battery's plug and leads and the stack's power leads instead of two loose plugs side by side – on every frame, with the battery on top or underneath, and in the web configurator.",
+                  "de": "Gesteckte Akkus zeigen keine Stecker und Kabel mehr: Sitzt der Akku, blendet die Drohne Stecker und Kabel des Akkus und die Stromkabel des Stacks aus, statt zwei lose Stecker nebeneinander zu zeigen – an jedem Rahmen, mit dem Akku oben oder unten, und im Web-Konfigurator."
                 },
                 {
                   "en": "The bottom gate of a stack counts all the way down to the ground – where its bottom bar is missing, flying through counts, also right after stacking. Courses, records and ghosts stay as they are.",
@@ -219,6 +219,10 @@
                 {
                   "en": "Worlds, drones, courses, leaderboards, ghosts and settings from 0.5.x load unchanged. Courses get their course ID the first time they load, old leaderboards stay valid, the freecam rule starts off in every world, and bandos that are already generated stay as they are.",
                   "de": "Welten, Drohnen, Kurse, Bestenlisten, Geister und Einstellungen aus 0.5.x laden unverändert. Kurse bekommen ihre Kurs-ID beim ersten Laden, alte Bestenlisten bleiben gültig, die Freecam-Regel startet in jeder Welt aus, und schon erzeugte Bandos bleiben, wie sie sind."
+                },
+                {
+                  "en": "Going back to 0.5.2: a world played with 0.6.0 opens in Propwash 0.5.2 without a crash, but RX blocks disappear there like any block 0.5.2 doesn't know, and add-on data on drones is ignored.",
+                  "de": "Zurück zu 0.5.2: Eine mit 0.6.0 gespielte Welt öffnet sich in Propwash 0.5.2 ohne Absturz, RX-Blöcke verschwinden dort aber wie jeder Block, den 0.5.2 nicht kennt, und Add-on-Daten an Drohnen werden ignoriert."
                 },
                 {
                   "en": "Servers: only the course owner and operators can edit a course now – courses without an owner (world courses, old courses) only operators. Every player may create zones until you switch off *Players may create zones*.",

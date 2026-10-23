@@ -811,8 +811,6 @@ function compactModel(model, where) {
 }
 
 const PLUG_ELEMENTS = new Set(['connector', 'connector_grip', 'bt_connector']);
-const NOT_BODY = ['arm', 'motor', 'prop', 'duct'];
-const BODY_STRIP_MM = 10;
 const mm = (v) => (v - 8) * 8;
 
 export function namedBoxes(model) {
@@ -857,15 +855,6 @@ export function pigtailOf(elements) {
   if (leads.length !== 2) return null;
   const [first, second] = leads;
   return (second[0] < first[0] ? [second, first] : [first, second]).map((lead) => lead.map(round));
-}
-
-export function bodyRearZ(elements) {
-  let rear = -Infinity;
-  for (const { name, box } of elements) {
-    if (NOT_BODY.some((prefix) => name.startsWith(prefix))) continue;
-    if (box[3] >= -BODY_STRIP_MM && box[0] <= BODY_STRIP_MM) rear = Math.max(rear, box[5]);
-  }
-  return Number.isFinite(rear) ? round(rear) : NaN;
 }
 
 /** Base64 of bytes, in the browser and in Node. */
@@ -964,10 +953,6 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
       const socket = variants[name] && socketOf(raw[name].elements);
       if (socket) variants[name].socket = socket;
     }
-  }
-  if (p.category === 'frame') {
-    const rear = bodyRearZ(raw.base.elements);
-    if (Number.isFinite(rear)) variants.base.rear = rear;
   }
   const tex = textures.map((rel) => `data:image/png;base64,${base64(textureBytes(rel))}`);
   return { format: 1, id: p.id, tex, variants };
