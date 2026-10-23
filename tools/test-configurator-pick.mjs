@@ -12,8 +12,8 @@
 //   - paint tab, pointer on a face outside the part's tint groups (it paints the part's main slot): the label names the
 //     slot, the faces of the slot light up fully and the part under the pointer lights up a little as a whole
 //     (website design 0.6.0, fixes 3.E); the parts tab lights the whole category there as before
-//   - battery plugged in (Propwash 0.6.0): a click on the plug or lead selects the stack; in the paint tab they are not
-//     pickable
+//   - battery plugged in (Propwash 0.6.0): no plug and no lead drawn – the mounted stack without its two pigtails, the
+//     battery without its socket and the leads to it
 //   - phone (390 × 844, touch): the hint fits beside the toolbar, a tap picks in both tabs, a one-finger drag and a
 //     two-finger pinch do not, the page does not scroll sideways
 //   - no console errors or uncaught exceptions anywhere
@@ -468,38 +468,20 @@ async function main() {
       await hoverAway();
     }
 
-    // ---- Battery plugged in: plug and lead belong to the stack ----
+    // ---- Battery plugged in: no plug and no lead drawn ----
     {
       const label = 'battery plugged in';
       await open(`${base}/configurator/#${codeWith('propwash:freestyle', {})}`, DESKTOP, label);
       const roles = await evaluate('window.__viewer.highlights().map((l) => l.role)');
-      check(roles.filter((r) => r === 'power_lead').length === 1, `${label}: one plugged pair drawn (${roles})`);
-      check(await evaluate("window.__viewer.current().assembly.pieces.find((p) => p.role === 'stack').variant === 'mounted'"), `${label}: mounted stack drawn`);
-      await setTab('paint');
-      await viewerToTop();
-      const paintPoints = await evaluate('window.__viewer.pickPoints()');
-      const leadIds = await evaluate("window.__viewer.highlights().filter((l) => l.role === 'power_lead').map((l) => l.meshId)");
-      check(!paintPoints.some((p) => leadIds.includes(p.meshId)), `${label}: the lead can't be picked in the paint tab`);
-      await setTab('parts');
-      await setCategory('frame');
-      let leadPoint = null;
-      for (const view of VIEWS) {
-        await turn(view);
-        await viewerToTop();
-        leadPoint = (await evaluate('window.__viewer.pickPoints()')).find((p) => leadIds.includes(p.meshId));
-        if (leadPoint) break;
-      }
-      check(!!leadPoint, `${label}: a visible point on the plug or lead`);
-      if (leadPoint) {
-        const at = await client(leadPoint);
-        await mouse('mouseMoved', at.x, at.y, false);
-        await mouse('mousePressed', at.x, at.y, true);
-        await mouse('mouseReleased', at.x, at.y, false);
-        await sleep(120);
-        check((await ui()).category === 'stack', `${label}: a click on the lead opens the stack`);
-      }
-      await turn([]);
-      await hoverAway();
+      check(!roles.includes('power_lead'), `${label}: no plugged pair or lead drawn (${roles})`);
+      const hidden = await evaluate(`(() => {
+        const a = window.__viewer.current().assembly;
+        const stack = a.pieces.find((p) => p.role === 'stack');
+        const battery = a.pieces.find((p) => p.role === 'battery');
+        return { plugsHidden: a.plugsHidden, variant: stack.variant, stack: (stack.hide || []).length, battery: (battery.hide || []).length };
+      })()`);
+      check(hidden.plugsHidden && hidden.variant === 'mounted' && hidden.stack === 2 && hidden.battery === 6,
+        `${label}: mounted stack without its two pigtails, battery without socket, grip, leads, balance lead and plug (${JSON.stringify(hidden)})`);
     }
 
     // ---- Phone: taps pick, drags and pinches do not ----

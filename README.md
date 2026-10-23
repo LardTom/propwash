@@ -182,11 +182,11 @@ on hover and focus; without JavaScript narrow screens show the links as a row be
   configurator. Nothing is uploaded; the page uses the same modules as the configurator, without the 3D view
 - 3D view with three.js: the parts' Minecraft block models, textures and paint tints placed like the mod's drone
   renderer (frame layouts, motor seats, camera tilt, accessory anchors); drag to turn, scroll or pinch to zoom,
-  auto-rotate (off with reduced motion or paused animations), keyboard control on the canvas; the battery is plugged in
-  like in Propwash 0.6.0 (`PowerLeadRoute`): the stack is drawn as its `_mounted` variant and the plug sits on the
-  battery's socket (yellow for XT30/XT60/XT90/A30/AS150, white for BT2.0/BT3.0/PH2.0) with the red and black lead from
-  the stack's pigtails around the back of the frame, by the same rule and constants as the game – without a `_mounted`
-  variant, a socket or a frame model the stack is drawn as before
+  auto-rotate (off with reduced motion or paused animations), keyboard control on the canvas; with the battery in, the
+  drone shows no plugs and no power leads like in Propwash 0.6.0 (`PowerLead`, `PlugMask`): the stack is drawn as its
+  `_mounted` variant without its two pigtails and the battery without its socket and the leads to it (the elements the
+  game leaves out by name, found by the socket box and the pigtail ends of the model data) – without a `_mounted`
+  variant or a socket both parts are drawn as before
 - FPV camera preview (switch “3D / FPV camera” in the viewer, or open `configurator/?view=camera#PW1-…`): the image the
   drone's camera sends, drawn like the game's FPV view (since Propwash 0.4.0): 16:9 rectilinear from the lens with the drone's
   camera angle and the field of view of the camera in the video unit (`camera_fov_deg`, e.g. analog race 125°, digital

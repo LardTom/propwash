@@ -13,8 +13,8 @@
 // too). Every mesh carries its source piece in userData.pick; the ray test runs on the CPU only on a click and on
 // throttled pointer moves, against the visible meshes as drawn (back faces culled, cutout texels let the ray through).
 //
-// Battery plugged in (Propwash 0.6.0): the stack is drawn as its mounted variant and the plug and leads as boxes
-// (assembly.js powerLeadRoute); they belong to the stack and cannot be painted.
+// Battery plugged in (Propwash 0.6.0): no plugs and no power leads – the stack is drawn as its mounted variant and the
+// model elements listed in a piece's `hide` (assembly.js plugIn) are left out of its geometry.
 
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Group, Mesh, BufferGeometry, BufferAttribute, ShaderMaterial, Texture,
@@ -22,9 +22,9 @@ import {
   LinearSRGBColorSpace, OrbitControls,
 } from '../../vendor/three/three.min.js';
 import {
-  assemble, proceduralFrame, proceduralAccessoryBase, powerLeadShapes, pieceCategory, MM_PER_MODEL_UNIT, PROP_SLOTS,
-} from './assembly.js?v=4c1a9532';
-import { paintTints, groupsOf, pieceSlots, rgbOf, slotOf, shade } from './paint.js?v=41b84300';
+  assemble, proceduralFrame, proceduralAccessoryBase, pieceCategory, MM_PER_MODEL_UNIT, PROP_SLOTS,
+} from './assembly.js?v=6f42a16f';
+import { paintTints, groupsOf, pieceSlots, rgbOf, slotOf, shade } from './paint.js?v=e94a5904';
 import { discCenter, verticalFov, ASPECT as FPV_ASPECT, SLOTS } from './fpv.js?v=76cdbbe6';
 
 const MAX_TINTS = 8;
@@ -210,9 +210,10 @@ const apply = (m, x, y, z) => [m[0] * x + m[1] * y + m[2] * z, m[3] * x + m[4] *
 
 /**
  * BufferGeometry of compact model elements in millimetres around the model point (8, 8, 8). tints: tint index per
- * face (painted model) or null; groups: tint group per face for picking (also on the plain model), or null.
+ * face (painted model) or null; groups: tint group per face for picking (also on the plain model), or null; hide:
+ * indices of elements left out (their faces still count for tints and groups), or null.
  */
-function modelGeometry(elements, tints, groups) {
+function modelGeometry(elements, tints, groups, hide) {
   const pos = [];
   const nor = [];
   const uvs = [];
@@ -220,7 +221,13 @@ function modelGeometry(elements, tints, groups) {
   const grp = [];
   const index = [];
   let face = 0;
-  for (const el of elements) {
+  const hidden = new Set(hide || []);
+  for (let e = 0; e < elements.length; e++) {
+    const el = elements[e];
+    if (hidden.has(e)) {
+      face += el[7].filter(Boolean).length;
+      continue;
+    }
     const from = el.slice(0, 3);
     const to = el.slice(3, 6);
     const rot = el[6];
@@ -618,13 +625,13 @@ export function createViewer(container, options) {
     });
   }
 
-  function geometryFor(model, id, variantName) {
-    const key = `${id}#${variantName}`;
+  function geometryFor(model, id, variantName, hide) {
+    const key = `${id}#${variantName}#${hide ? hide.join(',') : ''}`;
     let g = geometryCache.get(key);
     if (!g) {
       const variant = model.variants[variantName];
       const source = variant.of ? model.variants[variant.of] : variant;
-      g = modelGeometry(source.el, variant.tint || null, faceGroups(model, variantName));
+      g = modelGeometry(source.el, variant.tint || null, faceGroups(model, variantName), hide || null);
       geometryCache.set(key, g);
     }
     return g;
@@ -659,9 +666,6 @@ export function createViewer(container, options) {
       const frame = catalog.part(piece.id);
       mesh = new Mesh(shapeGeometry(proceduralFrame(frame, current.layout, catalog)), material(whiteTexture()));
       mesh.userData.dispose = true;
-    } else if (piece.procedural === 'power_lead') {
-      mesh = new Mesh(shapeGeometry(powerLeadShapes(piece.route)), material(whiteTexture()));
-      mesh.userData.dispose = true;
     } else {
       const plain = piece.variant && piece.variant !== 'base' && model.variants[piece.variant] ? piece.variant : 'base';
       const painted = plain === 'base' ? 'paint' : `${plain}_paint`;
@@ -674,7 +678,7 @@ export function createViewer(container, options) {
           if (i < MAX_TINTS) mat.uniforms.tints.value[i].set(((rgb >> 16) & 255) / 255, ((rgb >> 8) & 255) / 255, (rgb & 255) / 255);
         });
       }
-      mesh = new Mesh(geometryFor(model, piece.id, name), mat);
+      mesh = new Mesh(geometryFor(model, piece.id, name, piece.hide), mat);
       faces = !!faceGroups(model, name);
     }
     mesh.userData.role = piece.role;
@@ -929,9 +933,8 @@ export function createViewer(container, options) {
   let tapPicked = false;
   const touches = new Set();
 
-  // The plugged lead is not pickable in paint mode, like in the game's paint picker; a click goes to what is behind it.
   function pickables() {
-    const meshes = droneGroup.children.filter((mesh) => mesh.visible && !(picking.mode === 'paint' && mesh.userData.role === 'power_lead'));
+    const meshes = droneGroup.children.filter((mesh) => mesh.visible);
     return discs.visible ? meshes.concat(discs.children) : meshes;
   }
 

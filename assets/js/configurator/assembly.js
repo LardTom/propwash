@@ -5,14 +5,14 @@
 // All positions are millimetres in the drone's frame: x to the right, y up, z to the rear (the nose points to −z).
 // A block model is drawn with its model point (8, 8, 8) at the part's position, 1 model unit = 8 mm.
 //
-// assemble(build, env) → { layout, cameraTilt, pieces, powerLead } where each piece is
+// assemble(build, env) → { layout, cameraTilt, pieces, plugsHidden } where each piece is
 //   { role, id, slot?, position: [x, y, z], variant: 'base' | 'ccw' | 'under' | 'mounted', paintPosition, tiltX, spinY,
-//     stretchX, procedural? }
+//     stretchX, procedural?, hide? }
 // env = { catalog, render, model(id) → loaded model JSON of a part or null }.
 //
-// Battery plugged in (Propwash 0.6.0, PlugAnchors / PowerLeadRoute / PowerLead): the stack is drawn as its "_mounted"
-// variant (without its own plug, the two power leads named pigtail) and one more piece, role 'power_lead', carries the
-// plugged pair and the leads as boxes in drone millimetres, routed by the same rule and constants as the game.
+// Battery plugged in (Propwash 0.6.0, PowerLead / PlugMask): a drone with its battery shows no plugs and no power leads.
+// The stack is drawn as its "_mounted" variant (without its own plug) and without its two power leads (pigtail), the
+// battery without its socket and the lead to it; `hide` lists the indices of the left-out model elements.
 
 export const SLOTS = 4;
 export const FRONT_LEFT = 0;
@@ -102,16 +102,8 @@ export function layoutFromDefinition(frame, catalog) {
   const propHeight = frame.builtin ? defaultPropHeight(typicalMotor(frame, catalog)) : NaN;
   return {
     motors, ccw, propHeight, stack: [0, stackY, 0], battery, video,
-    cameraTilt: d.camera ? d.camera.tilt_deg : 20, fromFile: false, accessories: defaultAccessories(frame), powerLeadBend: null,
+    cameraTilt: d.camera ? d.camera.tilt_deg : 20, fromFile: false, accessories: defaultAccessories(frame),
   };
-}
-
-/** DroneLayoutParser.powerLeadBend: the optional bend point power_lead.bend_mm [x, y, z] of a layout entry, else null. */
-export function powerLeadBend(entry) {
-  const lead = entry && entry.power_lead;
-  if (!lead || typeof lead !== 'object' || Array.isArray(lead)) return null;
-  const bend = lead.bend_mm;
-  return Array.isArray(bend) && bend.length === 3 && bend.every(finite) ? bend.map(Math.fround) : null;
 }
 
 function fileAnchor(entry) {
@@ -154,7 +146,6 @@ export function frameLayout(frame, catalog, render) {
     cameraTilt: tilt,
     fromFile: true,
     accessories,
-    powerLeadBend: powerLeadBend(entry),
   };
 }
 
@@ -230,8 +221,7 @@ export function batteryPiece(layout, frame, battery, env) {
  * Every other role is its category.
  */
 export function pieceCategory(piece) {
-  if (piece.role === 'accessory_base') return 'accessory';
-  return piece.role === 'power_lead' ? 'stack' : piece.role;
+  return piece.role === 'accessory_base' ? 'accessory' : piece.role;
 }
 
 /**
@@ -265,10 +255,11 @@ export function assemble(build, env) {
   if (stackPiece) pieces.push(stackPiece);
   const batteryAt = battery ? batteryPiece(layout, frame, battery, env) : null;
   if (batteryAt) pieces.push(batteryAt);
-  const powerLead = stackPiece && batteryAt ? plugIn(layout, frame, stackPiece, batteryAt, env) : null;
-  if (powerLead) {
+  const hidden = stackPiece && batteryAt ? plugIn(stackPiece, batteryAt, env) : null;
+  if (hidden) {
     stackPiece.variant = 'mounted';
-    pieces.push({ role: 'power_lead', id: stack.id, position: [0, 0, 0], procedural: 'power_lead', route: powerLead });
+    stackPiece.hide = hidden.stack;
+    batteryAt.hide = hidden.battery;
   }
   if (video) pieces.push({ role: 'video', id: video.id, position: layout.video, tiltX: layout.cameraTilt });
 
@@ -302,139 +293,97 @@ export function assemble(build, env) {
     }
     pieces.push({ role: 'accessory', id, mount, position: anchor.position, tiltX: anchor.tilt, stretchX: stretch });
   }
-  return { layout, cameraTilt: layout.cameraTilt, pieces, missing, powerLead };
+  return { layout, cameraTilt: layout.cameraTilt, pieces, missing, plugsHidden: !!hidden };
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-// Battery plugged in (PlugAnchors, PowerLeadRoute, PowerLead of Propwash 0.6.0)
+// Battery plugged in, plugs hidden (PowerLead and PlugMask of Propwash 0.6.0)
+//
+// The mod leaves out the battery's elements connector, connector_grip, bt_connector, balance_plug and the wires touching
+// one of them, and the stack's two pigtail elements (by name). The compact models carry no names, so the same elements
+// are found by the anchors in the data: inside the socket box or its grip box, the lead in front of the socket and within
+// its outline, then everything that lies completely behind the pack's rear face where that lead starts (the balance lead
+// and plug); the two pigtails by their end point and diameter. In every model of the export this is exactly the named set.
 
-export const PLUG_LENGTH_RATIO = 0.8;
-export const SEAM_MM = 0.5;
-export const SEAM_SHADE = 0.7;
-export const BEND_CLEARANCE_MM = 3.0;
-export const MIN_PIECE_MM = 0.1;
-export const GRIP_INSET_MM = 0.8;
-export const GRIP_HEIGHT_MM = 0.8;
-export const GRIP_END_MM = 1.0;
-export const GRIP_LENGTH_RATIO = 0.55;
-/** Plug colours (PlugAnchors.Family, values of tools/assets/parts/paint.py) and the lead colours, 0xRRGGBB. */
-export const PLUG_COLORS = Object.freeze({ XT: 0xe8b923, BT: 0xdedbd2, red: 0xc62828, black: 0x1c1c1c });
-const YELLOW_PLUGS = new Set(['XT30', 'XT60', 'XT90', 'A30', 'AS150']);
-const WHITE_PLUGS = new Set(['BT2.0', 'BT3.0', 'PH2.0']);
+const PLUG_EPS_MM = 0.01;
 
-/** PlugAnchors.Family.ofConnector: 'XT' (yellow, with a grip), 'BT' (white) or null for a connector name. */
-export function plugFamily(connector) {
-  const key = String(connector || '').replace(/[ -]/g, '').toUpperCase();
-  if (YELLOW_PLUGS.has(key)) return 'XT';
-  return WHITE_PLUGS.has(key) ? 'BT' : null;
-}
-
-const offsetBox = (b, by) => [b[0] + by[0], b[1] + by[1], b[2] + by[2], b[3] + by[0], b[4] + by[1], b[5] + by[2]];
-
-/** PowerLeadRoute.shade: every channel × factor, rounded. */
-export function plugShade(rgb, factor) {
-  return (Math.round(((rgb >> 16) & 255) * factor) << 16) | (Math.round(((rgb >> 8) & 255) * factor) << 8) | Math.round((rgb & 255) * factor);
-}
-
-function wireBox(from, to, diameter, extendStart, extendEnd) {
-  const half = diameter * 0.5;
-  const d = [to[0] - from[0], to[1] - from[1], to[2] - from[2]];
-  const length = Math.hypot(d[0], d[1], d[2]) || 1;
-  const dir = d.map((v) => (v / length) * half);
-  const a = extendStart ? from.map((v, i) => v - dir[i]) : from.slice();
-  const b = extendEnd ? to.map((v, i) => v + dir[i]) : to.slice();
-  const lo = [0, 1, 2].map((i) => Math.min(a[i], b[i]));
-  const hi = [0, 1, 2].map((i) => Math.max(a[i], b[i]));
-  const pad = [0, 1, 2].map((i) => (hi[i] - lo[i] > 0 ? 0 : half));
-  return [lo[0] - pad[0], lo[1] - pad[1], lo[2] - pad[2], hi[0] + pad[0], hi[1] + pad[1], hi[2] + pad[2]];
-}
-
-/**
- * PowerLeadRoute.compute: the plug pushed onto the battery's socket and the two leads from the stack's pigtail ends to
- * the back of the plug, each in three axis-parallel runs around the bend behind the frame. All in drone millimetres.
- * @param {{body: number[], grip: number[]|null, family: 'XT'|'BT'}} socket box [minX, minY, minZ, maxX, maxY, maxZ]
- * @param {{red: number[], black: number[]}} pigtail lead ends [x, y, end z, diameter]
- * @param {number} bodyRearZ rear of the frame body (NaN: none)
- * @param {number[]|null} bend optional bend point of the layout
- * @returns {{socketZ, socketLength, plugEndZ, bendZ, plug: number[], wires: {red, diameter, segments: [from, to][]}[],
- *   pieces: {role: 'seam'|'plug'|'grip'|'red'|'black', box: number[], color: number}[]}}
- */
-export function powerLeadRoute(socket, pigtail, bodyRearZ, bend) {
-  const body = socket.body;
-  const zB = body[5];
-  const lengthB = body[5] - body[2];
-  const zS = zB + PLUG_LENGTH_RATIO * lengthB;
-  const rear = Number.isFinite(bodyRearZ) ? bodyRearZ : -Infinity;
-  const endZ = Math.max(pigtail.red[2], pigtail.black[2]);
-  const zK = bend ? bend[2] : Math.max(Math.max(endZ, rear), zS) + BEND_CLEARANCE_MM;
-  const plug = [body[0], body[1], zB, body[3], body[4], zS];
-  const color = PLUG_COLORS[socket.family];
-  const pieces = [];
-  const seamEnd = Math.min(zS, zB + SEAM_MM);
-  pieces.push({ role: 'seam', box: [body[0], body[1], zB, body[3], body[4], seamEnd], color: plugShade(color, SEAM_SHADE) });
-  if (zS - seamEnd >= MIN_PIECE_MM) pieces.push({ role: 'plug', box: [body[0], body[1], seamEnd, body[3], body[4], zS], color });
-  if (socket.family === 'XT') {
-    const length = GRIP_LENGTH_RATIO * (zS - zB);
-    if (length - GRIP_END_MM >= MIN_PIECE_MM) {
-      const model = socket.grip;
-      const minX = model ? Math.max(body[0], model[0]) : body[0] + GRIP_INSET_MM;
-      const maxX = model ? Math.min(body[3], model[3]) : body[3] - GRIP_INSET_MM;
-      const height = model ? model[4] - model[1] : GRIP_HEIGHT_MM;
-      if (maxX - minX >= MIN_PIECE_MM && height >= MIN_PIECE_MM) {
-        pieces.push({ role: 'grip', box: [minX, body[4], zS - length, maxX, body[4] + height, zS - GRIP_END_MM], color });
+/** Box [minX, minY, minZ, maxX, maxY, maxZ] of a compact model element in millimetres around the model point (rotated corners). */
+export function elementBox(el) {
+  const box = [Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity];
+  const rot = el[6];
+  const rad = Math.PI / 180;
+  const [cx, sx, cy, sy, cz, sz] = rot ? [Math.cos(rot[3] * rad), Math.sin(rot[3] * rad), Math.cos(rot[4] * rad), Math.sin(rot[4] * rad),
+    Math.cos(rot[5] * rad), Math.sin(rot[5] * rad)] : [];
+  for (const x of [el[0], el[3]]) {
+    for (const y of [el[1], el[4]]) {
+      for (const z of [el[2], el[5]]) {
+        let p = [x, y, z];
+        if (rot) {
+          let [px, py, pz] = [x - rot[0], y - rot[1], z - rot[2]];
+          [py, pz] = [py * cx - pz * sx, py * sx + pz * cx];
+          [px, pz] = [px * cy + pz * sy, -px * sy + pz * cy];
+          [px, py] = [px * cz - py * sz, px * sz + py * cz];
+          p = [px + rot[0], py + rot[1], pz + rot[2]];
+        }
+        for (let i = 0; i < 3; i++) {
+          const v = (p[i] - 8) * MM_PER_MODEL_UNIT;
+          box[i] = Math.min(box[i], v);
+          box[i + 3] = Math.max(box[i + 3], v);
+        }
       }
     }
   }
-  const diameter = Math.min(pigtail.red[3], pigtail.black[3]);
-  const half = Math.min(Math.abs(pigtail.black[0] - pigtail.red[0]), Math.max(0, (body[3] - body[0]) - diameter)) * 0.5;
-  const plugX = (body[0] + body[3]) * 0.5;
-  const plugY = (body[1] + body[4]) * 0.5;
-  const wires = [];
-  for (const [red, lead] of [[true, pigtail.red], [false, pigtail.black]]) {
-    const offset = red ? -half : half;
-    const xs = plugX + offset;
-    const w = bend ? [bend[0] + offset, bend[1], bend[2]] : [xs, lead[1], zK];
-    const points = [[lead[0], lead[1], lead[2]], [lead[0], lead[1], w[2]], [lead[0], w[1], w[2]], [w[0], w[1], w[2]], [w[0], plugY, w[2]],
-      [xs, plugY, w[2]], [xs, plugY, zS]];
-    const segments = [];
-    for (let i = 1; i < points.length; i++) {
-      const [a, b] = [points[i - 1], points[i]];
-      if (Math.hypot(b[0] - a[0], b[1] - a[1], b[2] - a[2]) >= MIN_PIECE_MM) segments.push([a, b]);
-    }
-    if (!segments.length) continue;
-    wires.push({ red, diameter, segments });
-    segments.forEach(([a, b], i) => {
-      pieces.push({ role: red ? 'red' : 'black', box: wireBox(a, b, diameter, i > 0, i < segments.length - 1), color: red ? PLUG_COLORS.red : PLUG_COLORS.black });
-    });
-  }
-  return { socketZ: zB, socketLength: lengthB, plugEndZ: zS, bendZ: zK, plug, wires, pieces };
+  return box;
 }
 
+const inside = (b, outer) => [0, 1, 2].every((i) => b[i] >= outer[i] - PLUG_EPS_MM && b[i + 3] <= outer[i + 3] + PLUG_EPS_MM);
+
+/** Indices of a battery variant's plugs and leads: socket, grip, the lead from the pack to the socket, balance lead and plug. */
+export function plugElements(elements, socket) {
+  const body = socket.body;
+  const boxes = elements.map(elementBox);
+  const out = new Set();
+  let rear = Infinity;
+  boxes.forEach((b, i) => {
+    if (inside(b, body) || (socket.grip && inside(b, socket.grip))) {
+      out.add(i);
+    } else if (Math.abs(b[5] - body[2]) <= PLUG_EPS_MM && b[0] >= body[0] - PLUG_EPS_MM && b[3] <= body[3] + PLUG_EPS_MM
+      && b[1] >= body[1] - PLUG_EPS_MM && b[4] <= body[4] + PLUG_EPS_MM) {
+      out.add(i);
+      rear = Math.min(rear, b[2]);
+    }
+  });
+  if (Number.isFinite(rear)) boxes.forEach((b, i) => { if (b[2] >= rear - PLUG_EPS_MM) out.add(i); });
+  return [...out].sort((a, b) => a - b);
+}
+
+/** Indices of a mounted stack's two pigtails ([x, y, end z, diameter] each). */
+export function pigtailElements(elements, pigtail) {
+  const out = [];
+  elements.forEach((el, i) => {
+    const b = elementBox(el);
+    const hit = pigtail.some(([x, y, endZ, diameter]) => Math.abs((b[0] + b[3]) / 2 - x) <= PLUG_EPS_MM && Math.abs((b[1] + b[4]) / 2 - y) <= PLUG_EPS_MM
+      && Math.abs(b[5] - endZ) <= PLUG_EPS_MM && Math.abs(Math.min(b[3] - b[0], b[4] - b[1]) - diameter) <= PLUG_EPS_MM);
+    if (hit) out.push(i);
+  });
+  return out;
+}
+
+const variantElements = (model, variant) => (variant.of ? model.variants[variant.of] : variant).el || [];
+
 /**
- * PowerLead.of: the route of the plugged battery, or null (drawn as before: frame, stack or battery without a model,
- * a stack without the mounted variant and its two pigtails, a battery model without a socket).
+ * PowerLead.of: the elements left out ({ battery, stack } index lists), or null (drawn as before: a stack without the
+ * mounted variant and its two pigtails, a battery model without a socket, a part without a model).
  */
-export function plugIn(layout, frame, stackPiece, batteryAt, env) {
-  const frameModel = env.model(frame.id);
+export function plugIn(stackPiece, batteryAt, env) {
   const stackModel = env.model(stackPiece.id);
   const batteryModel = env.model(batteryAt.id);
   const mounted = stackModel && stackModel.variants && stackModel.variants.mounted;
   const variant = batteryModel && batteryModel.variants && batteryModel.variants[batteryAt.variant || 'base'];
-  if (!frameModel || !mounted || !mounted.pigtail || !variant || !variant.socket) return null;
-  const battery = env.catalog.part(batteryAt.id);
-  const family = plugFamily(battery && battery.data.connector) || (variant.socket.bt ? 'BT' : 'XT');
-  const at = batteryAt.position;
-  const socket = { body: offsetBox(variant.socket.body, at), grip: variant.socket.grip ? offsetBox(variant.socket.grip, at) : null, family };
-  const s = stackPiece.position;
-  const lead = (l) => [l[0] + s[0], l[1] + s[1], l[2] + s[2], l[3]];
-  const pigtail = { red: lead(mounted.pigtail[0]), black: lead(mounted.pigtail[1]) };
-  const rear = frameModel.variants.base && Number.isFinite(frameModel.variants.base.rear) ? frameModel.variants.base.rear : NaN;
-  return powerLeadRoute(socket, pigtail, rear, layout.powerLeadBend || null);
-}
-
-/** Box shapes of a power lead for the viewer ({kind: 'box', center, size, color}). */
-export function powerLeadShapes(route) {
-  return route.pieces.map(({ box, color }) => between(box[0], box[1], box[2], box[3], box[4], box[5], color));
+  if (!mounted || !mounted.pigtail || !variant || !variant.socket) return null;
+  const battery = plugElements(variantElements(batteryModel, variant), variant.socket);
+  const stack = pigtailElements(variantElements(stackModel, mounted), mounted.pigtail);
+  return battery.length && stack.length === 2 ? { battery, stack } : null;
 }
 
 // ---------------------------------------------------------------------------------------------------------------
