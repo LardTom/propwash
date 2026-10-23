@@ -132,7 +132,8 @@ for (const frame of catalog.partsIn('frame')) {
 check(proceduralAccessoryBase(0xd6333a).length === 8, 'top mount base shape');
 
 // Accessories for the front mount (add-ons like a gimbal or a dispenser mount): drawn at the frame's front anchor,
-// without a base and unstretched (DroneAssembly, AccessoryAnchor.fallback FRONT: 0, 0, -0.3 × wheelbase, no tilt).
+// without a base and unstretched (DroneAssembly, AccessoryAnchor.fallback FRONT: 0, 0, -0.3 × wheelbase, no tilt), and
+// counted by the flight analysis like the game's ParamDerivation (every mount: mass, power, frontal area, inertia).
 {
   const json = JSON.parse(fs.readFileSync(path.join(DATA, 'catalog.json'), 'utf8'));
   const gripper = json.parts.find((p) => p.id === 'propwash:gripper');
@@ -150,6 +151,12 @@ check(proceduralAccessoryBase(0xd6333a).length === 8, 'top mount base shape');
     check(!!piece && JSON.stringify(piece.position) === JSON.stringify(anchor.position), `${frame.id}: front accessory at the front anchor (${piece && piece.position} / ${anchor.position})`);
     check(!!piece && piece.stretchX === 1 && piece.tiltX === anchor.tilt, `${frame.id}: front accessory unstretched with the anchor's tilt`);
     check(!a.pieces.some((x) => x.role === 'accessory_base' && x.mount === 'front'), `${frame.id}: no base on the front mount`);
+    const without = withFront.analyze({ ...build, accessories: {} });
+    const loaded = withFront.analyze(build);
+    check(!!without && !!loaded && Math.abs(loaded.mass_grams - without.mass_grams - front.basics.mass_g) < 1e-9,
+      `${frame.id}: the flight analysis weighs the front accessory (${loaded && loaded.mass_grams} g = ${without && without.mass_grams} g + ${front.basics.mass_g} g)`);
+    check(!!without && !!loaded && Math.abs(loaded.avionics_power_w - without.avionics_power_w - front.data.flight_battery_w) < 1e-9,
+      `${frame.id}: the flight analysis counts the power of the front accessory (${loaded && loaded.avionics_power_w} W)`);
   }
   check(frames > 0, `frames with a front mount (${frames})`);
   const plain = withFront.partsIn('frame').find((f) => !(f.data.accessory_anchors && f.data.accessory_anchors.front));
