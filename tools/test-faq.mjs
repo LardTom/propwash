@@ -251,8 +251,8 @@ async function directLinks() {
     if (!r.m.open) closed.push(`${r.how} #${r.id} ${r.lang} ${r.width}`);
     if (!r.m.answer) hidden.push(`${r.how} #${r.id} ${r.lang} ${r.width}`);
   }
-  lock('cov-site-b-2', !closed.length, `no. 2: the <details> of the anchor is open – closed in ${closed.length} of ${results.length} cases (first: ${closed.slice(0, 2).join('; ')})`);
-  lock('cov-site-b-2', !hidden.length, `no. 2: the answer is visible – hidden in ${hidden.length} of ${results.length} cases (first: ${hidden.slice(0, 2).join('; ')})`);
+  check(!closed.length, `no. 2: the <details> of the anchor is open – closed in ${closed.length} of ${results.length} cases (first: ${closed.slice(0, 2).join('; ')})`);
+  check(!hidden.length, `no. 2: the answer is visible – hidden in ${hidden.length} of ${results.length} cases (first: ${hidden.slice(0, 2).join('; ')})`);
   return results.length;
 }
 
