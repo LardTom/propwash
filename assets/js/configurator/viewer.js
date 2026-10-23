@@ -23,8 +23,8 @@ import {
 } from '../../vendor/three/three.min.js';
 import {
   assemble, proceduralFrame, proceduralAccessoryBase, powerLeadShapes, pieceCategory, MM_PER_MODEL_UNIT, PROP_SLOTS,
-} from './assembly.js?v=e8018744';
-import { paintTints, groupsOf, pieceSlots, rgbOf, slotOf, shade } from './paint.js?v=320ddce0';
+} from './assembly.js?v=4c1a9532';
+import { paintTints, groupsOf, pieceSlots, rgbOf, slotOf, shade } from './paint.js?v=41b84300';
 import { discCenter, verticalFov, ASPECT as FPV_ASPECT, SLOTS } from './fpv.js?v=76cdbbe6';
 
 const MAX_TINTS = 8;
@@ -495,7 +495,7 @@ export function webglAvailable() {
  *   reducedMotion?: boolean, onPick?: (hit: object) => void, onHover?: (hit: object|null) => void}} options
  */
 export function createViewer(container, options) {
-  const { catalog, render } = options;
+  let { catalog, render } = options;
   const renderer = new WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
   renderer.outputColorSpace = LinearSRGBColorSpace;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -1196,6 +1196,11 @@ export function createViewer(container, options) {
     },
     /** Current assembly (pieces and loaded models) for the paint panel. */
     current: () => current,
+    /** Catalog and render data after an add-on came, went or was switched; the next show() draws with them. */
+    setData(nextCatalog, nextRender) {
+      catalog = nextCatalog;
+      render = nextRender;
+    },
     setAutoRotate(on) {
       controls.autoRotate = !!on;
       requestRender();

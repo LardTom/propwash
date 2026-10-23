@@ -19,7 +19,7 @@ const FIELDS = ['frame', 'stack', 'motor', 'prop', 'video', 'battery'];
 
 /**
  * Resolves the part objects of a build. Returns { parts, unknown, misplaced } where parts has frame … battery and
- * accessories { top?, bottom? } as catalog part objects, unknown lists the ids that are missing or in the wrong
+ * accessories { top?, bottom?, front? } as catalog part objects, unknown lists the ids that are missing or in the wrong
  * field, misplaced is true when an accessory sits in a slot it does not fit.
  */
 export function resolveBuild(build, catalog) {
@@ -32,7 +32,7 @@ export function resolveBuild(build, catalog) {
   }
   let misplaced = false;
   const accessories = build.accessories || {};
-  // Accessory mounts of a share code: top and bottom, and front (PW1–PW3 carry it; no part uses it yet).
+  // Accessory mounts of a share code: top, bottom and front (PW1–PW3 carry it; add-on parts like gimbals use it).
   for (const slot of ['top', 'bottom', 'front']) {
     const id = accessories[slot];
     if (id == null) continue;

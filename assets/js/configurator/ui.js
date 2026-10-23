@@ -2,26 +2,26 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText, createCatalog } from './data.js?v=b9037dd0';
+import { loadCatalog, localText, createCatalog } from './data.js?v=9b4be038';
 import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=594888f1';
-import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=6fae3e31';
+import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=87906fc9';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
-import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=c64a5c0d';
+import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=94cae39b';
 import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
-import { batteryFit } from './rules.js?v=e77905ee';
-import { assemble, PROP_SLOTS } from './assembly.js?v=e8018744';
-import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=320ddce0';
-import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=51be8283';
-import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=75a1b774';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=4e942aef';
+import { batteryFit } from './rules.js?v=c16cd6c9';
+import { assemble, PROP_SLOTS } from './assembly.js?v=4c1a9532';
+import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=41b84300';
+import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=943f706f';
+import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=2b17041c';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=8547a2a1';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
 const DATA_ROOT = new URL('../../data/configurator/', import.meta.url);
-const SITE_ROOT = new URL('../../../', import.meta.url);
 const DEFAULT_PRESET = 'justmoreparts:deadcat5_6s';
 const FIELDS = ['frame', 'stack', 'motor', 'prop', 'video', 'battery'];
 const SLOT_CATEGORIES = [...FIELDS, 'accessory'];
+const ACCESSORY_MOUNTS = ['top', 'bottom', 'front'];
 const ROLE_ORDER = ['whoop', 'toothpick', 'cinewhoop', 'freestyle', 'race', 'long_range', 'x_class'];
 const KEY_STATS = ['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'mixed_flight_time_min', 'top_speed_kmh'];
 // Rows of the flight analysis, ordered like the workbench in the game (Propwash 0.4.0): main figures, the four flight
@@ -233,7 +233,7 @@ function computeRoles() {
 function classesOf(category) {
   const set = new Set();
   for (const p of catalog.partsIn(category)) for (const r of partRoles.get(p.id)) set.add(r);
-  const order = category === 'video' ? ['analog', 'digital'] : category === 'accessory' ? ['top', 'bottom'] : ROLE_ORDER;
+  const order = category === 'video' ? ['analog', 'digital'] : category === 'accessory' ? ACCESSORY_MOUNTS : ROLE_ORDER;
   return order.filter((r) => set.has(r));
 }
 
@@ -282,7 +282,7 @@ function slotRows() {
     let unknown = false;
     if (category === 'accessory') {
       const acc = state.build.accessories || {};
-      const mounts = ['top', 'bottom', 'front'];
+      const mounts = ACCESSORY_MOUNTS;
       const names = mounts.filter((m) => acc[m]).map((m) => (catalog.part(acc[m]) ? catalog.partName(acc[m], lang()) : displayId(acc[m])));
       unknown = mounts.some((m) => acc[m] && !partOf(acc[m], 'accessory'));
       value = names.length ? names.join(' + ') : t('ui.none');
@@ -453,7 +453,9 @@ function picker() {
     list.replaceChildren();
     let shown = 0;
     if (chips) for (const chip of chips.children) chip.setAttribute('aria-pressed', String(chip.dataset.cls === classOf(category, filter)));
-    const groups = category === 'accessory' ? ['top', 'bottom'] : [null];
+    const fitted = state.build.accessories || {};
+    const groups = category === 'accessory'
+      ? ACCESSORY_MOUNTS.filter((m) => m !== 'front' || fitted.front || parts.some((p) => p.data.slot === 'front')) : [null];
     for (const mount of groups) {
       const container = mount ? el('div', { role: 'group', 'aria-labelledby': `grp-${mount}`, class: 'part-group' },
         el('p', { class: 'part-group__title', id: `grp-${mount}`, role: 'presentation' }, t(`roles.${mount}`))) : list;
@@ -933,7 +935,7 @@ function renderPaint() {
         el('div', { class: 'paint-row__label' },
           el('span', { class: 'paint-row__name', id: `paint-${slot}-name` }, name),
           el('span', { class: 'paint-row__hint' }, off ? t(slot === 'frame' && derived.proceduralFrame ? 'ui.paintHidden' : 'ui.notOnBuild')
-            : localText(info && info.hint, lang()))),
+            : tr(localText(info && info.hint, lang())))),
         el('span', { class: 'paint-row__hex mono' }, paintValueText(value, painted), el('span', { class: 'visually-hidden' }, ` (${painted ? t('ui.painted') : t('ui.original')})`)),
         el('button', {
           type: 'button', class: 'icon-btn icon-btn--small', title: t('ui.resetSlot'), 'aria-label': `${t('ui.resetSlot')}: ${name}`,
@@ -1457,8 +1459,7 @@ function renderOsd() {
   };
   if (state.osd.imported) options.append(radio('imported', t('ui.osdImported'), importedOsdInfo()));
   for (const p of OSD_PRESETS) {
-    const [en, de, den, dde] = entry(`osdPresets.${p}`);
-    options.append(radio(p, lang() === 'de' ? de : en, lang() === 'de' ? dde : den));
+    options.append(radio(p, t(`osdPresets.${p}.title`), t(`osdPresets.${p}.text`)));
   }
   panel.replaceChildren(el('p', { class: 'panel-intro' }, t('ui.osdIntro')), include, options, el('p', { class: 'tune-note' }, t('ui.osdPresetNote')));
 }
@@ -1579,7 +1580,7 @@ function scheduleHash() {
 
 /** A line about an add-on a PW3 code names that this page can't match, with its safe links (convert.js addonNote), or null. */
 function addonLine(report) {
-  const note = addonNote(report, catalog, lang(), new URL('addons/', SITE_ROOT).href);
+  const note = addonNote(report, catalog, lang(), pageHref('addons/'));
   if (!note) return null;
   const line = el('span', { class: 'addon-line' }, note.text,
     ...note.links.flatMap(([label, href]) => [' ', el('a', { href, target: '_blank', rel: 'noopener noreferrer' }, label)]));
@@ -1593,8 +1594,9 @@ function addonLine(report) {
  * the viewer follow it. A build that loses a part gets a preset of what is left.
  */
 function applyAddons(json, nextRender) {
-  catalog = keepUnitsTogether(createCatalog(json));
+  catalog = pageTexts(createCatalog(json));
   render = nextRender;
+  if (viewer) viewer.setData(catalog, render);
   computeRoles();
   if (!knownBuild(state.build)) {
     const preset = catalog.presetContent(DEFAULT_PRESET) ? DEFAULT_PRESET
@@ -1810,7 +1812,7 @@ function renderBeginner() {
   if (!builds.length) return;
   const head = el('div', { class: 'beginner__head' },
     el('h3', { class: 'beginner__title', id: 'beginner-title' }, t('beginner.title')),
-    el('p', { class: 'beginner__hint' }, t('beginner.angle'), ' ', el('a', { href: new URL(beginner.school || '#learn', SITE_ROOT).href }, t('beginner.school'))));
+    el('p', { class: 'beginner__hint' }, t('beginner.angle'), ' ', el('a', { href: pageHref(beginner.school || '#learn') }, t('beginner.school'))));
   const list = el('ul', { class: 'beginner__cards' });
   for (const b of builds) {
     const preset = catalog.preset(b.preset);
@@ -2016,7 +2018,7 @@ async function startViewer() {
   const button = $('[data-autorotate]');
   let mod;
   try {
-    mod = await import('./viewer.js?v=1bd88c6a');
+    mod = await import('./viewer.js?v=d786e196');
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;
@@ -2487,16 +2489,29 @@ function toast(message, level) {
 // ---------------------------------------------------------------------------------------------------------------
 // Boot
 
-/** Texts from the web export (names, help, rules) with no-break spaces between numbers and units. */
-function keepUnitsTogether(c) {
-  for (const name of ['partName', 'shortName', 'presetName', 'issueText', 'analysisWarningText']) {
+/**
+ * Texts from the web export (names, help, rules) with no-break spaces between numbers and units; on a translated page
+ * help, rules, warnings, statuses and tune groups in its language (part and preset names stay English, website design
+ * 0.6.0, 3.2.5).
+ */
+function pageTexts(c) {
+  for (const name of ['partName', 'shortName', 'presetName']) {
     const get = c[name];
     c[name] = (...args) => glue(get(...args));
   }
+  for (const name of ['issueText', 'analysisWarningText']) {
+    const get = c[name];
+    c[name] = (...args) => glue(tr(get(...args)));
+  }
+  for (const name of ['statusText', 'tuneGroupName']) {
+    const get = c[name];
+    c[name] = (...args) => tr(get(...args));
+  }
   const help = c.help;
+  const local = (text) => glue(tr(text));
   c.help = (...args) => {
     const h = help(...args);
-    return h && { summary: glue(h.summary), what: h.what.map(glue), use: h.use.map(glue) };
+    return h && { summary: local(h.summary), what: h.what.map(local), use: h.use.map(local) };
   };
   return c;
 }
@@ -2514,8 +2529,9 @@ async function boot() {
       }),
       optional('stathelp.json', { stats: {} }),
       optional('beginner.json', { builds: [] }),
+      loadTexts(),
     ]);
-    catalog = keepUnitsTogether(c);
+    catalog = pageTexts(c);
     render = r;
     statHelp = help;
     beginner = starters;
@@ -2553,7 +2569,7 @@ async function boot() {
   wireStatHelp();
   mountAddonBar({
     host: $('[data-panel-parts]'), before: $('[data-slots]'), base: catalog.json, render, apply: applyAddons,
-    directoryUrl: new URL('addons/', SITE_ROOT).href,
+    directoryUrl: pageHref('addons/'),
   });
   refreshAll();
   if (fromLink) {

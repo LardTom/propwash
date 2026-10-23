@@ -2,15 +2,13 @@
 // included; PW3 codes are only checked. The same modules as the configurator (catalog, share codes, convert.js), no 3D
 // view. Everything runs in the browser; the only request goes to this site's catalog.
 
-import { loadCatalog } from './data.js?v=b9037dd0';
-import { convertText, reasonText, addonNote, MAX_CODES } from './convert.js?v=51be8283';
+import { loadCatalog } from './data.js?v=9b4be038';
+import { convertText, reasonText, addonNote, MAX_CODES } from './convert.js?v=943f706f';
 import { displayId } from './sharecode.js?v=594888f1';
-import { t, lang } from './i18n.js?v=75a1b774';
+import { t, lang, tr, loadTexts, pageHref } from './i18n.js?v=2b17041c';
 
 const doc = document;
 const $ = (sel, ctx = doc) => ctx.querySelector(sel);
-const CONFIGURATOR = new URL('../../../configurator/', import.meta.url);
-const ADDONS = new URL('../../../addons/', import.meta.url);
 
 /** Small DOM builder: text is always set as text, never as markup (the codes and names come from pasted text). */
 function el(tag, attrs, ...children) {
@@ -59,7 +57,7 @@ async function copy(text, message) {
 function addonLines(r) {
   const out = [];
   for (const report of r.missing) {
-    const note = addonNote(report, catalog, lang(), ADDONS.href);
+    const note = addonNote(report, catalog, lang(), pageHref('addons/'));
     if (!note) continue;
     const line = el('p', { class: 'cv-code__note' }, note.text,
       ...note.links.flatMap(([label, href]) => [' ', el('a', { href, target: '_blank', rel: 'noopener noreferrer' }, label)]));
@@ -87,10 +85,10 @@ function codeItem(r, index) {
     item.append(el('div', { class: 'cv-code__actions' },
       el('button', { type: 'button', class: 'btn btn--primary btn--small', 'aria-label': t('convert.copyLabel', { n: index + 1 }), onclick: () => copy(r.code, t('convert.pw3Copied')) },
         t('convert.copy')),
-      el('a', { class: 'btn btn--ghost btn--small', href: `${CONFIGURATOR.href}#${r.code}` }, t('convert.open'))));
+      el('a', { class: 'btn btn--ghost btn--small', href: `${pageHref('configurator/')}#${r.code}` }, t('convert.open'))));
   }
   if (r.kind === 'not_convertible') item.append(el('p', { class: 'cv-code__note is-bad' }, t('convert.notConvertible', { reason: reasonText(r.reason) })));
-  else if (r.kind === 'damaged') item.append(el('p', { class: 'cv-code__note is-bad' }, catalog.statusText(r.status, lang())));
+  else if (r.kind === 'damaged') item.append(el('p', { class: 'cv-code__note is-bad' }, tr(catalog.statusText(r.status, lang()))));
   if (r.unknown.length) item.append(el('p', { class: 'cv-code__note is-bad' }, t('ui.importUnknown', { ids: r.unknown.map(displayId).join(', ') })));
   item.append(...addonLines(r));
   return item;
@@ -144,7 +142,7 @@ async function boot() {
   });
   doc.addEventListener('propwash:lang', show);
   try {
-    catalog = await loadCatalog();
+    [catalog] = await Promise.all([loadCatalog(), loadTexts()]);
   } catch {
     const status = $('[data-cv-status]');
     status.textContent = t('convert.loadFailed');

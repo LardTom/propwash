@@ -5,8 +5,10 @@
 // does not list (mod id, name and the newest Fabric jar come from those checkouts at run time; nothing of them is
 // written into this repository), or the jars given with --addon-jars.
 //   - no. 139: every part of the jar's parts table that has a part file shows up after “Open add-on jar” with its name,
-//     its model and its mass; a part the add-on registers only in code (a copy of the jar without one part file) gives
-//     the note that the add-on needs a web export and shows up as unknown in a code
+//     its model and its mass (accessories under their mount, those for the front mount too, and one of them picked; the
+//     3D view has the picked parts on the drone);
+//     a part the add-on registers only in code (a copy of the jar without one part file) gives the note that the add-on
+//     needs a web export and shows up as unknown in a code
 //   - no. 140: a fresh page, a share code with a part of the add-on pasted: “Needs <add-on> …” with the button to open
 //     the jar; the jar opened through that button's file input: the build is complete (the code is written by the
 //     site's PW3 writer from the jar, byte for byte the game's; --addon-code takes a code from the game instead)
@@ -189,8 +191,14 @@ const pickerOptions = (p, cat) => p.evaluate(`(async () => {
   await new Promise((r) => setTimeout(r, 150));
   const all = document.querySelector('[data-picker] [data-cls="all"]');
   if (all && all.getAttribute('aria-pressed') !== 'true') { all.click(); await new Promise((r) => setTimeout(r, 150)); }
-  return [...document.querySelectorAll('[data-picker] [role=option]')].map((o) => ({ id: o.dataset.id, text: o.innerText.replace(/\\s+/g, ' ').trim(),
+  return [...document.querySelectorAll('[data-picker] [role=option]')].map((o) => ({ id: o.dataset.id, mount: o.dataset.mount, text: o.innerText.replace(/\\s+/g, ' ').trim(),
     badge: o.querySelector('.badge') ? { text: o.querySelector('.badge').textContent, title: o.querySelector('.badge').title } : null }));
+})()`);
+
+const VIEWER_HOOK = "document.addEventListener('propwash:viewer', (e) => { window.__viewer = e.detail; });";
+const drawn = (p, id) => p.evaluate(`(() => {
+  const c = window.__viewer && window.__viewer.current();
+  return !!c && c.assembly.pieces.some((x) => x.id === ${JSON.stringify(id)} && (c.models.has(x.id) || !!x.procedural));
 })()`);
 
 const slots = (p) => p.evaluate(`[...document.querySelectorAll('[data-slots] .slot')].map((s) => ({ cat: s.dataset.cat, bad: s.classList.contains('is-bad'), text: s.querySelector('.slot__value').textContent.trim() }))`);
@@ -210,6 +218,7 @@ async function browser(found) {
         for (const width of WIDTHS) {
           const where = `${u.label} ${lang} ${width} px`;
           const p = await b.page({ lang });
+          await p.send('Page.addScriptToEvaluateOnNewDocument', { source: VIEWER_HOOK });
           await p.open('/configurator/', { width, lang, ready: CFG_READY });
           loads++;
           p.requests.length = 0;
@@ -227,7 +236,7 @@ async function browser(found) {
               const o = options.find((x) => x.id === f.id);
               const name = lang === 'de' ? f.name.de_de : f.name.en_us;
               if (f.category === 'accessory' && f.data && f.data.slot === 'front') {
-                if (!o) front.push(`${f.id} (${lang} ${width})`);
+                if (!o || o.mount !== 'front') front.push(`${f.id} (${lang} ${width}${o ? `, under ${o.mount}` : ''})`);
                 if (!o) continue;
               }
               check(!!o && o.text.includes(name), `no. 139 ${where}: ${f.id} among the ${cat} choices with its name “${name}” (${o && o.text.slice(0, 60)})`);
@@ -252,6 +261,21 @@ async function browser(found) {
             const pickName = lang === 'de' ? pick.name.de_de : pick.name.en_us;
             check(!!slot && (slot.text.includes(pickName) || slot.text.includes(lang === 'de' ? (pick.short_name || pick.name).de_de : (pick.short_name || pick.name).en_us)), `no. 139 ${where}: ${pick.id} picked, the slot names it (${JSON.stringify(slot)})`);
             check(await p.evaluate("!!document.querySelector('canvas')") && !(await p.evaluate("[...document.querySelectorAll('.addon-bar__message')].some((m) => /without their model|ohne ihr Modell/.test(m.textContent))")), `no. 139 ${where}: the 3D view draws it with its model`);
+            check(await drawn(p, pick.id), `no. 139 ${where}: the 3D view has ${pick.id} on the drone (${await p.evaluate("document.querySelector('[data-viewer-fallback]').hidden ? '' : document.querySelector('[data-viewer-fallback]').textContent")})`);
+          }
+          const frontPart = u.files.find((f) => f.category === 'accessory' && f.data && f.data.slot === 'front');
+          if (frontPart) {
+            await pickerOptions(p, 'accessory');
+            const at = await p.center(`[data-picker] [role=option][data-id="${frontPart.id}"]`);
+            if (at) {
+              if (width < 600) await p.tap(at.x, at.y);
+              else await p.click(at.x, at.y);
+              await sleep(900);
+            }
+            const acc = (await slots(p)).find((x) => x.cat === 'accessory');
+            const frontName = lang === 'de' ? frontPart.name.de_de : frontPart.name.en_us;
+            if (!acc || !acc.text.includes(frontName)) front.push(`${frontPart.id} picked, the accessory slot does not name it (${lang} ${width}: ${acc && acc.text})`);
+            else if (!(await drawn(p, frontPart.id))) front.push(`${frontPart.id} picked, not in the 3D view (${lang} ${width})`);
           }
           if (SHOTS) await p.shot(path.join(SHOTS, `addon-jar-${u.files.length}-${lang}-${width}.png`));
           check(p.errors.length === 0, `no. 139 ${where}: no console errors (${p.errors.slice(0, 2).join(' | ')})`);
@@ -313,7 +337,7 @@ async function browser(found) {
       }
     }
     if (found.length) {
-      lock('cov-site-b-13', !front.length, `no. 139: accessories for the front mount are among the accessory choices – missing: ${front.slice(0, 4).join(', ')}${front.length > 4 ? ` … (${front.length})` : ''}`);
+      check(!front.length, `no. 139: accessories for the front mount are among the accessory choices under the front mount and can be picked – missing: ${front.slice(0, 4).join(', ')}${front.length > 4 ? ` … (${front.length})` : ''}`);
       const jmpLabel = badges.filter((x) => /\bJMP\b|Just More Parts/.test(`${x.text} ${x.title}`));
       lock('cov-site-b-15', !jmpLabel.length, `no. 139: the badge of a part of another add-on does not call it Just More Parts – ${jmpLabel.length} of ${badges.length} choices say “${jmpLabel[0] ? `${jmpLabel[0].text}” / “${jmpLabel[0].title}` : ''}” (first: ${jmpLabel[0] ? `${jmpLabel[0].id}, ${jmpLabel[0].where}` : ''})`);
       lock('cov-site-b-14', !lost.length, `no. 140: after opening the jar the build of the code is complete, its add-on parts in place – ${lost.length} of ${named.length} cases lose the build (first: ${lost[0] || ''})`);
