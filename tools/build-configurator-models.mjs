@@ -6,9 +6,8 @@
 // Same export location rules as tools/build-configurator-data.mjs (sibling checkout, JMP_WEB_EXPORT or --export).
 //
 // Writes:
-//   assets/data/configurator/render.json                        frame layouts (drone_layout.json, with the optional
-//                                                               power_lead bend point), motor seats, paint channel
-//                                                               references, accessory base tints
+//   assets/data/configurator/render.json                        frame layouts (drone_layout.json), motor seats, paint
+//                                                               channel references, accessory base tints
 //   assets/data/configurator/models/<ns>/<category>/<path>.json one file per part with a model: the block-model
 //                                                               elements in a compact form plus the textures as
 //                                                               data URLs (base, paint, ccw, battery under and stack
@@ -26,9 +25,9 @@
 //
 // Plug anchors (battery plugged in, like PlugAnchors in Propwash), in millimetres around the part's position, measured
 // in the drawn space (after the transformation): every battery variant gets `socket` (the box of its connector or
-// bt_connector elements, the box of connector_grip, bt for a BT2.0 socket), the stack's mounted variant `pigtail` (the
-// two pigtail ends: red first, [x, y, end z, diameter]) and every frame `rear` (the rearmost z of its body near the
-// centre line, arms, motors, props and ducts left out).
+// bt_connector elements, the box of connector_grip, bt for a BT2.0 socket) and the stack's mounted variant `pigtail`
+// (the two pigtail ends: red first, [x, y, end z, diameter]). With them assets/js/configurator/assembly.js finds the
+// elements a plugged-in battery hides, as the compact models carry no element names.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -159,8 +158,6 @@ function compactModel(model, where) {
 // Plug anchors (PlugAnchors): named element boxes in millimetres around the model point (8, 8, 8)
 
 const PLUG_ELEMENTS = new Set(['connector', 'connector_grip', 'bt_connector']);
-const NOT_BODY = ['arm', 'motor', 'prop', 'duct'];
-const BODY_STRIP_MM = 10;
 const mm = (v) => (v - 8) * 8;
 
 /** Every element with its name and the box of its (rotated, transformed) corners in millimetres. */
@@ -179,7 +176,7 @@ export function namedBoxes(model) {
 
 const union = (a, b) => (a ? [Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.min(a[2], b[2]), Math.max(a[3], b[3]), Math.max(a[4], b[4]), Math.max(a[5], b[5])] : b.slice());
 
-/** PlugAnchors.socket: the battery's half of the pair, or null. */
+/** PlugAnchors.socket: the battery's socket (connector or bt_connector, and connector_grip), or null. */
 export function socketOf(elements) {
   let body = null;
   let grip = null;
@@ -208,16 +205,6 @@ export function pigtailOf(elements) {
   if (leads.length !== 2) return null;
   const [first, second] = leads;
   return (second[0] < first[0] ? [second, first] : [first, second]).map((lead) => lead.map(round));
-}
-
-/** PlugAnchors.bodyRearZ: rearmost z of the body near the centre line, or NaN. */
-export function bodyRearZ(elements) {
-  let rear = -Infinity;
-  for (const { name, box } of elements) {
-    if (NOT_BODY.some((prefix) => name.startsWith(prefix))) continue;
-    if (box[3] >= -BODY_STRIP_MM && box[0] <= BODY_STRIP_MM) rear = Math.max(rear, box[5]);
-  }
-  return Number.isFinite(rear) ? round(rear) : NaN;
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -290,7 +277,7 @@ function main() {
   let files = 0;
   let bytes = 0;
   const withModel = [];
-  const counts = { sockets: 0, mounted: 0, mountedFromResources: 0, mountedMissing: [], rears: 0 };
+  const counts = { sockets: 0, mounted: 0, mountedFromResources: 0, mountedMissing: [] };
   for (const p of parts) {
     const m = p.model || {};
     if (m.kind !== 'model' || !m.drone) continue;
@@ -390,13 +377,6 @@ function main() {
         }
       }
     }
-    if (p.category === 'frame') {
-      const rear = bodyRearZ(raw.base.elements);
-      if (Number.isFinite(rear)) {
-        variants.base.rear = rear;
-        counts.rears++;
-      }
-    }
 
     const tex = textures.map((t) => `data:image/png;base64,${fs.readFileSync(t.file).toString('base64')}`);
     const out = { format: 1, id: p.id, tex, variants };
@@ -440,7 +420,7 @@ function main() {
   fs.writeFileSync(path.join(OUT, 'render.json'), JSON.stringify(render) + '\n');
   console.log(`models: ${files} files, ${(bytes / 1024).toFixed(0)} KiB; render.json: ${Object.keys(layouts).length} layouts, `
     + `${Object.keys(motorSeats).length} motor seats`);
-  console.log(`battery plugged in: ${counts.sockets} battery sockets, ${counts.rears} frame rears, ${counts.mounted} mounted stacks`
+  console.log(`battery plugged in: ${counts.sockets} battery sockets, ${counts.mounted} mounted stacks`
     + `${counts.mountedFromResources ? ` (${counts.mountedFromResources} from the mod resources, the export lacks them)` : ''}`
     + `${counts.mountedMissing.length ? `; drawn unplugged: ${counts.mountedMissing.join(', ')}` : ''}`);
 }

@@ -31,8 +31,8 @@ This repository contains only the website, no mod source code.
     `rules.js` (compatibility), `analysis.js` (flight analysis as in Propwash 0.6.0: energy balance, battery model, climb thrust and the heat model of motors and ESC), `fpv.js` (FPV camera rig and props in view),
     `tuning.js` (tune defaults and editing), `index.js`
   - page: `ui.js` (part pickers, builds for beginners, paint, tune editor, OSD layer, stats with explanations, share
-    code, import), `i18n.js` (texts), `assembly.js` (where every part sits on the drone, the plugged battery lead),
-    `paint.js` (paint tints), `viewer.js` (three.js viewer), `convert-page.js` (the page `/convert/`)
+    code, import), `i18n.js` (texts), `assembly.js` (where every part sits on the drone, what a plugged-in battery
+    hides), `paint.js` (paint tints), `viewer.js` (three.js viewer), `convert-page.js` (the page `/convert/`)
 - `assets/js/roadmap/` – the roadmap page: `data.js` (loading, status counts and the validation shared with the test),
   `view.js` (horizons, release groups with progress rings, item cards, download buttons), `platforms.js` (the download
   platforms, also used by `tools/build-platforms.mjs`)
