@@ -131,6 +131,35 @@ for (const frame of catalog.partsIn('frame')) {
 }
 check(proceduralAccessoryBase(0xd6333a).length === 8, 'top mount base shape');
 
+// Accessories for the front mount (add-ons like a gimbal or a dispenser mount): drawn at the frame's front anchor,
+// without a base and unstretched (DroneAssembly, AccessoryAnchor.fallback FRONT: 0, 0, -0.3 × wheelbase, no tilt).
+{
+  const json = JSON.parse(fs.readFileSync(path.join(DATA, 'catalog.json'), 'utf8'));
+  const gripper = json.parts.find((p) => p.id === 'propwash:gripper');
+  const front = { ...gripper, id: 'propwash:front_test', data: { ...gripper.data, slot: 'front' } };
+  json.parts.push(front);
+  const withFront = createCatalog(json);
+  const fenv = { catalog: withFront, render, model: (id) => models.get(id === front.id ? gripper.id : id) || null };
+  let frames = 0;
+  for (const frame of withFront.partsIn('frame').filter((f) => f.data.accessory_mounts.includes('front'))) {
+    frames++;
+    const build = { ...withFront.presetBuild('propwash:freestyle'), frame: frame.id, accessories: { front: front.id } };
+    const a = assemble(build, fenv);
+    const piece = a.pieces.find((x) => x.role === 'accessory' && x.mount === 'front');
+    const anchor = frameLayout(frame, withFront, render).accessories.front;
+    check(!!piece && JSON.stringify(piece.position) === JSON.stringify(anchor.position), `${frame.id}: front accessory at the front anchor (${piece && piece.position} / ${anchor.position})`);
+    check(!!piece && piece.stretchX === 1 && piece.tiltX === anchor.tilt, `${frame.id}: front accessory unstretched with the anchor's tilt`);
+    check(!a.pieces.some((x) => x.role === 'accessory_base' && x.mount === 'front'), `${frame.id}: no base on the front mount`);
+  }
+  check(frames > 0, `frames with a front mount (${frames})`);
+  const plain = withFront.partsIn('frame').find((f) => !(f.data.accessory_anchors && f.data.accessory_anchors.front));
+  const bare = { ...plain, data: { ...plain.data, accessory_anchors: {}, accessory_mounts: ['front'] } };
+  const fallback = frameLayout(bare, withFront, null).accessories.front;
+  const wb = bare.data.wheelbase_mm;
+  check(fallback && JSON.stringify(fallback.position) === JSON.stringify([0, 0, -0.3 * wb]) && fallback.tilt === 0 && fallback.length === 0,
+    `front anchor without a table: 0, 0, -0.3 × wheelbase, no tilt (${fallback && JSON.stringify(fallback)})`);
+}
+
 for (const preset of catalog.presets) {
   const build = catalog.presetBuild(preset.id);
   build.accessories = {};
