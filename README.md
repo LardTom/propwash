@@ -22,7 +22,7 @@ This repository contains only the website, no mod source code.
 - `assets/css/style.css` – styles of all pages; `assets/css/configurator.css` – configurator only;
   `assets/css/docs.css` and `assets/js/docs.js` – docs only (menu, tables, code blocks with copy buttons);
   `assets/css/roadmap.css` – roadmap only; `assets/css/changelog.css` – changelog only
-- `assets/js/main.js` – language switch, main navigation (menu button and Features menu), hero feed with pause switch, image switchers, video demo, gallery lightbox
+- `assets/js/main.js` – language switch, main navigation (menu button and Features menu), hero feed with pause switch, image switchers, video demo, FAQ direct links, gallery lightbox
 - `assets/js/configurator/` – the configurator as plain ES modules:
   - core: `data.js` (catalog), `sharecode.js` (the entry point that reads PW1, PW2 and PW3 and writes PW3, plus the frozen
     PW1 codec), `sharecode2.js` + `sharecode2-tables.js` (the frozen PW2 codec and the layers PW3 shares with it),
@@ -99,7 +99,8 @@ release goes into **What’s new** and moves into its section (or out) with the 
   download section names the add-on Just More Parts with its version and part count, and the compatibility lines of
   the changelog (`tools/test-platforms.mjs` checks that the version in “Install” and in the add-on block is current)
 - every FAQ question is a `<details>` with an id starting with `faq-`; `tools/test-platforms.mjs` knows the list of
-  ids, so a new question also goes there
+  ids, so a new question also goes there; a direct link (`/#faq-license`, also by a hashchange) opens its question
+  (`assets/js/main.js`, checked by `tools/test-faq.mjs`)
 - the pictures are the mod's own screenshots of the release commit:
 
 ```sh
