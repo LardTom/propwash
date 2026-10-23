@@ -368,6 +368,13 @@
   background: var(--cl-jmp);
 }
 
+/* The other languages have longer words for "All": narrower padding, and a label that still doesn't fit wraps
+   instead of running out of the box. */
+html:is([lang="es"], [lang="fr"], [lang="pt-BR"], [lang="pl"], [lang="ru"]) .cl-filter__btn {
+  padding-inline: 8px;
+  white-space: normal;
+}
+
 @media (max-width: 999px) {
   .cl-filter {
     grid-template-columns: auto auto auto;

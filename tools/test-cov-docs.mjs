@@ -7,8 +7,10 @@
 //     section “Run a server”
 //   - world rules: “Allow freecam drone” off by default as in the export, its text names walls and modified clients;
 //     “Hardware limits” names the ESC; no “restart the race” / „Rennen neu starten“ anywhere in docs/**, “Reset” there
-//   - add-on API: <code>/propwash webexport</code> and the parts table (PW3) with its own anchor; #rules in English and
-//     German, and the address Propwash opens from its namespace report (NamespaceReportScreen.RULES_URL) is
+//   - add-on API: <code>/propwash webexport</code> in English and German, explained in its own section “Your add-on in
+//     the configurator” / „Dein Add-on im Konfigurator“ (#web-configurator: the command with a namespace, the export
+//     folder, the jar opened in the browser and the add-on directory), and the parts table (PW3) with its own anchor;
+//     #rules in English and German, and the address Propwash opens from its namespace report (NamespaceReportScreen.RULES_URL) is
 //     https://propwashfpv.com/docs/api/#rules, the canonical address of this page plus that anchor
 //   - “New in API 1.7” with its ten building blocks (switches and axes, OSD, collision, dispensing, world rules, data on
 //     the drone, autonomous flight, operator, service button, namespace), the checklist, the example of moving a
@@ -130,7 +132,20 @@ function worldRules() {
 function addonApi() {
   for (const lang of LANGS) {
     const text = langHtml(api, lang);
-    lock('cov-site-b-5', /<code>\/propwash webexport<\/code>/.test(text), `no. 47 (5.7) ${lang}: docs/api names <code>/propwash webexport</code> (how an add-on gets into the web configurator)`);
+    check(/<code>\/propwash webexport<\/code>/.test(text), `no. 47 (5.7) ${lang}: docs/api names <code>/propwash webexport</code> (how an add-on gets into the web configurator)`);
+  }
+  const web = headingBoth(api, 'web-configurator', 'no. 47 (5.7) your add-on in the configurator');
+  if (web) {
+    const en = plain(langHtml(web.heading, 'en'));
+    const de = plain(langHtml(web.heading, 'de'));
+    check(en === 'Your add-on in the configurator' && de === 'Dein Add-on im Konfigurator', `no. 47 (5.7): #web-configurator is “Your add-on in the configurator” / „Dein Add-on im Konfigurator“ (“${en}” / „${de}“)`);
+    for (const [lang, text] of [['en', web.en], ['de', web.de]]) {
+      check(/\/propwash webexport <(namespace|namensraum)>/.test(text), `no. 47 (5.7) ${lang}: the section gives the command for one add-on (/propwash webexport <namespace>)`);
+      check(/propwash\/web-export\//.test(text), `no. 47 (5.7) ${lang}: the section names the export folder propwash/web-export/`);
+      check(lang === 'en' ? /Open add-on jar/.test(text) && /web export/i.test(text) : /Add-on-Jar öffnen/.test(text) && /Web-Export/.test(text), `no. 47 (5.7) ${lang}: the section explains the jar opened in the browser and when an add-on needs a web export`);
+    }
+    const links = hrefs(web.html);
+    check(links.some((h) => /(^|\/)configurator\/$/.test(h)) && links.some((h) => /(^|\/)addons\/(#listing)?$/.test(h)), `no. 47 (5.7): the section links the configurator and the add-on directory (${links.join(', ')})`);
   }
   const share = headingBoth(api, 'share', 'no. 47 (5.7) parts table');
   if (share) {

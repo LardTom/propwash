@@ -323,7 +323,7 @@ async function inBrowser(dir) {
       await p.evaluate(setInput('[data-cv-input]', read('tools/fixtures/cov/post.txt')));
       await sleep(900);
     });
-    const KNOWN_RED = { 'changelog/': 'cov-site-b-12' };
+    const KNOWN_RED = {};
     for (const f of found) {
       check(f.blocks > 5, `no. 34 (b) /${f.page}: visible text collected (${f.blocks} blocks)`);
       check(!f.errors.length, `no. 34 (b) /${f.page}: no console errors (${f.errors.slice(0, 2).join(' | ')})`);
