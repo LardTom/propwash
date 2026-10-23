@@ -11,9 +11,9 @@ import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe
 import { batteryFit } from './rules.js?v=c16cd6c9';
 import { assemble, PROP_SLOTS } from './assembly.js?v=4c1a9532';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=41b84300';
-import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=943f706f';
-import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=2b17041c';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=8547a2a1';
+import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=dd4ad593';
+import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=9294ec03';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=8c3ec805';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
@@ -342,6 +342,15 @@ function matches(part, filter, cls) {
   return true;
 }
 
+/** Where a part comes from: Propwash, Just More Parts (JMP) or another add-on, named in the tooltip. */
+function partBadge(part) {
+  if (part.builtin) return el('span', { class: 'badge badge--pw', title: t('ui.builtinLong') }, t('ui.builtin'));
+  const ns = part.id.split(':')[0];
+  if (ns === 'justmoreparts') return el('span', { class: 'badge badge--jmp', title: t('ui.addonLong') }, t('ui.addon'));
+  const info = catalog.namespace(ns);
+  return el('span', { class: 'badge badge--addon', title: t('ui.addonOtherLong', { name: (info && info.name) || ns }) }, t('ui.addonOther'));
+}
+
 let detailsOpen = false;
 
 function helpBlock(part, compact, noSummary) {
@@ -394,8 +403,7 @@ function picker() {
     selectedCard = el('div', { class: 'picker__current' },
       el('p', { class: 'picker__current-label' }, t('ui.current')),
       el('p', { class: 'picker__current-name' }, catalog.partName(current.id, lang()),
-        el('span', { class: `badge badge--${current.builtin ? 'pw' : 'jmp'}`, title: current.builtin ? t('ui.builtinLong') : t('ui.addonLong') },
-          current.builtin ? t('ui.builtin') : t('ui.addon'))),
+        partBadge(current)),
       el('p', { class: 'part-help__summary' }, (help && help.summary) || facts(current)),
       more ? el('details', { class: 'picker__more', open: detailsOpen || null, ontoggle: (e) => { detailsOpen = e.currentTarget.open; } },
         el('summary', null, t('ui.prosCons')), helpBlock(current, false, true)) : null);
@@ -443,8 +451,7 @@ function picker() {
       el('span', { class: 'part__name' }, name),
       part ? el('span', { class: 'part__facts' }, facts(part)) : null,
       fit.issues.length ? issueLine(fit.issues) : null),
-    part ? el('span', { class: `badge badge--${part.builtin ? 'pw' : 'jmp'}`, title: part.builtin ? t('ui.builtinLong') : t('ui.addonLong') },
-      part.builtin ? t('ui.builtin') : t('ui.addon')) : null,
+    part ? partBadge(part) : null,
     el('span', { class: 'visually-hidden' }, `, ${fitText}`));
     return { node, fit };
   }
@@ -1589,16 +1596,53 @@ function addonLine(report) {
   return line;
 }
 
+/** True if the build has a part the catalog before knew that the current catalog does not know. */
+function lostPart(before, build) {
+  const known = (c, id, category) => {
+    const p = c.part(id);
+    return !!p && p.category === category;
+  };
+  return [...FIELDS.map((f) => [build[f], f]), ...Object.values(build.accessories || {}).map((id) => [id, 'accessory'])]
+    .some(([id, category]) => id && known(before, id, category) && !known(catalog, id, category));
+}
+
+/**
+ * Parts of an opened code that were unknown, once their add-on is here: the build is written with the heads of that
+ * code (carry) and read again with the current catalog, like opening the code now. Returns the decoded result if a
+ * part was resolved (state takes its build, carry and add-ons), else null and the state stays.
+ */
+function resolveUnknown(before) {
+  const unknown = (c) => buildIds(state.build).filter((id) => id && !c.part(id)).length;
+  const was = unknown(before);
+  if (!was) return null;
+  let result;
+  try {
+    result = catalog.decode(encodeBuild({ build: state.build, paint: null, tune: null, osd: null, name: null }, state.carry, state.addons));
+  } catch {
+    return null;
+  }
+  if (!result.ok) return null;
+  const b = result.content.build;
+  const still = buildIds(b).filter((id) => id && !catalog.part(id)).length;
+  if (still >= was) return null;
+  state.build = { ...b, accessories: { ...(b.accessories || {}) } };
+  state.carry = result.carry || new Map();
+  state.addons = codeAddons(result.namespaces);
+  return result;
+}
+
 /**
  * The catalog with the add-ons of the add-on bar (assets/js/addons/configurator-addons.js): pickers, figures, codes and
- * the viewer follow it. A build that loses a part gets a preset of what is left.
+ * the viewer follow it. Unknown parts of an opened code resolve once their add-on is here; a build that loses a part
+ * it had gets a preset of what is left.
  */
 function applyAddons(json, nextRender) {
+  const before = catalog;
   catalog = pageTexts(createCatalog(json));
   render = nextRender;
   if (viewer) viewer.setData(catalog, render);
   computeRoles();
-  if (!knownBuild(state.build)) {
+  if (lostPart(before, state.build)) {
     const preset = catalog.presetContent(DEFAULT_PRESET) ? DEFAULT_PRESET
       : (catalog.presets.find((p) => p.id === 'propwash:freestyle') || catalog.presets[0]).id;
     undoSnapshot = null;
@@ -1607,7 +1651,16 @@ function applyAddons(json, nextRender) {
     banner(() => t('addons.buildSwitched', { name: catalog.presetName(preset, lang()) }), 'warn', false);
     return;
   }
+  const resolved = resolveUnknown(before);
   refreshAll();
+  if (!resolved) return;
+  scheduleHash();
+  const raw = $('[data-import]').value.trim();
+  if (raw) importPreview(decodeField(raw).result);
+  if (shownLink && lastBanner && lastBanner.message === shownLink.message) {
+    const again = catalog.decode(shownLink.code);
+    if (again.ok) linkBanner(shownLink.code, again, shownLink.conversion);
+  }
 }
 
 /** What a decoded code brings along: [text or node, bad] per line (layers first). */
@@ -1666,6 +1719,17 @@ function conversionNote(result, conversion) {
   return { text: () => t('convert.notConvertible', { reason: reasonText(conversion.reason) }), action: null };
 }
 
+/** The banner of a code opened from a link, while it is shown (applyAddons renews it when its add-on comes). */
+let shownLink = null;
+
+/** Banner of a readable code opened from a link: what it brought along. */
+function linkBanner(code, result, conversion) {
+  const warn = result.unknownParts.length || result.wrongKind.length || (conversion && conversion.status !== 'OK');
+  const note = conversionNote(result, conversion);
+  banner(() => [...(note.text ? [note.text(), ' '] : []), ...joined(t('ui.linkLoaded'), importDetails(result))], warn ? 'warn' : 'ok', false, note.action);
+  shownLink = { code, conversion, message: lastBanner.message };
+}
+
 /** Banner for a build opened from a link: what it brought along, or why it could not be read. The import field
     shows an unreadable code so it can be fixed there; after a readable link it is emptied, so nothing stale stays. */
 function linkResult(code, result, conversion = null) {
@@ -1673,9 +1737,7 @@ function linkResult(code, result, conversion = null) {
   if (result.ok) {
     input.value = '';
     importPreview(null);
-    const warn = result.unknownParts.length || result.wrongKind.length || (conversion && conversion.status !== 'OK');
-    const note = conversionNote(result, conversion);
-    banner(() => [...(note.text ? [note.text(), ' '] : []), ...joined(t('ui.linkLoaded'), importDetails(result))], warn ? 'warn' : 'ok', false, note.action);
+    linkBanner(code, result, conversion);
   } else {
     input.value = code;
     importPreview(result);

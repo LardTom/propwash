@@ -1295,7 +1295,8 @@ button {
   white-space: nowrap;
 }
 
-.badge--jmp {
+.badge--jmp,
+.badge--addon {
   border-color: var(--accent-dim);
   color: var(--accent);
 }

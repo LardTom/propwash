@@ -3,7 +3,7 @@
 // codes, and puts the new codes in place of the old ones. Runs in the browser only; nothing is sent anywhere. Also the
 // texts both pages show for a code: why it can't be converted, and the add-ons it needs with safe links.
 
-import { t } from './i18n.js?v=2b17041c';
+import { t } from './i18n.js?v=9294ec03';
 
 /** At most this many codes per pass (website design 0.6.0, 3.5.3). */
 export const MAX_CODES = 100;

@@ -13,7 +13,9 @@
 //     propwash, HTML in a name: each gives a message instead of a crash, the rest loads
 //   - headless Chrome, English and German, 390 and 1280 px: the add-on bar with “only local”, a jar through the file
 //     input (parts in the pickers, no request leaves the page), the messages of a bad jar, switching Just More Parts
-//     off and on, HTML in names stays text, a reload forgets the jar (nothing in localStorage, IndexedDB or cookies)
+//     off and on, HTML in names stays text, a reload forgets the jar (nothing in localStorage, IndexedDB or cookies);
+//     a code with parts of an add-on that is not loaded, pasted or from a link, is complete once its jar is opened
+//     (no preset instead, the same code again), and the parts of an add-on other than Just More Parts carry its name
 //
 //   node tools/test-jar-loader.mjs [--jmp-jar <jar>] [--propwash-jar <jar>] [--export <web export>] [--propwash-repo <dir>]
 //                                  [--no-browser] [--shots <dir>] [--chrome <path>]
@@ -845,6 +847,73 @@ async function browserTests(jars) {
     const line = await evaluate("[...document.querySelectorAll('.addon-line')].map((l) => l.textContent).join(' | ')");
     const needs = text('addons.missing', 'en').split('{name}')[0];
     check(line.includes(`${needs}Test Add-on for Propwash ${text('addons.from', 'en').replace('{version}', '0.1.0')}`) && !/\baddons\.\w/.test(line), `a code with a missing add-on: the line names the add-on and its version (“${line}”)`);
+
+    // A code with parts of an add-on that is not loaded (the frame by its number in the parts table, the LED ring by
+    // its path), pasted or opened from a link: opening the jar afterwards completes that very build instead of
+    // loading a preset, switching another add-on keeps it, and the add-on's parts carry its own name in the pickers.
+    const ringCode = c.encode({ build: { ...c.presetBuild('propwash:whoop'), frame: `${NS}:tiny_frame`, accessories: { bottom: `${NS}:ring` } }, paint: null, tune: null, osd: null, name: null });
+    const slotState = () => evaluate("[...document.querySelectorAll('[data-slots] .slot')].map((s) => ({ cat: s.dataset.cat, title: s.title, text: s.querySelector('.slot__value').textContent.trim() }))");
+    const bannerText = () => evaluate("document.querySelector('.banner') ? document.querySelector('.banner').textContent : ''");
+    const shareCode = () => evaluate("document.querySelector('[data-code]').textContent");
+    const badges = (prefix) => evaluate(`(async () => {
+      document.querySelector('[data-slots] [data-cat="frame"]').click();
+      await new Promise((r) => setTimeout(r, 120));
+      const all = document.querySelector('[data-picker] [data-cls="all"]');
+      if (all) { all.click(); await new Promise((r) => setTimeout(r, 120)); }
+      const badge = (b) => (b ? { text: b.textContent, title: b.title } : null);
+      const current = document.querySelector('.picker__current-name');
+      return { options: [...document.querySelectorAll('[data-picker] [role=option]')].filter((o) => o.dataset.id.startsWith(${JSON.stringify(prefix)})).map((o) => badge(o.querySelector('.badge'))),
+        current: current ? badge(current.querySelector('.badge')) : null };
+    })()`);
+    for (const lang of ['en', 'de']) {
+      language = lang;
+      const unknownWord = text('ui.unknownPart', lang);
+      const switched = text('addons.buildSwitched', lang).split('{name}')[0].slice(0, 30);
+      const frameName = lang === 'de' ? 'Winziger Rahmen' : 'Tiny Frame';
+      const ringName = lang === 'de' ? 'LED-Ring' : 'LED Ring';
+      const complete = (s) => s.length === 7 && s.every((x) => !x.text.includes(unknownWord) && !x.text.includes('?'))
+        && s.some((x) => x.cat === 'frame' && x.title.includes(frameName)) && s.some((x) => x.cat === 'accessory' && x.text === ringName);
+      const rest = (s) => JSON.stringify(s.filter((x) => !['frame', 'accessory'].includes(x.cat)));
+      for (const how of ['paste', 'link']) {
+        const tag = `${how} ${lang}`;
+        if (how === 'paste') {
+          await open(`${base}/configurator/`, 1280);
+          await evaluate(`(() => { const i = document.querySelector('[data-import]'); i.value = ${JSON.stringify(ringCode)}; i.dispatchEvent(new Event('input', { bubbles: true })); return true; })()`);
+          await sleep(700);
+        } else {
+          await open(`${base}/configurator/#${ringCode}`, 1280);
+        }
+        const opened = await slotState();
+        check(opened.some((x) => x.cat === 'frame' && x.text.includes(unknownWord)), `code with a missing add-on (${tag}): its frame is unknown before the jar (${JSON.stringify(opened)})`);
+        await evaluate("document.querySelector('[data-addon-switch=\"justmoreparts\"]').click()");
+        await sleep(400);
+        const off = await slotState();
+        check(JSON.stringify(off) === JSON.stringify(opened) && !(await bannerText()).includes(switched), `code with a missing add-on (${tag}): switching Just More Parts off keeps the build (${JSON.stringify(off)})`);
+        await evaluate("document.querySelector('[data-addon-switch=\"justmoreparts\"]').click()");
+        await sleep(400);
+        await setFile(files.good);
+        const after = await slotState();
+        check(complete(after) && rest(after) === rest(opened), `code with a missing add-on (${tag}): after the jar the build is complete (${JSON.stringify(after)})`);
+        check(!(await bannerText()).includes(switched), `code with a missing add-on (${tag}): no preset instead of the build (“${await bannerText()}”)`);
+        check(await shareCode() === ringCode, `code with a missing add-on (${tag}): the share box has the code of the build again (${(await shareCode()).slice(0, 30)}…)`);
+        if (how === 'paste') {
+          const preview = await evaluate("document.querySelector('[data-import-result]').textContent");
+          check(!preview.includes(text('addons.missing', lang).split('{name}')[0].trim()) && !(await evaluate("!!document.querySelector('[data-import-result] .addon-line__jar')")), `code with a missing add-on (${tag}): the field's note no longer asks for the jar (“${preview}”)`);
+        } else {
+          await sleep(500);
+          check(await evaluate('location.hash') === `#${ringCode}`, `code with a missing add-on (${tag}): the address keeps the code`);
+          check(await evaluate("!!document.querySelector('.banner.is-ok') && !document.querySelector('.banner .addon-line__jar')"), `code with a missing add-on (${tag}): the banner of the link no longer asks for the jar (“${await bannerText()}”)`);
+        }
+        const own = await badges(`${NS}:`);
+        const jmp = await badges('justmoreparts:');
+        const ownTitle = text('ui.addonOtherLong', lang).replace('{name}', 'Test Add-on for Propwash');
+        check(own.options.length === 1 && own.options.every((b) => b && b.text === text('ui.addonOther', lang) && b.title === ownTitle) && own.current && own.current.title === ownTitle,
+          `badge (${tag}): a part of the jar's add-on says “${text('ui.addonOther', lang)}” / “${ownTitle}” (${JSON.stringify(own)})`);
+        check(jmp.options.length === jmpParts && jmp.options.every((b) => b && b.text === text('ui.addon', lang) && b.title === text('ui.addonLong', lang)), `badge (${tag}): Just More Parts still says “${text('ui.addon', lang)}” (${JSON.stringify(jmp.options[0])})`);
+        if (how === 'link') await shot(`jar-code-then-jar-${lang}-1280`);
+      }
+    }
+    language = 'en';
     check(errors.length === 0, `no console errors or exceptions: ${errors.slice(0, 5).join(' | ')}`);
   } finally {
     browser.close();

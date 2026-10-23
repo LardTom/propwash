@@ -297,6 +297,7 @@ const TEXT = {
     selected: ['selected', 'gewählt'], current: ['Current', 'Aktuell'], none: ['None', 'Keins'],
     unknownPart: ['Unknown part', 'Unbekanntes Teil'], builtin: ['Propwash', 'Propwash'], addon: ['JMP', 'JMP'],
     builtinLong: ['Part of Propwash FPV', 'Teil von Propwash FPV'], addonLong: ['Added by Just More Parts', 'Aus Just More Parts'],
+    addonOther: ['Add-on', 'Add-on'], addonOtherLong: ['Added by {name}', 'Aus {name}'],
     prosCons: ['Details, pros and cons', 'Details, Vor- und Nachteile'],
     ifSwapped: ['With this part', 'Mit diesem Teil'],
     statusProblems: ['Can’t be built', 'Nicht baubar'], statusWarnings: ['Buildable, with warnings', 'Baubar, mit Warnungen'],
