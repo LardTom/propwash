@@ -8,7 +8,7 @@
 //   - figure explanations: hover, keyboard focus and a tap on the info button open the text with the class range,
 //     Escape closes it; every figure of the analysis has one
 //   - builds for beginners: three cards with picture, figures and buttons, "Load" loads the preset
-//   - battery plugged in: the default preset is drawn with the mounted stack and one plugged pair
+//   - battery plugged in: the default preset is drawn with the mounted stack and without plugs and leads
 //   - no console errors or uncaught exceptions
 //
 //   node tools/test-configurator-flows.mjs [--post <text file>] [--shots <dir>] [--chrome <path>]
@@ -180,7 +180,7 @@ async function main() {
         const link = await evaluate(`(() => {
           const banner = document.querySelector('.banner');
           return { hash: location.hash, banner: banner ? banner.textContent : '', copy: banner ? [...banner.querySelectorAll('button')].map((b) => b.textContent) : [],
-            code: document.querySelector('[data-code]').textContent, plugged: window.__viewer.current().assembly.pieces.filter((p) => p.role === 'power_lead').length };
+            code: document.querySelector('[data-code]').textContent, plugsHidden: window.__viewer.current().assembly.plugsHidden };
         })()`);
         check(link.hash === `#${old.code}`, `old link ${tag}: address switched to ${link.hash} (want #${old.code})`);
         check(link.banner.includes(text('convert.converted', lang).replace('{format}', old.format)), `old link ${tag}: banner “${link.banner}”`);
@@ -245,8 +245,8 @@ async function main() {
       const after = await evaluate("({ hash: location.hash, banner: document.querySelector('.banner')?.textContent || '' })");
       check(after.hash === `#${pasted.pw3}`, `paste ${lang}: address ${after.hash} (want #${pasted.pw3})`);
       check(after.banner.includes(text('convert.converted', lang).replace('{format}', 'PW1')), `paste ${lang}: banner “${after.banner}”`);
-      const plugged = await evaluate("window.__viewer.current().assembly.pieces.filter((p) => p.role === 'power_lead').length");
-      check(plugged === 1, `paste ${lang}: the battery is plugged in (${plugged} pairs)`);
+      const plugged = await evaluate("({ hidden: window.__viewer.current().assembly.plugsHidden, leads: window.__viewer.current().assembly.pieces.filter((p) => p.role === 'power_lead').length })");
+      check(plugged.hidden === true && plugged.leads === 0, `paste ${lang}: the battery is plugged in, plugs and leads hidden (${JSON.stringify(plugged)})`);
     }
   } finally {
     browser.close();
