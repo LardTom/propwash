@@ -10,11 +10,11 @@
 //     has one (DroneAssembly.batteryPart)
 //   - picking in the 3D view: every placed piece belongs to a part category, and its paint slots (per tint group and
 //     its main slot) are slots the build's paint panel shows; the clicks themselves: tools/test-configurator-pick.mjs
-//   - battery plugged in (Propwash 0.6.0, PowerLeadRoute): for every valid combination of a frame, battery and stack
-//     with models exactly one plugged pair, the mounted stack, both leads from the pigtail ends to the back of the
-//     plug (ends exactly on the anchors; the design allows 0.5 model pixel), the plug on the socket and near the drone; the three reference
-//     builds with the same numbers as the mod's PowerLeadRouteTest; the fallbacks (no mounted variant, no socket, a
-//     frame drawn from its measurements) draw the stack as before
+//   - battery plugged in, plugs hidden (Propwash 0.6.0, PowerLead / PlugMask): for every valid combination of a frame,
+//     battery and stack with models no plug and no lead – the mounted stack without its two pigtails, the battery
+//     without its socket, the two leads in front of it and what lies behind the pack's rear face (balance lead and
+//     plug), the pack drawn, no extra piece; the hidden part of the 1300 and of the whoop battery with the numbers of
+//     the mod's PlugAnchorsTest; the fallbacks (no mounted variant, no socket) draw stack and battery as before
 //
 //   node tools/test-configurator-render.mjs [--export <web-export dir>]
 
@@ -23,8 +23,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createCatalog } from '../assets/js/configurator/data.js';
 import {
-  assemble, frameLayout, proceduralFrame, proceduralAccessoryBase, pieceCategory, SLOTS, MM_PER_MODEL_UNIT, PROP_SLOTS, batteryBelow, plugFamily,
-  plugShade, PLUG_COLORS, BEND_CLEARANCE_MM, PLUG_LENGTH_RATIO, MIN_PIECE_MM,
+  assemble, frameLayout, proceduralFrame, proceduralAccessoryBase, pieceCategory, SLOTS, MM_PER_MODEL_UNIT, PROP_SLOTS, batteryBelow,
 } from '../assets/js/configurator/assembly.js';
 import { batteryFit } from '../assets/js/configurator/rules.js';
 import { channelTint, rgbOf, paintTints, paintDefaults, paintAvailable, groupsOf, pieceSlots } from '../assets/js/configurator/paint.js';
@@ -175,8 +174,7 @@ for (const preset of catalog.presets) {
   }
   const a = assemble(build, env);
   check(a.missing.length === 0 && a.layout, `${preset.id}: assembles`);
-  const plugged = a.pieces.some((p) => p.role === 'power_lead');
-  const expected = 1 + 3 + 8 + Object.keys(build.accessories).length + (build.accessories.top ? 1 : 0) + (plugged ? 1 : 0);
+  const expected = 1 + 3 + 8 + Object.keys(build.accessories).length + (build.accessories.top ? 1 : 0);
   check(a.pieces.length === expected, `${preset.id}: ${a.pieces.length} pieces, expected ${expected}`);
   check(a.pieces.every((p) => finiteVec(p.position)), `${preset.id}: finite positions`);
   const props = a.pieces.filter((p) => p.role === 'prop');
@@ -196,10 +194,6 @@ for (const preset of catalog.presets) {
     const label = `${preset.id}: pick ${piece.role} ${piece.id}`;
     check(PICK_CATEGORIES.includes(pieceCategory(piece)), `${label}: category ${pieceCategory(piece)}`);
     const { groups, main } = pieceSlots(piece, groupsOf(piece, modelOf(piece.id), render));
-    if (piece.role === 'power_lead') {
-      check(pieceCategory(piece) === 'stack' && main === null && groups.length === 0, `${label}: the lead belongs to the stack and is not paintable`);
-      continue;
-    }
     check(main !== null && available.has(main) && groups.every((slot) => available.has(slot)), `${label}: paint slots ${main} / ${groups}`);
     if (piece.role === 'prop') check(main === PROP_SLOTS[piece.slot], `${label}: prop paint slot ${main} at position ${piece.slot}`);
     if (piece.role === 'video') check(main === 'camera', `${label}: video paints the camera slot, not ${main}`);
@@ -270,18 +264,40 @@ check(pieceSlots({ role: 'frame' }, null).main === null, 'a frame without tint g
   console.log(`Batteries under the frame: ${hanging} builds, ${under} with the "_under" model`);
 }
 
-// Battery plugged in: every valid combination of frame, battery and stack with models.
+// Battery plugged in, plugs hidden: every valid combination of frame, battery and stack with models.
 {
-  const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
-  const boxOf = (piece) => {
-    const model = models.get(piece.id);
-    const v = model && model.variants[piece.variant || 'base'];
-    if (!v || !v.box) return null;
-    return [0, 1, 2, 3, 4, 5].map((i) => (v.box[i] - 8) * MM_PER_MODEL_UNIT + piece.position[i % 3]);
+  // Box of a compact element in mm around the model point, corners rotated X, then Y, then Z (like the asset kit).
+  const elementBox = (el) => {
+    const rot = el[6];
+    const r = Math.PI / 180;
+    const box = [Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity];
+    for (const x of [el[0], el[3]]) for (const y of [el[1], el[4]]) for (const z of [el[2], el[5]]) {
+      let p = [x, y, z];
+      if (rot) {
+        let [px, py, pz] = [x - rot[0], y - rot[1], z - rot[2]];
+        [py, pz] = [py * Math.cos(rot[3] * r) - pz * Math.sin(rot[3] * r), py * Math.sin(rot[3] * r) + pz * Math.cos(rot[3] * r)];
+        [px, pz] = [px * Math.cos(rot[4] * r) + pz * Math.sin(rot[4] * r), -px * Math.sin(rot[4] * r) + pz * Math.cos(rot[4] * r)];
+        [px, py] = [px * Math.cos(rot[5] * r) - py * Math.sin(rot[5] * r), px * Math.sin(rot[5] * r) + py * Math.cos(rot[5] * r)];
+        p = [px + rot[0], py + rot[1], pz + rot[2]];
+      }
+      p.forEach((v, i) => {
+        box[i] = Math.min(box[i], (v - 8) * MM_PER_MODEL_UNIT);
+        box[i + 3] = Math.max(box[i + 3], (v - 8) * MM_PER_MODEL_UNIT);
+      });
+    }
+    return box;
   };
+  const elementsOf = (model, name) => {
+    const v = model.variants[name];
+    return (v.of ? model.variants[v.of] : v).el;
+  };
+  const within = (b, outer) => outer && [0, 1, 2].every((i) => b[i] >= outer[i] - 0.01 && b[i + 3] <= outer[i + 3] + 0.01);
+  const unionOf = (boxes) => boxes.reduce((h, b) => [Math.min(h[0], b[0]), Math.min(h[1], b[1]), Math.min(h[2], b[2]), Math.max(h[3], b[3]),
+    Math.max(h[4], b[4]), Math.max(h[5], b[5])]);
+  const volume = (b) => (b[3] - b[0]) * (b[4] - b[1]) * (b[5] - b[2]);
   let combos = 0;
-  let longest = 0;
-  const families = { XT: 0, BT: 0 };
+  let fallbacks = 0;
+  const hiddenCounts = {};
   for (const frame of catalog.partsIn('frame').filter((f) => models.has(f.id))) {
     const preset = catalog.presets.find((p) => catalog.part(p.build.frame).data.role === frame.data.role) || catalog.presets[0];
     for (const battery of catalog.partsIn('battery').filter((b) => models.has(b.id) && ['ok', 'weak'].includes(batteryFit(frame, b)))) {
@@ -289,94 +305,62 @@ check(pieceSlots({ role: 'frame' }, null).main === null, 'a frame without tint g
         const build = { ...catalog.presetBuild(preset.id), frame: frame.id, battery: battery.id, stack: stack.id, accessories: {} };
         const label = `${frame.id} + ${battery.id} + ${stack.id}`;
         const a = assemble(build, env);
-        const leads = a.pieces.filter((p) => p.role === 'power_lead');
         const stackPiece = a.pieces.find((p) => p.role === 'stack');
         const batteryPiece = a.pieces.find((p) => p.role === 'battery');
-        const mounted = models.get(stack.id).variants.mounted;
-        const socket = models.get(battery.id).variants[batteryPiece.variant || 'base'].socket;
-        if (!mounted || !socket) {
-          check(leads.length === 0 && !stackPiece.variant, `${label}: drawn as before without a mounted stack or socket`);
+        check(!a.pieces.some((p) => p.procedural && p.procedural !== 'frame' && p.procedural !== 'accessory_base'), `${label}: no extra piece`);
+        const stackModel = models.get(stack.id);
+        const batteryModel = models.get(battery.id);
+        const mounted = stackModel.variants.mounted;
+        const variantName = batteryPiece.variant || 'base';
+        const socket = batteryModel.variants[variantName].socket;
+        if (!mounted || !mounted.pigtail || !socket) {
+          check(!a.plugsHidden && !stackPiece.variant && !stackPiece.hide && !batteryPiece.hide, `${label}: drawn as before without a mounted stack or socket`);
+          fallbacks++;
           continue;
         }
         combos++;
-        if (!check(leads.length === 1 && stackPiece.variant === 'mounted', `${label}: one plugged pair, mounted stack`)) continue;
-        const route = leads[0].route;
-        const family = plugFamily(battery.data.connector) || (socket.bt ? 'BT' : 'XT');
-        families[family]++;
-        const body = socket.body.map((v, i) => v + batteryPiece.position[i % 3]);
-        check(route.plug[2] === body[5] && route.plug[0] === body[0] && route.plug[3] === body[3] && route.plug[1] === body[1] && route.plug[4] === body[4],
-          `${label}: plug pushed onto the socket`);
-        check(Math.abs(route.plugEndZ - (body[5] + PLUG_LENGTH_RATIO * (body[5] - body[2]))) < 1e-9, `${label}: plug length`);
-        const plugs = route.pieces.filter((p) => ['seam', 'plug', 'grip'].includes(p.role));
-        check(plugs.length === (family === 'XT' ? 3 : 2), `${label}: one plug (${plugs.length} pieces)`);
-        check(route.pieces.find((p) => p.role === 'plug').color === PLUG_COLORS[family] && route.pieces[0].role === 'seam'
-          && route.pieces[0].color === plugShade(PLUG_COLORS[family], 0.7), `${label}: colours of a ${family} plug`);
-        check(route.wires.length === 2 && route.wires[0].red && !route.wires[1].red, `${label}: red and black lead`);
-        const ends = mounted.pigtail.map((l) => [l[0] + stackPiece.position[0], l[1] + stackPiece.position[1], l[2] + stackPiece.position[2]]);
-        route.wires.forEach((w, i) => {
-          const first = w.segments[0][0];
-          const last = w.segments[w.segments.length - 1][1];
-          check(dist(first, ends[i]) < 1e-6, `${label}: lead ${i} starts on its pigtail end (${dist(first, ends[i])} mm)`);
-          check(Math.abs(last[2] - route.plugEndZ) < 1e-9 && last[0] > route.plug[0] && last[0] < route.plug[3], `${label}: lead ${i} ends at the back of the plug`);
-          check(w.segments.every(([p, q]) => dist(p, q) >= MIN_PIECE_MM), `${label}: no piece shorter than ${MIN_PIECE_MM} mm`);
-          const length = w.segments.reduce((n, [p, q]) => n + dist(p, q), 0);
-          longest = Math.max(longest, length);
-          check(length < 400, `${label}: lead ${i} ${length.toFixed(1)} mm`);
-        });
-        check(route.wires[0].segments.at(-1)[1][0] < route.wires[1].segments.at(-1)[1][0], `${label}: red on the side of the red pigtail`);
-        if (!a.layout.powerLeadBend) {
-          check(route.bendZ >= route.plugEndZ + BEND_CLEARANCE_MM - 1e-9 && route.bendZ >= Math.max(ends[0][2], ends[1][2]) + BEND_CLEARANCE_MM - 1e-9,
-            `${label}: bend behind the plug and the pigtails`);
-        }
-        check(route.pieces.every((p) => p.box[3] > p.box[0] && p.box[4] > p.box[1] && p.box[5] > p.box[2] && p.box.every(Number.isFinite)), `${label}: no empty piece`);
-        // The plug sits at the drone: inside the box of frame and battery plus a margin.
-        const hull = [boxOf(a.pieces.find((p) => p.role === 'frame')), boxOf(batteryPiece)].filter(Boolean)
-          .reduce((h, b) => [Math.min(h[0], b[0]), Math.min(h[1], b[1]), Math.min(h[2], b[2]), Math.max(h[3], b[3]), Math.max(h[4], b[4]), Math.max(h[5], b[5])]);
-        const margin = 20;
-        check(route.plug[0] >= hull[0] - margin && route.plug[3] <= hull[3] + margin && route.plug[1] >= hull[1] - margin && route.plug[4] <= hull[4] + margin
-          && route.plug[2] >= hull[2] - margin && route.plug[5] <= hull[5] + margin, `${label}: plug inside the drone's box plus ${margin} mm`);
+        if (!check(a.plugsHidden && stackPiece.variant === 'mounted' && Array.isArray(stackPiece.hide) && Array.isArray(batteryPiece.hide),
+          `${label}: plugs hidden, mounted stack`)) continue;
+        const stackBoxes = elementsOf(stackModel, 'mounted').map(elementBox);
+        const ends = stackPiece.hide.map((i) => stackBoxes[i][5]).sort((x, y) => x - y);
+        check(stackPiece.hide.length === 2 && ends.every((z, i) => Math.abs(z - [...mounted.pigtail].map((l) => l[2]).sort((x, y) => x - y)[i]) < 0.01),
+          `${label}: the two pigtails left out (${stackPiece.hide})`);
+        const boxes = elementsOf(batteryModel, variantName).map(elementBox);
+        const hidden = batteryPiece.hide.map((i) => boxes[i]);
+        const inSocket = hidden.filter((b) => within(b, socket.body) || within(b, socket.grip)).length;
+        const leads = hidden.filter((b) => !within(b, socket.body) && Math.abs(b[5] - socket.body[2]) < 0.01);
+        const packRear = Math.min(...leads.map((b) => b[2]));
+        const behind = boxes.filter((b) => b[2] >= packRear - 0.01).length;
+        check(leads.length === 2 && inSocket >= 1 && behind === hidden.length, `${label}: socket (${inSocket}), two leads (${leads.length}) and `
+          + `everything behind the pack face (${behind}) left out, ${hidden.length} in all`);
+        check(Math.abs(unionOf(hidden)[5] - socket.body[5]) < 0.01, `${label}: hidden part ends at the socket face`);
+        const biggest = boxes.reduce((best, b, i) => (volume(b) > volume(boxes[best]) ? i : best), 0);
+        check(!batteryPiece.hide.includes(biggest), `${label}: the pack is drawn`);
+        hiddenCounts[hidden.length] = (hiddenCounts[hidden.length] || 0) + 1;
       }
     }
   }
-  check(combos > 200 && families.XT > 0 && families.BT > 0, `plugged combinations: ${combos} (${families.XT} XT, ${families.BT} BT)`);
-  // The mod's reference builds (PowerLeadRouteTest): same numbers.
+  check(combos > 200, `combinations with hidden plugs: ${combos}`);
+  // The mod's PlugAnchorsTest: the hidden part of the 1300 runs from the pack (78 mm) to the socket face.
   const near = (a, b) => Math.abs(a - b) < 1e-3;
-  const reference = [
-    ['propwash:freestyle_5', 'propwash:b6s_1300', 'propwash:stack_30', [72.5, 15.5, 84.9, 87.9], [-8, 54.5, 72.5, 8, 62.5, 84.9], 3,
-      [[-2.8, 6.2, 38], [-2.8, 6.2, 87.9], [-2.8, 58.5, 87.9], [-2.8, 58.5, 84.9]], [[2.8, 6.2, 38], [2.8, 6.2, 87.9], [2.8, 58.5, 87.9], [2.8, 58.5, 84.9]], 105.2],
-    ['propwash:race_5', 'propwash:b6s_1100', 'propwash:aio_20', [70.5, 15.5, 82.9, 85.9], [-8, -10.8, 70.5, 8, -2.8, 82.9], 2,
-      [[-2.2, 6, 25], [-2.2, 6, 85.9], [-2.2, -6.8, 85.9], [-2.2, -6.8, 82.9]], [[2.2, 6, 25], [2.2, 6, 85.9], [2.2, -6.8, 85.9], [2.2, -6.8, 82.9]], 76.7],
-    ['propwash:whoop_65', 'propwash:b1s_300_hv', 'propwash:aio_whoop', [40.5, 5, 44.5, 47.5], [-3.2, -8.7, 40.5, 3.2, -4.2, 44.5], 1,
-      [[-1.1, 2.5, 17.5], [-1.1, 2.5, 47.5], [-1.1, -6.45, 47.5], [-1.1, -6.45, 44.5]], [[1.1, 2.5, 17.5], [1.1, 2.5, 47.5], [1.1, -6.45, 47.5], [1.1, -6.45, 44.5]], 41.95],
-  ];
-  for (const [frame, battery, stack, zs, plug, diameter, red, black, length] of reference) {
-    const build = { ...catalog.presetBuild('propwash:freestyle'), frame, battery, stack, accessories: {} };
-    const lead = assemble(build, env).pieces.find((p) => p.role === 'power_lead');
-    const label = `reference ${frame} + ${battery} + ${stack}`;
-    if (!check(lead, `${label}: plugged`)) continue;
-    const r = lead.route;
-    check([r.socketZ, r.socketLength, r.plugEndZ, r.bendZ].every((v, i) => near(v, zs[i])), `${label}: socket, plug and bend ${[r.socketZ, r.socketLength, r.plugEndZ, r.bendZ]}`);
-    check(r.plug.every((v, i) => near(v, plug[i])), `${label}: plug box ${r.plug}`);
-    r.wires.forEach((w, i) => {
-      const points = [w.segments[0][0], ...w.segments.map((sgm) => sgm[1])];
-      const want = i === 0 ? red : black;
-      check(w.diameter === diameter && points.length === want.length && points.every((p, k) => dist(p, want[k]) < 1e-3), `${label}: lead ${i} ${JSON.stringify(points)}`);
-      check(near(w.segments.reduce((n, [p, q]) => n + dist(p, q), 0), length), `${label}: lead ${i} length`);
-    });
-    check(plugFamily(catalog.part(battery).data.connector) === null || battery !== 'propwash:b1s_300_hv', `${label}: family from the model`);
-  }
-  check(assemble({ ...catalog.presetBuild('propwash:whoop') }, env).pieces.find((p) => p.role === 'power_lead').route.pieces
-    .find((p) => p.role === 'plug').color === PLUG_COLORS.BT, 'whoop: white BT2.0 pair');
-  // Fallbacks: drawn as before.
   const freestyle = catalog.presetBuild('propwash:freestyle');
+  const fs5 = assemble({ ...freestyle, battery: 'propwash:b6s_1300', accessories: {} }, env);
+  const hide1300 = fs5.pieces.find((p) => p.role === 'battery').hide || [];
+  const h1300 = hide1300.length ? unionOf(hide1300.map((i) => elementBox(models.get('propwash:b6s_1300').variants.base.el[i]))) : null;
+  check(hide1300.length === 6 && near(h1300[0], -8) && near(h1300[3], 14.5) && near(h1300[2], 39) && near(h1300[5], 68.5) && near(h1300[1], 26)
+    && h1300[4] <= 34.8 + 1e-3, `1300: connector, grip, two leads, balance lead and plug from 39 to 68.5 mm (${hide1300.length}: ${h1300})`);
+  const whoop = assemble({ ...catalog.presetBuild('propwash:whoop'), accessories: {} }, env);
+  check(whoop.plugsHidden && (whoop.pieces.find((p) => p.role === 'battery').hide || []).length === 3, 'whoop: BT2.0 socket and two leads left out');
+  // Fallbacks: drawn as before.
   const noMount = { ...env, model: (id) => (id === freestyle.stack ? { ...models.get(id), variants: { ...models.get(id).variants, mounted: undefined } } : env.model(id)) };
   const fa = assemble(freestyle, noMount);
-  check(!fa.pieces.some((p) => p.role === 'power_lead') && !fa.pieces.find((p) => p.role === 'stack').variant, 'fallback: stack without a mounted variant');
+  check(!fa.plugsHidden && !fa.pieces.find((p) => p.role === 'stack').variant && !fa.pieces.find((p) => p.role === 'battery').hide,
+    'fallback: stack without a mounted variant keeps both plugs');
   const noSocket = { ...env, model: (id) => (id === freestyle.battery ? { ...models.get(id), variants: { ...models.get(id).variants, base: { ...models.get(id).variants.base, socket: undefined } } } : env.model(id)) };
-  check(!assemble(freestyle, noSocket).pieces.some((p) => p.role === 'power_lead'), 'fallback: battery without a socket');
+  check(!assemble(freestyle, noSocket).plugsHidden, 'fallback: battery without a socket');
   const noFrame = { ...env, model: (id) => (id === freestyle.frame ? null : env.model(id)) };
-  check(!assemble(freestyle, noFrame).pieces.some((p) => p.role === 'power_lead'), 'fallback: frame drawn from its measurements');
-  console.log(`Battery plugged in: ${combos} combinations of frame, battery and stack (${families.XT} XT, ${families.BT} BT), leads up to ${longest.toFixed(0)} mm, 3 reference builds like the mod`);
+  check(assemble(freestyle, noFrame).plugsHidden, 'a frame drawn from its measurements does not matter');
+  console.log(`Battery plugged in, plugs hidden: ${combos} combinations of frame, battery and stack (hidden battery elements ${JSON.stringify(hiddenCounts)}), ${fallbacks} drawn as before`);
 }
 
 // Unknown parts are left out, not drawn.
