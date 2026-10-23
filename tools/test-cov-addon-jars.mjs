@@ -193,7 +193,7 @@ const pickerOptions = (p, cat) => p.evaluate(`(async () => {
     badge: o.querySelector('.badge') ? { text: o.querySelector('.badge').textContent, title: o.querySelector('.badge').title } : null }));
 })()`);
 
-const slots = (p) => p.evaluate(`[...document.querySelectorAll('[data-slots] .slot')].map((s) => ({ cat: s.dataset.cat, bad: s.classList.contains('is-bad'), text: s.querySelector('.slot__value').textContent.trim() }))`);
+const slots = (p) => p.evaluate(`[...document.querySelectorAll('[data-slots] .slot')].map((s) => ({ cat: s.dataset.cat, bad: s.classList.contains('is-bad'), text: s.querySelector('.slot__value').textContent.replace(/\\s+/g, ' ').trim() }))`);
 
 const offSite = (base, urls) => urls.filter((u) => !u.startsWith('data:') && !u.startsWith('blob:') && !u.startsWith(base));
 
@@ -315,8 +315,8 @@ async function browser(found) {
     if (found.length) {
       lock('cov-site-b-13', !front.length, `no. 139: accessories for the front mount are among the accessory choices – missing: ${front.slice(0, 4).join(', ')}${front.length > 4 ? ` … (${front.length})` : ''}`);
       const jmpLabel = badges.filter((x) => /\bJMP\b|Just More Parts/.test(`${x.text} ${x.title}`));
-      lock('cov-site-b-15', !jmpLabel.length, `no. 139: the badge of a part of another add-on does not call it Just More Parts – ${jmpLabel.length} of ${badges.length} choices say “${jmpLabel[0] ? `${jmpLabel[0].text}” / “${jmpLabel[0].title}` : ''}” (first: ${jmpLabel[0] ? `${jmpLabel[0].id}, ${jmpLabel[0].where}` : ''})`);
-      lock('cov-site-b-14', !lost.length, `no. 140: after opening the jar the build of the code is complete, its add-on parts in place – ${lost.length} of ${named.length} cases lose the build (first: ${lost[0] || ''})`);
+      check(!jmpLabel.length, `no. 139: the badge of a part of another add-on does not call it Just More Parts – ${jmpLabel.length} of ${badges.length} choices say “${jmpLabel[0] ? `${jmpLabel[0].text}” / “${jmpLabel[0].title}` : ''}” (first: ${jmpLabel[0] ? `${jmpLabel[0].id}, ${jmpLabel[0].where}` : ''})`);
+      check(!lost.length, `no. 140: after opening the jar the build of the code is complete, its add-on parts in place – ${lost.length} of ${named.length} cases lose the build (first: ${lost[0] || ''})`);
     }
     for (const lang of LANGS) {
       const p = await b.page({ lang });
