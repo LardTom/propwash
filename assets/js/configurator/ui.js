@@ -11,9 +11,9 @@ import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe
 import { batteryFit } from './rules.js?v=e77905ee';
 import { assemble, PROP_SLOTS } from './assembly.js?v=e8018744';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=320ddce0';
-import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=51be8283';
-import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=75a1b774';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=4e942aef';
+import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=25e9fc0d';
+import { t, tk, entry, num, lang, NB, glue } from './i18n.js?v=4d5ccb06';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=1740081e';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
@@ -342,6 +342,15 @@ function matches(part, filter, cls) {
   return true;
 }
 
+/** Where a part comes from: Propwash, Just More Parts (JMP) or another add-on, named in the tooltip. */
+function partBadge(part) {
+  if (part.builtin) return el('span', { class: 'badge badge--pw', title: t('ui.builtinLong') }, t('ui.builtin'));
+  const ns = part.id.split(':')[0];
+  if (ns === 'justmoreparts') return el('span', { class: 'badge badge--jmp', title: t('ui.addonLong') }, t('ui.addon'));
+  const info = catalog.namespace(ns);
+  return el('span', { class: 'badge badge--addon', title: t('ui.addonOtherLong', { name: (info && info.name) || ns }) }, t('ui.addonOther'));
+}
+
 let detailsOpen = false;
 
 function helpBlock(part, compact, noSummary) {
@@ -394,8 +403,7 @@ function picker() {
     selectedCard = el('div', { class: 'picker__current' },
       el('p', { class: 'picker__current-label' }, t('ui.current')),
       el('p', { class: 'picker__current-name' }, catalog.partName(current.id, lang()),
-        el('span', { class: `badge badge--${current.builtin ? 'pw' : 'jmp'}`, title: current.builtin ? t('ui.builtinLong') : t('ui.addonLong') },
-          current.builtin ? t('ui.builtin') : t('ui.addon'))),
+        partBadge(current)),
       el('p', { class: 'part-help__summary' }, (help && help.summary) || facts(current)),
       more ? el('details', { class: 'picker__more', open: detailsOpen || null, ontoggle: (e) => { detailsOpen = e.currentTarget.open; } },
         el('summary', null, t('ui.prosCons')), helpBlock(current, false, true)) : null);
@@ -443,8 +451,7 @@ function picker() {
       el('span', { class: 'part__name' }, name),
       part ? el('span', { class: 'part__facts' }, facts(part)) : null,
       fit.issues.length ? issueLine(fit.issues) : null),
-    part ? el('span', { class: `badge badge--${part.builtin ? 'pw' : 'jmp'}`, title: part.builtin ? t('ui.builtinLong') : t('ui.addonLong') },
-      part.builtin ? t('ui.builtin') : t('ui.addon')) : null,
+    part ? partBadge(part) : null,
     el('span', { class: 'visually-hidden' }, `, ${fitText}`));
     return { node, fit };
   }
