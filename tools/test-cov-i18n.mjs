@@ -15,9 +15,12 @@
 //   - no. 34 script contents: (a) the texts the scripts draw for the figure explanations (stathelp), the builds for
 //     beginners (beginner), the converter (convert.js) and the directory (directory page, add-on bar) are listed here,
 //     reach assets/i18n/<lang>.json and have a translation in every dictionary; tools/i18n/pages.mjs is not changed,
-//     its RUNTIME list is reported; (b) /es/configurator/ with a preset and an open figure explanation, /es/roadmap/,
-//     /es/changelog/ and /es/convert/ with a converted post, after their scripts ran: the visible text is checked with
-//     the “still English” rule of test-i18n (3 or more English function words and more than a quarter of the words)
+//     its RUNTIME list is reported; (b) /es/configurator/ with a preset and an open figure explanation and with each
+//     of the tabs Paint, Tuning and OSD, /es/roadmap/, /es/changelog/ and /es/convert/ with a converted post, after
+//     their scripts ran: the visible text is checked with the “still English” rule of test-i18n (3 or more English
+//     function words and more than a quarter of the words) and against the English keys of the dictionary; links the
+//     configurator and the converter draw to a translated page (landing page, configurator, converter, add-ons,
+//     roadmap, changelog) stay in the language tree
 //
 //   node tools/test-cov-i18n.mjs [--lang es] [--no-browser] [--keep] [--list] [--chrome <path>]
 //
@@ -205,6 +208,9 @@ const VISIBLE_TEXT = String.raw`(() => {
   return out;
 })()`;
 
+const ROOT_LINKS = String.raw`[...document.querySelectorAll('main a[href]')].map((a) => new URL(a.href))
+  .filter((u) => u.origin === location.origin && /^\/(?:(?:configurator|convert|addons|roadmap|changelog)\/)?$/.test(u.pathname)).map((u) => u.href)`;
+
 async function enter(p) {
   const common = { key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 };
   await p.send('Input.dispatchKeyEvent', { type: 'keyDown', text: '\r', unmodifiedText: '\r', ...common });
@@ -288,7 +294,7 @@ async function inBrowser(dir) {
       if (same && !(words.length >= 4 && words.some((w) => ENGLISH.has(w)))) continue;
       sources.set(en.toLowerCase(), en);
     }
-    const visit = async (pathPart, ready, prepare) => {
+    const visit = async (pathPart, ready, prepare, label = '') => {
       const p = await b.page({ lang: 'en' });
       await p.open(`${base}/${tree}/${pathPart}`, { width: 1280, ready });
       loads++;
@@ -296,7 +302,8 @@ async function inBrowser(dir) {
       await sleep(400);
       const blocks = await p.evaluate(VISIBLE_TEXT);
       const english = blocks.filter((x) => stillEnglish(withoutNames(x.text)) || sources.has(x.text.toLowerCase()));
-      found.push({ page: `${tree}/${pathPart}`, blocks: blocks.length, english, errors: p.errors.slice() });
+      const links = await p.evaluate(ROOT_LINKS);
+      found.push({ page: `${tree}/${pathPart}${label}`, blocks: blocks.length, english, links, errors: p.errors.slice() });
       await p.close();
     };
     await visit('configurator/', CFG_READY, async (p) => {
@@ -304,13 +311,19 @@ async function inBrowser(dir) {
       await sleep(600);
       await p.evaluate("(document.querySelector('[data-stat-help]').click(), true)");
     });
+    for (const tab of ['paint', 'tune', 'osd']) {
+      await visit('configurator/', CFG_READY, async (p) => {
+        await p.evaluate(`(document.querySelector('[data-tab="${tab}"]').click(), true)`);
+        await sleep(300);
+      }, ` (tab ${tab})`);
+    }
     await visit('roadmap/', "document.querySelector('[data-rm-root]') && document.querySelector('[data-rm-root]').children.length > 0");
     await visit('changelog/', "!!document.querySelector('[data-cl-tally]') && !document.querySelector('[data-cl-tally]').hidden && !!document.querySelector('[data-cl-root] article')");
     await visit('convert/', CV_READY, async (p) => {
       await p.evaluate(setInput('[data-cv-input]', read('tools/fixtures/cov/post.txt')));
       await sleep(900);
     });
-    const KNOWN_RED = { 'configurator/': 'cov-site-b-11', 'convert/': 'cov-site-b-11', 'changelog/': 'cov-site-b-12' };
+    const KNOWN_RED = { 'changelog/': 'cov-site-b-12' };
     for (const f of found) {
       check(f.blocks > 5, `no. 34 (b) /${f.page}: visible text collected (${f.blocks} blocks)`);
       check(!f.errors.length, `no. 34 (b) /${f.page}: no console errors (${f.errors.slice(0, 2).join(' | ')})`);
@@ -318,6 +331,7 @@ async function inBrowser(dir) {
       const known = Object.entries(KNOWN_RED).find(([k]) => f.page.endsWith(`/${k}`));
       if (known) lock(known[1], !f.english.length, message);
       else check(!f.english.length, message);
+      if (/\/(configurator|convert)\//.test(f.page)) check(!f.links.length, `no. 34 (b) /${f.page}: links the scripts draw to translated pages stay in /${tree}/ (${f.links.slice(0, 2).join(' | ')})`);
     }
     if (flag('--list')) for (const f of found) for (const x of f.english) console.log(`  english /${f.page} ${x.tag}${x.cls ? `.${x.cls}` : ''}: ${x.text.slice(0, 140)}`);
   } finally {
