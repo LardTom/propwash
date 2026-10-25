@@ -2872,6 +2872,7 @@
     "Stack doesn't fit the frame": "Стек не подходит к раме",
     "Battery doesn't fit the frame": "Аккумулятор не подходит к раме",
     "Accessory doesn't fit the frame": "Аксессуар не подходит к раме",
+    "Accessory only fits other frames": "Аксессуар подходит только к другим рамам",
     "Battery voltage too high for the motors": "Напряжение аккумулятора слишком высокое для моторов",
     "Battery voltage too low for the motors": "Напряжение аккумулятора слишком низкое для моторов",
     "Battery voltage doesn't match the stack": "Напряжение аккумулятора не подходит к стеку",

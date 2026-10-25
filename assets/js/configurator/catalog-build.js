@@ -12,7 +12,7 @@
 //   const model = partModel(parts[0], res);                 // as in assets/data/configurator/models/…
 
 import { crc32 } from './crc32.js?v=62ad0fa2';
-import { KINDS, ARM_KEYS, trueX, maxContinuousCurrent, landingCellVoltage, effectiveUsableFraction, SOC_GRID, splitId, tryParse } from './partjson.js?v=5f4b02d5';
+import { KINDS, ARM_KEYS, trueX, maxContinuousCurrent, landingCellVoltage, effectiveUsableFraction, SOC_GRID, splitId, tryParse, idCompare } from './partjson.js?v=2c29ef2a';
 
 export const LANGUAGES = Object.freeze(['de_de', 'en_us']);
 export const NOMINAL_CELL_V = 3.7;
@@ -33,12 +33,7 @@ const utf8 = new TextDecoder('utf-8');
 export const text = (bytes) => (bytes == null ? null : typeof bytes === 'string' ? bytes : utf8.decode(bytes));
 const num = (v) => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 const cmp = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
-/** Identifier.compareTo of Minecraft: the path first, then the namespace. */
-export function idCompare(a, b) {
-  const [na, pa] = splitId(a);
-  const [nb, pb] = splitId(b);
-  return cmp(pa, pb) || cmp(na, nb);
-}
+export { idCompare };
 /** '#rrggbb' of an RGB int (ExportJson.hex). */
 export const hex = (rgb) => `#${(rgb & 0xffffff).toString(16).padStart(6, '0')}`;
 
@@ -395,7 +390,7 @@ export function exportData(def) {
     };
     case 'accessory': {
       const c = def.actionCam;
-      return {
+      const out = {
         slot: def.slot, size_mm: nums(def.widthMm, def.heightMm, def.depthMm), flight_battery_w: num(def.flightBatteryWatts), frontal_area_m2: num(def.frontalAreaM2),
         leds: def.ledCount, lens: { x_mm: num(def.lensXMm), length_mm: num(def.lensLengthMm) },
         action_cam: c ? {
@@ -405,6 +400,8 @@ export function exportData(def) {
         } : null,
         led_path: def.ledPathMm.map((p) => nums(...p)),
       };
+      if (def.frames && def.frames.length) out.frames = [...def.frames];
+      return out;
     }
     default: return {};
   }

@@ -223,6 +223,7 @@ node tools/test-configurator-pick.mjs      # clicks and taps on the parts in the
 node tools/test-configurator-flows.mjs     # converter, old links, explanations, builds for beginners (headless Chrome)
 node tools/test-plug-texts.mjs             # battery plugged in: texts, dictionaries and model data say plugs are hidden
 node tools/test-beginner-images.mjs        # pictures of the builds for beginners match a fresh render (Chrome, dwebp)
+node tools/test-configurator-frames.mjs    # accessories only for some frames: reader, accessory_frame, pickers (Chrome)
 ```
 
 `--goldens` copies the share-code golden files of Propwash (`pw1-vectors.json`, `pw2-vectors.json`, `pw3-vectors.json`,
@@ -245,6 +246,14 @@ The heat model of the workbench changed in Propwash 0.6.0 (20 °C, motor cooling
 the ESC heats up and counts for the heat warning). `node tools/build-configurator-heat.mjs --export <0.6.0 web export>`
 writes the game's heat figures of every preset and one-part-swapped variant into `tools/fixtures/heat-vectors.json`, so
 `tools/test-configurator.mjs` checks them without the export too.
+
+Accessories that fit only some frames (Propwash 0.6.0: `frames` in the part file, `data.frames` in the web export, the
+build problem `accessory_frame` in `rules.json`) are read from add-on jars, checked like the workbench and offered in the
+accessory picker only on their frames. `catalog.json` already carries the rule `accessory_frame` with the game's texts
+while it is built from an older export; a newer export brings the same entry. `tools/test-configurator-frames.mjs
+[--propwash-repo <dir>]` checks the reader, the rule, the order and texts of all rules against `RuleCheck` and the
+language files of that checkout, the dictionaries, the gimbals of an add-on checkout next to this one (if there) and the
+pickers in headless Chrome.
 
 `tools/fixtures/report-vectors.json` keeps share codes from bug reports with the build, analysis and FPV camera the
 mod gives for them (hand-maintained, not overwritten by the build scripts); the test decodes, re-encodes and analyses

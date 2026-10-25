@@ -4,9 +4,11 @@
 // Result: { unknownParts, problems, warnings } with issue keys in Propwash's order.
 // Unknown ids (not in the catalog, or a part of another category in that field) stop the check with the
 // problem 'missing_part' (rules.json gate); an accessory in a slot it does not fit stops it with 'accessory_mount'.
+// An accessory with frames (data.frames, Propwash 0.6.0 AccessoryDefinition#frames()) on another frame is
+// 'accessory_frame'; without frames every frame fits.
 
 export const PROBLEM_ORDER = Object.freeze(['missing_part', 'motor_mount', 'prop_too_large', 'prop_too_small', 'prop_mount',
-  'stack_mount', 'battery_frame', 'accessory_mount']);
+  'stack_mount', 'battery_frame', 'accessory_mount', 'accessory_frame']);
 export const WARNING_ORDER = Object.freeze(['motor_overvoltage', 'motor_undervoltage', 'stack_voltage', 'esc_undersized',
   'battery_weak', 'battery_undersized']);
 
@@ -64,6 +66,12 @@ export function batteryContinuousCurrent(battery) {
   return (battery.data.c_rating * battery.data.capacity_mah) / 1000.0;
 }
 
+/** AccessoryType#fitsFrame: an accessory without frames fits every frame, one with frames only those. */
+export function fitsFrame(accessory, frameId) {
+  const frames = accessory.data.frames;
+  return !frames || !frames.length || frames.includes(frameId);
+}
+
 export function propFits(motorPropMount, propMount) {
   return motorPropMount === UNIVERSAL_PROP_MOUNT || propMount === UNIVERSAL_PROP_MOUNT || motorPropMount === propMount;
 }
@@ -91,6 +99,12 @@ export function check(build, catalog) {
   for (const slot of Object.keys(parts.accessories)) {
     if (!f.accessory_mounts.includes(slot)) {
       problems.push('accessory_mount');
+      break;
+    }
+  }
+  for (const accessory of Object.values(parts.accessories)) {
+    if (!fitsFrame(accessory, frame.id)) {
+      problems.push('accessory_frame');
       break;
     }
   }

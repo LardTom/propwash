@@ -6,7 +6,8 @@
 // written into this repository), or the jars given with --addon-jars.
 //   - no. 139: every part of the jar's parts table that has a part file shows up after “Open add-on jar” with its name,
 //     its model and its mass (accessories under their mount, those for the front mount too, and one of them picked; the
-//     3D view has the picked parts on the drone);
+//     3D view has the picked parts on the drone; an accessory with frames is looked for on one of its frames, the only
+//     ones it is offered on);
 //     a part the add-on registers only in code (a copy of the jar without one part file) gives the note that the add-on
 //     needs a web export and shows up as unknown in a code
 //   - no. 140: a fresh page, a share code with a part of the add-on pasted: “Needs <add-on> …” with the button to open
@@ -195,6 +196,26 @@ const pickerOptions = (p, cat) => p.evaluate(`(async () => {
     badge: o.querySelector('.badge') ? { text: o.querySelector('.badge').textContent, title: o.querySelector('.badge').title } : null }));
 })()`);
 
+/**
+ * An accessory that fits only some frames (data.frames) is offered only on those: puts on a frame all such parts of
+ * the list share (else one of the first one's), unless the build has one of them already.
+ */
+async function frameFor(p, parts) {
+  const lists = parts.filter((f) => f.category === 'accessory' && f.data && f.data.frames && f.data.frames.length).map((f) => f.data.frames);
+  if (!lists.length) return;
+  const shared = lists[0].filter((id) => lists.every((l) => l.includes(id)));
+  const wanted = shared.length ? shared : lists[0];
+  await pickerOptions(p, 'frame');
+  const current = await p.evaluate("(document.querySelector('[data-picker] [role=option][aria-selected=\"true\"]') || {}).dataset?.id || null");
+  if (wanted.includes(current)) return;
+  await p.evaluate(`(() => {
+    const o = ${JSON.stringify(wanted)}.map((id) => document.querySelector(\`[data-picker] [role=option][data-id="\${id}"]\`)).find(Boolean);
+    if (o) o.click();
+    return !!o;
+  })()`);
+  await sleep(700);
+}
+
 const VIEWER_HOOK = "document.addEventListener('propwash:viewer', (e) => { window.__viewer = e.detail; });";
 const drawn = (p, id) => p.evaluate(`(() => {
   const c = window.__viewer && window.__viewer.current();
@@ -231,6 +252,7 @@ async function browser(found) {
           check(!bar.messages.some((m) => m.level === 'error' || /without their model|ohne ihr Modell/.test(m.text)), `no. 139 ${where}: no error and no part without its model`);
           check(offSite(p.base, p.requests).length === 0, `no. 49 ${where}: opening the jar sends no request off the site (${offSite(p.base, p.requests).slice(0, 2)})`);
           for (const cat of [...new Set(u.files.map((f) => f.category))]) {
+            if (cat === 'accessory') await frameFor(p, u.files);
             const options = await pickerOptions(p, cat);
             for (const f of u.files.filter((x) => x.category === cat)) {
               const o = options.find((x) => x.id === f.id);
@@ -265,6 +287,7 @@ async function browser(found) {
           }
           const frontPart = u.files.find((f) => f.category === 'accessory' && f.data && f.data.slot === 'front');
           if (frontPart) {
+            await frameFor(p, [frontPart]);
             await pickerOptions(p, 'accessory');
             const at = await p.center(`[data-picker] [role=option][data-id="${frontPart.id}"]`);
             if (at) {
