@@ -224,6 +224,12 @@ function sameAsGame() {
     const key = `propwash.build.issue.${r.key}`;
     check(r.text.en_us === lang.en_us[key] && r.text.de_de === lang.de_de[key], `catalog: the text of ${r.key} is the game's (${JSON.stringify(r.text)} vs ${lang.en_us[key]} / ${lang.de_de[key]})`);
   }
+  const example = path.join(PW_REPO, 'common/src/devtest/resources/data/propwash_example/propwash_parts/accessory/cine_gimbal.json');
+  if (!check(fs.existsSync(example), 'the test accessory propwash_example:cine_gimbal of F-APIFRAMES-1 is there')) return;
+  const raw = JSON.parse(fs.readFileSync(example, 'utf8'));
+  const r = decodePart('accessory', 'propwash_example:cine_gimbal', JSON.stringify(raw));
+  check(r.definition && !r.warnings.length && JSON.stringify(r.definition.frames) === JSON.stringify(sortedIds(raw.frames)),
+    `propwash_example:cine_gimbal: frames ${JSON.stringify(r.definition && r.definition.frames)} without a warning (${r.warnings.join(' | ')})`);
 }
 
 function dictionaries() {
@@ -357,6 +363,8 @@ async function flow(p, where, { gimbal, frames, name, text, other = null, foreig
   acc = await options(p, 'accessory');
   const kept = acc.find((o) => o.id === gimbal);
   check(kept && kept.selected && kept.bad && kept.issue.includes(text), `${where}: the fitted gimbal stays in the accessory picker to take it off (${JSON.stringify(kept)})`);
+  const free = acc.filter((o) => o.id && o.id !== gimbal);
+  check(free.length > 0 && free.every((o) => !o.issue.includes(text)), `${where}: accessories that fit every frame are not marked with “${text}” (${free.filter((o) => o.issue.includes(text)).map((o) => o.id).join(', ')})`);
   return { list };
 }
 
