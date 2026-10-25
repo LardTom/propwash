@@ -2872,6 +2872,7 @@
   "Stack doesn't fit the frame": "Le stack ne va pas sur la frame",
   "Battery doesn't fit the frame": "La batterie ne va pas sur la frame",
   "Accessory doesn't fit the frame": "L’accessoire ne va pas sur la frame",
+  "Accessory only fits other frames": "L’accessoire ne va que sur d’autres frames",
   "Battery voltage too high for the motors": "Tension de la batterie trop élevée pour les moteurs",
   "Battery voltage too low for the motors": "Tension de la batterie trop faible pour les moteurs",
   "Battery voltage doesn't match the stack": "La tension de la batterie ne correspond pas au stack",

@@ -2,18 +2,18 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText, createCatalog } from './data.js?v=82113fee';
+import { loadCatalog, localText, createCatalog } from './data.js?v=9eec6e70';
 import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=594888f1';
-import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=87906fc9';
+import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=22940b30';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
-import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=94cae39b';
+import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=373b0553';
 import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
-import { batteryFit } from './rules.js?v=c16cd6c9';
+import { batteryFit, fitsFrame } from './rules.js?v=6634f777';
 import { assemble, PROP_SLOTS } from './assembly.js?v=6f42a16f';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=e94a5904';
 import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=dd4ad593';
 import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=9294ec03';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=d29c4a2c';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=9bcfa472';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
@@ -36,6 +36,7 @@ const AXES = ['roll', 'pitch', 'yaw'];
 const INVOLVED = {
   missing_part: [], motor_mount: ['frame', 'motor'], prop_too_large: ['frame', 'prop'], prop_too_small: ['frame', 'prop'],
   prop_mount: ['motor', 'prop'], stack_mount: ['frame', 'stack'], battery_frame: ['frame', 'battery'], accessory_mount: ['frame', 'accessory'],
+  accessory_frame: ['frame', 'accessory'],
   motor_overvoltage: ['motor', 'battery'], motor_undervoltage: ['motor', 'battery'], stack_voltage: ['stack', 'battery'],
   esc_undersized: ['motor', 'stack'], battery_weak: ['motor', 'battery'], battery_undersized: ['frame', 'battery'],
 };
@@ -230,9 +231,20 @@ function computeRoles() {
   }
 }
 
+/**
+ * The parts a picker offers: an accessory that fits only some frames (data.frames) only on those, as the workbench of
+ * the game takes it only there; one that is fitted stays, so it can be taken off.
+ */
+function offeredParts(category) {
+  const parts = catalog.partsIn(category);
+  if (category !== 'accessory') return parts;
+  const fitted = Object.values(state.build.accessories || {});
+  return parts.filter((p) => fitted.includes(p.id) || fitsFrame(p, state.build.frame));
+}
+
 function classesOf(category) {
   const set = new Set();
-  for (const p of catalog.partsIn(category)) for (const r of partRoles.get(p.id)) set.add(r);
+  for (const p of offeredParts(category)) for (const r of partRoles.get(p.id)) set.add(r);
   const order = category === 'video' ? ['analog', 'digital'] : category === 'accessory' ? ACCESSORY_MOUNTS : ROLE_ORDER;
   return order.filter((r) => set.has(r));
 }
@@ -245,10 +257,14 @@ function swapped(part) {
   return b;
 }
 
-/** Fit of a part for the current build: {level: 'ok'|'warn'|'bad', issues: [key]}. */
+/**
+ * Fit of a part for the current build: {level: 'ok'|'warn'|'bad', issues: [key]}. accessory_frame belongs to an
+ * accessory only if that accessory is the one that does not fit the frame.
+ */
 function fitOf(part) {
   const result = catalog.check(swapped(part));
-  const mine = (key) => (INVOLVED[key] || []).includes(part.category);
+  const mine = (key) => (INVOLVED[key] || []).includes(part.category)
+    && !(key === 'accessory_frame' && part.category === 'accessory' && fitsFrame(part, state.build.frame));
   const problems = result.problems.filter(mine);
   const warnings = result.warnings.filter(mine);
   return { level: problems.length ? 'bad' : warnings.length ? 'warn' : 'ok', issues: [...problems, ...warnings] };
@@ -390,7 +406,7 @@ function picker() {
   box.id = 'picker';
   const category = state.category;
   const filter = filterFor(category);
-  const parts = catalog.partsIn(category);
+  const parts = offeredParts(category);
   const current = category === 'accessory' ? null : partOf(state.build[category], category);
   const listId = `list-${category}`;
 

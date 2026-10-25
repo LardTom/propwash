@@ -88,6 +88,14 @@ export function splitId(id) {
   return colon < 0 ? ['minecraft', id] : [id.slice(0, colon), id.slice(colon + 1)];
 }
 
+/** Identifier.compareTo of Minecraft: the path first, then the namespace. */
+export function idCompare(a, b) {
+  const [na, pa] = splitId(a);
+  const [nb, pb] = splitId(b);
+  const cmp = (x, y) => (x < y ? -1 : x > y ? 1 : 0);
+  return cmp(pa, pb) || cmp(na, nb);
+}
+
 // ---------------------------------------------------------------------------------------------------------------
 // Problems and fields (PartDataProblems, JsonFields)
 
@@ -270,6 +278,16 @@ class Fields {
     }
     const items = Array.isArray(v) ? v : [v];
     if (!items.length) this.error(key, 'mindestens eine Id erwartet');
+    return this.ids(key, v, items);
+  }
+
+  optIdList(key) {
+    const v = this.take(key);
+    if (v === null) return [];
+    return this.ids(key, v, Array.isArray(v) ? v : [v]);
+  }
+
+  ids(key, v, items) {
     const out = [];
     items.forEach((item, i) => {
       const where = Array.isArray(v) ? `${key}[${i}]` : key;
@@ -1058,6 +1076,7 @@ function accessory(id, basics, f) {
   const ledPath = ledRaw === null ? [] : readLedPath(f, ledRaw);
   const hangsStraight = f.boolOr('hangs_straight', false);
   const muzzle = f.optVector('muzzle_mm', 3);
+  const frames = f.optIdList('frames');
   if (f.problems.hasErrors()) return null;
   const resolved = resolveBasics(basics, 1.0);
   if (slot === null || size[0] < 0) fail(`${id}: Masse, Halterung und Maße sind Pflicht`);
@@ -1080,7 +1099,7 @@ function accessory(id, basics, f) {
   return {
     kind: 'accessory', id, basics: resolved, slot, widthMm: width, heightMm: height, depthMm: depth, flightBatteryWatts: watts,
     frontalAreaM2: frontal, ledCount: leds, actionCam: camera, lensXMm: lens[0], lensLengthMm: lens[1], ledPathMm: path, hangsStraight,
-    muzzleMm,
+    muzzleMm, frames: [...new Set(frames)].sort(idCompare),
   };
 }
 
