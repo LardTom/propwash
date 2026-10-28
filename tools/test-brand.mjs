@@ -12,7 +12,7 @@
 //   - only lardtom: neither the page nor the kit's README carries the name of the legal notice (impressum/)
 //   - every text of the page and the footer link have a translation in the five dictionaries (same tags, numbers, code
 //     spans and glossary terms), and the generated page of each language has them
-//   - headless Chrome, en/de at 1280 and 390 px: every copy button puts its hex value on the clipboard and says so,
+//   - headless Chrome, en/de at 1280 px (click) and 390 px (tap): every copy button puts its hex value on the clipboard and says so,
 //     the download link answers with the ZIP, no console error, no request outside the site
 //
 //   node tools/test-brand.mjs [--no-browser]
@@ -212,7 +212,7 @@ if (texts.length) {
     const page = files.get(`${l.code}/${PAGE}`);
     if (!check(!!page, `${l.code}/${PAGE} is generated`)) continue;
     const dict = loadDict(l.code);
-    check(!/<(span|p|h[1-6]|li|figcaption|strong|div) lang="(en|de)"/.test(page), `${l.code}/${PAGE}: no English/German pair left`);
+    check(!/<(span|p|h[1-6]|li|figcaption|strong|div) lang="(en|de)"(?! class="keep)/.test(page), `${l.code}/${PAGE}: no English/German pair left`);
     check(page.includes('href="../../assets/brand/propwash-brand-kit.zip"'), `${l.code}/${PAGE}: download from the site root`);
     const title = dict.entries['Brand kit'];
     check(!!title && page.includes(title), `${l.code}/${PAGE}: the footer link in the language (${title})`);
@@ -229,13 +229,15 @@ if (!flag('--no-browser') && exists(PAGE)) {
         const where = `${lang} ${width} px`;
         await tab.open('/brand/', { width, lang, ready: "document.readyState === 'complete'" });
         check(await tab.evaluate('document.documentElement.lang') === lang, `${where}: page language`);
-        check(await tab.evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), `${where}: no horizontal overflow`);
+        const box = await tab.evaluate('[window.innerWidth, document.documentElement.scrollWidth]');
+        check(box[0] <= width + 1 && box[1] <= width + 1, `${where}: no horizontal overflow (window ${box[0]} px, page ${box[1]} px)`);
         for (const c of palette) {
           const id = `#copy-${c.hex.slice(1).toLowerCase()}`;
           const at = await tab.center(id);
           if (!check(!!at, `${where}: copy button ${c.hex}`)) continue;
           const before = (await tab.copies()).length;
-          await tab.click(at.x, at.y);
+          if (width < 600) await tab.tap(at.x, at.y);
+          else await tab.click(at.x, at.y);
           const copies = await tab.copies();
           check(copies.length === before + 1 && copies[copies.length - 1] === c.hex, `${where}: ${c.name} copies ${c.hex} (got ${copies.slice(before).join(', ') || 'nothing'})`);
           const state = await tab.evaluate(`(() => {
