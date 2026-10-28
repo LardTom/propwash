@@ -2570,8 +2570,8 @@ function toast(message, level) {
 
 /**
  * Texts from the web export (names, help, rules) with no-break spaces between numbers and units; on a translated page
- * help, rules, warnings, statuses and tune groups in its language (part and preset names stay English, website design
- * 0.6.0, 3.2.5).
+ * help, rules, warnings, statuses, tune groups and paint slots in its language (part and preset names stay English,
+ * website design 0.6.0, 3.2.5).
  */
 function pageTexts(c) {
   for (const name of ['partName', 'shortName', 'presetName']) {
@@ -2582,7 +2582,7 @@ function pageTexts(c) {
     const get = c[name];
     c[name] = (...args) => glue(tr(get(...args)));
   }
-  for (const name of ['statusText', 'tuneGroupName']) {
+  for (const name of ['statusText', 'tuneGroupName', 'paintSlotName']) {
     const get = c[name];
     c[name] = (...args) => tr(get(...args));
   }
