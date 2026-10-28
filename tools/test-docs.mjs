@@ -8,7 +8,9 @@
 // 2. Completeness against the mod's code: every API type has a description, every field the part reader reads is
 //    documented (and nothing else), every server.json setting and every event is explained, the API history covers
 //    the current API version, the world rules carry both languages and their race classification, every example
-//    command is valid, and the German rules for add-ons follow the current ADDONS.md (hash and block structure).
+//    command is valid, the German rules for add-ons follow the current ADDONS.md (hash and block structure), the API
+//    page lists the build problems and warnings of DroneBuild in both languages, and every accessory field that is new
+//    in Propwash 0.6.0 is named in the API 1.7 overview (row "Accessory shape" and the version history).
 // 3. Every page: unique ids, every in-page anchor and every relative link or image exists, English and German texts
 //    come in pairs, tags are balanced, German texts use real umlauts, no local paths, and no term of the local
 //    denylist (the same file the mod's public export uses: PROPWASH_EXPORT_DENYLIST, otherwise
@@ -24,9 +26,9 @@ import { computeHashes, stampHtml } from './stamp-assets.mjs';
 import { checkGamerules } from './docs/extract.mjs';
 import { RECIPES, checkCommand } from './docs/pages/gamerules.mjs';
 import { SERVER_FIELDS } from './docs/pages/guide.mjs';
-import { EVENT_INFO, apiHistoryProblem, addonRulesProblem } from './docs/pages/api.mjs';
+import { EVENT_INFO, API_HISTORY, apiHistoryProblem, addonRulesProblem } from './docs/pages/api.mjs';
 import { referenceProblems } from './docs/pages/reference.mjs';
-import { partsFormatProblems } from './docs/pages/parts-format.mjs';
+import { FIELDS, partsFormatProblems } from './docs/pages/parts-format.mjs';
 
 const quiet = process.argv.includes('--quiet');
 let passed = 0;
@@ -103,6 +105,42 @@ none(rulesProblem ? [rulesProblem] : [], 'Regeln für Add-ons: deutsche Fassung 
 none(data.gamerules.rules.map((r) => checkCommand(data.gamerules.rules, r.example)).filter(Boolean), 'Beispielbefehle der Regeln gültig');
 none(RECIPES.flatMap((r) => r.commands.map((c) => checkCommand(data.gamerules.rules, c))).filter(Boolean), 'Befehle der Rezepte gültig');
 none(data.controls.keys.filter((k) => !k.title || !k.title.en || !k.title.de).map((k) => `Taste ${k.name} ohne Text`), 'Tasten mit Texten en/de');
+
+// The list under "What Propwash checks" (docs/api/#parts-checks) is the one DroneBuild checks: problems and warnings in
+// their order, in English and German. Notes in brackets after a key are not part of the list.
+const apiHtml = rendered['docs/api/index.html'] || '';
+const issues = data.parts.issues;
+ok(!!(issues && issues.problems && issues.problems.length && issues.warnings && issues.warnings.length), 'Bauprobleme und Warnungen in parts.json (aus DroneBuild, Doku-Daten neu extrahieren)');
+const checksAt = apiHtml.indexOf('id="parts-checks"');
+const checksBlock = checksAt < 0 ? '' : apiHtml.slice(checksAt, apiHtml.indexOf('</section>', checksAt));
+const issueKeys = (text) => [...(text || '').replace(/\([^()]*\)/g, '').matchAll(/<code>([a-z0-9_]+)<\/code>/g)].map((m) => m[1]);
+for (const [lang, re] of [
+  ['en', /<p lang="en">Not buildable \(problems\): ([\s\S]*?)\. Warnings: ([\s\S]*?)\. Texts:/],
+  ['de', /<p lang="de">Nicht baubar \(Probleme\): ([\s\S]*?)\. Warnungen: ([\s\S]*?)\. Texte:/],
+]) {
+  const m = checksBlock.match(re);
+  if (!ok(!!m, `docs/api/index.html: Abschnitt „Was Propwash prüft“ mit Problemen und Warnungen (${lang})`)) continue;
+  for (const [i, list] of [[1, 'problems'], [2, 'warnings']]) {
+    const shown = issueKeys(m[i]);
+    const expected = (issues && issues[list]) || [];
+    ok(JSON.stringify(shown) === JSON.stringify(expected), `docs/api/index.html: ${list} (${lang}) wie DroneBuild ${shown.join(', ') === expected.join(', ') ? '' : `(Seite: ${shown.join(', ')}; DroneBuild: ${expected.join(', ')})`}`);
+  }
+}
+
+// Accessory fields new in Propwash 0.6.0 (parts format) belong to API 1.7: the row "Accessory shape" of the API 1.7
+// overview and the 1.7 entry of the version history name each of them, in English and German.
+const shapeRow = (apiHtml.match(/<tr><th scope="row"><span lang="en">Accessory shape<\/span>[\s\S]*?<\/tr>/) || [''])[0];
+ok(!!shapeRow, 'docs/api/index.html: Zeile „Zubehör-Form“ in der Übersicht API 1.7');
+const onlyLang = (html, lang) => html.replace(new RegExp(`<span lang="${lang === 'en' ? 'de' : 'en'}">[\\s\\S]*?</span>`, 'g'), '');
+const history17 = API_HISTORY.find((h) => h.version === '1.7');
+const newAccessoryFields = FIELDS.accessory.filter((f) => /^Since Propwash 0\.6\.0/.test(f.desc.en)).map((f) => f.path);
+ok(newAccessoryFields.length > 0, 'Zubehör-Felder seit Propwash 0.6.0 im Teile-Format gefunden');
+for (const field of newAccessoryFields) {
+  for (const lang of ['en', 'de']) {
+    ok(onlyLang(shapeRow, lang).includes(`<code>${field}</code>`), `docs/api/index.html: Zeile „Zubehör-Form“ (${lang}) nennt das Zubehör-Feld ${field}`);
+    ok(!!history17 && history17.text[lang].includes(`<code>${field}</code>`), `API_HISTORY 1.7 (${lang}) nennt das Zubehör-Feld ${field}`);
+  }
+}
 
 // 3. Pages
 

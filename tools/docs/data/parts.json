@@ -131,6 +131,7 @@
       "action_cam",
       "flight_battery_w",
       "fov_deg",
+      "frames",
       "frontal_area_m2",
       "hangs_straight",
       "horizon_levelling",
@@ -151,6 +152,27 @@
       "slot",
       "stabilization",
       "x_mm"
+    ]
+  },
+  "issues": {
+    "problems": [
+      "missing_part",
+      "motor_mount",
+      "prop_too_large",
+      "prop_too_small",
+      "prop_mount",
+      "stack_mount",
+      "battery_frame",
+      "accessory_mount",
+      "accessory_frame"
+    ],
+    "warnings": [
+      "motor_overvoltage",
+      "motor_undervoltage",
+      "stack_voltage",
+      "esc_undersized",
+      "battery_weak",
+      "battery_undersized"
     ]
   },
   "armKeys": [
