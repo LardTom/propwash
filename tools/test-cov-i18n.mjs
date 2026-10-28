@@ -20,7 +20,10 @@
 //     their scripts ran: the visible text is checked with the “still English” rule of test-i18n (3 or more English
 //     function words and more than a quarter of the words) and against the English keys of the dictionary; links the
 //     configurator and the converter draw to a translated page (landing page, configurator, converter, add-ons,
-//     roadmap, changelog) stay in the language tree
+//     roadmap, changelog) stay in the language tree; no page shows a text key of configurator/i18n.js instead of its
+//     text (“osdPresets.race”); the names of the paint slots (catalog.json, tab Paint and the label of the 3D view in
+//     the tab Paint) are in every dictionary and on the page in its language; a code with the OSD layout of the preset
+//     Race, opened, names it in the tab OSD in the page's language
 //
 //   node tools/test-cov-i18n.mjs [--lang es] [--no-browser] [--keep] [--list] [--chrome <path>]
 //
@@ -168,6 +171,7 @@ function scriptTexts() {
     'stathelp.json (figure explanations, ranges)': [...strings(entry('statHelp')), ...strings(entry('ui.statRange')), ...strings(entry('ui.statOutside')), ...strings(entry('ui.statOutsideLong')), ...strings(entry('ui.statInfo'))],
     'beginner.json (builds for beginners)': strings(entry('beginner')),
     'convert.js and the page /convert/': strings(entry('convert')),
+    'paint slot names of catalog.json (tab Paint, 3D view)': catalog.paint.slots.map((s) => s.name.en_us),
     'directory and add-on bar': [...strings(entry('addons')), registry.addons.flatMap((a) => (a.text ? [a.text.en] : [])), ...literal].flat(),
   };
   const ex = extract();
@@ -206,6 +210,25 @@ const VISIBLE_TEXT = String.raw`(() => {
   const tip = document.querySelector('[data-stat-tip]');
   if (tip && tip.checkVisibility()) out.push({ tag: 'tip', cls: 'stat-tip', text: tip.innerText.replace(/\s+/g, ' ').trim() });
   return out;
+})()`;
+
+const VIEWER_HOOK = "document.addEventListener('propwash:viewer', (e) => { window.__viewer = e.detail; });";
+const TEXT_KEY = /(?<![\p{L}\d.\/])[a-z][A-Za-z]*(?:\.[a-z][A-Za-z_]*)+/gu;
+const isTextKey = (key) => {
+  const group = entry(key.split('.')[0]);
+  return !!group && typeof group === 'object' && !Array.isArray(group);
+};
+const slotName = (key) => catalog.paint.slots.find((s) => s.key === key).name.en_us;
+const OSD_RACE_CODE = `(async () => {
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  document.querySelector('[data-tab="osd"]').click();
+  await wait(200);
+  const include = document.querySelector('[data-panel-osd] .check--strong input');
+  if (!include.checked) include.click();
+  await wait(200);
+  document.querySelector('#osd-race').click();
+  await wait(400);
+  return document.querySelector('[data-code]').textContent;
 })()`;
 
 const ROOT_LINKS = String.raw`[...document.querySelectorAll('main a[href]')].map((a) => new URL(a.href))
@@ -294,17 +317,50 @@ async function inBrowser(dir) {
       if (same && !(words.length >= 4 && words.some((w) => ENGLISH.has(w)))) continue;
       sources.set(en.toLowerCase(), en);
     }
+    const want = (en) => {
+      const k = normalize(en);
+      return Object.prototype.hasOwnProperty.call(dict.entries, k) ? plain(dict.entries[k]) : null;
+    };
     const visit = async (pathPart, ready, prepare, label = '') => {
       const p = await b.page({ lang: 'en' });
+      await p.send('Page.addScriptToEvaluateOnNewDocument', { source: VIEWER_HOOK });
       await p.open(`${base}/${tree}/${pathPart}`, { width: 1280, ready });
       loads++;
       if (prepare) await prepare(p);
       await sleep(400);
       const blocks = await p.evaluate(VISIBLE_TEXT);
       const english = blocks.filter((x) => stillEnglish(withoutNames(x.text)) || sources.has(x.text.toLowerCase()));
+      const keys = [...new Set(blocks.flatMap((x) => [...x.text.matchAll(TEXT_KEY)].map((m) => m[0]).filter(isTextKey)))];
       const links = await p.evaluate(ROOT_LINKS);
-      found.push({ page: `${tree}/${pathPart}${label}`, blocks: blocks.length, english, links, errors: p.errors.slice() });
+      found.push({ page: `${tree}/${pathPart}${label}`, blocks: blocks.length, english, keys, links, errors: p.errors.slice() });
       await p.close();
+    };
+    const paintNames = async (p) => {
+      const where = `no. 34 (b) /${tree}/configurator/ (tab paint)`;
+      const rows = await p.evaluate("[...document.querySelectorAll('[data-paint-row]')].map((r) => ({ slot: r.dataset.paintRow, name: r.querySelector('.paint-row__name').textContent }))");
+      check(rows.length >= 8, `${where}: paint slots of the build listed (${rows.map((r) => r.slot).join(', ')})`);
+      const wrong = rows.filter((r) => want(slotName(r.slot)) === null || normalize(r.name) !== want(slotName(r.slot)));
+      check(!wrong.length, `${where}: the paint slot names are in the language of the page – ${wrong.length} of ${rows.length} not (${wrong.slice(0, 4).map((r) => `${r.slot} “${r.name}”, want “${want(slotName(r.slot))}”`).join('; ')})`);
+      await p.evaluate("(document.querySelector('[data-viewer]').scrollIntoView({ block: 'start', behavior: 'instant' }), scrollBy({ top: -70, behavior: 'instant' }), true)");
+      await sleep(200);
+      const view = await p.evaluate(`(() => {
+        const r = document.querySelector('[data-viewer-canvas] canvas').getBoundingClientRect();
+        return { x: r.left, y: r.top, w: innerWidth, h: innerHeight, points: window.__viewer ? window.__viewer.pickPoints().filter((pt) => pt.paintSlot) : [] };
+      })()`);
+      const shown = new Map();
+      for (const pt of view.points) {
+        const x = view.x + pt.x;
+        const y = view.y + pt.y;
+        if (shown.has(pt.paintSlot) || !(x > 0 && y > 0 && x < view.w && y < view.h)) continue;
+        await p.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x, y, button: 'none', buttons: 0, pointerType: 'mouse' });
+        await sleep(200);
+        shown.set(pt.paintSlot, await p.evaluate("(() => { const l = document.querySelector('[data-pick-label]'); return l.hidden ? null : (l.querySelector('.viewer__pick-kind') || {}).textContent || ''; })()"));
+      }
+      await p.send('Input.dispatchMouseEvent', { type: 'mouseMoved', x: 2, y: 2, button: 'none', buttons: 0, pointerType: 'mouse' });
+      await sleep(200);
+      check(shown.size >= 4, `${where}: the pointer on the drone in the 3D view names paint slots (${[...shown.keys()].join(', ')})`);
+      const badHover = [...shown].filter(([slot, kind]) => want(slotName(slot)) === null || normalize(kind || '') !== want(slotName(slot)));
+      check(!badHover.length, `${where}: the label of the 3D view names the paint slot in the language of the page – ${badHover.length} of ${shown.size} not (${badHover.slice(0, 4).map(([slot, kind]) => `${slot} “${kind}”, want “${want(slotName(slot))}”`).join('; ')})`);
     };
     await visit('configurator/', CFG_READY, async (p) => {
       await p.evaluate(`(() => { const s = document.querySelector('[data-preset]'); s.value = 'propwash:freestyle'; s.dispatchEvent(new Event('change', { bubbles: true })); return true; })()`);
@@ -315,8 +371,21 @@ async function inBrowser(dir) {
       await visit('configurator/', CFG_READY, async (p) => {
         await p.evaluate(`(document.querySelector('[data-tab="${tab}"]').click(), true)`);
         await sleep(300);
+        if (tab === 'paint') await paintNames(p);
       }, ` (tab ${tab})`);
     }
+    await visit('configurator/', CFG_READY, async (p) => {
+      const code = await p.evaluate(OSD_RACE_CODE);
+      check(code.startsWith('PW3-'), `no. 34 (b) /${tree}/configurator/: a PW3 code with the OSD layout “race” (${code})`);
+      await p.open(`${base}/${tree}/configurator/#${code}`, { width: 1280, ready: CFG_READY });
+      await p.evaluate("(document.querySelector('[data-tab=\"osd\"]').click(), true)");
+      await sleep(300);
+      const info = await p.evaluate("(() => { const i = document.querySelector('#osd-imported'); const o = i && i.closest('.osd-option'); return o ? o.querySelector('.osd-option__text > span').textContent : null; })()");
+      const template = want(entry('ui.osdImportedInfo')[0]);
+      const preset = want(entry('osdPresets.race.title')[0]);
+      const expected = template && preset ? template.replace('{preset}', preset).replace('{count}', '0') : null;
+      check(expected && info === expected, `no. 34 (b) /${tree}/configurator/ (tab osd, opened code): the layout from the code reads “${expected}” (got “${info}”)`);
+    }, ' (tab osd, opened code with an OSD layout)');
     await visit('roadmap/', "document.querySelector('[data-rm-root]') && document.querySelector('[data-rm-root]').children.length > 0");
     await visit('changelog/', "!!document.querySelector('[data-cl-tally]') && !document.querySelector('[data-cl-tally]').hidden && !!document.querySelector('[data-cl-root] article')");
     await visit('convert/', CV_READY, async (p) => {
@@ -331,6 +400,7 @@ async function inBrowser(dir) {
       const known = Object.entries(KNOWN_RED).find(([k]) => f.page.endsWith(`/${k}`));
       if (known) lock(known[1], !f.english.length, message);
       else check(!f.english.length, message);
+      check(!f.keys.length, `no. 34 (b) /${f.page}: no text key of configurator/i18n.js shown instead of its text (${f.keys.slice(0, 3).join(' | ')})`);
       if (/\/(configurator|convert)\//.test(f.page)) check(!f.links.length, `no. 34 (b) /${f.page}: links the scripts draw to translated pages stay in /${tree}/ (${f.links.slice(0, 2).join(' | ')})`);
     }
     if (flag('--list')) for (const f of found) for (const x of f.english) console.log(`  english /${f.page} ${x.tag}${x.cls ? `.${x.cls}` : ''}: ${x.text.slice(0, 140)}`);
