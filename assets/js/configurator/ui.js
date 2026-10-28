@@ -1801,6 +1801,7 @@ function banner(message, level, withUndo, action = null) {
         undoSnapshot = null;
         $('[data-preset]').value = state.presetId || '';
         refreshAll();
+        scheduleHash();
         banner('');
       },
     }, t('ui.undo')) : null,
