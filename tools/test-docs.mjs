@@ -26,7 +26,7 @@ import { computeHashes, stampHtml } from './stamp-assets.mjs';
 import { checkGamerules } from './docs/extract.mjs';
 import { RECIPES, checkCommand } from './docs/pages/gamerules.mjs';
 import { SERVER_FIELDS } from './docs/pages/guide.mjs';
-import { EVENT_INFO, API_HISTORY, apiHistoryProblem, addonRulesProblem } from './docs/pages/api.mjs';
+import { EVENT_INFO, API_HISTORY, ISSUE_NOTES, apiHistoryProblem, addonRulesProblem } from './docs/pages/api.mjs';
 import { referenceProblems } from './docs/pages/reference.mjs';
 import { FIELDS, partsFormatProblems } from './docs/pages/parts-format.mjs';
 
@@ -126,6 +126,8 @@ for (const [lang, re] of [
     ok(JSON.stringify(shown) === JSON.stringify(expected), `docs/api/index.html: ${list} (${lang}) wie DroneBuild ${shown.join(', ') === expected.join(', ') ? '' : `(Seite: ${shown.join(', ')}; DroneBuild: ${expected.join(', ')})`}`);
   }
 }
+const checkedKeys = issues ? [...issues.problems, ...issues.warnings] : [];
+none(Object.keys(ISSUE_NOTES).filter((k) => !checkedKeys.includes(k)).map((k) => `ISSUE_NOTES erklärt ${k}, das DroneBuild nicht prüft (tools/docs/pages/api.mjs)`), 'Hinweise der Problemliste gehören zu geprüften Schlüsseln');
 
 // Accessory fields new in Propwash 0.6.0 (parts format) belong to API 1.7: the row "Accessory shape" of the API 1.7
 // overview and the 1.7 entry of the version history name each of them, in English and German.
