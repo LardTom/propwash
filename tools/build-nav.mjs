@@ -26,6 +26,7 @@ export const HAND_PAGES = [
   ['convert/index.html', '../', 'convert'],
   ['addons/index.html', '../', 'addons'],
   ['addons/just-more-parts/index.html', '../../', 'addons-sub'],
+  ['brand/index.html', '../', 'brand'],
 ];
 
 /** A page with the current navigation and footer links (options as for siteNav). */
