@@ -64,9 +64,11 @@ function pairTexts(data) {
   return out;
 }
 
-// Part texts of the configurator catalog: every en_us text except names (the item names of the game).
+// Part texts of the configurator catalog: every en_us text except names (the item names of the game); the names of
+// the paint slots are labels of the paint tab.
 function catalogTexts(data) {
   const out = [];
+  for (const slot of (data.paint && data.paint.slots) || []) if (slot.name && typeof slot.name.en_us === 'string') out.push(slot.name.en_us);
   const visit = (v, key) => {
     if (Array.isArray(v)) { v.forEach((x) => visit(x, key)); return; }
     if (!v || typeof v !== 'object') return;

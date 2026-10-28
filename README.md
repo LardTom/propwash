@@ -640,7 +640,7 @@ node tools/test-layout.mjs                        # every page × language × 36
   English/German pages both languages as before, on the others one language from `assets/i18n/<lang>.json`. The
   configurator and the converter go through `assets/js/configurator/i18n.js`: on a translated page `t()` gives the
   translation of the English text, `tr()` that of a text from the web export (help, rules, warnings, statuses, tune
-  groups; part and preset names stay English), `num()` writes numbers in the language and `pageHref()` keeps links to
+  groups, paint slots; part and preset names stay English), `num()` writes numbers in the language and `pageHref()` keeps links to
   translated pages in the language tree; both pages call `loadTexts()` before their first text.
 - **Head block:** `node tools/build-nav.mjs` also writes the head of the hand-written pages (`siteHead` in
   `tools/site-nav.mjs`, found by its marker `<script data-pw-head>`): `pw-root`, and once another language is active

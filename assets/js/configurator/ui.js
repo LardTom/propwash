@@ -1447,7 +1447,7 @@ function importedOsdInfo() {
   if (!osd) return '';
   try {
     const json = JSON.parse(osd.json);
-    const preset = OSD_PRESETS.includes(json.preset) ? t(`osdPresets.${json.preset}`) : String(json.preset || '–');
+    const preset = OSD_PRESETS.includes(json.preset) ? t(`osdPresets.${json.preset}.title`) : String(json.preset || '–');
     const count = json.elements ? Object.keys(json.elements).length : 0;
     return t(count === 1 ? 'ui.osdImportedInfoOne' : 'ui.osdImportedInfo', { preset, count });
   } catch {
@@ -2570,8 +2570,8 @@ function toast(message, level) {
 
 /**
  * Texts from the web export (names, help, rules) with no-break spaces between numbers and units; on a translated page
- * help, rules, warnings, statuses and tune groups in its language (part and preset names stay English, website design
- * 0.6.0, 3.2.5).
+ * help, rules, warnings, statuses, tune groups and paint slots in its language (part and preset names stay English,
+ * website design 0.6.0, 3.2.5).
  */
 function pageTexts(c) {
   for (const name of ['partName', 'shortName', 'presetName']) {
@@ -2582,7 +2582,7 @@ function pageTexts(c) {
     const get = c[name];
     c[name] = (...args) => glue(tr(get(...args)));
   }
-  for (const name of ['statusText', 'tuneGroupName']) {
+  for (const name of ['statusText', 'tuneGroupName', 'paintSlotName']) {
     const get = c[name];
     c[name] = (...args) => tr(get(...args));
   }

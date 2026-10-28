@@ -11,6 +11,8 @@
 //   - battery plugged in: the default preset is drawn with the mounted stack and without plugs and leads
 //   - "Undo" in the banner after a preset (over the opened code P4 with a missing add-on, over another preset): the
 //     build, the share box and the address are the ones from before, and reloading opens that build
+//   - a code with the OSD layout of the preset Race: opened, its OSD tab offers “Layout from the opened code” with
+//     “Preset Race, 0 elements set individually” (German “Preset Rennen, …”)
 //   - no console errors or uncaught exceptions
 //
 //   node tools/test-configurator-flows.mjs [--post <text file>] [--shots <dir>] [--chrome <path>]
@@ -304,6 +306,34 @@ async function main() {
       check(restored.hash === freeBuild.code, `undo preset ${lang}: after “${undoLabel}” the address is the freestyle code ${freeBuild.code} (${restored.hash})`);
       const freeAgain = await reload(`undo preset reload ${lang}`);
       check(freeAgain.code === freeBuild.code && freeAgain.frame === freeBuild.frame, `undo preset ${lang}: reloading after “${undoLabel}” opens the freestyle build (${freeAgain.code}, frame “${freeAgain.frame}”)`);
+
+      // ---- An opened code with an OSD layout: the OSD tab names its preset ----
+      await open(`${base}/configurator/`, 1280, `osd ${lang}`, cfgReady);
+      const osdCode = await evaluate(`(async () => {
+        const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+        document.querySelector('#tab-osd').click();
+        await wait(200);
+        const include = document.querySelector('[data-panel-osd] .check--strong input');
+        if (!include.checked) include.click();
+        await wait(200);
+        document.querySelector('#osd-race').click();
+        await wait(400);
+        return document.querySelector('[data-code]').textContent;
+      })()`);
+      check(osdCode.startsWith('PW3-'), `osd ${lang}: the share box shows a PW3 code with the OSD layout “race” (${osdCode})`);
+      await open(`${base}/configurator/#${osdCode}`, 1280, `osd opened ${lang}`, cfgReady);
+      const osdInfo = await evaluate(`(async () => {
+        document.querySelector('#tab-osd').click();
+        await new Promise((r) => setTimeout(r, 200));
+        const input = document.querySelector('#osd-imported');
+        const option = input && input.closest('.osd-option');
+        return option ? { checked: input.checked, title: option.querySelector('.osd-option__text > strong').textContent,
+          info: option.querySelector('.osd-option__text > span').textContent } : null;
+      })()`);
+      const wantInfo = text('ui.osdImportedInfo', lang).replace('{preset}', text('osdPresets.race.title', lang)).replace('{count}', '0');
+      check(osdInfo && osdInfo.checked && osdInfo.title === text('ui.osdImported', lang), `osd opened ${lang}: the OSD tab offers “${text('ui.osdImported', lang)}”, chosen (${JSON.stringify(osdInfo)})`);
+      check(osdInfo && osdInfo.info === wantInfo, `osd opened ${lang}: the layout from the code reads “${wantInfo}” (got “${osdInfo && osdInfo.info}”)`);
+      await shot(`configurator-osd-opened-${lang}-1280`);
     }
   } finally {
     browser.close();
@@ -319,7 +349,7 @@ async function main() {
     console.error(`FAIL: ${failures.length} of ${checks} checks failed`);
     process.exit(1);
   }
-  console.log(`flows: ${checks} checks passed (converter with ${expected.found} codes, old link, pasted code, figure explanations, builds for beginners, undo in the banner; `
+  console.log(`flows: ${checks} checks passed (converter with ${expected.found} codes, old link, pasted code, figure explanations, builds for beginners, undo in the banner, OSD layout of an opened code; `
     + `en/de at 1280 and 390 px)${shots ? `; screenshots in ${shots}` : ''}`);
 }
 
