@@ -311,8 +311,9 @@ What comes from the code (`tools/docs/extract.mjs`, written to `tools/docs/data/
   `docs/gamerules/gamerules.json`
 - **API reference**: every public type and member of `de.lardtom.propwash.api`, read from the Java sources
   (`tools/docs/java-api.mjs`), the API version and the types from outside the package that the API exposes
-- **parts format**: the field names the part reader (`parts/PartJson.java`) reads per category, the enum values, the
-  built-in mounts, parts and chemistries, and real part files as examples
+- **parts format**: the field names the part reader (`parts/PartJson.java`) reads per category, the build problems and
+  warnings in the order `build/DroneBuild.java` checks them, the enum values, the built-in mounts, parts and chemistries,
+  and real part files as examples
 - **keys and switch functions**: `KeyDefaults`, `SwitchFunction` and the language files
 - **server.json**: settings, defaults and limits from `ServerRulesConfig`
 - **race classification**: whether each world rule is race-relevant or neutral (`WorldRuleSpecs`), added to the world
@@ -325,7 +326,8 @@ What comes from the code (`tools/docs/extract.mjs`, written to `tools/docs/data/
 The explanations are written in `tools/docs/pages/*.mjs` (English and German side by side). `tools/test-docs.mjs`
 checks that the pages match the renderer, that every API type, part field, server setting and event has its
 explanation (and none is left for something that is gone), that the API history covers the current API version, that
-every example command is valid, that every world rule is classified for races, that the German rules for add-ons
+the API page lists the build problems and warnings of `DroneBuild` and names every accessory field added in Propwash
+0.6.0 in its API 1.7 overview, that every example command is valid, that every world rule is classified for races, that the German rules for add-ons
 follow the current `ADDONS.md` (hash and structure), and on every page: unique ids, working anchors and local links, English and German in
 pairs, balanced tags, real umlauts in German, and no local paths or terms from the local denylist. When a release adds
 something, the test names the file and the entry to write. The denylist is not part of this repository: the test reads
