@@ -4,6 +4,7 @@
 
 import { loadCatalog, localText, createCatalog } from './data.js?v=9eec6e70';
 import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=594888f1';
+import { parseUnknown, unknownId, unknownMarker, SHORT_KEY_PREFIX } from './sharecode3.js?v=594888f1';
 import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=22940b30';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
 import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=373b0553';
@@ -1623,28 +1624,57 @@ function lostPart(before, build) {
 }
 
 /**
- * Parts of an opened code that were unknown, once their add-on is here: the build is written with the heads of that
- * code (carry) and read again with the current catalog, like opening the code now. Returns the decoded result if a
- * part was resolved (state takes its build, carry and add-ons), else null and the state stays.
+ * A placeholder of an opened code ('pw3.unknown:…', sharecode3.js) read again with the current tables, like the
+ * reader does: the add-on's part by its number in the parts table or by its path; a placeholder still, if the number
+ * is not in the table (then under the add-on's namespace, once a loaded jar names the code's short id). Other ids stay.
+ */
+function readPlaceholder(id, tables) {
+  const unknown = parseUnknown(id);
+  if (!unknown) return id;
+  const namespace = unknown.key.startsWith(SHORT_KEY_PREFIX) ? tables.namespaceOfShort(Number(unknown.key.slice(SHORT_KEY_PREFIX.length))) : unknown.key;
+  if (!namespace) return id;
+  if (unknown.number === 0) return `${namespace}:${unknown.path}`;
+  const table = tables.table(namespace);
+  const entry = table && table.entry(unknown.kind, unknown.number);
+  return entry ? `${namespace}:${entry.id}` : unknownId(namespace, unknown.kind, unknown.number, null);
+}
+
+/**
+ * Parts of an opened code that were unknown, once their add-on is here: each of them is read again on its own, by its
+ * number or path, with the current catalog, like opening the code now – also when other parts of the build were
+ * changed or taken off since. Returns true if a part was resolved (state takes the build, the heads its placeholders
+ * still need and the add-ons the page still lacks), else false and the state stays.
  */
 function resolveUnknown(before) {
-  const unknown = (c) => buildIds(state.build).filter((id) => id && !c.part(id)).length;
-  const was = unknown(before);
-  if (!was) return null;
-  let result;
-  try {
-    result = catalog.decode(encodeBuild({ build: state.build, paint: null, tune: null, osd: null, name: null }, state.carry, state.addons));
-  } catch {
-    return null;
+  const unknown = (c, build) => buildIds(build).filter((id) => id && !c.part(id)).length;
+  const was = unknown(before, state.build);
+  if (!was) return false;
+  const tables = catalog.shareTables();
+  const moved = new Map();
+  const read = (id) => {
+    if (!id || before.part(id)) return id;
+    const next = readPlaceholder(id, tables);
+    const from = parseUnknown(id);
+    const to = parseUnknown(next);
+    if (from && to && from.key !== to.key) moved.set(to.key, from.key);
+    return unknownMarker(next) ? next : tables.replacement(next);
+  };
+  const build = { ...state.build, accessories: {} };
+  for (const field of FIELDS) build[field] = read(state.build[field]);
+  for (const [mount, id] of Object.entries(state.build.accessories || {})) build.accessories[mount] = read(id);
+  if (unknown(catalog, build) >= was) return false;
+  const carry = new Map();
+  for (const id of buildIds(build)) {
+    const placeholder = parseUnknown(id);
+    if (!placeholder || carry.has(placeholder.key)) continue;
+    const key = placeholder.key;
+    const head = state.carry.get(key) || state.carry.get(moved.get(key));
+    if (head) carry.set(key, moved.has(key) ? { ...head, namespace: key } : head);
   }
-  if (!result.ok) return null;
-  const b = result.content.build;
-  const still = buildIds(b).filter((id) => id && !catalog.part(id)).length;
-  if (still >= was) return null;
-  state.build = { ...b, accessories: { ...(b.accessories || {}) } };
-  state.carry = result.carry || new Map();
-  state.addons = codeAddons(result.namespaces);
-  return result;
+  state.build = build;
+  state.carry = carry;
+  state.addons = new Map([...state.addons].filter(([namespace]) => !tables.installed(namespace)));
+  return true;
 }
 
 /**
