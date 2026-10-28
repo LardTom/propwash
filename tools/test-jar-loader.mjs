@@ -913,6 +913,68 @@ async function browserTests(jars) {
         if (how === 'link') await shot(`jar-code-then-jar-${lang}-1280`);
       }
     }
+
+    // The same kind of code with three parts of the add-on (frame and motor by their numbers, the LED ring by its path),
+    // one of them changed before the jar comes – the ring taken off or the frame swapped for a Propwash frame: opening
+    // the jar resolves the add-on's other parts all the same, and the field's note or the link's banner stop asking for
+    // the jar (fault AUTO16-1).
+    const tinyFrame = `${NS}:tiny_frame`;
+    const fastMotor = `${NS}:fast_motor`;
+    const ring = `${NS}:ring`;
+    const whoop = c.presetBuild('propwash:whoop');
+    const threeCode = c.encode({ build: { ...whoop, frame: tinyFrame, motor: fastMotor, accessories: { bottom: ring } }, paint: null, tune: null, osd: null, name: null });
+    const edits = {
+      ring: { cat: 'accessory', id: '', mount: 'bottom', build: { ...whoop, frame: tinyFrame, motor: fastMotor, accessories: {} } },
+      frame: { cat: 'frame', id: whoop.frame, mount: '', build: { ...whoop, motor: fastMotor, accessories: { bottom: ring } } },
+    };
+    const pick = (cat, id, mount) => evaluate(`(async () => {
+      document.querySelector('[data-slots] [data-cat="${cat}"]').click();
+      await new Promise((r) => setTimeout(r, 150));
+      const all = document.querySelector('[data-picker] [data-cls="all"]');
+      if (all) { all.click(); await new Promise((r) => setTimeout(r, 150)); }
+      const option = [...document.querySelectorAll('[data-picker] [role=option]')].find((o) => o.dataset.id === ${JSON.stringify(id)} && (${JSON.stringify(!mount)} || o.dataset.mount === ${JSON.stringify(mount)}));
+      if (!option) return false;
+      option.click();
+      await new Promise((r) => setTimeout(r, 400));
+      return true;
+    })()`);
+    for (const [lang, how, edit] of [['en', 'paste', 'ring'], ['en', 'link', 'frame'], ['de', 'paste', 'frame'], ['de', 'link', 'ring']]) {
+      language = lang;
+      const tag = `${edit} changed, ${how} ${lang}`;
+      const unknownWord = text('ui.unknownPart', lang);
+      const switched = text('addons.buildSwitched', lang).split('{name}')[0].slice(0, 30);
+      const unknownIn = (s) => s.filter((x) => x.text.includes(unknownWord) || x.text.includes('?') || x.text.includes(`${NS}:`)).map((x) => x.cat);
+      const want = c.encode({ build: edits[edit].build, paint: null, tune: null, osd: null, name: null });
+      if (how === 'paste') {
+        await open(`${base}/configurator/`, 1280);
+        await evaluate(`(() => { const i = document.querySelector('[data-import]'); i.value = ${JSON.stringify(threeCode)}; i.dispatchEvent(new Event('input', { bubbles: true })); return true; })()`);
+        await sleep(700);
+      } else {
+        await open(`${base}/configurator/#${threeCode}`, 1280);
+      }
+      const opened = await slotState();
+      check(JSON.stringify(unknownIn(opened)) === JSON.stringify(['frame', 'motor', 'accessory']), `code with three parts of a missing add-on (${tag}): frame, motor and ring unknown before the jar (${JSON.stringify(opened)})`);
+      const { cat, id, mount } = edits[edit];
+      check(await pick(cat, id, mount), `code with three parts of a missing add-on (${tag}): the ${edit} can be changed before the jar`);
+      const changed = await slotState();
+      const stillUnknown = edit === 'ring' ? ['frame', 'motor'] : ['motor', 'accessory'];
+      check(JSON.stringify(unknownIn(changed)) === JSON.stringify(stillUnknown), `code with three parts of a missing add-on (${tag}): after the change only ${stillUnknown.join(' and ')} unknown (${JSON.stringify(changed)})`);
+      await setFile(files.good);
+      const after = await slotState();
+      check(unknownIn(after).length === 0, `code with three parts of a missing add-on (${tag}): after the jar no part is unknown (${JSON.stringify(after)})`);
+      check(!(await bannerText()).includes(switched), `code with three parts of a missing add-on (${tag}): no preset instead of the build (“${await bannerText()}”)`);
+      check(await shareCode() === want, `code with three parts of a missing add-on (${tag}): the share box has the code of the changed build (${(await shareCode()).slice(0, 30)}…, want ${want.slice(0, 30)}…)`);
+      check(await evaluate("document.querySelector('[data-stats-note]').hidden"), `code with three parts of a missing add-on (${tag}): the flight figures are back`);
+      if (how === 'paste') {
+        const preview = await evaluate("document.querySelector('[data-import-result]').textContent");
+        check(!preview.includes(text('addons.missing', lang).split('{name}')[0].trim()) && !(await evaluate("!!document.querySelector('[data-import-result] .addon-line__jar')")), `code with three parts of a missing add-on (${tag}): the field's note no longer asks for the jar (“${preview}”)`);
+      } else {
+        await sleep(500);
+        check(await evaluate('location.hash') === `#${want}`, `code with three parts of a missing add-on (${tag}): the address has the code of the changed build (${(await evaluate('location.hash')).slice(0, 31)}…)`);
+        check(await evaluate("!!document.querySelector('.banner.is-ok') && !document.querySelector('.banner .addon-line__jar')"), `code with three parts of a missing add-on (${tag}): the banner of the link no longer asks for the jar (“${await bannerText()}”)`);
+        await shot(`jar-edit-then-jar-${lang}-1280`);
+      }
+    }
     language = 'en';
     check(errors.length === 0, `no console errors or exceptions: ${errors.slice(0, 5).join(' | ')}`);
   } finally {
