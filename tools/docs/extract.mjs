@@ -149,6 +149,27 @@ function enumKeys(root, rel) {
   return out;
 }
 
+// Build problems (not buildable) and warnings in the order DroneBuild#problems() and #warnings() check them; the API
+// page lists them under "What Propwash checks" and tools/test-docs.mjs compares that list with this one.
+export function buildIssues(text) {
+  const declared = text.match(/public enum Issue \{([^;]*);/);
+  if (!declared) throw new Error('DroneBuild.Issue nicht gefunden');
+  const constants = declared[1].split(',').map((s) => s.trim().toLowerCase()).filter(Boolean);
+  const checked = (method) => {
+    const start = text.indexOf(`public List<Issue> ${method}() {`);
+    if (start < 0) throw new Error(`DroneBuild.${method}() nicht gefunden`);
+    const body = text.slice(start, text.indexOf('\n    }\n', start));
+    return [...new Set([...body.matchAll(/Issue\.([A-Z0-9_]+)/g)].map((m) => m[1].toLowerCase()))];
+  };
+  const out = { problems: checked('problems'), warnings: checked('warnings') };
+  for (const key of constants) {
+    const lists = Object.keys(out).filter((list) => out[list].includes(key));
+    if (lists.length !== 1) throw new Error(`DroneBuild.Issue.${key.toUpperCase()} steht in ${lists.length ? 'problems() und warnings()' : 'keiner der Prüfungen problems()/warnings()'}`);
+  }
+  for (const key of [...out.problems, ...out.warnings]) if (!constants.includes(key)) throw new Error(`DroneBuild prüft ${key}, das Issue nicht deklariert`);
+  return out;
+}
+
 export function extractParts(root, lang) {
   const partJson = read(root, `${JAVA}/parts/PartJson.java`);
   const part = (name) => `${JAVA}/api/part/${name}.java`;
@@ -188,6 +209,7 @@ export function extractParts(root, lang) {
   return {
     format: constant(partJson, 'FORMAT'),
     keys: partJsonKeys(partJson),
+    issues: buildIssues(read(root, `${JAVA}/build/DroneBuild.java`)),
     armKeys,
     enums,
     rarities: ['common', 'uncommon', 'rare', 'epic'],

@@ -5942,7 +5942,8 @@
             "double lensLengthMm",
             "List<Vec3Mm> ledPathMm",
             "boolean hangsStraight",
-            "Optional<Vec3Mm> muzzleMm"
+            "Optional<Vec3Mm> muzzleMm",
+            "Set<Identifier> frames"
           ],
           "extends": "",
           "implements": "PartDefinition",
@@ -5996,6 +5997,12 @@
               "name": "AccessoryDefinition",
               "static": false,
               "display": "AccessoryDefinition(Identifier id, PartBasics basics, AccessorySlot slot, double widthMm, double heightMm, double depthMm, double flightBatteryWatts, double frontalAreaM2, int ledCount, Optional<ActionCamDefinition> actionCam, double lensXMm, double lensLengthMm, List<Vec3Mm> ledPathMm, boolean hangsStraight)"
+            },
+            {
+              "kind": "constructor",
+              "name": "AccessoryDefinition",
+              "static": false,
+              "display": "AccessoryDefinition(Identifier id, PartBasics basics, AccessorySlot slot, double widthMm, double heightMm, double depthMm, double flightBatteryWatts, double frontalAreaM2, int ledCount, Optional<ActionCamDefinition> actionCam, double lensXMm, double lensLengthMm, List<Vec3Mm> ledPathMm, boolean hangsStraight, Optional<Vec3Mm> muzzleMm)"
             },
             {
               "kind": "method",
@@ -6093,6 +6100,12 @@
                   "name": "muzzle",
                   "static": false,
                   "display": "Builder muzzle(double xMm, double yMm, double zMm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "frames",
+                  "static": false,
+                  "display": "Builder frames(Identifier... frameIds)"
                 },
                 {
                   "kind": "method",
