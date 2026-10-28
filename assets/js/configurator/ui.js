@@ -1447,7 +1447,7 @@ function importedOsdInfo() {
   if (!osd) return '';
   try {
     const json = JSON.parse(osd.json);
-    const preset = OSD_PRESETS.includes(json.preset) ? t(`osdPresets.${json.preset}`) : String(json.preset || '–');
+    const preset = OSD_PRESETS.includes(json.preset) ? t(`osdPresets.${json.preset}.title`) : String(json.preset || '–');
     const count = json.elements ? Object.keys(json.elements).length : 0;
     return t(count === 1 ? 'ui.osdImportedInfoOne' : 'ui.osdImportedInfo', { preset, count });
   } catch {
