@@ -975,6 +975,51 @@ async function browserTests(jars) {
         await shot(`jar-edit-then-jar-${lang}-1280`);
       }
     }
+
+    // The add-on's table claims a short id the directory does not know, so the code names the add-on only by that number:
+    // with the ring taken off before the jar, the jar still resolves frame and motor; a motor number the loaded table
+    // does not have yet stays unknown, and the build keeps the very code it was opened with.
+    const table = (motors) => ({ name: `data/${NS}/propwash_share/table.json`, data: JSON.stringify({ format: 1, namespace: NS, short_id: 42, parts: { frame: [{ id: 'tiny_frame', since: '0.1.0' }], motor: motors } }) });
+    const withTable = (entry, more = []) => zip([...addonEntries().map((e) => (e.name.endsWith('propwash_share/table.json') ? entry : e)), ...more]);
+    const motors = [{ id: 'fast_motor', since: '0.1.0' }, { id: 'java_motor', since: '0.3.0' }];
+    const shortJar = withTable(table(motors));
+    const newerJar = withTable(table([...motors, { id: 'new_motor', since: '0.3.0' }]), [part('motor', 'new_motor', { mass_g: 2.1, stator: '0802', kv: 25000, mount: 'propwash:m08', max_current_a: 4.5, resistance_ohm: 0.3, cells: [1, 1] })]);
+    const shortFile = path.join(tmp, 'short.jar');
+    fs.writeFileSync(shortFile, shortJar);
+    const cShort = createCatalog(composeCatalog(catalog, { fragments: [readAddon(shortJar, { base: catalog }).fragment] }));
+    const cNewer = createCatalog(composeCatalog(catalog, { fragments: [readAddon(newerJar, { base: catalog }).fragment] }));
+    const plainPage = createCatalog(catalog);
+    const shortCode = cShort.encode({ build: { ...whoop, frame: tinyFrame, motor: fastMotor, accessories: { bottom: ring } }, paint: null, tune: null, osd: null, name: null });
+    const newerCode = cNewer.encode({ build: { ...whoop, frame: tinyFrame, motor: `${NS}:new_motor`, accessories: { bottom: ring } }, paint: null, tune: null, osd: null, name: null });
+    for (const [label, code] of [['short id', shortCode], ['short id, newer table', newerCode]]) {
+      const read = plainPage.decode(code);
+      check(read.ok && read.unknownParts.length === 3 && read.unknownParts.every((id) => id.startsWith('pw3.unknown:pw3.short.42/')), `code with a short id the directory lacks (${label}): its parts are read under the short id (${read.unknownParts})`);
+    }
+    {
+      language = 'en';
+      const tag = 'short id, ring taken off, link en';
+      const want = cShort.encode({ build: { ...whoop, frame: tinyFrame, motor: fastMotor, accessories: {} }, paint: null, tune: null, osd: null, name: null });
+      await open(`${base}/configurator/#${shortCode}`, 1280);
+      check(await pick('accessory', '', 'bottom'), `code with three parts of a missing add-on (${tag}): the ring can be taken off before the jar`);
+      await setFile(shortFile);
+      const after = await slotState();
+      const unknownWord = text('ui.unknownPart', 'en');
+      check(after.every((x) => !x.text.includes(unknownWord) && !x.text.includes('?') && !x.text.includes(`${NS}:`)), `code with three parts of a missing add-on (${tag}): after the jar no part is unknown (${JSON.stringify(after)})`);
+      check(await shareCode() === want, `code with three parts of a missing add-on (${tag}): the share box has the code of the changed build (${(await shareCode()).slice(0, 30)}…, want ${want.slice(0, 30)}…)`);
+    }
+    {
+      language = 'de';
+      const tag = 'short id, newer table, paste de';
+      await open(`${base}/configurator/`, 1280);
+      await evaluate(`(() => { const i = document.querySelector('[data-import]'); i.value = ${JSON.stringify(newerCode)}; i.dispatchEvent(new Event('input', { bubbles: true })); return true; })()`);
+      await sleep(700);
+      await setFile(shortFile);
+      const after = await slotState();
+      const unknownWord = text('ui.unknownPart', 'de');
+      const unknownCats = after.filter((x) => x.text.includes(unknownWord) || x.text.includes('?') || x.text.includes(`${NS}:`)).map((x) => x.cat);
+      check(JSON.stringify(unknownCats) === JSON.stringify(['motor']) && after.some((x) => x.cat === 'motor' && x.text.includes('?motor.3')), `code with three parts of a missing add-on (${tag}): frame and ring resolved, the motor the table lacks stays ?motor.3 (${JSON.stringify(after)})`);
+      check(await shareCode() === newerCode, `code with three parts of a missing add-on (${tag}): the build keeps the code it was opened with (${(await shareCode()).slice(0, 30)}…)`);
+    }
     language = 'en';
     check(errors.length === 0, `no console errors or exceptions: ${errors.slice(0, 5).join(' | ')}`);
   } finally {
