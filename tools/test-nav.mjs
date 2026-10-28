@@ -2,6 +2,7 @@
 // Checks the main navigation and the footer links of every page (tools/site-nav.mjs):
 //   - every page carries exactly the navigation and footer links tools/site-nav.mjs gives for it (hand-written pages:
 //     node tools/build-nav.mjs, docs pages: node tools/build-docs.mjs --render-only), and no page is left out
+//   - the brand kit page brand/ is a hand-written page and the footer of every page links to it
 //   - every entry of the "Features" menu points to a section of the landing page, the menu button controls the menu,
 //     the menu button of the header controls the navigation
 //   - the landing page keeps the anchors older links use, and shows the configurator three times: in the header, in
@@ -60,6 +61,14 @@ for (const file of pages) {
   check((nav.match(/class="site-nav__cta"/g) || []).length === 1, `${file}: one configurator button in the navigation`);
 }
 check(pages.length >= HAND_PAGES.length, 'all hand-written pages found');
+
+// 1b. The brand kit page is a hand-written page, and the footer of every page leads to it.
+check(pages.includes('brand/index.html'), 'brand/index.html (brand kit) is a page of the site');
+check(known.has('brand/index.html'), 'brand/index.html is in HAND_PAGES of tools/build-nav.mjs');
+for (const file of pages) {
+  const links = (read(file).match(FOOTER_PATTERN) || [''])[0];
+  check(/<a href="(?:\.\/|(?:\.\.\/)*brand\/)"><span lang="en">Brand kit<\/span><span lang="de">Presse &amp; Brand<\/span><\/a>/.test(links), `${file}: the footer links to the brand kit (brand/)`);
+}
 
 // 2. The landing page: sections of the "Features" menu, old anchors, the configurator.
 const home = read('index.html');
