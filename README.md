@@ -224,6 +224,7 @@ node tools/test-configurator-flows.mjs     # converter, old links, explanations,
 node tools/test-plug-texts.mjs             # battery plugged in: texts, dictionaries and model data say plugs are hidden
 node tools/test-beginner-images.mjs        # pictures of the builds for beginners match a fresh render (Chrome, dwebp)
 node tools/test-configurator-frames.mjs    # accessories only for some frames: reader, accessory_frame, pickers (Chrome)
+node tools/test-configurator-texts.mjs     # motor help fits the heat model and the analysis, the page names its export
 ```
 
 `--goldens` copies the share-code golden files of Propwash (`pw1-vectors.json`, `pw2-vectors.json`, `pw3-vectors.json`,
