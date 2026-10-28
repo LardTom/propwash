@@ -57,7 +57,7 @@ const GLOBE = '<svg class="i18n-globe" aria-hidden="true" viewBox="0 0 16 16" wi
 // Paths of the pages with a fixed page key ('docs-sub' and 'addons-sub' stand for several pages).
 const PAGE_PATHS = {
   home: '', configurator: 'configurator/', convert: 'convert/', addons: 'addons/', docs: 'docs/', changelog: 'changelog/',
-  roadmap: 'roadmap/', impressum: 'impressum/', datenschutz: 'datenschutz/',
+  roadmap: 'roadmap/', impressum: 'impressum/', datenschutz: 'datenschutz/', brand: 'brand/',
 };
 
 const escapeAttr = (v) => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -99,7 +99,7 @@ ${items.join('\n')}
  * The navigation for a page.
  * @param {string} prefix  path from the page to the site root ('' for index.html, '../' one level down, …)
  * @param {string|null} current  'home', 'configurator', 'docs', 'docs-sub' (a page below docs/), 'changelog',
- *   'roadmap', 'impressum' or 'datenschutz'
+ *   'roadmap', 'impressum', 'datenschutz' or 'brand'
  * @param {object} [options]  languages: the other languages in the language menu (default: the active ones of
  *   tools/i18n/languages.json, none = no menu); path: the page's path below the root, if the page key does not tell;
  *   lang + tr: the page is in that other language, tr(english) gives the translation of a text
@@ -152,6 +152,7 @@ export function siteFooterLinks(prefix, current, options = {}) {
     `<a href="${local('changelog/', 'changelog')}">${label({ en: 'Changelog', de: 'Changelog' })}</a>`,
     `<a href="${local('roadmap/', 'roadmap')}">${label({ en: 'Roadmap', de: 'Roadmap' })}</a>`,
     `<a href="${SOURCE}" ${ext}>${label({ en: 'Source code', de: 'Quellcode' })}</a>`,
+    `<a href="${local('brand/', 'brand')}">${label({ en: 'Brand kit', de: 'Presse &amp; Brand' })}</a>`,
     `<a href="${local('impressum/', 'impressum')}">${label({ en: 'Legal notice', de: 'Impressum' })}</a>`,
     `<a href="${local('datenschutz/', 'datenschutz')}">${label({ en: 'Privacy policy', de: 'Datenschutz' })}</a>`,
   ].join(' · ').replace(/^/, '<p class="site-footer__links">') + '</p>';

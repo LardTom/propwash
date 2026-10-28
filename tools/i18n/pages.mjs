@@ -20,6 +20,7 @@ export const PAGES = [
   { file: 'docs/guide/index.html', path: 'docs/guide/', current: 'docs-sub' },
   { file: 'docs/gamerules/index.html', path: 'docs/gamerules/', current: 'docs-sub' },
   { file: 'docs/blackbox/index.html', path: 'docs/blackbox/', current: 'docs-sub' },
+  { file: 'brand/index.html', path: 'brand/', current: 'brand' },
 ];
 
 // Texts drawn by scripts: "pairs" = every {en, de} object of a JSON file, "catalog" = the part texts of the

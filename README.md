@@ -19,6 +19,8 @@ This repository contains only the website, no mod source code.
 - `impressum/index.html` and `datenschutz/index.html` – the legal notice and privacy policy required under German law
   (English and German, same switch), linked from the footer of every page; the bracketed placeholders need filling in
   before the site goes live
+- `brand/index.html` – the brand kit for creators (English and German, same switch, translated like the pages for
+  players), linked from the footer of every page as “Brand kit” / “Presse & Brand”, see [Brand kit](#brand-kit)
 - `assets/css/style.css` – styles of all pages; `assets/css/configurator.css` – configurator only;
   `assets/css/docs.css` and `assets/js/docs.js` – docs only (menu, tables, code blocks with copy buttons);
   `assets/css/roadmap.css` – roadmap only; `assets/css/changelog.css` – changelog only
@@ -55,7 +57,8 @@ This repository contains only the website, no mod source code.
   pictures of the docs pages
 - `sitemap.xml` and `robots.txt` – every page for search engines (see [Link check](#link-check))
 - `assets/fonts/` – Saira and JetBrains Mono (Latin with Latin Extended-A), Exo 2 and JetBrains Mono for the Cyrillic
-  letters of the Russian pages, all under the SIL Open Font License 1.1 (see [Languages](#languages))
+  letters of the Russian pages, all under the SIL Open Font License 1.1 (see [Languages](#languages)); Barlow Condensed
+  Black Italic and ExtraBold Italic (Basic Latin, OFL) only for the font samples of the brand kit page
 - `tools/site-nav.mjs` – the main navigation and the footer links of every page, defined once (see
   [Navigation](#navigation))
 - `tools/` – build and test scripts for the navigation, the landing page pictures, the configurator data and picture, the
@@ -544,6 +547,21 @@ translation. `test-changelog.mjs` fails while an entry has no German text, while
 line changed), when the JSON differs from a fresh build or a newer release tag exists, and checks the navigation and footer
 links of every page and that the released groups of the roadmap link to `../changelog/#propwash-<version>`.
 
+## Brand kit
+
+`brand/` is the page for creators who make videos, thumbnails, streams or articles about Propwash: the download
+`assets/brand/propwash-brand-kit.zip` (logo, colors, fonts, images and a README with the rules), a preview of the logo
+on dark and on light (`assets/brand/propwash-logo-256.webp` and `-512.webp`), the palette with a copy button per hex
+value (`assets/js/brand.js`), the two fonts with a sample and their licenses, and the usage rules with the Minecraft
+notice. Everything on the page comes from the kit: the colors in the order of `colors/propwash-colors.json`, the rules
+from its `README.md`; the maker is named only as lardtom. Styles in `assets/css/brand.css` (only the variables of
+`style.css`).
+
+A new kit: replace the ZIP (one folder at the top, no `__MACOSX` or `.DS_Store`), then bring the page in line with it –
+size in “ZIP · 3.7 MB” and its German and translated forms, swatches, rules – and run `node tools/test-brand.mjs`,
+which reads the ZIP and compares the page with it, checks every text in the five dictionaries and clicks every copy
+button in headless Chrome (`--no-browser` skips that part).
+
 ## Link check
 
 ```sh
@@ -622,10 +640,10 @@ node tools/test-layout.mjs                        # every page × language × 36
   hand-written pages), `node tools/build-docs.mjs --render-only`, `node tools/i18n/build-i18n.mjs` and
   `node tools/test-links.mjs --write-sitemap`.
 - **What is translated:** `tools/i18n/pages.mjs` – the landing page, configurator, roadmap, changelog, the docs for
-  players (overview, player guide, world rules, blackbox tuning) and, once they exist, converter and add-on pages; and
-  the texts the scripts draw: roadmap, changelog, platforms and add-on data (every `{en, de}` pair), the part texts
-  of the configurator catalog (not the part names), `{ en: '…', de: '…' }` literals in the roadmap and changelog
-  scripts, the `['English', 'Deutsch']` texts of `assets/js/configurator/i18n.js` and the texts of `main.js`.
+  players (overview, player guide, world rules, blackbox tuning), the brand kit and, once they exist, converter and
+  add-on pages; and the texts the scripts draw: roadmap, changelog, platforms and add-on data (every `{en, de}` pair),
+  the part texts of the configurator catalog (not the part names), `{ en: '…', de: '…' }` literals in the roadmap and
+  changelog scripts, the `['English', 'Deutsch']` texts of `assets/js/configurator/i18n.js` and the texts of `main.js`.
 - **Dictionaries:** `tools/i18n/dict/<lang>.json` – `{ "schema": 1, "lang": "fr", "source": "en", "entries": { … } }`,
   the English text (whitespace collapsed, markup kept) as key, like `tools/changelog/de.json`; an optional `glossary`
   holds fixed translations of that language. A changed English sentence is a new key: `--missing` lists it, and the old

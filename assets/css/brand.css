@@ -1,0 +1,456 @@
+/* The brand kit page (/brand/): download, logo preview, colors, fonts and rules. Only the variables of style.css;
+   Barlow Condensed is loaded for the font samples of this page only. */
+
+@font-face {
+  font-family: "PW Barlow";
+  src: url("../fonts/barlow-condensed-900-italic.woff2") format("woff2");
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "PW Barlow";
+  src: url("../fonts/barlow-condensed-800-italic.woff2") format("woff2");
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+   Intro with the download */
+
+.brand-intro {
+  padding-block: clamp(2rem, 1.2rem + 3vw, 3.5rem) clamp(1.5rem, 1rem + 1.5vw, 2.5rem);
+}
+
+.brand-intro__inner {
+  display: grid;
+  gap: clamp(1.5rem, 1rem + 2vw, 3rem);
+  align-items: center;
+}
+
+@media (min-width: 860px) {
+  .brand-intro__inner {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+.brand-intro .kicker {
+  margin-bottom: 12px;
+}
+
+.brand-title {
+  font-size: clamp(2.1rem, 1.4rem + 3vw, 3.4rem);
+  font-weight: 750;
+  font-stretch: 108%;
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+}
+
+.brand-lead {
+  max-width: 40em;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: clamp(1rem, 0.96rem + 0.25vw, 1.12rem);
+}
+
+.brand-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin-top: 22px;
+}
+
+.brand-download svg {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.brand-meta {
+  color: var(--faint);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+}
+
+.brand-intro__logo {
+  justify-self: center;
+  width: clamp(140px, 30vw, 220px);
+  margin: 0;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.55));
+}
+
+.brand-intro__logo img {
+  display: block;
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+   Sections */
+
+.brand-body {
+  padding-bottom: clamp(3rem, 2rem + 4vw, 5rem);
+}
+
+.brand-section {
+  margin-top: clamp(2.5rem, 1.8rem + 2.5vw, 4rem);
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+
+.brand-h2 {
+  font-size: clamp(1.35rem, 1.15rem + 0.9vw, 1.8rem);
+  font-weight: 700;
+  font-stretch: 104%;
+}
+
+.brand-h3 {
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+
+.brand-section > p,
+.brand-text {
+  max-width: 46em;
+  margin-top: 10px;
+  color: var(--text-2);
+}
+
+.brand-list {
+  max-width: 46em;
+  margin: 12px 0 0;
+  padding-left: 1.2em;
+  color: var(--text-2);
+}
+
+.brand-list li + li {
+  margin-top: 6px;
+}
+
+.brand-list li::marker {
+  color: var(--accent);
+}
+
+/* What is in the kit */
+
+.brand-contents {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12.5rem), 1fr));
+  gap: 12px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.brand-contents li {
+  padding: 16px 18px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background: var(--panel);
+  color: var(--text-2);
+  font-size: 0.95rem;
+}
+
+.brand-contents strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 1rem;
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+   Logo */
+
+.brand-logos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.brand-logo {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+.brand-logo__stage {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  padding: 24px;
+}
+
+.brand-logo--dark .brand-logo__stage {
+  background: #141414;
+}
+
+.brand-logo--light .brand-logo__stage {
+  background: #f2f2f2;
+}
+
+.brand-logo__space {
+  padding: 12.5%;
+  outline: 1px dashed rgba(255, 187, 0, 0.55);
+  outline-offset: -1px;
+}
+
+.brand-logo--light .brand-logo__space {
+  outline-color: rgba(20, 20, 20, 0.35);
+}
+
+.brand-logo img {
+  display: block;
+  width: clamp(96px, 22vw, 150px);
+}
+
+.brand-logo figcaption {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+   Colors */
+
+.brand-colors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 720px) {
+  .brand-colors {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 980px) {
+  .brand-colors {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.brand-color {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+.brand-color__chip {
+  display: block;
+  height: 76px;
+  border-bottom: 1px solid var(--border);
+  background: var(--swatch);
+}
+
+.brand-color__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px 14px;
+}
+
+.brand-color__name {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.brand-color__use {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.brand-color__value {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin-top: auto;
+  padding-top: 8px;
+}
+
+.brand-color__hex {
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  user-select: all;
+}
+
+.brand-color__rgb {
+  color: var(--faint);
+  font-size: 0.8rem;
+}
+
+.brand-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  align-self: flex-start;
+  min-height: 36px;
+  margin-top: 8px;
+  padding: 6px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--field);
+  color: var(--text-2);
+  font: 600 0.78rem/1 var(--mono);
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.brand-copy svg {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+
+.brand-copy:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.brand-copy__done {
+  display: none;
+}
+
+.brand-copy.is-done {
+  border-color: var(--gate);
+  color: var(--gate);
+}
+
+.brand-copy.is-done .brand-copy__idle {
+  display: none;
+}
+
+.brand-copy.is-done .brand-copy__done {
+  display: inline;
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+   Fonts */
+
+.brand-fonts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.brand-font {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+.brand-font__sample {
+  margin: 12px 0 4px;
+  padding: 18px 16px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: var(--bg-deep);
+  color: #fff;
+  overflow-wrap: anywhere;
+}
+
+.brand-font__title {
+  display: block;
+  font: italic 900 clamp(2.2rem, 1.6rem + 2.6vw, 3.4rem)/0.95 "PW Barlow", "Barlow Condensed", var(--font);
+  letter-spacing: 0.005em;
+  text-shadow: 0 3px 14px rgba(0, 0, 0, 0.6);
+}
+
+.brand-font__title span {
+  color: var(--accent);
+}
+
+.brand-font__sub {
+  display: block;
+  margin-top: 8px;
+  color: var(--text-2);
+  font: italic 800 clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem)/1.15 "PW Barlow", "Barlow Condensed", var(--font);
+  letter-spacing: 0.02em;
+}
+
+.brand-font__osd {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 18px;
+  font-family: var(--mono);
+  font-size: clamp(0.85rem, 0.8rem + 0.3vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.brand-font__osd b {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.brand-font .brand-list {
+  font-size: 0.95rem;
+}
+
+.brand-tip {
+  max-width: 46em;
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  background: var(--panel-2);
+  color: var(--text-2);
+}
+
+/* ---------------------------------------------------------------------------------------------------------------
+   Rules */
+
+.brand-rules {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.brand-rule {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--panel);
+}
+
+.brand-rule p {
+  margin-top: 8px;
+  color: var(--text-2);
+  font-size: 0.97rem;
+}
+
+.brand-rule--notice {
+  border-color: var(--border-strong);
+}
