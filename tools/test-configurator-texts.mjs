@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Texts of the web configurator agree with the data it shows and the model it calculates with (finding AUTO9-1, from
-// G-P1-V12-4):
+// Texts of the web configurator agree with the data it shows and the model it calculates with (findings AUTO9-1 and
+// AUTO9-2, from G-P1-V12-4):
 //   - part help of the motors in catalog.json describes the heat model of Propwash 0.6.0: no motor throttles or
 //     derates any more (only the ESC throttles back), a temperature from which a motor loses power is its
 //     thermal.derate_start_c, and a temperature after one minute, e.g. “(81 °C after 1 min)”, is what the analysis
@@ -9,6 +9,10 @@
 //   - the parts of an add-on carry the names and help of the hosted export of the same add-on version under
 //     assets/data/addons/<namespace>/<version>/, so the catalog never keeps the texts of an older export
 //   - every dictionary that translates a motor help line with a temperature keeps its numbers
+//   - the configurator page names the export its data come from: the intro of the flight analysis and “About this
+//     page” name the Propwash version of catalog.source, “About this page” also the version of Just More Parts, and
+//     no other version of either appears on the page; the intro names the reference temperature of analysis.js
+//   - every dictionary that translates the intro or “About this page” keeps these versions and the temperature
 //
 //   node tools/test-configurator-texts.mjs
 
@@ -150,9 +154,57 @@ for (const motor of motors) {
   }
 }
 
+const html = read('configurator/index.html');
+const plain = (s) => s.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/ /g, ' ').replace(/\s+/g, ' ').trim();
+const pw = release(json.source && json.source.mods && json.source.mods.propwash);
+const jmp = release(json.source && json.source.mods && json.source.mods.justmoreparts);
+const ambient = (/REFERENCE_AMBIENT_C\s*=\s*([\d.]+)/.exec(read('assets/js/configurator/analysis.js')) || [])[1];
+check(pw, 'catalog.json: source.mods names the Propwash version of its export');
+check(ambient, 'analysis.js: REFERENCE_AMBIENT_C');
+const ambientText = `${Number(ambient)} °C`;
+
+const analysisCard = /<section class="cfg-card cfg-analysis"[\s\S]*?<\/section>/.exec(html)?.[0] || '';
+const about = /<section class="wrap cfg-about"[\s\S]*?<\/section>/.exec(html)?.[0] || '';
+check(analysisCard, 'configurator/index.html: the card of the flight analysis');
+check(about, 'configurator/index.html: the section “About this page”');
+const paragraphs = (section, cls, lang) => [...section.matchAll(new RegExp(`<p${cls ? ` class="${cls}"` : ''} lang="${lang}">([\\s\\S]*?)</p>`, 'g'))].map((m) => m[1]);
+const pageTexts = [];
+for (const lang of ['en', 'de']) {
+  const intro = paragraphs(analysisCard, 'cfg-card__intro', lang);
+  const aboutText = paragraphs(about, null, lang);
+  check(intro.length === 1, `configurator/index.html: one intro of the flight analysis in ${lang}`);
+  check(aboutText.length >= 1, `configurator/index.html: “About this page” in ${lang}`);
+  const introPlain = plain(intro.join(' '));
+  const aboutPlain = plain(aboutText.join(' '));
+  check(introPlain.includes(`Propwash ${pw}`), `${lang}: the intro of the flight analysis names Propwash ${pw}, the version of the export (“${introPlain.slice(0, 100)}…”)`);
+  check(introPlain.includes(ambientText), `${lang}: the intro of the flight analysis names ${ambientText}, the temperature analysis.js calculates with`);
+  check(aboutPlain.includes(`Propwash ${pw}`), `${lang}: “About this page” names Propwash ${pw} as the source of the data (“${aboutPlain.slice(0, 120)}…”)`);
+  if (jmp) check(aboutPlain.includes(`Just More Parts ${jmp}`), `${lang}: “About this page” names Just More Parts ${jmp} as the source of the data`);
+  pageTexts.push(...intro, ...aboutText);
+}
+const page = plain(html);
+for (const m of page.matchAll(/\bPropwash(?: FPV)? (\d+\.\d+\.\d+)/g)) check(m[1] === pw, `configurator/index.html names “${m[0]}”, the data come from Propwash ${pw}`);
+if (jmp) for (const m of page.matchAll(/\bJust More Parts (\d+\.\d+\.\d+)/g)) check(m[1] === jmp, `configurator/index.html names “${m[0]}”, the data come from Just More Parts ${jmp}`);
+
+let translatedPage = 0;
+for (const text of pageTexts) {
+  const key = text.trim();
+  const needs = [...new Set([...plain(key).matchAll(/\b(?:Propwash|Just More Parts) \d+\.\d+\.\d+/g)].map((m) => m[0]))];
+  const temps = temperatures(key);
+  for (const [code, entries] of dicts) {
+    const t = Object.entries(entries).find(([k]) => plain(k) === plain(key));
+    if (!t) continue;
+    translatedPage++;
+    const value = typeof t[1] === 'string' ? t[1] : t[1] && t[1].text;
+    const tp = plain(value || '');
+    for (const n of needs) check(tp.includes(n), `${code}.json: translation of “${plain(key).slice(0, 60)}…” keeps ${n}`);
+    check(temps.every((x) => temperatures(value || '').includes(x)), `${code}.json: translation of “${plain(key).slice(0, 60)}…” keeps ${temps.map((x) => `${x} °C`).join(', ')}`);
+  }
+}
+
 for (const n of notes) console.log(`note: ${n}`);
 const summary = `${motors.length} motors, ${helpChecked} help lines, ${derateClaims} derating and ${minuteClaims} one-minute temperatures, `
-  + `${hostedParts} parts of hosted exports, ${translatedHelp} translated help lines`;
+  + `${hostedParts} parts of hosted exports, ${translatedHelp} translated help lines, ${translatedPage} translated page texts`;
 if (failures.length) {
   console.error(failures.slice(0, 80).join('\n'));
   console.error(`FAIL: configurator texts: ${failures.length} of ${checks} checks failed (${summary})`);
