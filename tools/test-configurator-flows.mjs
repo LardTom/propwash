@@ -9,6 +9,8 @@
 //     Escape closes it; every figure of the analysis has one
 //   - builds for beginners: three cards with picture, figures and buttons, "Load" loads the preset
 //   - battery plugged in: the default preset is drawn with the mounted stack and without plugs and leads
+//   - "Undo" in the banner after a preset (over the opened code P4 with a missing add-on, over another preset): the
+//     build, the share box and the address are the ones from before, and reloading opens that build
 //   - no console errors or uncaught exceptions
 //
 //   node tools/test-configurator-flows.mjs [--post <text file>] [--shots <dir>] [--chrome <path>]
@@ -26,6 +28,7 @@ import { entry } from '../assets/js/configurator/i18n.js';
 
 const catalog = createCatalog(JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/configurator/catalog.json'), 'utf8')));
 const conversions = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/fixtures/sharecode/pw3-conversions.json'), 'utf8')).vectors;
+const P4 = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/fixtures/cov/codes.json'), 'utf8')).pw3.other_addon;
 
 function arg(name, fallback) {
   const i = process.argv.indexOf(name);
@@ -247,6 +250,60 @@ async function main() {
       check(after.banner.includes(text('convert.converted', lang).replace('{format}', 'PW1')), `paste ${lang}: banner “${after.banner}”`);
       const plugged = await evaluate("({ hidden: window.__viewer.current().assembly.plugsHidden, leads: window.__viewer.current().assembly.pieces.filter((p) => p.role === 'power_lead').length })");
       check(plugged.hidden === true && plugged.leads === 0, `paste ${lang}: the battery is plugged in, plugs and leads hidden (${JSON.stringify(plugged)})`);
+
+      // ---- “Undo” in the banner: the address follows the build it brings back ----
+      const undoLabel = text('ui.undo', lang);
+      const shown = () => evaluate(`({ hash: location.hash.slice(1), code: document.querySelector('[data-code]').textContent,
+        preset: document.querySelector('[data-preset]').value, frame: document.querySelector('[data-slots] [data-cat="frame"] .slot__value')?.textContent || '' })`);
+      const pickPreset = async (id) => {
+        await evaluate(`(() => { const s = document.querySelector('[data-preset]'); s.value = ${JSON.stringify(id)}; s.dispatchEvent(new Event('change', { bubbles: true })); return true; })()`);
+        await sleep(700);
+      };
+      const undo = async (label) => {
+        const found = await evaluate(`(() => {
+          const b = [...document.querySelectorAll('.banner button')].find((x) => x.textContent === ${JSON.stringify(undoLabel)});
+          if (b) b.click();
+          return !!b;
+        })()`);
+        check(found, `${label}: the banner offers “${undoLabel}”`);
+        await sleep(700);
+      };
+      const reload = async (label) => {
+        await open(await evaluate('location.href'), 1280, label,
+          "document.querySelector('[data-cfg]')?.getAttribute('aria-busy') === 'false' && !!document.querySelector('[data-code]').textContent");
+        return shown();
+      };
+      await open(`${base}/configurator/`, 1280, `undo P4 ${lang}`, cfgReady);
+      await evaluate(`(() => {
+        const input = document.querySelector('[data-import]');
+        input.value = ${JSON.stringify(P4)};
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+        return true;
+      })()`);
+      await sleep(900);
+      const p4 = await shown();
+      check(p4.hash === P4 && p4.code === P4, `undo P4 ${lang}: opening P4 shows it in the address and the share box (${p4.hash.slice(0, 30)})`);
+      await pickPreset('propwash:freestyle');
+      const free = await shown();
+      check(free.preset === 'propwash:freestyle' && free.code !== P4 && free.hash === free.code, `undo P4 ${lang}: the freestyle preset is in the address (${free.hash})`);
+      await undo(`undo P4 ${lang}`);
+      const back = await shown();
+      check(back.code === P4 && back.preset === '' && back.frame === p4.frame, `undo P4 ${lang}: “${undoLabel}” brings P4 back (${back.code.slice(0, 30)}, frame “${back.frame}”)`);
+      check(back.hash === P4, `undo P4 ${lang}: after “${undoLabel}” the address is P4 again (${back.hash.slice(0, 30)}, not the freestyle ${free.hash})`);
+      const p4again = await reload(`undo P4 reload ${lang}`);
+      check(p4again.code === P4 && p4again.frame === p4.frame, `undo P4 ${lang}: reloading after “${undoLabel}” opens P4 (${p4again.code.slice(0, 30)}, frame “${p4again.frame}”, not “${free.frame}”)`);
+
+      await pickPreset('propwash:freestyle');
+      const freeBuild = await shown();
+      await pickPreset('propwash:long_range');
+      const longBuild = await shown();
+      check(longBuild.preset === 'propwash:long_range' && longBuild.code !== freeBuild.code && longBuild.hash === longBuild.code, `undo preset ${lang}: the long range preset is in the address (${longBuild.hash})`);
+      await undo(`undo preset ${lang}`);
+      const restored = await shown();
+      check(restored.preset === 'propwash:freestyle' && restored.code === freeBuild.code, `undo preset ${lang}: “${undoLabel}” brings the freestyle preset back (${restored.preset}, ${restored.code})`);
+      check(restored.hash === freeBuild.code, `undo preset ${lang}: after “${undoLabel}” the address is the freestyle code ${freeBuild.code} (${restored.hash})`);
+      const freeAgain = await reload(`undo preset reload ${lang}`);
+      check(freeAgain.code === freeBuild.code && freeAgain.frame === freeBuild.frame, `undo preset ${lang}: reloading after “${undoLabel}” opens the freestyle build (${freeAgain.code}, frame “${freeAgain.frame}”)`);
     }
   } finally {
     browser.close();
@@ -262,7 +319,7 @@ async function main() {
     console.error(`FAIL: ${failures.length} of ${checks} checks failed`);
     process.exit(1);
   }
-  console.log(`flows: ${checks} checks passed (converter with ${expected.found} codes, old link, pasted code, figure explanations, builds for beginners; `
+  console.log(`flows: ${checks} checks passed (converter with ${expected.found} codes, old link, pasted code, figure explanations, builds for beginners, undo in the banner; `
     + `en/de at 1280 and 390 px)${shots ? `; screenshots in ${shots}` : ''}`);
 }
 
