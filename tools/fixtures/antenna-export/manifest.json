@@ -1,0 +1,16 @@
+{
+ "format": 2,
+ "generated_at": "2026-10-29T22:17:24Z",
+ "generator": "propwash 0.6.0-dev.11",
+ "propwash": "0.6.0-dev.11",
+ "selection": "propwash",
+ "base": false,
+ "namespaces": [
+  "propwash"
+ ],
+ "mods": {
+  "propwash": "0.6.0-dev.11"
+ },
+ "fingerprint": null,
+ "fixture": "the four core VTX of Propwash c0d4a159f (antennas at the rear of the frame) as /propwash webexport writes them"
+}

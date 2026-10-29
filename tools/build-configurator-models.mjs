@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // Builds the 3D data of the configurator's drone viewer from the web export of Propwash (format 2).
 //
-//   node tools/build-configurator-models.mjs [--export <web-export dir>] [--resources <mod resources dir> …]
+//   node tools/build-configurator-models.mjs [--export <web-export dir>] [--resources <mod resources dir> …] [--out <dir>]
 //
 // Same export location rules as tools/build-configurator-data.mjs (sibling checkout, JMP_WEB_EXPORT or --export).
+// --out writes render.json and models/ to another folder instead of assets/data/configurator (for tests).
 //
 // Writes:
 //   assets/data/configurator/render.json                        frame layouts (drone_layout.json), motor seats, paint
@@ -218,9 +219,15 @@ function resourceDirs(argv) {
   return out;
 }
 
+function outDir(argv) {
+  const i = argv.indexOf('--out');
+  return i >= 0 && argv[i + 1] ? path.resolve(argv[i + 1]) : OUT;
+}
+
 function main() {
   const argv = process.argv.slice(2);
   const dir = exportDir(argv);
+  const out = outDir(argv);
   const { manifest, namespaces } = readExport(dir);
   const resources = resourceDirs(argv);
   const parts = [];
@@ -272,7 +279,7 @@ function main() {
     return { model: def.model, transform: transformOf(def.transformation, defPath) };
   }
 
-  const outModels = path.join(OUT, 'models');
+  const outModels = path.join(out, 'models');
   fs.rmSync(outModels, { recursive: true, force: true });
   let files = 0;
   let bytes = 0;
@@ -417,7 +424,8 @@ function main() {
     accessory_bases: accessoryBases,
     models: withModel,
   };
-  fs.writeFileSync(path.join(OUT, 'render.json'), JSON.stringify(render) + '\n');
+  fs.mkdirSync(out, { recursive: true });
+  fs.writeFileSync(path.join(out, 'render.json'), JSON.stringify(render) + '\n');
   console.log(`models: ${files} files, ${(bytes / 1024).toFixed(0)} KiB; render.json: ${Object.keys(layouts).length} layouts, `
     + `${Object.keys(motorSeats).length} motor seats`);
   console.log(`battery plugged in: ${counts.sockets} battery sockets, ${counts.mounted} mounted stacks`
