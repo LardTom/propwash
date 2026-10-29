@@ -2,7 +2,7 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText, createCatalog } from './data.js?v=85bd3f70';
+import { loadCatalog, localText, createCatalog } from './data.js?v=29d694bf';
 import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=024bd980';
 import { parseUnknown, unknownId, unknownMarker, SHORT_KEY_PREFIX, creativeCounts } from './sharecode3.js?v=024bd980';
 import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=22940b30';
@@ -10,11 +10,11 @@ import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
 import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=373b0553';
 import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
 import { batteryFit, fitsFrame } from './rules.js?v=6634f777';
-import { assemble, PROP_SLOTS } from './assembly.js?v=6f42a16f';
-import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=e94a5904';
+import { assemble, PROP_SLOTS } from './assembly.js?v=44cf305a';
+import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=b9f3fb36';
 import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=031da610';
 import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=582a6e40';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=66243c58';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=cc6d2d19';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
@@ -2143,7 +2143,7 @@ async function startViewer() {
   const button = $('[data-autorotate]');
   let mod;
   try {
-    mod = await import('./viewer.js?v=599d717f');
+    mod = await import('./viewer.js?v=1374beb2');
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;

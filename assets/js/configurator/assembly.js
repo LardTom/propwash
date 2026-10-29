@@ -6,9 +6,13 @@
 // A block model is drawn with its model point (8, 8, 8) at the part's position, 1 model unit = 8 mm.
 //
 // assemble(build, env) → { layout, cameraTilt, pieces, plugsHidden } where each piece is
-//   { role, id, slot?, position: [x, y, z], variant: 'base' | 'ccw' | 'under' | 'mounted', paintPosition, tiltX, spinY,
-//     stretchX, procedural?, hide? }
+//   { role, id, slot?, position: [x, y, z], variant: 'base' | 'ccw' | 'under' | 'mounted' | 'antenna', paintPosition, tiltX,
+//     spinY, stretchX, procedural?, hide? }
 // env = { catalog, render, model(id) → loaded model JSON of a part or null }.
+//
+// VTX antennas (Propwash 0.6.0, DroneAssembly#antenna): a video part with an "_antenna" model gets a second piece, role
+// 'antenna', at the frame's antenna anchor (drone_layout.json, else DroneLayout.defaultAntenna), not tilted with the
+// camera; it belongs to the video part and paints the antenna slot.
 //
 // Battery plugged in (Propwash 0.6.0, PowerLead / PlugMask): a drone with its battery shows no plugs and no power leads.
 // The stack is drawn as its "_mounted" variant (without its own plug) and without its two power leads (pigtail), the
@@ -24,6 +28,10 @@ export const PROP_SLOTS = Object.freeze(['prop_fl', 'prop_fr', 'prop_rl', 'prop_
 
 const PROPS_IN_CCW = [false, true, true, false];
 const CAMERA_BEHIND_LENS_MM = 10;
+const ANTENNA_REAR_OF_WHEELBASE = 0.21;
+const ANTENNA_ABOVE_ELECTRONICS_MM = 8;
+// DroneLayoutParser: a point of drone_layout.json lies within ±2 m.
+const MAX_ABS_MM = 2000;
 // Preview rotor angles of the workbench preview (DroneVisuals.fillPreview).
 const PREVIEW_ROTOR = (slot) => 0.35 + slot * 0.7;
 
@@ -70,6 +78,17 @@ export function accessoryAnchor(frame, mount) {
   return { position: [0, -3, -0.25 * wb], tilt: 30, length: 0.15 * wb };
 }
 
+/**
+ * DroneLayout.defaultAntenna: centre, on the battery plate (pack on top) or 8 mm above the electronics and at least at
+ * the lens height (pack below), 0.21 × wheelbase to the rear.
+ */
+export function defaultAntenna(frame) {
+  const d = frame.data;
+  const lens = d.camera && d.camera.pos;
+  const top = d.battery.on_top ? d.battery.plate_mm : Math.max(d.electronics_mm + ANTENNA_ABOVE_ELECTRONICS_MM, lens ? lens[1] : 0);
+  return [0, top, ANTENNA_REAR_OF_WHEELBASE * d.wheelbase_mm];
+}
+
 function defaultAccessories(frame) {
   const out = {};
   for (const mount of frame.data.accessory_mounts || []) out[mount] = accessoryAnchor(frame, mount);
@@ -102,8 +121,14 @@ export function layoutFromDefinition(frame, catalog) {
   const propHeight = frame.builtin ? defaultPropHeight(typicalMotor(frame, catalog)) : NaN;
   return {
     motors, ccw, propHeight, stack: [0, stackY, 0], battery, video,
-    cameraTilt: d.camera ? d.camera.tilt_deg : 20, fromFile: false, accessories: defaultAccessories(frame),
+    cameraTilt: d.camera ? d.camera.tilt_deg : 20, fromFile: false, accessories: defaultAccessories(frame), antenna: defaultAntenna(frame),
   };
+}
+
+/** DroneLayoutParser.vector: [x, y, z] of finite numbers within ±2 m, else null. */
+function filePoint(value) {
+  if (!Array.isArray(value) || value.length !== 3) return null;
+  return value.every((v) => finite(v) && Math.abs(v) <= MAX_ABS_MM) ? value.slice() : null;
 }
 
 function fileAnchor(entry) {
@@ -146,6 +171,7 @@ export function frameLayout(frame, catalog, render) {
     cameraTilt: tilt,
     fromFile: true,
     accessories,
+    antenna: filePoint(entry.antenna) || fallback.antenna,
   };
 }
 
@@ -217,11 +243,22 @@ export function batteryPiece(layout, frame, battery, env) {
 }
 
 /**
- * Part category of a placed piece (the picker that chooses it); the top mount's base belongs to the top accessory.
- * Every other role is its category.
+ * DroneAssembly.antennaPart: a VTX drawn from its model with an "_antenna" model of its own carries it at the frame's
+ * antenna anchor, without the camera tilt; null otherwise (older exports keep the antennas in the video model).
+ */
+export function antennaPiece(layout, video, env) {
+  const model = env.model(video.id);
+  if (!model || !model.variants || !model.variants.antenna) return null;
+  return { role: 'antenna', id: video.id, position: layout.antenna.slice(), variant: 'antenna' };
+}
+
+/**
+ * Part category of a placed piece (the picker that chooses it); the top mount's base belongs to the top accessory and
+ * the antenna to the video part. Every other role is its category.
  */
 export function pieceCategory(piece) {
-  return piece.role === 'accessory_base' ? 'accessory' : piece.role;
+  if (piece.role === 'accessory_base') return 'accessory';
+  return piece.role === 'antenna' ? 'video' : piece.role;
 }
 
 /**
@@ -261,7 +298,11 @@ export function assemble(build, env) {
     stackPiece.hide = hidden.stack;
     batteryAt.hide = hidden.battery;
   }
-  if (video) pieces.push({ role: 'video', id: video.id, position: layout.video, tiltX: layout.cameraTilt });
+  if (video) {
+    pieces.push({ role: 'video', id: video.id, position: layout.video, tiltX: layout.cameraTilt });
+    const antenna = antennaPiece(layout, video, env);
+    if (antenna) pieces.push(antenna);
+  }
 
   const height = motor ? propHeight(layout, frame, motor, env) : defaultPropHeight(null);
   for (let slot = 0; slot < SLOTS; slot++) {

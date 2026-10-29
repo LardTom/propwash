@@ -2,7 +2,7 @@
 // group belongs to a paint channel with a reference grey. A painted part swaps to its "_paint" model and multiplies
 // each tint group with PaintChannel.tint(colour); parts without any painted group keep the unpainted model.
 
-import { PROP_SLOTS } from './assembly.js?v=6f42a16f';
+import { PROP_SLOTS } from './assembly.js?v=44cf305a';
 
 const CHANNEL_SLOT = Object.freeze({
   frame: 'frame', tpu: 'tpu', motor: 'motors', stack: 'stack', battery: 'battery', camera: 'camera', antenna: 'antenna',
@@ -174,8 +174,8 @@ export function groupsOf(piece, model, render) {
 
 // Paint channel each piece role stands for: a click on a face of the piece outside its tint groups paints this one.
 const ROLE_CHANNEL = Object.freeze({
-  frame: 'frame', stack: 'stack', battery: 'battery', video: 'camera', motor: 'motor', prop: 'prop', accessory: 'accessory',
-  accessory_base: 'tpu',
+  frame: 'frame', stack: 'stack', battery: 'battery', video: 'camera', antenna: 'antenna', motor: 'motor', prop: 'prop',
+  accessory: 'accessory', accessory_base: 'tpu',
 });
 
 /**
@@ -190,9 +190,10 @@ export function pieceSlots(piece, groups) {
   return { groups: slots, main: (own >= 0 ? slots[own] : slots.find(Boolean)) || null };
 }
 
+// PaintPicker.parts: frame, stack, battery, video unit, its antenna, then motor and prop per position, then accessories.
 function paintOrder(pieces) {
   const by = (role) => pieces.filter((p) => p.role === role);
-  const order = [...by('frame'), ...by('stack'), ...by('battery'), ...by('video')];
+  const order = [...by('frame'), ...by('stack'), ...by('battery'), ...by('video'), ...by('antenna')];
   const motors = by('motor');
   const props = by('prop');
   for (let slot = 0; slot < 4; slot++) {

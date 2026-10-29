@@ -11,8 +11,9 @@
 //                                                               channel references, accessory base tints
 //   assets/data/configurator/models/<ns>/<category>/<path>.json one file per part with a model: the block-model
 //                                                               elements in a compact form plus the textures as
-//                                                               data URLs (base, paint, ccw, battery under and stack
-//                                                               mounted variants) and the plug anchors (see below)
+//                                                               data URLs (base, paint, ccw, battery under, stack
+//                                                               mounted and VTX antenna variants) and the plug
+//                                                               anchors (see below)
 //
 // Only files from the web export are used, with one exception: a stack's "_mounted" variant (battery plugged in,
 // Propwash 0.6.0) that the export lacks is taken from a mod's resource folder given with --resources (a folder with
@@ -23,6 +24,10 @@
 // variants are left out because the configurator shows new parts at rest. A render definition may carry a vanilla
 // "transformation" (JMP X-Class frames: the model is shrunk to fit the −16…32 model limit and scaled back to real
 // size); it is baked into the element coordinates here.
+//
+// VTX antennas (Propwash 0.6.0): a video part's "_antenna" variant (with "_antenna_paint", paint channel antenna) is
+// drawn at the frame's antenna anchor, not tilted with the camera (assets/js/configurator/assembly.js); its video model
+// then carries no antennas. The anchors come with the frame layouts of drone_layout.json ("antenna").
 //
 // Plug anchors (battery plugged in, like PlugAnchors in Propwash), in millimetres around the part's position, measured
 // in the drawn space (after the transformation): every battery variant gets `socket` (the box of its connector or
@@ -284,7 +289,7 @@ function main() {
   let files = 0;
   let bytes = 0;
   const withModel = [];
-  const counts = { sockets: 0, mounted: 0, mountedFromResources: 0, mountedMissing: [] };
+  const counts = { sockets: 0, mounted: 0, mountedFromResources: 0, mountedMissing: [], antennas: 0 };
   for (const p of parts) {
     const m = p.model || {};
     if (m.kind !== 'model' || !m.drone) continue;
@@ -345,6 +350,10 @@ function main() {
     add('base', '', null);
     if (p.category === 'prop' && add('ccw', '_ccw', null)) add('ccw_paint', '_ccw_paint', 'ccw');
     if (p.category === 'battery' && add('under', '_under', null)) add('under_paint', '_under_paint', 'under');
+    if (p.category === 'video' && add('antenna', '_antenna', null)) {
+      add('antenna_paint', '_antenna_paint', 'antenna');
+      counts.antennas++;
+    }
     if (p.category === 'stack') {
       // Battery plugged in: the stack drawn without its own plug ("_mounted"), the same pack as the base variant only.
       const fromExport = available.has(variantPath('_mounted'));
@@ -368,7 +377,8 @@ function main() {
     }
     add('paint', '_paint', 'base');
     // Paint groups belong to the unpainted model (DroneRenderResources#paintGroups); keep them on the paint entry.
-    for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint'], ['mounted', 'mounted_paint']]) {
+    for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint'], ['mounted', 'mounted_paint'],
+      ['antenna', 'antenna_paint']]) {
       if (variants[plain] && variants[plain].groups) {
         if (variants[painted]) variants[painted].groups = variants[plain].groups;
         delete variants[plain].groups;
@@ -427,7 +437,8 @@ function main() {
   fs.mkdirSync(out, { recursive: true });
   fs.writeFileSync(path.join(out, 'render.json'), JSON.stringify(render) + '\n');
   console.log(`models: ${files} files, ${(bytes / 1024).toFixed(0)} KiB; render.json: ${Object.keys(layouts).length} layouts, `
-    + `${Object.keys(motorSeats).length} motor seats`);
+    + `${Object.keys(motorSeats).length} motor seats, ${Object.values(layouts).filter((l) => l.antenna).length} antenna anchors`);
+  console.log(`VTX antennas at the rear of the frame: ${counts.antennas} video parts with an "_antenna" model`);
   console.log(`battery plugged in: ${counts.sockets} battery sockets, ${counts.mounted} mounted stacks`
     + `${counts.mountedFromResources ? ` (${counts.mountedFromResources} from the mod resources, the export lacks them)` : ''}`
     + `${counts.mountedMissing.length ? `; drawn unplugged: ${counts.mountedMissing.join(', ')}` : ''}`);
