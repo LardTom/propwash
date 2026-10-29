@@ -427,6 +427,8 @@ async function browserChecks() {
         }
       }
       await turn([]);
+      await viewerToTop();
+      await sleep(150);
       if (SHOTS) {
         fs.mkdirSync(SHOTS, { recursive: true });
         const shot = await send('Page.captureScreenshot', { format: 'png' });
@@ -448,7 +450,12 @@ async function browserChecks() {
     browser.close();
     child.kill();
     server.close();
-    fs.rmSync(profile, { recursive: true, force: true });
+    await sleep(300);
+    try {
+      fs.rmSync(profile, { recursive: true, force: true });
+    } catch {
+      // Chrome may still write into its profile while it shuts down; the temporary folder stays then.
+    }
   }
 }
 

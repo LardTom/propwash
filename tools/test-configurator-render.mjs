@@ -15,6 +15,9 @@
 //     without its socket, the two leads in front of it and what lies behind the pack's rear face (balance lead and
 //     plug), the pack drawn, no extra piece; the hidden part of the 1300 and of the whoop battery with the numbers of
 //     the mod's PlugAnchorsTest; the fallbacks (no mounted variant, no socket) draw stack and battery as before
+//   - VTX antennas (Propwash 0.6.0): every frame has an antenna anchor; a VTX with an "_antenna" model adds one antenna
+//     piece (category video, paint slot antenna), whose tints match the export's "_antenna_paint" definition; the rest:
+//     tools/test-configurator-antenna.mjs
 //
 //   node tools/test-configurator-render.mjs [--export <web-export dir>]
 
@@ -82,7 +85,7 @@ if (fs.existsSync(path.join(dir, 'manifest.json')) && JSON.parse(fs.readFileSync
   for (const part of catalog.parts) {
     const model = models.get(part.id);
     if (!model) continue;
-    for (const [plain, painted] of [['', 'paint'], ['_ccw', 'ccw_paint']]) {
+    for (const [plain, painted] of [['', 'paint'], ['_ccw', 'ccw_paint'], ['_antenna', 'antenna_paint']]) {
       const v = model.variants[painted];
       if (!v) continue;
       const def = JSON.parse(fs.readFileSync(path.join(dir, part.id.split(':')[0], part.model.drone.replace(/\.json$/, `${plain}_paint.json`)), 'utf8')).model;
@@ -112,7 +115,7 @@ for (const [id, entry] of Object.entries(render.layouts)) {
 for (const frame of catalog.partsIn('frame')) {
   const layout = frameLayout(frame, catalog, render);
   check(layout.motors.length === SLOTS && layout.motors.every(finiteVec), `${frame.id}: motors`);
-  check(finiteVec(layout.battery) && finiteVec(layout.video) && finiteVec(layout.stack), `${frame.id}: mount points`);
+  check(finiteVec(layout.battery) && finiteVec(layout.video) && finiteVec(layout.stack) && finiteVec(layout.antenna), `${frame.id}: mount points`);
   for (const mount of frame.data.accessory_mounts) check(finiteVec(layout.accessories[mount].position), `${frame.id}: ${mount} anchor`);
   if (frame.model.kind !== 'model') {
     const shapes = proceduralFrame(frame, layout, catalog);
@@ -174,7 +177,8 @@ for (const preset of catalog.presets) {
   }
   const a = assemble(build, env);
   check(a.missing.length === 0 && a.layout, `${preset.id}: assembles`);
-  const expected = 1 + 3 + 8 + Object.keys(build.accessories).length + (build.accessories.top ? 1 : 0);
+  const antenna = models.get(build.video) && models.get(build.video).variants.antenna ? 1 : 0;
+  const expected = 1 + 3 + 8 + antenna + Object.keys(build.accessories).length + (build.accessories.top ? 1 : 0);
   check(a.pieces.length === expected, `${preset.id}: ${a.pieces.length} pieces, expected ${expected}`);
   check(a.pieces.every((p) => finiteVec(p.position)), `${preset.id}: finite positions`);
   const props = a.pieces.filter((p) => p.role === 'prop');
@@ -197,6 +201,7 @@ for (const preset of catalog.presets) {
     check(main !== null && available.has(main) && groups.every((slot) => available.has(slot)), `${label}: paint slots ${main} / ${groups}`);
     if (piece.role === 'prop') check(main === PROP_SLOTS[piece.slot], `${label}: prop paint slot ${main} at position ${piece.slot}`);
     if (piece.role === 'video') check(main === 'camera', `${label}: video paints the camera slot, not ${main}`);
+    if (piece.role === 'antenna') check(main === 'antenna' && pieceCategory(piece) === 'video', `${label}: the antenna paints the antenna slot, not ${main}`);
   }
 }
 check(pieceCategory({ role: 'accessory_base', mount: 'top' }) === 'accessory', 'top mount base belongs to the accessories');
