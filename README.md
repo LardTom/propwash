@@ -194,7 +194,12 @@ on hover and focus; without JavaScript narrow screens show the links as a row be
   drone shows no plugs and no power leads like in Propwash 0.6.0 (`PowerLead`, `PlugMask`): the stack is drawn as its
   `_mounted` variant without its two pigtails and the battery without its socket and the leads to it (the elements the
   game leaves out by name, found by the socket box and the pigtail ends of the model data) – without a `_mounted`
-  variant or a socket both parts are drawn as before
+  variant or a socket both parts are drawn as before; the VTX antennas sit at the rear of the frame like in Propwash
+  0.6.0: a video part's `_antenna` model (with `_antenna_paint`, paint slot “Antenna tips”) is drawn at the frame's
+  antenna anchor (`antenna` in `drone_layout.json`, else 0.21 × wheelbase behind the centre on the battery plate or
+  8 mm above the electronics, `DroneLayout.defaultAntenna`), not tilted with the camera, picked as part of the video
+  part and hidden in the camera preview – a video part without `_antenna` (older exports, add-on VTX) keeps its
+  antennas in its own model
 - FPV camera preview (switch “3D / FPV camera” in the viewer, or open `configurator/?view=camera#PW1-…`): the image the
   drone's camera sends, drawn like the game's FPV view (since Propwash 0.4.0): 16:9 rectilinear from the lens with the drone's
   camera angle and the field of view of the camera in the video unit (`camera_fov_deg`, e.g. analog race 125°, digital
@@ -227,6 +232,7 @@ node tools/build-configurator-models.mjs   # render.json and models/ (with the p
 node tools/build-configurator-beginner.mjs # pictures of the builds for beginners (headless Chrome, cwebp)
 node tools/test-configurator.mjs           # share codes, conversion, presets, analysis, FPV camera, tune, explanations
 node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts, assembly, plugged battery, FPV hubs
+node tools/test-configurator-antenna.mjs   # VTX antennas at the rear of the frame: export and jar, anchors, paint (Chrome)
 node tools/test-configurator-pick.mjs      # clicks and taps on the parts in the 3D view (headless Chrome, ~1 min)
 node tools/test-configurator-flows.mjs     # converter, old links, explanations, builds for beginners (headless Chrome)
 node tools/test-configurator-creative.mjs  # PWD1 and creative PW3 codes in converter and configurator (headless Chrome)
@@ -248,6 +254,12 @@ PW3 conversion), made with the mod's classes (`ShareFormat.decode`, `ShareConver
 `PROPWASH_DISCORD_CODES` may name a local file of real codes (one per line, never in this repository); each must
 convert. `tools/test-configurator-flows.mjs --post <file>` converts a real post instead of the built-in one, and
 `--shots <dir>` keeps its screenshots.
+
+`tools/fixtures/antenna-export` is a web export cut down to the four core VTX of Propwash 0.6.0 (their video models,
+`_antenna` and `_antenna_paint` models, `drone_layout.json` with the antenna anchors and `drone_paint.json`, files of
+Propwash c0d4a159f); `tools/test-configurator-antenna.mjs` builds the viewer data from it with
+`build-configurator-models.mjs --out <dir>`, so the antennas are checked while the site's data still come from an
+older export.
 
 Web exports before the fix of their asset index lack the stacks' `_mounted` variants (battery plugged in, Propwash
 0.6.0). `build-configurator-models.mjs --resources <dir>` (repeatable, or `PROPWASH_MOD_RESOURCES`) then takes them from a
