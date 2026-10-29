@@ -8,6 +8,6 @@
     "FPV", "OSD", "VTX", "ESC", "AIO", "PID", "TPA", "KV", "LiPo", "LiHV", "XT60",
     "Whoop", "Toothpick", "Cinewhoop", "Freestyle", "Long Range", "X-Class", "Deadcat",
     "Gate", "Bando", "Rates", "Acro", "Angle", "Horizon", "Turtle", "Blackbox",
-    "Sharecode", "PW1", "PW2", "PW3", "Mode 1", "Mode 2", "Mode 3", "Mode 4"
+    "Sharecode", "PW1", "PW2", "PW3", "PWD1", "Mode 1", "Mode 2", "Mode 3", "Mode 4"
   ]
 }

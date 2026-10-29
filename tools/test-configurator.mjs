@@ -9,8 +9,13 @@
 //    layers, content and skipped entries and re-encodes byte-identically; every PW3 vector encodes byte-identically in
 //    its context, reads to the mod's content, namespace reports, unknown parts and renames, and writes back unchanged
 //    with its carry; every conversion PW1/PW2 → PW3 is byte-identical (status and reason too), idempotent and keeps
-//    the build; the table checksum vectors; the frozen table orders (baselines) against the catalog's tables.
+//    the build; the table checksum vectors; the frozen table orders (baselines) against the catalog's tables; the
+//    creative values of PW3 revision 3.1 (pw3-creative-vectors.json: the layer CREATIVE, extension 0, written and read
+//    byte-identically, and old PWD1 codes of the drone editor read and converted like the mod).
 //    PROPWASH_SHARECODE_GOLDENS (or a sibling ../propwash checkout): the copies must equal the mod's files.
+// 1f. PWD1 codes of the drone editor (tools/fixtures/pwd1-vectors.json, made with the mod's classes: CreativeShareCode
+//    and ShareConvert): Base64url, raw deflate, number forms of Double.parseDouble, limits of CreativeSpec – status,
+//    creative values and the PW3 conversion like the mod; random creative values written and read back bit for bit.
 // 2. The PW3 vectors of the web export (tools/fixtures/pw3-export-vectors.json): the preset codes, read and written by
 //    the catalog like the game with Just More Parts installed, with the compatibility check and the analysis.
 // 3. The vectors of Just More Parts 1.1.1 (tools/fixtures/sharecode-vectors.json, frozen: PW1 and PW2 from the last
@@ -71,6 +76,7 @@ const exportVectors = fixture('pw3-export-vectors.json');
 const legacyVectors = fixture('sharecode-vectors.json');
 const reportVectors = fixture('report-vectors.json');
 const heatVectors = fixture('heat-vectors.json');
+const pwd1Vectors = fixture('pwd1-vectors.json');
 const statHelp = data('stathelp.json');
 const beginner = data('beginner.json');
 // Heat model of the game since Propwash 0.6.0; figures of older exports are compared without it.
@@ -185,6 +191,18 @@ function compareContent(actual, expected, where) {
   good = compareTune(actual.tune, expected.tune, where) && good;
   good = ok(same(actual.osd, expected.osd), `${where}: osd`) && good;
   good = ok(actual.name === expected.name, `${where}: name ${actual.name} vs ${expected.name}`) && good;
+  return good;
+}
+
+/** Creative values (CreativeSpec) against the mod's: base parts in the mod's order, every value bit for bit. */
+function compareCreative(actual, expected, where) {
+  if (expected == null) return ok(actual == null, `${where}: creative values expected none, got ${JSON.stringify(actual)}`);
+  if (!ok(actual != null, `${where}: creative values missing`)) return false;
+  let good = ok(same(Object.entries(actual.base), Object.entries(expected.base)), `${where}: base parts ${JSON.stringify(actual.base)} vs ${JSON.stringify(expected.base)}`);
+  const keys = Object.keys(actual.values);
+  const want = Object.keys(expected.values);
+  good = ok(same([...keys].sort(), [...want].sort()), `${where}: value keys ${keys.join(',')} vs ${want.join(',')}`) && good;
+  for (const key of want) good = ok(Object.is(actual.values[key], expected.values[key]), `${where}: ${key}=${actual.values[key]} vs ${expected.values[key]}`) && good;
   return good;
 }
 
@@ -330,6 +348,125 @@ function goldenContext(name) {
     if (failed === before) pass++;
   }
   console.log(`Golden conversions (pw3-conversions.json): ${pass}/${g.vectors.length} like the mod (${converted} converted byte-identically, idempotent, same content)`);
+}
+
+// 1e. Golden creative values (PW3 revision 3.1, extension 0) and PWD1 codes of the drone editor
+{
+  const g = golden['pw3-creative-vectors.json'];
+  const frozen = goldenContext('frozen');
+  let pass = 0;
+  let encoded = 0;
+  let converted = 0;
+  ok(g.revision === pw3.PW3_REVISION, `creative vectors of revision ${g.revision}, the site writes ${pw3.PW3_REVISION}`);
+  for (const v of g.vectors) {
+    const before = failed;
+    const code = v.code || v.from;
+    const d = share.decode(code, { tables: frozen });
+    ok(d.status === v.status, `${v.name}: status ${d.status} vs ${v.status}`);
+    ok(d.format === (v.from ? 'PWD1' : 'PW3'), `${v.name}: format ${d.format}`);
+    ok(same(d.layers, v.layers || ['parts', 'creative']), `${v.name}: layers ${d.layers}`);
+    if (v.skipped) ok(same(d.skipped, v.skipped), `${v.name}: skipped ${d.skipped}`);
+    compareContent(d.content, v.content, v.name);
+    compareCreative(d.content && d.content.creative, v.creative, v.name);
+    if (v.code) {
+      let again;
+      try {
+        again = share.encode({ ...v.content, creative: v.creative }, { tables: frozen });
+      } catch (e) {
+        again = `error ${e.message}`;
+      }
+      if (ok(again === v.code, `${v.name}: encoded ${again} vs ${v.code}`)) encoded++;
+      if (d.ok) ok(share.encode(d.content, { tables: frozen, carry: d.carry }) === v.code, `${v.name}: written back unchanged`);
+      for (const spelling of tolerantSpellings(v.code)) compareCreative(share.decode(spelling, { tables: frozen }).content?.creative, v.creative, `${v.name} (tolerant input)`);
+      ok(share.convert(v.code, frozen).code === v.code, `${v.name}: a PW3 code with creative values is only checked`);
+    } else {
+      const r = share.convert(v.from, frozen);
+      ok(r.status === 'OK' && r.format === 'PWD1' && r.code === v.pw3 && r.converted, `${v.name}: converted ${r.status} ${r.format} ${r.code} vs ${v.pw3}`);
+      ok(catalog.convert(v.from).code === v.pw3, `${v.name}: catalog conversion`);
+      if (r.code) {
+        converted++;
+        const now = share.decode(r.code, { tables: frozen });
+        ok(same(now.layers, ['parts', 'creative']) && now.format === 'PW3', `${v.name}: PW3 layers ${now.layers}`);
+        compareContent(now.content, v.content, `${v.name} (PW3)`);
+        compareCreative(now.content && now.content.creative, v.creative, `${v.name} (PW3)`);
+        const again = share.convert(r.code, frozen);
+        ok(again.code === r.code && !again.converted, `${v.name}: converting the PW3 code again gives it back`);
+      }
+    }
+    if (failed === before) pass++;
+  }
+  console.log(`Golden creative values (pw3-creative-vectors.json): ${pass}/${g.vectors.length} like the mod (${encoded} written byte-identically, ${converted} PWD1 codes converted)`);
+}
+
+// 1f. PWD1 codes of the drone editor with every edge the mod's reader has (pwd1-vectors.json), random creative values
+{
+  const before = failed;
+  const frozen = goldenContext('frozen');
+  let pass = 0;
+  for (const v of pwd1Vectors.vectors) {
+    const start = failed;
+    const d = share.decode(v.code, { tables: frozen });
+    ok(d.status === v.status && d.format === v.format, `PWD1 ${v.name}: ${d.status} ${d.format} vs ${v.status} ${v.format}`);
+    ok(same(d.layers, v.layers) && same(d.skipped, v.skipped), `PWD1 ${v.name}: layers ${d.layers}, skipped ${d.skipped}`);
+    compareCreative(d.ok ? d.content.creative : null, v.creative, `PWD1 ${v.name}`);
+    const r = share.convert(v.code, frozen);
+    ok(r.status === v.convert_status && r.code === v.pw3 && r.reason === v.reason, `PWD1 ${v.name}: conversion ${r.status} ${r.code} vs ${v.convert_status} ${v.pw3}`);
+    if (failed === start) pass++;
+  }
+  // Random creative values: decimal and raw numbers, table and text keys, base parts through a head and as text.
+  let seed = 0x5eed1234;
+  const rand = () => {
+    seed = (seed * 1103515245 + 12345) >>> 0;
+    return seed / 4294967296;
+  };
+  const view = new DataView(new ArrayBuffer(8));
+  const randomNumber = () => {
+    const pick = rand();
+    if (pick < 0.3) return Math.round((rand() - 0.5) * 10 ** Math.floor(rand() * 7)) / 10 ** Math.floor(rand() * 4);
+    if (pick < 0.5) return Number(((rand() - 0.5) * 1e4).toFixed(Math.floor(rand() * 16)));
+    if (pick < 0.6) return [0, -0, 1, -1, 0.1, 1e-300, 5e-324, 1.7976931348623157e308, 2 ** 40, -(2 ** 40) + 1, 0.30000000000000004][Math.floor(rand() * 11)];
+    for (;;) {
+      view.setUint32(0, Math.floor(rand() * 4294967296));
+      view.setUint32(4, Math.floor(rand() * 4294967296));
+      const x = view.getFloat64(0);
+      if (Number.isFinite(x)) return x;
+    }
+  };
+  const tableKeys = pw3.CREATIVE_KEYS || ['frame.mass_g'];
+  const baseKinds = pw3.CREATIVE_BASE_KINDS || ['frame'];
+  const editorBuild = pw3.PWD1_BUILD || golden['pw3-creative-vectors.json'].vectors[0].content.build;
+  const textKeys = ['future.lift', 'otheraddon:arm.length', 'größe', 'motor.kv2', 'a', 'x'.repeat(128)];
+  const bases = ['whoop_65', 'justmoreparts:p13_2b', 'propwash:p51_3b', 'otheraddon:motor_x', 'b6s_1300', 'freestyle_5'];
+  let roundTrips = 0;
+  for (let i = 0; i < 3000; i++) {
+    const values = {};
+    const n = Math.floor(rand() * 12);
+    for (let k = 0; k < n; k++) {
+      const key = rand() < 0.75 ? tableKeys[Math.floor(rand() * tableKeys.length)] : textKeys[Math.floor(rand() * textKeys.length)];
+      values[key] = randomNumber();
+    }
+    const base = {};
+    for (const kind of baseKinds) if (rand() < 0.3) base[kind] = bases[Math.floor(rand() * bases.length)];
+    const content = { build: { ...editorBuild, accessories: {} }, creative: { base, values } };
+    let code;
+    try {
+      code = share.encode(content, { tables: frozen });
+    } catch (e) {
+      code = null;
+      ok(false, `random creative ${i}: ${e.message}`);
+      continue;
+    }
+    const d = share.decode(code, { tables: frozen });
+    const want = { base: Object.fromEntries(baseKinds.filter((k) => k in base).map((k) => [k, base[k]])),
+      values: Object.fromEntries(Object.entries(values).map(([k, v]) => [k, v === 0 ? 0 : v])) };
+    if (ok(d.ok && same(d.layers, ['parts', 'creative']), `random creative ${i}: ${d.status} ${d.layers}`) && compareCreative(d.content.creative, want, `random creative ${i}`)
+      && ok(share.encode(d.content, { tables: frozen }) === code, `random creative ${i}: written back unchanged`)) roundTrips++;
+  }
+  // Codes without creative values stay byte-identical to revision 3.0; an empty creative layer is still a layer.
+  const plain = share.encode({ build: { ...editorBuild, accessories: {} } }, { tables: frozen });
+  ok(same(share.decode(plain, { tables: frozen }).layers, ['parts']) && share.decode(plain, { tables: frozen }).content.creative === null, 'no creative values: no layer');
+  console.log(`PWD1 codes (pwd1-vectors.json): ${pass}/${pwd1Vectors.vectors.length} like the mod; ${roundTrips}/3000 random creative values `
+    + `written and read back bit for bit${failed === before ? '' : ' – FAILED'}`);
 }
 
 // 1d. Table checksums and the frozen table orders
@@ -723,8 +860,14 @@ function crcOf(bytes) {
   expectStatus('PW3-', 'TRUNCATED', 'PW3 alone');
   expectStatus(`PW3-${'0'.repeat(pw2.symbolsFor(2501))}`, 'TOO_LARGE', 'PW3 frame over 2500 bytes');
   expectStatus('PWT1-abc', 'OTHER_CODE', 'tuning preset code');
-  expectStatus('pwd1abc', 'OTHER_CODE', 'drone editor code');
+  ok(!share.OTHER_CODES.includes('PWD1'), 'drone editor codes are read (PW3 revision 3.1), not another kind of code');
+  expectStatus('pwd1abc', 'CORRUPT', 'drone editor code without its dash');
+  expectStatus('PWD1-abc', 'CORRUPT', 'damaged drone editor code');
+  expectStatus('PWD1-AwA', 'OK', 'empty drone editor code');
   ok(catalog.decode('PWT1-abc').format === 'PWT1' && catalog.decode('PWD1-abc').format === 'PWD1', 'other codes name their kind');
+  const editor = catalog.decode(golden['pw3-creative-vectors.json'].vectors.find((v) => v.name.startsWith('D1_')).from);
+  ok(editor.ok && editor.format === 'PWD1' && editor.unknownParts.length === 0 && editor.content.build.stack === 'propwash:creative_fc',
+    `a drone editor code opens with the creative flight controller, not as an unknown part (${editor.unknownParts})`);
   ok(share.formatOf(p1.code) === 'PW3' && share.formatOf(p1.code.slice(4)) === 'PW3' && share.formatOf(a.code) === 'PW1' && share.formatOf(p2.code) === 'PW2',
     'formatOf');
   // Compressed payload that inflates past 16384 bytes, and large OSD layouts in every format.
@@ -871,6 +1014,35 @@ function crcOf(bytes) {
     + `${real ? `; ${real} real codes converted with the same build` : ''}`);
 }
 
+// 7a. PWD1 codes of the drone editor in running text: found, converted to PW3 with their creative values
+{
+  const before = failed;
+  const creative = golden['pw3-creative-vectors.json'].vectors;
+  const d1 = creative.find((v) => v.name.startsWith('D1_'));
+  const d3 = creative.find((v) => v.name.startsWith('D3_'));
+  const c1 = creative.find((v) => v.name.startsWith('C1_'));
+  const post = [
+    `My creative whoop: ${d1.from}`,
+    `and the other one (${d3.from}).`,
+    `Already new: ${c1.code}`,
+    'Not a code: xPWD1-AwA, the PWD1-Code of the editor, PWD1- and PWD1-ab.',
+  ].join('\n');
+  const found = findCodes(post).filter((f) => !f.word);
+  ok(same(found.map((f) => [f.code, f.format]), [[d1.from, 'PWD1'], [d3.from, 'PWD1'], [c1.code, 'PW3']]), `PWD1 codes found: ${found.map((f) => f.code).join(' ')}`);
+  const r = convertText(post, catalog);
+  ok(r.text === post.replace(d1.from, d1.pw3).replace(d3.from, d3.pw3), `PWD1 codes converted in place:\n${r.text}`);
+  const rows = Object.fromEntries(r.codes.map((c) => [c.from, c]));
+  ok(rows[d1.from] && rows[d1.from].kind === 'converted' && rows[d1.from].format === 'PWD1' && rows[d1.from].code === d1.pw3 && rows[d1.from].unknown.length === 0,
+    `PWD1 row: ${JSON.stringify(rows[d1.from] && { kind: rows[d1.from].kind, format: rows[d1.from].format, unknown: rows[d1.from].unknown })}`);
+  ok(rows[d1.from] && same(rows[d1.from].creative, { values: 3, base: 2 }) && rows[c1.code] && rows[c1.code].kind === 'pw3' && same(rows[c1.code].creative, { values: 3, base: 2 }),
+    'converter rows count the creative values and base parts');
+  ok(convertText(r.text, catalog).codes.every((c) => c.kind !== 'converted'), 'converting the result again changes nothing');
+  ok(rows[d3.from] && rows[d3.from].creative && rows[d3.from].creative.values === 2, 'unknown creative keys travel on');
+  const broken = convertText(`broken: ${d1.from.slice(0, 40)}`, catalog);
+  ok(broken.codes.length === 1 && broken.codes[0].kind === 'damaged' && broken.codes[0].format === 'PWD1', 'a cut PWD1 code is damaged');
+  console.log(`Converter, drone editor codes: ${failed === before ? 'PWD1 codes found in running text and converted to PW3 with their creative values' : 'FAILED'}`);
+}
+
 // 7b. Add-ons an opened PW3 code needs that this page has not loaded: written again with what the code says about them
 {
   const before = failed;
@@ -974,7 +1146,24 @@ function crcOf(bytes) {
     const spec = JSON.parse(fs.readFileSync(path.join(dir, 'base/sharecode/spec.json'), 'utf8'));
     {
       const before = failed;
-      ok(spec.code_format === pw3.PW3_FORMAT && spec.prefix === pw3.PW3_PREFIX && spec.revision === pw3.PW3_REVISION, 'PW3 spec: format, prefix, revision');
+      const revisions = pw3.PW3_REVISIONS || [pw3.PW3_REVISION];
+      ok(spec.code_format === pw3.PW3_FORMAT && spec.prefix === pw3.PW3_PREFIX && revisions.includes(spec.revision)
+        && revisions.indexOf(spec.revision) <= revisions.indexOf(pw3.PW3_REVISION), `PW3 spec: format, prefix, revision ${spec.revision}`);
+      if (spec.creative) {
+        const c = spec.creative;
+        const params = pw3.CREATIVE_PARAMS || {};
+        const limits = pw3.CREATIVE_LIMITS || {};
+        ok(c.extension === pw3.CREATIVE_EXTENSION && c.layer_bit === pw3.CREATIVE_LAYER_BIT && same(c.base_kinds, pw3.CREATIVE_BASE_KINDS)
+          && same(c.keys, pw3.CREATIVE_KEYS) && c.pwd1_prefix === share.PWD1_PREFIX && same(c.pwd1_build, pw3.PWD1_BUILD), 'PW3 spec: creative values (revision 3.1)');
+        ok(spec.params.creative_namespace === params.namespace && spec.params.creative_count === params.count
+          && spec.params.creative_gap === params.gap && spec.params.creative_literal_count === params.literalCount
+          && spec.params.creative_decimals === params.decimals && spec.params.creative_value === params.value, 'PW3 spec: creative Exp-Golomb parameters');
+        ok(spec.limits.creative_values === limits.values && spec.limits.creative_key_chars === limits.keyChars
+          && spec.limits.creative_decimals === limits.decimals && spec.limits.creative_mantissa_bits === limits.mantissaBits
+          && spec.limits.extensions === pw3.PW3_LIMITS.extensions, 'PW3 spec: creative limits');
+        const layer = spec.layers.find((l) => l.key === 'creative');
+        ok(layer && layer.bit === pw3.CREATIVE_LAYER_BIT, 'PW3 spec: layer creative');
+      }
       ok(spec.alphabet === pw2.BASE62 && spec.id_alphabet === pw3.ID_ALPHABET && spec.text_alphabet === pw2.TEXT_ALPHABET, 'PW3 spec: alphabets');
       const p = spec.params;
       ok(p.namespace_count === pw3.PW3_PARAMS.namespaceCount && p.short_id === pw3.PW3_PARAMS.shortId && p.part === pw3.PW3_PARAMS.part

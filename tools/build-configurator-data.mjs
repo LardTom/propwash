@@ -31,7 +31,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const RELEASES = path.resolve(ROOT, '../propwash-justmoreparts/release');
 const CATEGORIES = ['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory'];
 export const GOLDEN_FILES = ['pw1-vectors.json', 'pw2-vectors.json', 'pw3-vectors.json', 'pw3-conversions.json', 'tablechecksum-vectors.json',
-  'propwash-baseline.json', 'directory-baseline.json'];
+  'propwash-baseline.json', 'directory-baseline.json', 'pw3-creative-vectors.json'];
 
 const versionParts = (v) => v.split('.').map((n) => Number.parseInt(n, 10) || 0);
 

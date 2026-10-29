@@ -1,7 +1,9 @@
-// Share codes: the entry point that reads PW1, PW2 and PW3 and writes PW3 (ShareFormat of Propwash 0.6.0), and the
-// PW1 codec (pw1.md of Propwash, revision 1.2, frozen): the reader of Propwash (share.legacy.Pw1Reader) and the encoder
-// of Just More Parts 1.0 (only for the tests). PW2 lives in sharecode2.js, PW3 in sharecode3.js. Uncompressed PW1 codes
-// are byte-identical to the mod's; compressed codes too, because the vendored deflate is a zlib port (level 9, raw).
+// Share codes: the entry point that reads PW1, PW2, PW3 and the old PWD1 codes of the drone editor and writes PW3
+// (ShareFormat of Propwash 0.6.0), the PW1 codec (pw1.md of Propwash, revision 1.2, frozen): the reader of Propwash
+// (share.legacy.Pw1Reader) and the encoder of Just More Parts 1.0 (only for the tests), and the PWD1 reader
+// (creative.CreativeShareCode, share.CreativeShare: pw3.md 7.1). PW2 lives in sharecode2.js, PW3 in sharecode3.js.
+// Uncompressed PW1 codes are byte-identical to the mod's; compressed codes too, because the vendored deflate is a zlib
+// port (level 9, raw).
 //
 // Content shape used by encode() and returned by decode():
 //   {
@@ -10,22 +12,27 @@
 //     tune:  { <flight or camera key>: number } | null,   // float32 values, keys sorted
 //     osd:   { version, json } | null,
 //     name:  string | null,
+//     creative: { base: { frame?, stack?, motor?, prop?, battery? }, values: { <key>: number } } | null,  // PW3 3.1
 //   }
+// creative: the values of a creative drone (drone editor of the game; sharecode3.js normalizeCreative), written as the
+// PW3 layer CREATIVE; an old PWD1 code reads as the Flight School's freestyle drone with the creative flight controller
+// and its values (sharecode3.js PWD1_BUILD), like in the mod.
 // Parts the reader cannot resolve keep the mod's marker ids: 'pw1.unknown.<n>:<path>' (PW1 namespace number n),
 // 'pw2.unknown:<kind>.<n>' (PW2 table number n) and 'pw3.unknown:<namespace>/<kind>/<n>' (sharecode3.js); displayId()
 // shows them as '?…'. PW3 needs the parts tables of the installed namespaces (createShareTables in sharecode3.js, the
 // catalog builds them from the web export); without tables every part is written by name.
 
 import { crc32 } from './crc32.js?v=62ad0fa2';
-import { inflateRaw } from './inflate.js?v=f04f9641';
+import { inflateRaw } from './inflate.js?v=08050593';
 import { TUNE_KEYS, tuneIndex, isSharedKey } from './tune.js?v=f4084d0e';
 import { deflateRaw } from '../../vendor/pako/deflate.js';
-import { encodePw2, parsePw2, PW2_FORMAT } from './sharecode2.js?v=594888f1';
+import { encodePw2, parsePw2, PW2_FORMAT } from './sharecode2.js?v=024bd980';
 import {
   encodePw3, parsePw3, createShareTables, ShareError, unknownMarker, base62Only, displayId, PW3_FORMAT, PW3_PREFIX, splitId as idParts,
-} from './sharecode3.js?v=594888f1';
+  normalizeCreative, PWD1_BUILD,
+} from './sharecode3.js?v=024bd980';
 
-export { displayId, createShareTables, frozenTables, ShareError, PW3_FORMAT, PW3_PREFIX } from './sharecode3.js?v=594888f1';
+export { displayId, createShareTables, frozenTables, ShareError, PW3_FORMAT, PW3_PREFIX } from './sharecode3.js?v=024bd980';
 
 /** Format of new codes. Decoding reads PW1, PW2 and PW3; the site writes PW3 only (Propwash 0.6.0). */
 export const SHARE_FORMAT = 'PW3';
@@ -55,8 +62,15 @@ export const LIMITS = Object.freeze({
 });
 export const STATUSES = Object.freeze(['OK', 'EMPTY', 'INVALID_PREFIX', 'BAD_CHARACTER', 'TOO_LONG', 'TRUNCATED', 'CHECKSUM',
   'UNSUPPORTED_VERSION', 'TOO_LARGE', 'CORRUPT', 'OTHER_CODE', 'NOT_CONVERTIBLE', 'UNKNOWN_ENTRIES']);
-/** Other codes of Propwash that are no share codes (ShareFormat.TUNE_PRESET, DRONE_EDITOR). */
-export const OTHER_CODES = Object.freeze(['PWT1', 'PWD1']);
+/** Other codes of Propwash that are no share codes (ShareFormat.TUNE_PRESET). */
+export const OTHER_CODES = Object.freeze(['PWT1']);
+/** Codes of the drone editor up to Propwash 0.5.x (ShareFormat.DRONE_EDITOR): read and converted since PW3 revision 3.1. */
+export const DRONE_EDITOR = 'PWD1';
+export const PWD1_PREFIX = 'PWD1-';
+const PWD1_MAX_CODE_CHARS = 4096;
+const PWD1_MAX_TEXT_BYTES = 16384;
+const PART_KINDS = Object.freeze(['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory']);
+const BASE64URL = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
 
 const FRAME_VERSION = 1;
 const FLAG_DEFLATE = 1;
@@ -429,7 +443,8 @@ export function normalizeContent(content) {
     if (stripped.length > LIMITS.nameChars) throw new Error(`name has at most ${LIMITS.nameChars} characters`);
     if (stripped) name = stripped;
   }
-  return { build, paint, tune, osd, name };
+  const creative = content.creative == null ? null : normalizeCreative(content.creative);
+  return { build, paint, tune, osd, name, creative };
 }
 
 /** Layers a (normalised) content fills. */
@@ -439,6 +454,7 @@ export function contentLayers(content) {
   if (content.tune) layers.push('tune');
   if (content.osd) layers.push('osd');
   if (content.name) layers.push('name');
+  if (content.creative) layers.push('creative');
   return layers;
 }
 
@@ -726,6 +742,7 @@ export function detect(code) {
   if (upper.startsWith(PW2_FORMAT)) return { status: 'OK', format: PW2_FORMAT, symbols: withoutDashes(text, PW2_FORMAT.length) };
   if (upper.startsWith(FORMAT)) return { status: 'OK', format: FORMAT, symbols: withoutDashes(upper, FORMAT.length) };
   for (const other of OTHER_CODES) if (upper.startsWith(other)) return { status: 'OTHER_CODE', format: other, symbols: '' };
+  if (upper.startsWith(DRONE_EDITOR)) return { status: 'OK', format: DRONE_EDITOR, symbols: text };
   if (newerFormat(upper)) return { status: 'UNSUPPORTED_VERSION', format: '', symbols: '' };
   if (base62Only(text)) return { status: 'OK', format: PW3_FORMAT, symbols: text };
   return { status: 'INVALID_PREFIX', format: '', symbols: '' };
@@ -764,6 +781,7 @@ function decodeDetected(detected, tables, renames) {
       return finish(parsed, PW3_FORMAT, tables, reports, carry, true);
     }
     if (detected.format === PW2_FORMAT) return finish(parsePw2(detected.symbols), PW2_FORMAT, tables, [], new Map(), renames);
+    if (detected.format === DRONE_EDITOR) return finish(readPwd1(detected.symbols), DRONE_EDITOR, tables, [], new Map(), renames);
     return finish(readPw1(detected.symbols), FORMAT, tables, [], new Map(), renames);
   } catch (e) {
     if (isFail(e)) return failed(e.status, detected.format);
@@ -810,7 +828,204 @@ function parse(data) {
   return parsed;
 }
 
-// Renames, unknown, wrong-kind and inactive parts and the result object, shared by PW1, PW2 and PW3 (ShareFormat.finish).
+// ---------------------------------------------------------------------------------------------------------------
+// PWD1: codes of the drone editor up to Propwash 0.5.x ('PWD1-' + Base64url of a raw deflate stream of the lines
+// 'base.<kind>=<part>' and '<key>=<number>'; creative-drone.md and pw3.md 7.1 of Propwash). Read exactly like
+// CreativeShareCode.decode: Java's URL-safe Base64, a complete deflate stream without the extra input byte (data after
+// its end is ignored), at most 16 KiB of text decoded like new String(bytes, UTF_8), Double.parseDouble and the limits
+// of CreativeSpec. Anything the mod rejects is CORRUPT.
+
+/** Base64.getUrlDecoder().decode(text) of Java: the bytes, or null where Java throws. */
+function base64Url(text) {
+  const length = text.length;
+  if (length === 1) return null;
+  const out = [];
+  let bits = 0;
+  let shift = 18;
+  let at = 0;
+  while (at < length) {
+    const c = text[at++];
+    const value = BASE64URL.indexOf(c);
+    if (value < 0) {
+      if (c !== '=') return null;
+      if ((shift === 6 && (at === length || text[at++] !== '=')) || shift === 18) return null;
+      break;
+    }
+    bits |= value << shift;
+    shift -= 6;
+    if (shift < 0) {
+      out.push((bits >> 16) & 0xff, (bits >> 8) & 0xff, bits & 0xff);
+      shift = 18;
+      bits = 0;
+    }
+  }
+  if (shift === 6) out.push((bits >> 16) & 0xff);
+  else if (shift === 0) out.push((bits >> 16) & 0xff, (bits >> 8) & 0xff);
+  else if (shift === 12) return null;
+  return at < length ? null : Uint8Array.from(out);
+}
+
+/** new String(bytes, UTF_8) of Java: malformed input becomes U+FFFD as the JDK counts it (String.decodeUTF8_UTF16). */
+function javaUtf8(bytes) {
+  const REPL = '\uFFFD';
+  const cont = (b) => (b & 0xc0) === 0x80;
+  const length = bytes.length;
+  let out = '';
+  let at = 0;
+  while (at < length) {
+    const b1 = bytes[at++];
+    if (b1 < 0x80) {
+      out += String.fromCharCode(b1);
+    } else if (b1 >= 0xc2 && b1 <= 0xdf) {
+      if (at >= length) {
+        out += REPL;
+        break;
+      }
+      const b2 = bytes[at++];
+      if (cont(b2)) {
+        out += String.fromCharCode(((b1 & 0x1f) << 6) | (b2 & 0x3f));
+      } else {
+        out += REPL;
+        at--;
+      }
+    } else if (b1 >= 0xe0 && b1 <= 0xef) {
+      if (at + 1 < length) {
+        const b2 = bytes[at++];
+        const b3 = bytes[at++];
+        if ((b1 === 0xe0 && (b2 & 0xe0) === 0x80) || !cont(b2) || !cont(b3)) {
+          out += REPL;
+          at -= 2;
+          if (!((b1 === 0xe0 && (b2 & 0xe0) === 0x80) || !cont(b2))) at++;
+        } else {
+          const c = ((b1 & 0x0f) << 12) | ((b2 & 0x3f) << 6) | (b3 & 0x3f);
+          out += c >= 0xd800 && c <= 0xdfff ? REPL : String.fromCharCode(c);
+        }
+        continue;
+      }
+      out += REPL;
+      if (at < length && ((b1 === 0xe0 && (bytes[at] & 0xe0) === 0x80) || !cont(bytes[at]))) continue;
+      break;
+    } else if (b1 >= 0xf0 && b1 <= 0xf7) {
+      if (at + 2 < length) {
+        const b2 = bytes[at++];
+        const b3 = bytes[at++];
+        const b4 = bytes[at++];
+        const uc = ((b1 & 0x07) << 18) | ((b2 & 0x3f) << 12) | ((b3 & 0x3f) << 6) | (b4 & 0x3f);
+        if (!cont(b2) || !cont(b3) || !cont(b4) || uc < 0x10000 || uc > 0x10ffff) {
+          out += REPL;
+          at -= 3;
+          if (!(b1 > 0xf4 || (b1 === 0xf0 && (b2 < 0x90 || b2 > 0xbf)) || (b1 === 0xf4 && (b2 & 0xf0) !== 0x80) || !cont(b2))) at += cont(b3) ? 2 : 1;
+        } else {
+          out += String.fromCodePoint(uc);
+        }
+        continue;
+      }
+      if (b1 > 0xf4 || (at < length && ((b1 === 0xf0 && (bytes[at] < 0x90 || bytes[at] > 0xbf)) || (b1 === 0xf4 && (bytes[at] & 0xf0) !== 0x80) || !cont(bytes[at])))) {
+        out += REPL;
+        continue;
+      }
+      at++;
+      out += REPL;
+      if (at < length && !cont(bytes[at])) continue;
+      break;
+    } else {
+      out += REPL;
+    }
+  }
+  return out;
+}
+
+const JAVA_DECIMAL = /^[+-]?(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?[fFdD]?$/;
+const JAVA_HEX = /^([+-])?0[xX](?:([0-9a-fA-F]+)\.?|([0-9a-fA-F]*)\.([0-9a-fA-F]+))[pP]([+-])?([0-9]+)[fFdD]?$/;
+
+/** m · 2^e (m a positive BigInt) as the nearest double, ties to even, with subnormals and overflow to Infinity. */
+function binaryDouble(m, e) {
+  const length = m.toString(2).length;
+  const top = length - 1 + e;
+  if (top > 1023) return Infinity;
+  if (top < -1075) return 0;
+  const lsb = Math.max(top - 52, -1074);
+  const shift = lsb - e;
+  let q;
+  if (shift > 0) {
+    const s = BigInt(shift);
+    q = m >> s;
+    const rest = m - (q << s);
+    const half = 1n << (s - 1n);
+    if (rest > half || (rest === half && (q & 1n) === 1n)) q += 1n;
+  } else {
+    q = m << BigInt(-shift);
+  }
+  return Number(q) * 2 ** lsb;
+}
+
+/** Double.parseDouble of Java: the number (also NaN and ±Infinity), or null where Java throws NumberFormatException. */
+export function javaParseDouble(input) {
+  const text = String(input).replace(/^[\u0000-\u0020]+|[\u0000-\u0020]+$/g, '');
+  if (/^[+-]?NaN$/.test(text)) return NaN;
+  if (/^[+-]?Infinity$/.test(text)) return text[0] === '-' ? -Infinity : Infinity;
+  const hex = JAVA_HEX.exec(text);
+  if (hex) {
+    const fraction = hex[2] !== undefined ? '' : hex[4];
+    const digits = `${hex[2] !== undefined ? hex[2] : hex[3]}${fraction}`.replace(/^0+/, '');
+    let value = 0;
+    if (digits) {
+      const power = hex[6].replace(/^0+/, '') || '0';
+      const exponent = power.length > 12 ? Infinity : Number(power);
+      value = binaryDouble(BigInt(`0x${digits}`), (hex[5] === '-' ? -exponent : exponent) - 4 * fraction.length);
+    }
+    return hex[1] === '-' ? -value : value;
+  }
+  if (!JAVA_DECIMAL.test(text)) return null;
+  return Number(text.replace(/[fFdD]$/, ''));
+}
+
+/**
+ * The creative values of a PWD1 code ({base, values} like sharecode3.js normalizeCreative), or null where the mod
+ * rejects the code (CreativeShareCode.decode).
+ */
+export function decodePwd1(code) {
+  if (code == null) return null;
+  const trimmed = javaStrip(String(code));
+  if (trimmed.length > PWD1_MAX_CODE_CHARS || trimmed.length < PWD1_PREFIX.length) return null;
+  for (let i = 0; i < PWD1_PREFIX.length; i++) if (trimmed[i].toUpperCase() !== PWD1_PREFIX[i]) return null;
+  const packed = base64Url(trimmed.slice(PWD1_PREFIX.length).replace(/[ \t\n\x0B\f\r]/g, ''));
+  if (!packed) return null;
+  const inflated = inflateRaw(packed, PWD1_MAX_TEXT_BYTES, undefined, { pad: false, trailing: true });
+  if (!inflated.bytes) return null;
+  const base = {};
+  const values = new Map();
+  for (const line of javaUtf8(inflated.bytes).split('\n')) {
+    if (!javaStrip(line)) continue;
+    const eq = line.indexOf('=');
+    if (eq <= 0) return null;
+    const key = javaStrip(line.slice(0, eq));
+    const value = javaStrip(line.slice(eq + 1));
+    if (key.startsWith('base.')) {
+      const kind = key.slice('base.'.length).toLowerCase();
+      if (PART_KINDS.includes(kind) && value) base[kind] = value.toLowerCase();
+      continue;
+    }
+    const number = javaParseDouble(value);
+    if (number === null) return null;
+    if (Number.isFinite(number)) values.set(key, number);
+  }
+  const plain = Object.create(null);
+  for (const [key, number] of values) plain[key] = number;
+  return normalizeCreative({ base, values: plain });
+}
+
+/** A PWD1 code as parsed content (CreativeShare.readPwd1): the Flight School's freestyle drone with the creative flight controller and the values. */
+function readPwd1(code) {
+  const creative = decodePwd1(code);
+  if (!creative) throw new Fail('CORRUPT');
+  return {
+    layers: ['parts', 'creative'], skipped: [], parts: BUILD_FIELDS.map((field) => PWD1_BUILD[field]), accessories: {}, paint: null, tune: null,
+    osd: null, name: null, creative,
+  };
+}
+
+// Renames, unknown, wrong-kind and inactive parts and the result object, shared by PW1, PW2, PW3 and PWD1 (ShareFormat.finish).
 function finish(parsed, format, tables, reports, carry, renames) {
   if (!parsed.parts) throw new Fail('CORRUPT');
 
@@ -869,7 +1084,7 @@ function finish(parsed, format, tables, reports, carry, renames) {
     status: 'OK',
     ok: true,
     format,
-    content: { build, paint, tune, osd: parsed.osd, name: parsed.name },
+    content: { build, paint, tune, osd: parsed.osd, name: parsed.name, creative: parsed.creative || null },
     layers: parsed.layers,
     namespaces: reports,
     unknownParts: unknown,
@@ -894,9 +1109,10 @@ function notConvertible(id) {
 }
 
 /**
- * ShareConvert.toPw3: a PW1 or PW2 code as PW3 with the frozen data only (sharecode3.js frozenTables: the Propwash
- * table and the tables of the add-on directory, no versions, no add-on info), so the result depends on the old code
- * alone and equals the mod's byte for byte. A PW3 code comes back as 'PW3-<body>'.
+ * ShareConvert.toPw3: a PW1, PW2 or PWD1 code as PW3 with the frozen data only (sharecode3.js frozenTables: the
+ * Propwash table and the tables of the add-on directory, no versions, no add-on info), so the result depends on the old
+ * code alone and equals the mod's byte for byte; a PWD1 code keeps its creative values. A PW3 code comes back as
+ * 'PW3-<body>'.
  * @returns {{status: string, format: string, code: string|null, reason: string|null, converted: boolean}}
  */
 export function convert(code, frozen) {
@@ -925,10 +1141,10 @@ export function convert(code, frozen) {
 // ---------------------------------------------------------------------------------------------------------------
 // Links
 
-/** Format of a code: 'PW3', 'PW2' or 'PW1' by its prefix (a bare body counts as PW3), '' for anything else. */
+/** Format of a code: 'PW3', 'PW2', 'PW1' or 'PWD1' by its prefix (a bare body counts as PW3), '' for anything else. */
 export function formatOf(code) {
   const d = detect(code);
-  return ['PW1', 'PW2', 'PW3'].includes(d.format) ? d.format : '';
+  return ['PW1', 'PW2', 'PW3', DRONE_EDITOR].includes(d.format) ? d.format : '';
 }
 
 /** Share link for a code: '<page>#PW3-…' (old links: '#PW2…', '#PW1-…'). */
@@ -937,7 +1153,7 @@ export function shareLink(code, pageUrl) {
   return `${base}#${code}`;
 }
 
-/** The code in a location hash ('#PW3-…', '#PW2…' or '#PW1-…', also URL-encoded and in lower case), or null. */
+/** The code in a location hash ('#PW3-…', '#PW2…', '#PW1-…' or '#PWD1-…', also URL-encoded and in lower case), or null. */
 export function codeFromHash(hash) {
   if (!hash) return null;
   let text = String(hash).replace(/^#/, '');
@@ -947,5 +1163,5 @@ export function codeFromHash(hash) {
     return null;
   }
   text = text.trim();
-  return /^pw[123]/i.test(text) ? text : null;
+  return /^pw(?:[123]|d1)/i.test(text) ? text : null;
 }

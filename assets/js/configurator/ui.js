@@ -2,9 +2,9 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText, createCatalog } from './data.js?v=9eec6e70';
-import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=594888f1';
-import { parseUnknown, unknownId, unknownMarker, SHORT_KEY_PREFIX } from './sharecode3.js?v=594888f1';
+import { loadCatalog, localText, createCatalog } from './data.js?v=85bd3f70';
+import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=024bd980';
+import { parseUnknown, unknownId, unknownMarker, SHORT_KEY_PREFIX, creativeCounts } from './sharecode3.js?v=024bd980';
 import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=22940b30';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
 import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=373b0553';
@@ -12,9 +12,9 @@ import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe
 import { batteryFit, fitsFrame } from './rules.js?v=6634f777';
 import { assemble, PROP_SLOTS } from './assembly.js?v=6f42a16f';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=e94a5904';
-import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=dd4ad593';
-import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=9294ec03';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=9bcfa472';
+import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=031da610';
+import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=582a6e40';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=66243c58';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
@@ -78,7 +78,9 @@ const state = {
   paint: {},
   tune: {},
   name: '',
-  layers: { paint: true, tune: true, osd: false, name: true },
+  // Values of a creative drone from an opened code (drone editor of the game): kept and written back as they are.
+  creative: null,
+  layers: { paint: true, tune: true, osd: false, name: true, creative: true },
   osd: { source: 'preset', preset: 'standard', imported: null },
   presetId: null,
   category: 'frame',
@@ -99,8 +101,8 @@ let lastHashCode = null;
 let undoSnapshot = null;
 
 function snapshot() {
-  return JSON.stringify({ build: state.build, paint: state.paint, tune: state.tune, name: state.name, layers: state.layers, osd: state.osd, presetId: state.presetId,
-    carry: [...state.carry], addons: [...state.addons] });
+  return JSON.stringify({ build: state.build, paint: state.paint, tune: state.tune, name: state.name, creative: state.creative, layers: state.layers, osd: state.osd,
+    presetId: state.presetId, carry: [...state.carry], addons: [...state.addons] });
 }
 
 function restore(json) {
@@ -190,6 +192,7 @@ function content() {
     tune: state.layers.tune ? { ...state.tune } : null,
     osd: state.layers.osd ? osdSpec() : null,
     name,
+    creative: state.layers.creative && state.creative ? state.creative : null,
   };
 }
 
@@ -898,12 +901,17 @@ function renderChecks() {
   const c = derived.check;
   const a = derived.analysis;
   const flight = a ? a.warnings : [];
-  const unknown = c.unknownParts || [];
+  // The creative flight controller is no unknown part: the game has it in creative mode only, so the page can't rate the drone.
+  const creative = (c.unknownParts || []).filter((id) => catalog.creativeOnly(id));
+  const unknown = (c.unknownParts || []).filter((id) => !catalog.creativeOnly(id));
   let level;
   let label;
   if (unknown.length) {
     level = 'bad';
     label = t('ui.statusUnknown');
+  } else if (creative.length) {
+    level = 'warn';
+    label = t('ui.statusCreative');
   } else if (c.problems.length) {
     level = 'bad';
     label = t('ui.statusProblems');
@@ -915,8 +923,10 @@ function renderChecks() {
     label = t('ui.statusOk');
   }
   const list = el('ul', { class: 'checks__list' });
+  if (creative.length) list.append(el('li', { class: 'is-warn' }, t('ui.creativeExplain')));
   if (unknown.length) list.append(el('li', { class: 'is-bad' }, t('ui.unknownExplain'), el('span', { class: 'mono' }, unknown.join(', '))));
-  for (const k of c.problems) if (!(unknown.length && k === 'missing_part')) list.append(el('li', { class: 'is-bad' }, catalog.issueText(k, lang())));
+  const missing = unknown.length || creative.length;
+  for (const k of c.problems) if (!(missing && k === 'missing_part')) list.append(el('li', { class: 'is-bad' }, catalog.issueText(k, lang())));
   for (const k of c.warnings) list.append(el('li', { class: 'is-warn' }, catalog.issueText(k, lang())));
   for (const k of flight) list.append(el('li', { class: 'is-warn' }, el('span', { class: 'checks__tag' }, t('ui.flightWarning')), catalog.analysisWarningText(k, lang())));
   box.replaceChildren(el('p', { class: `checks__status is-${level}` }, el('span', { class: 'checks__led', 'aria-hidden': 'true' }), label), list.children.length ? list : '');
@@ -1520,6 +1530,7 @@ function renderLayers() {
     ['osd', state.layers.osd, true, state.layers.osd ? '' : t('ui.layerNoOsd')],
     ['name', state.layers.name, hasName, hasName ? '' : t('ui.layerNoName')],
   ];
+  if (state.creative) items.push(['creative', state.layers.creative, true, '']);
   for (const [key, checked, enabled, note] of items) {
     box.append(el('label', { class: `check layer${enabled ? '' : ' is-off'}` },
       el('input', {
@@ -1717,6 +1728,8 @@ function importDetails(result) {
     const line = addonLine(report);
     if (line) lines.push([line, true]);
   }
+  const creative = creativeCounts(result.content && result.content.creative);
+  if (creative) lines.push([t('ui.importCreative', creative), false]);
   if (result.unknownParts.length) lines.push([t('ui.importUnknown', { ids: result.unknownParts.map(displayId).join(', ') }), true]);
   if (result.wrongKind.length) lines.push([t('ui.wrongKindExplain') + result.wrongKind.join(', '), true]);
   if (result.renamed.length) lines.push([t('ui.importRenamed', { n: result.renamed.length }), false]);
@@ -1797,11 +1810,13 @@ function applyDecoded(result) {
   state.paint = c.paint ? { ...c.paint } : {};
   state.tune = c.tune ? { ...c.tune } : {};
   state.name = c.name || '';
+  state.creative = c.creative || null;
   state.layers = {
     paint: true,
     tune: result.layers.includes('tune'),
     osd: result.layers.includes('osd'),
     name: true,
+    creative: true,
   };
   state.osd = { ...state.osd, imported: c.osd || null, source: c.osd ? 'imported' : 'preset' };
   state.presetId = null;
@@ -1898,6 +1913,7 @@ function loadPreset(id, announce) {
   state.paint = c.paint ? { ...c.paint } : {};
   state.tune = c.tune ? { ...c.tune } : {};
   state.name = '';
+  state.creative = null;
   state.presetId = id;
   state.carry = new Map();
   state.addons = new Map();

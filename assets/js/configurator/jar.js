@@ -7,7 +7,7 @@
 //   const jar = openJar(bytes);          // throws JarError: jar.too_big, jar.not_zip, jar.too_many_entries, …
 //   jar.has('fabric.mod.json'); const bytes = jar.read('fabric.mod.json');   // throws JarError per entry
 
-import { inflateRaw } from './inflate.js?v=f04f9641';
+import { inflateRaw } from './inflate.js?v=08050593';
 import { crc32 } from './crc32.js?v=62ad0fa2';
 
 const MiB = 1024 * 1024;

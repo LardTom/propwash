@@ -1,7 +1,9 @@
-// PW3 share codes (pw3.md of Propwash, PW3 revision 3.0): a port of Pw3Codec with IdText, TableChecksum,
-// ShareVersion, Pw3Carry, ShareTables, AddonDirectory and ShareConvert of Propwash 0.6.0. Every code is byte-identical
-// to the mod's (tools/test-configurator.mjs checks the golden files of Propwash). The layers paint, tune, OSD and name
-// are the ones of PW2 (sharecode2.js), bit for bit.
+// PW3 share codes (pw3.md of Propwash, PW3 revision 3.1): a port of Pw3Codec with IdText, TableChecksum,
+// ShareVersion, Pw3Carry, ShareTables, AddonDirectory, ShareConvert and CreativeLayer of Propwash 0.6.0. Every code is
+// byte-identical to the mod's (tools/test-configurator.mjs checks the golden files of Propwash). The layers paint,
+// tune, OSD and name are the ones of PW2 (sharecode2.js), bit for bit; revision 3.1 adds the values of a creative drone
+// as the extension 0 (layer CREATIVE, pw3.md 3.6), written only when a code carries them, so every other code is the
+// same as in revision 3.0.
 //
 // Layout: 'PW3-' + base62 of [bit stream, padded to whole bytes] + [low 16 bits of the CRC-32 of those bytes]. The
 // stream names every namespace (= mod id) of the parts once – by the short id of the official add-on directory or as
@@ -15,13 +17,15 @@
 import { crc32 } from './crc32.js?v=62ad0fa2';
 import {
   BitWriter, golombLength, writeText, readText, writePaint, writeTune, writeOsd, indexBits, frameOf, openFrame, base62Encode,
-  readLayers, skipOnce, BASE62,
-} from './sharecode2.js?v=594888f1';
-import { Fail, ACCESSORY_SLOTS, BUILD_FIELDS, utf8Encode, javaStrip } from './sharecode.js?v=594888f1';
+  readLayers, skipOnce, BASE62, PW2_PARAMS,
+} from './sharecode2.js?v=024bd980';
+import { Fail, ACCESSORY_SLOTS, BUILD_FIELDS, utf8Encode, javaStrip } from './sharecode.js?v=024bd980';
 
 export const PW3_FORMAT = 'PW3';
 export const PW3_PREFIX = 'PW3-';
-export const PW3_REVISION = '3.0';
+export const PW3_REVISION = '3.1';
+/** Revisions this port reads, oldest first: 3.0 wrote no extension, 3.1 adds the creative values (extension 0). */
+export const PW3_REVISIONS = Object.freeze(['3.0', '3.1']);
 export const ID_ALPHABET = 'abcdefghijklmnopqrstuvwxyz0123456789_.-/';
 export const UNKNOWN_NAMESPACE = 'pw3.unknown';
 export const RESERVED_PREFIX = 'pw3.';
@@ -37,8 +41,30 @@ export const RESULTS = Object.freeze(['MATCH', 'MISMATCH', 'NEWER', 'MISSING', '
 export const PW3_PARAMS = Object.freeze({ namespaceCount: 0, shortId: 1, part: 3, idText: 3, version: 0, accessoryCount: 0, accessorySlot: 0 });
 export const PW3_LIMITS = Object.freeze({
   namespaces: 16, namespaceChars: 64, pathChars: 128, slugChars: 64, linkChars: 200, versionSuffixChars: 32, addonNameChars: 48,
-  accessories: 255, frameBytes: 2500,
+  accessories: 255, frameBytes: 2500, extensions: 32,
 });
+// Creative values (pw3.md 3.6, Pw3Params and CreativeSpec of Propwash 0.6.0): the extension and its layer bit, the
+// base parts in bit order (bit 4 … 0), the key table (number = index + 1, only ever appended), Exp-Golomb parameters,
+// limits, and the build an old PWD1 code of the drone editor stands for (CreativeShare.PWD1_BUILD).
+export const FIRST_EXTENSION_LAYER = 5;
+export const CREATIVE_EXTENSION = 0;
+export const CREATIVE_LAYER_BIT = FIRST_EXTENSION_LAYER + CREATIVE_EXTENSION;
+export const CREATIVE_BASE_KINDS = Object.freeze(['frame', 'stack', 'motor', 'prop', 'battery']);
+export const CREATIVE_KEYS = Object.freeze(['frame.mass_g', 'motor.mass_g', 'prop.mass_g', 'battery.mass_g', 'stack.mass_g', 'video.mass_g',
+  'inertia.roll', 'inertia.pitch', 'inertia.yaw', 'frame.wheelbase_mm', 'arm.front_left.forward', 'arm.front_left.right', 'arm.front_left.up',
+  'arm.front_right.forward', 'arm.front_right.right', 'arm.front_right.up', 'arm.rear_left.forward', 'arm.rear_left.right', 'arm.rear_left.up',
+  'arm.rear_right.forward', 'arm.rear_right.right', 'arm.rear_right.up', 'prop.diameter_mm', 'prop.pitch_in', 'prop.blades', 'prop.ct', 'prop.cp',
+  'motor.kv', 'motor.resistance_mohm', 'motor.max_current_a', 'battery.cells', 'battery.capacity_mah', 'battery.resistance_mohm',
+  'battery.c_rating', 'stack.esc_current_a', 'frame.frontal_area_cm2', 'frame.drag_cd', 'frame.side_area_cm2', 'frame.top_area_cm2',
+  'frame.ducts', 'frame.impact_tolerance', 'video.fov_deg', 'camera.forward', 'camera.right', 'camera.up']);
+export const CREATIVE_PARAMS = Object.freeze({ namespace: 0, count: 2, gap: 1, literalCount: 0, decimals: 0, value: 4 });
+export const CREATIVE_LIMITS = Object.freeze({ values: 96, keyChars: 128, decimals: 15, mantissaBits: 40 });
+export const CREATIVE_FC = 'propwash:creative_fc';
+export const PWD1_BUILD = Object.freeze({
+  frame: 'propwash:freestyle_5', stack: CREATIVE_FC, motor: 'propwash:m2207_1750', prop: 'propwash:p51_3b', video: 'propwash:digital_hd',
+  battery: 'propwash:b6s_1300', accessories: Object.freeze({}),
+});
+const CREATIVE_INDEX = new Map(CREATIVE_KEYS.map((key, i) => [key, i + 1]));
 export const TABLE_CHECKSUM_BITS = 10;
 const MAX_NUMBER = 0x7fffffff;
 const MAX_CHAIN = 8;
@@ -570,7 +596,7 @@ export function encodePw3(content, tables, { info = 'AUTO', carry = null } = {})
     heads.push(carried ? carriedHead(key, group, tables, carry, values) : freshHead(key, group, tables, info, values));
   }
   const out = new BitWriter();
-  out.bit(!!content.paint).bit(!!content.tune).bit(!!content.osd).bit(!!content.name).bit(false);
+  out.bit(!!content.paint).bit(!!content.tune).bit(!!content.osd).bit(!!content.name).bit(!!content.creative);
   out.golomb(heads.length - 1, PW3_PARAMS.namespaceCount);
   for (const head of heads) writeHead(out, head);
   const bits = indexBits(heads.length);
@@ -595,6 +621,11 @@ export function encodePw3(content, tables, { info = 'AUTO', carry = null } = {})
   if (content.tune) writeTune(out, content.tune);
   if (content.osd) writeOsd(out, content.osd);
   if (content.name) writeText(out, content.name);
+  if (content.creative) {
+    const layer = writeCreative(content.creative, keys);
+    out.golomb(1, 0).golomb(CREATIVE_EXTENSION, 0).golomb(layer.length, PW2_PARAMS.extensionBits);
+    for (const bit of layer.bitsOut) out.bit(bit);
+  }
   const frame = frameOf(out.toBytes());
   if (frame.length > PW3_LIMITS.frameBytes) throw new ShareError('TOO_LARGE', 'propwash.share.error.too_large', [frame.length, PW3_LIMITS.frameBytes]);
   return PW3_PREFIX + base62Encode(frame);
@@ -745,8 +776,23 @@ export function parsePw3(symbols, tables) {
     slots.push(slot);
     refs.push(readRef(r, `accessory:${slot}`, 'accessory', heads, bits));
   }
-  const parsed = { layers: ['parts'], skipped: [], parts: null, accessories: {}, paint: null, tune: null, osd: null, name: null };
-  readLayers(r, parsed, has);
+  const parsed = { layers: ['parts'], skipped: [], parts: null, accessories: {}, paint: null, tune: null, osd: null, name: null, creative: null };
+  readLayers(r, parsed, has, (extension, bits) => {
+    if (extension !== CREATIVE_EXTENSION) return false;
+    if (bits > r.remaining()) throw new Fail('TRUNCATED');
+    if (parsed.creative) throw new Fail('CORRUPT');
+    const start = r.pos;
+    try {
+      parsed.creative = readCreative(r, keys, parsed);
+    } catch (e) {
+      throw e && e.shareFail === true && e.status === 'TRUNCATED' ? new Fail('CORRUPT') : e;
+    }
+    const used = r.pos - start;
+    if (used > bits) throw new Fail('CORRUPT');
+    r.skip(bits - used);
+    parsed.layers.push('creative');
+    return true;
+  });
   const used = new Array(count).fill(false);
   const ids = refs.map((ref) => {
     used[ref.head] = true;
@@ -784,6 +830,194 @@ export function parsePw3(symbols, tables) {
     }
   }
   return { parsed, reports, carry };
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Creative values (CreativeSpec, CreativeLayer)
+
+/** Number of a creative key in the key table (1 …), 0 for a key that goes as text (Pw3Params.creativeIndex). */
+export const creativeIndex = (key) => CREATIVE_INDEX.get(key) || 0;
+
+/**
+ * Creative values as the mod keeps them (CreativeSpec): {base, values} with the base parts of the five base kinds in
+ * their order (1–128 characters each) and, in Java's key order, the first 96 values with a key of 1–128 characters and
+ * a finite number (−0 becomes 0). values has no prototype, so any key is just a key. null stays null.
+ */
+export function normalizeCreative(spec) {
+  if (spec == null) return null;
+  const base = {};
+  const values = Object.create(null);
+  const limit = CREATIVE_LIMITS.keyChars;
+  for (const kind of CREATIVE_BASE_KINDS) {
+    const key = spec.base ? spec.base[kind] : undefined;
+    if (typeof key === 'string' && key.length >= 1 && key.length <= limit) base[kind] = key;
+  }
+  let count = 0;
+  for (const key of Object.keys(spec.values || {}).sort()) {
+    const value = spec.values[key];
+    if (key.length < 1 || key.length > limit || typeof value !== 'number' || !Number.isFinite(value) || count >= CREATIVE_LIMITS.values) continue;
+    values[key] = value === 0 ? 0 : value;
+    count++;
+  }
+  return { base, values };
+}
+
+const DOUBLE = new DataView(new ArrayBuffer(8));
+
+/** The number m · 10^−d as the nearest double, like BigDecimal.valueOf(m, d).doubleValue() (correctly rounded). */
+function decimalNumber(mantissa, decimals) {
+  return Number(`${mantissa}e-${decimals}`) + 0;
+}
+
+/** BigInteger.bitLength: bits of the two's complement without the sign bit. */
+const bitLength = (n) => (n < 0n ? -n - 1n : n).toString(2).replace(/^0$/, '').length;
+
+/**
+ * [mantissa, decimals] of a double for the decimal form of the code, or null for the raw form (CreativeLayer.decimal):
+ * the shortest decimal that reads back as the double (Double.toString), without trailing zeros, if it has at most 15
+ * decimals, a mantissa below 2^39 (two's complement) and gives exactly this double. Java (JDK 19 and later) and
+ * JavaScript print the same shortest digits; they differ only for subnormal numbers, which take the raw form anyway.
+ */
+function decimalOf(value) {
+  if (!Number.isFinite(value)) return null;
+  const m = /^(-?)(\d+)(?:\.(\d+))?(?:e([+-]\d+))?$/.exec(String(value === 0 ? 0 : value));
+  if (!m) return null;
+  const fraction = m[3] || '';
+  let digits = BigInt(`${m[1]}${m[2]}${fraction}`);
+  let scale = fraction.length - (m[4] ? Number(m[4]) : 0);
+  while (scale > 0 && digits % 10n === 0n) {
+    digits /= 10n;
+    scale--;
+  }
+  if (digits === 0n) scale = 0;
+  if (scale < 0) {
+    digits *= 10n ** BigInt(-scale);
+    scale = 0;
+  }
+  if (scale > CREATIVE_LIMITS.decimals || bitLength(digits) >= CREATIVE_LIMITS.mantissaBits) return null;
+  return decimalNumber(digits, scale) === value ? [digits, scale] : null;
+}
+
+function writeCreativeValue(out, value) {
+  const decimal = decimalOf(value);
+  if (decimal === null) {
+    DOUBLE.setFloat64(0, value);
+    out.bit(true).bits(DOUBLE.getUint32(0), 32).bits(DOUBLE.getUint32(4), 32);
+    return;
+  }
+  const [mantissa, decimals] = decimal;
+  const zigzag = mantissa >= 0n ? 2n * mantissa : -2n * mantissa - 1n;
+  out.bit(false).golomb(decimals, CREATIVE_PARAMS.decimals).golomb(Number(zigzag), CREATIVE_PARAMS.value);
+}
+
+function readCreativeValue(r) {
+  if (r.bit()) {
+    DOUBLE.setUint32(0, r.bits(32));
+    DOUBLE.setUint32(4, r.bits(32));
+    const value = DOUBLE.getFloat64(0);
+    if (!Number.isFinite(value)) throw new Fail('CORRUPT');
+    return value + 0;
+  }
+  const decimals = r.golombInt(CREATIVE_PARAMS.decimals, CREATIVE_LIMITS.decimals);
+  const zigzag = r.golomb(CREATIVE_PARAMS.value);
+  if (zigzag >= 2 ** CREATIVE_LIMITS.mantissaBits) throw new Fail('CORRUPT');
+  const mantissa = zigzag % 2 === 0 ? zigzag / 2 : -(zigzag + 1) / 2;
+  return decimalNumber(mantissa, decimals);
+}
+
+/** A base part: by the head of its namespace and its path (idtext), or as text (CreativeLayer.writeBase). */
+function writeCreativeBase(out, key, keys) {
+  const colon = key.indexOf(':');
+  const namespace = colon < 0 ? PROPWASH : key.slice(0, colon);
+  const path = colon < 0 ? key : key.slice(colon + 1);
+  const canonical = colon < 0 || namespace !== PROPWASH;
+  const head = keys.indexOf(namespace);
+  if (canonical && head >= 0 && encodable(path, PW3_LIMITS.pathChars)) {
+    out.golomb(head + 1, CREATIVE_PARAMS.namespace);
+    writeIdText(out, path, PW3_LIMITS.pathChars);
+    return;
+  }
+  out.golomb(0, CREATIVE_PARAMS.namespace);
+  writeText(out, key);
+}
+
+function readCreativeBase(r, keys) {
+  const head = r.golombInt(CREATIVE_PARAMS.namespace, keys.length);
+  if (head === 0) {
+    const key = readText(r, CREATIVE_LIMITS.keyChars);
+    if (key.length === 0 || key.length > CREATIVE_LIMITS.keyChars) throw new Fail('CORRUPT');
+    return key;
+  }
+  const namespace = keys[head - 1];
+  const path = readIdText(r, PW3_LIMITS.pathChars);
+  const key = namespace === PROPWASH ? path : `${namespace}:${path}`;
+  if (key.length > CREATIVE_LIMITS.keyChars) throw new Fail('CORRUPT');
+  return key;
+}
+
+/** The bits of the layer CREATIVE (CreativeLayer.write); keys: the namespace keys of the code's heads, in order. */
+export function writeCreative(creative, keys) {
+  const spec = normalizeCreative(creative);
+  const out = new BitWriter();
+  let mask = 0;
+  CREATIVE_BASE_KINDS.forEach((kind, i) => {
+    if (spec.base[kind] != null) mask |= 1 << (CREATIVE_BASE_KINDS.length - 1 - i);
+  });
+  out.bits(mask, CREATIVE_BASE_KINDS.length);
+  for (const kind of CREATIVE_BASE_KINDS) if (spec.base[kind] != null) writeCreativeBase(out, spec.base[kind], keys);
+  const sorted = Object.keys(spec.values).sort();
+  const indexed = sorted.filter((key) => creativeIndex(key) > 0).sort((a, b) => creativeIndex(a) - creativeIndex(b));
+  const literal = sorted.filter((key) => creativeIndex(key) === 0);
+  out.golomb(indexed.length, CREATIVE_PARAMS.count);
+  let previous = 0;
+  for (const key of indexed) {
+    const index = creativeIndex(key);
+    out.golomb(index - previous - 1, CREATIVE_PARAMS.gap);
+    previous = index;
+    writeCreativeValue(out, spec.values[key]);
+  }
+  out.golomb(literal.length, CREATIVE_PARAMS.literalCount);
+  for (const key of literal) {
+    writeText(out, key);
+    writeCreativeValue(out, spec.values[key]);
+  }
+  return out;
+}
+
+/** Reads the layer CREATIVE (CreativeLayer.read); throws Fail. */
+export function readCreative(r, keys, parsed) {
+  const mask = r.bits(CREATIVE_BASE_KINDS.length);
+  const base = {};
+  CREATIVE_BASE_KINDS.forEach((kind, i) => {
+    if (mask & (1 << (CREATIVE_BASE_KINDS.length - 1 - i))) base[kind] = readCreativeBase(r, keys);
+  });
+  const values = Object.create(null);
+  const indexed = r.golombInt(CREATIVE_PARAMS.count, CREATIVE_LIMITS.values);
+  let index = 0;
+  for (let i = 0; i < indexed; i++) {
+    index += r.golomb(CREATIVE_PARAMS.gap) + 1;
+    if (index > MAX_NUMBER) throw new Fail('CORRUPT');
+    const value = readCreativeValue(r);
+    if (index > CREATIVE_KEYS.length) {
+      skipOnce(parsed, `creative_index:${index}`);
+      continue;
+    }
+    values[CREATIVE_KEYS[index - 1]] = value;
+  }
+  const literal = r.golombInt(CREATIVE_PARAMS.literalCount, CREATIVE_LIMITS.values - indexed);
+  for (let i = 0; i < literal; i++) {
+    const key = readText(r, CREATIVE_LIMITS.keyChars);
+    if (key.length === 0 || key.length > CREATIVE_LIMITS.keyChars) throw new Fail('CORRUPT');
+    const value = readCreativeValue(r);
+    if (Object.prototype.hasOwnProperty.call(values, key)) skipOnce(parsed, `creative_duplicate:${key}`);
+    values[key] = value;
+  }
+  return normalizeCreative({ base, values });
+}
+
+/** Number of own values and base parts of creative values (the line “Creative drone: N own values, M base parts”). */
+export function creativeCounts(creative) {
+  return creative ? { values: Object.keys(creative.values).length, base: Object.keys(creative.base).length } : null;
 }
 
 /** True if the text is a bare Base62 body (what a double click selects of 'PW3-…'). */

@@ -10,10 +10,10 @@ import { check as checkBuild } from './rules.js?v=6634f777';
 import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=373b0553';
 import {
   encode as encodeCode, decode as decodeCode, convert as convertCode, hexColor, createShareTables, frozenTables, displayId,
-} from './sharecode.js?v=594888f1';
+} from './sharecode.js?v=024bd980';
 import { sharedOnly } from './tune.js?v=f4084d0e';
 import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=22940b30';
-import { catalogOrder } from './catalog-build.js?v=70bff0d2';
+import { catalogOrder, CREATIVE_ONLY } from './catalog-build.js?v=70bff0d2';
 
 export const CATALOG_URL = new URL('../../data/configurator/catalog.json', import.meta.url);
 export const CATEGORIES = Object.freeze(['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory']);
@@ -76,6 +76,15 @@ export function createCatalog(json) {
     .map((n) => [n.namespace, { name: n.name, homepage: n.homepage || null }]));
   let shareTables = null;
   let frozen = null;
+  // Parts of the game the web export leaves out (the creative flight controller): known to the share codes by their
+  // kind in the Propwash table, so a code of a creative drone names them as what they are, not as unknown parts.
+  const creativeOnly = new Map();
+  for (const id of CREATIVE_ONLY) {
+    const path = id.slice(id.indexOf(':') + 1);
+    for (const [kind, list] of Object.entries(((json.sharecode.tables || {}).propwash || {}).parts || {})) {
+      if (list.some((e) => e && e.id === path)) creativeOnly.set(id, kind);
+    }
+  }
 
   const catalog = {
     json,
@@ -94,6 +103,8 @@ export function createCatalog(json) {
     part: (id) => byId.get(id) || null,
     /** Category of a part id, or null (lookup for the share code decoder). */
     category: (id) => (byId.get(id) || {}).category || null,
+    /** True for a part of the game that only exists in creative mode and is not in this catalog (the creative flight controller). */
+    creativeOnly: (id) => creativeOnly.has(id),
     /** All parts of a category in the mod's order. */
     partsIn: (category) => byCategory.get(category) || [],
     chemistry: (id) => chemistries.get(id) || null,
@@ -204,7 +215,8 @@ export function createCatalog(json) {
     shareTables() {
       if (!shareTables) {
         shareTables = createShareTables({
-          tables: Object.values(json.sharecode.tables || {}), directory: json.sharecode.directory, versions, mods, lookup: catalog.category,
+          tables: Object.values(json.sharecode.tables || {}), directory: json.sharecode.directory, versions, mods,
+          lookup: (id) => catalog.category(id) || creativeOnly.get(id) || null,
         });
       }
       return shareTables;
@@ -216,9 +228,9 @@ export function createCatalog(json) {
     },
     /** PW3 share code of a content object (sharecode.js); options as for sharecode.js encode (format, carry). */
     encode: (content, options = {}) => encodeCode(content, { tables: catalog.shareTables(), ...options }),
-    /** Tolerant share code decoding (PW1, PW2, PW3) with this catalog's tables and part lookup. */
+    /** Tolerant share code decoding (PW1, PW2, PW3, PWD1) with this catalog's tables and part lookup. */
     decode: (code) => decodeCode(code, { tables: catalog.shareTables() }),
-    /** An old code (PW1, PW2) as PW3, byte for byte like the mod (ShareConvert); a PW3 code is only checked. */
+    /** An old code (PW1, PW2, PWD1) as PW3, byte for byte like the mod (ShareConvert); a PW3 code is only checked. */
     convert: (code) => convertCode(code, catalog.frozenTables()),
 
     /** Build of a preset as a fresh object. */

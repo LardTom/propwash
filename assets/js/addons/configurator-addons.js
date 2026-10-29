@@ -9,10 +9,10 @@
 //
 // apply(catalogJson, renderJson, { reason }) gets the composed catalog whenever an add-on comes, goes or is switched.
 
-import { readAddon } from '../configurator/addon-catalog.js?v=7b541cb4';
-import { JAR_LIMITS } from '../configurator/jar.js?v=01790790';
-import { composeCatalog, composeRender } from '../configurator/data.js?v=9eec6e70';
-import { t, lang, num } from '../configurator/i18n.js?v=9294ec03';
+import { readAddon } from '../configurator/addon-catalog.js?v=d50b671f';
+import { JAR_LIMITS } from '../configurator/jar.js?v=8440b18b';
+import { composeCatalog, composeRender } from '../configurator/data.js?v=85bd3f70';
+import { t, lang, num } from '../configurator/i18n.js?v=582a6e40';
 
 const MiB = 1024 * 1024;
 const local = [];

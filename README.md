@@ -171,16 +171,21 @@ on hover and focus; without JavaScript narrow screens show the links as a row be
 - tune editor for rates (with a live rate-curve graph), PID, feedforward, TPA, filters and throttle curve (with graph),
   using the defaults the game derives from the build
 - optional OSD layer (a Propwash OSD preset or the layout from an opened code)
-- share codes like Propwash 0.6.0 (`pw3.md` of the mod): the page writes PW3 and reads PW3, PW2 and PW1; codes are
-  byte-identical to the game's. Opening an old link (`#PW2…`, `#PW1-…`) or pasting an old code loads the build, switches
+- share codes like Propwash 0.6.0 (`pw3.md` of the mod, PW3 revision 3.1): the page writes PW3 and reads PW3, PW2, PW1
+  and the old PWD1 codes of the drone editor; codes are byte-identical to the game's. Opening an old link (`#PW2…`, `#PW1-…`) or pasting an old code loads the build, switches
   the address to its PW3 code (the one `/propwash code convert` gives in the game, unless a part of the old code has been
   replaced since) and offers “Copy PW3”.
   A PW3 code names every add-on it uses; one this page does not have shows as “Needs *name* *version*” with its Modrinth
   or CurseForge link (from the add-on directory, else from the code; a free address in a code is only shown as text),
   a code for another version of a loaded add-on as “doesn't match the loaded version”. Unknown parts keep their place
-  and are written back unchanged. Tuning-preset and drone-editor codes (`PWT1`, `PWD1`) get a hint where they belong
-- converter `/convert/`: paste any text – a whole Discord post – and every PW1 and PW2 code in it (also inside links)
-  becomes PW3 in place, at most 100 codes per pass; below, one row per code with name, class, status (converted, already
+  and are written back unchanged. Tuning-preset codes (`PWT1`) get a hint where they belong. A creative drone keeps its
+  values (layer “Creative values”, PW3 extension 0): the banner says “Creative drone: N own values, M base parts”, the
+  share box writes them back unchanged (or without them when the layer is unticked), and the check list names the
+  Creative Flight Controller instead of an unknown part – the page can't rate a creative drone. A PWD1 code (or a link
+  `#PWD1-…`) opens like an old code: the Flight School's freestyle drone with the Creative Flight Controller and the
+  code's values, the address switches to its PW3 code and “Copy PW3” is offered
+- converter `/convert/`: paste any text – a whole Discord post – and every PW1, PW2 and PWD1 code in it (also inside
+  links) becomes PW3 in place (a PWD1 code with its creative values), at most 100 codes per pass; below, one row per code with name, class, status (converted, already
   PW3, unknown parts, can't be converted with the reason, damaged), the new code to copy and a link into the
   configurator. Nothing is uploaded; the page uses the same modules as the configurator, without the 3D view
 - 3D view with three.js: the parts' Minecraft block models, textures and paint tints placed like the mod's drone
@@ -224,6 +229,7 @@ node tools/test-configurator.mjs           # share codes, conversion, presets, a
 node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts, assembly, plugged battery, FPV hubs
 node tools/test-configurator-pick.mjs      # clicks and taps on the parts in the 3D view (headless Chrome, ~1 min)
 node tools/test-configurator-flows.mjs     # converter, old links, explanations, builds for beginners (headless Chrome)
+node tools/test-configurator-creative.mjs  # PWD1 and creative PW3 codes in converter and configurator (headless Chrome)
 node tools/test-plug-texts.mjs             # battery plugged in: texts, dictionaries and model data say plugs are hidden
 node tools/test-beginner-images.mjs        # pictures of the builds for beginners match a fresh render (Chrome, dwebp)
 node tools/test-configurator-frames.mjs    # accessories only for some frames: reader, accessory_frame, pickers (Chrome)
@@ -231,11 +237,14 @@ node tools/test-configurator-texts.mjs     # motor help fits the heat model and 
 ```
 
 `--goldens` copies the share-code golden files of Propwash (`pw1-vectors.json`, `pw2-vectors.json`, `pw3-vectors.json`,
-`pw3-conversions.json`, `tablechecksum-vectors.json` and the two frozen table orders) unchanged into
+`pw3-conversions.json`, `pw3-creative-vectors.json`, `tablechecksum-vectors.json` and the two frozen table orders) unchanged into
 `tools/fixtures/sharecode/`; the mod's JUnit tests read the very same files, so Java and JavaScript are held to the same
 codes byte for byte. With `PROPWASH_SHARECODE_GOLDENS` set (or a `propwash` checkout next to this one) the test also
 checks that the copies are current. `tools/fixtures/sharecode-vectors.json` keeps the PW1 and PW2 vectors of the last
 format-1 export (Just More Parts 1.1.1, frozen): they must still read, and convert to PW3 with the same build.
+`tools/fixtures/pwd1-vectors.json` holds PWD1 codes with every edge of the mod's reader (Base64url, deflate, number
+forms of `Double.parseDouble`, the limits of the creative values) and what Propwash 0.6.0 makes of them (status, values,
+PW3 conversion), made with the mod's classes (`ShareFormat.decode`, `ShareConvert.toPw3`).
 `PROPWASH_DISCORD_CODES` may name a local file of real codes (one per line, never in this repository); each must
 convert. `tools/test-configurator-flows.mjs --post <file>` converts a real post instead of the built-in one, and
 `--shots <dir>` keeps its screenshots.
