@@ -23,7 +23,8 @@ export const CHANNEL_SLOTS = Object.freeze({
   camera: ['camera'], antenna: ['antenna'], accessory: ['accessories'],
 });
 export const ASSET_SUFFIXES = Object.freeze(['.json', '.png', '.mcmeta']);
-const VARIANT = /^((_(worn|damaged|broken|ccw|blur|under|paint))*)\.json$/;
+const VARIANT = /^((_(worn|damaged|broken|ccw|blur|under|antenna|paint))*)\.json$/;
+const ANTENNA = '_antenna';
 const UPTILT = Object.freeze({
   whoop: [10, 35], toothpick: [10, 40], cinewhoop: [0, 35], freestyle: [0, 50], race: [15, 70], long_range: [0, 40], cinelifter: [0, 30],
   x_class: [0, 50],
@@ -192,7 +193,10 @@ function use(res, scope, path, textures) {
   follow(res, res.used.get(scope), path, textures, new Set(), 0);
 }
 
-/** AssetIndex.model: item icon, render definition with its variants, textures, paintability and base colours. */
+/**
+ * AssetIndex.model: item icon, render definition with its variants, textures, paintability and base colours (with the
+ * paint groups of an "_antenna" model, Propwash 0.6.0).
+ */
 export function modelOf(definition, res) {
   if (res.models.has(definition.id)) return res.models.get(definition.id);
   const [namespace, path] = splitId(definition.id);
@@ -235,7 +239,8 @@ export function modelOf(definition, res) {
   } else {
     paintKey = `${namespace}:${category}/${path}`;
   }
-  const layers = res.paint.get(paintKey) || [];
+  const layers = [...(res.paint.get(paintKey) || [])];
+  if (res.has(`${renderBase}${ANTENNA}.json`)) layers.push(...(res.paint.get(`${paintKey}${ANTENNA}`) || []));
   const paintable = layers.length > 0 && res.has(`${renderBase}_paint.json`);
   const colors = {};
   for (const layer of layers) {
@@ -864,7 +869,8 @@ export function base64(bytes) {
 /**
  * The viewer's model file of a parts.json entry ({format: 1, id, tex, variants}) from the mod's own files, or null
  * when the part has no render model. Like the game, a stack's "_mounted" variant (battery plugged in) comes from the
- * same files as its base model. Throws for a model the viewer cannot draw (as the build tool does).
+ * same files as its base model; a VTX's "_antenna" variant is drawn at the frame's antenna anchor. Throws for a model
+ * the viewer cannot draw (as the build tool does).
  */
 export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {}) {
   const m = p.model || {};
@@ -928,6 +934,7 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
   add('base', '', null);
   if (p.category === 'prop' && add('ccw', '_ccw', null)) add('ccw_paint', '_ccw_paint', 'ccw');
   if (p.category === 'battery' && add('under', '_under', null)) add('under_paint', '_under_paint', 'under');
+  if (p.category === 'video' && add('antenna', ANTENNA, null)) add('antenna_paint', `${ANTENNA}_paint`, 'antenna');
   if (p.category === 'stack' && add('mounted', '_mounted', null, true)) {
     const pigtail = pigtailOf(raw.mounted.elements);
     if (pigtail) {
@@ -938,7 +945,8 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
     }
   }
   add('paint', '_paint', 'base');
-  for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint'], ['mounted', 'mounted_paint']]) {
+  for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint'], ['mounted', 'mounted_paint'],
+    ['antenna', 'antenna_paint']]) {
     if (variants[plain] && variants[plain].groups) {
       if (variants[painted]) variants[painted].groups = variants[plain].groups;
       delete variants[plain].groups;

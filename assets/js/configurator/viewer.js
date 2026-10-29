@@ -15,6 +15,9 @@
 //
 // Battery plugged in (Propwash 0.6.0): no plugs and no power leads – the stack is drawn as its mounted variant and the
 // model elements listed in a piece's `hide` (assembly.js plugIn) are left out of its geometry.
+//
+// VTX antennas (Propwash 0.6.0): the antenna piece is drawn at the frame's antenna anchor without the camera tilt and,
+// like the video unit, never in the camera preview.
 
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Group, Mesh, BufferGeometry, BufferAttribute, ShaderMaterial, Texture,
@@ -23,8 +26,8 @@ import {
 } from '../../vendor/three/three.min.js';
 import {
   assemble, proceduralFrame, proceduralAccessoryBase, pieceCategory, MM_PER_MODEL_UNIT, PROP_SLOTS,
-} from './assembly.js?v=6f42a16f';
-import { paintTints, groupsOf, pieceSlots, rgbOf, slotOf, shade } from './paint.js?v=e94a5904';
+} from './assembly.js?v=44cf305a';
+import { paintTints, groupsOf, pieceSlots, rgbOf, slotOf, shade } from './paint.js?v=b9f3fb36';
 import { discCenter, verticalFov, ASPECT as FPV_ASPECT, SLOTS } from './fpv.js?v=76cdbbe6';
 
 const MAX_TINTS = 8;
@@ -744,7 +747,7 @@ export function createViewer(container, options) {
       const role = child.userData.role;
       if (!fpv.on) child.visible = true;
       else if (role === 'prop') child.visible = !fpv.spinning;
-      else if (role === 'video') child.visible = false;
+      else if (role === 'video' || role === 'antenna') child.visible = false;
       else child.visible = fpv.frame;
     }
   }
@@ -1229,14 +1232,14 @@ export function createViewer(container, options) {
     /** The part under a point of the canvas (CSS px from its top left), as for a click; null for none. */
     pickAt,
     /**
-     * How every drawn mesh is highlighted now, for tests: {meshId, role, category, all (the whole mesh), faces (highest
-     * level of a tint group)}.
+     * How every drawn mesh is highlighted now, for tests: {meshId, role, category, visible, all (the whole mesh), faces
+     * (highest level of a tint group)}.
      */
     highlights() {
       return droneGroup.children.map((mesh) => {
         const u = mesh.material.uniforms || {};
         return {
-          meshId: mesh.id, role: mesh.userData.role, category: mesh.userData.pick.category,
+          meshId: mesh.id, role: mesh.userData.role, category: mesh.userData.pick.category, visible: mesh.visible,
           all: u.highlightAll ? u.highlightAll.value : 0, faces: u.highlight ? Math.max(0, ...u.highlight.value) : 0,
         };
       });
