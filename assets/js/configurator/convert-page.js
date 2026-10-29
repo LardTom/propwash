@@ -1,11 +1,11 @@
-// Page /convert/: paste any text (a whole Discord post) and every PW1 and PW2 code in it becomes PW3 in place, links
-// included; PW3 codes are only checked. The same modules as the configurator (catalog, share codes, convert.js), no 3D
+// Page /convert/: paste any text (a whole Discord post) and every PW1, PW2 and PWD1 code in it becomes PW3 in place,
+// links included; PW3 codes are only checked. The same modules as the configurator (catalog, share codes, convert.js), no 3D
 // view. Everything runs in the browser; the only request goes to this site's catalog.
 
-import { loadCatalog } from './data.js?v=9eec6e70';
-import { convertText, reasonText, addonNote, MAX_CODES } from './convert.js?v=dd4ad593';
-import { displayId } from './sharecode.js?v=594888f1';
-import { t, lang, tr, loadTexts, pageHref } from './i18n.js?v=9294ec03';
+import { loadCatalog } from './data.js?v=85bd3f70';
+import { convertText, reasonText, addonNote, MAX_CODES } from './convert.js?v=031da610';
+import { displayId } from './sharecode.js?v=024bd980';
+import { t, lang, tr, loadTexts, pageHref } from './i18n.js?v=582a6e40';
 
 const doc = document;
 const $ = (sel, ctx = doc) => ctx.querySelector(sel);
@@ -89,6 +89,7 @@ function codeItem(r, index) {
   }
   if (r.kind === 'not_convertible') item.append(el('p', { class: 'cv-code__note is-bad' }, t('convert.notConvertible', { reason: reasonText(r.reason) })));
   else if (r.kind === 'damaged') item.append(el('p', { class: 'cv-code__note is-bad' }, tr(catalog.statusText(r.status, lang()))));
+  if (r.creative) item.append(el('p', { class: 'cv-code__note' }, t('ui.importCreative', r.creative)));
   if (r.unknown.length) item.append(el('p', { class: 'cv-code__note is-bad' }, t('ui.importUnknown', { ids: r.unknown.map(displayId).join(', ') })));
   item.append(...addonLines(r));
   return item;

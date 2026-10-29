@@ -11,14 +11,14 @@
 // tables read as 'pw2.unknown:<kind>.<n>', like the mod.
 
 import { crc32 } from './crc32.js?v=62ad0fa2';
-import { inflateRaw } from './inflate.js?v=f04f9641';
+import { inflateRaw } from './inflate.js?v=08050593';
 import { TUNE_KEYS as PW1_TUNE_KEYS, isSharedKey } from './tune.js?v=f4084d0e';
 import { deflateRaw } from '../../vendor/pako/deflate.js';
 import { PW2_PARTS, PW2_COLORS, PW2_OSD_DICTIONARY } from './sharecode2-tables.js?v=1e97a115';
 import {
   Fail, utf8Encode, javaStrip, validPath, validNamespace, LIMITS, ACCESSORY_SLOTS, PAINT_SLOTS,
   BUILD_FIELDS,
-} from './sharecode.js?v=594888f1';
+} from './sharecode.js?v=024bd980';
 
 export const PW2_FORMAT = 'PW2';
 export const PW2_PREFIX = 'PW2';
@@ -659,7 +659,11 @@ export function parsePw2(symbols) {
 }
 
 /** The layers after the parts, the same for PW2 and PW3 (LayerCodec), and the zero padding at the end; throws Fail. */
-export function readLayers(r, parsed, has) {
+/**
+ * Reads the layers after the parts (paint, tune, OSD, name, extensions) and checks the padding. extension(e, bits):
+ * reads an extension the caller knows (PW3: the creative values) and returns true, else it is skipped as 'layer:<bit>'.
+ */
+export function readLayers(r, parsed, has, extension = null) {
   if (has.paint) {
     parsed.layers.push('paint');
     readPaint(r, parsed);
@@ -681,10 +685,11 @@ export function readLayers(r, parsed, has) {
   if (has.extensions) {
     const count = r.golombInt(0, MAX_EXTENSIONS);
     for (let i = 0; i < count; i++) {
-      const layer = FIRST_EXTENSION_LAYER + r.golombInt(0, 1024);
+      const e = r.golombInt(0, 1024);
       const bits = r.golomb(PW2_PARAMS.extensionBits);
+      if (extension && extension(e, bits)) continue;
       r.skip(bits);
-      parsed.skipped.push(`layer:${layer}`);
+      parsed.skipped.push(`layer:${FIRST_EXTENSION_LAYER + e}`);
     }
   }
   if (!r.paddingOnly()) throw new Fail('CORRUPT');

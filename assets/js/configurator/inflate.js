@@ -1,8 +1,10 @@
-// Raw DEFLATE decoder (RFC 1951, no zlib header) for share codes (PW1 frames, PW2 OSD layouts with a preset dictionary).
+// Raw DEFLATE decoder (RFC 1951, no zlib header) for share codes (PW1 frames, PW2 OSD layouts with a preset dictionary,
+// PWD1 codes of the drone editor).
 //
 // Behaves like the mod's use of java.util.zip.Inflater(nowrap = true): the input gets one extra zero byte, the
 // output is capped, a stream that needs more input, carries data after its end or contains an invalid block is
-// CORRUPT, more than `limit` bytes of output is TOO_LARGE. Never throws to the caller; returns
+// CORRUPT, more than `limit` bytes of output is TOO_LARGE. PWD1 (CreativeShareCode) inflates without the extra byte
+// and ignores bytes after the end of the stream (options pad and trailing). Never throws to the caller; returns
 // { bytes } or { status }.
 
 const LENGTH_BASE = [3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258];
@@ -196,10 +198,12 @@ function dynamicTables(br) {
  * @param {Uint8Array} data compressed bytes
  * @param {number} limit maximum output size
  * @param {Uint8Array} [dictionary] preset dictionary (zlib inflateSetDictionary; at most 32 KiB, used by PW2)
+ * @param {{pad?: boolean, trailing?: boolean}} [options] pad: the extra zero byte after the input (default true);
+ *   trailing: bytes after the end of the stream are allowed (default false)
  * @returns {{bytes: Uint8Array} | {status: 'CORRUPT' | 'TOO_LARGE'}}
  */
-export function inflateRaw(data, limit, dictionary = new Uint8Array(0)) {
-  const input = new Uint8Array(data.length + 1);
+export function inflateRaw(data, limit, dictionary = new Uint8Array(0), { pad = true, trailing = false } = {}) {
+  const input = new Uint8Array(data.length + (pad ? 1 : 0));
   input.set(data);
   const br = new BitReader(input);
   const out = new Output(limit, dictionary);
@@ -232,7 +236,7 @@ export function inflateRaw(data, limit, dictionary = new Uint8Array(0)) {
       }
     }
     if (out.length > limit) return { status: 'TOO_LARGE' };
-    if (input.length - br.consumed() > 1) return { status: 'CORRUPT' };
+    if (!trailing && input.length - br.consumed() > (pad ? 1 : 0)) return { status: 'CORRUPT' };
     return { bytes: out.buf.slice(0, out.length) };
   } catch (e) {
     if (e instanceof Failure) {

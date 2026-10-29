@@ -1,9 +1,12 @@
-// Converter of old share codes (the page /convert/ and the configurator): finds every PW1, PW2 and PW3 code in any text,
-// e.g. a whole Discord post, converts PW1 and PW2 to PW3 like the mod (ShareConvert, sharecode.js convert), checks PW3
-// codes, and puts the new codes in place of the old ones. Runs in the browser only; nothing is sent anywhere. Also the
-// texts both pages show for a code: why it can't be converted, and the add-ons it needs with safe links.
+// Converter of old share codes (the page /convert/ and the configurator): finds every PW1, PW2 and PW3 code and every
+// PWD1 code of the drone editor in any text, e.g. a whole Discord post, converts PW1, PW2 and PWD1 to PW3 like the mod
+// (ShareConvert, sharecode.js convert; a PWD1 code keeps its creative values), checks PW3 codes, and puts the new codes
+// in place of the old ones. Runs in the browser only; nothing is sent anywhere. Also the texts both pages show for a
+// code: why it can't be converted, and the add-ons it needs with safe links.
 
-import { t } from './i18n.js?v=9294ec03';
+import { t } from './i18n.js?v=582a6e40';
+import { decodePwd1, PWD1_PREFIX } from './sharecode.js?v=024bd980';
+import { creativeCounts } from './sharecode3.js?v=024bd980';
 
 /** At most this many codes per pass (website design 0.6.0, 3.5.3). */
 export const MAX_CODES = 100;
@@ -17,22 +20,54 @@ const MIN_SYMBOLS = 5;
 // small ones, no digits. Random code bodies look like that now and then too, so such a token only counts as a code when
 // it reads as one (convertText).
 const WORDS = /^(?:[A-Z]?[a-z]+)+$/;
+// A PWD1 code of the drone editor: 'PWD1-' (any case) and Base64url (letters, digits, '-', '_'), not inside a word
+// (letters, digits or '_' before it). Like the game's chat (ChatCodeFinder): dashes at the end belong to the code only
+// if it reads with them; the shortest body is "AwA" (an empty deflate stream).
+const PWD1 = /(?<![\p{L}\p{N}_])PWD1-([0-9A-Za-z_-]+)/giu;
+const MIN_PWD1_SYMBOLS = 3;
+const wordChar = (c) => c !== undefined && /[\p{L}\p{N}_]/u.test(c);
+
+/** PWD1 codes of a text: {code, start, end, format: 'PWD1', word}. */
+function findPwd1(text) {
+  const out = [];
+  for (const m of text.matchAll(PWD1)) {
+    const start = m.index;
+    const longest = start + m[0].length;
+    let shortest = longest;
+    while (shortest > start + PWD1_PREFIX.length + 1 && text[shortest - 1] === '-') shortest--;
+    if (shortest - start - PWD1_PREFIX.length < MIN_PWD1_SYMBOLS) continue;
+    let end = -1;
+    for (let at = shortest; at <= longest; at++) {
+      if (!wordChar(text[at]) && decodePwd1(text.slice(start, at))) {
+        end = at;
+        break;
+      }
+    }
+    if (end < 0 && !wordChar(text[shortest])) end = shortest;
+    if (end < 0) continue;
+    const code = text.slice(start, end);
+    out.push({ code, start, end, format: 'PWD1', word: WORDS.test(code.slice(PWD1_PREFIX.length)) });
+  }
+  return out;
+}
 
 /**
  * Every token of a text that looks like a share code, in order: {code, start, end, format, word} with format 'PW1',
- * 'PW2' or 'PW3' (from the prefix; the reader decides whether it is valid) and word true for a token that could just as
- * well be a hyphenated word ("PW3-Code"). Codes inside links (configurator/#PW2…) count too.
+ * 'PW2', 'PW3' or 'PWD1' (from the prefix; the reader decides whether it is valid) and word true for a token that could
+ * just as well be a hyphenated word ("PW3-Code"). Codes inside links (configurator/#PW2…) count too.
  */
 export function findCodes(text) {
   const out = [];
   if (typeof text !== 'string') return out;
+  const editor = findPwd1(text);
+  const inside = (at) => editor.some((e) => at >= e.start && at < e.end);
   for (const m of text.matchAll(CODE)) {
     const code = m[1];
     const body = code.slice(3).replace(/-/g, '');
-    if (body.length < MIN_SYMBOLS) continue;
+    if (body.length < MIN_SYMBOLS || inside(m.index)) continue;
     out.push({ code, start: m.index, end: m.index + code.length, format: code.slice(0, 3).toUpperCase(), word: WORDS.test(body) });
   }
-  return out;
+  return [...out, ...editor].sort((a, b) => a.start - b.start);
 }
 
 /** Why an old code can't become PW3 (ShareConvert reasons), as text. */
@@ -102,12 +137,13 @@ export function withCodeAddons(tables, addons) {
 /**
  * Outcome of one code: kind 'converted' (old code, new PW3 code in code), 'pw3' (already PW3 and readable),
  * 'unknown' (readable, but with parts this site does not know, e.g. of an add-on that is not loaded), 'not_convertible'
- * (reason), 'damaged' (status of the reader: CHECKSUM, TRUNCATED, …); plus the drone's name, frame and class.
+ * (reason), 'damaged' (status of the reader: CHECKSUM, TRUNCATED, …); plus the drone's name, frame and class, and for a
+ * creative drone the number of its own values and base parts (creative: {values, base}).
  */
 export function convertCode(code, catalog) {
-  const format = code.slice(0, 3).toUpperCase();
+  const format = /^pwd1/i.test(code) ? 'PWD1' : code.slice(0, 3).toUpperCase();
   const result = { from: code, format, kind: 'damaged', status: 'CORRUPT', code: null, reason: null, name: null, frame: null, role: null,
-    unknown: [], missing: [], namespaces: [] };
+    unknown: [], missing: [], namespaces: [], creative: null };
   const conversion = catalog.convert(code);
   result.status = conversion.status;
   if (conversion.status === 'NOT_CONVERTIBLE') {
@@ -138,6 +174,7 @@ function describe(result, decoded, catalog) {
   result.frame = build.frame;
   result.role = frame && frame.category === 'frame' ? frame.data.role : null;
   result.unknown = [...decoded.unknownParts, ...decoded.wrongKind];
+  result.creative = creativeCounts(decoded.content.creative);
   result.namespaces = decoded.namespaces;
   result.missing = decoded.namespaces.filter((n) => n.result !== 'MATCH' && n.result !== 'NO_TABLE');
 }
