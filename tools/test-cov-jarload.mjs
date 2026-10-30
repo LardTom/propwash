@@ -243,7 +243,9 @@ async function main() {
         const why = args ? fill(text(key, lang), args) : text(key, lang).split('{name}')[1].slice(0, 30);
         check(s.messages.some((m) => m.level === 'error' && m.text === failed), `no. 78 ${lang}: ${label}: “${failed}” (${JSON.stringify(s.messages.map((m) => m.text))})`);
         check(s.messages.some((m) => m.level === 'error' && m.text.includes(why)), `no. 78 ${lang}: ${label}: says why (“${why.slice(0, 50)}”)`);
-        check(s.rows.length === 1 && s.rows[0].ns === 'justmoreparts' && s.rows[0].on === 'true', `no. 78 ${lang}: ${label}: the bar is unchanged`);
+        const addonNs = base.namespaces.map((n) => n.namespace).filter((ns) => ns !== 'propwash');
+        check(s.rows.length === addonNs.length && s.rows.some((r) => r.ns === 'justmoreparts') && s.rows.every((r) => addonNs.includes(r.ns) && r.on === 'true'),
+          `no. 78 ${lang}: ${label}: the bar is unchanged (the add-ons of the site's data, all on)`);
         await p.evaluate(`(() => { const s = document.querySelector('[data-preset]'); s.value = 'propwash:cinewhoop'; s.dispatchEvent(new Event('change', { bubbles: true })); return true; })()`);
         await sleep(400);
         const after = await p.evaluate("document.querySelector('[data-code]').textContent");

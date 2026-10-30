@@ -770,7 +770,9 @@ async function browserTests(jars) {
         const tag = `${lang}-${width}`;
         await open(`${base}/configurator/`, width);
         let b = await bar();
-        check(b.rows.length === 1 && b.rows[0].ns === 'justmoreparts' && b.rows[0].source === 'directory' && b.rows[0].on === 'true', `bar ${tag}: Just More Parts from the directory, on (${JSON.stringify(b.rows)})`);
+        const addonNs = catalog.namespaces.map((n) => n.namespace).filter((ns) => ns !== 'propwash');
+        check(b.rows.length === addonNs.length && b.rows.some((r) => r.ns === 'justmoreparts') && b.rows.every((r) => addonNs.includes(r.ns) && r.source === 'directory' && r.on === 'true'),
+          `bar ${tag}: Just More Parts and the other add-ons of the catalog (${addonNs.join(', ')}) from the site's data, on (${JSON.stringify(b.rows)})`);
         check(b.open === text('addons.open', lang) && b.local === text('addons.local', lang), `bar ${tag}: “${b.open}” with “${b.local}”`);
         await evaluate("document.querySelector('[data-addon-bar]').scrollIntoView({ block: 'start' })");
         await shot(`jar-bar-${tag}`);
@@ -826,7 +828,7 @@ async function browserTests(jars) {
             await setFile(JMP_JAR);
             b = await bar();
             const local = b.rows.find((r) => r.ns === 'justmoreparts');
-            check(local && local.source === 'local' && b.rows.length === 1, `JMP jar ${tag}: replaces the directory's (${JSON.stringify(b.rows)})`);
+            check(local && local.source === 'local' && b.rows.filter((r) => r.ns === 'justmoreparts').length === 1, `JMP jar ${tag}: replaces the directory's (${JSON.stringify(b.rows)})`);
             check((await frames('justmoreparts:')).length === jmpParts, `JMP jar ${tag}: ${jmpParts} frames`);
             check(await evaluate("(() => { const v = document.querySelector('[data-code]').textContent; return v.startsWith('PW3-'); })()"), `JMP jar ${tag}: the build keeps a code`);
             await shot(`jar-jmp-local-${tag}`);

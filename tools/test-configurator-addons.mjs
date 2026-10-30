@@ -152,14 +152,14 @@ function catalogChecks() {
   const disp = exists('assets/data/configurator/models/mobdefense/accessory/dispenser_mount.json')
     ? readJson('assets/data/configurator/models/mobdefense/accessory/dispenser_mount.json') : null;
   if (check(disp, 'dispenser model file')) {
-    check(disp.tex.length === 2, `dispenser: two textures, its own and a stand-in for ${VANILLA} (${disp.tex.length})`);
+    check(disp.tex.length === 3, `dispenser: three textures, its own, its paint texture and a stand-in for ${VANILLA} (${disp.tex.length})`);
     const base0 = disp.variants.base;
     const faces = base0.el.reduce((n, e) => n + e[7].filter(Boolean).length, 0);
     check(Array.isArray(base0.ftex) && base0.ftex.length === faces, `dispenser: a texture per face (${base0.ftex && base0.ftex.length} of ${faces})`);
     check(Array.isArray(base0.ftex) && base0.ftex.filter((t) => t === 1).length === 1, 'dispenser: exactly the north face of the front plate shows the stand-in');
     check(same((disp.stand_ins || {})[1], VANILLA), `dispenser: the second texture is named as the stand-in of ${VANILLA}`);
     const paint = disp.variants.paint;
-    check(paint && Array.isArray(paint.ftex) && same(paint.ftex, base0.ftex), 'dispenser: the paint variant has the same faces with the stand-in');
+    check(paint && Array.isArray(paint.ftex) && same(paint.ftex.map((t) => t === 1), base0.ftex.map((t) => t === 1)), 'dispenser: the paint variant has the same face with the stand-in');
   }
 
   for (const id of CAM_PRESETS) {
@@ -320,7 +320,10 @@ function vectorChecks() {
     const written = attempt(() => catalog.encode(fresh));
     check(written === v.code, `${v.name}: written byte for byte like the game (${written} vs ${v.code})`);
     if (d.ok) check(attempt(() => catalog.encode(d.content, { carry: d.carry })) === v.code, `${v.name}: read and written again unchanged`);
-    if (v.check) check(same(catalog.check(v.decoded.build), v.check), `${v.name}: check like the game ${JSON.stringify(catalog.check(v.decoded.build))}`);
+    if (v.check) {
+      const c = catalog.check(v.decoded.build);
+      check(same({ problems: c.problems, warnings: c.warnings }, v.check), `${v.name}: check like the game ${JSON.stringify(c)}`);
+    }
     if (v.analysis) {
       const a = catalog.analyze(v.decoded.build);
       check(a && STAT_KEYS.every((k) => close(a[k], v.analysis[k])), `${v.name}: analysis like the game`);
@@ -354,7 +357,7 @@ function vectorChecks() {
 
 function textChecks() {
   for (const key of ['ui.addonFilter', 'ui.addonFilterAll', 'roles.cinelifter', 'camdrones.title', 'camdrones.check.title', 'camdrones.gps', 'camdrones.sensorsDown',
-    'camdrones.sensorsAll', 'camdrones.tilt', 'camdrones.pan', 'camdrones.lensBay', 'camdrones.speeds', 'camdrones.rangeNote', 'ui.fpvGimbalNote']) {
+    'camdrones.sensorsAll', 'camdrones.gimbal', 'camdrones.pan', 'camdrones.lensBay', 'camdrones.speeds', 'camdrones.rangeNote', 'ui.fpvGimbalNote']) {
     const e = entry(key);
     check(Array.isArray(e) && e[0] && e[1], `text ${key} in English and German`);
   }
@@ -364,7 +367,8 @@ function textChecks() {
   }
   const help = readJson('assets/data/configurator/stathelp.json');
   for (const cls of ['cinelifter', 'camera_drone']) {
-    check(help.classes.includes(cls), `stathelp.json: class ${cls}`);
+    check(cls === 'camera_drone' ? help.build_classes.includes(cls) && !help.classes.includes(cls) : help.classes.includes(cls),
+      `stathelp.json: ${cls === 'camera_drone' ? 'build class' : 'frame class'} ${cls}`);
     for (const [key, ranges] of Object.entries(help.stats)) check(Array.isArray(ranges[cls]) && ranges[cls][0] < ranges[cls][1], `stathelp.json: ${key} range for ${cls}`);
   }
   for (const id of CAM_PRESETS) {
@@ -442,7 +446,8 @@ async function preset(p, id) {
 }
 
 async function snapshotTo(p, file) {
-  const url = await p.evaluate('(() => { const s = window.__viewer && window.__viewer.snapshot({ maxWidth: 900, maxHeight: 900 }); return s && s.dataUrl ? s.dataUrl : (typeof s === "string" ? s : null); })()');
+  await sleep(1500);
+  const url = await p.evaluate('(() => { const s = window.__viewer && window.__viewer.snapshot({ maxWidth: 900, maxHeight: 900, pad: 0.04 }); return s && s.toDataURL ? s.toDataURL("image/png") : null; })()');
   if (url && url.startsWith('data:image/png;base64,')) fs.writeFileSync(file, Buffer.from(url.slice(22), 'base64'));
   return !!url;
 }
@@ -506,7 +511,7 @@ async function browser() {
         await filterBy(p, JMP);
         await sleep(200);
         opts = await listed(p);
-        check(opts.length > 10 && opts.every((o) => nsOf(o.id) === JMP && o.badge === text(`addonShort.${JMP}`, lang)), `${where}: filter Just More Parts shows only its frames with their badge (${opts.length})`);
+        check(opts.length > 10 && opts.every((o) => nsOf(o.id) === JMP && o.badge === text('ui.addon', lang)), `${where}: filter Just More Parts shows only its frames with their badge “${text('ui.addon', lang)}” (${opts.length})`);
         await filterBy(p, 'all');
 
         // Mob Defense on the 5″ freestyle preset: the filter, every accessory drawn, weight and mount.
@@ -520,6 +525,7 @@ async function browser() {
           const o = opts.find((x) => x.id === id);
           check(o && o.mount === want.slot && o.facts.includes(`${want.mass}`) && !o.bad, `${where}: ${id} under the ${want.slot} mount, ${want.mass} g, fits (${o && JSON.stringify(o)})`);
           check(o && o.badge === SHORT[MD], `${where}: ${id} badge “${SHORT[MD]}” (${o && o.badge})`);
+          await preset(p, 'propwash:freestyle');
           check(await choose(p, 'accessory', id), `${where}: ${id} picked`);
           const d = await drawnAll(p);
           check(d && d.ids.includes(id) && d.missing.length === 0, `${where}: ${id} drawn with its model (${d && d.missing})`);
