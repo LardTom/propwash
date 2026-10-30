@@ -1,7 +1,8 @@
 # Propwash FPV – landing page, roadmap and drone configurator
 
 Static website for **Propwash FPV**, an FPV drone racing and freestyle mod for Minecraft 26.3
-(Fabric and NeoForge), with an online drone configurator for the addon **Propwash: Just More Parts**.
+(Fabric and NeoForge), with an online drone configurator for Propwash and its official add-ons **Propwash: Just More
+Parts**, **Propwash: Camera Drones** and **Propwash: Mob Defense**.
 This repository contains only the website, no mod source code.
 
 ## Structure
@@ -31,7 +32,9 @@ This repository contains only the website, no mod source code.
     `sharecode3.js` (PW3: codec, parts tables, add-on directory, conversion), `convert.js` (codes in running text),
     `crc32.js`, `inflate.js`, `tune.js`,
     `rules.js` (compatibility), `analysis.js` (flight analysis as in Propwash 0.6.0: energy balance, battery model, climb thrust and the heat model of motors and ESC), `fpv.js` (FPV camera rig and props in view),
-    `tuning.js` (tune defaults and editing), `index.js`
+    `tuning.js` (tune defaults and editing), `camdrones.js` (camera drones of Propwash: Camera Drones: what makes a
+    build one, the check of the workbench button “Check camera drone”), `stand-ins.js` (the site's own textures for
+    textures of Minecraft that an add-on model uses and no export carries), `index.js`
   - page: `ui.js` (part pickers, builds for beginners, paint, tune editor, OSD layer, stats with explanations, share
     code, import), `i18n.js` (texts), `assembly.js` (where every part sits on the drone, what a plugged-in battery
     hides), `paint.js` (paint tints), `viewer.js` (three.js viewer), `convert-page.js` (the page `/convert/`)
@@ -45,11 +48,14 @@ This repository contains only the website, no mod source code.
   review (see [Platforms](#platforms)); `assets/js/roadmap/platforms.js` reads it for the build script, the roadmap
   and the tests
 - `assets/data/changelog.json` – what the changelog shows, generated (see [Changelog](#changelog))
-- `assets/data/configurator/` – data from the web export of Propwash (format 2, with Just More Parts): `catalog.json`
+- `assets/data/configurator/` – data from the web export of Propwash (format 2, with Just More Parts, Camera Drones and
+  Mob Defense): `catalog.json`
   (parts, presets, rules, paint, tune, the parts table of every namespace and the add-on directory), `render.json` (frame
   layouts, motor seats, paint channels) and `models/` (one file per part: block-model geometry plus textures and plug
   anchors, loaded only for the parts on the drone); written by hand: `stathelp.json` (typical range of every figure per
-  drone class) and `beginner.json` (the builds for beginners) with their pictures in `beginner/`
+  drone class) and `beginner.json` (the builds for beginners) with their pictures in `beginner/`, and
+  `camera-drones.json` (what Camera Drones keeps in its code: nav boards with their sensors, gimbals with tilt, pan and
+  lenses, the flight classes with the speeds of Cine, Normal and Sport)
 - `assets/vendor/three/` – three.js r186 as a trimmed, minified bundle (MIT, `LICENSE`)
 - `assets/vendor/pako/` – the deflate part of pako 2.1.0 (MIT, `LICENSE`), so share codes are byte-identical to the mod's
 - `assets/img/` – real in-game screenshots as WebP (800 and 1600 px wide, plus cropped shots) and `og-image.jpg` for link
@@ -146,7 +152,25 @@ on hover and focus; without JavaScript narrow screens show the links as a row be
 
 ## Drone configurator
 
-`configurator/` builds a drone from every Propwash and Just More Parts part:
+`configurator/` builds a drone from every part of Propwash and of its official add-ons Just More Parts, Camera Drones and
+Mob Defense:
+
+- add-ons in the part lists: every part of an add-on carries its badge (“JMP”, “Camera Drones”, “Mob Defense”, else
+  “Add-on”, the tooltip names the mod), and when a list holds parts of more than one source, the filter “Add-on” above
+  it shows only those of Propwash or of one add-on; the preset list has a group per add-on with presets
+- camera drones (Propwash: Camera Drones): the three drones Compact, Tour and Cine as presets and all 19 parts – folding
+  frames, nav flight controllers, folding props, motors, camera links, smart batteries and gimbals – with model, mass,
+  the figures of the workbench and the help texts of the game; the part lists name what a nav board and a gimbal bring
+  (GPS, obstacle sensors, tilt range, 360° pan, lenses) instead of FPV figures, a camera drone gets the panel “Check
+  camera drone” (the workbench button of the add-on: Nav-FC, gimbal, battery and camera link fitted, other, missing or
+  wrong, with the part of the frame's camera drone as the advice; what the nav board, gimbal and flight class bring)
+  and its figures are compared with camera drones, not with an FPV class (`stathelp.json`, `build_classes`); the cine
+  frame has its class Cinelifter; the FPV camera preview says that a camera drone films with its gimbal camera
+- Mob Defense: the dispenser mount (front, four slots), spear mount (bottom) and rocket booster (top) as accessories
+  with mass, mount and the frame limits of the game (only on a frame with that mount, e.g. not the dispenser on the
+  65 mm whoop); the front plate of the dispenser uses Minecraft's own dispenser texture, which no export and no jar
+  carries – the 3D view draws it with a texture of the site's own (`stand-ins.js`, named in the model file's
+  `stand_ins`)
 
 - builds for beginners above the parts: three Propwash presets (`assets/data/configurator/beginner.json`) with a picture,
   their key figures, “Load” and “Copy code” (the PW3 code is written when copied, so it stays right when a table grows),
@@ -226,14 +250,32 @@ on hover and focus; without JavaScript narrow screens show the links as a row be
 
 ### Updating the data
 
-The data come from the web export of Propwash (format 2, `/propwash webexport all` with Just More Parts installed;
-`runWebExport` of either mod). Default location: the newest `../propwash-justmoreparts/release/<version>/web-export`, or
-pass `--export <dir>` / set `JMP_WEB_EXPORT`:
+The data come from the web export of Propwash (format 2, `/propwash webexport all` with the add-ons installed). The
+current data: `runWebExport` of Propwash 0.6.0-rc.1 with the rc.1 jars of Just More Parts (1.2.0-rc.1), Camera Drones
+(1.0.0-rc.1) and Mob Defense (1.0.0-rc.1) in `mods/`, all four namespaces in one export; `catalog.json` names it in
+`source.sources` (generator, time, namespaces) and the jars with their SHA-256 in `source.jars`:
 
 ```sh
-node tools/build-configurator-data.mjs --goldens <propwash>/common/src/test/resources/sharecode
+# in a Propwash checkout of the release stand, with the add-on jars in one folder
+./gradlew :fabric:runWebExport -PpropwashWebExportMods=<folder with the add-on jars>
+```
+
+The build scripts read one export with all add-ons or several exports (`--export` repeated, or `JMP_WEB_EXPORT` with
+paths separated like `PATH`): `base/` comes from the first export that has it, every namespace from the first export
+that has it. Default: the newest `web-export` of `../propwash-justmoreparts/release/<version>/`,
+`../propwash-camera/release/<version>/` and `../propwash-mobdefense/release/<version>/` that exist. `--mods <jar or
+folder>` (or `PROPWASH_WEB_EXPORT_MODS`) gives the jars of the add-ons: their metadata (`fabric.mod.json` or
+`neoforge.mods.toml`) gives each namespace its homepage, which a PW3 code names for an add-on that is not in the add-on
+directory (Camera Drones and Mob Defense: `propwashfpv.com`, only as text) – without it the page's codes of those
+add-ons would differ from the game's:
+
+```sh
+node tools/build-configurator-data.mjs --export <dir> --mods <jars> --goldens <propwash>/common/src/test/resources/sharecode
                                            # catalog.json, the export's PW3 vectors and the golden files of Propwash
-node tools/build-configurator-models.mjs   # render.json and models/ (with the plug anchors)
+node tools/build-configurator-models.mjs --export <dir> --resources <propwash>/common/src/main/resources --resources <unpacked JMP jar>
+                                           # render.json and models/ (with the plug anchors)
+node tools/build-configurator-heat.mjs --export <dir>   # heat figures of the game (tools/fixtures/heat-vectors.json)
+node tools/build-addons.mjs --jar justmoreparts=<jar>   # the hosted export of Just More Parts the configurator shows
 node tools/build-configurator-beginner.mjs # pictures of the builds for beginners (headless Chrome, cwebp)
 node tools/test-configurator.mjs           # share codes, conversion, presets, analysis, FPV camera, tune, explanations
 node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts, assembly, plugged battery, FPV hubs
@@ -245,6 +287,8 @@ node tools/test-plug-texts.mjs             # battery plugged in: texts, dictiona
 node tools/test-beginner-images.mjs        # pictures of the builds for beginners match a fresh render (Chrome, dwebp)
 node tools/test-configurator-frames.mjs    # accessories only for some frames: reader, accessory_frame, pickers (Chrome)
 node tools/test-configurator-texts.mjs     # motor help fits the heat model and the analysis, the page names its export
+node tools/test-configurator-addons.mjs    # Camera Drones and Mob Defense: catalog, models, camera check, codes of the
+                                           # game, missing add-on, filter and badges (Chrome, en/de, 1280 and 390 px)
 ```
 
 `--goldens` copies the share-code golden files of Propwash (`pw1-vectors.json`, `pw2-vectors.json`, `pw3-vectors.json`,
@@ -252,7 +296,13 @@ node tools/test-configurator-texts.mjs     # motor help fits the heat model and 
 `tools/fixtures/sharecode/`; the mod's JUnit tests read the very same files, so Java and JavaScript are held to the same
 codes byte for byte. With `PROPWASH_SHARECODE_GOLDENS` set (or a `propwash` checkout next to this one) the test also
 checks that the copies are current. `tools/fixtures/sharecode-vectors.json` keeps the PW1 and PW2 vectors of the last
-format-1 export (Just More Parts 1.1.1, frozen): they must still read, and convert to PW3 with the same build.
+format-1 export (Just More Parts 1.1.1, frozen): they must still read, and convert to PW3 with the same build. Its PW3
+vectors are codes of the add-ons from the game: a camera drone (Tour with name and paint), the dispenser mount on the
+5″ freestyle preset, all three Mob Defense accessories and a build with parts of all three add-ons, written by the PW3
+codec of Propwash 0.6.0-rc.1 with the parts tables and mod data of the three rc.1 jars (the same setup writes the 62
+vectors of that web export byte for byte), with the game's check and analysis where the export has the build and the
+game's line for a missing add-on (name, version, `https://propwashfpv.com`, not clickable);
+`tools/test-configurator.mjs` and `tools/test-configurator-addons.mjs` read and write them byte for byte.
 `tools/fixtures/pwd1-vectors.json` holds PWD1 codes with every edge of the mod's reader (Base64url, deflate, number
 forms of `Double.parseDouble`, the limits of the creative values) and what Propwash 0.6.0 makes of them (status, values,
 PW3 conversion), made with the mod's classes (`ShareFormat.decode`, `ShareConvert.toPw3`).
@@ -265,10 +315,10 @@ convert. `tools/test-configurator-flows.mjs --post <file>` converts a real post 
 `antenna`, their models and textures, `drone_layout.json` and `drone_paint.json` of both namespaces, and `frames.json`
 with id, data and derived values of every frame of that export, `antenna_anchor` included);
 `tools/test-configurator-antenna.mjs` builds the viewer data from it with `build-configurator-models.mjs --out <dir>`
-and checks the rules, the faces left out (the numbers of the game's own self test) and the antennas in the viewer
-while the site's data still come from an older export. With a newer web export the site's VTX models gain their
-lists of left-out faces and the catalog the holders and antennas when `build-configurator-models.mjs` and
-`build-configurator-data.mjs` run again.
+and checks the rules, the faces left out (the numbers of the game's own self test) and the antennas in the viewer.
+Since the site's data come from the web export of Propwash 0.6.0-rc.1, its VTX models carry those lists and the
+catalog the holders and antennas too; frames the fixture does not have (Camera Drones) take their holder from the
+catalog.
 
 Web exports before the fix of their asset index lack the stacks' `_mounted` variants (battery plugged in, Propwash
 0.6.0). `build-configurator-models.mjs --resources <dir>` (repeatable, or `PROPWASH_MOD_RESOURCES`) then takes them from a
@@ -296,7 +346,7 @@ each one. The first is the 7″ deadcat whose props the game showed at the image
 and the test fails if the configurator ever shows 0 % for it again. The same code carries the second report (flight
 times and part stats a bit off, e.g. 24.2 min hovering and 124 °C at full throttle): `analysis` holds the figures of
 Propwash 0.5.2 and Just More Parts 1.1.1 (19.6 min hovering, 11.9 min cruising, 8.1 min mixed, 5.8 min aggressive)
-with the motor temperatures of Propwash 0.6.0 (98 °C after 60 s full throttle), `analysis_before` the ones of an earlier pre-release build; the test checks that weight, thrust-to-weight, hover
+with the motor temperatures of Propwash 0.6.0-rc.1 and Just More Parts 1.2.0-rc.1 (96 °C after 60 s full throttle), `analysis_before` the ones of an earlier pre-release build; the test checks that weight, thrust-to-weight, hover
 throttle and props in view stay unchanged (the flight physics is bit-identical; the top speed moves with the climb thrust
 of 0.5.0 and the battery model of 0.5.2) and that the energy figures changed.
 
