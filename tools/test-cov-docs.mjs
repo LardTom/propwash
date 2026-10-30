@@ -4,7 +4,9 @@
 //   - player guide: “Sharing builds” (#share) names PW3, missing add-ons, the shopping list, stand-in parts and
 //     <code>/propwash code</code> and links convert/ (there); the sections of 0.6.0 by id (freecam, RX block, flight
 //     path marker, slime and wool, motor heat, stacked gates, pressure plates, /propwash clear, gate hint); no page or
-//     section “Run a server”
+//     section “Run a server”; every OSD element that is new in Propwash 0.6.0 (OsdElement of the mod against v0.5.2)
+//     has its own section video-<element> in “Video and FPV view” that names it as the game does, and the spectator
+//     count says who counts (F7, goggles on the channel), who doesn't (pilot, gimbal operator) and its presets
 //   - world rules: “Allow freecam drone” off by default as in the export, its text names walls and modified clients;
 //     “Hardware limits” names the ESC; no “restart the race” / „Rennen neu starten“ anywhere in docs/**, “Reset” there
 //   - add-on API: <code>/propwash webexport</code> in English and German, explained in its own section “Your add-on in
@@ -22,7 +24,7 @@
 //   node tools/test-cov-docs.mjs [--propwash-repo <dir>] [--propwash-ref <ref>] [--gamerules <file>] [--no-browser] [--chrome <path>]
 //
 // --propwash-repo (or PROPWASH_REPO, default: the propwash checkout next to this repository) and --propwash-ref (default
-// integration, else HEAD): where RULES_URL is read with git show; --gamerules (or PROPWASH_GAMERULES): the mod's
+// integration, else HEAD): where RULES_URL, OsdElement and the element names are read with git show; --gamerules (or PROPWASH_GAMERULES): the mod's
 // export of its world rules (default docs/gamerules/gamerules.json). Checks of a known fault are locked (they print
 // their state); COV_UNLOCK=<id>,… or all makes them count.
 
@@ -96,6 +98,54 @@ function sections060() {
   const headings = docsPages().flatMap((p) => [...read(p).matchAll(/<h[1-6][^>]*>([\s\S]*?)<\/h[1-6]>/g)].map((m) => ({ p, t: plain(m[1]) })));
   const run = headings.filter((h) => /\b(run(ning)? a server|host(ing)? a server|server betreiben|server aufsetzen)\b/i.test(h.t));
   check(!run.length, `no. 45: no section “Run a server” / „Server betreiben“ (${run.map((h) => `${h.p}: ${h.t}`).join('; ')})`);
+}
+
+const OSD_ELEMENT_JAVA = 'common/src/main/java/de/lardtom/propwash/osd/OsdElement.java';
+const OSD_BEFORE = 'v0.5.2';
+const OSD_WORDS = {
+  SPECTATORS: {
+    en: [[/\beye\b/i, 'the eye'], [/\bF7\b/, 'F7'], [/goggles[^.]*channel/i, 'goggles on its channel'], [/gimbal operator/i, 'the gimbal operator'], [/don’t count|doesn’t count|do not count/i, 'who doesn’t count'], [/\bStandard\b/, 'preset Standard'], [/\bFull\b/, 'preset Full']],
+    de: [[/\bAuge\b/, 'das Auge'], [/\bF7\b/, 'F7'], [/Brille[^.]*Kanal/, 'Brille auf ihrem Kanal'], [/Gimbal-Operator/, 'den Gimbal-Operator'], [/zählen nicht|zählt nicht/, 'wer nicht zählt'], [/\bStandard\b/, 'Vorlage Standard'], [/\bVoll\b/, 'Vorlage Voll']],
+  },
+};
+const reEscape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+function osdElements060() {
+  const repo = arg('--propwash-repo', 'PROPWASH_REPO') || siblingRepo('propwash');
+  if (!repo) {
+    note('no. 45 OSD: no Propwash checkout (--propwash-repo / PROPWASH_REPO): new OSD elements not read');
+    return;
+  }
+  const ref = arg('--propwash-ref') || (gitHasRef(repo, 'integration') ? 'integration' : 'HEAD');
+  const now = gitShow(repo, ref, OSD_ELEMENT_JAVA);
+  const before = gitHasRef(repo, OSD_BEFORE) ? gitShow(repo, OSD_BEFORE, OSD_ELEMENT_JAVA) : null;
+  const langEn = gitShow(repo, ref, 'common/src/main/resources/assets/propwash/lang/en_us.json');
+  const langDe = gitShow(repo, ref, 'common/src/main/resources/assets/propwash/lang/de_de.json');
+  if (!now || !before || !langEn || !langDe) {
+    note(`no. 45 OSD: ${ref} or ${OSD_BEFORE} of ${repo} without OsdElement.java or language files: new OSD elements not read`);
+    return;
+  }
+  const constants = (java) => new Set([...java.matchAll(/^ {4}([A-Z][A-Z0-9_]*)\(/gm)].map((m) => m[1]));
+  const old = constants(before);
+  const added = [...constants(now)].filter((c) => !old.has(c));
+  check(added.length > 0, `no. 45 OSD: OsdElement of ${ref} has elements that are new since ${OSD_BEFORE}`);
+  const names = { en: JSON.parse(langEn), de: JSON.parse(langDe) };
+  const video = docSection(guide, 'video');
+  check(!!video, 'no. 45 OSD: chapter #video “Video and FPV view” there');
+  for (const c of added) {
+    const key = `propwash.osd.element.${c.toLowerCase()}`;
+    const name = { en: names.en[key], de: names.de[key] };
+    if (!check(!!(name.en && name.de), `no. 45 OSD: ${key} has its name in English and German (${ref})`)) continue;
+    const id = `video-${c.toLowerCase().replace(/_/g, '-')}`;
+    const s = headingBoth(guide, id, `no. 45 OSD element ${c}`);
+    if (!s) continue;
+    check(!!video && video.html.includes(s.heading), `no. 45 OSD: #${id} is part of the chapter “Video and FPV view”`);
+    for (const lang of LANGS) {
+      check(new RegExp(`(^|[^\\p{L}])${reEscape(name[lang])}($|[^\\p{L}])`, 'iu').test(s[lang]), `no. 45 OSD ${lang}: #${id} names the element “${name[lang]}” as the game does`);
+      for (const [re, what] of (OSD_WORDS[c] || {})[lang] || []) check(re.test(s[lang]), `no. 45 OSD ${lang}: #${id} names ${what}`);
+    }
+  }
+  note(`no. 45 OSD: elements new since ${OSD_BEFORE} read from ${path.basename(repo)} ${ref}: ${added.join(', ')}`);
 }
 
 function worldRules() {
@@ -288,6 +338,7 @@ async function apiInBrowser() {
 async function main() {
   sharing();
   sections060();
+  osdElements060();
   worldRules();
   addonApi();
   rulesUrl();
