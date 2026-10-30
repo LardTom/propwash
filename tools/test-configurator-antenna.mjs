@@ -246,7 +246,7 @@ for (const ns of NAMESPACES) {
   const own = withAnchor({ pos: [0, 30, 52.5], tilt_deg: 40 });
   check(own.definition && same(exportData(own.definition).antenna_anchor, { pos: [0, 30, 52.5], tilt_deg: 40, explicit: true }), 'PartData antenna_anchor: the frame\'s own holder, explicit');
 
-  const videoJson = { format: 1, mass_g: 9, link: 'digital', latency_ms: 28, range_blocks: 900, image_quality: 0.9, vtx_power_mw: 500 };
+  const videoJson = { format: 1, mass_g: 9, link: 'digital', latency_ms: 28, range_blocks: 800, image_quality: 0.9, vtx_power_mw: 500 };
   const withAntenna = (antenna) => decodePart('video', 'addon:vtx_a', JSON.stringify(antenna === undefined ? videoJson : { ...videoJson, antenna }));
   r = withAntenna({ count: 2, length_mm: 80, cap: 'patch' });
   check(r.definition && same(r.definition.antenna, { count: 2, lengthMm: 80, cap: 'patch' }) && !r.warnings.length, `PartJson antenna: read (${JSON.stringify(r.definition && r.definition.antenna)})`);
