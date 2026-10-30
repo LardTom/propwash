@@ -1,0 +1,3864 @@
+[
+ {
+  "id": "propwash:whoop_65",
+  "builtin": true,
+  "data": {
+   "role": "whoop",
+   "shape": "true_x",
+   "wheelbase_mm": 65,
+   "props_mm": [
+    0,
+    31
+   ],
+   "motor_mounts": [
+    "propwash:m08"
+   ],
+   "stack_mounts": [
+    "propwash:whoop_aio"
+   ],
+   "accessory_mounts": [
+    "bottom"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -22.980970388562792,
+      0,
+      -22.980970388562792
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      22.980970388562792,
+      0,
+      -22.980970388562792
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -22.980970388562792,
+      0,
+      22.980970388562792
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      22.980970388562792,
+      0,
+      22.980970388562792
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": false,
+    "plate_mm": -3
+   },
+   "electronics_mm": 4,
+   "camera": {
+    "pos": [
+     0,
+     16,
+     -20
+    ],
+    "tilt_deg": 12,
+    "tilt_min_deg": 10,
+    "tilt_max_deg": 35
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.2,
+    "plate": 0.3,
+    "duct": 0.5
+   },
+   "accessory_anchors": {
+    "bottom": {
+     "pos": [
+      0,
+      0.5,
+      -25.6
+     ],
+     "tilt_deg": 90,
+     "length_mm": 10
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     23.2,
+     9.2
+    ],
+    "tilt_deg": 35,
+    "explicit": true
+   },
+   "aero": {
+    "frontal_area_m2": 0.0035,
+    "drag_coefficient": 1.1,
+    "side_area_m2": null,
+    "top_area_m2": 0.0041
+   },
+   "duct": {
+    "thrust_gain": null,
+    "clearance_mm": null,
+    "translational_lift_gain": null,
+    "wash_loss": null,
+    "wash_noise": null,
+    "restitution": null,
+    "friction": null
+   },
+   "impact_tolerance": 14,
+   "battery_fit": {
+    "cells": [
+     1,
+     1
+    ],
+    "max_mass_g": 10,
+    "preferred_min_cells": 1,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 1,
+   "ducted": true,
+   "shape_extent_mm": 76.96194077712559
+  }
+ },
+ {
+  "id": "propwash:cinewhoop_3",
+  "builtin": true,
+  "data": {
+   "role": "cinewhoop",
+   "shape": "true_x",
+   "wheelbase_mm": 142,
+   "props_mm": [
+    0,
+    76
+   ],
+   "motor_mounts": [
+    "propwash:m14"
+   ],
+   "stack_mounts": [
+    "propwash:s20"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -50.20458146424487,
+      0,
+      -50.20458146424487
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      50.20458146424487,
+      0,
+      -50.20458146424487
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -50.20458146424487,
+      0,
+      50.20458146424487
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      50.20458146424487,
+      0,
+      50.20458146424487
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 20
+   },
+   "electronics_mm": 10,
+   "camera": {
+    "pos": [
+     0,
+     30,
+     -48
+    ],
+    "tilt_deg": 10,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 35
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.2,
+    "plate": 0.3,
+    "duct": 0.5
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      44.7,
+      -47
+     ],
+     "tilt_deg": 10,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -3,
+      -24
+     ],
+     "tilt_deg": 30,
+     "length_mm": 26
+    },
+    "front": {
+     "pos": [
+      0,
+      -3,
+      -50
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     24,
+     34
+    ],
+    "tilt_deg": 35,
+    "explicit": true
+   },
+   "aero": {
+    "frontal_area_m2": 0.012,
+    "drag_coefficient": 1,
+    "side_area_m2": null,
+    "top_area_m2": 0.02
+   },
+   "duct": {
+    "thrust_gain": null,
+    "clearance_mm": null,
+    "translational_lift_gain": null,
+    "wash_loss": null,
+    "wash_noise": null,
+    "restitution": null,
+    "friction": null
+   },
+   "impact_tolerance": 11,
+   "battery_fit": {
+    "cells": [
+     3,
+     4
+    ],
+    "max_mass_g": 120,
+    "preferred_min_cells": 3,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 3,
+   "ducted": true,
+   "shape_extent_mm": 176.40916292848974
+  }
+ },
+ {
+  "id": "propwash:freestyle_5",
+  "builtin": true,
+  "data": {
+   "role": "freestyle",
+   "shape": "true_x",
+   "wheelbase_mm": 225,
+   "props_mm": [
+    0,
+    130
+   ],
+   "motor_mounts": [
+    "propwash:m22"
+   ],
+   "stack_mounts": [
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -79.54951288348659,
+      0,
+      -79.54951288348659
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      79.54951288348659,
+      0,
+      -79.54951288348659
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -79.54951288348659,
+      0,
+      79.54951288348659
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      79.54951288348659,
+      0,
+      79.54951288348659
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 30
+   },
+   "electronics_mm": 12,
+   "camera": {
+    "pos": [
+     0,
+     17.2,
+     -58.8
+    ],
+    "tilt_deg": 28,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 50
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      34.7,
+      -69
+     ],
+     "tilt_deg": 22,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -3,
+      -56
+     ],
+     "tilt_deg": 30,
+     "length_mm": 34
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -72
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     28.5,
+     50
+    ],
+    "tilt_deg": 35,
+    "explicit": true
+   },
+   "aero": {
+    "frontal_area_m2": 0.012,
+    "drag_coefficient": 0.9,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 8,
+   "battery_fit": {
+    "cells": [
+     4,
+     6
+    ],
+    "max_mass_g": 230,
+    "preferred_min_cells": 6,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 5,
+   "ducted": false,
+   "shape_extent_mm": 289.09902576697317
+  }
+ },
+ {
+  "id": "propwash:race_5",
+  "builtin": true,
+  "data": {
+   "role": "race",
+   "shape": "true_x",
+   "wheelbase_mm": 215,
+   "props_mm": [
+    0,
+    130
+   ],
+   "motor_mounts": [
+    "propwash:m22"
+   ],
+   "stack_mounts": [
+    "propwash:s20",
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -76.01397897755385,
+      0,
+      -76.01397897755385
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      76.01397897755385,
+      0,
+      -76.01397897755385
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -76.01397897755385,
+      0,
+      76.01397897755385
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      76.01397897755385,
+      0,
+      76.01397897755385
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": false,
+    "plate_mm": -2.8
+   },
+   "electronics_mm": 10,
+   "camera": {
+    "pos": [
+     0,
+     18.7,
+     -51.9
+    ],
+    "tilt_deg": 38,
+    "tilt_min_deg": 15,
+    "tilt_max_deg": 70
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      26.7,
+      -67
+     ],
+     "tilt_deg": 20,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -2,
+      -48
+     ],
+     "tilt_deg": 30,
+     "length_mm": 28
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -66
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     20,
+     44
+    ],
+    "tilt_deg": 35,
+    "explicit": true
+   },
+   "aero": {
+    "frontal_area_m2": 0.009,
+    "drag_coefficient": 0.75,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 7,
+   "battery_fit": {
+    "cells": [
+     4,
+     6
+    ],
+    "max_mass_g": 230,
+    "preferred_min_cells": 6,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 5,
+   "ducted": false,
+   "shape_extent_mm": 282.0279579551077
+  }
+ },
+ {
+  "id": "propwash:long_range_7",
+  "builtin": true,
+  "data": {
+   "role": "long_range",
+   "shape": "true_x",
+   "wheelbase_mm": 295,
+   "props_mm": [
+    0,
+    180
+   ],
+   "motor_mounts": [
+    "propwash:m22",
+    "propwash:m28"
+   ],
+   "stack_mounts": [
+    "propwash:s20",
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -104.29825022501575,
+      0,
+      -104.29825022501575
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      104.29825022501575,
+      0,
+      -104.29825022501575
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -104.29825022501575,
+      0,
+      104.29825022501575
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      104.29825022501575,
+      0,
+      104.29825022501575
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 32
+   },
+   "electronics_mm": 14,
+   "camera": {
+    "pos": [
+     0,
+     17.4,
+     -65.4
+    ],
+    "tilt_deg": 20,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 40
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      38.7,
+      -68
+     ],
+     "tilt_deg": 20,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -2.5,
+      -60
+     ],
+     "tilt_deg": 30,
+     "length_mm": 36
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -76
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     32.5,
+     62
+    ],
+    "tilt_deg": 35,
+    "explicit": true
+   },
+   "aero": {
+    "frontal_area_m2": 0.016,
+    "drag_coefficient": 0.9,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 8,
+   "battery_fit": {
+    "cells": [
+     6,
+     6
+    ],
+    "max_mass_g": 500,
+    "preferred_min_cells": 6,
+    "preferred_min_capacity_mah": 1300
+   }
+  },
+  "derived": {
+   "size_class_in": 7,
+   "ducted": false,
+   "shape_extent_mm": 388.5965004500315
+  }
+ },
+ {
+  "id": "justmoreparts:whoop_65_lite",
+  "builtin": false,
+  "data": {
+   "role": "whoop",
+   "shape": "true_x",
+   "wheelbase_mm": 65,
+   "props_mm": [
+    28,
+    31
+   ],
+   "motor_mounts": [
+    "propwash:m08"
+   ],
+   "stack_mounts": [
+    "propwash:whoop_aio"
+   ],
+   "accessory_mounts": [
+    "bottom"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -22.980970388562792,
+      0,
+      -22.980970388562792
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      22.980970388562792,
+      0,
+      -22.980970388562792
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -22.980970388562792,
+      0,
+      22.980970388562792
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      22.980970388562792,
+      0,
+      22.980970388562792
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": false,
+    "plate_mm": -3
+   },
+   "electronics_mm": 4,
+   "camera": {
+    "pos": [
+     0,
+     18.5,
+     -17.5
+    ],
+    "tilt_deg": 14,
+    "tilt_min_deg": 10,
+    "tilt_max_deg": 35
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.2,
+    "plate": 0.3,
+    "duct": 0.5
+   },
+   "accessory_anchors": {
+    "bottom": {
+     "pos": [
+      0,
+      0.5,
+      -25.6
+     ],
+     "tilt_deg": 90,
+     "length_mm": 10
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     24.5,
+     9.8
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.0034,
+    "drag_coefficient": 1.1,
+    "side_area_m2": null,
+    "top_area_m2": 0.0039
+   },
+   "duct": {
+    "thrust_gain": null,
+    "clearance_mm": 1.5,
+    "translational_lift_gain": null,
+    "wash_loss": null,
+    "wash_noise": null,
+    "restitution": null,
+    "friction": null
+   },
+   "impact_tolerance": 10,
+   "battery_fit": {
+    "cells": [
+     1,
+     1
+    ],
+    "max_mass_g": 10,
+    "preferred_min_cells": 1,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 1,
+   "ducted": true,
+   "shape_extent_mm": 76.96194077712559
+  }
+ },
+ {
+  "id": "justmoreparts:whoop_75_duct",
+  "builtin": false,
+  "data": {
+   "role": "whoop",
+   "shape": "true_x",
+   "wheelbase_mm": 75,
+   "props_mm": [
+    35,
+    40
+   ],
+   "motor_mounts": [
+    "propwash:m08"
+   ],
+   "stack_mounts": [
+    "propwash:whoop_aio"
+   ],
+   "accessory_mounts": [
+    "bottom"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -26.51650429449553,
+      0,
+      -26.51650429449553
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      26.51650429449553,
+      0,
+      -26.51650429449553
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -26.51650429449553,
+      0,
+      26.51650429449553
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      26.51650429449553,
+      0,
+      26.51650429449553
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": false,
+    "plate_mm": -3.5
+   },
+   "electronics_mm": 4.5,
+   "camera": {
+    "pos": [
+     0,
+     19,
+     -24
+    ],
+    "tilt_deg": 18,
+    "tilt_min_deg": 10,
+    "tilt_max_deg": 35
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.2,
+    "plate": 0.3,
+    "duct": 0.5
+   },
+   "accessory_anchors": {
+    "bottom": {
+     "pos": [
+      0,
+      0.5,
+      -29.5
+     ],
+     "tilt_deg": 90,
+     "length_mm": 11
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     25,
+     11.3
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.0045,
+    "drag_coefficient": 1.1,
+    "side_area_m2": null,
+    "top_area_m2": 0.0046
+   },
+   "duct": {
+    "thrust_gain": null,
+    "clearance_mm": null,
+    "translational_lift_gain": null,
+    "wash_loss": null,
+    "wash_noise": null,
+    "restitution": null,
+    "friction": null
+   },
+   "impact_tolerance": 13,
+   "battery_fit": {
+    "cells": [
+     1,
+     2
+    ],
+    "max_mass_g": 25,
+    "preferred_min_cells": 1,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 1.5,
+   "ducted": true,
+   "shape_extent_mm": 93.03300858899107
+  }
+ },
+ {
+  "id": "justmoreparts:whoop_85_duct",
+  "builtin": false,
+  "data": {
+   "role": "whoop",
+   "shape": "true_x",
+   "wheelbase_mm": 85,
+   "props_mm": [
+    40,
+    45
+   ],
+   "motor_mounts": [
+    "propwash:m08"
+   ],
+   "stack_mounts": [
+    "propwash:whoop_aio"
+   ],
+   "accessory_mounts": [
+    "bottom"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -30.052038200428267,
+      0,
+      -30.052038200428267
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      30.052038200428267,
+      0,
+      -30.052038200428267
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -30.052038200428267,
+      0,
+      30.052038200428267
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      30.052038200428267,
+      0,
+      30.052038200428267
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": false,
+    "plate_mm": -4
+   },
+   "electronics_mm": 5,
+   "camera": {
+    "pos": [
+     0,
+     21,
+     -27
+    ],
+    "tilt_deg": 18,
+    "tilt_min_deg": 10,
+    "tilt_max_deg": 35
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.2,
+    "plate": 0.3,
+    "duct": 0.5
+   },
+   "accessory_anchors": {
+    "bottom": {
+     "pos": [
+      0,
+      0.5,
+      -33.5
+     ],
+     "tilt_deg": 90,
+     "length_mm": 12
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     27,
+     12.8
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.0056,
+    "drag_coefficient": 1.1,
+    "side_area_m2": null,
+    "top_area_m2": 0.0065
+   },
+   "duct": {
+    "thrust_gain": null,
+    "clearance_mm": null,
+    "translational_lift_gain": null,
+    "wash_loss": null,
+    "wash_noise": null,
+    "restitution": null,
+    "friction": null
+   },
+   "impact_tolerance": 12,
+   "battery_fit": {
+    "cells": [
+     1,
+     2
+    ],
+    "max_mass_g": 35,
+    "preferred_min_cells": 2,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 2,
+   "ducted": true,
+   "shape_extent_mm": 105.10407640085654
+  }
+ },
+ {
+  "id": "justmoreparts:tp_2_x",
+  "builtin": false,
+  "data": {
+   "role": "toothpick",
+   "shape": "true_x",
+   "wheelbase_mm": 90,
+   "props_mm": [
+    45,
+    51
+   ],
+   "motor_mounts": [
+    "propwash:m08",
+    "propwash:m14"
+   ],
+   "stack_mounts": [
+    "propwash:whoop_aio"
+   ],
+   "accessory_mounts": [
+    "bottom"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -31.819805153394636,
+      0,
+      -31.819805153394636
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      31.819805153394636,
+      0,
+      -31.819805153394636
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -31.819805153394636,
+      0,
+      31.819805153394636
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      31.819805153394636,
+      0,
+      31.819805153394636
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 7
+   },
+   "electronics_mm": 5,
+   "camera": {
+    "pos": [
+     0,
+     13.2,
+     -28.9
+    ],
+    "tilt_deg": 25,
+    "tilt_min_deg": 10,
+    "tilt_max_deg": 40
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "bottom": {
+     "pos": [
+      0,
+      -2.8,
+      -22.5
+     ],
+     "tilt_deg": 30,
+     "length_mm": 20
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     7,
+     19.8
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.0035,
+    "drag_coefficient": 0.9,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 9,
+   "battery_fit": {
+    "cells": [
+     1,
+     2
+    ],
+    "max_mass_g": 30,
+    "preferred_min_cells": 2,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 2,
+   "ducted": false,
+   "shape_extent_mm": 114.63961030678928
+  }
+ },
+ {
+  "id": "justmoreparts:tp_25_x",
+  "builtin": false,
+  "data": {
+   "role": "toothpick",
+   "shape": "true_x",
+   "wheelbase_mm": 110,
+   "props_mm": [
+    55,
+    65
+   ],
+   "motor_mounts": [
+    "propwash:m14"
+   ],
+   "stack_mounts": [
+    "propwash:whoop_aio"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -38.89087296526011,
+      0,
+      -38.89087296526011
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      38.89087296526011,
+      0,
+      -38.89087296526011
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -38.89087296526011,
+      0,
+      38.89087296526011
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      38.89087296526011,
+      0,
+      38.89087296526011
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 9
+   },
+   "electronics_mm": 5.5,
+   "camera": {
+    "pos": [
+     0,
+     14.1,
+     -33.1
+    ],
+    "tilt_deg": 22,
+    "tilt_min_deg": 10,
+    "tilt_max_deg": 40
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      15,
+      -35
+     ],
+     "tilt_deg": 15,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -2.8,
+      -27.5
+     ],
+     "tilt_deg": 30,
+     "length_mm": 20
+    },
+    "front": {
+     "pos": [
+      0,
+      -0.3,
+      -48
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     9,
+     24.2
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.0045,
+    "drag_coefficient": 0.9,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 8.5,
+   "battery_fit": {
+    "cells": [
+     2,
+     4
+    ],
+    "max_mass_g": 60,
+    "preferred_min_cells": 3,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 2.5,
+   "ducted": false,
+   "shape_extent_mm": 142.78174593052023
+  }
+ },
+ {
+  "id": "justmoreparts:cw_25_duct",
+  "builtin": false,
+  "data": {
+   "role": "cinewhoop",
+   "shape": "true_x",
+   "wheelbase_mm": 112,
+   "props_mm": [
+    60,
+    65
+   ],
+   "motor_mounts": [
+    "propwash:m14"
+   ],
+   "stack_mounts": [
+    "propwash:s20",
+    "propwash:whoop_aio"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -39.59797974644666,
+      0,
+      -39.59797974644666
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      39.59797974644666,
+      0,
+      -39.59797974644666
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -39.59797974644666,
+      0,
+      39.59797974644666
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      39.59797974644666,
+      0,
+      39.59797974644666
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 16
+   },
+   "electronics_mm": 8,
+   "camera": {
+    "pos": [
+     0,
+     29.5,
+     -48
+    ],
+    "tilt_deg": 15,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 35
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.2,
+    "plate": 0.3,
+    "duct": 0.5
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      40.5,
+      -36
+     ],
+     "tilt_deg": 10,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -3,
+      -20
+     ],
+     "tilt_deg": 30,
+     "length_mm": 20
+    },
+    "front": {
+     "pos": [
+      0,
+      -3,
+      -50
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     16,
+     24.6
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.009,
+    "drag_coefficient": 1,
+    "side_area_m2": null,
+    "top_area_m2": 0.015
+   },
+   "duct": {
+    "thrust_gain": null,
+    "clearance_mm": null,
+    "translational_lift_gain": null,
+    "wash_loss": null,
+    "wash_noise": null,
+    "restitution": null,
+    "friction": null
+   },
+   "impact_tolerance": 12,
+   "battery_fit": {
+    "cells": [
+     3,
+     4
+    ],
+    "max_mass_g": 110,
+    "preferred_min_cells": 4,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 2.5,
+   "ducted": true,
+   "shape_extent_mm": 144.19595949289334
+  }
+ },
+ {
+  "id": "justmoreparts:tp_3_x",
+  "builtin": false,
+  "data": {
+   "role": "toothpick",
+   "shape": "true_x",
+   "wheelbase_mm": 125,
+   "props_mm": [
+    70,
+    76
+   ],
+   "motor_mounts": [
+    "propwash:m14"
+   ],
+   "stack_mounts": [
+    "propwash:s20",
+    "propwash:whoop_aio"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -44.194173824159215,
+      0,
+      -44.194173824159215
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      44.194173824159215,
+      0,
+      -44.194173824159215
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -44.194173824159215,
+      0,
+      44.194173824159215
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      44.194173824159215,
+      0,
+      44.194173824159215
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 12
+   },
+   "electronics_mm": 6,
+   "camera": {
+    "pos": [
+     0,
+     16.9,
+     -36.3
+    ],
+    "tilt_deg": 25,
+    "tilt_min_deg": 10,
+    "tilt_max_deg": 40
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      18,
+      -38
+     ],
+     "tilt_deg": 15,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -3.3,
+      -31
+     ],
+     "tilt_deg": 30,
+     "length_mm": 20
+    },
+    "front": {
+     "pos": [
+      0,
+      -0.3,
+      -51
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     12,
+     27.5
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.0058,
+    "drag_coefficient": 0.9,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 8,
+   "battery_fit": {
+    "cells": [
+     3,
+     6
+    ],
+    "max_mass_g": 110,
+    "preferred_min_cells": 4,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 3,
+   "ducted": false,
+   "shape_extent_mm": 164.38834764831842
+  }
+ },
+ {
+  "id": "justmoreparts:cw_35_duct",
+  "builtin": false,
+  "data": {
+   "role": "cinewhoop",
+   "shape": "true_x",
+   "wheelbase_mm": 158,
+   "props_mm": [
+    80,
+    90
+   ],
+   "motor_mounts": [
+    "propwash:m14"
+   ],
+   "stack_mounts": [
+    "propwash:s20"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -55.86143571373725,
+      0,
+      -55.86143571373725
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      55.86143571373725,
+      0,
+      -55.86143571373725
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -55.86143571373725,
+      0,
+      55.86143571373725
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      55.86143571373725,
+      0,
+      55.86143571373725
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 20
+   },
+   "electronics_mm": 10,
+   "camera": {
+    "pos": [
+     0,
+     34.8,
+     -52
+    ],
+    "tilt_deg": 15,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 35
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.2,
+    "plate": 0.3,
+    "duct": 0.5
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      50.5,
+      -50
+     ],
+     "tilt_deg": 10,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -3,
+      -28
+     ],
+     "tilt_deg": 30,
+     "length_mm": 28
+    },
+    "front": {
+     "pos": [
+      0,
+      -3,
+      -54
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     20,
+     34.8
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.0137,
+    "drag_coefficient": 1,
+    "side_area_m2": null,
+    "top_area_m2": 0.0228
+   },
+   "duct": {
+    "thrust_gain": null,
+    "clearance_mm": null,
+    "translational_lift_gain": null,
+    "wash_loss": null,
+    "wash_noise": null,
+    "restitution": null,
+    "friction": null
+   },
+   "impact_tolerance": 11,
+   "battery_fit": {
+    "cells": [
+     4,
+     6
+    ],
+    "max_mass_g": 200,
+    "preferred_min_cells": 6,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 3.5,
+   "ducted": true,
+   "shape_extent_mm": 201.7228714274745
+  }
+ },
+ {
+  "id": "justmoreparts:tp_35_stretched",
+  "builtin": false,
+  "data": {
+   "role": "toothpick",
+   "shape": "stretched_x",
+   "wheelbase_mm": 159,
+   "props_mm": [
+    80,
+    89
+   ],
+   "motor_mounts": [
+    "propwash:m14"
+   ],
+   "stack_mounts": [
+    "propwash:s20",
+    "propwash:whoop_aio"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -50,
+      0,
+      -62
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      50,
+      0,
+      -62
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -50,
+      0,
+      62
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      50,
+      0,
+      62
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": true,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 14
+   },
+   "electronics_mm": 7,
+   "camera": {
+    "pos": [
+     0,
+     12,
+     -80
+    ],
+    "tilt_deg": 26,
+    "tilt_min_deg": 10,
+    "tilt_max_deg": 40
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      21,
+      -44
+     ],
+     "tilt_deg": 15,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -3.3,
+      -40
+     ],
+     "tilt_deg": 30,
+     "length_mm": 22
+    },
+    "front": {
+     "pos": [
+      0,
+      -0.3,
+      -95
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     14,
+     35
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.0072,
+    "drag_coefficient": 0.85,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 8,
+   "battery_fit": {
+    "cells": [
+     3,
+     6
+    ],
+    "max_mass_g": 170,
+    "preferred_min_cells": 4,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 3.5,
+   "ducted": false,
+   "shape_extent_mm": 213
+  }
+ },
+ {
+  "id": "justmoreparts:lr_4_x",
+  "builtin": false,
+  "data": {
+   "role": "long_range",
+   "shape": "true_x",
+   "wheelbase_mm": 175,
+   "props_mm": [
+    90,
+    102
+   ],
+   "motor_mounts": [
+    "propwash:m14"
+   ],
+   "stack_mounts": [
+    "propwash:s20",
+    "propwash:whoop_aio"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -61.871843353822904,
+      0,
+      -61.871843353822904
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      61.871843353822904,
+      0,
+      -61.871843353822904
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -61.871843353822904,
+      0,
+      61.871843353822904
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      61.871843353822904,
+      0,
+      61.871843353822904
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 22
+   },
+   "electronics_mm": 9,
+   "camera": {
+    "pos": [
+     0,
+     16.9,
+     -46.8
+    ],
+    "tilt_deg": 20,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 40
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      27,
+      -52
+     ],
+     "tilt_deg": 18,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -2.5,
+      -44
+     ],
+     "tilt_deg": 30,
+     "length_mm": 28
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -71
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     22,
+     38.5
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.009,
+    "drag_coefficient": 0.9,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 8,
+   "battery_fit": {
+    "cells": [
+     4,
+     6
+    ],
+    "max_mass_g": 320,
+    "preferred_min_cells": 6,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 4,
+   "ducted": false,
+   "shape_extent_mm": 225.7436867076458
+  }
+ },
+ {
+  "id": "justmoreparts:deadcat_5",
+  "builtin": false,
+  "data": {
+   "role": "freestyle",
+   "shape": "deadcat",
+   "wheelbase_mm": 223,
+   "props_mm": [
+    115,
+    130
+   ],
+   "motor_mounts": [
+    "propwash:m22"
+   ],
+   "stack_mounts": [
+    "propwash:s20",
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -100,
+      0,
+      -55
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      100,
+      0,
+      -55
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -78,
+      0,
+      80
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      78,
+      0,
+      80
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": true,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 30
+   },
+   "electronics_mm": 12,
+   "camera": {
+    "pos": [
+     0,
+     14,
+     -105
+    ],
+    "tilt_deg": 30,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 50
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    6
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      35,
+      -66
+     ],
+     "tilt_deg": 22,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -3,
+      -52
+     ],
+     "tilt_deg": 30,
+     "length_mm": 34
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -129
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     30,
+     49.1
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.013,
+    "drag_coefficient": 0.95,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 8.5,
+   "battery_fit": {
+    "cells": [
+     4,
+     6
+    ],
+    "max_mass_g": 250,
+    "preferred_min_cells": 6,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 5,
+   "ducted": false,
+   "shape_extent_mm": 330
+  }
+ },
+ {
+  "id": "justmoreparts:fs_5_bash",
+  "builtin": false,
+  "data": {
+   "role": "freestyle",
+   "shape": "true_x",
+   "wheelbase_mm": 226,
+   "props_mm": [
+    115,
+    130
+   ],
+   "motor_mounts": [
+    "propwash:m22"
+   ],
+   "stack_mounts": [
+    "propwash:s20",
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -79.90306627407986,
+      0,
+      -79.90306627407986
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      79.90306627407986,
+      0,
+      -79.90306627407986
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -79.90306627407986,
+      0,
+      79.90306627407986
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      79.90306627407986,
+      0,
+      79.90306627407986
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 32
+   },
+   "electronics_mm": 12,
+   "camera": {
+    "pos": [
+     0,
+     20.6,
+     -57.5
+    ],
+    "tilt_deg": 30,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 50
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      37,
+      -69
+     ],
+     "tilt_deg": 22,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -3,
+      -56
+     ],
+     "tilt_deg": 30,
+     "length_mm": 34
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -81.5
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     32,
+     49.7
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.0125,
+    "drag_coefficient": 0.95,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 10,
+   "battery_fit": {
+    "cells": [
+     4,
+     6
+    ],
+    "max_mass_g": 260,
+    "preferred_min_cells": 6,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 5,
+   "ducted": false,
+   "shape_extent_mm": 289.8061325481597
+  }
+ },
+ {
+  "id": "justmoreparts:race_5_stretched",
+  "builtin": false,
+  "data": {
+   "role": "race",
+   "shape": "stretched_x",
+   "wheelbase_mm": 236,
+   "props_mm": [
+    115,
+    130
+   ],
+   "motor_mounts": [
+    "propwash:m22"
+   ],
+   "stack_mounts": [
+    "propwash:s20",
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -70,
+      0,
+      -95
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      70,
+      0,
+      -95
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -70,
+      0,
+      95
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      70,
+      0,
+      95
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": true,
+   "battery": {
+    "on_top": false,
+    "plate_mm": -2.8
+   },
+   "electronics_mm": 10,
+   "camera": {
+    "pos": [
+     0,
+     16.5,
+     -47.5
+    ],
+    "tilt_deg": 40,
+    "tilt_min_deg": 15,
+    "tilt_max_deg": 70
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      28.5,
+      -70
+     ],
+     "tilt_deg": 20,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -2,
+      -50
+     ],
+     "tilt_deg": 30,
+     "length_mm": 28
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -72
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     24,
+     51.9
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.0085,
+    "drag_coefficient": 0.72,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 6.5,
+   "battery_fit": {
+    "cells": [
+     4,
+     6
+    ],
+    "max_mass_g": 230,
+    "preferred_min_cells": 4,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 5,
+   "ducted": false,
+   "shape_extent_mm": 320
+  }
+ },
+ {
+  "id": "justmoreparts:fs_5_squashed",
+  "builtin": false,
+  "data": {
+   "role": "freestyle",
+   "shape": "squashed_x",
+   "wheelbase_mm": 239,
+   "props_mm": [
+    115,
+    130
+   ],
+   "motor_mounts": [
+    "propwash:m22"
+   ],
+   "stack_mounts": [
+    "propwash:s20",
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -97,
+      0,
+      -70
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      97,
+      0,
+      -70
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -97,
+      0,
+      70
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      97,
+      0,
+      70
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": true,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 30
+   },
+   "electronics_mm": 12,
+   "camera": {
+    "pos": [
+     0,
+     16.9,
+     -60.2
+    ],
+    "tilt_deg": 30,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 50
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      35,
+      -62
+     ],
+     "tilt_deg": 22,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -3,
+      -50
+     ],
+     "tilt_deg": 30,
+     "length_mm": 34
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -84
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     30,
+     52.6
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.0125,
+    "drag_coefficient": 0.92,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 8.5,
+   "battery_fit": {
+    "cells": [
+     4,
+     6
+    ],
+    "max_mass_g": 250,
+    "preferred_min_cells": 6,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 5,
+   "ducted": false,
+   "shape_extent_mm": 324
+  }
+ },
+ {
+  "id": "justmoreparts:hframe_5",
+  "builtin": false,
+  "data": {
+   "role": "freestyle",
+   "shape": "h_frame",
+   "wheelbase_mm": 252,
+   "props_mm": [
+    115,
+    130
+   ],
+   "motor_mounts": [
+    "propwash:m22"
+   ],
+   "stack_mounts": [
+    "propwash:s20",
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -105,
+      0,
+      -70
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      105,
+      0,
+      -70
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -105,
+      0,
+      70
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      105,
+      0,
+      70
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": true,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 28
+   },
+   "electronics_mm": 14,
+   "camera": {
+    "pos": [
+     0,
+     18,
+     -92
+    ],
+    "tilt_deg": 25,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 50
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.45,
+    "plate": 0.55,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      33,
+      -82
+     ],
+     "tilt_deg": 20,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -3,
+      -62
+     ],
+     "tilt_deg": 30,
+     "length_mm": 40
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -116
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     28,
+     55.4
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.015,
+    "drag_coefficient": 1,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 9,
+   "battery_fit": {
+    "cells": [
+     4,
+     6
+    ],
+    "max_mass_g": 260,
+    "preferred_min_cells": 6,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 5,
+   "ducted": false,
+   "shape_extent_mm": 340
+  }
+ },
+ {
+  "id": "justmoreparts:lr_6_x",
+  "builtin": false,
+  "data": {
+   "role": "long_range",
+   "shape": "true_x",
+   "wheelbase_mm": 255,
+   "props_mm": [
+    140,
+    152
+   ],
+   "motor_mounts": [
+    "propwash:m22",
+    "propwash:m28"
+   ],
+   "stack_mounts": [
+    "propwash:s20",
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -90.1561146012848,
+      0,
+      -90.1561146012848
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      90.1561146012848,
+      0,
+      -90.1561146012848
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -90.1561146012848,
+      0,
+      90.1561146012848
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      90.1561146012848,
+      0,
+      90.1561146012848
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 30
+   },
+   "electronics_mm": 12,
+   "camera": {
+    "pos": [
+     0,
+     21,
+     -63.6
+    ],
+    "tilt_deg": 22,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 40
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      35,
+      -70
+     ],
+     "tilt_deg": 20,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -2.5,
+      -58
+     ],
+     "tilt_deg": 30,
+     "length_mm": 36
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -88
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     30,
+     56.1
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.0155,
+    "drag_coefficient": 0.9,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 8,
+   "battery_fit": {
+    "cells": [
+     4,
+     6
+    ],
+    "max_mass_g": 450,
+    "preferred_min_cells": 6,
+    "preferred_min_capacity_mah": 0
+   }
+  },
+  "derived": {
+   "size_class_in": 6,
+   "ducted": false,
+   "shape_extent_mm": 332.3122292025696
+  }
+ },
+ {
+  "id": "justmoreparts:lr_7_deadcat",
+  "builtin": false,
+  "data": {
+   "role": "long_range",
+   "shape": "deadcat",
+   "wheelbase_mm": 302,
+   "props_mm": [
+    165,
+    180
+   ],
+   "motor_mounts": [
+    "propwash:m22",
+    "propwash:m28"
+   ],
+   "stack_mounts": [
+    "propwash:s20",
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -135,
+      0,
+      -72
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      135,
+      0,
+      -72
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -105,
+      0,
+      112
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      105,
+      0,
+      112
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": true,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 32
+   },
+   "electronics_mm": 14,
+   "camera": {
+    "pos": [
+     0,
+     16,
+     -78
+    ],
+    "tilt_deg": 22,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 40
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    8
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      37,
+      -76
+     ],
+     "tilt_deg": 20,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -2.5,
+      -62
+     ],
+     "tilt_deg": 30,
+     "length_mm": 38
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -102
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     32,
+     66.1
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.017,
+    "drag_coefficient": 0.9,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 8,
+   "battery_fit": {
+    "cells": [
+     6,
+     8
+    ],
+    "max_mass_g": 650,
+    "preferred_min_cells": 6,
+    "preferred_min_capacity_mah": 1300
+   }
+  },
+  "derived": {
+   "size_class_in": 7,
+   "ducted": false,
+   "shape_extent_mm": 450
+  }
+ },
+ {
+  "id": "justmoreparts:lr_8_x",
+  "builtin": false,
+  "data": {
+   "role": "long_range",
+   "shape": "true_x",
+   "wheelbase_mm": 360,
+   "props_mm": [
+    190,
+    205
+   ],
+   "motor_mounts": [
+    "propwash:m28"
+   ],
+   "stack_mounts": [
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -127.27922061357854,
+      0,
+      -127.27922061357854
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      127.27922061357854,
+      0,
+      -127.27922061357854
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -127.27922061357854,
+      0,
+      127.27922061357854
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      127.27922061357854,
+      0,
+      127.27922061357854
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 34
+   },
+   "electronics_mm": 15,
+   "camera": {
+    "pos": [
+     0,
+     20.2,
+     -85.6
+    ],
+    "tilt_deg": 20,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 40
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      39,
+      -80
+     ],
+     "tilt_deg": 20,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -3,
+      -66
+     ],
+     "tilt_deg": 30,
+     "length_mm": 40
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -110
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     34,
+     69.9
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.021,
+    "drag_coefficient": 0.9,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 7.5,
+   "battery_fit": {
+    "cells": [
+     6,
+     8
+    ],
+    "max_mass_g": 900,
+    "preferred_min_cells": 6,
+    "preferred_min_capacity_mah": 2000
+   }
+  },
+  "derived": {
+   "size_class_in": 8,
+   "ducted": false,
+   "shape_extent_mm": 459.5584412271571
+  }
+ },
+ {
+  "id": "justmoreparts:xclass_10",
+  "builtin": false,
+  "data": {
+   "role": "x_class",
+   "shape": "true_x",
+   "wheelbase_mm": 460,
+   "props_mm": [
+    230,
+    254
+   ],
+   "motor_mounts": [
+    "justmoreparts:m31"
+   ],
+   "stack_mounts": [
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -162.6345596729059,
+      0,
+      -162.6345596729059
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      162.6345596729059,
+      0,
+      -162.6345596729059
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -162.6345596729059,
+      0,
+      162.6345596729059
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      162.6345596729059,
+      0,
+      162.6345596729059
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 45
+   },
+   "electronics_mm": 20,
+   "camera": {
+    "pos": [
+     0,
+     27,
+     -106.6
+    ],
+    "tilt_deg": 25,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 50
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      51,
+      -100
+     ],
+     "tilt_deg": 20,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -4,
+      -84
+     ],
+     "tilt_deg": 30,
+     "length_mm": 50
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -131
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     45,
+     76.4
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.0275,
+    "drag_coefficient": 1,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 7,
+   "battery_fit": {
+    "cells": [
+     6,
+     8
+    ],
+    "max_mass_g": 1100,
+    "preferred_min_cells": 6,
+    "preferred_min_capacity_mah": 3000
+   }
+  },
+  "derived": {
+   "size_class_in": 10,
+   "ducted": false,
+   "shape_extent_mm": 579.2691193458118
+  }
+ },
+ {
+  "id": "justmoreparts:xclass_12",
+  "builtin": false,
+  "data": {
+   "role": "x_class",
+   "shape": "true_x",
+   "wheelbase_mm": 700,
+   "props_mm": [
+    280,
+    305
+   ],
+   "motor_mounts": [
+    "justmoreparts:m31",
+    "justmoreparts:m42"
+   ],
+   "stack_mounts": [
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -247.48737341529161,
+      0,
+      -247.48737341529161
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      247.48737341529161,
+      0,
+      -247.48737341529161
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -247.48737341529161,
+      0,
+      247.48737341529161
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      247.48737341529161,
+      0,
+      247.48737341529161
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 55
+   },
+   "electronics_mm": 25,
+   "camera": {
+    "pos": [
+     0,
+     26,
+     -157
+    ],
+    "tilt_deg": 28,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 50
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      61,
+      -130
+     ],
+     "tilt_deg": 20,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -5,
+      -110
+     ],
+     "tilt_deg": 30,
+     "length_mm": 60
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -181
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     55,
+     92
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.032,
+    "drag_coefficient": 1,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 6.5,
+   "battery_fit": {
+    "cells": [
+     6,
+     8
+    ],
+    "max_mass_g": 1800,
+    "preferred_min_cells": 8,
+    "preferred_min_capacity_mah": 3000
+   }
+  },
+  "derived": {
+   "size_class_in": 12,
+   "ducted": false,
+   "shape_extent_mm": 799.9747468305832
+  }
+ },
+ {
+  "id": "justmoreparts:xclass_13",
+  "builtin": false,
+  "data": {
+   "role": "x_class",
+   "shape": "true_x",
+   "wheelbase_mm": 820,
+   "props_mm": [
+    300,
+    330
+   ],
+   "motor_mounts": [
+    "justmoreparts:m42"
+   ],
+   "stack_mounts": [
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -289.91378028648444,
+      0,
+      -289.91378028648444
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      289.91378028648444,
+      0,
+      -289.91378028648444
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -289.91378028648444,
+      0,
+      289.91378028648444
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      289.91378028648444,
+      0,
+      289.91378028648444
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": false,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 60
+   },
+   "electronics_mm": 28,
+   "camera": {
+    "pos": [
+     0,
+     26,
+     -182.2
+    ],
+    "tilt_deg": 30,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 50
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.6,
+    "plate": 0.4,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      66,
+      -150
+     ],
+     "tilt_deg": 20,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -5,
+      -125
+     ],
+     "tilt_deg": 30,
+     "length_mm": 60
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -206
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     60,
+     99.8
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.04,
+    "drag_coefficient": 1,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 6,
+   "battery_fit": {
+    "cells": [
+     6,
+     8
+    ],
+    "max_mass_g": 2500,
+    "preferred_min_cells": 8,
+    "preferred_min_capacity_mah": 4000
+   }
+  },
+  "derived": {
+   "size_class_in": 13,
+   "ducted": false,
+   "shape_extent_mm": 909.8275605729689
+  }
+ },
+ {
+  "id": "justmoreparts:xclass_13_h",
+  "builtin": false,
+  "data": {
+   "role": "x_class",
+   "shape": "h_frame",
+   "wheelbase_mm": 828,
+   "props_mm": [
+    300,
+    330
+   ],
+   "motor_mounts": [
+    "justmoreparts:m42"
+   ],
+   "stack_mounts": [
+    "propwash:s30"
+   ],
+   "accessory_mounts": [
+    "top",
+    "bottom",
+    "front"
+   ],
+   "arms": {
+    "front_left": {
+     "pos": [
+      -330,
+      0,
+      -250
+     ],
+     "spin": "cw"
+    },
+    "front_right": {
+     "pos": [
+      330,
+      0,
+      -250
+     ],
+     "spin": "ccw"
+    },
+    "rear_left": {
+     "pos": [
+      -330,
+      0,
+      250
+     ],
+     "spin": "ccw"
+    },
+    "rear_right": {
+     "pos": [
+      330,
+      0,
+      250
+     ],
+     "spin": "cw"
+    }
+   },
+   "arms_explicit": true,
+   "battery": {
+    "on_top": true,
+    "plate_mm": 60
+   },
+   "electronics_mm": 30,
+   "camera": {
+    "pos": [
+     0,
+     30,
+     -300
+    ],
+    "tilt_deg": 25,
+    "tilt_min_deg": 0,
+    "tilt_max_deg": 50
+   },
+   "center_of_mass_mm": [
+    0,
+    0,
+    0
+   ],
+   "mass_split": {
+    "arms": 0.4,
+    "plate": 0.6,
+    "duct": 0
+   },
+   "accessory_anchors": {
+    "top": {
+     "pos": [
+      0,
+      66,
+      -230
+     ],
+     "tilt_deg": 20,
+     "length_mm": 0
+    },
+    "bottom": {
+     "pos": [
+      0,
+      -5,
+      -170
+     ],
+     "tilt_deg": 30,
+     "length_mm": 60
+    },
+    "front": {
+     "pos": [
+      0,
+      0,
+      -324
+     ],
+     "tilt_deg": 0,
+     "length_mm": 0
+    }
+   },
+   "antenna_anchor": {
+    "pos": [
+     0,
+     60,
+     100.3
+    ],
+    "tilt_deg": 35,
+    "explicit": false
+   },
+   "aero": {
+    "frontal_area_m2": 0.046,
+    "drag_coefficient": 1.05,
+    "side_area_m2": null,
+    "top_area_m2": null
+   },
+   "duct": null,
+   "impact_tolerance": 7,
+   "battery_fit": {
+    "cells": [
+     6,
+     8
+    ],
+    "max_mass_g": 2500,
+    "preferred_min_cells": 8,
+    "preferred_min_capacity_mah": 4000
+   }
+  },
+  "derived": {
+   "size_class_in": 13,
+   "ducted": false,
+   "shape_extent_mm": 990
+  }
+ }
+]

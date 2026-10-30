@@ -13,11 +13,11 @@
 // Node tools pass a Map of files instead of bytes (readAddon(files, …)) and get the same result.
 
 import { openJar, readText, readTexture, JarError } from './jar.js?v=8440b18b';
-import { bundledParts, splitId, partPath, DEFAULT_NAMESPACE } from './partjson.js?v=2c29ef2a';
+import { bundledParts, splitId, partPath, DEFAULT_NAMESPACE } from './partjson.js?v=d74d681a';
 import {
   resources, exportParts, exportChemistries, exportMounts, catalogPart, catalogOrder, partModel, renderAdditions, tableCrc, tableEntries,
   LANGUAGES,
-} from './catalog-build.js?v=6adaaa67';
+} from './catalog-build.js?v=d98fb9e6';
 import { parseTable } from './sharecode3.js?v=024bd980';
 
 const TABLE = (ns) => `data/${ns}/propwash_share/table.json`;

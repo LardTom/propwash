@@ -50,6 +50,11 @@ export const MAX_LED_PATH_POINTS = 256;
 export const MAX_LED_PATH_MM = 500.0;
 export const MAX_MUZZLE_OUTSIDE_MM = 20.0;
 export const MAX_VTX_LEVELS = 8;
+export const DEFAULT_ANTENNA_TILT = 35.0;
+export const CAPS = Object.freeze(['whip', 'stubby', 'lollipop', 'pagoda', 'patch']);
+export const MAX_ANTENNA_COUNT = 2;
+export const MIN_ANTENNA_LENGTH_MM = 10.0;
+export const MAX_ANTENNA_LENGTH_MM = 250.0;
 const INT_MIN = -2147483648;
 const INT_MAX = 2147483647;
 
@@ -636,8 +641,8 @@ function frame(id, basics, f) {
   const b = {
     role: 'freestyle', shape: 'true_x', wheelbase: -1, minProp: 0, maxProp: -1, motorMounts: [], stackMounts: [], accessoryMounts: [],
     arms: [], batteryOnTop: null, batteryPlate: null, electronics: null, camera: null, cameraTilt: DEFAULT_CAMERA_TILT,
-    centerOfMass: [0.0, 0.0, 0.0], massSplit: null, anchors: {}, frontal: -1.0, drag: -1.0, side: null, top: null, duct: null,
-    impactTolerance: 8.0, batteryFit: null,
+    centerOfMass: [0.0, 0.0, 0.0], massSplit: null, anchors: {}, antennaAnchor: null, frontal: -1.0, drag: -1.0, side: null, top: null,
+    duct: null, impactTolerance: 8.0, batteryFit: null,
   };
   const role = f.optEnum('role', ROLES);
   if (role !== null) b.role = role;
@@ -704,6 +709,14 @@ function frame(id, basics, f) {
     }
     anchors.finish();
   }
+  // The frame's antenna holder (Propwash 0.6.0, FrameDefinition.Builder#antennaAnchor).
+  const antennaAnchor = f.optObject('antenna_anchor');
+  if (antennaAnchor) {
+    const pos = antennaAnchor.requireVector('pos', 3);
+    const tilt = antennaAnchor.doubleOr('tilt_deg', DEFAULT_ANTENNA_TILT);
+    antennaAnchor.finish();
+    if (pos !== null) b.antennaAnchor = anchorSpec(pos[0], pos[1], pos[2], tilt, 0.0);
+  }
   const aero = f.requireObject('aero');
   if (aero) {
     const frontal = aero.requireDouble('frontal_area_m2');
@@ -760,7 +773,7 @@ function buildFrame(id, basics, b) {
   for (const slot of SLOTS) if (b.anchors[slot]) anchors[slot] = b.anchors[slot];
   const geometry = {
     arms: b.arms, batteryOnTop: onTop, batteryPlateMm: plate, electronicsMm: electronics, cameraMm: b.camera, cameraTiltDeg: b.cameraTilt,
-    frameCenterOfMassMm: b.centerOfMass, massSplit: split, accessoryAnchors: anchors,
+    frameCenterOfMassMm: b.centerOfMass, massSplit: split, accessoryAnchors: anchors, antennaAnchor: b.antennaAnchor,
   };
   if (!(b.frontal > 0 && b.frontal <= 2.0)) fail(`Stirnfläche muss größer als 0 und höchstens 2 m² sein: ${b.frontal}`);
   if (!(b.drag > 0 && b.drag <= 3.0)) fail(`Widerstandsbeiwert muss größer als 0 und höchstens 3 sein: ${b.drag}`);
@@ -939,6 +952,8 @@ function video(id, basics, f) {
   const power = f.intOr('vtx_power_mw', 0);
   const watts = f.optDouble('power_w');
   const levels = f.optIntList('vtx_levels_mw') ?? [];
+  const antennaFields = f.optObject('antenna');
+  const antenna = antennaFields ? readAntenna(antennaFields) : null;
   if (f.problems.hasErrors()) return null;
   const resolved = resolveBasics(basics, 1.0);
   if (link === null || latency < 0 || range < 0 || quality < 0) fail(`${id}: Masse, System, Latenz, Reichweite und Bildqualität sind Pflicht`);
@@ -962,8 +977,27 @@ function video(id, basics, f) {
   }
   return {
     kind: 'video', id, basics: resolved, link, latencyMs: latency, rangeBlocks: range, imageQuality: quality, cameraWidthMm: cameraWidth,
-    cameraFovDeg: fov, vtxPowerMw: power, powerW: watts, vtxLevelsMw: levels,
+    cameraFovDeg: fov, vtxPowerMw: power, powerW: watts, vtxLevelsMw: levels, antenna,
   };
+}
+
+/** VideoAntenna: one or two antennas of 10 to 250 mm with a cap. */
+function videoAntenna(count, lengthMm, cap) {
+  if (count < 1 || count > MAX_ANTENNA_COUNT) fail(`Antennen-Anzahl muss 1 oder ${MAX_ANTENNA_COUNT} sein: ${count}`);
+  if (!(lengthMm >= MIN_ANTENNA_LENGTH_MM && lengthMm <= MAX_ANTENNA_LENGTH_MM)) {
+    fail(`Antennen-Länge muss zwischen ${MIN_ANTENNA_LENGTH_MM.toFixed(1)} und ${MAX_ANTENNA_LENGTH_MM.toFixed(1)} mm liegen: ${lengthMm}`);
+  }
+  return { count, lengthMm, cap };
+}
+
+/** PartJson.antenna: the VTX's own antennas (count 1 by default), null with an error in the part. */
+function readAntenna(a) {
+  const count = a.intOr('count', 1);
+  const length = a.requireDouble('length_mm');
+  const cap = a.requireEnum('cap', CAPS);
+  a.finish();
+  if (cap === null || a.problems.hasErrors()) return null;
+  return videoAntenna(count, length, cap);
 }
 
 function readLedPath(f, v) {

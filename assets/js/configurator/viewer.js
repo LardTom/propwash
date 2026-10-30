@@ -16,8 +16,9 @@
 // Battery plugged in (Propwash 0.6.0): no plugs and no power leads – the stack is drawn as its mounted variant and the
 // model elements listed in a piece's `hide` (assembly.js plugIn) are left out of its geometry.
 //
-// VTX antennas (Propwash 0.6.0): the antenna piece is drawn at the frame's antenna anchor without the camera tilt and,
-// like the video unit, never in the camera preview.
+// VTX antennas (Propwash 0.6.0): the antenna piece is drawn from its shapes (AntennaGeometry, antenna.js) at the
+// frame's antenna holder without the camera tilt and, like the video unit, never in the camera preview; the faces of a
+// VTX model listed in the video piece's `hideFaces` (its "antenna…" elements, AntennaMask) are left out.
 
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Group, Mesh, BufferGeometry, BufferAttribute, ShaderMaterial, Texture,
@@ -26,8 +27,8 @@ import {
 } from '../../vendor/three/three.min.js';
 import {
   assemble, proceduralFrame, proceduralAccessoryBase, pieceCategory, MM_PER_MODEL_UNIT, PROP_SLOTS,
-} from './assembly.js?v=44cf305a';
-import { paintTints, groupsOf, pieceSlots, rgbOf, slotOf, shade } from './paint.js?v=b9f3fb36';
+} from './assembly.js?v=37a74b6c';
+import { paintTints, groupsOf, pieceSlots, rgbOf, slotOf, shade, antennaShapes } from './paint.js?v=9c4a7433';
 import { discCenter, verticalFov, ASPECT as FPV_ASPECT, SLOTS } from './fpv.js?v=76cdbbe6';
 
 const MAX_TINTS = 8;
@@ -214,9 +215,10 @@ const apply = (m, x, y, z) => [m[0] * x + m[1] * y + m[2] * z, m[3] * x + m[4] *
 /**
  * BufferGeometry of compact model elements in millimetres around the model point (8, 8, 8). tints: tint index per
  * face (painted model) or null; groups: tint group per face for picking (also on the plain model), or null; hide:
- * indices of elements left out (their faces still count for tints and groups), or null.
+ * indices of elements left out (their faces still count for tints and groups), or null; hideFaces: indices of single
+ * faces left out (counted over all faces), or null.
  */
-function modelGeometry(elements, tints, groups, hide) {
+function modelGeometry(elements, tints, groups, hide, hideFaces) {
   const pos = [];
   const nor = [];
   const uvs = [];
@@ -225,6 +227,7 @@ function modelGeometry(elements, tints, groups, hide) {
   const index = [];
   let face = 0;
   const hidden = new Set(hide || []);
+  const hiddenFaces = new Set(hideFaces || []);
   for (let e = 0; e < elements.length; e++) {
     const el = elements[e];
     if (hidden.has(e)) {
@@ -241,7 +244,7 @@ function modelGeometry(elements, tints, groups, hide) {
       if (!uv) continue;
       const tint = tints ? tints[face] : -1;
       const group = groups ? groups[face] : -1;
-      face++;
+      if (hiddenFaces.has(face++)) continue;
       const info = FACES[f];
       const normal = m ? apply(m, ...info.n) : info.n;
       const base = pos.length / 3;
@@ -271,7 +274,48 @@ function modelGeometry(elements, tints, groups, hide) {
   return g;
 }
 
-/** Geometry of box/cylinder primitives (FallbackShapes) with per-vertex colours. */
+// Ry · Rz · scale, then translate (FallbackShapes).
+function turnPlacement(s) {
+  const [sx, sy, sz] = s.size;
+  const ry = s.rotY || 0;
+  const rz = s.rotZ || 0;
+  const [cy, syn, cz, szn] = [Math.cos(ry), Math.sin(ry), Math.cos(rz), Math.sin(rz)];
+  const tf = (x, y, z) => {
+    let px = x * sx;
+    let py = y * sy;
+    const pz = z * sz;
+    [px, py] = [px * cz - py * szn, px * szn + py * cz];
+    return [px * cy + pz * syn + s.center[0], py + s.center[1], -px * syn + pz * cy + s.center[2]];
+  };
+  const tn = (x, y, z) => {
+    let [nx, ny, nz] = [x / sx, y / sy, z / sz];
+    [nx, ny] = [nx * cz - ny * szn, nx * szn + ny * cz];
+    const out = [nx * cy + nz * syn, ny, -nx * syn + nz * cy];
+    const len = Math.hypot(...out) || 1;
+    return out.map((v) => v / len);
+  };
+  return { tf, tn };
+}
+
+// A 4 × 4 matrix (ShapeBuilder): points times the matrix, normals times its inverse transpose (Matrix4f.normal).
+function matrixPlacement(m) {
+  const tf = (x, y, z) => [m[0] * x + m[1] * y + m[2] * z + m[3], m[4] * x + m[5] * y + m[6] * z + m[7], m[8] * x + m[9] * y + m[10] * z + m[11]];
+  const [a, b, c, d, e, f, g, h, i] = [m[0], m[1], m[2], m[4], m[5], m[6], m[8], m[9], m[10]];
+  // Cofactors of the 3 × 3 part = inverse transpose times the determinant (the length is normalised away).
+  const n = [e * i - f * h, f * g - d * i, d * h - e * g, c * h - b * i, a * i - c * g, b * g - a * h, b * f - c * e, c * d - a * f, a * e - b * d];
+  const sign = Math.sign(a * n[0] + b * n[1] + c * n[2]) || 1;
+  const tn = (x, y, z) => {
+    const out = [n[0] * x + n[1] * y + n[2] * z, n[3] * x + n[4] * y + n[5] * z, n[6] * x + n[7] * y + n[8] * z].map((v) => v * sign);
+    const len = Math.hypot(...out) || 1;
+    return out.map((v) => v / len);
+  };
+  return { tf, tn };
+}
+
+/**
+ * Geometry of box/cylinder primitives (FallbackShapes, AntennaGeometry) with per-vertex colours: placed by center, size
+ * and the turns rotY/rotZ, or by a 4 × 4 matrix (row by row) of the unit cube or cylinder.
+ */
 function shapeGeometry(shapes) {
   const pos = [];
   const nor = [];
@@ -288,25 +332,7 @@ function shapeGeometry(shapes) {
     for (let i = 1; i + 1 < points.length; i++) index.push(base, base + i, base + i + 1);
   };
   for (const s of shapes) {
-    const [sx, sy, sz] = s.size;
-    const ry = s.rotY || 0;
-    const rz = s.rotZ || 0;
-    const [cy, syn, cz, szn] = [Math.cos(ry), Math.sin(ry), Math.cos(rz), Math.sin(rz)];
-    // Ry · Rz · scale, then translate.
-    const tf = (x, y, z) => {
-      let px = x * sx;
-      let py = y * sy;
-      const pz = z * sz;
-      [px, py] = [px * cz - py * szn, px * szn + py * cz];
-      return [px * cy + pz * syn + s.center[0], py + s.center[1], -px * syn + pz * cy + s.center[2]];
-    };
-    const tn = (x, y, z) => {
-      let [nx, ny, nz] = [x / sx, y / sy, z / sz];
-      [nx, ny] = [nx * cz - ny * szn, nx * szn + ny * cz];
-      const out = [nx * cy + nz * syn, ny, -nx * syn + nz * cy];
-      const len = Math.hypot(...out) || 1;
-      return out.map((v) => v / len);
-    };
+    const { tf, tn } = s.matrix ? matrixPlacement(s.matrix) : turnPlacement(s);
     if (s.kind === 'box') {
       for (const f of FACES) {
         const pts = f.v.map((p) => tf(p[0] - 0.5, p[1] - 0.5, p[2] - 0.5));
@@ -628,13 +654,13 @@ export function createViewer(container, options) {
     });
   }
 
-  function geometryFor(model, id, variantName, hide) {
-    const key = `${id}#${variantName}#${hide ? hide.join(',') : ''}`;
+  function geometryFor(model, id, variantName, hide, hideFaces) {
+    const key = `${id}#${variantName}#${hide ? hide.join(',') : ''}#${hideFaces ? hideFaces.join(',') : ''}`;
     let g = geometryCache.get(key);
     if (!g) {
       const variant = model.variants[variantName];
       const source = variant.of ? model.variants[variant.of] : variant;
-      g = modelGeometry(source.el, variant.tint || null, faceGroups(model, variantName), hide || null);
+      g = modelGeometry(source.el, variant.tint || null, faceGroups(model, variantName), hide || null, hideFaces || null);
       geometryCache.set(key, g);
     }
     return g;
@@ -669,6 +695,9 @@ export function createViewer(container, options) {
       const frame = catalog.part(piece.id);
       mesh = new Mesh(shapeGeometry(proceduralFrame(frame, current.layout, catalog)), material(whiteTexture()));
       mesh.userData.dispose = true;
+    } else if (piece.procedural === 'antenna') {
+      mesh = new Mesh(shapeGeometry(antennaShapes(piece, paint)), material(whiteTexture()));
+      mesh.userData.dispose = true;
     } else {
       const plain = piece.variant && piece.variant !== 'base' && model.variants[piece.variant] ? piece.variant : 'base';
       const painted = plain === 'base' ? 'paint' : `${plain}_paint`;
@@ -681,7 +710,7 @@ export function createViewer(container, options) {
           if (i < MAX_TINTS) mat.uniforms.tints.value[i].set(((rgb >> 16) & 255) / 255, ((rgb >> 8) & 255) / 255, (rgb & 255) / 255);
         });
       }
-      mesh = new Mesh(geometryFor(model, piece.id, name, piece.hide), mat);
+      mesh = new Mesh(geometryFor(model, piece.id, name, piece.hide, piece.hideFaces), mat);
       faces = !!faceGroups(model, name);
     }
     mesh.userData.role = piece.role;
@@ -1233,7 +1262,7 @@ export function createViewer(container, options) {
     pickAt,
     /**
      * How every drawn mesh is highlighted now, for tests: {meshId, role, category, visible, all (the whole mesh), faces
-     * (highest level of a tint group)}.
+     * (highest level of a tint group), triangles (drawn)}.
      */
     highlights() {
       return droneGroup.children.map((mesh) => {
@@ -1241,6 +1270,7 @@ export function createViewer(container, options) {
         return {
           meshId: mesh.id, role: mesh.userData.role, category: mesh.userData.pick.category, visible: mesh.visible,
           all: u.highlightAll ? u.highlightAll.value : 0, faces: u.highlight ? Math.max(0, ...u.highlight.value) : 0,
+          triangles: mesh.geometry.index ? mesh.geometry.index.count / 3 : 0,
         };
       });
     },
@@ -1291,16 +1321,17 @@ export function createViewer(container, options) {
     },
     /**
      * The drone alone on a transparent 2D canvas, always from the same view of the drone (SHOT_AZIMUTH,
-     * SHOT_ELEVATION in its own frame, not the preview's), cropped to the drone plus pad (share of its longer side)
-     * and as large as fits into maxWidth × maxHeight. Null when nothing is drawn.
+     * SHOT_ELEVATION in its own frame, not the preview's; azimuth and elevation in degrees for another one, 180 from
+     * behind), cropped to the drone plus pad (share of its longer side) and as large as fits into maxWidth × maxHeight.
+     * Null when nothing is drawn.
      */
-    snapshot({ maxWidth = 1600, maxHeight = 1600, pad = 0.05 } = {}) {
+    snapshot({ maxWidth = 1600, maxHeight = 1600, pad = 0.05, azimuth = SHOT_AZIMUTH, elevation = SHOT_ELEVATION } = {}) {
       const box = new Box3().setFromObject(droneGroup);
       if (box.isEmpty()) return null;
       const sphere = box.getBoundingSphere(new Sphere());
       const shot = new PerspectiveCamera(camera.fov, 1, 1, 2);
-      const flat = Math.cos(SHOT_ELEVATION * DEG);
-      const dir = new Vector3(Math.sin(SHOT_AZIMUTH * DEG) * flat, Math.sin(SHOT_ELEVATION * DEG), -Math.cos(SHOT_AZIMUTH * DEG) * flat)
+      const flat = Math.cos(elevation * DEG);
+      const dir = new Vector3(Math.sin(azimuth * DEG) * flat, Math.sin(elevation * DEG), -Math.cos(azimuth * DEG) * flat)
         .transformDirection(droneGroup.matrixWorld);
       const distance = (sphere.radius / Math.sin((shot.fov * DEG) / 2)) * 1.02;
       shot.up.set(0, 1, 0).transformDirection(droneGroup.matrixWorld);

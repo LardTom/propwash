@@ -12,7 +12,8 @@
 //   const model = partModel(parts[0], res);                 // as in assets/data/configurator/models/…
 
 import { crc32 } from './crc32.js?v=62ad0fa2';
-import { KINDS, ARM_KEYS, trueX, maxContinuousCurrent, landingCellVoltage, effectiveUsableFraction, SOC_GRID, splitId, tryParse, idCompare } from './partjson.js?v=2c29ef2a';
+import { antennaKind, derivedAntenna, fallbackAnchor, antennaFaces } from './antenna.js?v=d6dc6e8a';
+import { KINDS, ARM_KEYS, trueX, maxContinuousCurrent, landingCellVoltage, effectiveUsableFraction, SOC_GRID, splitId, tryParse, idCompare } from './partjson.js?v=d74d681a';
 
 export const LANGUAGES = Object.freeze(['de_de', 'en_us']);
 export const NOMINAL_CELL_V = 3.7;
@@ -23,8 +24,7 @@ export const CHANNEL_SLOTS = Object.freeze({
   camera: ['camera'], antenna: ['antenna'], accessory: ['accessories'],
 });
 export const ASSET_SUFFIXES = Object.freeze(['.json', '.png', '.mcmeta']);
-const VARIANT = /^((_(worn|damaged|broken|ccw|blur|under|antenna|paint))*)\.json$/;
-const ANTENNA = '_antenna';
+const VARIANT = /^((_(worn|damaged|broken|ccw|blur|under|paint))*)\.json$/;
 const UPTILT = Object.freeze({
   whoop: [10, 35], toothpick: [10, 40], cinewhoop: [0, 35], freestyle: [0, 50], race: [15, 70], long_range: [0, 40], cinelifter: [0, 30],
   x_class: [0, 50],
@@ -193,10 +193,7 @@ function use(res, scope, path, textures) {
   follow(res, res.used.get(scope), path, textures, new Set(), 0);
 }
 
-/**
- * AssetIndex.model: item icon, render definition with its variants, textures, paintability and base colours (with the
- * paint groups of an "_antenna" model, Propwash 0.6.0).
- */
+/** AssetIndex.model: item icon, render definition with its variants, textures, paintability and base colours. */
 export function modelOf(definition, res) {
   if (res.models.has(definition.id)) return res.models.get(definition.id);
   const [namespace, path] = splitId(definition.id);
@@ -239,8 +236,7 @@ export function modelOf(definition, res) {
   } else {
     paintKey = `${namespace}:${category}/${path}`;
   }
-  const layers = [...(res.paint.get(paintKey) || [])];
-  if (res.has(`${renderBase}${ANTENNA}.json`)) layers.push(...(res.paint.get(`${paintKey}${ANTENNA}`) || []));
+  const layers = res.paint.get(paintKey) || [];
   const paintable = layers.length > 0 && res.has(`${renderBase}_paint.json`);
   const colors = {};
   for (const layer of layers) {
@@ -348,6 +344,7 @@ function frameData(frame) {
     center_of_mass_mm: nums(...g.frameCenterOfMassMm),
     mass_split: { arms: num(g.massSplit.arms), plate: num(g.massSplit.plate), duct: num(g.massSplit.duct) },
     accessory_anchors: anchors,
+    antenna_anchor: antennaAnchorData(frame),
     aero: {
       frontal_area_m2: num(frame.aero.frontalAreaM2), drag_coefficient: num(frame.aero.dragCoefficient), side_area_m2: num(frame.aero.sideAreaM2),
       top_area_m2: num(frame.aero.topAreaM2),
@@ -362,6 +359,27 @@ function frameData(frame) {
       preferred_min_cells: frame.batteryFit.preferredMinCells, preferred_min_capacity_mah: frame.batteryFit.preferredMinCapacityMah,
     },
   };
+}
+
+/** PartData: the frame's antenna holder (AntennaRules.anchor) with whether the frame names it itself. */
+function antennaAnchorData(frame) {
+  const g = frame.geometry;
+  const own = g.antennaAnchor || null;
+  const a = own || fallbackAnchor({
+    wheelbaseMm: frame.wheelbaseMm, batteryOnTop: g.batteryOnTop, batteryPlateMm: g.batteryPlateMm, electronicsMm: g.electronicsMm,
+    cameraY: g.cameraMm ? g.cameraMm[1] : null, ducted: frame.duct !== null,
+  });
+  return { pos: nums(a.x, a.y, a.z), tilt_deg: num(a.tiltDeg), explicit: own !== null };
+}
+
+/** PartData: the VTX's antennas (AntennaRules.antenna), its kind and whether they are derived. */
+function antennaData(def) {
+  const values = {
+    rangeBlocks: def.rangeBlocks, massGrams: def.basics.massGrams, link: def.link, imageQuality: def.imageQuality, latencyMs: def.latencyMs,
+    vtxPowerMw: def.vtxPowerMw,
+  };
+  const a = def.antenna || derivedAntenna(values);
+  return { count: a.count, length_mm: num(a.lengthMm), cap: a.cap, kind: antennaKind(values), derived: !def.antenna };
 }
 
 /** PartData.data: the definition's values with every default filled in. */
@@ -392,6 +410,7 @@ export function exportData(def) {
     case 'video': return {
       link: def.link, latency_ms: def.latencyMs, range_blocks: def.rangeBlocks, image_quality: num(def.imageQuality), camera_width_mm: num(def.cameraWidthMm),
       camera_fov_deg: num(def.cameraFovDeg), vtx_power_mw: def.vtxPowerMw, power_w: def.powerW === null ? null : num(def.powerW),
+      antenna: antennaData(def),
     };
     case 'accessory': {
       const c = def.actionCam;
@@ -869,8 +888,8 @@ export function base64(bytes) {
 /**
  * The viewer's model file of a parts.json entry ({format: 1, id, tex, variants}) from the mod's own files, or null
  * when the part has no render model. Like the game, a stack's "_mounted" variant (battery plugged in) comes from the
- * same files as its base model; a VTX's "_antenna" variant is drawn at the frame's antenna anchor. Throws for a model
- * the viewer cannot draw (as the build tool does).
+ * same files as its base model; a VTX's base variant lists the faces of its antenna elements the game leaves out
+ * (AntennaMask). Throws for a model the viewer cannot draw (as the build tool does).
  */
 export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {}) {
   const m = p.model || {};
@@ -911,7 +930,8 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
     if (!definition || definition.type !== 'minecraft:model') throw new Error(`${def}: plain minecraft:model expected`);
     const modelRel = modelFile(definition.model);
     if (!res.has(modelRel)) throw new Error(`${def}: model ${definition.model} not found`);
-    const transformed = applyTransform(readJson(modelRel), transformOf(definition.transformation, def), def);
+    const json = readJson(modelRel);
+    const transformed = applyTransform(json, transformOf(definition.transformation, def), def);
     const model = compactModel(transformed, def);
     if (textureBytes(model.texture) == null) throw new Error(`${def}: texture ${model.texture} not found`);
     const entry = { tex: textureIndex(model.texture) };
@@ -928,13 +948,12 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
     const groups = tintGroups(`${local}${geometryOf ? suffix.replace(/_paint$/, '') : suffix}`);
     if (groups) entry.groups = groups;
     variants[name] = entry;
-    raw[name] = { elements: namedBoxes(transformed) };
+    raw[name] = { elements: namedBoxes(transformed), json };
     return true;
   };
   add('base', '', null);
   if (p.category === 'prop' && add('ccw', '_ccw', null)) add('ccw_paint', '_ccw_paint', 'ccw');
   if (p.category === 'battery' && add('under', '_under', null)) add('under_paint', '_under_paint', 'under');
-  if (p.category === 'video' && add('antenna', ANTENNA, null)) add('antenna_paint', `${ANTENNA}_paint`, 'antenna');
   if (p.category === 'stack' && add('mounted', '_mounted', null, true)) {
     const pigtail = pigtailOf(raw.mounted.elements);
     if (pigtail) {
@@ -945,8 +964,7 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
     }
   }
   add('paint', '_paint', 'base');
-  for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint'], ['mounted', 'mounted_paint'],
-    ['antenna', 'antenna_paint']]) {
+  for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint'], ['mounted', 'mounted_paint']]) {
     if (variants[plain] && variants[plain].groups) {
       if (variants[painted]) variants[painted].groups = variants[plain].groups;
       delete variants[plain].groups;
@@ -959,6 +977,7 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
       if (socket) variants[name].socket = socket;
     }
   }
+  if (p.category === 'video' && variants.base) variants.base.antenna = antennaFaces(raw.base.json);
   const tex = textures.map((rel) => `data:image/png;base64,${base64(textureBytes(rel))}`);
   return { format: 1, id: p.id, tex, variants };
 }

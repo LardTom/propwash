@@ -615,12 +615,6 @@
         "base": "#1d1e21"
       }
     ],
-    "video/analog_nano_antenna": [
-      {
-        "channel": "antenna",
-        "base": "#e6e6e6"
-      }
-    ],
     "video/analog_race": [
       {
         "channel": "camera",
@@ -629,12 +623,6 @@
       {
         "channel": "camera",
         "base": "#1d1e21"
-      }
-    ],
-    "video/analog_race_antenna": [
-      {
-        "channel": "antenna",
-        "base": "#c0392b"
       }
     ],
     "video/digital_hd": [
@@ -647,12 +635,6 @@
         "base": "#1d1e21"
       }
     ],
-    "video/digital_hd_antenna": [
-      {
-        "channel": "antenna",
-        "base": "#c0392b"
-      }
-    ],
     "video/digital_lite": [
       {
         "channel": "camera",
@@ -661,12 +643,6 @@
       {
         "channel": "camera",
         "base": "#1d1e21"
-      }
-    ],
-    "video/digital_lite_antenna": [
-      {
-        "channel": "antenna",
-        "base": "#e6e6e6"
       }
     ]
   }
