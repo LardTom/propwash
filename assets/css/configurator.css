@@ -1419,6 +1419,18 @@ button {
   display: none;
 }
 
+/* Add-on filter of the part lists (Propwash, Just More Parts, Camera Drones, Mob Defense). */
+.chips--src {
+  align-items: center;
+}
+
+.chips__label {
+  color: var(--muted);
+  font: 600 0.72rem/1.3 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .picker__count {
   color: var(--muted);
   font-size: 0.9rem;
@@ -1690,6 +1702,117 @@ button {
   border: 1px solid var(--border-soft);
   border-radius: 4px;
   background: var(--border-soft);
+}
+
+/* Camera drone panel (Propwash: Camera Drones): the camera check of the workbench and what nav board and gimbal bring. */
+.camdrone {
+  display: grid;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-soft);
+  border-radius: 4px;
+  background: var(--panel-2);
+}
+
+.camdrone[hidden] {
+  display: none;
+}
+
+.camdrone__title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.camdrone__status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font: 600 0.8rem/1.3 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gate);
+}
+
+.camdrone__status.is-warn {
+  color: var(--accent);
+}
+
+.camdrone__status.is-warn .checks__led {
+  background: var(--accent);
+  box-shadow: 0 0 10px rgba(255, 187, 0, 0.55);
+}
+
+.camdrone__hint,
+.camdrone__props-title {
+  margin: 0;
+  color: var(--text-2);
+  font-size: 0.9rem;
+}
+
+.camdrone__props-title {
+  color: var(--muted);
+  font: 600 0.72rem/1.3 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.camdrone__roles,
+.camdrone__props {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9rem;
+}
+
+.camdrone__roles li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  padding: 6px 10px;
+  border-radius: 4px;
+  background: var(--field);
+  color: var(--text-2);
+}
+
+.camdrone__roles li.is-bad {
+  background: rgba(242, 102, 94, 0.09);
+}
+
+.camdrone__role {
+  min-width: 7.5em;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.camdrone__state {
+  color: var(--gate);
+  font-family: var(--mono);
+  font-size: 0.82rem;
+}
+
+.camdrone__roles li.is-bad .camdrone__state {
+  color: var(--danger);
+}
+
+.camdrone__part {
+  flex-basis: 100%;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.camdrone__props li {
+  padding-left: 14px;
+  text-indent: -14px;
+  color: var(--text-2);
+}
+
+.camdrone__props li::before {
+  content: "· ";
+  color: var(--accent);
 }
 
 .stat {

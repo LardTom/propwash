@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "about": "What the add-on Propwash: Camera Drones keeps in its code and the web export does not carry, written by hand from its sources (SensorTable, GimbalTable, LensItems, FlightClass, CamPresets, CameraCheck): the nav boards with GPS, compass, barometer and their obstacle sensors, the gimbals with tilt, pan and lenses, and the three flight classes with their camera frame, preset and the speeds of the flight modes Cine, Normal and Sport. tools/test-configurator-addons.mjs compares it with a checkout of the add-on next to this repository.",
+  "source": "Propwash: Camera Drones 1.0.0-rc.1",
+  "namespace": "camdrones",
+  "nav_boards": {
+    "camdrones:nav_fc_compact": { "gps": true, "compass": true, "barometer": true, "sensors": ["down"] },
+    "camdrones:nav_fc_pro": { "gps": true, "compass": true, "barometer": true, "sensors": ["forward", "back", "left", "right", "up", "down"] }
+  },
+  "sensor_range_m": 15,
+  "gimbals": {
+    "camdrones:gimbal_compact": { "axes": 3, "tilt": [-90, 30], "pan_360": false, "lens_bay": false, "focal_mm": [24] },
+    "camdrones:gimbal_tour": { "axes": 3, "tilt": [-90, 30], "pan_360": false, "lens_bay": false, "focal_mm": [24, 70] },
+    "camdrones:gimbal_cine": { "axes": 3, "tilt": [-90, 60], "pan_360": true, "lens_bay": true, "focal_mm": [] }
+  },
+  "lenses_mm": [24, 50, 85],
+  "classes": [
+    { "key": "compact", "frame": "camdrones:compact_fold_frame", "preset": "camdrones:compact", "speeds_ms": { "cine": 3, "normal": 10, "sport": 16 }, "climb_ms": 5, "descend_ms": 3.5 },
+    { "key": "tour", "frame": "camdrones:tour_fold_frame", "preset": "camdrones:tour", "speeds_ms": { "cine": 3, "normal": 12, "sport": 20 }, "climb_ms": 6, "descend_ms": 5 },
+    { "key": "cine", "frame": "camdrones:cine_frame", "preset": "camdrones:cine", "speeds_ms": { "cine": 4, "normal": 15, "sport": 26 }, "climb_ms": 8, "descend_ms": 6 }
+  ]
+}

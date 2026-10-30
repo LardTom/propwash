@@ -12,6 +12,7 @@
 //   const model = partModel(parts[0], res);                 // as in assets/data/configurator/models/…
 
 import { crc32 } from './crc32.js?v=62ad0fa2';
+import { standIn } from './stand-ins.js?v=ac5c805f';
 import { antennaKind, derivedAntenna, fallbackAnchor, antennaFaces } from './antenna.js?v=d6dc6e8a';
 import { KINDS, ARM_KEYS, trueX, maxContinuousCurrent, landingCellVoltage, effectiveUsableFraction, SOC_GRID, splitId, tryParse, idCompare } from './partjson.js?v=d74d681a';
 
@@ -803,21 +804,28 @@ function applyTransform(model, transform, where) {
   return { ...model, elements };
 }
 
-function compactModel(model, where) {
-  const textures = Object.entries(model.textures || {}).filter(([k]) => k !== 'particle');
-  if (textures.length !== 1) throw new Error(`${where}: exactly one texture expected, found ${textures.length}`);
-  const key = `#${textures[0][0]}`;
+/**
+ * The compact form of a block model: elements, tints and box, and its textures – the main texture (used by the most
+ * faces) and, for a model whose faces use more than one texture (Mob Defense's dispenser mount: the vanilla dispenser
+ * front on its front plate), the texture of every face in face order (faceTextures, indices into textures).
+ */
+export function compactModel(model, where) {
+  const named = Object.entries(model.textures || {}).filter(([k]) => k !== 'particle');
+  if (!named.length) throw new Error(`${where}: no texture`);
+  const files = new Map(named.map(([k, v]) => [`#${k}`, textureFile(v)]));
   const elements = [];
   const tints = [];
+  const faceFiles = [];
   const box = [Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity];
   for (const e of model.elements || []) {
     const faces = DIRS.map((dir) => {
       const f = e.faces && e.faces[dir];
       if (!f) return 0;
-      if (f.texture !== key) throw new Error(`${where}: face texture ${f.texture} is not ${key}`);
+      if (!files.has(f.texture)) throw new Error(`${where}: face texture ${f.texture} is not one of the model's`);
       if (f.rotation) throw new Error(`${where}: UV rotation is not supported`);
       if (!f.uv) throw new Error(`${where}: face without uv`);
       tints.push(f.tintindex == null ? -1 : f.tintindex);
+      faceFiles.push(files.get(f.texture));
       return f.uv.map(round);
     });
     elements.push([...e.from.map(round), ...e.to.map(round), rotationOf(e.rotation), faces]);
@@ -828,7 +836,13 @@ function compactModel(model, where) {
       }
     }
   }
-  return { texture: textureFile(textures[0][1]), elements, tints, box: box.map(round) };
+  const counts = new Map();
+  for (const file of faceFiles) counts.set(file, (counts.get(file) || 0) + 1);
+  if (!counts.size) counts.set(files.values().next().value, 0);
+  const main = [...counts.entries()].reduce((best, entry) => (entry[1] > best[1] ? entry : best))[0];
+  const textures = [main, ...[...counts.keys()].filter((file) => file !== main)];
+  const faceTextures = textures.length > 1 ? faceFiles.map((file) => textures.indexOf(file)) : null;
+  return { texture: main, textures, faceTextures, elements, tints, box: box.map(round) };
 }
 
 const PLUG_ELEMENTS = new Set(['connector', 'connector_grip', 'bt_connector']);
@@ -933,8 +947,11 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
     const json = readJson(modelRel);
     const transformed = applyTransform(json, transformOf(definition.transformation, def), def);
     const model = compactModel(transformed, def);
-    if (textureBytes(model.texture) == null) throw new Error(`${def}: texture ${model.texture} not found`);
+    for (const file of model.textures) {
+      if (textureBytes(file) == null && !standIn(file)) throw new Error(`${def}: texture ${file} not found`);
+    }
     const entry = { tex: textureIndex(model.texture) };
+    if (model.faceTextures) entry.ftex = model.faceTextures.map((i) => textureIndex(model.textures[i]));
     if (geometryOf) {
       const base = variants[geometryOf];
       if (JSON.stringify(base.el) !== JSON.stringify(model.elements)) throw new Error(`${def}: geometry differs from ${geometryOf}`);
@@ -978,8 +995,10 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
     }
   }
   if (p.category === 'video' && variants.base) variants.base.antenna = antennaFaces(raw.base.json);
-  const tex = textures.map((rel) => `data:image/png;base64,${base64(textureBytes(rel))}`);
-  return { format: 1, id: p.id, tex, variants };
+  const own = (rel) => textureBytes(rel) != null;
+  const tex = textures.map((rel) => `data:image/png;base64,${own(rel) ? base64(textureBytes(rel)) : standIn(rel).png}`);
+  const standIns = Object.fromEntries(textures.map((rel, i) => [i, own(rel) ? null : standIn(rel).id]).filter(([, id]) => id));
+  return Object.keys(standIns).length ? { format: 1, id: p.id, tex, variants, stand_ins: standIns } : { format: 1, id: p.id, tex, variants };
 }
 
 /** render.json additions of a mod's files: frame layouts and motor seats (drone_layout.json), paint channels. */

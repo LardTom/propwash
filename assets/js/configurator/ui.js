@@ -2,7 +2,7 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText, createCatalog } from './data.js?v=aeab85a9';
+import { loadCatalog, localText, createCatalog } from './data.js?v=3c6a36ca';
 import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=024bd980';
 import { parseUnknown, unknownId, unknownMarker, SHORT_KEY_PREFIX, creativeCounts } from './sharecode3.js?v=024bd980';
 import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=22940b30';
@@ -12,9 +12,10 @@ import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe
 import { batteryFit, fitsFrame } from './rules.js?v=6634f777';
 import { assemble, PROP_SLOTS } from './assembly.js?v=37a74b6c';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=9c4a7433';
-import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=031da610';
-import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=582a6e40';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=7d2874fe';
+import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=8dd58b3e';
+import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=58d1b91a';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=0a9abb1e';
+import { cameraCheck, isCameraDrone, navOf, gimbalOf, classOf as flightClassOf } from './camdrones.js?v=80954d0d';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
@@ -23,7 +24,7 @@ const DEFAULT_PRESET = 'justmoreparts:deadcat5_6s';
 const FIELDS = ['frame', 'stack', 'motor', 'prop', 'video', 'battery'];
 const SLOT_CATEGORIES = [...FIELDS, 'accessory'];
 const ACCESSORY_MOUNTS = ['top', 'bottom', 'front'];
-const ROLE_ORDER = ['whoop', 'toothpick', 'cinewhoop', 'freestyle', 'race', 'long_range', 'x_class'];
+const ROLE_ORDER = ['whoop', 'toothpick', 'cinewhoop', 'freestyle', 'race', 'long_range', 'x_class', 'cinelifter'];
 const KEY_STATS = ['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'mixed_flight_time_min', 'top_speed_kmh'];
 // Rows of the flight analysis, ordered like the workbench in the game (Propwash 0.4.0): main figures, the four flight
 // times (mixed is the main value), currents, voltages and loads, temperatures.
@@ -274,9 +275,22 @@ function fitOf(part) {
   return { level: problems.length ? 'bad' : warnings.length ? 'warn' : 'ok', issues: [...problems, ...warnings] };
 }
 
+// The nav board and gimbal of a camera drone (camera-drones.json): what they do instead of FPV figures.
+const tiltText = (tilt) => `${tilt[0] < 0 ? '−' : '+'}${Math.abs(tilt[0])}…${tilt[1] < 0 ? '−' : '+'}${Math.abs(tilt[1])}°`;
+
 function facts(p) {
   const d = p.data;
   const g = `${num(p.basics.mass_g, p.basics.mass_g < 10 ? 1 : 0)}${NB}g`;
+  const nav = p.category === 'stack' ? navOf(p.id, cameraData) : null;
+  if (nav) {
+    const sensors = nav.sensors.length > 1 ? t('camdrones.factsAll') : t('camdrones.factsDown');
+    return `GPS · ${sensors} · ${d.cells[0] === d.cells[1] ? d.cells[0] : `${d.cells[0]}–${d.cells[1]}`}S · ${d.esc_continuous_a}${NB}A · ${g}`;
+  }
+  const gimbal = p.category === 'accessory' ? gimbalOf(p.id, cameraData) : null;
+  if (gimbal) {
+    const lenses = gimbal.lens_bay ? cameraData.lenses_mm : gimbal.focal_mm;
+    return [t(`mounts.${d.slot}`), gimbal.pan_360 ? '360°' : null, tiltText(gimbal.tilt), `${lenses.join('/')}${NB}mm`, g].filter(Boolean).join(' · ');
+  }
   switch (p.category) {
     case 'frame': return `${d.wheelbase_mm}${NB}mm · ${d.props_mm[0] ? `${d.props_mm[0]}–` : `≤${NB}`}${d.props_mm[1]}${NB}mm ${t('ui.props')} · ${g}`;
     case 'stack': return `${d.cells[0] === d.cells[1] ? d.cells[0] : `${d.cells[0]}–${d.cells[1]}`}S · ${d.esc_continuous_a}${NB}A · ${g}`;
@@ -339,7 +353,7 @@ function slotRows() {
 }
 
 function filterFor(category) {
-  if (!state.filters[category]) state.filters[category] = { q: '', cls: 'auto', fits: false };
+  if (!state.filters[category]) state.filters[category] = { q: '', cls: 'auto', fits: false, src: 'all' };
   return state.filters[category];
 }
 
@@ -352,8 +366,14 @@ function classOf(category, filter) {
   return category !== 'frame' && role && classesOf(category).includes(role) ? role : 'all';
 }
 
-function matches(part, filter, cls) {
+/** The add-on filter in effect: 'all' or a namespace that still has parts in the category. */
+function sourceOf(category, filter) {
+  return filter.src && filter.src !== 'all' && sourcesOf(category).includes(filter.src) ? filter.src : 'all';
+}
+
+function matches(part, filter, cls, src = 'all') {
   if (cls !== 'all' && !partRoles.get(part.id).has(cls)) return false;
+  if (src !== 'all' && !part.id.startsWith(`${src}:`)) return false;
   if (filter.q) {
     const hay = [catalog.partName(part.id, 'en'), catalog.partName(part.id, 'de'), part.id, facts(part),
       localText(part.short_name, 'en'), (catalog.help(part.id, lang()) || {}).summary || ''].join(' ').toLowerCase();
@@ -368,7 +388,25 @@ function partBadge(part) {
   const ns = part.id.split(':')[0];
   if (ns === 'justmoreparts') return el('span', { class: 'badge badge--jmp', title: t('ui.addonLong') }, t('ui.addon'));
   const info = catalog.namespace(ns);
-  return el('span', { class: 'badge badge--addon', title: t('ui.addonOtherLong', { name: (info && info.name) || ns }) }, t('ui.addonOther'));
+  const name = (info && info.name) || ns;
+  const known = Array.isArray(entry(`addonShort.${ns}`));
+  return el('span', { class: `badge badge--addon${known ? ` badge--${ns}` : ''}`, title: t('ui.addonOtherLong', { name }) },
+    known ? t(`addonShort.${ns}`) : t('ui.addonOther'));
+}
+
+/** Short name of where parts come from: Propwash, an official add-on (addonShort) or the add-on's name. */
+function sourceName(ns) {
+  if (ns === 'propwash') return t('ui.builtin');
+  if (Array.isArray(entry(`addonShort.${ns}`))) return t(`addonShort.${ns}`);
+  const info = catalog.namespace(ns);
+  return info && info.name ? info.name.replace(/^Propwash:\s*/, '') : ns;
+}
+
+/** The namespaces the parts of a category come from: Propwash first, then the add-ons in the catalog's order. */
+function sourcesOf(category) {
+  const used = new Set(offeredParts(category).map((p) => p.id.slice(0, p.id.indexOf(':'))));
+  const order = ['propwash', 'justmoreparts', ...catalog.namespaces.map((n) => n.namespace)];
+  return [...new Set(order)].filter((ns) => used.has(ns)).concat([...used].filter((ns) => !order.includes(ns)).sort());
 }
 
 let detailsOpen = false;
@@ -446,11 +484,21 @@ function picker() {
         renderList();
       },
     }, cls === 'all' ? t('ui.all') : t(`roles.${cls}`)))) : null;
+  const sources = sourcesOf(category);
+  const srcChips = sources.length > 1 ? el('div', { class: 'chips chips--src', role: 'group', 'aria-label': t('ui.addonFilter') },
+    el('span', { class: 'chips__label', 'aria-hidden': 'true' }, t('ui.addonFilter')),
+    ['all', ...sources].map((src) => el('button', {
+      type: 'button', class: 'chip', 'aria-pressed': String(sourceOf(category, filter) === src), dataset: { src },
+      onclick: () => {
+        filter.src = src;
+        renderList();
+      },
+    }, src === 'all' ? t('ui.addonFilterAll') : sourceName(src)))) : null;
   const fits = el('label', { class: 'check' },
     el('input', { type: 'checkbox', checked: filter.fits || null, onchange: (e) => { filter.fits = e.target.checked; renderList(); } }),
     el('span', null, t('ui.fitsOnly')));
   const tools = el('div', { class: 'picker__tools' },
-    el('div', { class: 'picker__search-wrap' }, svgEl('svg', { class: 'picker__search-icon', width: 16, height: 16, 'aria-hidden': 'true' }), search), chips, fits);
+    el('div', { class: 'picker__search-wrap' }, svgEl('svg', { class: 'picker__search-icon', width: 16, height: 16, 'aria-hidden': 'true' }), search), chips, srcChips, fits);
   tools.querySelector('.picker__search-icon').append(svgEl('use', { href: '#i-search' }));
 
   const list = el('div', { class: 'part-list', role: 'listbox', id: listId, 'aria-labelledby': 'picker-title' });
@@ -480,6 +528,7 @@ function picker() {
     list.replaceChildren();
     let shown = 0;
     if (chips) for (const chip of chips.children) chip.setAttribute('aria-pressed', String(chip.dataset.cls === classOf(category, filter)));
+    if (srcChips) for (const chip of srcChips.querySelectorAll('[data-src]')) chip.setAttribute('aria-pressed', String(chip.dataset.src === sourceOf(category, filter)));
     const fitted = state.build.accessories || {};
     const groups = category === 'accessory'
       ? ACCESSORY_MOUNTS.filter((m) => m !== 'front' || fitted.front || parts.some((p) => p.data.slot === 'front')) : [null];
@@ -492,7 +541,7 @@ function picker() {
       }
       for (const part of parts) {
         if (mount && part.data.slot !== mount) continue;
-        if (!matches(part, filter, classOf(category, filter))) continue;
+        if (!matches(part, filter, classOf(category, filter), sourceOf(category, filter))) continue;
         const { node, fit } = option(part, mount);
         if (filter.fits && fit.level === 'bad') continue;
         container.append(node);
@@ -633,15 +682,26 @@ function unitText(unit) {
 // or a tap, with the typical range of the frame's class (assets/data/configurator/stathelp.json); a value outside it
 // gets a quiet mark (no error: errors are the compatibility check's).
 let statHelp = { stats: {} };
+// Nav boards, gimbals and flight classes of Propwash: Camera Drones (assets/data/configurator/camera-drones.json).
+let cameraData = { nav_boards: {}, gimbals: {}, classes: [], lenses_mm: [] };
 
 function frameRole() {
   const frame = partOf(state.build.frame, 'frame');
   return frame ? frame.data.role : null;
 }
 
-/** Typical range [low, high] of a figure for the class of the current frame, or null. */
+/**
+ * The class a figure is compared with: a camera drone (nav board of Camera Drones) with camera drones, else the class
+ * of the frame.
+ */
+function statClass() {
+  if (state.build && isCameraDrone(state.build, cameraData) && (statHelp.build_classes || []).includes('camera_drone')) return 'camera_drone';
+  return frameRole();
+}
+
+/** Typical range [low, high] of a figure for the class of the current build, or null. */
 function statRange(key) {
-  const role = frameRole();
+  const role = statClass();
   const table = statHelp.stats && statHelp.stats[key];
   return role && table && Array.isArray(table[role]) ? table[role] : null;
 }
@@ -664,9 +724,10 @@ function outsideRange(value, range, decimals) {
 function statHelpLines(key, analysis) {
   const [, , , decimals] = entry(`stats.${key}`);
   const range = statRange(key);
-  const cls = frameRole() ? t(`roles.${frameRole()}`) : '';
+  const cls = statClass() ? t(`roles.${statClass()}`) : '';
   const lines = [t(`statHelp.${key}`)];
   if (range) lines.push(t('ui.statRange', { class: cls, range: rangeText(key, range) }));
+  if (range && statClass() === 'camera_drone') lines.push(t('camdrones.rangeNote'));
   if (analysis && outsideRange(analysis[key], range, decimals)) lines.push(t('ui.statOutsideLong', { class: cls }));
   return lines;
 }
@@ -697,6 +758,58 @@ function renderStats() {
   note.textContent = a ? '' : t('ui.noAnalysis');
   note.hidden = !!a;
   renderCamera();
+  renderCamdrone();
+}
+
+// The camera drone panel (Propwash: Camera Drones): the check of the workbench button “Check camera drone” and what
+// the nav board, gimbal and flight class bring, instead of FPV figures that do not fit a camera drone.
+function renderCamdrone() {
+  const box = $('[data-camdrone]');
+  if (!box) return;
+  const build = state.build;
+  const known = build && [build.frame, build.stack, build.battery, build.video].every((id) => catalog.part(id));
+  const r = known && cameraData.classes ? cameraCheck(build, catalog, cameraData) : null;
+  box.hidden = !(r && r.camera);
+  if (box.hidden) {
+    box.replaceChildren();
+    return;
+  }
+  const name = (id) => (id ? catalog.partName(id, lang()) : '');
+  const problems = r.lines.filter((l) => l.state === 'missing' || l.state === 'wrong').length;
+  const status = el('p', { class: `camdrone__status is-${r.complete ? 'ok' : 'warn'}` }, el('span', { class: 'checks__led', 'aria-hidden': 'true' }),
+    r.complete ? t('camdrones.check.complete') : t('camdrones.check.incomplete'));
+  const hint = el('p', { class: 'camdrone__hint' }, r.complete ? t('camdrones.check.completeHint')
+    : t('camdrones.check.incompleteHint', { x: problems, y: r.lines.length }));
+  const roles = el('ul', { class: 'camdrone__roles' }, r.lines.map((l) => {
+    const state = t(`camdrones.check.${l.state}`);
+    const detail = l.state === 'wrong' && l.role === 'nav_fc' ? t('camdrones.check.wrongNav', { x: name(l.part) })
+      : [l.part ? name(l.part) : null, l.advice ? t('camdrones.check.recommended', { x: name(l.advice) }) : null].filter(Boolean).join(' · ');
+    return el('li', { class: `is-${l.state === 'fitted' || l.state === 'other' ? 'ok' : 'bad'}`, dataset: { role: l.role, state: l.state } },
+      el('span', { class: 'camdrone__role' }, t(`camdrones.check.role.${l.role}`)), ' ', el('span', { class: 'camdrone__state' }, state),
+      detail ? el('span', { class: 'camdrone__part' }, detail) : null);
+  }));
+  const props = [];
+  const nav = navOf(build.stack, cameraData);
+  if (nav) {
+    props.push(t('camdrones.gps'));
+    props.push(nav.sensors.length > 1 ? t('camdrones.sensorsAll', { range: num(cameraData.sensor_range_m, 0) }) : t('camdrones.sensorsDown'));
+  }
+  const gimbalId = Object.values(build.accessories || {}).find((id) => gimbalOf(id, cameraData));
+  const gimbal = gimbalId ? gimbalOf(gimbalId, cameraData) : null;
+  if (gimbal) {
+    const parts = [t('camdrones.gimbal', { axes: gimbal.axes, min: num(gimbal.tilt[0], 0), max: num(gimbal.tilt[1], 0) })];
+    if (gimbal.pan_360) parts.push(t('camdrones.pan'));
+    parts.push(gimbal.lens_bay ? t('camdrones.lensBay', { lenses: cameraData.lenses_mm.join('/') }) : t('camdrones.lenses', { lenses: gimbal.focal_mm.join('/') }));
+    props.push(parts.join(', '));
+  }
+  const cls = flightClassOf(build.frame, cameraData);
+  if (cls) props.push(t('camdrones.speeds', { cine: num(cls.speeds_ms.cine, 0), normal: num(cls.speeds_ms.normal, 0), sport: num(cls.speeds_ms.sport, 0) }));
+  box.replaceChildren(
+    el('h3', { class: 'camdrone__title', id: 'camdrone-title' }, t('camdrones.check.title')),
+    status, hint, roles,
+    r.preset ? '' : el('p', { class: 'camdrone__hint' }, t('camdrones.check.no_camera_frame')),
+    props.length ? el('p', { class: 'camdrone__props-title' }, t('camdrones.properties')) : '',
+    props.length ? el('ul', { class: 'camdrone__props' }, props.map((x) => el('li', null, x))) : '');
 }
 
 // The floating explanation of a figure (one for the page, aria-hidden: buttons carry the text via aria-describedby).
@@ -830,6 +943,7 @@ function renderCamera() {
   note.textContent = standard
     ? t('ui.fpvNoteDefault', { tilt: num(view.uptilt_deg, 0), fov: num(fov, 0), link })
     : t('ui.fpvNoteChanged', { tilt: num(view.uptilt_deg, 0), percent: num(view.props_in_view_percent, 1) });
+  if (isCameraDrone(state.build, cameraData)) note.textContent += ` ${t('ui.fpvGimbalNote')}`;
   if (viewer) viewer.setCamera({ on: fpvState.on, tilt, fov, spinning: !fpvState.still, frame: fpvState.frame, mark: fpvState.mark });
   cameraLabel(percent);
 }
@@ -1897,9 +2011,13 @@ function presetSelect() {
   const select = $('[data-preset]');
   const value = select.value;
   select.replaceChildren(el('option', { value: '' }, t('ui.presetPlaceholder')));
-  for (const [label, prefix] of [[t('ui.presetGroupPropwash'), 'propwash:'], [t('ui.presetGroupJmp'), 'justmoreparts:']]) {
-    const group = el('optgroup', { label });
-    for (const p of catalog.presets.filter((x) => x.id.startsWith(prefix))) group.append(el('option', { value: p.id }, catalog.presetName(p.id, lang())));
+  const label = (ns) => (ns === 'propwash' ? t('ui.presetGroupPropwash') : ns === 'justmoreparts' ? t('ui.presetGroupJmp') : sourceName(ns));
+  const order = [...new Set(['propwash', 'justmoreparts', ...catalog.namespaces.map((n) => n.namespace)])];
+  for (const ns of order) {
+    const presets = catalog.presets.filter((x) => x.id.startsWith(`${ns}:`));
+    if (!presets.length) continue;
+    const group = el('optgroup', { label: label(ns) });
+    for (const p of presets) group.append(el('option', { value: p.id }, catalog.presetName(p.id, lang())));
     select.append(group);
   }
   select.value = state.presetId || value || '';
@@ -2143,7 +2261,7 @@ async function startViewer() {
   const button = $('[data-autorotate]');
   let mod;
   try {
-    mod = await import('./viewer.js?v=9ef4b7d8');
+    mod = await import('./viewer.js?v=941be885');
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;
@@ -2646,7 +2764,7 @@ async function boot() {
   try {
     const optional = (file, fallback) => fetch(new URL(file, DATA_ROOT), { credentials: 'same-origin' })
       .then((res) => (res.ok ? res.json() : fallback)).catch(() => fallback);
-    const [c, r, help, starters] = await Promise.all([
+    const [c, r, help, starters, camera] = await Promise.all([
       loadCatalog(),
       fetch(RENDER_URL, { credentials: 'same-origin' }).then((res) => {
         if (!res.ok) throw new Error(`render.json: HTTP ${res.status}`);
@@ -2654,12 +2772,14 @@ async function boot() {
       }),
       optional('stathelp.json', { stats: {} }),
       optional('beginner.json', { builds: [] }),
+      optional('camera-drones.json', cameraData),
       loadTexts(),
     ]);
     catalog = pageTexts(c);
     render = r;
     statHelp = help;
     beginner = starters;
+    cameraData = camera;
   } catch {
     $('[data-loading]').textContent = t('ui.loadFailed');
     return;

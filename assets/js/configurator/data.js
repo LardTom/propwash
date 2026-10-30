@@ -13,7 +13,7 @@ import {
 } from './sharecode.js?v=024bd980';
 import { sharedOnly } from './tune.js?v=f4084d0e';
 import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=22940b30';
-import { catalogOrder, CREATIVE_ONLY } from './catalog-build.js?v=d98fb9e6';
+import { catalogOrder, CREATIVE_ONLY } from './catalog-build.js?v=c601bf0b';
 
 export const CATALOG_URL = new URL('../../data/configurator/catalog.json', import.meta.url);
 export const CATEGORIES = Object.freeze(['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory']);
@@ -71,8 +71,9 @@ export function createCatalog(json) {
   const layerNames = new Map((json.sharecode.layers || []).map((l) => [l.key, l.name]));
   const namespaces = new Map((json.namespaces || []).map((n) => [n.namespace, n]));
   const versions = Object.fromEntries([...namespaces.values()].map((n) => [n.namespace, n.version]));
-  // Add-ons read in the browser are not in the directory: their codes carry the mod's name and link, like the game's.
-  const mods = Object.fromEntries([...namespaces.values()].filter((n) => n.source === 'local' && n.name)
+  // Add-ons that are not in the directory (read in the browser, or of the export with their jar's homepage, like
+  // Camera Drones and Mob Defense): their codes carry the mod's name and link, like the game's.
+  const mods = Object.fromEntries([...namespaces.values()].filter((n) => n.name && (n.source === 'local' || n.homepage !== undefined))
     .map((n) => [n.namespace, { name: n.name, homepage: n.homepage || null }]));
   let shareTables = null;
   let frozen = null;

@@ -218,7 +218,7 @@ const apply = (m, x, y, z) => [m[0] * x + m[1] * y + m[2] * z, m[3] * x + m[4] *
  * indices of elements left out (their faces still count for tints and groups), or null; hideFaces: indices of single
  * faces left out (counted over all faces), or null.
  */
-function modelGeometry(elements, tints, groups, hide, hideFaces) {
+function modelGeometry(elements, tints, groups, hide, hideFaces, faceTex = null, only = -1) {
   const pos = [];
   const nor = [];
   const uvs = [];
@@ -244,7 +244,8 @@ function modelGeometry(elements, tints, groups, hide, hideFaces) {
       if (!uv) continue;
       const tint = tints ? tints[face] : -1;
       const group = groups ? groups[face] : -1;
-      if (hiddenFaces.has(face++)) continue;
+      const other = faceTex && faceTex[face] !== only;
+      if (hiddenFaces.has(face++) || other) continue;
       const info = FACES[f];
       const normal = m ? apply(m, ...info.n) : info.n;
       const base = pos.length / 3;
@@ -606,7 +607,7 @@ export function createViewer(container, options) {
   let lastRadius = 0;
   let disposed = false;
 
-  function texture(dataUrl) {
+  function textureOf(dataUrl) {
     let t = textureCache.get(dataUrl);
     if (!t) {
       const image = new Image();
@@ -654,13 +655,15 @@ export function createViewer(container, options) {
     });
   }
 
-  function geometryFor(model, id, variantName, hide, hideFaces) {
-    const key = `${id}#${variantName}#${hide ? hide.join(',') : ''}#${hideFaces ? hideFaces.join(',') : ''}`;
+  // texture: only the faces of that texture (a model with a texture per face, ftex), -1 all faces.
+  function geometryFor(model, id, variantName, hide, hideFaces, texture = -1) {
+    const key = `${id}#${variantName}#${hide ? hide.join(',') : ''}#${hideFaces ? hideFaces.join(',') : ''}#${texture}`;
     let g = geometryCache.get(key);
     if (!g) {
       const variant = model.variants[variantName];
       const source = variant.of ? model.variants[variant.of] : variant;
-      g = modelGeometry(source.el, variant.tint || null, faceGroups(model, variantName), hide || null, hideFaces || null);
+      g = modelGeometry(source.el, variant.tint || null, faceGroups(model, variantName), hide || null, hideFaces || null,
+        texture >= 0 ? variant.ftex : null, texture);
       geometryCache.set(key, g);
     }
     return g;
@@ -682,8 +685,20 @@ export function createViewer(container, options) {
     };
   }
 
-  // One mesh per placed piece; painting swaps between the plain and the "_paint" model.
-  function pieceMesh(piece, model, paint) {
+  // The meshes of a placed piece: one, or one per texture for a model with a texture per face (ftex).
+  function pieceMeshes(piece, model, paint) {
+    if (piece.procedural || !model) return [pieceMesh(piece, model, paint)];
+    const plain = piece.variant && piece.variant !== 'base' && model.variants[piece.variant] ? piece.variant : 'base';
+    const painted = plain === 'base' ? 'paint' : `${plain}_paint`;
+    const tints = model.variants[painted] ? paintTints(model.variants[painted].groups, paint, piece.paintPosition || 0, render.channels) : null;
+    const variant = model.variants[tints ? painted : plain];
+    const used = variant && Array.isArray(variant.ftex) ? [...new Set(variant.ftex)] : [];
+    if (used.length < 2) return [pieceMesh(piece, model, paint)];
+    return used.map((texture) => pieceMesh(piece, model, paint, texture));
+  }
+
+  // One mesh per placed piece (per texture of it, see pieceMeshes); painting swaps between the plain and the "_paint" model.
+  function pieceMesh(piece, model, paint, texture = -1) {
     let mesh;
     let faces = false;
     if (piece.procedural === 'accessory_base') {
@@ -704,13 +719,13 @@ export function createViewer(container, options) {
       const tints = model.variants[painted] ? paintTints(model.variants[painted].groups, paint, piece.paintPosition || 0, render.channels) : null;
       const name = tints ? painted : plain;
       const variant = model.variants[name];
-      const mat = material(texture(model.tex[variant.tex]));
+      const mat = material(textureOf(model.tex[texture >= 0 ? texture : variant.tex]));
       if (tints) {
         tints.forEach((rgb, i) => {
           if (i < MAX_TINTS) mat.uniforms.tints.value[i].set(((rgb >> 16) & 255) / 255, ((rgb >> 8) & 255) / 255, (rgb & 255) / 255);
         });
       }
-      mesh = new Mesh(geometryFor(model, piece.id, name, piece.hide, piece.hideFaces), mat);
+      mesh = new Mesh(geometryFor(model, piece.id, name, piece.hide, piece.hideFaces, texture), mat);
       faces = !!faceGroups(model, name);
     }
     mesh.userData.role = piece.role;
@@ -737,7 +752,7 @@ export function createViewer(container, options) {
     for (const piece of current.assembly.pieces) {
       const model = current.models.get(piece.id);
       if (!model && !piece.procedural) continue;
-      droneGroup.add(pieceMesh(piece, model, paint));
+      for (const mesh of pieceMeshes(piece, model, paint)) droneGroup.add(mesh);
     }
     rebuildDiscs(paint);
     applyHighlight();

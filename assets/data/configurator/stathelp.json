@@ -1,18 +1,19 @@
 {
  "schema": 1,
- "about": "Typical range per drone class for the figures of the flight analysis, the frame's data.role picks the class. Source: the target corridors of Just More Parts (parts catalogue 1.7), widened to the built-in Propwash presets and the flight times of the battery model of Propwash 0.5.2 and later. The explanations are in assets/js/configurator/i18n.js (statHelp).",
- "classes": ["whoop", "toothpick", "cinewhoop", "freestyle", "race", "long_range", "x_class"],
+ "about": "Typical range per drone class for the figures of the flight analysis, the frame's data.role picks the class. Source: the target corridors of Just More Parts (parts catalogue 1.7), widened to the built-in Propwash presets and the flight times of the battery model of Propwash 0.5.2 and later. cinelifter is the class of the cine frame of Propwash: Camera Drones; camera_drone (build_classes) is no frame class: every build with a nav board of Camera Drones is compared with it instead of its frame class (from the three camera drones of the add-on and the hover times of its flight classes). The explanations are in assets/js/configurator/i18n.js (statHelp).",
+ "classes": ["whoop", "toothpick", "cinewhoop", "freestyle", "race", "long_range", "x_class", "cinelifter"],
+ "build_classes": ["camera_drone"],
  "stats": {
-  "mass_grams": {"whoop": [20, 60], "toothpick": [50, 230], "cinewhoop": [190, 420], "freestyle": [400, 650], "race": [380, 520], "long_range": [440, 1400], "x_class": [1600, 3400]},
-  "thrust_to_weight": {"whoop": [3, 7], "toothpick": [5, 9], "cinewhoop": [3.5, 7], "freestyle": [8, 15], "race": [10, 16], "long_range": [3.5, 12], "x_class": [5, 9]},
-  "hover_throttle_percent": {"whoop": [25, 60], "toothpick": [20, 40], "cinewhoop": [25, 50], "freestyle": [15, 30], "race": [12, 25], "long_range": [20, 50], "x_class": [25, 45]},
-  "mixed_flight_time_min": {"whoop": [2.5, 6], "toothpick": [4, 10], "cinewhoop": [4, 9], "freestyle": [4, 7], "race": [2.5, 4.5], "long_range": [7, 20], "x_class": [4, 7]},
-  "aggressive_flight_time_min": {"whoop": [2, 5], "toothpick": [3, 7], "cinewhoop": [2.5, 7], "freestyle": [3, 5], "race": [2, 3.5], "long_range": [5, 13], "x_class": [3, 5]},
-  "hover_flight_time_min": {"whoop": [3.5, 9], "toothpick": [8, 16], "cinewhoop": [5, 12], "freestyle": [9, 14], "race": [10, 14], "long_range": [16, 42], "x_class": [14, 23]},
-  "cruise_flight_time_min": {"whoop": [3.5, 9], "toothpick": [6, 14], "cinewhoop": [5, 11], "freestyle": [6, 10], "race": [7, 11], "long_range": [9, 30], "x_class": [10, 15]},
-  "top_speed_kmh": {"whoop": [40, 80], "toothpick": [70, 120], "cinewhoop": [50, 95], "freestyle": [120, 160], "race": [140, 200], "long_range": [90, 150], "x_class": [100, 140]},
-  "landing_cell_voltage": {"whoop": [3.3, 3.8], "toothpick": [3.3, 3.8], "cinewhoop": [3.3, 3.8], "freestyle": [3.3, 3.8], "race": [3.3, 3.8], "long_range": [3, 3.8], "x_class": [3.3, 3.8]},
-  "motor_response_ms": {"whoop": [35, 60], "toothpick": [20, 35], "cinewhoop": [12, 30], "freestyle": [10, 16], "race": [10, 16], "long_range": [15, 35], "x_class": [12, 25]},
-  "props_in_view_percent": {"whoop": [0, 20], "toothpick": [0, 15], "cinewhoop": [0, 25], "freestyle": [0, 15], "race": [0, 15], "long_range": [0, 20], "x_class": [0, 20]}
+  "mass_grams": {"whoop": [20, 60], "toothpick": [50, 230], "cinewhoop": [190, 420], "freestyle": [400, 650], "race": [380, 520], "long_range": [440, 1400], "x_class": [1600, 3400], "cinelifter": [2500, 4500], "camera_drone": [200, 4000]},
+  "thrust_to_weight": {"whoop": [3, 7], "toothpick": [5, 9], "cinewhoop": [3.5, 7], "freestyle": [8, 15], "race": [10, 16], "long_range": [3.5, 12], "x_class": [5, 9], "cinelifter": [2.5, 4.5], "camera_drone": [2.5, 4.5]},
+  "hover_throttle_percent": {"whoop": [25, 60], "toothpick": [20, 40], "cinewhoop": [25, 50], "freestyle": [15, 30], "race": [12, 25], "long_range": [20, 50], "x_class": [25, 45], "cinelifter": [40, 65], "camera_drone": [40, 65]},
+  "mixed_flight_time_min": {"whoop": [2.5, 6], "toothpick": [4, 10], "cinewhoop": [4, 9], "freestyle": [4, 7], "race": [2.5, 4.5], "long_range": [7, 20], "x_class": [4, 7], "cinelifter": [12, 25], "camera_drone": [15, 30]},
+  "aggressive_flight_time_min": {"whoop": [2, 5], "toothpick": [3, 7], "cinewhoop": [2.5, 7], "freestyle": [3, 5], "race": [2, 3.5], "long_range": [5, 13], "x_class": [3, 5], "cinelifter": [10, 22], "camera_drone": [12, 28]},
+  "hover_flight_time_min": {"whoop": [3.5, 9], "toothpick": [8, 16], "cinewhoop": [5, 12], "freestyle": [9, 14], "race": [10, 14], "long_range": [16, 42], "x_class": [14, 23], "cinelifter": [18, 32], "camera_drone": [23, 46]},
+  "cruise_flight_time_min": {"whoop": [3.5, 9], "toothpick": [6, 14], "cinewhoop": [5, 11], "freestyle": [6, 10], "race": [7, 11], "long_range": [9, 30], "x_class": [10, 15], "cinelifter": [18, 32], "camera_drone": [20, 40]},
+  "top_speed_kmh": {"whoop": [40, 80], "toothpick": [70, 120], "cinewhoop": [50, 95], "freestyle": [120, 160], "race": [140, 200], "long_range": [90, 150], "x_class": [100, 140], "cinelifter": [85, 120], "camera_drone": [55, 115]},
+  "landing_cell_voltage": {"whoop": [3.3, 3.8], "toothpick": [3.3, 3.8], "cinewhoop": [3.3, 3.8], "freestyle": [3.3, 3.8], "race": [3.3, 3.8], "long_range": [3, 3.8], "x_class": [3.3, 3.8], "cinelifter": [3.2, 3.7], "camera_drone": [2.8, 3.7]},
+  "motor_response_ms": {"whoop": [35, 60], "toothpick": [20, 35], "cinewhoop": [12, 30], "freestyle": [10, 16], "race": [10, 16], "long_range": [15, 35], "x_class": [12, 25], "cinelifter": [12, 30], "camera_drone": [5, 25]},
+  "props_in_view_percent": {"whoop": [0, 20], "toothpick": [0, 15], "cinewhoop": [0, 25], "freestyle": [0, 15], "race": [0, 15], "long_range": [0, 20], "x_class": [0, 20], "cinelifter": [0, 20], "camera_drone": [0, 20]}
  }
 }
