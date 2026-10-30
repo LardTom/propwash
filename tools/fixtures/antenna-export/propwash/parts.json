@@ -113,7 +113,7 @@
    "power_w": 3.5,
    "antenna": {
     "count": 1,
-    "length_mm": 45,
+    "length_mm": 50,
     "cap": "lollipop",
     "kind": "race",
     "derived": true
@@ -284,6 +284,349 @@
    "textures": [
     "assets/propwash/textures/item/part/video/digital_hd.png",
     "assets/propwash/textures/item/part/video/digital_hd_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "propwash:b1s_300_hv",
+  "category": "battery",
+  "builtin": true,
+  "name": {
+   "de_de": "1S-Akku 300 mAh (LiHV)",
+   "en_us": "1S 300 mAh Battery (LiHV)"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "1S-LiHV, 300 mAh – nur für Whoops",
+    "what": [],
+    "use": []
+   },
+   "en_us": {
+    "summary": "1S LiHV, 300 mAh – whoops only",
+    "what": [],
+    "use": []
+   }
+  },
+  "basics": {
+   "mass_g": 7.5,
+   "stack_size": 0,
+   "sort": 0,
+   "creative": true,
+   "durability": 1,
+   "recycle": null,
+   "accent": "#6b2fb3",
+   "render_model": null
+  },
+  "data": {
+   "cells": 1,
+   "capacity_mah": 300,
+   "cell_resistance_ohm": 0.04,
+   "c_rating": 45,
+   "chemistry": "propwash:lihv",
+   "pack_mm": null,
+   "connector": ""
+  },
+  "derived": {
+   "energy_wh": 1.14,
+   "max_continuous_a": 13.5,
+   "wh_per_kg": 152
+  },
+  "paint": {
+   "slots": [
+    "battery"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "battery": "#6b2fb3"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/propwash/items/b1s_300_hv.json",
+   "drone": "assets/propwash/items/drone_render/battery/b1s_300_hv.json",
+   "variants": [
+    "assets/propwash/items/drone_render/battery/b1s_300_hv_paint.json"
+   ],
+   "textures": [
+    "assets/propwash/textures/item/part/battery/b1s_300_hv.png",
+    "assets/propwash/textures/item/part/battery/b1s_300_hv_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "propwash:b4s_650",
+  "category": "battery",
+  "builtin": true,
+  "name": {
+   "de_de": "4S-Akku 650 mAh",
+   "en_us": "4S 650 mAh Battery"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "4S-LiPo, 650 mAh – für Cinewhoops",
+    "what": [],
+    "use": []
+   },
+   "en_us": {
+    "summary": "4S LiPo, 650 mAh – for cinewhoops",
+    "what": [],
+    "use": []
+   }
+  },
+  "basics": {
+   "mass_g": 78,
+   "stack_size": 0,
+   "sort": 1,
+   "creative": true,
+   "durability": 1,
+   "recycle": null,
+   "accent": "#f07c1e",
+   "render_model": null
+  },
+  "data": {
+   "cells": 4,
+   "capacity_mah": 650,
+   "cell_resistance_ohm": 0.01,
+   "c_rating": 95,
+   "chemistry": "propwash:lipo",
+   "pack_mm": null,
+   "connector": ""
+  },
+  "derived": {
+   "energy_wh": 9.62,
+   "max_continuous_a": 61.75,
+   "wh_per_kg": 123.33333333333333
+  },
+  "paint": {
+   "slots": [
+    "battery"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "battery": "#202226"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/propwash/items/b4s_650.json",
+   "drone": "assets/propwash/items/drone_render/battery/b4s_650.json",
+   "variants": [
+    "assets/propwash/items/drone_render/battery/b4s_650_paint.json"
+   ],
+   "textures": [
+    "assets/propwash/textures/item/part/battery/b4s_650.png",
+    "assets/propwash/textures/item/part/battery/b4s_650_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "propwash:b6s_1100",
+  "category": "battery",
+  "builtin": true,
+  "name": {
+   "de_de": "6S-Akku 1100 mAh",
+   "en_us": "6S 1100 mAh Battery"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "6S-LiPo, 1100 mAh – leicht, für Race",
+    "what": [],
+    "use": []
+   },
+   "en_us": {
+    "summary": "6S LiPo, 1100 mAh – light, for racing",
+    "what": [],
+    "use": []
+   }
+  },
+  "basics": {
+   "mass_g": 175,
+   "stack_size": 0,
+   "sort": 2,
+   "creative": true,
+   "durability": 1,
+   "recycle": null,
+   "accent": "#d4312a",
+   "render_model": null
+  },
+  "data": {
+   "cells": 6,
+   "capacity_mah": 1100,
+   "cell_resistance_ohm": 0.006,
+   "c_rating": 120,
+   "chemistry": "propwash:lipo",
+   "pack_mm": null,
+   "connector": ""
+  },
+  "derived": {
+   "energy_wh": 24.420000000000005,
+   "max_continuous_a": 132,
+   "wh_per_kg": 139.54285714285717
+  },
+  "paint": {
+   "slots": [
+    "battery"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "battery": "#1c1d21"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/propwash/items/b6s_1100.json",
+   "drone": "assets/propwash/items/drone_render/battery/b6s_1100.json",
+   "variants": [
+    "assets/propwash/items/drone_render/battery/b6s_1100_paint.json",
+    "assets/propwash/items/drone_render/battery/b6s_1100_under.json",
+    "assets/propwash/items/drone_render/battery/b6s_1100_under_paint.json"
+   ],
+   "textures": [
+    "assets/propwash/textures/item/part/battery/b6s_1100.png",
+    "assets/propwash/textures/item/part/battery/b6s_1100_paint.png",
+    "assets/propwash/textures/item/part/battery/b6s_1100_under.png",
+    "assets/propwash/textures/item/part/battery/b6s_1100_under_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "propwash:b6s_1300",
+  "category": "battery",
+  "builtin": true,
+  "name": {
+   "de_de": "6S-Akku 1300 mAh",
+   "en_us": "6S 1300 mAh Battery"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "6S-LiPo, 1300 mAh – Freestyle-Standard",
+    "what": [],
+    "use": []
+   },
+   "en_us": {
+    "summary": "6S LiPo, 1300 mAh – freestyle standard",
+    "what": [],
+    "use": []
+   }
+  },
+  "basics": {
+   "mass_g": 210,
+   "stack_size": 0,
+   "sort": 3,
+   "creative": true,
+   "durability": 1,
+   "recycle": null,
+   "accent": "#2f6fd6",
+   "render_model": null
+  },
+  "data": {
+   "cells": 6,
+   "capacity_mah": 1300,
+   "cell_resistance_ohm": 0.0055,
+   "c_rating": 120,
+   "chemistry": "propwash:lipo",
+   "pack_mm": null,
+   "connector": ""
+  },
+  "derived": {
+   "energy_wh": 28.860000000000003,
+   "max_continuous_a": 156,
+   "wh_per_kg": 137.42857142857144
+  },
+  "paint": {
+   "slots": [
+    "battery"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "battery": "#1c1d21"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/propwash/items/b6s_1300.json",
+   "drone": "assets/propwash/items/drone_render/battery/b6s_1300.json",
+   "variants": [
+    "assets/propwash/items/drone_render/battery/b6s_1300_paint.json",
+    "assets/propwash/items/drone_render/battery/b6s_1300_under.json",
+    "assets/propwash/items/drone_render/battery/b6s_1300_under_paint.json"
+   ],
+   "textures": [
+    "assets/propwash/textures/item/part/battery/b6s_1300.png",
+    "assets/propwash/textures/item/part/battery/b6s_1300_paint.png",
+    "assets/propwash/textures/item/part/battery/b6s_1300_under.png",
+    "assets/propwash/textures/item/part/battery/b6s_1300_under_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "propwash:b6s_4000_lion",
+  "category": "battery",
+  "builtin": true,
+  "name": {
+   "de_de": "6S-Akku 4000 mAh (Li-Ion)",
+   "en_us": "6S 4000 mAh Battery (Li-Ion)"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "6S-Li-Ion, 4000 mAh – Ausdauer für 7″",
+    "what": [],
+    "use": []
+   },
+   "en_us": {
+    "summary": "6S Li-Ion, 4000 mAh – endurance for 7″",
+    "what": [],
+    "use": []
+   }
+  },
+  "basics": {
+   "mass_g": 420,
+   "stack_size": 0,
+   "sort": 4,
+   "creative": true,
+   "durability": 1,
+   "recycle": null,
+   "accent": "#1a8f8b",
+   "render_model": null
+  },
+  "data": {
+   "cells": 6,
+   "capacity_mah": 4000,
+   "cell_resistance_ohm": 0.012,
+   "c_rating": 11,
+   "chemistry": "propwash:lion",
+   "pack_mm": null,
+   "connector": ""
+  },
+  "derived": {
+   "energy_wh": 86.4,
+   "max_continuous_a": 44,
+   "wh_per_kg": 205.71428571428572
+  },
+  "paint": {
+   "slots": [
+    "battery"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "battery": "#1a8f8b"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/propwash/items/b6s_4000_lion.json",
+   "drone": "assets/propwash/items/drone_render/battery/b6s_4000_lion.json",
+   "variants": [
+    "assets/propwash/items/drone_render/battery/b6s_4000_lion_paint.json"
+   ],
+   "textures": [
+    "assets/propwash/textures/item/part/battery/b6s_4000_lion.png",
+    "assets/propwash/textures/item/part/battery/b6s_4000_lion_paint.png"
    ]
   }
  }

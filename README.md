@@ -220,15 +220,20 @@ Mob Defense:
   game leaves out by name, found by the socket box and the pigtail ends of the model data) – without a `_mounted`
   variant or a socket both parts are drawn as before; the VTX antennas sit on the frame's antenna holder like in
   Propwash 0.6.0 (`assets/js/configurator/antenna.js`, ports of `AntennaRules`, `AntennaGeometry` and `AntennaMask`):
-  the holder is the frame's `antenna_anchor` from `parts.json` (position and tilt, 35° by default; without one the
-  fallback from the frame's geometry, a point `antenna` in `drone_layout.json` still moves it), the antennas come from
-  the VTX's `antenna` (count, length and cap, else derived from range, mass, video system, image quality and latency:
-  whip, stubby, lollipop, two lollipops in a V for HD, pagoda for long range), drawn from shapes – holder, SMA, sleeve,
-  stalk and cap – not tilted with the camera, picked as part of the video part, their caps painted with the slot
-  “Antenna tips” (which starts with the cap's colour) and hidden in the camera preview; the VTX model leaves out the
-  faces of its elements named `antenna…` (add-on VTX, listed as `antenna` on the model file's base variant), so no
-  antenna is drawn twice – a VTX model file without that list (data of an older export) keeps its antennas and gets
-  none at the holder
+  the holder is the frame's `antenna_anchor` from `parts.json` (position and tilt, 45° by default; without one the
+  fallback from the frame's geometry right at the rear, 12 mm behind the top plate, on a whoop 0.18 × wheelbase; a
+  point `antenna` in `drone_layout.json` still moves it), the antennas come from the VTX's `antenna` (count, length and
+  cap, else derived from range, mass, video system, image quality and latency: whip, stubby, lollipop (race 45–60 mm),
+  two lollipops in a V for HD, pagoda for long range), at most as long as the frame's `max_length_mm` (1.2 ×
+  wheelbase), one in the middle straight up and back, a pair in a V from one point leaning out by the frame's
+  `pair_lean_deg` each (15°, narrower on small open frames; both computed from the frame when an older export lacks
+  them); a pack on top that reaches further back than the holder moves the antenna 5 mm behind its rear (the pack
+  without its plug and leads) and the TPU holder reaches forward to the top plate by as much; drawn from shapes –
+  holder, SMA, sleeve, stalk and cap – not tilted with the camera, picked as part of the video part, their caps
+  painted with the slot “Antenna tips” (which starts with the cap's colour) and hidden in the camera preview; the VTX
+  model leaves out the faces of its elements named `antenna…` (add-on VTX, listed as `antenna` on the model file's
+  base variant), so no antenna is drawn twice – a VTX model file without that list (data of an older export) keeps its
+  antennas and gets none at the holder
 - FPV camera preview (switch “3D / FPV camera” in the viewer, or open `configurator/?view=camera#PW1-…`): the image the
   drone's camera sends, drawn like the game's FPV view (since Propwash 0.4.0): 16:9 rectilinear from the lens with the drone's
   camera angle and the field of view of the camera in the video unit (`camera_fov_deg`, e.g. analog race 125°, digital
@@ -251,9 +256,9 @@ Mob Defense:
 ### Updating the data
 
 The data come from the web export of Propwash (format 2, `/propwash webexport all` with the add-ons installed). The
-current data: `runWebExport` of Propwash 0.6.0-rc.1 with the rc.1 jars of Just More Parts (1.2.0-rc.1), Camera Drones
-(1.0.0-rc.1) and Mob Defense (1.0.0-rc.1) in `mods/`, all four namespaces in one export; `catalog.json` names it in
-`source.sources` (generator, time, namespaces) and the jars with their SHA-256 in `source.jars`:
+current data: `runWebExport` of Propwash 0.6.0-rc.1 (810cdb410) with the rc.1 jars of Just More Parts (1.2.0-rc.1),
+Camera Drones (1.0.0-rc.1) and Mob Defense (1.0.0-rc.1) in `mods/`, all four namespaces in one export; `catalog.json`
+names it in `source.sources` (generator, time, namespaces) and the jars with their SHA-256 in `source.jars`:
 
 ```sh
 # in a Propwash checkout of the release stand, with the add-on jars in one folder
@@ -310,15 +315,17 @@ PW3 conversion), made with the mod's classes (`ShareFormat.decode`, `ShareConver
 convert. `tools/test-configurator-flows.mjs --post <file>` converts a real post instead of the built-in one, and
 `--shots <dir>` keeps its screenshots.
 
-`tools/fixtures/antenna-export` is a web export cut down to the VTX of Propwash 0.6.0 and Just More Parts 1.2.0-dev.1
-(made by `runWebExport` of Propwash c23e9188 with the Just More Parts jar: the VTX entries of `parts.json` with their
-`antenna`, their models and textures, `drone_layout.json` and `drone_paint.json` of both namespaces, and `frames.json`
-with id, data and derived values of every frame of that export, `antenna_anchor` included);
-`tools/test-configurator-antenna.mjs` builds the viewer data from it with `build-configurator-models.mjs --out <dir>`
-and checks the rules, the faces left out (the numbers of the game's own self test) and the antennas in the viewer.
-Since the site's data come from the web export of Propwash 0.6.0-rc.1, its VTX models carry those lists and the
-catalog the holders and antennas too; frames the fixture does not have (Camera Drones) take their holder from the
-catalog.
+`tools/fixtures/antenna-export` is a web export cut down to the VTX of Propwash 0.6.0 and Just More Parts 1.2.0-rc.1
+(made by `runWebExport` of Propwash 810cdb410 with the Just More Parts jar: the VTX entries of `parts.json` with their
+`antenna` and ten batteries, their models and textures, `drone_layout.json` and `drone_paint.json` of both
+namespaces, and `frames.json` with id, data and derived values of every frame of that export, `antenna_anchor` with
+`max_length_mm` and `pair_lean_deg` included); `tools/test-configurator-antenna.mjs` builds the viewer data from it
+with `build-configurator-models.mjs --out <dir>` and checks the rules, the faces left out (the numbers of the game's
+own self test), the antennas behind an overhanging pack (with the packs of the game's self test the same 22
+combinations as in the game) and the antennas in the viewer.
+Since the site's data come from the web export of Propwash 0.6.0-rc.1 (810cdb410), its VTX models carry those lists
+and the catalog the holders with `max_length_mm` and `pair_lean_deg` and the antennas too; frames the fixture does not
+have (Camera Drones) take their holder from the catalog.
 
 Web exports before the fix of their asset index lack the stacks' `_mounted` variants (battery plugged in, Propwash
 0.6.0). `build-configurator-models.mjs --resources <dir>` (repeatable, or `PROPWASH_MOD_RESOURCES`) then takes them from a

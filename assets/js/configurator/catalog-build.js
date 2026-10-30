@@ -13,8 +13,8 @@
 
 import { crc32 } from './crc32.js?v=62ad0fa2';
 import { standIn } from './stand-ins.js?v=ac5c805f';
-import { antennaKind, derivedAntenna, fallbackAnchor, antennaFaces } from './antenna.js?v=d6dc6e8a';
-import { KINDS, ARM_KEYS, trueX, maxContinuousCurrent, landingCellVoltage, effectiveUsableFraction, SOC_GRID, splitId, tryParse, idCompare } from './partjson.js?v=d74d681a';
+import { antennaKind, derivedAntenna, fallbackAnchor, antennaFaces, maxLengthMm, pairLeanDeg } from './antenna.js?v=bc5d352c';
+import { KINDS, ARM_KEYS, trueX, maxContinuousCurrent, landingCellVoltage, effectiveUsableFraction, SOC_GRID, splitId, tryParse, idCompare } from './partjson.js?v=fddd4b25';
 
 export const LANGUAGES = Object.freeze(['de_de', 'en_us']);
 export const NOMINAL_CELL_V = 3.7;
@@ -362,15 +362,22 @@ function frameData(frame) {
   };
 }
 
-/** PartData: the frame's antenna holder (AntennaRules.anchor) with whether the frame names it itself. */
+/**
+ * PartData: the frame's antenna holder (AntennaRules.anchor) with whether the frame names it itself, the longest
+ * antenna (AntennaRules.maxLengthMm) and the lean of a pair (AntennaRules.pairLeanDeg).
+ */
 function antennaAnchorData(frame) {
   const g = frame.geometry;
   const own = g.antennaAnchor || null;
-  const a = own || fallbackAnchor({
+  const values = {
     wheelbaseMm: frame.wheelbaseMm, batteryOnTop: g.batteryOnTop, batteryPlateMm: g.batteryPlateMm, electronicsMm: g.electronicsMm,
     cameraY: g.cameraMm ? g.cameraMm[1] : null, ducted: frame.duct !== null,
-  });
-  return { pos: nums(a.x, a.y, a.z), tilt_deg: num(a.tiltDeg), explicit: own !== null };
+  };
+  const a = own || fallbackAnchor(values);
+  return {
+    pos: nums(a.x, a.y, a.z), tilt_deg: num(a.tiltDeg), explicit: own !== null, max_length_mm: num(maxLengthMm(values)),
+    pair_lean_deg: num(pairLeanDeg(values)),
+  };
 }
 
 /** PartData: the VTX's antennas (AntennaRules.antenna), its kind and whether they are derived. */

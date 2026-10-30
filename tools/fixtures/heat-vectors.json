@@ -1,5 +1,5 @@
 {
- "source": {"web_export_format":2,"generator":"propwash 0.6.0-rc.1","generated_at":"2026-10-30T08:58:06Z","mods":{"camdrones":"1.0.0-rc.1","justmoreparts":"1.2.0-rc.1","mobdefense":"1.0.0-rc.1","propwash":"0.6.0-rc.1"},"propwash_api":"1.7.0","fingerprint":"7feffc4d51bc11ba74e635562f072c19fbcb32294de297db41380fa6320163e0"},
+ "source": {"web_export_format":2,"generator":"propwash 0.6.0-rc.1","generated_at":"2026-10-30T12:55:51Z","mods":{"camdrones":"1.0.0-rc.1","justmoreparts":"1.2.0-rc.1","mobdefense":"1.0.0-rc.1","propwash":"0.6.0-rc.1"},"propwash_api":"1.7.0","fingerprint":"c59dbb52c282c388e062b8dd115eac809963c5d4b3cb6b7d7cb1cc50ed746e3a"},
  "keys": ["sustained_motor_temp_c","motor_temp_minute_c","mixed_motor_temp_c"],
  "motor_thermal": {"de_de":"Dauervollgas im Stand überhitzt: heiße Motoren verschleißen, ein heißer ESC regelt ab","en_us":"Sustained full throttle in place overheats: hot motors wear out, a hot ESC throttles back"},
  "motors": {
