@@ -797,7 +797,8 @@ function renderCamdrone() {
   const gimbalId = Object.values(build.accessories || {}).find((id) => gimbalOf(id, cameraData));
   const gimbal = gimbalId ? gimbalOf(gimbalId, cameraData) : null;
   if (gimbal) {
-    const parts = [t('camdrones.gimbal', { axes: gimbal.axes, min: num(gimbal.tilt[0], 0), max: num(gimbal.tilt[1], 0) })];
+    const signed = (v) => `${v < 0 ? '−' : '+'}${num(Math.abs(v), 0)}`;
+    const parts = [t('camdrones.gimbal', { axes: gimbal.axes, min: signed(gimbal.tilt[0]), max: signed(gimbal.tilt[1]) })];
     if (gimbal.pan_360) parts.push(t('camdrones.pan'));
     parts.push(gimbal.lens_bay ? t('camdrones.lensBay', { lenses: cameraData.lenses_mm.join('/') }) : t('camdrones.lenses', { lenses: gimbal.focal_mm.join('/') }));
     props.push(parts.join(', '));
