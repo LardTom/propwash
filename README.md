@@ -162,8 +162,10 @@ Mob Defense:
   frames, nav flight controllers, folding props, motors, camera links, smart batteries and gimbals – with model, mass,
   the figures of the workbench and the help texts of the game; the part lists name what a nav board and a gimbal bring
   (GPS, obstacle sensors, tilt range, 360° pan, lenses) instead of FPV figures, a camera drone gets the panel “Check
-  camera drone” (the workbench button of the add-on: Nav-FC, gimbal, battery and camera link fitted, other, missing or
-  wrong, with the part of the frame's camera drone as the advice; what the nav board, gimbal and flight class bring)
+  camera drone” (the workbench button of the add-on, row by row like its screen: Nav-FC, gimbal, battery and camera link
+  fitted, other, missing or wrong; a wrong Nav-FC says why, a missing or wrong part names the part of the frame's
+  camera drone to fit, an other part that is fine the recommended one; “No camera frame” only while the build is
+  incomplete; what the nav board, gimbal and flight class bring)
   and its figures are compared with camera drones, not with an FPV class (`stathelp.json`, `build_classes`); the cine
   frame has its class Cinelifter; the FPV camera preview says that a camera drone films with its gimbal camera
 - Mob Defense: the dispenser mount (front, four slots), spear mount (bottom) and rocket booster (top) as accessories
@@ -292,8 +294,10 @@ node tools/test-plug-texts.mjs             # battery plugged in: texts, dictiona
 node tools/test-beginner-images.mjs        # pictures of the builds for beginners match a fresh render (Chrome, dwebp)
 node tools/test-configurator-frames.mjs    # accessories only for some frames: reader, accessory_frame, pickers (Chrome)
 node tools/test-configurator-texts.mjs     # motor help fits the heat model and the analysis, the page names its export
-node tools/test-configurator-addons.mjs    # Camera Drones and Mob Defense: catalog, models, camera check, codes of the
-                                           # game, missing add-on, filter and badges (Chrome, en/de, 1280 and 390 px)
+                                           # and every add-on of the catalog with its version
+node tools/test-configurator-addons.mjs    # Camera Drones and Mob Defense: catalog, models, camera check (rows like
+                                           # the game), codes of the game, missing add-on, filter and badges (Chrome,
+                                           # en/de, 1280 and 390 px)
 ```
 
 `--goldens` copies the share-code golden files of Propwash (`pw1-vectors.json`, `pw2-vectors.json`, `pw3-vectors.json`,

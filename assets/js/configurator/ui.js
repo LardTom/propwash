@@ -12,10 +12,10 @@ import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe
 import { batteryFit, fitsFrame } from './rules.js?v=6634f777';
 import { assemble, PROP_SLOTS } from './assembly.js?v=376f5101';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=5d735de8';
-import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=8dd58b3e';
-import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=58d1b91a';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=be4c91fe';
-import { cameraCheck, isCameraDrone, navOf, gimbalOf, classOf as flightClassOf } from './camdrones.js?v=80954d0d';
+import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=167aea2f';
+import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=01d57f4b';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=42f92883';
+import { cameraCheck, isCameraDrone, navOf, gimbalOf, classOf as flightClassOf, lineNotes, noCameraFrameHint } from './camdrones.js?v=b1626e80';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);
@@ -761,6 +761,8 @@ function renderStats() {
   renderCamdrone();
 }
 
+const CAM_NOTES = Object.freeze({ wrongNav: 'camdrones.check.wrongNav', advice: 'camdrones.check.advice', recommended: 'camdrones.check.recommended' });
+
 // The camera drone panel (Propwash: Camera Drones): the check of the workbench button “Check camera drone” and what
 // the nav board, gimbal and flight class bring, instead of FPV figures that do not fit a camera drone.
 function renderCamdrone() {
@@ -782,11 +784,11 @@ function renderCamdrone() {
     : t('camdrones.check.incompleteHint', { x: problems, y: r.lines.length }));
   const roles = el('ul', { class: 'camdrone__roles' }, r.lines.map((l) => {
     const state = t(`camdrones.check.${l.state}`);
-    const detail = l.state === 'wrong' && l.role === 'nav_fc' ? t('camdrones.check.wrongNav', { x: name(l.part) })
-      : [l.part ? name(l.part) : null, l.advice ? t('camdrones.check.recommended', { x: name(l.advice) }) : null].filter(Boolean).join(' · ');
+    const notes = lineNotes(l).map((n) => el('span', { class: `camdrone__part${n.key === 'advice' ? ' camdrone__advice' : ''}` },
+      t(CAM_NOTES[n.key], { x: name(n.part) })));
     return el('li', { class: `is-${l.state === 'fitted' || l.state === 'other' ? 'ok' : 'bad'}`, dataset: { role: l.role, state: l.state } },
       el('span', { class: 'camdrone__role' }, t(`camdrones.check.role.${l.role}`)), ' ', el('span', { class: 'camdrone__state' }, state),
-      detail ? el('span', { class: 'camdrone__part' }, detail) : null);
+      l.part && l.state !== 'wrong' ? el('span', { class: 'camdrone__part' }, name(l.part)) : null, ...notes);
   }));
   const props = [];
   const nav = navOf(build.stack, cameraData);
@@ -807,8 +809,9 @@ function renderCamdrone() {
   if (cls) props.push(t('camdrones.speeds', { cine: num(cls.speeds_ms.cine, 0), normal: num(cls.speeds_ms.normal, 0), sport: num(cls.speeds_ms.sport, 0) }));
   box.replaceChildren(
     el('h3', { class: 'camdrone__title', id: 'camdrone-title' }, t('camdrones.check.title')),
-    status, hint, roles,
-    r.preset ? '' : el('p', { class: 'camdrone__hint' }, t('camdrones.check.no_camera_frame')),
+    status, hint,
+    noCameraFrameHint(r) ? el('p', { class: 'camdrone__hint' }, t('camdrones.check.no_camera_frame')) : '',
+    roles,
     props.length ? el('p', { class: 'camdrone__props-title' }, t('camdrones.properties')) : '',
     props.length ? el('ul', { class: 'camdrone__props' }, props.map((x) => el('li', null, x))) : '');
 }

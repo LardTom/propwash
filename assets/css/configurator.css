@@ -1804,6 +1804,10 @@ button {
   font-size: 0.85rem;
 }
 
+.camdrone__advice {
+  color: var(--text-2);
+}
+
 .camdrone__props li {
   padding-left: 14px;
   text-indent: -14px;

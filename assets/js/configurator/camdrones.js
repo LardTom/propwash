@@ -68,3 +68,22 @@ export function cameraCheck(build, catalog, data) {
     lines,
   };
 }
+
+const WRONG_TEXT = Object.freeze({ nav_fc: 'wrongNav' });
+
+/**
+ * The rows under a line of the check, like CameraCheckScreen.rows: a wrong part says why (check.wrongNav), then the
+ * advice names the part to fit (check.advice) or, next to an accepted other part, the recommended one
+ * (check.recommended). [{key, part}] with key the text under camdrones.check.
+ */
+export function lineNotes(line) {
+  const out = [];
+  if (line.state === 'wrong' && line.part && WRONG_TEXT[line.role]) out.push({ key: WRONG_TEXT[line.role], part: line.part });
+  if (line.advice) out.push({ key: line.state === 'other' ? 'recommended' : 'advice', part: line.advice });
+  return out;
+}
+
+/** The hint “No camera frame fitted”, like the game only while the build is not yet a complete camera drone. */
+export function noCameraFrameHint(result) {
+  return !!result && !result.complete && !result.preset;
+}

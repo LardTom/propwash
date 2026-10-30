@@ -13,7 +13,10 @@
 //   - camera drones (assets/data/configurator/camera-drones.json, what the add-on keeps in code): nav boards with GPS,
 //     compass, barometer and their obstacle sensors, gimbals with tilt, pan and lenses, the flight classes; against the
 //     Java sources of a camera add-on checkout next to this repository if there; the camera check of the workbench
-//     (CameraCheck: Nav-FC, gimbal, battery, camera link) with the game's texts
+//     (CameraCheck: Nav-FC, gimbal, battery, camera link) with the game's texts and its rows like CameraCheckScreen
+//     (finding AUTO42-1): a wrong Nav-FC says why and names the part to fit (“Fit: …”), a missing part names the part
+//     to fit, only an accepted other part gets “Recommended: …”, the hint “No camera frame” only while the build is
+//     incomplete – also in the panel of the page for the game's case (tour frame with an FPV stack and no gimbal)
 //   - share codes from the game (tools/fixtures/sharecode-vectors.json, format PW3: a camera drone, a Mob Defense
 //     accessory, both Mob Defense accessories plus booster, all three add-ons): read and written byte for byte like the
 //     game; without the add-on the page names it like the game (“Needs Propwash: Camera Drones from 1.0.0”, the address
@@ -70,6 +73,14 @@ const text = (path, lang) => {
   const e = entry(path);
   return Array.isArray(e) ? e[lang === 'de' ? 1 : 0] : null;
 };
+const fill = (s, vars) => String(s).replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
+const gameText = (s) => {
+  let next = 0;
+  return s.replace(/%(?:(\d)\$)?s/g, (m, n) => ['{x}', '{y}'][(n ? Number(n) : ++next) - 1] || m);
+};
+const flat = (s) => String(s || '').replace(/[\s  ]+/g, ' ').trim();
+// Finding AUTO42-1: the tour frame with an FPV stack and without gimbal (code of the review, read in Chrome).
+const WRONG_NAV_CODE = 'PW3-01g3njSaz6kOMbxctGEJlNq8WvvXjNjc1tDDXjiOQP4eqKgfODbGoxNPTeT1A4YYxvdPZ8fme3KG';
 const attempt = (fn) => {
   try {
     return fn();
@@ -264,13 +275,22 @@ async function cameraChecks() {
       const file = path.join(repo, `common/src/lang/parts/${lang}.json`);
       if (!fs.existsSync(file)) continue;
       const game = JSON.parse(fs.readFileSync(file, 'utf8'));
-      for (const key of ['title', 'complete', 'incomplete', 'fitted', 'missing', 'wrong', 'other', 'recommended', 'no_camera_frame',
-        'role.nav_fc', 'role.gimbal', 'role.battery', 'role.link']) {
-        const mine = text(`camdrones.check.${key}`, lang === 'de_de' ? 'de' : 'en');
-        const theirs = game[`camdrones.check.${key}`];
-        check(theirs && mine === theirs.replace(/%(\d\$)?s/g, '{x}'), `camera check text ${key} (${lang}): “${mine}” like the game “${theirs}”`);
+      for (const key of ['title', 'complete', 'incomplete', 'fitted', 'missing', 'wrong', 'other', 'advice', 'recommended', 'no_camera_frame',
+        'role.nav_fc', 'role.gimbal', 'role.battery', 'role.link', ['completeHint', 'complete.hint'], ['incompleteHint', 'incomplete.hint'],
+        ['wrongNav', 'wrong.nav_fc']]) {
+        const [site, gameKey] = Array.isArray(key) ? key : [key, key];
+        const mine = text(`camdrones.check.${site}`, lang === 'de_de' ? 'de' : 'en');
+        const theirs = game[`camdrones.check.${gameKey}`];
+        check(theirs && mine === gameText(theirs), `camera check text ${site} (${lang}): “${mine}” like the game's ${gameKey} “${theirs}”`);
       }
     }
+    const screen = src('part/client/CameraCheckScreen.java');
+    check(/if \(!complete && result\.preset\(\)\.isEmpty\(\)\)\s*\{\s*out\.add\(new Row\(Component\.translatable\(CameraCheck\.NO_CAMERA_FRAME\)/.test(screen),
+      'CameraCheckScreen.rows: “No camera frame” only for an incomplete build without a camera frame (the page follows it)');
+    check(/line\.state\(\) == CameraCheck\.State\.WRONG && line\.fitted\(\)\.isPresent\(\)\)\s*\{[^}]*wrongKey\(\)[^}]*\}\s*if \(line\.advice\(\)\.isPresent\(\)\)/.test(screen),
+      'CameraCheckScreen.rows: a wrong part gets its reason and then, on its own, the advice (the page follows it)');
+    check(/other \? CameraCheck\.RECOMMENDED : CameraCheck\.ADVICE/.test(screen),
+      'CameraCheckScreen.rows: “Recommended” only next to an accepted other part, else “Fit” (the page follows it)');
   }
 
   let mod = null;
@@ -300,6 +320,33 @@ async function cameraChecks() {
   r = run({ ...catalog.presetBuild('propwash:long_range'), stack: 'camdrones:nav_fc_pro' });
   check(r.camera && r.preset === null, 'camera check: a nav board on a non-camera frame: camera drone without a camera frame (no advice)');
   check(mod.isCameraDrone(tour, cameraData) && !mod.isCameraDrone(catalog.presetBuild('propwash:freestyle'), cameraData), 'isCameraDrone: by the nav board');
+
+  // The rows under each role and the hint without camera frame, like CameraCheckScreen.rows (finding AUTO42-1).
+  if (!check(typeof mod.lineNotes === 'function' && typeof mod.noCameraFrameHint === 'function',
+    'camdrones.js: lineNotes and noCameraFrameHint (the rows of CameraCheckScreen)')) return;
+  const notesOf = (res, role) => mod.lineNotes(res.lines.find((l) => l.role === role));
+  r = run({ ...tour, stack: 'propwash:stack_30' });
+  check(same(notesOf(r, 'nav_fc'), [{ key: 'wrongNav', part: 'propwash:stack_30' }, { key: 'advice', part: 'camdrones:nav_fc_pro' }]),
+    `camera check rows: a wrong Nav-FC says why and then “Fit: Nav-FC Pro” (${JSON.stringify(notesOf(r, 'nav_fc'))})`);
+  r = run({ ...tour, accessories: {} });
+  check(same(notesOf(r, 'gimbal'), [{ key: 'advice', part: 'camdrones:gimbal_tour' }]),
+    `camera check rows: a missing gimbal gets “Fit: …”, not “Recommended: …” (${JSON.stringify(notesOf(r, 'gimbal'))})`);
+  r = run({ ...tour, battery: 'propwash:b6s_1300' });
+  check(same(notesOf(r, 'battery'), [{ key: 'recommended', part: tour.battery }]),
+    `camera check rows: another battery is fine and gets “Recommended: …” (${JSON.stringify(notesOf(r, 'battery'))})`);
+  for (const id of CAM_PRESETS) {
+    r = run(catalog.presetBuild(id));
+    check(r.lines.every((l) => mod.lineNotes(l).length === 0) && !mod.noCameraFrameHint(r), `camera check rows ${id}: complete, no advice and no hint`);
+  }
+  r = run({ ...tour, stack: 'propwash:stack_30', accessories: {} });
+  check(!mod.noCameraFrameHint(r), 'camera check rows: incomplete on a camera frame – no hint “No camera frame”');
+  const lr = catalog.presetBuild('propwash:long_range');
+  r = run({ ...lr, stack: 'camdrones:nav_fc_pro' });
+  check(!r.complete && mod.noCameraFrameHint(r) && r.lines.every((l) => mod.lineNotes(l).every((n) => n.key !== 'advice' && n.key !== 'recommended')),
+    'camera check rows: a nav board on a non-camera frame – incomplete, the hint “No camera frame”, no advice');
+  r = run({ ...lr, stack: 'camdrones:nav_fc_pro', accessories: { front: 'camdrones:gimbal_tour' } });
+  check(r.complete && r.preset === null && !mod.noCameraFrameHint(r),
+    `camera check rows: complete without a camera frame – no hint “No camera frame”, like the game (complete ${r.complete})`);
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -477,6 +524,7 @@ async function browser() {
           const panel = await p.evaluate("(() => { const n = document.querySelector('[data-camdrone]'); return n && !n.hidden ? n.textContent.replace(/\\s+/g, ' ').trim() : null; })()");
           check(panel && panel.includes(text('camdrones.check.complete', lang)), `${where}: ${id} – the camera drone panel says “${text('camdrones.check.complete', lang)}” (${panel && panel.slice(0, 160)})`);
           check(panel && panel.includes('GPS'), `${where}: ${id} – the panel names GPS`);
+          check(panel && !panel.includes(flat(text('camdrones.check.no_camera_frame', lang))), `${where}: ${id} – complete, no hint “No camera frame”`);
           const mass = await p.evaluate("[...document.querySelectorAll('[data-keystats] .keystat')].map((k) => k.textContent.replace(/\\s+/g, ' ').trim())");
           const g = catalog.preset(id).analysis.mass_grams;
           const shown = lang === 'de' ? g.toFixed(1).replace('.', ',') : g.toFixed(1);
@@ -540,6 +588,57 @@ async function browser() {
         await p.close();
       }
     }
+    // The panel “Check camera drone” row by row like CameraCheckScreen (finding AUTO42-1): the review's code (tour frame,
+    // FPV stack, no gimbal) and a nav board on the long range frame without and with a gimbal (no camera frame).
+    const lrNav = { ...catalog.presetBuild('propwash:long_range'), stack: 'camdrones:nav_fc_pro' };
+    const codeOf = (build) => attempt(() => catalog.encode({ build, paint: null, tune: null, osd: null, name: null }));
+    const camCases = [
+      { label: 'tour frame, FPV stack, no gimbal', code: WRONG_NAV_CODE, complete: false, hint: false,
+        rows: { nav_fc: ['wrong', [['wrongNav', 'propwash:stack_30'], ['advice', 'camdrones:nav_fc_pro']]], gimbal: ['missing', [['advice', 'camdrones:gimbal_tour']]] } },
+      { label: 'nav board on the long range frame', code: codeOf(lrNav), complete: false, hint: true, rows: { gimbal: ['missing', []] } },
+      { label: 'nav board and gimbal on the long range frame', code: codeOf({ ...lrNav, accessories: { front: 'camdrones:gimbal_tour' } }), complete: true, hint: false,
+        rows: { nav_fc: ['fitted', null], gimbal: ['fitted', null] } },
+    ];
+    for (const lang of ['en', 'de']) {
+      const p = await b.page({ lang });
+      for (const c of camCases) {
+        const where = `camera check ${lang}: ${c.label}`;
+        if (!check(typeof c.code === 'string' && c.code.startsWith('PW3-'), `${where}: code (${c.code})`)) continue;
+        await p.open(`/configurator/#${c.code}`, { width: 1280, lang, ready: CFG_READY });
+        loads++;
+        await sleep(300);
+        const panel = await p.evaluate(`(() => {
+          const n = document.querySelector('[data-camdrone]');
+          if (!n || n.hidden) return null;
+          return {
+            status: (n.querySelector('.camdrone__status') || {}).textContent || '',
+            hints: [...n.querySelectorAll('.camdrone__hint')].map((h) => h.textContent),
+            rows: [...n.querySelectorAll('.camdrone__roles li')].map((li) => ({ role: li.dataset.role, state: li.dataset.state,
+              notes: [...li.querySelectorAll('.camdrone__part')].map((s) => s.textContent) })),
+          };
+        })()`);
+        if (!check(panel, `${where}: the panel “${text('camdrones.check.title', lang)}” is shown`)) continue;
+        const status = text(c.complete ? 'camdrones.check.complete' : 'camdrones.check.incomplete', lang);
+        check(flat(panel.status) === flat(status), `${where}: “${status}” (${flat(panel.status)})`);
+        const noFrame = flat(text('camdrones.check.no_camera_frame', lang));
+        const hinted = panel.hints.map(flat).includes(noFrame);
+        check(hinted === c.hint, `${where}: hint “No camera frame” ${c.hint ? 'shown' : 'not shown'}, like the game (${JSON.stringify(panel.hints.map(flat))})`);
+        const recommended = flat(fill(text('camdrones.check.recommended', lang), { x: '' }));
+        for (const [role, [state, notes]] of Object.entries(c.rows)) {
+          const row = panel.rows.find((x) => x.role === role);
+          if (!check(row && row.state === state, `${where}: ${role} ${state} (${row && row.state})`)) continue;
+          if (!notes) continue;
+          const want = notes.map(([key, part]) => flat(fill(text(`camdrones.check.${key}`, lang), { x: catalog.partName(part, lang) })));
+          const got = row.notes.map(flat);
+          check(want.length ? same(got.filter((g) => want.includes(g)), want) : got.length === 0,
+            `${where}: ${role} – ${JSON.stringify(want)}${want.length > 1 ? ' in this order' : ''}, like the game (${JSON.stringify(got)})`);
+          check(!got.some((s) => s.startsWith(recommended)), `${where}: ${role} – no “${recommended}…” (only next to an accepted other part)`);
+        }
+      }
+      check(p.errors.length === 0, `camera check ${lang}: no console errors (${p.errors.slice(0, 2).join(' | ')})`);
+      await p.close();
+    }
+
     // A code with all three add-ons opens complete; with Camera Drones switched off it names the add-on like the game.
     for (const lang of ['en', 'de']) {
       const where = `link ${lang}`;

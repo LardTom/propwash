@@ -13,6 +13,10 @@
 //     page” name the Propwash version of catalog.source, “About this page” also the version of Just More Parts, and
 //     no other version of either appears on the page; the intro names the reference temperature of analysis.js
 //   - every dictionary that translates the intro or “About this page” keeps these versions and the temperature
+//   - the page names every add-on of the catalog, not only Just More Parts (finding AUTO42-2): no text of the page
+//     (title, description, kicker, lead, “How do I get it into the game?”, “About this page”) names only some of
+//     them; the description and the lead name all of them, “How do I get it into the game?” and “About this page” each
+//     with the version of the export (e.g. Camera Drones 1.0.0), and no other version of an add-on is on the page
 //
 //   node tools/test-configurator-texts.mjs
 
@@ -186,10 +190,56 @@ const page = plain(html);
 for (const m of page.matchAll(/\bPropwash(?: FPV)? (\d+\.\d+\.\d+)/g)) check(m[1] === pw, `configurator/index.html names “${m[0]}”, the data come from Propwash ${pw}`);
 if (jmp) for (const m of page.matchAll(/\bJust More Parts (\d+\.\d+\.\d+)/g)) check(m[1] === jmp, `configurator/index.html names “${m[0]}”, the data come from Just More Parts ${jmp}`);
 
+// Every add-on of the catalog by the short name the page uses (“Camera Drones” of “Propwash: Camera Drones”).
+const addons = (json.namespaces || []).filter((n) => n.namespace !== 'propwash')
+  .map((n) => ({ ns: n.namespace, short: String(n.name || '').replace(/^Propwash:\s*/, ''), version: release(json.source && json.source.mods && json.source.mods[n.namespace]) }));
+check(addons.length >= 3 && addons.every((a) => a.short && a.version), `catalog.json: the add-ons with name and version (${JSON.stringify(addons)})`);
+const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const decode = (s) => plain(String(s || '').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>'));
+const one = (re) => (re.exec(html) || [])[1];
+const howto = /<details class="howto">([\s\S]*?)<\/details>/.exec(html)?.[1] || '';
+check(howto, 'configurator/index.html: “How do I get it into the game?”');
+const kicker = /<p class="kicker">([\s\S]*?)<\/p>/.exec(/<section class="cfg-intro"[\s\S]*?<\/section>/.exec(html)?.[0] || '')?.[1];
+check(kicker, 'configurator/index.html: the kicker of the intro');
+const named = (s) => addons.filter((a) => s.includes(a.short)).map((a) => a.short);
+const pageParts = [
+  ['title', one(/<title>([^<]*)<\/title>/), 'some'],
+  ['og:title', one(/<meta property="og:title" content="([^"]*)"/), 'some'],
+  ['description', one(/<meta name="description" content="([^"]*)"/), 'all'],
+  ['og:description', one(/<meta property="og:description" content="([^"]*)"/), 'all'],
+  ['kicker', kicker, 'some'],
+];
+for (const lang of ['en', 'de']) {
+  pageParts.push([`title (${lang})`, one(new RegExp(`data-title-${lang}="([^"]*)"`)), 'some']);
+  pageParts.push([`description (${lang})`, one(new RegExp(`data-description-${lang}="([^"]*)"`)), 'all']);
+  pageParts.push([`lead (${lang})`, one(new RegExp(`<p class="cfg-lead" lang="${lang}">([\\s\\S]*?)</p>`)), 'all']);
+  const steps = (new RegExp(`<ol lang="${lang}">([\\s\\S]*?)</ol>`).exec(howto) || [])[1];
+  pageParts.push([`“How do I get it into the game?” (${lang})`, steps, 'versions']);
+  if (steps) pageTexts.push(steps);
+  pageParts.push([`“About this page” (${lang})`, paragraphs(about, null, lang).join(' '), 'versions']);
+}
+for (const [label, raw, need] of pageParts) {
+  if (!check(typeof raw === 'string' && raw.length > 0, `configurator/index.html: ${label} is there`)) continue;
+  const s = decode(raw);
+  const has = named(s);
+  check(has.length === 0 || has.length === addons.length,
+    `configurator/index.html: ${label} names only ${has.join(', ')} of the add-ons ${addons.map((a) => a.short).join(', ')} (“${s.slice(0, 140)}”)`);
+  if (need === 'all' || need === 'versions') check(has.length === addons.length, `configurator/index.html: ${label} names every add-on of the page – missing ${addons.filter((a) => !has.includes(a.short)).map((a) => a.short).join(', ')}`);
+  if (need === 'versions') {
+    for (const a of addons) check(s.includes(`${a.short} ${a.version}`), `configurator/index.html: ${label} names ${a.short} ${a.version}, the version of the export (“${s.slice(0, 160)}…”)`);
+  }
+}
+for (const a of addons) {
+  for (const m of page.matchAll(new RegExp(`\\b${escapeRe(a.short)} (\\d+\\.\\d+\\.\\d+)`, 'g'))) {
+    check(m[1] === a.version, `configurator/index.html names “${m[0]}”, the data come from ${a.short} ${a.version}`);
+  }
+}
+
 let translatedPage = 0;
+const versioned = new RegExp(`\\b(?:Propwash|${addons.map((a) => escapeRe(a.short)).join('|')}) \\d+\\.\\d+\\.\\d+`, 'g');
 for (const text of pageTexts) {
   const key = text.trim();
-  const needs = [...new Set([...plain(key).matchAll(/\b(?:Propwash|Just More Parts) \d+\.\d+\.\d+/g)].map((m) => m[0]))];
+  const needs = [...new Set([...plain(key).matchAll(versioned)].map((m) => m[0]))];
   const temps = temperatures(key);
   for (const [code, entries] of dicts) {
     const t = Object.entries(entries).find(([k]) => plain(k) === plain(key));

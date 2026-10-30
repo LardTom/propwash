@@ -3,9 +3,9 @@
 // view. Everything runs in the browser; the only request goes to this site's catalog.
 
 import { loadCatalog } from './data.js?v=9d6fa364';
-import { convertText, reasonText, addonNote, MAX_CODES } from './convert.js?v=8dd58b3e';
+import { convertText, reasonText, addonNote, MAX_CODES } from './convert.js?v=167aea2f';
 import { displayId } from './sharecode.js?v=024bd980';
-import { t, lang, tr, loadTexts, pageHref } from './i18n.js?v=58d1b91a';
+import { t, lang, tr, loadTexts, pageHref } from './i18n.js?v=01d57f4b';
 
 const doc = document;
 const $ = (sel, ctx = doc) => ctx.querySelector(sel);
