@@ -761,6 +761,8 @@ function renderStats() {
   renderCamdrone();
 }
 
+const CAM_NOTES = Object.freeze({ wrongNav: 'camdrones.check.wrongNav', advice: 'camdrones.check.advice', recommended: 'camdrones.check.recommended' });
+
 // The camera drone panel (Propwash: Camera Drones): the check of the workbench button “Check camera drone” and what
 // the nav board, gimbal and flight class bring, instead of FPV figures that do not fit a camera drone.
 function renderCamdrone() {
@@ -783,7 +785,7 @@ function renderCamdrone() {
   const roles = el('ul', { class: 'camdrone__roles' }, r.lines.map((l) => {
     const state = t(`camdrones.check.${l.state}`);
     const notes = lineNotes(l).map((n) => el('span', { class: `camdrone__part${n.key === 'advice' ? ' camdrone__advice' : ''}` },
-      t(`camdrones.check.${n.key}`, { x: name(n.part) })));
+      t(CAM_NOTES[n.key], { x: name(n.part) })));
     return el('li', { class: `is-${l.state === 'fitted' || l.state === 'other' ? 'ok' : 'bad'}`, dataset: { role: l.role, state: l.state } },
       el('span', { class: 'camdrone__role' }, t(`camdrones.check.role.${l.role}`)), ' ', el('span', { class: 'camdrone__state' }, state),
       l.part && l.state !== 'wrong' ? el('span', { class: 'camdrone__part' }, name(l.part)) : null, ...notes);
