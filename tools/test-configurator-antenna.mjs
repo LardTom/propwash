@@ -547,7 +547,8 @@ console.log(`behind the pack: ${pushed} of ${packs} frame and battery combinatio
   let moved = 0;
   let all = 0;
   const frames = [];
-  for (const frame of catalog.partsIn('frame')) {
+  // The frames of the fixture's export (Propwash and Just More Parts), as in the game's self test of G-ANTENNA4-1.
+  for (const frame of catalog.partsIn('frame').filter((f) => fixtureFrames.some((x) => x.id === f.id))) {
     const battery = SELFTEST_PACKS[frame.id];
     if (!check(battery && catalog.part(battery), `${frame.id}: the self test's pack ${battery}`)) continue;
     let here = 0;
@@ -589,12 +590,18 @@ console.log(`behind the pack: ${pushed} of ${packs} frame and battery combinatio
     const l = frameLayout(frame, catalog, { ...render, layouts });
     check(near(l.antenna, expected) && l.antennaTilt === TILT, `drone_layout.json "antenna" ${JSON.stringify(point)}: holder at ${l.antenna} / ${l.antennaTilt}° (expected ${expected})`);
   }
-  // An older export: no antenna_anchor and no antenna in the catalog – the holder and the antenna from the rules.
-  const lr = oldCatalog.part('justmoreparts:lr_7_deadcat');
-  check(near(frameLayout(lr, oldCatalog, render).antenna, anchorOf(lr.id).pos), 'older catalog: the fallback holder of an add-on frame equals the export');
-  const a2 = assemble({ ...base, frame: 'propwash:freestyle_5', video: 'justmoreparts:digital_lr', accessories: {} }, { ...oldEnv, model: env.model });
-  const p2 = a2.pieces.find((p) => p.role === 'antenna');
-  check(p2 && p2.antenna.count === 2 && p2.antenna.lengthMm === 150 && p2.antenna.cap === 'pagoda', `older catalog: the antenna derived from the VTX (${JSON.stringify(p2 && p2.antenna)})`);
+  // An older export: no antenna_anchor and no antenna in the catalog – the holder, its limits and the antenna from the
+  // rules.
+  const bare = createCatalog({ ...siteJson, parts: siteJson.parts.map((p) => without(without(p, 'antenna_anchor'), 'antenna')) });
+  const bareEnv = { ...env, catalog: bare };
+  for (const id of ['justmoreparts:lr_7_deadcat', 'justmoreparts:tp_2_x', 'justmoreparts:whoop_75_duct']) {
+    const frame = bare.part(id);
+    check(near(frameLayout(frame, bare, render).antenna, anchorOf(id).pos), `older catalog: the fallback holder of ${id} equals the export`);
+    const piece = assemble({ ...base, frame: id, video: 'justmoreparts:digital_lr', accessories: {} }, bareEnv).pieces.find((p) => p.role === 'antenna');
+    const expected = Math.min(150, anchorOf(id).max_length_mm);
+    check(piece && piece.antenna.count === 2 && piece.antenna.lengthMm === expected && piece.antenna.cap === 'pagoda' && piece.pairLean === anchorOf(id).pair_lean_deg
+      && piece.tilt === TILT, `older catalog, ${id}: the antenna derived from the VTX, ${expected} mm at most, pair ${anchorOf(id).pair_lean_deg}° (${JSON.stringify(piece)})`);
+  }
 }
 console.log(`assembly: ${combos} frame and VTX combinations`);
 
