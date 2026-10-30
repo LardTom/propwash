@@ -62,6 +62,7 @@ const TEXT = {
       incomplete: ['Not a complete camera drone yet', 'Noch keine vollständige Kamera-Drohne'],
       incompleteHint: ['Camera parts missing or wrong: {x} of {y}', 'Kamera-Teile fehlen oder passen nicht: {x} von {y}'],
       fitted: ['fitted', 'eingebaut'], missing: ['missing', 'fehlt'], wrong: ['wrong part', 'falsches Teil'], other: ['other part', 'anderes Teil'],
+      advice: ['Fit: {x}', 'Einbauen: {x}'],
       recommended: ['Recommended: {x}', 'Empfohlen: {x}'],
       wrongNav: ['{x} has no GPS: the drone flies like an FPV quad', '{x} hat kein GPS: Die Drohne fliegt wie ein FPV-Quad'],
       no_camera_frame: ['No camera frame fitted – with a camera frame the check names the matching parts.',
