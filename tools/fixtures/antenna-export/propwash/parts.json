@@ -21,11 +21,11 @@
    }
   },
   "basics": {
-   "mass_g": 4.0,
+   "mass_g": 4,
    "stack_size": 0,
    "sort": 0,
    "creative": true,
-   "durability": 1.0,
+   "durability": 1,
    "recycle": null,
    "accent": null,
    "render_model": null
@@ -35,10 +35,17 @@
    "latency_ms": 12,
    "range_blocks": 250,
    "image_quality": 0.55,
-   "camera_width_mm": 12.0,
-   "camera_fov_deg": 125.0,
+   "camera_width_mm": 12,
+   "camera_fov_deg": 125,
    "vtx_power_mw": 200,
-   "power_w": 1.9
+   "power_w": 1.9,
+   "antenna": {
+    "count": 1,
+    "length_mm": 35,
+    "cap": "whip",
+    "kind": "whoop",
+    "derived": true
+   }
   },
   "derived": {},
   "paint": {
@@ -48,8 +55,7 @@
    ],
    "paintable_model": true,
    "default_colors": {
-    "camera": "#e8761e",
-    "antenna": "#e6e6e6"
+    "camera": "#e8761e"
    }
   },
   "model": {
@@ -57,14 +63,10 @@
    "item": "assets/propwash/items/analog_nano.json",
    "drone": "assets/propwash/items/drone_render/video/analog_nano.json",
    "variants": [
-    "assets/propwash/items/drone_render/video/analog_nano_antenna.json",
-    "assets/propwash/items/drone_render/video/analog_nano_antenna_paint.json",
     "assets/propwash/items/drone_render/video/analog_nano_paint.json"
    ],
    "textures": [
     "assets/propwash/textures/item/part/video/analog_nano.png",
-    "assets/propwash/textures/item/part/video/analog_nano_antenna.png",
-    "assets/propwash/textures/item/part/video/analog_nano_antenna_paint.png",
     "assets/propwash/textures/item/part/video/analog_nano_paint.png"
    ]
   }
@@ -91,11 +93,11 @@
    }
   },
   "basics": {
-   "mass_g": 8.0,
+   "mass_g": 8,
    "stack_size": 0,
    "sort": 1,
    "creative": true,
-   "durability": 1.0,
+   "durability": 1,
    "recycle": null,
    "accent": null,
    "render_model": null
@@ -105,10 +107,17 @@
    "latency_ms": 12,
    "range_blocks": 380,
    "image_quality": 0.65,
-   "camera_width_mm": 19.0,
-   "camera_fov_deg": 125.0,
+   "camera_width_mm": 19,
+   "camera_fov_deg": 125,
    "vtx_power_mw": 400,
-   "power_w": 3.5
+   "power_w": 3.5,
+   "antenna": {
+    "count": 1,
+    "length_mm": 45,
+    "cap": "lollipop",
+    "kind": "race",
+    "derived": true
+   }
   },
   "derived": {},
   "paint": {
@@ -118,8 +127,7 @@
    ],
    "paintable_model": true,
    "default_colors": {
-    "camera": "#d6352c",
-    "antenna": "#c0392b"
+    "camera": "#d6352c"
    }
   },
   "model": {
@@ -127,14 +135,10 @@
    "item": "assets/propwash/items/analog_race.json",
    "drone": "assets/propwash/items/drone_render/video/analog_race.json",
    "variants": [
-    "assets/propwash/items/drone_render/video/analog_race_antenna.json",
-    "assets/propwash/items/drone_render/video/analog_race_antenna_paint.json",
     "assets/propwash/items/drone_render/video/analog_race_paint.json"
    ],
    "textures": [
     "assets/propwash/textures/item/part/video/analog_race.png",
-    "assets/propwash/textures/item/part/video/analog_race_antenna.png",
-    "assets/propwash/textures/item/part/video/analog_race_antenna_paint.png",
     "assets/propwash/textures/item/part/video/analog_race_paint.png"
    ]
   }
@@ -165,7 +169,7 @@
    "stack_size": 0,
    "sort": 2,
    "creative": true,
-   "durability": 1.0,
+   "durability": 1,
    "recycle": null,
    "accent": null,
    "render_model": null
@@ -175,10 +179,17 @@
    "latency_ms": 26,
    "range_blocks": 300,
    "image_quality": 0.85,
-   "camera_width_mm": 14.0,
-   "camera_fov_deg": 104.0,
+   "camera_width_mm": 14,
+   "camera_fov_deg": 104,
    "vtx_power_mw": 400,
-   "power_w": 5.5
+   "power_w": 5.5,
+   "antenna": {
+    "count": 1,
+    "length_mm": 60,
+    "cap": "lollipop",
+    "kind": "lite",
+    "derived": true
+   }
   },
   "derived": {},
   "paint": {
@@ -188,8 +199,7 @@
    ],
    "paintable_model": true,
    "default_colors": {
-    "camera": "#8d949c",
-    "antenna": "#e6e6e6"
+    "camera": "#8d949c"
    }
   },
   "model": {
@@ -197,14 +207,10 @@
    "item": "assets/propwash/items/digital_lite.json",
    "drone": "assets/propwash/items/drone_render/video/digital_lite.json",
    "variants": [
-    "assets/propwash/items/drone_render/video/digital_lite_antenna.json",
-    "assets/propwash/items/drone_render/video/digital_lite_antenna_paint.json",
     "assets/propwash/items/drone_render/video/digital_lite_paint.json"
    ],
    "textures": [
     "assets/propwash/textures/item/part/video/digital_lite.png",
-    "assets/propwash/textures/item/part/video/digital_lite_antenna.png",
-    "assets/propwash/textures/item/part/video/digital_lite_antenna_paint.png",
     "assets/propwash/textures/item/part/video/digital_lite_paint.png"
    ]
   }
@@ -231,11 +237,11 @@
    }
   },
   "basics": {
-   "mass_g": 23.0,
+   "mass_g": 23,
    "stack_size": 0,
    "sort": 3,
    "creative": true,
-   "durability": 1.0,
+   "durability": 1,
    "recycle": null,
    "accent": null,
    "render_model": null
@@ -244,11 +250,18 @@
    "link": "digital",
    "latency_ms": 30,
    "range_blocks": 520,
-   "image_quality": 1.0,
-   "camera_width_mm": 20.0,
-   "camera_fov_deg": 130.0,
+   "image_quality": 1,
+   "camera_width_mm": 20,
+   "camera_fov_deg": 130,
    "vtx_power_mw": 700,
-   "power_w": 9.0
+   "power_w": 9,
+   "antenna": {
+    "count": 2,
+    "length_mm": 90,
+    "cap": "lollipop",
+    "kind": "hd",
+    "derived": true
+   }
   },
   "derived": {},
   "paint": {
@@ -258,8 +271,7 @@
    ],
    "paintable_model": true,
    "default_colors": {
-    "camera": "#3a3e44",
-    "antenna": "#c0392b"
+    "camera": "#3a3e44"
    }
   },
   "model": {
@@ -267,14 +279,10 @@
    "item": "assets/propwash/items/digital_hd.json",
    "drone": "assets/propwash/items/drone_render/video/digital_hd.json",
    "variants": [
-    "assets/propwash/items/drone_render/video/digital_hd_antenna.json",
-    "assets/propwash/items/drone_render/video/digital_hd_antenna_paint.json",
     "assets/propwash/items/drone_render/video/digital_hd_paint.json"
    ],
    "textures": [
     "assets/propwash/textures/item/part/video/digital_hd.png",
-    "assets/propwash/textures/item/part/video/digital_hd_antenna.png",
-    "assets/propwash/textures/item/part/video/digital_hd_antenna_paint.png",
     "assets/propwash/textures/item/part/video/digital_hd_paint.png"
    ]
   }

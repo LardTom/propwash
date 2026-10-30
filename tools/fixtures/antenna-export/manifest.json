@@ -1,16 +1,18 @@
 {
  "format": 2,
- "generated_at": "2026-10-29T22:17:24Z",
+ "generated_at": "2026-10-30T00:58:18Z",
  "generator": "propwash 0.6.0-dev.11",
  "propwash": "0.6.0-dev.11",
- "selection": "propwash",
+ "selection": "all",
  "base": false,
  "namespaces": [
-  "propwash"
+  "propwash",
+  "justmoreparts"
  ],
  "mods": {
+  "justmoreparts": "1.2.0-dev.1",
   "propwash": "0.6.0-dev.11"
  },
  "fingerprint": null,
- "fixture": "the four core VTX of Propwash c0d4a159f (antennas at the rear of the frame) as /propwash webexport writes them"
+ "fixture": "the VTX of Propwash c23e9188 and Just More Parts 1.2.0-dev.1 (antennas at the frame's antenna holder) as /propwash webexport writes them; frames.json: id, data and derived of every frame of that export"
 }

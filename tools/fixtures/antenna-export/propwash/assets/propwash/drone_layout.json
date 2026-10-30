@@ -45,11 +45,6 @@
         13.9,
         -10.2
       ],
-      "antenna": [
-        0.0,
-        23.2,
-        9.2
-      ],
       "camera_tilt_default": 12.0,
       "accessories": {
         "bottom": {
@@ -107,11 +102,6 @@
         0.0,
         28.3,
         -38.2
-      ],
-      "antenna": [
-        0.0,
-        24.0,
-        34.0
       ],
       "camera_tilt_default": 10.0,
       "accessories": {
@@ -187,11 +177,6 @@
         12.5,
         -50.0
       ],
-      "antenna": [
-        0.0,
-        28.5,
-        50.0
-      ],
       "camera_tilt_default": 28.0,
       "accessories": {
         "top": {
@@ -266,11 +251,6 @@
         12.5,
         -44.0
       ],
-      "antenna": [
-        0.0,
-        20.0,
-        44.0
-      ],
       "camera_tilt_default": 38.0,
       "accessories": {
         "top": {
@@ -344,11 +324,6 @@
         0.0,
         14.0,
         -56.0
-      ],
-      "antenna": [
-        0.0,
-        32.5,
-        62.0
       ],
       "camera_tilt_default": 20.0,
       "accessories": {

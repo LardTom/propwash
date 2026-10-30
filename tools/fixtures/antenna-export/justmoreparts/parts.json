@@ -1,0 +1,635 @@
+[
+ {
+  "id": "justmoreparts:analog_whoop_25mw",
+  "category": "video",
+  "builtin": false,
+  "name": {
+   "de_de": "Analoge Whoop-Kamera mit Sender (Firefly Nano)",
+   "en_us": "Analog Whoop Camera + VTX (Firefly Nano)"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "Firefly Nano – Kamera und Sender für 1S-Whoops",
+    "what": [
+     "Analog · 12 ms · 200 Blöcke · 2,2 g · 25 mW",
+     "+ leichteste Kamera: 1,8 g unter Standard",
+     "− kurze Reichweite, rauschiges Bild"
+    ],
+    "use": [
+     "Für 65–75-mm-Whoops und 2″-Toothpicks",
+     "Brille: analog"
+    ]
+   },
+   "en_us": {
+    "summary": "Firefly Nano – camera and transmitter for 1S whoops",
+    "what": [
+     "Analog · 12 ms · 200 blocks · 2.2 g · 25 mW",
+     "+ lightest camera: 1.8 g below standard",
+     "− short range, noisy image"
+    ],
+    "use": [
+     "For 65–75 mm whoops and 2″ toothpicks",
+     "Goggles: analog"
+    ]
+   }
+  },
+  "basics": {
+   "mass_g": 2.2,
+   "stack_size": 0,
+   "sort": 500,
+   "creative": true,
+   "durability": 1,
+   "recycle": null,
+   "accent": "#f0883e",
+   "render_model": null
+  },
+  "data": {
+   "link": "analog",
+   "latency_ms": 12,
+   "range_blocks": 200,
+   "image_quality": 0.5,
+   "camera_width_mm": 14,
+   "camera_fov_deg": 126,
+   "vtx_power_mw": 25,
+   "power_w": 0.7,
+   "antenna": {
+    "count": 1,
+    "length_mm": 30,
+    "cap": "whip",
+    "kind": "whoop",
+    "derived": true
+   }
+  },
+  "derived": {},
+  "paint": {
+   "slots": [
+    "camera",
+    "antenna"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "camera": "#e6823b",
+    "antenna": "#e6e6e6"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/justmoreparts/items/analog_whoop_25mw.json",
+   "drone": "assets/justmoreparts/items/drone_render/video/analog_whoop_25mw.json",
+   "variants": [
+    "assets/justmoreparts/items/drone_render/video/analog_whoop_25mw_paint.json"
+   ],
+   "textures": [
+    "assets/justmoreparts/textures/item/part/video/analog_whoop_25mw.png",
+    "assets/justmoreparts/textures/item/part/video/analog_whoop_25mw_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "justmoreparts:analog_race_800",
+  "category": "video",
+  "builtin": false,
+  "name": {
+   "de_de": "Analoge Race-Kamera mit Sender (Racecore 800)",
+   "en_us": "Analog Race Camera + VTX (Racecore 800)"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "Racecore 800 – analoges Racing mit wenig Latenz",
+    "what": [
+     "Analog · 11 ms · 520 Blöcke · 9,5 g · 800 mW",
+     "+ kaum Latenz (11 ms)",
+     "+ mehr Reichweite als die Standard-Race-Cam",
+     "− analoges Rauschen, Bild weich"
+    ],
+    "use": [
+     "Für 5″-Race und Freestyle",
+     "Brille: analog"
+    ]
+   },
+   "en_us": {
+    "summary": "Racecore 800 – analog racing with low latency",
+    "what": [
+     "Analog · 11 ms · 520 blocks · 9.5 g · 800 mW",
+     "+ hardly any latency (11 ms)",
+     "+ more range than the standard race cam",
+     "− analog noise, soft image"
+    ],
+    "use": [
+     "For 5″ racing and freestyle",
+     "Goggles: analog"
+    ]
+   }
+  },
+  "basics": {
+   "mass_g": 9.5,
+   "stack_size": 0,
+   "sort": 501,
+   "creative": true,
+   "durability": 1,
+   "recycle": null,
+   "accent": "#bf3989",
+   "render_model": null
+  },
+  "data": {
+   "link": "analog",
+   "latency_ms": 11,
+   "range_blocks": 520,
+   "image_quality": 0.68,
+   "camera_width_mm": 19,
+   "camera_fov_deg": 125,
+   "vtx_power_mw": 800,
+   "power_w": 5,
+   "antenna": {
+    "count": 1,
+    "length_mm": 50,
+    "cap": "lollipop",
+    "kind": "race",
+    "derived": true
+   }
+  },
+  "derived": {},
+  "paint": {
+   "slots": [
+    "camera",
+    "antenna"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "camera": "#bf3989",
+    "antenna": "#c0392b"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/justmoreparts/items/analog_race_800.json",
+   "drone": "assets/justmoreparts/items/drone_render/video/analog_race_800.json",
+   "variants": [
+    "assets/justmoreparts/items/drone_render/video/analog_race_800_paint.json"
+   ],
+   "textures": [
+    "assets/justmoreparts/textures/item/part/video/analog_race_800.png",
+    "assets/justmoreparts/textures/item/part/video/analog_race_800_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "justmoreparts:analog_lr_1600",
+  "category": "video",
+  "builtin": false,
+  "name": {
+   "de_de": "Analoge Long-Range-Kamera mit Sender (Longshot 1600)",
+   "en_us": "Analog Long Range Camera + VTX (Longshot 1600)"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "Longshot 1600 – analoge Long-Range-Flüge",
+    "what": [
+     "Analog · 12 ms · 820 Blöcke · 16 g · 1600 mW",
+     "+ größte analoge Reichweite",
+     "+ Latenz analog: 20 ms weniger als digital",
+     "+ 110° Sichtfeld: natürliches Bild auf Distanz",
+     "− schwer durch Kühlkörper (16 g)",
+     "− analoges Rauschen"
+    ],
+    "use": [
+     "Für 6–8″-Long-Range und X-Class",
+     "Brille: analog"
+    ]
+   },
+   "en_us": {
+    "summary": "Longshot 1600 – analog long-range flights",
+    "what": [
+     "Analog · 12 ms · 820 blocks · 16 g · 1600 mW",
+     "+ longest analog range",
+     "+ analog latency: 20 ms less than digital",
+     "+ 110° field of view: natural image at range",
+     "− heavy heatsink (16 g)",
+     "− analog noise"
+    ],
+    "use": [
+     "For 6–8″ long range and X-Class",
+     "Goggles: analog"
+    ]
+   }
+  },
+  "basics": {
+   "mass_g": 16,
+   "stack_size": 0,
+   "sort": 502,
+   "creative": true,
+   "durability": 1,
+   "recycle": null,
+   "accent": "#9e6a03",
+   "render_model": null
+  },
+  "data": {
+   "link": "analog",
+   "latency_ms": 12,
+   "range_blocks": 820,
+   "image_quality": 0.62,
+   "camera_width_mm": 19,
+   "camera_fov_deg": 110,
+   "vtx_power_mw": 1600,
+   "power_w": 8.5,
+   "antenna": {
+    "count": 1,
+    "length_mm": 138,
+    "cap": "pagoda",
+    "kind": "long_range",
+    "derived": true
+   }
+  },
+  "derived": {},
+  "paint": {
+   "slots": [
+    "camera",
+    "antenna"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "camera": "#9e6a03",
+    "antenna": "#c0392b"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/justmoreparts/items/analog_lr_1600.json",
+   "drone": "assets/justmoreparts/items/drone_render/video/analog_lr_1600.json",
+   "variants": [
+    "assets/justmoreparts/items/drone_render/video/analog_lr_1600_paint.json"
+   ],
+   "textures": [
+    "assets/justmoreparts/textures/item/part/video/analog_lr_1600.png",
+    "assets/justmoreparts/textures/item/part/video/analog_lr_1600_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "justmoreparts:digital_micro",
+  "category": "video",
+  "builtin": false,
+  "name": {
+   "de_de": "Digitales Micro-Videosystem (Pixel Micro)",
+   "en_us": "Digital Micro Video System (Pixel Micro)"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "Pixel Micro – digitales Bild für kleine Drohnen",
+    "what": [
+     "Digital · 24 ms · 220 Blöcke · 4,8 g · 200 mW",
+     "+ klares Bild in unter 5 g",
+     "+ 126° Sichtfeld statt 104° beim Lite-System",
+     "− kurze Reichweite (220 Blöcke)",
+     "− Bild unter HD-Niveau (Qualität 0,78)"
+    ],
+    "use": [
+     "Für 85-mm-Whoops, Toothpicks, Cinewhoops",
+     "Brille: digital"
+    ]
+   },
+   "en_us": {
+    "summary": "Pixel Micro – digital image for small drones",
+    "what": [
+     "Digital · 24 ms · 220 blocks · 4.8 g · 200 mW",
+     "+ clear image below 5 g",
+     "+ 126° field of view instead of 104° (Lite)",
+     "− short range (220 blocks)",
+     "− image below HD level (quality 0.78)"
+    ],
+    "use": [
+     "For 85 mm whoops, toothpicks, cinewhoops",
+     "Goggles: digital"
+    ]
+   }
+  },
+  "basics": {
+   "mass_g": 4.8,
+   "stack_size": 0,
+   "sort": 503,
+   "creative": true,
+   "durability": 1,
+   "recycle": null,
+   "accent": "#6e7781",
+   "render_model": null
+  },
+  "data": {
+   "link": "digital",
+   "latency_ms": 24,
+   "range_blocks": 220,
+   "image_quality": 0.78,
+   "camera_width_mm": 14,
+   "camera_fov_deg": 126,
+   "vtx_power_mw": 200,
+   "power_w": 5.1,
+   "antenna": {
+    "count": 1,
+    "length_mm": 35,
+    "cap": "whip",
+    "kind": "whoop",
+    "derived": true
+   }
+  },
+  "derived": {},
+  "paint": {
+   "slots": [
+    "camera",
+    "antenna"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "camera": "#6e7781",
+    "antenna": "#e6e6e6"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/justmoreparts/items/digital_micro.json",
+   "drone": "assets/justmoreparts/items/drone_render/video/digital_micro.json",
+   "variants": [
+    "assets/justmoreparts/items/drone_render/video/digital_micro_paint.json"
+   ],
+   "textures": [
+    "assets/justmoreparts/textures/item/part/video/digital_micro.png",
+    "assets/justmoreparts/textures/item/part/video/digital_micro_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "justmoreparts:digital_low_latency",
+  "category": "video",
+  "builtin": false,
+  "name": {
+   "de_de": "Digitales Race-Videosystem (Swift Link)",
+   "en_us": "Digital Race Video System (Swift Link)"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "Swift Link – digitales Racing",
+    "what": [
+     "Digital · 14 ms · 380 Blöcke · 9,8 g · 500 mW",
+     "+ Latenz fast wie analog (14 ms)",
+     "+ leicht für ein digitales System",
+     "+ weites Sichtfeld (133°)",
+     "− Bild weicher als HD"
+    ],
+    "use": [
+     "Für digitales 5″-Racing",
+     "Brille: digital"
+    ]
+   },
+   "en_us": {
+    "summary": "Swift Link – digital racing",
+    "what": [
+     "Digital · 14 ms · 380 blocks · 9.8 g · 500 mW",
+     "+ latency almost like analog (14 ms)",
+     "+ light for a digital system",
+     "+ wide field of view (133°)",
+     "− image softer than HD"
+    ],
+    "use": [
+     "For digital 5″ racing",
+     "Goggles: digital"
+    ]
+   }
+  },
+  "basics": {
+   "mass_g": 9.8,
+   "stack_size": 0,
+   "sort": 504,
+   "creative": true,
+   "durability": 1,
+   "recycle": null,
+   "accent": "#1f6feb",
+   "render_model": null
+  },
+  "data": {
+   "link": "digital",
+   "latency_ms": 14,
+   "range_blocks": 380,
+   "image_quality": 0.82,
+   "camera_width_mm": 19,
+   "camera_fov_deg": 133,
+   "vtx_power_mw": 500,
+   "power_w": 5.8,
+   "antenna": {
+    "count": 1,
+    "length_mm": 45,
+    "cap": "stubby",
+    "kind": "race",
+    "derived": true
+   }
+  },
+  "derived": {},
+  "paint": {
+   "slots": [
+    "camera",
+    "antenna"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "camera": "#1e6de6",
+    "antenna": "#e6e6e6"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/justmoreparts/items/digital_low_latency.json",
+   "drone": "assets/justmoreparts/items/drone_render/video/digital_low_latency.json",
+   "variants": [
+    "assets/justmoreparts/items/drone_render/video/digital_low_latency_paint.json"
+   ],
+   "textures": [
+    "assets/justmoreparts/textures/item/part/video/digital_low_latency.png",
+    "assets/justmoreparts/textures/item/part/video/digital_low_latency_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "justmoreparts:digital_hd_pro",
+  "category": "video",
+  "builtin": false,
+  "name": {
+   "de_de": "Digitales HD-Videosystem (Clarity HD Pro)",
+   "en_us": "Digital HD Video System (Clarity HD Pro)"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "Clarity HD Pro – bestes Bild für Freestyle",
+    "what": [
+     "Digital · 24 ms · 650 Blöcke · 24 g · 1 W",
+     "+ bestes Bild (Qualität 1,0)",
+     "+ weniger Latenz als Standard-HD (24/30 ms)",
+     "+ mehr Reichweite (650 statt 520 Blöcke)",
+     "− empfindlich (Haltbarkeit 0,8)"
+    ],
+    "use": [
+     "Für Freestyle, Cinematic, Cinewhoops",
+     "Brille: digital"
+    ]
+   },
+   "en_us": {
+    "summary": "Clarity HD Pro – best image for freestyle",
+    "what": [
+     "Digital · 24 ms · 650 blocks · 24 g · 1 W",
+     "+ best image (quality 1.0)",
+     "+ lower latency than standard HD (24/30 ms)",
+     "+ more range (650 instead of 520 blocks)",
+     "− fragile (durability 0.8)"
+    ],
+    "use": [
+     "For freestyle, cinematic, cinewhoops",
+     "Goggles: digital"
+    ]
+   }
+  },
+  "basics": {
+   "mass_g": 24,
+   "stack_size": 0,
+   "sort": 505,
+   "creative": true,
+   "durability": 0.8,
+   "recycle": null,
+   "accent": "#b08d57",
+   "render_model": null
+  },
+  "data": {
+   "link": "digital",
+   "latency_ms": 24,
+   "range_blocks": 650,
+   "image_quality": 1,
+   "camera_width_mm": 20,
+   "camera_fov_deg": 130,
+   "vtx_power_mw": 1000,
+   "power_w": 9,
+   "antenna": {
+    "count": 2,
+    "length_mm": 100,
+    "cap": "lollipop",
+    "kind": "hd",
+    "derived": true
+   }
+  },
+  "derived": {},
+  "paint": {
+   "slots": [
+    "camera",
+    "antenna"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "camera": "#b08d57",
+    "antenna": "#c0392b"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/justmoreparts/items/digital_hd_pro.json",
+   "drone": "assets/justmoreparts/items/drone_render/video/digital_hd_pro.json",
+   "variants": [
+    "assets/justmoreparts/items/drone_render/video/digital_hd_pro_paint.json"
+   ],
+   "textures": [
+    "assets/justmoreparts/textures/item/part/video/digital_hd_pro.png",
+    "assets/justmoreparts/textures/item/part/video/digital_hd_pro_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "justmoreparts:digital_lr",
+  "category": "video",
+  "builtin": false,
+  "name": {
+   "de_de": "Digitales Long-Range-Videosystem (Horizon LR)",
+   "en_us": "Digital Long Range Video System (Horizon LR)"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "Horizon LR – digitales Long Range",
+    "what": [
+     "Digital · 32 ms · 900 Blöcke · 19 g · 1,2 W",
+     "+ größte Reichweite (900 Blöcke)",
+     "+ klares Bild auch weit weg",
+     "− mehr Latenz (32 ms)",
+     "− 19 g schwer"
+    ],
+    "use": [
+     "Für Long Range und X-Class",
+     "Brille: digital"
+    ]
+   },
+   "en_us": {
+    "summary": "Horizon LR – digital long range",
+    "what": [
+     "Digital · 32 ms · 900 blocks · 19 g · 1.2 W",
+     "+ longest range (900 blocks)",
+     "+ clear image even far away",
+     "− more latency (32 ms)",
+     "− weighs 19 g"
+    ],
+    "use": [
+     "For long range and X-Class",
+     "Goggles: digital"
+    ]
+   }
+  },
+  "basics": {
+   "mass_g": 19,
+   "stack_size": 0,
+   "sort": 506,
+   "creative": true,
+   "durability": 1,
+   "recycle": null,
+   "accent": "#238636",
+   "render_model": null
+  },
+  "data": {
+   "link": "digital",
+   "latency_ms": 32,
+   "range_blocks": 900,
+   "image_quality": 0.9,
+   "camera_width_mm": 19,
+   "camera_fov_deg": 130,
+   "vtx_power_mw": 1200,
+   "power_w": 10,
+   "antenna": {
+    "count": 2,
+    "length_mm": 150,
+    "cap": "pagoda",
+    "kind": "long_range",
+    "derived": true
+   }
+  },
+  "derived": {},
+  "paint": {
+   "slots": [
+    "camera",
+    "antenna"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "camera": "#238636",
+    "antenna": "#c0392b"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/justmoreparts/items/digital_lr.json",
+   "drone": "assets/justmoreparts/items/drone_render/video/digital_lr.json",
+   "variants": [
+    "assets/justmoreparts/items/drone_render/video/digital_lr_paint.json"
+   ],
+   "textures": [
+    "assets/justmoreparts/textures/item/part/video/digital_lr.png",
+    "assets/justmoreparts/textures/item/part/video/digital_lr_paint.png"
+   ]
+  }
+ }
+]
