@@ -1,8 +1,12 @@
 // Paint of the drone viewer, as in Propwash 0.4.0: every paintable model has tint groups (drone_paint.json), each
 // group belongs to a paint channel with a reference grey. A painted part swaps to its "_paint" model and multiplies
 // each tint group with PaintChannel.tint(colour); parts without any painted group keep the unpainted model.
+//
+// VTX antennas (Propwash 0.6.0): the antenna piece is drawn from shapes, not from a model. Its slot starts with the
+// colour of its cap (AntennaGeometry.capColor), and a colour on the slot recolours the caps (DroneVisuals.paintShape).
 
-import { PROP_SLOTS } from './assembly.js?v=44cf305a';
+import { capColor, paintedAntenna, antennaPieces } from './antenna.js?v=d6dc6e8a';
+import { PROP_SLOTS } from './assembly.js?v=37a74b6c';
 
 const CHANNEL_SLOT = Object.freeze({
   frame: 'frame', tpu: 'tpu', motor: 'motors', stack: 'stack', battery: 'battery', camera: 'camera', antenna: 'antenna',
@@ -162,6 +166,7 @@ export function paintTints(groups, paint, propPosition, channels) {
 
 /** Tint groups of a placed piece (from its model file or, for the top mount, render.json). */
 export function groupsOf(piece, model, render) {
+  if (piece.role === 'antenna') return null;
   if (piece.role === 'accessory_base') {
     const base = render.accessory_bases && render.accessory_bases[piece.mount];
     return base ? base.groups : null;
@@ -185,6 +190,7 @@ const ROLE_CHANNEL = Object.freeze({
  * @param {Array<[string, string]>|null} groups tint groups of the piece (groupsOf)
  */
 export function pieceSlots(piece, groups) {
+  if (piece.role === 'antenna') return { groups: [], main: 'antenna' };
   const slots = (groups || []).map(([channel]) => slotOf(channel, piece.paintPosition || 0));
   const own = (groups || []).findIndex(([channel]) => channel === ROLE_CHANNEL[piece.role]);
   return { groups: slots, main: (own >= 0 ? slots[own] : slots.find(Boolean)) || null };
@@ -206,9 +212,14 @@ function paintOrder(pieces) {
   return order;
 }
 
-/** PaintPicker.defaults: original colour per slot from the tint groups of the assembled parts. */
+/**
+ * PaintPicker.defaults: original colour per slot from the tint groups of the assembled parts; the antenna slot first
+ * from the cap of the antenna drawn at the frame.
+ */
 export function paintDefaults(pieces, modelOf, render) {
   const out = {};
+  const antenna = pieces.find((p) => p.role === 'antenna' && p.antenna);
+  if (antenna) out.antenna = hexOf(capColor(antenna.antenna));
   for (const piece of paintOrder(pieces)) {
     const groups = groupsOf(piece, modelOf(piece.id), render);
     for (const [channel, base] of groups || []) {
@@ -223,15 +234,25 @@ export function paintDefaults(pieces, modelOf, render) {
   return out;
 }
 
-/** PaintPicker.available: the slots this build shows (all when no part has paint groups). */
+/**
+ * PaintPicker.available: the slots this build shows (all when no part has paint groups); the antenna drawn at the frame
+ * always offers its slot.
+ */
 export function paintAvailable(pieces, modelOf, render, allSlots) {
   const channels = new Set();
   for (const piece of pieces) {
     for (const [channel] of groupsOf(piece, modelOf(piece.id), render) || []) channels.add(channel);
   }
   if (!channels.size) return new Set(allSlots);
+  if (pieces.some((p) => p.role === 'antenna' && p.antenna)) channels.add('antenna');
   return new Set(allSlots.filter((slot) => {
     const channel = PROP_SLOTS.includes(slot) ? 'prop' : Object.keys(CHANNEL_SLOT).find((c) => CHANNEL_SLOT[c] === slot);
     return channels.has(channel);
   }));
+}
+
+/** The shapes of an antenna piece with the paint on it: the caps in the antenna slot's colour when it is painted. */
+export function antennaShapes(piece, paint) {
+  const color = paint && paint.antenna;
+  return paintedAntenna(antennaPieces(piece.antenna, piece.tilt, piece.wheelbase), color ? rgbOf(color) : null);
 }
