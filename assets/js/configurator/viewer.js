@@ -27,8 +27,8 @@ import {
 } from '../../vendor/three/three.min.js';
 import {
   assemble, proceduralFrame, proceduralAccessoryBase, pieceCategory, MM_PER_MODEL_UNIT, PROP_SLOTS,
-} from './assembly.js?v=37a74b6c';
-import { paintTints, groupsOf, pieceSlots, rgbOf, slotOf, shade, antennaShapes } from './paint.js?v=9c4a7433';
+} from './assembly.js?v=376f5101';
+import { paintTints, groupsOf, pieceSlots, rgbOf, slotOf, shade, antennaShapes } from './paint.js?v=5d735de8';
 import { discCenter, verticalFov, ASPECT as FPV_ASPECT, SLOTS } from './fpv.js?v=76cdbbe6';
 
 const MAX_TINTS = 8;

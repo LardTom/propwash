@@ -13,17 +13,19 @@
 // VTX antennas (Propwash 0.6.0, DroneAssembly#antennaPart, AntennaRules, AntennaGeometry, AntennaMask): the VTX's
 // antennas are drawn from shapes (antenna.js) as a piece of their own, role 'antenna', procedural 'antenna', at the
 // frame's antenna holder (antenna_anchor, else AntennaRules.fallbackAnchor; a point "antenna" in drone_layout.json
-// still moves it) with the holder's tilt and never the camera angle; { antenna: {count, lengthMm, cap, kind}, tilt,
-// wheelbase } say what to draw. It belongs to the video part and paints the antenna slot. The video unit leaves out
-// the faces of its "antenna…" elements (`hideFaces`, the list "antenna" of the model's base variant). A VTX model
-// without that list comes from an older export whose models still carry their antennas: then the VTX is drawn as
-// before and gets no antenna piece, so no antenna sits twice.
+// still moves it) with the holder's tilt and never the camera angle; { antenna: {count, lengthMm, cap, kind} (cut to
+// the frame's longest antenna), tilt, wheelbase, pairLean, behindPack } say what to draw. A pack on top that reaches
+// further back than the holder moves the antenna 5 mm behind its rear (DroneAssembly#behindPackMm, `behindPack` mm)
+// and the holder reaches forward by as much. It belongs to the video part and paints the antenna slot. The video unit
+// leaves out the faces of its "antenna…" elements (`hideFaces`, the list "antenna" of the model's base variant). A VTX
+// model without that list comes from an older export whose models still carry their antennas: then the VTX is drawn
+// as before and gets no antenna piece, so no antenna sits twice.
 //
 // Battery plugged in (Propwash 0.6.0, PowerLead / PlugMask): a drone with its battery shows no plugs and no power leads.
 // The stack is drawn as its "_mounted" variant (without its own plug) and without its two power leads (pigtail), the
 // battery without its socket and the lead to it; `hide` lists the indices of the left-out model elements.
 
-import { frameAntennaAnchor, videoAntenna } from './antenna.js?v=d6dc6e8a';
+import { frameAntennaAnchor, videoAntenna } from './antenna.js?v=bc5d352c';
 
 export const SLOTS = 4;
 export const FRONT_LEFT = 0;
@@ -31,6 +33,8 @@ export const FRONT_RIGHT = 1;
 export const REAR_LEFT = 2;
 export const REAR_RIGHT = 3;
 export const MM_PER_MODEL_UNIT = 8;
+// DroneAssembly.PACK_GAP_MM: the antenna's distance behind an overhanging pack.
+export const PACK_GAP_MM = 5;
 export const PROP_SLOTS = Object.freeze(['prop_fl', 'prop_fr', 'prop_rl', 'prop_rr']);
 
 const PROPS_IN_CCW = [false, true, true, false];
@@ -256,14 +260,61 @@ export function antennaMask(model) {
 }
 
 /**
- * DroneAssembly.antennaPart: the VTX's antennas (AntennaRules.antenna) at the frame's antenna holder with its tilt,
- * drawn from shapes and not turned by the camera angle; null for a VTX model of an older export (antennas in the model).
+ * DroneRenderResources#packRear: the rear end (largest z, mm around the model point) of a battery model's base variant
+ * without its plug and leads (the elements PlugMask hides, see plugElements); NaN for none.
  */
-export function antennaPiece(layout, frame, video, env) {
+export function packRear(model) {
+  const variant = model && model.variants && model.variants.base;
+  if (!variant) return NaN;
+  const elements = variantElements(model, variant);
+  const leads = new Set(variant.socket ? plugElements(elements, variant.socket) : []);
+  let rear = NaN;
+  elements.forEach((el, i) => {
+    if (leads.has(i)) return;
+    const z = elementBox(el)[5];
+    rear = Number.isNaN(rear) ? z : Math.max(rear, z);
+  });
+  return rear;
+}
+
+/** FallbackShapes.buildBattery, its rear: half the pack's length, the connector 8 mm behind it from 2 cells. */
+export function fallbackPackRear(battery, catalog) {
+  const pack = battery.data && battery.data.pack_mm;
+  const length = Array.isArray(pack) && pack.length === 3 && finite(pack[0]) ? pack[0] : 2.2 * packHeight(battery, catalog);
+  return battery.data && battery.data.cells > 1 ? length / 2 + 8 : length / 2;
+}
+
+/**
+ * DroneAssembly#behindPackMm: how far a pack on top reaches behind the antenna holder plus PACK_GAP_MM, else 0 (pack
+ * under the frame, no battery). The rear of the pack from its model (packRear), without a model from FallbackShapes.
+ */
+export function behindPackMm(layout, frame, batteryAt, env) {
+  if (!batteryAt || batteryBelow(frame)) return 0;
+  const model = env.model(batteryAt.id);
+  let rear;
+  if (model) {
+    rear = packRear(model);
+  } else {
+    const battery = env.catalog.part(batteryAt.id);
+    rear = battery ? fallbackPackRear(battery, env.catalog) : NaN;
+  }
+  if (!finite(rear)) return 0;
+  return Math.max(0, batteryAt.position[2] + rear + PACK_GAP_MM - layout.antenna[2]);
+}
+
+/**
+ * DroneAssembly.antennaPart: the VTX's antennas (AntennaRules.antenna(video, frame)) at the frame's antenna holder with
+ * its tilt and lean of a pair, behind an overhanging pack (batteryAt: the battery piece), drawn from shapes and not
+ * turned by the camera angle; null for a VTX model of an older export (antennas in the model).
+ */
+export function antennaPiece(layout, frame, video, env, batteryAt = null) {
   if (antennaMask(env.model(video.id)) === null) return null;
+  const holder = frameAntennaAnchor(frame);
+  const behind = behindPackMm(layout, frame, batteryAt, env);
+  const [x, y, z] = layout.antenna;
   return {
-    role: 'antenna', id: video.id, position: layout.antenna.slice(), procedural: 'antenna', antenna: videoAntenna(video),
-    tilt: layout.antennaTilt, wheelbase: frame.data.wheelbase_mm,
+    role: 'antenna', id: video.id, position: [x, y, z + behind], procedural: 'antenna', antenna: videoAntenna(video, frame),
+    tilt: layout.antennaTilt, wheelbase: frame.data.wheelbase_mm, pairLean: holder.pairLeanDeg, behindPack: behind,
   };
 }
 
@@ -318,7 +369,7 @@ export function assemble(build, env) {
     const mask = antennaMask(env.model(video.id));
     if (mask && mask.length) videoPiece.hideFaces = mask;
     pieces.push(videoPiece);
-    const antenna = antennaPiece(layout, frame, video, env);
+    const antenna = antennaPiece(layout, frame, video, env, batteryAt);
     if (antenna) pieces.push(antenna);
   }
 

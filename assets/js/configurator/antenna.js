@@ -1,33 +1,46 @@
 // VTX antennas of Propwash 0.6.0 in the browser: ports of build.AntennaRules, drone.client.render.AntennaGeometry and
-// drone.client.render.AntennaMask.
+// drone.client.render.AntennaMask, as of F-ANTENNA4-1.
 //
 // In the game the antennas are no part of the VTX model any more. The frame carries an antenna holder (antenna_anchor:
-// position and tilt, else AntennaRules.fallbackAnchor), the VTX says what sits on it (antenna: count, length and cap,
-// else derived from range, mass, video system, image quality and latency), and the renderer builds holder, SMA,
-// sleeve, stalk and cap as shapes at the holder, never turned by the camera angle. Elements whose name starts with
-// "antenna" in a VTX model (add-on VTX) are left out where the drone is drawn (AntennaMask), so no antenna sits twice.
+// position and tilt, else AntennaRules.fallbackAnchor right at the rear, 12 mm behind the top plate, tilt 45°), the VTX
+// says what sits on it (antenna: count, length and cap, else derived from range, mass, video system, image quality and
+// latency), cut to the frame's longest antenna (1.2 × wheelbase), and the renderer builds holder, SMA, sleeve, stalk
+// and cap as shapes at the holder, never turned by the camera angle: one antenna in the middle straight up and back, a
+// pair in a V from one point (15° each, narrower on small open frames). Elements whose name starts with "antenna" in a
+// VTX model (add-on VTX) are left out where the drone is drawn (AntennaMask), so no antenna sits twice.
 //
 // All lengths are millimetres in the drone's frame (x to the right, y up, z to the rear), like assembly.js.
 //
 //   antennaKind(values) / derivedAntenna(values)   values: {rangeBlocks, massGrams, link, imageQuality, latencyMs, vtxPowerMw}
 //   fallbackAnchor(values)                         values: {wheelbaseMm, batteryOnTop, batteryPlateMm, electronicsMm,
 //                                                           cameraY (null without a camera position), ducted}
-//   videoAntenna(part) / frameAntennaAnchor(part)  the same from a catalog entry (parts.json data, the export's own
-//                                                  antenna and antenna_anchor first)
-//   antennaPieces(antenna, tiltDeg, wheelbaseMm)   the shapes of AntennaGeometry.pieces: {name, kind, matrix, segments, color}
+//   maxLengthMm(values) / pairLeanDeg(values)      the frame's longest antenna and the lean of each antenna of a pair
+//   videoAntenna(part, frame?) / frameAntennaAnchor(part)
+//                                                  the same from a catalog entry (parts.json data, the export's own
+//                                                  antenna and antenna_anchor first; with a frame cut to its longest)
+//   antennaPieces(antenna, tiltDeg, wheelbaseMm, pairLeanDeg?, behindPackMm?)
+//                                                  the shapes of AntennaGeometry.pieces: {name, kind, matrix, segments, color}
 //   antennaFaces(model)                            indices of the faces AntennaMask leaves out of a block model (counted
 //                                                  like the compact model files: element by element, faces in the order
 //                                                  down, up, north, south, west, east)
 
-export const DEFAULT_ANTENNA_TILT = 35.0;
+export const DEFAULT_ANTENNA_TILT = 45.0;
 export const LONG_RANGE_BLOCKS = 700;
 export const WHOOP_MAX_GRAMS = 6.0;
 export const HD_MIN_QUALITY = 0.95;
 export const RACE_MAX_LATENCY_MS = 16;
-export const WHOOP_REAR_OF_WHEELBASE = 0.15;
+export const RACE_MIN_MM = 45.0;
+export const RACE_MAX_MM = 60.0;
+export const MAX_LENGTH_OF_WHEELBASE = 1.2;
+export const PAIR_LEAN_DEG = 15.0;
+export const MIN_PAIR_LEAN_DEG = 5.0;
+export const NARROW_SPREAD_WHEELBASE_MM = 100.0;
+export const FULL_SPREAD_WHEELBASE_MM = 200.0;
+export const WHOOP_REAR_OF_WHEELBASE = 0.18;
 export const REAR_OF_WHEELBASE = 0.22;
 export const LARGE_WHEELBASE_MM = 300.0;
 export const LARGE_REAR_GROWTH = 0.065;
+export const BEHIND_PLATE_MM = 12.0;
 export const ABOVE_ELECTRONICS = 2.4;
 export const ABOVE_DUCTED_CAMERA_MM = 6.0;
 export const CAPS = Object.freeze(['whip', 'stubby', 'lollipop', 'pagoda', 'patch']);
@@ -39,12 +52,15 @@ export const MAX_LENGTH_MM = 250.0;
 export const ANTENNA_COLORS = Object.freeze({
   stalk: 0x111111, sleeve: 0x202022, mount: 0x262628, sma: 0xb08d3c, cap: 0xc83232, capLight: 0xe4e4e2,
 });
-export const SINGLE_LEAN_DEG = 12.0;
-export const V_LEAN_DEG = 25.0;
-export const MAX_OFFSET_MM = 7.0;
+export const SINGLE_LEAN_DEG = 0.0;
+export const V_LEAN_DEG = 15.0;
+export const MAX_OFFSET_MM = 0.0;
 export const OFFSET_OF_WHEELBASE = 0.06;
 export const BASE_Y_MM = 0.8;
-export const BASE_Z_MM = 4.5;
+export const BASE_Z_MM = 0.5;
+export const MOUNT_REACH_MM = 16.0;
+export const MOUNT_REACH_OF_WHEELBASE = 0.12;
+export const MOUNT_REAR_MM = 3.5;
 export const SMA_MM = 3.0;
 
 export const MASK_PREFIX = 'antenna';
@@ -75,7 +91,7 @@ export function derivedAntenna(v) {
       const power = v.vtxPowerMw > 0 ? v.vtxPowerMw : 25;
       return { count: 1, lengthMm: 30.0 + 5.0 * clamp((power - 25) / 175.0, 0.0, 1.0), cap: 'whip' };
     }
-    case 'race': return { count: 1, lengthMm: clamp(45.0 + (range - 380) / 28.0, 40.0, 50.0), cap: v.link === 'analog' ? 'lollipop' : 'stubby' };
+    case 'race': return { count: 1, lengthMm: clamp(50.0 + (range - 380) / 14.0, RACE_MIN_MM, RACE_MAX_MM), cap: v.link === 'analog' ? 'lollipop' : 'stubby' };
     case 'lite': return { count: 1, lengthMm: 60.0, cap: 'lollipop' };
     case 'hd': return { count: 2, lengthMm: 90.0 + clamp((range - 520) / 13.0, 0.0, 10.0), cap: 'lollipop' };
     default: return {
@@ -95,18 +111,39 @@ export function validAntenna(a) {
   return { count, lengthMm: length, cap: a.cap };
 }
 
+/** AntennaRules.maxLengthMm: the frame's longest antenna, 1.2 × wheelbase to half a millimetre, 10 to 250 mm. */
+export function maxLengthMm(v) {
+  const max = Math.round(MAX_LENGTH_OF_WHEELBASE * v.wheelbaseMm * 2.0) / 2.0;
+  return clamp(max, MIN_LENGTH_MM, MAX_LENGTH_MM);
+}
+
+/**
+ * AntennaRules.pairLeanDeg: the lean of each antenna of a pair – 15° on ducted frames and from 200 mm wheelbase,
+ * narrower below (none of it at 100 mm, at least 5°), rounded to 0.1°.
+ */
+export function pairLeanDeg(v) {
+  if (v.ducted || v.wheelbaseMm >= FULL_SPREAD_WHEELBASE_MM) return PAIR_LEAN_DEG;
+  const share = (v.wheelbaseMm - NARROW_SPREAD_WHEELBASE_MM) / (FULL_SPREAD_WHEELBASE_MM - NARROW_SPREAD_WHEELBASE_MM);
+  return Math.round(Math.max(MIN_PAIR_LEAN_DEG, PAIR_LEAN_DEG * share) * 10.0) / 10.0;
+}
+
+/** AntennaRules.antenna(video, frame): the antenna cut to the frame's longest antenna. */
+export function fittedAntenna(antenna, maxMm) {
+  return finite(maxMm) && antenna.lengthMm > maxMm ? { ...antenna, lengthMm: maxMm } : antenna;
+}
+
 /**
  * AntennaRules.fallbackAnchor: centre; on the battery plate (pack on top), else 2.4 × the electronics height and at
- * least the lens (+ 6 mm in a duct); 0.15 × wheelbase to the rear for a whoop (duct, pack below), 0.22 × wheelbase up
- * to 300 mm and flatter beyond; both rounded to 0.1 mm; tilt 35°.
+ * least the lens (+ 6 mm in a duct); 0.18 × wheelbase to the rear for a whoop (duct, pack below), else 12 mm behind
+ * the top plate (0.22 × wheelbase up to 300 mm and flatter beyond); both rounded to 0.1 mm; tilt 45°.
  */
 export function fallbackAnchor(v) {
   const wheelbase = v.wheelbaseMm;
   const whoop = !v.batteryOnTop && v.ducted;
   let z;
   if (whoop) z = WHOOP_REAR_OF_WHEELBASE * wheelbase;
-  else if (wheelbase <= LARGE_WHEELBASE_MM) z = REAR_OF_WHEELBASE * wheelbase;
-  else z = REAR_OF_WHEELBASE * LARGE_WHEELBASE_MM + LARGE_REAR_GROWTH * (wheelbase - LARGE_WHEELBASE_MM);
+  else if (wheelbase <= LARGE_WHEELBASE_MM) z = REAR_OF_WHEELBASE * wheelbase + BEHIND_PLATE_MM;
+  else z = REAR_OF_WHEELBASE * LARGE_WHEELBASE_MM + LARGE_REAR_GROWTH * (wheelbase - LARGE_WHEELBASE_MM) + BEHIND_PLATE_MM;
   let y;
   if (v.batteryOnTop) {
     y = v.batteryPlateMm;
@@ -126,11 +163,15 @@ export function videoValues(part) {
   };
 }
 
-/** AntennaRules.antenna of a catalog entry: the export's antenna when it is valid, else derived; with its kind. */
-export function videoAntenna(part) {
+/**
+ * AntennaRules.antenna of a catalog entry: the export's antenna when it is valid, else derived; with its kind. With a
+ * frame (AntennaRules.antenna(video, frame)) cut to the frame's longest antenna.
+ */
+export function videoAntenna(part, frame) {
   const values = videoValues(part);
   const own = validAntenna(part.data && part.data.antenna);
-  return { ...(own || derivedAntenna(values)), kind: antennaKind(values) };
+  const antenna = { ...(own || derivedAntenna(values)), kind: antennaKind(values) };
+  return frame ? fittedAntenna(antenna, frameAntennaAnchor(frame).maxLengthMm) : antenna;
 }
 
 /** The values AntennaRules reads from a frame, from a catalog entry (parts.json). */
@@ -143,14 +184,22 @@ export function frameValues(part) {
   };
 }
 
-/** AntennaRules.anchor of a catalog entry: the export's antenna_anchor when it is valid, else the fallback. */
+/**
+ * AntennaRules.anchor of a catalog entry: the export's antenna_anchor when it is valid, else the fallback; with the
+ * frame's longest antenna and lean of a pair (max_length_mm and pair_lean_deg of the export, else from the frame).
+ */
 export function frameAntennaAnchor(part) {
   const a = part.data && part.data.antenna_anchor;
+  const values = frameValues(part);
+  const limits = {
+    maxLengthMm: a && finite(a.max_length_mm) ? a.max_length_mm : maxLengthMm(values),
+    pairLeanDeg: a && finite(a.pair_lean_deg) ? a.pair_lean_deg : pairLeanDeg(values),
+  };
   if (a && Array.isArray(a.pos) && a.pos.length === 3 && a.pos.every(finite)) {
-    return { position: a.pos.slice(), tilt: finite(a.tilt_deg) ? a.tilt_deg : DEFAULT_ANTENNA_TILT, explicit: a.explicit !== false };
+    return { position: a.pos.slice(), tilt: finite(a.tilt_deg) ? a.tilt_deg : DEFAULT_ANTENNA_TILT, explicit: a.explicit !== false, ...limits };
   }
-  const f = fallbackAnchor(frameValues(part));
-  return { position: [f.x, f.y, f.z], tilt: f.tiltDeg, explicit: false };
+  const f = fallbackAnchor(values);
+  return { position: [f.x, f.y, f.z], tilt: f.tiltDeg, explicit: false, ...limits };
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -188,9 +237,14 @@ export function transformPoint(m, x, y, z) {
   return [m[0] * x + m[1] * y + m[2] * z + m[3], m[4] * x + m[5] * y + m[6] * z + m[7], m[8] * x + m[9] * y + m[10] * z + m[11]];
 }
 
-/** AntennaGeometry.offsetMm: half the distance of a V pair, 0.06 × wheelbase, at most 7 mm. */
+/** AntennaGeometry.offsetMm: half the distance of a V pair; 0 since both antennas of a pair start from one point. */
 export function antennaOffset(wheelbaseMm) {
   return Math.min(MAX_OFFSET_MM, OFFSET_OF_WHEELBASE * wheelbaseMm);
+}
+
+/** AntennaGeometry.reachMm: how far the holder reaches forward to the top plate, 0.12 × wheelbase, at most 16 mm. */
+export function reachMm(wheelbaseMm) {
+  return Math.min(MOUNT_REACH_MM, MOUNT_REACH_OF_WHEELBASE * wheelbaseMm);
 }
 
 function box(x0, y0, z0, x1, y1, z1) {
@@ -202,10 +256,14 @@ function rod(out, name, frame, from, to, width, segments, color) {
   out.push({ name, kind: 'cylinder', matrix: mul(mul(frame, translation(0, (from + to) * 0.5, 0)), scaling(width, to - from, width)), segments, color });
 }
 
-function antennaFrame(count, index, tiltDeg, offset) {
-  const side = count === 1 ? -1.0 : (index === 0 ? -1.0 : 1.0);
-  const lean = count === 1 ? SINGLE_LEAN_DEG : V_LEAN_DEG;
-  return mul(mul(translation(side * offset, BASE_Y_MM, BASE_Z_MM), rotationX(tiltDeg)), rotationZ(-side * lean));
+// AntennaGeometry.side: one antenna in the middle, a pair to the left and the right.
+const side = (count, index) => (count === 1 ? 0.0 : (index === 0 ? -1.0 : 1.0));
+const leanOf = (pairLeanDeg) => (finite(pairLeanDeg) ? pairLeanDeg : V_LEAN_DEG);
+
+function antennaFrame(count, index, tiltDeg, offset, pairLean) {
+  const s = side(count, index);
+  const lean = count === 1 ? SINGLE_LEAN_DEG : leanOf(pairLean);
+  return mul(mul(translation(s * offset, BASE_Y_MM, BASE_Z_MM), rotationX(tiltDeg)), rotationZ(-s * lean));
 }
 
 function whip(out, frame, antenna) {
@@ -216,9 +274,9 @@ function whip(out, frame, antenna) {
     case 'whip': {
       const sleeve = SMA_MM + 0.3 * length;
       const tip = 0.65 * length;
-      rod(out, 'sleeve', frame, SMA_MM, sleeve, 2.6, 8, C.sleeve);
-      rod(out, 'stalk', frame, sleeve, tip, 1.6, 6, C.stalk);
-      rod(out, 'tip', frame, tip, length, 1.2, 6, C.capLight);
+      rod(out, 'sleeve', frame, SMA_MM, sleeve, 3.0, 8, C.sleeve);
+      rod(out, 'stalk', frame, sleeve, tip, 2.0, 6, C.stalk);
+      rod(out, 'tip', frame, tip, length, 1.6, 6, C.capLight);
       break;
     }
     case 'stubby': {
@@ -259,17 +317,20 @@ function whip(out, frame, antenna) {
 }
 
 /**
- * AntennaGeometry.pieces: the holder (two boxes as wide as the pair) and per antenna the SMA nut and the antenna of
- * its cap, tilted back by the holder's tilt and leaning out (one antenna 12° to the left, a pair 25° in a V), around
- * the holder at (0, 0, 0). matrix: the unit cube or cylinder (−0.5…0.5, cylinder along y) into the drone's millimetres.
+ * AntennaGeometry.pieces / shape: the TPU holder (two boxes, the lower one reaching forward to the top plate, and by
+ * behindPackMm further when the antenna sits behind an overhanging pack) and per antenna the SMA nut and the antenna
+ * of its cap, tilted back by the holder's tilt – one antenna in the middle, a pair in a V from one point, each
+ * leaning out by pairLeanDeg (15° by default) – around the holder at (0, 0, 0). matrix: the unit cube or cylinder
+ * (−0.5…0.5, cylinder along y) into the drone's millimetres.
  */
-export function antennaPieces(antenna, tiltDeg, wheelbaseMm) {
+export function antennaPieces(antenna, tiltDeg, wheelbaseMm, pairLeanDeg, behindPackMm = 0) {
   const out = [];
   const offset = antennaOffset(wheelbaseMm);
-  const half = offset + 3.5;
-  out.push({ name: 'mount', kind: 'box', matrix: box(-half, -6.0, -3.0, half, -2.6, 6.5), segments: 0, color: ANTENNA_COLORS.mount });
-  out.push({ name: 'mount', kind: 'box', matrix: box(-half, -2.6, 0.3, half, -0.4, 6.5), segments: 0, color: ANTENNA_COLORS.mount });
-  for (let i = 0; i < antenna.count; i++) whip(out, antennaFrame(antenna.count, i, tiltDeg, offset), antenna);
+  const reach = reachMm(wheelbaseMm) + Math.max(0.0, finite(behindPackMm) ? behindPackMm : 0.0);
+  const half = (antenna.count === 1 ? 0.0 : offset) + 3.5;
+  out.push({ name: 'mount', kind: 'box', matrix: box(-half, -6.0, -Math.max(3.0, reach), half, -2.6, MOUNT_REAR_MM), segments: 0, color: ANTENNA_COLORS.mount });
+  out.push({ name: 'mount', kind: 'box', matrix: box(-half, -2.6, -3.0, half, -0.4, MOUNT_REAR_MM), segments: 0, color: ANTENNA_COLORS.mount });
+  for (let i = 0; i < antenna.count; i++) whip(out, antennaFrame(antenna.count, i, tiltDeg, offset, pairLeanDeg), antenna);
   return out;
 }
 
@@ -279,14 +340,14 @@ export function capColor(antenna) {
 }
 
 /** AntennaGeometry.axis: direction of antenna number index from the holder. */
-export function antennaAxis(antenna, tiltDeg, index) {
-  const m = antennaFrame(antenna.count, index, tiltDeg, 0);
+export function antennaAxis(antenna, tiltDeg, index, pairLeanDeg) {
+  const m = antennaFrame(antenna.count, index, tiltDeg, 0, pairLeanDeg);
   return [m[1], m[5], m[9]];
 }
 
 /** The tip of antenna number index (the far end of its cap) relative to the holder. */
-export function antennaTip(antenna, tiltDeg, wheelbaseMm, index) {
-  return transformPoint(antennaFrame(antenna.count, index, tiltDeg, antennaOffset(wheelbaseMm)), 0, antenna.lengthMm, 0);
+export function antennaTip(antenna, tiltDeg, wheelbaseMm, index, pairLeanDeg) {
+  return transformPoint(antennaFrame(antenna.count, index, tiltDeg, antennaOffset(wheelbaseMm), pairLeanDeg), 0, antenna.lengthMm, 0);
 }
 
 /** DroneVisuals.paintShape: a painted antenna slot recolours the caps (both cap colours) of the antenna shapes. */

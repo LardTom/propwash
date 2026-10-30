@@ -5,8 +5,8 @@
 // VTX antennas (Propwash 0.6.0): the antenna piece is drawn from shapes, not from a model. Its slot starts with the
 // colour of its cap (AntennaGeometry.capColor), and a colour on the slot recolours the caps (DroneVisuals.paintShape).
 
-import { capColor, paintedAntenna, antennaPieces } from './antenna.js?v=d6dc6e8a';
-import { PROP_SLOTS } from './assembly.js?v=37a74b6c';
+import { capColor, paintedAntenna, antennaPieces } from './antenna.js?v=bc5d352c';
+import { PROP_SLOTS } from './assembly.js?v=376f5101';
 
 const CHANNEL_SLOT = Object.freeze({
   frame: 'frame', tpu: 'tpu', motor: 'motors', stack: 'stack', battery: 'battery', camera: 'camera', antenna: 'antenna',
@@ -254,5 +254,5 @@ export function paintAvailable(pieces, modelOf, render, allSlots) {
 /** The shapes of an antenna piece with the paint on it: the caps in the antenna slot's colour when it is painted. */
 export function antennaShapes(piece, paint) {
   const color = paint && paint.antenna;
-  return paintedAntenna(antennaPieces(piece.antenna, piece.tilt, piece.wheelbase), color ? rgbOf(color) : null);
+  return paintedAntenna(antennaPieces(piece.antenna, piece.tilt, piece.wheelbase, piece.pairLean, piece.behindPack), color ? rgbOf(color) : null);
 }
