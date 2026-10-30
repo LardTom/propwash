@@ -94,10 +94,12 @@
     "pos": [
      0,
      23.2,
-     9.2
+     11.5
     ],
-    "tilt_deg": 35,
-    "explicit": true
+    "tilt_deg": 45,
+    "explicit": true,
+    "max_length_mm": 78,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.0035,
@@ -246,10 +248,12 @@
     "pos": [
      0,
      24,
-     34
+     46
     ],
-    "tilt_deg": 35,
-    "explicit": true
+    "tilt_deg": 45,
+    "explicit": true,
+    "max_length_mm": 170.5,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.012,
@@ -398,10 +402,12 @@
     "pos": [
      0,
      28.5,
-     50
+     64
     ],
-    "tilt_deg": 35,
-    "explicit": true
+    "tilt_deg": 45,
+    "explicit": true,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.012,
@@ -543,10 +549,12 @@
     "pos": [
      0,
      20,
-     44
+     54
     ],
-    "tilt_deg": 35,
-    "explicit": true
+    "tilt_deg": 45,
+    "explicit": true,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.009,
@@ -689,10 +697,12 @@
     "pos": [
      0,
      32.5,
-     62
+     72
     ],
-    "tilt_deg": 35,
-    "explicit": true
+    "tilt_deg": 45,
+    "explicit": true,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.016,
@@ -813,10 +823,12 @@
     "pos": [
      0,
      24.5,
-     9.8
+     11.7
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 78,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.0034,
@@ -945,10 +957,12 @@
     "pos": [
      0,
      25,
-     11.3
+     13.5
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 90,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.0045,
@@ -1077,10 +1091,12 @@
     "pos": [
      0,
      27,
-     12.8
+     15.3
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 102,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.0056,
@@ -1210,10 +1226,12 @@
     "pos": [
      0,
      7,
-     19.8
+     31.8
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 108,
+    "pair_lean_deg": 5
    },
    "aero": {
     "frontal_area_m2": 0.0035,
@@ -1354,10 +1372,12 @@
     "pos": [
      0,
      9,
-     24.2
+     36.2
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 132,
+    "pair_lean_deg": 5
    },
    "aero": {
     "frontal_area_m2": 0.0045,
@@ -1499,10 +1519,12 @@
     "pos": [
      0,
      16,
-     24.6
+     36.6
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 134.5,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.009,
@@ -1652,10 +1674,12 @@
     "pos": [
      0,
      12,
-     27.5
+     39.5
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 150,
+    "pair_lean_deg": 5
    },
    "aero": {
     "frontal_area_m2": 0.0058,
@@ -1796,10 +1820,12 @@
     "pos": [
      0,
      20,
-     34.8
+     46.8
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 189.5,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.0137,
@@ -1949,10 +1975,12 @@
     "pos": [
      0,
      14,
-     35
+     47
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 191,
+    "pair_lean_deg": 8.9
    },
    "aero": {
     "frontal_area_m2": 0.0072,
@@ -2094,10 +2122,12 @@
     "pos": [
      0,
      22,
-     38.5
+     50.5
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 210,
+    "pair_lean_deg": 11.3
    },
    "aero": {
     "frontal_area_m2": 0.009,
@@ -2239,10 +2269,12 @@
     "pos": [
      0,
      30,
-     49.1
+     61.1
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.013,
@@ -2384,10 +2416,12 @@
     "pos": [
      0,
      32,
-     49.7
+     61.7
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.0125,
@@ -2529,10 +2563,12 @@
     "pos": [
      0,
      24,
-     51.9
+     63.9
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.0085,
@@ -2674,10 +2710,12 @@
     "pos": [
      0,
      30,
-     52.6
+     64.6
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.0125,
@@ -2819,10 +2857,12 @@
     "pos": [
      0,
      28,
-     55.4
+     67.4
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.015,
@@ -2965,10 +3005,12 @@
     "pos": [
      0,
      30,
-     56.1
+     68.1
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.0155,
@@ -3111,10 +3153,12 @@
     "pos": [
      0,
      32,
-     66.1
+     78.1
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.017,
@@ -3255,10 +3299,12 @@
     "pos": [
      0,
      34,
-     69.9
+     81.9
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.021,
@@ -3399,10 +3445,12 @@
     "pos": [
      0,
      45,
-     76.4
+     88.4
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.0275,
@@ -3544,10 +3592,12 @@
     "pos": [
      0,
      55,
-     92
+     104
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.032,
@@ -3688,10 +3738,12 @@
     "pos": [
      0,
      60,
-     99.8
+     111.8
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.04,
@@ -3832,10 +3884,12 @@
     "pos": [
      0,
      60,
-     100.3
+     112.3
     ],
-    "tilt_deg": 35,
-    "explicit": false
+    "tilt_deg": 45,
+    "explicit": false,
+    "max_length_mm": 250,
+    "pair_lean_deg": 15
    },
    "aero": {
     "frontal_area_m2": 0.046,

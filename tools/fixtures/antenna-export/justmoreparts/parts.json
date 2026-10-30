@@ -144,7 +144,7 @@
    "power_w": 5,
    "antenna": {
     "count": 1,
-    "length_mm": 50,
+    "length_mm": 60,
     "cap": "lollipop",
     "kind": "race",
     "derived": true
@@ -419,7 +419,7 @@
    "power_w": 5.8,
    "antenna": {
     "count": 1,
-    "length_mm": 45,
+    "length_mm": 50,
     "cap": "stubby",
     "kind": "race",
     "derived": true
@@ -629,6 +629,434 @@
    "textures": [
     "assets/justmoreparts/textures/item/part/video/digital_lr.png",
     "assets/justmoreparts/textures/item/part/video/digital_lr_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "justmoreparts:b1s_750_hv",
+  "category": "battery",
+  "builtin": false,
+  "name": {
+   "de_de": "1S-Akku 750 mAh (LiHV)",
+   "en_us": "1S 750 mAh Battery (LiHV)"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "1S-LiHV, 750 mAh – Ausdauer auf 1S",
+    "what": [
+     "1S LiHV · 750 mAh · 75C · 18,8 g · BT3.0",
+     "+ längste Flugzeit aller 1S-Akkus",
+     "+ 75C: 1102/18000 KV ohne Einbruch",
+     "− schwer: spürbar weniger Schub/Gewicht"
+    ],
+    "use": [
+     "Passt zu: Whoop 75 mit 1102-Motoren",
+     "Im Whoop 85 will der Rahmen 2S (Hinweis)"
+    ]
+   },
+   "en_us": {
+    "summary": "1S LiHV, 750 mAh – endurance on 1S",
+    "what": [
+     "1S LiHV · 750 mAh · 75C · 18.8 g · BT3.0",
+     "+ longest flight time of all 1S packs",
+     "+ 75C: 1102/18000 KV without sag",
+     "− heavy: thrust-to-weight drops clearly"
+    ],
+    "use": [
+     "Fits: whoop 75 with 1102 motors",
+     "In a whoop 85 the frame wants 2S (hint)"
+    ]
+   }
+  },
+  "basics": {
+   "mass_g": 18.8,
+   "stack_size": 0,
+   "sort": 304,
+   "creative": true,
+   "durability": 1,
+   "recycle": null,
+   "accent": "#b8307e",
+   "render_model": null
+  },
+  "data": {
+   "cells": 1,
+   "capacity_mah": 750,
+   "cell_resistance_ohm": 0.022,
+   "c_rating": 75,
+   "chemistry": "propwash:lihv",
+   "pack_mm": null,
+   "connector": "BT3.0"
+  },
+  "derived": {
+   "energy_wh": 2.85,
+   "max_continuous_a": 56.25,
+   "wh_per_kg": 151.59574468085106
+  },
+  "paint": {
+   "slots": [
+    "battery"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "battery": "#b8307e"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/justmoreparts/items/b1s_750_hv.json",
+   "drone": "assets/justmoreparts/items/drone_render/battery/b1s_750_hv.json",
+   "variants": [
+    "assets/justmoreparts/items/drone_render/battery/b1s_750_hv_paint.json"
+   ],
+   "textures": [
+    "assets/justmoreparts/textures/item/part/battery/b1s_750_hv.png",
+    "assets/justmoreparts/textures/item/part/battery/b1s_750_hv_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "justmoreparts:b2s_300_hv",
+  "category": "battery",
+  "builtin": false,
+  "name": {
+   "de_de": "2S-Akku 300 mAh (LiHV)",
+   "en_us": "2S 300 mAh Battery (LiHV)"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "2S-LiHV, 300 mAh – leichter 2S-Whoop",
+    "what": [
+     "2S LiHV · 300 mAh · 45C · 16,3 g · A30",
+     "+ leicht: 2S-Punch im 75-mm-Whoop",
+     "− nur 13,5 A: jeder 2S-Whoop überlastet ihn",
+     "− starker Spannungseinbruch unter Last"
+    ],
+    "use": [
+     "Einsatz: Whoop 75 auf 2S, ruhig geflogen",
+     "Für Vollgas: 2S 450 HV (75C)"
+    ]
+   },
+   "en_us": {
+    "summary": "2S LiHV, 300 mAh – light 2S whoop",
+    "what": [
+     "2S LiHV · 300 mAh · 45C · 16.3 g · A30",
+     "+ light: 2S punch in a 75 mm whoop",
+     "− only 13.5 A: every 2S whoop overloads it",
+     "− heavy voltage sag under load"
+    ],
+    "use": [
+     "Use: whoop 75 on 2S, flown gently",
+     "For full throttle: 2S 450 HV (75C)"
+    ]
+   }
+  },
+  "basics": {
+   "mass_g": 16.3,
+   "stack_size": 0,
+   "sort": 305,
+   "creative": true,
+   "durability": 1,
+   "recycle": null,
+   "accent": "#3fc2d9",
+   "render_model": null
+  },
+  "data": {
+   "cells": 2,
+   "capacity_mah": 300,
+   "cell_resistance_ohm": 0.045,
+   "c_rating": 45,
+   "chemistry": "propwash:lihv",
+   "pack_mm": null,
+   "connector": "A30"
+  },
+  "derived": {
+   "energy_wh": 2.28,
+   "max_continuous_a": 13.5,
+   "wh_per_kg": 139.8773006134969
+  },
+  "paint": {
+   "slots": [
+    "battery"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "battery": "#1c1d21"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/justmoreparts/items/b2s_300_hv.json",
+   "drone": "assets/justmoreparts/items/drone_render/battery/b2s_300_hv.json",
+   "variants": [
+    "assets/justmoreparts/items/drone_render/battery/b2s_300_hv_paint.json"
+   ],
+   "textures": [
+    "assets/justmoreparts/textures/item/part/battery/b2s_300_hv.png",
+    "assets/justmoreparts/textures/item/part/battery/b2s_300_hv_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "justmoreparts:b3s_450",
+  "category": "battery",
+  "builtin": false,
+  "name": {
+   "de_de": "3S-Akku 450 mAh",
+   "en_us": "3S 450 mAh Battery"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "3S-LiPo, 450 mAh – leichter 2,5″-Toothpick",
+    "what": [
+     "3S LiPo · 450 mAh · 75C · 40,0 g · XT30",
+     "+ leichter als 3S 650: mehr Schub/Gewicht",
+     "− kürzere Flugzeit als 3S 650 mAh",
+     "− mit 1103/8000 KV: Einbruch bei Vollgas"
+    ],
+    "use": [
+     "Passt zu: Toothpick 2,5″, 1202,5/5500 KV"
+    ]
+   },
+   "en_us": {
+    "summary": "3S LiPo, 450 mAh – light 2.5″ toothpick",
+    "what": [
+     "3S LiPo · 450 mAh · 75C · 40.0 g · XT30",
+     "+ light: more thrust-to-weight than 3S 650",
+     "− shorter flight time than 3S 650 mAh",
+     "− with 1103/8000 KV: sag at full throttle"
+    ],
+    "use": [
+     "Fits: 2.5″ toothpick, 1202.5/5500 KV"
+    ]
+   }
+  },
+  "basics": {
+   "mass_g": 40,
+   "stack_size": 0,
+   "sort": 308,
+   "creative": true,
+   "durability": 1,
+   "recycle": {
+    "item": "propwash:lipo_cell",
+    "count": 2
+   },
+   "accent": "#8ad13f",
+   "render_model": null
+  },
+  "data": {
+   "cells": 3,
+   "capacity_mah": 450,
+   "cell_resistance_ohm": 0.02,
+   "c_rating": 75,
+   "chemistry": "propwash:lipo",
+   "pack_mm": null,
+   "connector": "XT30"
+  },
+  "derived": {
+   "energy_wh": 4.995000000000001,
+   "max_continuous_a": 33.75,
+   "wh_per_kg": 124.87500000000003
+  },
+  "paint": {
+   "slots": [
+    "battery"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "battery": "#1c1d21"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/justmoreparts/items/b3s_450.json",
+   "drone": "assets/justmoreparts/items/drone_render/battery/b3s_450.json",
+   "variants": [
+    "assets/justmoreparts/items/drone_render/battery/b3s_450_paint.json"
+   ],
+   "textures": [
+    "assets/justmoreparts/textures/item/part/battery/b3s_450.png",
+    "assets/justmoreparts/textures/item/part/battery/b3s_450_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "justmoreparts:b4s_1800",
+  "category": "battery",
+  "builtin": false,
+  "name": {
+   "de_de": "4S-Akku 1800 mAh",
+   "en_us": "4S 1800 mAh Battery"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "4S-LiPo, 1800 mAh – lange 4S-Flüge",
+    "what": [
+     "4S LiPo · 1800 mAh · 100C · 190,3 g · XT60",
+     "+ längste Flugzeit auf 4S (über 13 min)",
+     "− gegenüber 1500 mAh: weniger Schub/Gewicht"
+    ],
+    "use": [
+     "Passt zu: Race 5″ 4S, 5–6″ auf 4S",
+     "Freestyle-Rahmen wollen 6S (Hinweis)"
+    ]
+   },
+   "en_us": {
+    "summary": "4S LiPo, 1800 mAh – long 4S flights",
+    "what": [
+     "4S LiPo · 1800 mAh · 100C · 190.3 g · XT60",
+     "+ longest flight time on 4S (over 13 min)",
+     "− heavier: less thrust-to-weight than 1500"
+    ],
+    "use": [
+     "Fits: 5″ race on 4S, 5–6″ on 4S",
+     "Freestyle frames want 6S (hint)"
+    ]
+   }
+  },
+  "basics": {
+   "mass_g": 190.3,
+   "stack_size": 0,
+   "sort": 314,
+   "creative": true,
+   "durability": 1,
+   "recycle": {
+    "item": "propwash:lipo_cell",
+    "count": 2
+   },
+   "accent": "#b8452a",
+   "render_model": null
+  },
+  "data": {
+   "cells": 4,
+   "capacity_mah": 1800,
+   "cell_resistance_ohm": 0.005,
+   "c_rating": 100,
+   "chemistry": "propwash:lipo",
+   "pack_mm": null,
+   "connector": "XT60"
+  },
+  "derived": {
+   "energy_wh": 26.64,
+   "max_continuous_a": 180,
+   "wh_per_kg": 139.98949027850762
+  },
+  "paint": {
+   "slots": [
+    "battery"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "battery": "#1c1d21"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/justmoreparts/items/b4s_1800.json",
+   "drone": "assets/justmoreparts/items/drone_render/battery/b4s_1800.json",
+   "variants": [
+    "assets/justmoreparts/items/drone_render/battery/b4s_1800_paint.json",
+    "assets/justmoreparts/items/drone_render/battery/b4s_1800_under.json",
+    "assets/justmoreparts/items/drone_render/battery/b4s_1800_under_paint.json"
+   ],
+   "textures": [
+    "assets/justmoreparts/textures/item/part/battery/b4s_1800.png",
+    "assets/justmoreparts/textures/item/part/battery/b4s_1800_paint.png",
+    "assets/justmoreparts/textures/item/part/battery/b4s_1800_under.png",
+    "assets/justmoreparts/textures/item/part/battery/b4s_1800_under_paint.png"
+   ]
+  }
+ },
+ {
+  "id": "justmoreparts:b8s_5000",
+  "category": "battery",
+  "builtin": false,
+  "name": {
+   "de_de": "8S-Akku 5000 mAh",
+   "en_us": "8S 5000 mAh Battery"
+  },
+  "short_name": null,
+  "help": {
+   "de_de": {
+    "summary": "8S-LiPo, 5000 mAh – X-Class-Standard",
+    "what": [
+     "8S LiPo · 5000 mAh · 60C · 987 g · AS150",
+     "+ 300 A: volle Leistung für 4214-Motoren",
+     "+ 17 min Schweben im 13″",
+     "− fast 1 kg: schwerster LiPo im Katalog",
+     "− mit 4214/530 KV: Einbruch bei Vollgas"
+    ],
+    "use": [
+     "Passt zu: X-Class 12–13″, 4214/400 KV"
+    ]
+   },
+   "en_us": {
+    "summary": "8S LiPo, 5000 mAh – X-Class standard",
+    "what": [
+     "8S LiPo · 5000 mAh · 60C · 987 g · AS150",
+     "+ 300 A: full power for 4214 motors",
+     "+ 17 min hover in a 13″",
+     "− almost 1 kg: heaviest LiPo in the range",
+     "− with 4214/530 KV: sag at full throttle"
+    ],
+    "use": [
+     "Fits: 12–13″ X-Class, 4214/400 KV"
+    ]
+   }
+  },
+  "basics": {
+   "mass_g": 986.7,
+   "stack_size": 0,
+   "sort": 328,
+   "creative": true,
+   "durability": 1,
+   "recycle": {
+    "item": "propwash:lipo_cell",
+    "count": 4
+   },
+   "accent": "#8a8f99",
+   "render_model": null
+  },
+  "data": {
+   "cells": 8,
+   "capacity_mah": 5000,
+   "cell_resistance_ohm": 0.003,
+   "c_rating": 60,
+   "chemistry": "propwash:lipo",
+   "pack_mm": null,
+   "connector": "AS150"
+  },
+  "derived": {
+   "energy_wh": 148,
+   "max_continuous_a": 300,
+   "wh_per_kg": 149.99493260362826
+  },
+  "paint": {
+   "slots": [
+    "battery"
+   ],
+   "paintable_model": true,
+   "default_colors": {
+    "battery": "#1c1d21"
+   }
+  },
+  "model": {
+   "kind": "model",
+   "item": "assets/justmoreparts/items/b8s_5000.json",
+   "drone": "assets/justmoreparts/items/drone_render/battery/b8s_5000.json",
+   "variants": [
+    "assets/justmoreparts/items/drone_render/battery/b8s_5000_paint.json",
+    "assets/justmoreparts/items/drone_render/battery/b8s_5000_under.json",
+    "assets/justmoreparts/items/drone_render/battery/b8s_5000_under_paint.json"
+   ],
+   "textures": [
+    "assets/justmoreparts/textures/item/part/battery/b8s_5000.png",
+    "assets/justmoreparts/textures/item/part/battery/b8s_5000_paint.png",
+    "assets/justmoreparts/textures/item/part/battery/b8s_5000_under.png",
+    "assets/justmoreparts/textures/item/part/battery/b8s_5000_under_paint.png"
    ]
   }
  }

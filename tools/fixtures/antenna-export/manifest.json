@@ -1,8 +1,8 @@
 {
  "format": 2,
- "generated_at": "2026-10-30T00:58:18Z",
- "generator": "propwash 0.6.0-dev.11",
- "propwash": "0.6.0-dev.11",
+ "generated_at": "2026-10-30T12:18:41Z",
+ "generator": "propwash 0.6.0-rc.1",
+ "propwash": "0.6.0-rc.1",
  "selection": "all",
  "base": false,
  "namespaces": [
@@ -10,9 +10,9 @@
   "justmoreparts"
  ],
  "mods": {
-  "justmoreparts": "1.2.0-dev.1",
-  "propwash": "0.6.0-dev.11"
+  "justmoreparts": "1.2.0-rc.1",
+  "propwash": "0.6.0-rc.1"
  },
  "fingerprint": null,
- "fixture": "the VTX of Propwash c23e9188 and Just More Parts 1.2.0-dev.1 (antennas at the frame's antenna holder) as /propwash webexport writes them; frames.json: id, data and derived of every frame of that export"
+ "fixture": "the VTX and ten batteries of Propwash 810cdb410 (F-ANTENNA4-1) and Just More Parts 1.2.0-rc.1 (antennas at the frame's antenna holder, behind an overhanging pack) as /propwash webexport writes them; frames.json: id, builtin, data and derived of every frame of that export"
 }
