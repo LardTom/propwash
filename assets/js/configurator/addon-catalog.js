@@ -17,7 +17,7 @@ import { bundledParts, splitId, partPath, DEFAULT_NAMESPACE } from './partjson.j
 import {
   resources, exportParts, exportChemistries, exportMounts, catalogPart, catalogOrder, partModel, renderAdditions, tableCrc, tableEntries,
   LANGUAGES,
-} from './catalog-build.js?v=d98fb9e6';
+} from './catalog-build.js?v=c601bf0b';
 import { parseTable } from './sharecode3.js?v=024bd980';
 
 const TABLE = (ns) => `data/${ns}/propwash_share/table.json`;
@@ -85,6 +85,11 @@ function manifestValue(text, key) {
     if (i > 0 && line.slice(0, i).trim() === key) return line.slice(i + 1).trim();
   }
   return null;
+}
+
+/** modMeta of a jar (bytes) or a Map path → bytes, without reading its parts. */
+export function jarMeta(input) {
+  return modMeta(sourceOf(input));
 }
 
 /** The mod's id, name, version, homepage and required Propwash range from its metadata, or null. */

@@ -295,7 +295,9 @@ const siteModel = (id) => {
 const fixtureModels = new Map(VTX.map((id) => [id, builtModel(id)]));
 const env = { catalog, render, model: (id) => (fixtureModels.has(id) ? fixtureModels.get(id) : siteModel(id)) };
 const oldEnv = { catalog: oldCatalog, render, model: siteModel };
-const anchorOf = (id) => fixtureFrames.find((f) => f.id === id).data.antenna_anchor;
+// Frames the fixture does not have (the add-ons the site gained after it, e.g. Camera Drones) bring their holder in the
+// site's catalog, from the export the catalog was built from.
+const anchorOf = (id) => (fixtureFrames.find((f) => f.id === id) || oldCatalog.part(id)).data.antenna_anchor;
 
 const base = catalog.presetBuild('propwash:freestyle');
 let combos = 0;
@@ -322,8 +324,14 @@ for (const frame of catalog.partsIn('frame')) {
     const mask = fixtureModels.get(id).variants.base.antenna || [];
     check(video && (mask.length ? same(video.hideFaces, mask) : !video.hideFaces), `${label}: the video unit leaves out ${mask.length} faces (got ${video && JSON.stringify(video.hideFaces)})`);
     const old = assemble(build, oldEnv);
-    check(!old.pieces.some((p) => p.role === 'antenna' || p.hideFaces) && old.pieces.length === a.pieces.length - 1,
-      `${label}: with the site's older VTX model (antennas in it) no second antenna`);
+    const site = siteModel(id);
+    if (site && Array.isArray(site.variants.base.antenna)) {
+      check(old.pieces.filter((p) => p.role === 'antenna').length === 1 && old.pieces.length === a.pieces.length,
+        `${label}: the site's VTX model of a newer export (with its list of left-out faces) has one antenna at the holder too`);
+    } else {
+      check(!old.pieces.some((p) => p.role === 'antenna' || p.hideFaces) && old.pieces.length === a.pieces.length - 1,
+        `${label}: with the site's older VTX model (antennas in it) no second antenna`);
+    }
     combos++;
   }
 }

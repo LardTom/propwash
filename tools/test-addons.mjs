@@ -175,7 +175,8 @@ if (jmp) {
   const parts = JSON.parse(read(`${versionDir('justmoreparts', jmp.web_export.version)}parts.json`));
   const totals = [...html.matchAll(/data-addon-parts-total>(\d+)</g)].map((m) => Number(m[1]));
   check(totals.length && totals.every((n) => n === parts.length), `JMP page: part count ${totals} = parts.json (${parts.length})`);
-  const listedParts = (html.match(/data-part="justmoreparts:/g) || []).length;
+  // The parts lists of the page; the parts new in the listed version (addons:new) appear there a second time.
+  const listedParts = new Set(html.match(/data-part="justmoreparts:[^"]+"/g) || []).size;
   check(listedParts === parts.length, `JMP page: ${listedParts} parts listed, parts.json has ${parts.length}`);
   for (const p of parts) if (!html.includes(`data-part="${p.id}"`)) check(false, `JMP page: ${p.id} missing from the list`);
   const dirHtml = read('addons/index.html');

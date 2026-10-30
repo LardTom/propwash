@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 // Builds the 3D data of the configurator's drone viewer from the web export of Propwash (format 2).
 //
-//   node tools/build-configurator-models.mjs [--export <web-export dir>] [--resources <mod resources dir> …] [--out <dir>]
+//   node tools/build-configurator-models.mjs [--export <web-export dir> …] [--resources <mod resources dir> …] [--out <dir>]
 //
-// Same export location rules as tools/build-configurator-data.mjs (sibling checkout, JMP_WEB_EXPORT or --export).
+// Same export location rules as tools/build-configurator-data.mjs (one export with every add-on or several, sibling
+// checkouts, JMP_WEB_EXPORT or --export); base/ is not needed here.
 // --out writes render.json and models/ to another folder instead of assets/data/configurator (for tests).
 //
 // Writes:
@@ -13,7 +14,11 @@
 //                                                               elements in a compact form plus the textures as
 //                                                               data URLs (base, paint, ccw, battery under and stack
 //                                                               mounted variants), the plug anchors (see below) and
-//                                                               the faces left out for a VTX's antennas
+//                                                               the faces left out for a VTX's antennas; a model
+//                                                               whose faces use several textures gets the texture of
+//                                                               every face (ftex), and a texture of Minecraft that no
+//                                                               export carries the site's stand-in (stand_ins,
+//                                                               assets/js/configurator/stand-ins.js)
 //
 // Only files from the web export are used, with one exception: a stack's "_mounted" variant (battery plugged in,
 // Propwash 0.6.0) that the export lacks is taken from a mod's resource folder given with --resources (a folder with
@@ -40,8 +45,10 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { exportDir, readExport } from './build-configurator-data.mjs';
+import { exportDirs, readExports } from './build-configurator-data.mjs';
 import { antennaFaces } from '../assets/js/configurator/antenna.js';
+import { compactModel } from '../assets/js/configurator/catalog-build.js';
+import { standIn } from '../assets/js/configurator/stand-ins.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'assets/data/configurator');
@@ -53,14 +60,6 @@ function modelFile(id) {
   const colon = id.indexOf(':');
   const ns = colon < 0 ? 'minecraft' : id.slice(0, colon);
   return `assets/${ns}/models/${id.slice(colon + 1)}.json`;
-}
-
-function textureFile(ref) {
-  const id = typeof ref === 'string' ? ref : ref && ref.sprite;
-  if (!id) throw new Error(`texture reference expected: ${JSON.stringify(ref)}`);
-  const colon = id.indexOf(':');
-  const ns = colon < 0 ? 'minecraft' : id.slice(0, colon);
-  return `assets/${ns}/textures/${id.slice(colon + 1)}.png`;
 }
 
 // Euler angles (degrees, applied X then Y then Z like the mod's asset kit) of an element rotation.
@@ -135,34 +134,6 @@ function applyTransform(model, transform, where) {
   return { ...model, elements };
 }
 
-function compactModel(model, where) {
-  const textures = Object.entries(model.textures || {}).filter(([k]) => k !== 'particle');
-  if (textures.length !== 1) throw new Error(`${where}: exactly one texture expected, found ${textures.length}`);
-  const key = `#${textures[0][0]}`;
-  const elements = [];
-  const tints = [];
-  const box = [Infinity, Infinity, Infinity, -Infinity, -Infinity, -Infinity];
-  for (const e of model.elements || []) {
-    const faces = DIRS.map((dir) => {
-      const f = e.faces && e.faces[dir];
-      if (!f) return 0;
-      if (f.texture !== key) throw new Error(`${where}: face texture ${f.texture} is not ${key}`);
-      if (f.rotation) throw new Error(`${where}: UV rotation is not supported`);
-      if (!f.uv) throw new Error(`${where}: face without uv`);
-      tints.push(f.tintindex == null ? -1 : f.tintindex);
-      return f.uv.map(round);
-    });
-    elements.push([...e.from.map(round), ...e.to.map(round), rotationOf(e.rotation), faces]);
-    for (const p of corners(e)) {
-      for (let i = 0; i < 3; i++) {
-        box[i] = Math.min(box[i], p[i]);
-        box[i + 3] = Math.max(box[i + 3], p[i]);
-      }
-    }
-  }
-  return { texture: textureFile(textures[0][1]), elements, tints, box: box.map(round) };
-}
-
 // ---------------------------------------------------------------------------------------------------------------
 // Plug anchors (PlugAnchors): named element boxes in millimetres around the model point (8, 8, 8)
 
@@ -234,17 +205,17 @@ function outDir(argv) {
 
 function main() {
   const argv = process.argv.slice(2);
-  const dir = exportDir(argv);
+  const exp = readExports(exportDirs(argv), { needBase: false });
+  const { manifest, namespaces, dirOf } = exp;
   const out = outDir(argv);
-  const { manifest, namespaces } = readExport(dir);
   const resources = resourceDirs(argv);
   const parts = [];
-  for (const ns of namespaces) for (const p of JSON.parse(fs.readFileSync(path.join(dir, ns, 'parts.json'), 'utf8'))) parts.push(p);
+  for (const ns of namespaces) for (const p of JSON.parse(fs.readFileSync(path.join(dirOf(ns), ns, 'parts.json'), 'utf8'))) parts.push(p);
 
   const paintFiles = {};
   const layoutFiles = {};
   for (const ns of namespaces) {
-    const assets = path.join(dir, ns, 'assets');
+    const assets = path.join(dirOf(ns), ns, 'assets');
     if (!fs.existsSync(assets)) continue;
     for (const owner of fs.readdirSync(assets).sort()) {
       const paint = path.join(assets, owner, 'drone_paint.json');
@@ -265,7 +236,7 @@ function main() {
   }
 
   // A file of the export below the part's namespace folder, or (fallback) of a resource folder: {file, from}.
-  const exportPath = (scope, rel) => path.join(dir, scope, rel);
+  const exportPath = (scope, rel) => path.join(dirOf(scope), scope, rel);
   function locate(scope, rel, fallback) {
     const own = exportPath(scope, rel);
     if (fs.existsSync(own)) return { file: own, from: 'export' };
@@ -292,7 +263,7 @@ function main() {
   let files = 0;
   let bytes = 0;
   const withModel = [];
-  const counts = { sockets: 0, mounted: 0, mountedFromResources: 0, mountedMissing: [], videos: 0, masked: 0, maskedFaces: 0 };
+  const counts = { sockets: 0, mounted: 0, mountedFromResources: 0, mountedMissing: [], videos: 0, masked: 0, maskedFaces: 0, standIns: [] };
   for (const p of parts) {
     const m = p.model || {};
     if (m.kind !== 'model' || !m.drone) continue;
@@ -331,9 +302,14 @@ function main() {
       const json = readAt(modelAt);
       const transformed = applyTransform(json, render.transform, def);
       const model = compactModel(transformed, def);
-      const texture = locate(scope, model.texture, where.from !== 'export');
-      if (!texture) throw new Error(`${def}: texture ${model.texture} not found`);
-      const entry = { tex: textureIndex({ rel: model.texture, file: texture.file }) };
+      const files = new Map();
+      for (const rel of model.textures) {
+        const texture = locate(scope, rel, where.from !== 'export');
+        if (!texture && !standIn(rel)) throw new Error(`${def}: texture ${rel} not found`);
+        files.set(rel, texture ? { rel, file: texture.file } : { rel, standIn: standIn(rel) });
+      }
+      const entry = { tex: textureIndex(files.get(model.texture)) };
+      if (model.faceTextures) entry.ftex = model.faceTextures.map((i) => textureIndex(files.get(model.textures[i])));
       if (geometryOf) {
         const base = variants[geometryOf];
         if (JSON.stringify(base.el) !== JSON.stringify(model.elements)) throw new Error(`${def}: geometry differs from ${geometryOf}`);
@@ -360,7 +336,7 @@ function main() {
       if (add('mounted', '_mounted', null, true)) {
         const r = raw.mounted;
         const sameSource = r.where.from === 'export'
-          || (sameBytes(raw.base.where.file, path.join(r.where.from, raw.base.def)) && sameBytes(raw.base.model.file, path.join(r.where.from, path.relative(path.join(dir, scope), raw.base.model.file))));
+          || (sameBytes(raw.base.where.file, path.join(r.where.from, raw.base.def)) && sameBytes(raw.base.model.file, path.join(r.where.from, path.relative(path.join(dirOf(scope), scope), raw.base.model.file))));
         const pigtail = sameSource ? pigtailOf(r.elements) : null;
         if (pigtail) {
           variants.mounted.pigtail = pigtail;
@@ -400,8 +376,10 @@ function main() {
       counts.maskedFaces += variants.base.antenna.length;
     }
 
-    const tex = textures.map((t) => `data:image/png;base64,${fs.readFileSync(t.file).toString('base64')}`);
-    const out = { format: 1, id: p.id, tex, variants };
+    const tex = textures.map((t) => `data:image/png;base64,${t.standIn ? t.standIn.png : fs.readFileSync(t.file).toString('base64')}`);
+    const standIns = Object.fromEntries(textures.map((t, i) => [i, t.standIn ? t.standIn.id : null]).filter(([, id]) => id));
+    const out = Object.keys(standIns).length ? { format: 1, id: p.id, tex, variants, stand_ins: standIns } : { format: 1, id: p.id, tex, variants };
+    if (Object.keys(standIns).length) counts.standIns.push(`${p.id} (${Object.values(standIns).join(', ')})`);
     const [pns, ppath] = p.id.split(':');
     const target = path.join(outModels, pns, p.category, `${ppath}.json`);
     fs.mkdirSync(path.dirname(target), { recursive: true });
@@ -431,7 +409,7 @@ function main() {
 
   const render = {
     format: 1,
-    source: { generated_at: manifest.generated_at, mods: manifest.mods, fingerprint: manifest.fingerprint },
+    source: { generated_at: manifest.generated_at, mods: exp.mods, fingerprint: manifest.fingerprint },
     units: { mm_per_model_unit: 8, model_units_per_block: 16 },
     channels,
     layouts,
@@ -445,6 +423,7 @@ function main() {
     + `${Object.keys(motorSeats).length} motor seats`);
   console.log(`VTX antennas at the frame's antenna holder: ${counts.videos} video models, ${counts.masked} of them with antenna elements `
     + `left out (${counts.maskedFaces} faces)`);
+  if (counts.standIns.length) console.log(`textures of Minecraft drawn with the page's stand-in (assets/js/configurator/stand-ins.js): ${counts.standIns.join(', ')}`);
   console.log(`battery plugged in: ${counts.sockets} battery sockets, ${counts.mounted} mounted stacks`
     + `${counts.mountedFromResources ? ` (${counts.mountedFromResources} from the mod resources, the export lacks them)` : ''}`
     + `${counts.mountedMissing.length ? `; drawn unplugged: ${counts.mountedMissing.join(', ')}` : ''}`);

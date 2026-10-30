@@ -21,6 +21,9 @@
 // 3. The vectors of Just More Parts 1.1.1 (tools/fixtures/sharecode-vectors.json, frozen: PW1 and PW2 from the last
 //    format-1 export): read like before, converted to PW3 with the same build; check and analysis of Propwash 0.5.2
 //    compared without the heat model, the rest of the analysis is unchanged in 0.6.0.
+// 3b. The PW3 vectors of the add-ons in the same file (made with the classes of Propwash 0.6.0-rc.1 and the jars of
+//    Just More Parts, Camera Drones and Mob Defense): a camera drone, Mob Defense accessories and all three add-ons
+//    together, read and written byte for byte like the game, with its check and analysis where the export has them.
 // 4. Report vectors (tools/fixtures/report-vectors.json): codes from bug reports with their expected build, analysis
 //    and FPV camera, e.g. the deadcat whose props the game showed while the configurator said 0.0 %; analysis_before
 //    keeps the figures before a recalibration (the flight physics part must stay unchanged, the energy part must not).
@@ -73,7 +76,8 @@ const ABS_TOL = 1e-9;
 const catalog = createCatalog(data('catalog.json'));
 const golden = Object.fromEntries(GOLDEN_FILES.map((f) => [f, fixture(`sharecode/${f}`)]));
 const exportVectors = fixture('pw3-export-vectors.json');
-const legacyVectors = fixture('sharecode-vectors.json');
+const legacyVectors = fixture('sharecode-vectors.json').filter((v) => v.format !== 'PW3');
+const addonVectors = fixture('sharecode-vectors.json').filter((v) => v.format === 'PW3');
 const reportVectors = fixture('report-vectors.json');
 const heatVectors = fixture('heat-vectors.json');
 const pwd1Vectors = fixture('pwd1-vectors.json');
@@ -595,6 +599,31 @@ const legacyBuild = (b) => (b ? { ...Object.fromEntries(Object.entries(b).map(([
   }
   console.log(`Just More Parts 1.1.1 vectors: ${pass}/${legacyVectors.length} fully passed, ${byte}/${byteTotal} re-encoded byte-identically, `
     + `${converted} converted to PW3 with the same build, ${analysed} analyses compared without the heat model of 0.5.2`);
+}
+
+// 3b. PW3 vectors of the add-ons (Camera Drones, Mob Defense, all three add-ons), made by the game's codec
+{
+  let pass = 0;
+  let analysed = 0;
+  for (const v of addonVectors) {
+    const before = failed;
+    const d = catalog.decode(v.code);
+    ok(d.status === v.status && d.format === v.format, `${v.name}: ${d.status} ${d.format}`);
+    ok(same(d.layers, v.layers), `${v.name}: layers ${d.layers} vs ${v.layers}`);
+    ok(same(d.skipped, v.skipped), `${v.name}: skipped`);
+    ok(same(d.unknownParts, v.unknown_parts), `${v.name}: unknown parts ${d.unknownParts}`);
+    ok(same(d.namespaces.map((n) => ({ key: n.namespace, short_id: n.short_id, table: n.table, min_version: n.min_version, result: n.result })), v.namespaces),
+      `${v.name}: namespaces ${JSON.stringify(d.namespaces)}`);
+    compareContent(d.content, v.decoded, v.name);
+    if (d.ok) ok(catalog.encode(d.content) === v.code, `${v.name}: written ${catalog.encode(d.content)} vs ${v.code}`);
+    if (v.check) compareCheck(catalog.check(v.decoded.build), v.check, v.name);
+    if (v.analysis) {
+      analysed++;
+      compareAnalysis(catalog.analyze(v.decoded.build), v.analysis, v.name, catalogHeat);
+    }
+    if (failed === before) pass++;
+  }
+  console.log(`Add-on vectors (PW3 in sharecode-vectors.json): ${pass}/${addonVectors.length} read and written like the game, ${analysed} analyses compared`);
 }
 
 // 4. Report vectors

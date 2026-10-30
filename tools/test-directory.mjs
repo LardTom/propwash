@@ -291,7 +291,7 @@ async function browserTests() {
         await open(`${base}/${jmp.page}`, width, loaded);
         const sub = await evaluate(`(() => ({
           total: document.querySelector('[data-addon-parts-total]')?.textContent,
-          listed: document.querySelectorAll('[data-part]').length,
+          listed: document.querySelectorAll('details.addon-parts [data-part]').length,
           groups: document.querySelectorAll('details.addon-parts').length,
           buttons: [...document.querySelectorAll('.addons-actions a.btn')].map((a) => a.href),
         }))()`);

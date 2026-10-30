@@ -1,34 +1,44 @@
 #!/usr/bin/env node
 // Builds the lean configurator catalog from the web export of Propwash (format 2, Propwash 0.6.0 and later), made
-// with Just More Parts installed (`/propwash webexport all`).
+// with the add-ons installed (`/propwash webexport all`: Just More Parts, Camera Drones, Mob Defense).
 //
-//   node tools/build-configurator-data.mjs [--export <web-export dir>] [--goldens <dir>]
+//   node tools/build-configurator-data.mjs [--export <web-export dir> …] [--mods <jar or folder> …] [--goldens <dir>]
 //
-// Default export location: the newest ../propwash-justmoreparts/release/<version>/web-export (sibling checkout),
-// or the JMP_WEB_EXPORT environment variable. --goldens (or PROPWASH_SHARECODE_GOLDENS) names the folder with the
-// share-code golden files of Propwash (common/src/test/resources/sharecode/); they are copied unchanged, so the mod's
-// JUnit tests and tools/test-configurator.mjs check the very same files.
+// Add-on sources: one export with every add-on (runWebExport of Propwash with the add-on jars in mods/), or several
+// exports, e.g. one per add-on (`--export` repeated, or JMP_WEB_EXPORT with paths separated like PATH). The first
+// export that has base/ gives rules, paint, tune, the share-code spec and the vectors; every namespace comes from the
+// first export that has it (Propwash first, then the add-ons in the order of the exports). Default: the newest
+// web-export of the sibling checkouts ../propwash-justmoreparts/release/<version>/, ../propwash-camera/release/<version>/
+// and ../propwash-mobdefense/release/<version>/ that exist. --mods (or PROPWASH_WEB_EXPORT_MODS) names the add-on
+// jars (or folders with them, the folder given to runWebExport): their metadata gives each namespace its homepage,
+// the address a PW3 code names for an add-on that is not in the directory, like the game (ModMeta). --goldens (or
+// PROPWASH_SHARECODE_GOLDENS) names the folder with the share-code golden files of Propwash
+// (common/src/test/resources/sharecode/); they are copied unchanged, so the mod's JUnit tests and
+// tools/test-configurator.mjs check the very same files.
 //
 // Writes:
 //   assets/data/configurator/catalog.json      everything the configurator needs at runtime: the parts, presets,
-//                                              chemistries and mounts of every namespace of the export, rules, paint,
-//                                              tune, the FPV layout data of every drone_layout.json, and for share
-//                                              codes the parts table of every namespace and the add-on directory
+//                                              chemistries and mounts of every namespace of the export(s), rules,
+//                                              paint, tune, the FPV layout data of every drone_layout.json, and for
+//                                              share codes the parts table of every namespace and the add-on directory
 //   tools/fixtures/pw3-export-vectors.json     the PW3 vectors of the export (base/sharecode/vectors.json): a code per
 //                                              preset (parts only, and with paint and tune), with check and analysis
 //   tools/fixtures/sharecode/*.json            the golden files of Propwash (only with --goldens)
 //
-// Only data from the web export is used. Model and texture files are referenced by their export paths below the
-// namespace folder (model.drone / model.variants / model.textures); worn, damaged and broken variants are dropped
-// because the configurator only shows new parts.
+// Only data from the web export is used (and the metadata of the jars). Model and texture files are referenced by
+// their export paths below the namespace folder (model.drone / model.variants / model.textures); worn, damaged and
+// broken variants are dropped because the configurator only shows new parts.
 
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { jarMeta } from '../assets/js/configurator/addon-catalog.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const RELEASES = path.resolve(ROOT, '../propwash-justmoreparts/release');
+const ADDON_RELEASES = ['../propwash-camera/release', '../propwash-mobdefense/release'].map((d) => path.resolve(ROOT, d));
 const CATEGORIES = ['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory'];
 export const GOLDEN_FILES = ['pw1-vectors.json', 'pw2-vectors.json', 'pw3-vectors.json', 'pw3-conversions.json', 'tablechecksum-vectors.json',
   'propwash-baseline.json', 'directory-baseline.json', 'pw3-creative-vectors.json'];
@@ -45,24 +55,43 @@ function compareVersions(a, b) {
   return 0;
 }
 
-/** Newest release of the sibling checkout that carries a web export (release/<version>/web-export). */
-export function newestExport() {
+/** Newest release of a sibling checkout that carries a web export (<releases>/<version>/web-export), or null. */
+function newestIn(releases) {
   let versions = [];
   try {
-    versions = fs.readdirSync(RELEASES).filter((v) => /^\d+(\.\d+)*$/.test(v)
-      && fs.existsSync(path.join(RELEASES, v, 'web-export', 'manifest.json')));
+    versions = fs.readdirSync(releases).filter((v) => /^\d+(\.\d+)*$/.test(v)
+      && fs.existsSync(path.join(releases, v, 'web-export', 'manifest.json')));
   } catch {
     versions = [];
   }
   versions.sort(compareVersions);
-  return path.join(RELEASES, versions.length ? versions[versions.length - 1] : '1.2.0', 'web-export');
+  return versions.length ? path.join(releases, versions[versions.length - 1], 'web-export') : null;
 }
 
+/** Newest release of the Just More Parts checkout that carries a web export (release/<version>/web-export). */
+export function newestExport() {
+  return newestIn(RELEASES) || path.join(RELEASES, '1.2.0', 'web-export');
+}
+
+function argValues(argv, name) {
+  const out = [];
+  argv.forEach((a, i) => {
+    if (a === name && argv[i + 1]) out.push(path.resolve(argv[i + 1]));
+  });
+  return out;
+}
+
+/** The web exports to read, first the one with base/ (see the header). */
+export function exportDirs(argv = process.argv.slice(2)) {
+  const given = argValues(argv, '--export');
+  if (given.length) return given;
+  if (process.env.JMP_WEB_EXPORT) return process.env.JMP_WEB_EXPORT.split(path.delimiter).filter(Boolean).map((d) => path.resolve(d));
+  return [newestExport(), ...ADDON_RELEASES.map(newestIn).filter(Boolean)];
+}
+
+/** The first web export (the one with base/ when the defaults are used). */
 export function exportDir(argv = process.argv.slice(2)) {
-  const i = argv.indexOf('--export');
-  if (i >= 0 && argv[i + 1]) return path.resolve(argv[i + 1]);
-  if (process.env.JMP_WEB_EXPORT) return path.resolve(process.env.JMP_WEB_EXPORT);
-  return newestExport();
+  return exportDirs(argv)[0];
 }
 
 function argValue(argv, name, env) {
@@ -75,12 +104,70 @@ function read(dir, file) {
   return JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
 }
 
+const propwashFirst = (list) => [...list].sort((a, b) => (a === 'propwash' ? -1 : b === 'propwash' ? 1 : 0));
+
 /** Manifest of a format-2 export and its namespaces, Propwash first (the base), then the add-ons in export order. */
 export function readExport(dir) {
   const manifest = read(dir, 'manifest.json');
   if (manifest.format !== 2) throw new Error(`web export format ${manifest.format}, expected 2 (Propwash 0.6.0 or later)`);
-  const namespaces = [...manifest.namespaces].sort((a, b) => (a === 'propwash' ? -1 : b === 'propwash' ? 1 : 0));
-  return { manifest, namespaces };
+  return { manifest, namespaces: propwashFirst(manifest.namespaces) };
+}
+
+/**
+ * Several exports read as one: manifest and base/ of the first export with base/ (needBase false: else of the first
+ * export, for the model files, which need no base/), every namespace from the first export that has it ({manifest, base, namespaces, dirOf(ns), sources}); sources names each export by its generator,
+ * time and namespaces (no local paths).
+ */
+export function readExports(dirs, { needBase = true } = {}) {
+  const list = (Array.isArray(dirs) ? dirs : [dirs]).map((dir) => ({ dir, ...readExport(dir) }));
+  if (!list.length) throw new Error('no web export given');
+  const withBase = list.find((e) => e.manifest.base !== false && fs.existsSync(path.join(e.dir, 'base', 'rules.json'))) || (needBase ? null : list[0]);
+  if (!withBase) throw new Error('no web export with base/ (export all or propwash)');
+  const owner = new Map();
+  for (const e of [withBase, ...list.filter((x) => x !== withBase)]) for (const ns of e.namespaces) if (!owner.has(ns)) owner.set(ns, e);
+  const mods = {};
+  for (const [ns, e] of owner) mods[ns] = (e.manifest.mods || {})[ns] ?? null;
+  return {
+    manifest: withBase.manifest,
+    base: withBase.dir,
+    namespaces: propwashFirst([...owner.keys()]),
+    dirOf: (ns) => owner.get(ns).dir,
+    mods: Object.fromEntries(Object.entries(mods).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))),
+    sources: list.map((e) => ({
+      generator: e.manifest.generator, generated_at: e.manifest.generated_at,
+      namespaces: e.namespaces.filter((ns) => owner.get(ns) === e),
+    })).filter((s) => s.namespaces.length),
+  };
+}
+
+/** The jars named by --mods / PROPWASH_WEB_EXPORT_MODS (files or folders of jars), sorted by path. */
+export function modJars(argv = process.argv.slice(2)) {
+  const given = argValues(argv, '--mods');
+  const from = given.length ? given
+    : (process.env.PROPWASH_WEB_EXPORT_MODS || '').split(path.delimiter).filter(Boolean).map((d) => path.resolve(d));
+  const out = [];
+  for (const entry of from) {
+    if (fs.statSync(entry).isDirectory()) {
+      for (const f of fs.readdirSync(entry).sort()) if (f.endsWith('.jar')) out.push(path.join(entry, f));
+    } else {
+      out.push(entry);
+    }
+  }
+  return out;
+}
+
+/** Metadata of the add-on jars by mod id ({id, name, version, homepage}), read like the game reads ModMeta. */
+export function modMetas(jars) {
+  const out = {};
+  for (const file of jars) {
+    const bytes = fs.readFileSync(file);
+    const meta = jarMeta(new Uint8Array(bytes));
+    if (meta && meta.id && !(meta.id in out)) {
+      out[meta.id] = { id: meta.id, name: meta.name, version: meta.version, homepage: meta.homepage, file: path.basename(file),
+        sha256: crypto.createHash('sha256').update(bytes).digest('hex') };
+    }
+  }
+  return out;
 }
 
 const DROP_VARIANT = /_(worn|damaged|broken)(_|\.json$|\.png$)/;
@@ -210,8 +297,9 @@ export function fpvLayout(json, namespace) {
 /** The drone_layout.json of every namespace folder (format 2: <ns>/assets/<ns>/drone_layout.json). */
 export function layoutFiles(dir, namespaces) {
   const out = {};
+  const dirOf = typeof dir === 'function' ? dir : () => dir;
   for (const ns of namespaces) {
-    const assets = path.join(dir, ns, 'assets');
+    const assets = path.join(dirOf(ns), ns, 'assets');
     if (!fs.existsSync(assets)) continue;
     for (const owner of fs.readdirSync(assets).sort()) {
       const file = path.join(assets, owner, 'drone_layout.json');
@@ -255,8 +343,14 @@ function compactDirectory(directory) {
   };
 }
 
-export function buildCatalog(dir) {
-  const { manifest, namespaces } = readExport(dir);
+/**
+ * The catalog of one or several web exports (readExports); metas: the add-on jars' metadata by mod id (modMetas),
+ * for the homepage of every namespace.
+ */
+export function buildCatalog(dirs, { metas = {} } = {}) {
+  const exp = readExports(dirs);
+  const { manifest, namespaces, dirOf } = exp;
+  const dir = exp.base;
   const rules = read(dir, 'base/rules.json');
   const paint = read(dir, 'base/paint.json');
   const tune = read(dir, 'base/tune.json');
@@ -269,19 +363,21 @@ export function buildCatalog(dir) {
   const tables = {};
   const info = [];
   for (const ns of namespaces) {
-    const nsManifest = read(dir, `${ns}/manifest.json`);
+    const at = dirOf(ns);
+    const nsManifest = read(at, `${ns}/manifest.json`);
     for (const l of ['en_us', 'de_de']) {
-      const file = path.join(dir, ns, 'lang', `${l}.json`);
+      const file = path.join(at, ns, 'lang', `${l}.json`);
       if (fs.existsSync(file)) Object.assign(lang[l], JSON.parse(fs.readFileSync(file, 'utf8')));
     }
-    parts.push(...read(dir, `${ns}/parts.json`));
-    presets.push(...read(dir, `${ns}/presets.json`));
-    for (const c of read(dir, `${ns}/chemistries.json`)) if (!chemistries.has(c.id)) chemistries.set(c.id, c);
-    for (const [kind, list] of Object.entries(read(dir, `${ns}/mounts.json`))) {
+    parts.push(...read(at, `${ns}/parts.json`));
+    presets.push(...read(at, `${ns}/presets.json`));
+    for (const c of read(at, `${ns}/chemistries.json`)) if (!chemistries.has(c.id)) chemistries.set(c.id, c);
+    for (const [kind, list] of Object.entries(read(at, `${ns}/mounts.json`))) {
       mounts[kind] = mounts[kind] || {};
       for (const m of list) if (!(m.id in mounts[kind])) mounts[kind][m.id] = m.name;
     }
-    if (fs.existsSync(path.join(dir, ns, 'share_table.json'))) tables[ns] = read(dir, `${ns}/share_table.json`);
+    if (fs.existsSync(path.join(at, ns, 'share_table.json'))) tables[ns] = read(at, `${ns}/share_table.json`);
+    const meta = metas[ns] && metas[ns].version === nsManifest.mod.version ? metas[ns] : null;
     info.push({
       namespace: ns,
       name: nsManifest.mod.name,
@@ -291,6 +387,7 @@ export function buildCatalog(dir) {
       table_entries: nsManifest.table_entries ?? 0,
       table_crc: nsManifest.table_crc ?? null,
       requires: nsManifest.requires || {},
+      homepage: meta ? meta.homepage ?? null : null,
     });
   }
   parts.sort(partOrder);
@@ -299,7 +396,7 @@ export function buildCatalog(dir) {
   for (const p of parts) if (p.paint && p.paint.default_colors && Object.keys(p.paint.default_colors).length) defaultColors[p.id] = p.paint.default_colors;
 
   const layouts = {};
-  for (const [owner, json] of Object.entries(layoutFiles(dir, namespaces))) layouts[owner] = fpvLayout(json, owner);
+  for (const [owner, json] of Object.entries(layoutFiles(dirOf, namespaces))) layouts[owner] = fpvLayout(json, owner);
 
   return {
     format: 2,
@@ -308,11 +405,14 @@ export function buildCatalog(dir) {
       generator: manifest.generator,
       generated_at: manifest.generated_at,
       minecraft: manifest.minecraft,
-      mods: manifest.mods,
+      mods: exp.mods,
       propwash_api: manifest.propwash_api,
       sharecode: manifest.sharecode,
       fingerprint: manifest.fingerprint,
       counts: manifest.counts,
+      sources: exp.sources,
+      jars: Object.values(metas).filter((m) => exp.namespaces.includes(m.id)).sort((a, b) => (a.id < b.id ? -1 : 1))
+        .map((m) => ({ mod: m.id, version: m.version, file: m.file, sha256: m.sha256, used: m.version === exp.mods[m.id] })),
     },
     namespaces: info,
     categories: CATEGORIES,
@@ -364,12 +464,18 @@ export function copyGoldens(from) {
 
 function main() {
   const argv = process.argv.slice(2);
-  const dir = exportDir(argv);
-  if (!fs.existsSync(path.join(dir, 'manifest.json'))) {
-    console.error(`web export not found in ${path.relative(ROOT, dir) || dir} (use --export <dir> or JMP_WEB_EXPORT)`);
+  const dirs = exportDirs(argv);
+  const missing = dirs.filter((dir) => !fs.existsSync(path.join(dir, 'manifest.json')));
+  if (missing.length) {
+    console.error(`web export not found in ${missing.map((d) => path.relative(ROOT, d) || d).join(', ')} (use --export <dir> or JMP_WEB_EXPORT)`);
     process.exit(1);
   }
-  const catalog = buildCatalog(dir);
+  const metas = modMetas(modJars(argv));
+  const catalog = buildCatalog(dirs, { metas });
+  for (const n of catalog.namespaces) {
+    const meta = metas[n.namespace];
+    if (meta && meta.version !== n.version) console.warn(`warning: ${meta.file} is ${n.namespace} ${meta.version}, the export has ${n.version} – its homepage is not used`);
+  }
   const outDir = path.join(ROOT, 'assets/data/configurator');
   fs.mkdirSync(outDir, { recursive: true });
   const text = JSON.stringify(catalog);
@@ -377,10 +483,11 @@ function main() {
 
   const fixtures = path.join(ROOT, 'tools/fixtures');
   fs.mkdirSync(fixtures, { recursive: true });
-  const vectors = read(dir, 'base/sharecode/vectors.json');
+  const vectors = read(readExports(dirs).base, 'base/sharecode/vectors.json');
   fs.writeFileSync(path.join(fixtures, 'pw3-export-vectors.json'), JSON.stringify(vectors, null, 1) + '\n');
 
-  console.log(`catalog.json: ${catalog.parts.length} parts, ${catalog.presets.length} presets, namespaces ${catalog.namespaces.map((n) => `${n.namespace} ${n.version}`).join(', ')}, ${(text.length / 1024).toFixed(1)} KiB`);
+  console.log(`catalog.json: ${catalog.parts.length} parts, ${catalog.presets.length} presets, namespaces ${catalog.namespaces.map((n) => `${n.namespace} ${n.version}${n.homepage ? ` (${n.homepage})` : ''}`).join(', ')}, ${(text.length / 1024).toFixed(1)} KiB`);
+  console.log(`sources: ${catalog.source.sources.map((x) => `${x.generator} ${x.generated_at} [${x.namespaces.join(', ')}]`).join('; ')}`);
   console.log(`pw3-export-vectors.json: ${vectors.length} vectors`);
   const goldens = argValue(argv, '--goldens', 'PROPWASH_SHARECODE_GOLDENS');
   if (goldens) console.log(`golden files copied to ${path.relative(ROOT, copyGoldens(goldens))}: ${GOLDEN_FILES.join(', ')}`);

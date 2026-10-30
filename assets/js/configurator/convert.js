@@ -4,7 +4,7 @@
 // in place of the old ones. Runs in the browser only; nothing is sent anywhere. Also the texts both pages show for a
 // code: why it can't be converted, and the add-ons it needs with safe links.
 
-import { t } from './i18n.js?v=582a6e40';
+import { t } from './i18n.js?v=58d1b91a';
 import { decodePwd1, PWD1_PREFIX } from './sharecode.js?v=024bd980';
 import { creativeCounts } from './sharecode3.js?v=024bd980';
 

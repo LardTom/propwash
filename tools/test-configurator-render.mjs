@@ -314,7 +314,7 @@ check(pieceSlots({ role: 'frame' }, null).main === null, 'a frame without tint g
         const a = assemble(build, env);
         const stackPiece = a.pieces.find((p) => p.role === 'stack');
         const batteryPiece = a.pieces.find((p) => p.role === 'battery');
-        check(!a.pieces.some((p) => p.procedural && p.procedural !== 'frame' && p.procedural !== 'accessory_base'), `${label}: no extra piece`);
+        check(!a.pieces.some((p) => p.procedural && !['frame', 'accessory_base', 'antenna'].includes(p.procedural)), `${label}: no extra piece`);
         const stackModel = models.get(stack.id);
         const batteryModel = models.get(battery.id);
         const mounted = stackModel.variants.mounted;

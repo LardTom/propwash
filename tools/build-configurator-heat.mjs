@@ -37,7 +37,7 @@ export function atLeast(a, b) {
 }
 
 const buildKey = (b) => JSON.stringify({ ...b, accessories: Object.fromEntries(Object.entries(b.accessories || {}).sort()) },
-  ['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessories', 'top', 'bottom']);
+  ['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessories', 'top', 'bottom', 'front']);
 
 const heatOf = (a) => HEAT_KEYS.map((k) => a[k]);
 

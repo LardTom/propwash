@@ -5,12 +5,12 @@
  "mod": {
   "id": "justmoreparts",
   "name": "Propwash: Just More Parts",
-  "version": "1.2.0-dev.1"
+  "version": "1.2.0-rc.1"
  },
  "short_id": 2,
  "table_source": "mod",
- "table_entries": 143,
- "table_crc": "58b98f32",
+ "table_entries": 146,
+ "table_crc": "c907a30d",
  "requires": {
   "propwash": ">=0.6.0-"
  },
@@ -21,7 +21,7 @@
  "counts": {
   "frame": 22,
   "stack": 12,
-  "motor": 34,
+  "motor": 37,
   "prop": 38,
   "video": 7,
   "battery": 30,
@@ -29,9 +29,9 @@
   "chemistry": 4
  },
  "jar": {
-  "file": "justmoreparts-fabric-26.3-1.2.0-dev.1.jar",
-  "bytes": 4734966,
-  "sha256": "e25744d329a539489968921f5dc050fb0a99d74d52e8870d7d6220b7c2dd1fe5",
+  "file": "justmoreparts-fabric-26.3-1.2.0-rc.1.jar",
+  "bytes": 4762083,
+  "sha256": "cb60050f9e15ff98e1917ed6aecd76d895601beace44ace41101dd792858c2ea",
   "loader": "fabric"
  },
  "generator": "tools/build-addons.mjs (web export format 2, read from the jar like the configurator)",

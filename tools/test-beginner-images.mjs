@@ -154,8 +154,8 @@ async function main() {
     child.kill();
     server.close();
     await sleep(300);
-    fs.rmSync(profile, { recursive: true, force: true });
-    fs.rmSync(work, { recursive: true, force: true });
+    fs.rmSync(profile, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
+    fs.rmSync(work, { recursive: true, force: true, maxRetries: 5, retryDelay: 200 });
   }
   finish(summary.join('; '));
 }

@@ -3,7 +3,9 @@
 // and of the network side of the jar reader and the converter (5.7 no. 49), headless Chrome at 390 and 1280 px,
 // English and German. The add-ons are the add-on checkouts for Propwash 0.6.0 next to this repository that registry.json
 // does not list (mod id, name and the newest Fabric jar come from those checkouts at run time; nothing of them is
-// written into this repository), or the jars given with --addon-jars.
+// written into this repository), or the jars given with --addon-jars. An add-on the site's data already carries
+// (Camera Drones and Mob Defense, from the web export with all three add-ons) is switched off in the add-on bar for no. 140,
+// as if it were not installed.
 //   - no. 139: every part of the jar's parts table that has a part file shows up after “Open add-on jar” with its name,
 //     its model and its mass (accessories under their mount, those for the front mount too, and one of them picked; the
 //     3D view has the picked parts on the drone; an accessory with frames is looked for on one of its frames, the only
@@ -146,11 +148,13 @@ function unit(addon, dir) {
   const code = arg('--addon-code', 'PROPWASH_ADDON_CODE') || encodeWith(catalog, inCode);
   const decoded = catalog.decode(code);
   check(decoded.ok && decoded.namespaces.some((n) => n.namespace === addon.id && n.used), `no. 140 ${label}: the code carries the add-on (${code.slice(0, 24)}…)`);
-  const plainCatalog = createCatalog(base);
+  // An add-on the site's data already carries (Camera Drones and Mob Defense) is switched off: as if not installed.
+  const inBase = (base.namespaces || []).some((n) => n.namespace === addon.id);
+  const plainCatalog = createCatalog(inBase ? composeCatalog(base, { off: [addon.id] }) : base);
   const missing = plainCatalog.decode(code);
   check(missing.ok && missing.unknownParts.length > 0, `no. 140 ${label}: without the jar the code has unknown parts (${missing.ok && missing.unknownParts.length})`);
   const victimCode = encodeWith(catalog, [victim]);
-  return { a, files, codeOnly, victim, variant, code, victimCode, label, inCode: inCode.map((x) => x.id) };
+  return { a, files, codeOnly, victim, variant, code, victimCode, label, inCode: inCode.map((x) => x.id), inBase };
 }
 
 /** One part per category and mount, so a code can carry them all at once. */
@@ -321,6 +325,11 @@ async function browser(found) {
           const f = await b.page({ lang });
           await f.open('/configurator/', { width, lang, ready: CFG_READY });
           loads++;
+          if (u.inBase) {
+            check(await f.evaluate(`(() => { const s = document.querySelector('[data-addon-item="${addon.id}"] [role=switch]'); if (!s) return false; s.click(); return true; })()`),
+              `no. 140 ${where}: the add-on of the site's data switched off in the add-on bar`);
+            await sleep(700);
+          }
           await f.evaluate(setInput('[data-import]', u.code));
           await sleep(900);
           const needs = await f.evaluate(`(() => {
