@@ -428,6 +428,12 @@ something, the test names the file and the entry to write. The denylist is not p
 the same local file as the mod's public export (`PROPWASH_EXPORT_DENYLIST`, otherwise
 `~/.config/propwash/public-export-denylist.txt`, one term per line) and fails without it.
 
+`node tools/test-protocol-texts.mjs` checks the network protocol of the described release: `PROTOCOL` in the test names
+it per Propwash version (0.6.0: 18 from 0.6.0-rc.3 on; rc.1 and rc.2 had 17), and the docs data,
+`Constants.PROTOCOL_VERSION` at the Propwash commit the changelog page reads, every page under `docs/` (rows of other API
+versions in the API history excepted), the changelog entries of that release in English and German and the dictionaries
+must all name it. A release that raises the protocol adds its number there.
+
 The docs menu groups the pages under **Play** and **Make add-ons** (`GROUPS` and `PAGES` in `tools/docs/html.mjs`); the
 overview page shows the same groups as cards. A new docs page needs four things: an entry in `PAGES` with its path, id,
 group and title, a builder in `tools/docs/pages/<id>.mjs`, its line in `BUILDERS` of `tools/build-docs.mjs`, and a card in
