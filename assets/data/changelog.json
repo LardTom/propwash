@@ -10,7 +10,7 @@
         "de": "Die FPV-Drohnen-Mod für Minecraft"
       },
       "source": {
-        "ref": "896257b0883a711b629f8043043421480fa51584"
+        "ref": "e880099f1d60c900b7b7e43c1b38566cdc0fb615"
       },
       "releases": [
         {
@@ -98,8 +98,8 @@
                   "de": "Zonen für alle: Mit dem neuen Zonen-Markierer zwei Ecken rechtsklicken (grüner Vorschau-Rahmen), dann öffnet sich der Zonen-Editor. Jeder Spieler kann Zonen anlegen, Besitzer und Operatoren ändern oder löschen sie (Welt-Regel *Spieler dürfen Zonen anlegen*, standardmäßig an). Ein Kästchen *Zonen* neben jeder Regel im Tab *Welt-Regeln* legt fest, ob Zonen sie ändern dürfen."
                 },
                 {
-                  "en": "Creative-only barriers: the *Drone-Only Barrier* lets drones through and stops players, mobs, items and arrows, the *Drone Barrier* stops only drones. Both are invisible like the vanilla barrier and show up only while you hold one in creative mode.",
-                  "de": "Barrieren nur für den Kreativmodus: Der *Drohnen-Durchlass* lässt Drohnen durch und hält Spieler, Mobs, Items und Pfeile auf, die *Drohnen-Sperre* hält nur Drohnen auf. Beide sind unsichtbar wie die Vanilla-Barriere und erscheinen nur, solange du eine im Kreativmodus in der Hand hältst."
+                  "en": "Creative-only barriers: the *Drone-Passable Barrier* lets drones through and stops players, mobs, items and arrows, the *Drone Barrier* stops only drones. Both are invisible like the vanilla barrier: in creative mode they show the selection outline when you aim at them, even with an empty hand, and icons while you hold one; in survival they stay invisible.",
+                  "de": "Barrieren nur für den Kreativmodus: Die *Drohnen-durchlässige Barriere* lässt Drohnen durch und hält Spieler, Mobs, Items und Pfeile auf, die *Drohnen-Sperre* hält nur Drohnen auf. Beide sind unsichtbar wie die Vanilla-Barriere: Im Kreativmodus zeigen sie den Auswahlrahmen, wenn du auf sie zielst, auch mit leerer Hand, und Symbole, solange du eine in der Hand hältst; im Überleben bleiben sie unsichtbar."
                 },
                 {
                   "en": "Drones take the vanilla `minecraft:scale` attribute (0.0625–16): `/attribute` makes a drone bigger or smaller – model, props, LEDs, hitbox, collisions, FPV camera and rotor dust scale with it, the flight model stays the same. Laps with a resized drone count as assisted.",
@@ -213,8 +213,8 @@
               "kind": "compatibility",
               "items": [
                 {
-                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · network protocol 17: client and server must both run 0.6.0 – 0.5.x can't join a 0.6.0 server and the other way round.",
-                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · Netzwerkprotokoll 17: Client und Server brauchen beide 0.6.0 – 0.5.x kann einem 0.6.0-Server nicht beitreten und umgekehrt."
+                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · network protocol 18: client and server must both run 0.6.0 – 0.5.x can't join a 0.6.0 server and the other way round.",
+                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · Netzwerkprotokoll 18: Client und Server brauchen beide 0.6.0 – 0.5.x kann einem 0.6.0-Server nicht beitreten und umgekehrt."
                 },
                 {
                   "en": "Worlds, drones, courses, leaderboards, ghosts and settings from 0.5.x load unchanged. Courses get their course ID the first time they load, old leaderboards stay valid, the freecam rule starts off in every world, and bandos that are already generated stay as they are.",
