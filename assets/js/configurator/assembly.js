@@ -19,13 +19,14 @@
 // and the holder reaches forward by as much. It belongs to the video part and paints the antenna slot. The video unit
 // leaves out the faces of its "antenna…" elements (`hideFaces`, the list "antenna" of the model's base variant). A VTX
 // model without that list comes from an older export whose models still carry their antennas: then the VTX is drawn
-// as before and gets no antenna piece, so no antenna sits twice.
+// as before and gets no antenna piece, so no antenna sits twice. A VTX without external antennas
+// (VideoAntenna.none()) gets no antenna piece either: nothing drawn at the holder, no antenna paint slot from it.
 //
 // Battery plugged in (Propwash 0.6.0, PowerLead / PlugMask): a drone with its battery shows no plugs and no power leads.
 // The stack is drawn as its "_mounted" variant (without its own plug) and without its two power leads (pigtail), the
 // battery without its socket and the lead to it; `hide` lists the indices of the left-out model elements.
 
-import { frameAntennaAnchor, videoAntenna } from './antenna.js?v=bc5d352c';
+import { frameAntennaAnchor, videoAntenna, isNoAntenna } from './antenna.js?v=999e67f3';
 
 export const SLOTS = 4;
 export const FRONT_LEFT = 0;
@@ -305,15 +306,18 @@ export function behindPackMm(layout, frame, batteryAt, env) {
 /**
  * DroneAssembly.antennaPart: the VTX's antennas (AntennaRules.antenna(video, frame)) at the frame's antenna holder with
  * its tilt and lean of a pair, behind an overhanging pack (batteryAt: the battery piece), drawn from shapes and not
- * turned by the camera angle; null for a VTX model of an older export (antennas in the model).
+ * turned by the camera angle; null for a VTX model of an older export (antennas in the model) and for a VTX without
+ * external antennas (AntennaGeometry gives no shapes for it).
  */
 export function antennaPiece(layout, frame, video, env, batteryAt = null) {
   if (antennaMask(env.model(video.id)) === null) return null;
+  const antenna = videoAntenna(video, frame);
+  if (isNoAntenna(antenna)) return null;
   const holder = frameAntennaAnchor(frame);
   const behind = behindPackMm(layout, frame, batteryAt, env);
   const [x, y, z] = layout.antenna;
   return {
-    role: 'antenna', id: video.id, position: [x, y, z + behind], procedural: 'antenna', antenna: videoAntenna(video, frame),
+    role: 'antenna', id: video.id, position: [x, y, z + behind], procedural: 'antenna', antenna,
     tilt: layout.antennaTilt, wheelbase: frame.data.wheelbase_mm, pairLean: holder.pairLeanDeg, behindPack: behind,
   };
 }

@@ -13,8 +13,8 @@
 
 import { crc32 } from './crc32.js?v=62ad0fa2';
 import { standIn } from './stand-ins.js?v=ac5c805f';
-import { antennaKind, derivedAntenna, fallbackAnchor, antennaFaces, maxLengthMm, pairLeanDeg } from './antenna.js?v=bc5d352c';
-import { KINDS, ARM_KEYS, trueX, maxContinuousCurrent, landingCellVoltage, effectiveUsableFraction, SOC_GRID, splitId, tryParse, idCompare } from './partjson.js?v=fddd4b25';
+import { antennaKind, derivedAntenna, fallbackAnchor, antennaFaces, maxLengthMm, pairLeanDeg } from './antenna.js?v=999e67f3';
+import { KINDS, ARM_KEYS, trueX, maxContinuousCurrent, landingCellVoltage, effectiveUsableFraction, SOC_GRID, splitId, tryParse, idCompare } from './partjson.js?v=0e4150b1';
 
 export const LANGUAGES = Object.freeze(['de_de', 'en_us']);
 export const NOMINAL_CELL_V = 3.7;
