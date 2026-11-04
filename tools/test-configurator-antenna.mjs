@@ -32,11 +32,20 @@
 //     default), tips at the length along the axis, the holder reaching forward to the top plate
 //   - paint: the antenna slot starts with the colour of the cap (PaintPicker.defaults, before every model group),
 //     is offered for every VTX, a pick on the antenna paints it, its colour recolours the caps only
+//   - no external antennas (Propwash 0.6.0-rc.3, VideoAntenna.none()): a VTX whose export antenna has count 0 (PartData
+//     writes count 0, length_mm 0, cap whip, derived false) or "none" has no antennas instead of derived ones; its part
+//     file may say "antenna": "none" next to the object (any other text an error like PartJson) and then exports like
+//     the game; AntennaGeometry gives no shapes, so with every VTX of the fixture on every frame there is no antenna
+//     piece (the video unit still leaves out its antenna faces), mass and analysis stay as with antennas, and the
+//     antenna paint slot goes away unless the VTX model has an antenna group (PaintPicker.available; 11 slots against
+//     10 for freestyle_5 with digital_hd as in the game's self test)
 //   - headless Chrome, English and German, 1280 and 390 px, with the fixture's catalog data and VTX models on their way
 //     to the page: whoop, 5″ race, 5″ freestyle with HD and 7″ long range (Just More Parts VTX): one antenna mesh at
 //     the holder, the masked video unit, a hover and a click on the antenna pick “Video” and the antenna slot, the
 //     camera preview hides it like the video unit; with --shots also the drone from behind for the comparison with
-//     the game's sheets (antenna_rear_<frame>_*.png, antenna_close_*.png)
+//     the game's sheets (antenna_rear_<frame>_*.png, antenna_close_*.png); 5″ freestyle with HD and 7″ long range
+//     with the Just More Parts VTX whose export antenna has count 0: no antenna piece and no antenna mesh, the masked
+//     video unit, no paint row for the antenna tips (except for the antenna group of the VTX model)
 //
 //   node tools/test-configurator-antenna.mjs [--no-browser] [--shots <dir>] [--chrome <path>]
 
@@ -52,6 +61,7 @@ import { decodePart } from '../assets/js/configurator/partjson.js';
 import { paintDefaults, paintAvailable, groupsOf, pieceSlots, rgbOf } from '../assets/js/configurator/paint.js';
 import { PAINT_SLOTS } from '../assets/js/configurator/sharecode.js';
 import { entry } from '../assets/js/configurator/i18n.js';
+import * as Analysis from '../assets/js/configurator/analysis.js';
 
 const { assemble, frameLayout, pieceCategory } = Assembly;
 
@@ -687,6 +697,115 @@ for (const id of VTX) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------
+// No external antennas (Propwash 0.6.0-rc.3, F-RC3P-6: VideoAntenna.none(), "antenna": "none" in the part file, the web
+// export's antenna with count 0)
+
+const NONE = { count: 0, lengthMm: 0, cap: 'whip' };
+// PartData of a VTX without external antennas (AntennaRules.antenna → VideoAntenna.none(), Propwash 738966411).
+const exportNoneOf = (kind) => ({ count: 0, length_mm: 0, cap: 'whip', kind, derived: false });
+const exportNone = (p) => ({ ...p, data: { ...p.data, antenna: exportNoneOf(p.data.antenna.kind) } });
+const withoutAntennas = (json, ids) => ({
+  ...json, parts: json.parts.map((p) => (ids.has(p.id) ? { ...p, data: { ...p.data, antenna: exportNoneOf(p.data.antenna.kind) } } : p)),
+});
+let noneChecks = 0;
+{
+  const start = checks;
+  for (const a of [{ count: 0, length_mm: 0, cap: 'whip' }, { count: 0, length_mm: 80, cap: 'pagoda' }, { count: 0 }, 'none']) {
+    const got = call('validAntenna', a);
+    check(same(got, NONE), `antenna ${JSON.stringify(a)} of a catalog entry: no antennas (got ${JSON.stringify(got)})`);
+  }
+  for (const bad of [{ count: -1, length_mm: 80, cap: 'pagoda' }, 'nothing', 0]) {
+    check(call('validAntenna', bad) === null, `antenna ${JSON.stringify(bad)} of a catalog entry: invalid, derived instead`);
+  }
+  for (const p of fixtureVideos.map(exportNone)) {
+    const own = call('videoAntenna', p);
+    check(same(own, { ...NONE, kind: p.data.antenna.kind }), `${p.id} with count 0 in the export: no antennas instead of derived ones (${JSON.stringify(own)})`);
+    const fitted = fixtureFrames.map((f) => call('videoAntenna', p, f));
+    check(fitted.every((a) => a && a.count === 0 && a.lengthMm === 0), `${p.id} with count 0 on every frame of the export: no antennas`);
+  }
+  const noShapes = [[NONE, TILT, 225], [NONE, TILT, 65, 5, 9.5], [{ ...NONE, lengthMm: 80, cap: 'pagoda' }, TILT, 300, 15]];
+  check(noShapes.every((args) => same(call('antennaPieces', ...args), [])), 'AntennaGeometry without antennas: no shapes, neither antennas nor holder');
+
+  // The part file (PartJson): "antenna": "none" next to the object, written to the catalog like PartData.
+  const videoJson = { format: 1, mass_g: 9, link: 'digital', latency_ms: 28, range_blocks: 800, image_quality: 0.9, vtx_power_mw: 500 };
+  const withAntenna = (antenna) => decodePart('video', 'addon:vtx_none', JSON.stringify({ ...videoJson, antenna }));
+  let r = withAntenna('none');
+  check(r.definition && same(r.definition.antenna, NONE) && !r.errors.length && !r.warnings.length,
+    `PartJson "antenna": "none": no antennas (${JSON.stringify(r.definition && r.definition.antenna)}, ${JSON.stringify(r.errors)})`);
+  const d = r.definition ? exportData(r.definition) : {};
+  check(Object.keys(d).at(-1) === 'antenna' && same(d.antenna, exportNoneOf('long_range')),
+    `PartData of "antenna": "none": count 0, length_mm 0, cap whip, derived false like the game's export (${JSON.stringify(d.antenna)})`);
+  check(same(call('videoAntenna', { id: 'addon:vtx_none', category: 'video', basics: { mass_g: 9 }, data: d }), { ...NONE, kind: 'long_range' }),
+    'a VTX with "antenna": "none" read from a jar has no antennas in the catalog');
+  r = withAntenna({ count: 0, length_mm: 80, cap: 'pagoda' });
+  check(r.definition && same(r.definition.antenna, NONE) && !r.errors.length, `PartJson antenna with count 0: no antennas, length and cap without meaning (${JSON.stringify(r.definition && r.definition.antenna)})`);
+  for (const [bad, what] of [['nothing', '"none" oder Objekt erwartet, gefunden: "nothing"'], [7, 'Objekt erwartet, gefunden: 7'],
+    [{ count: -1, length_mm: 80, cap: 'patch' }, 'Antennen-Anzahl muss 0 (keine), 1 oder 2 sein: -1']]) {
+    r = withAntenna(bad);
+    check(!r.definition && r.errors.some((e) => e.includes(what)),
+      `PartJson antenna ${JSON.stringify(bad)}: error “${what}” (${JSON.stringify(r.errors)})`);
+  }
+
+  // The game's export with count 0 and the same VTX read from its part file with "none" load the same.
+  const hd = fixtureVideos.find((p) => p.id === 'propwash:digital_hd');
+  const hdJson = {
+    format: 1, mass_g: hd.basics.mass_g, link: hd.data.link, latency_ms: hd.data.latency_ms, range_blocks: hd.data.range_blocks,
+    image_quality: hd.data.image_quality, camera_width_mm: hd.data.camera_width_mm, camera_fov_deg: hd.data.camera_fov_deg,
+    vtx_power_mw: hd.data.vtx_power_mw, power_w: hd.data.power_w, antenna: 'none',
+  };
+  const jar = decodePart('video', hd.id, JSON.stringify(hdJson));
+  const jarData = jar.definition ? exportData(jar.definition) : {};
+  check(same(jarData.antenna, exportNone(hd).data.antenna), `${hd.id} with "none" from its part file = the export with count 0 (${JSON.stringify(jarData.antenna)})`);
+
+  // Assembly, analysis and paint with every VTX of the fixture without antennas.
+  const noneIds = new Set(VTX);
+  const noneCatalog = createCatalog(withoutAntennas(withFixtureData(siteJson), noneIds));
+  const noneEnv = { ...env, catalog: noneCatalog };
+  let noneCombos = 0;
+  for (const frame of catalog.partsIn('frame')) {
+    for (const id of VTX) {
+      const label = `${frame.id} + ${id} without antennas`;
+      const build = { ...base, frame: frame.id, video: id, accessories: {} };
+      const a = assemble(build, noneEnv);
+      const withAntennas = assemble(build, env);
+      const video = a.pieces.find((p) => p.role === 'video');
+      const mask = fixtureModels.get(id).variants.base.antenna || [];
+      check(!a.pieces.some((p) => p.role === 'antenna') && a.pieces.length === withAntennas.pieces.length - 1,
+        `${label}: no antenna piece (${a.pieces.filter((p) => p.role === 'antenna').length}), every other piece stays`);
+      check(video && (mask.length ? same(video.hideFaces, mask) : !video.hideFaces), `${label}: the video unit still leaves out its ${mask.length} antenna faces`);
+      noneCombos++;
+    }
+  }
+  check(noneCombos === combos, `without antennas: ${noneCombos} frame and VTX combinations`);
+  for (const id of VTX) {
+    const build = { ...base, video: id, accessories: {} };
+    const plain = callIn(Analysis, 'analyze', build, catalog);
+    const none = callIn(Analysis, 'analyze', build, noneCatalog);
+    check(plain && none && none.mass_grams === plain.mass_grams && same(none, plain),
+      `freestyle + ${id}: no antenna mass, mass ${none && none.mass_grams} g and every other figure as with derived antennas (${plain && plain.mass_grams} g)`);
+    const a = assemble(build, noneEnv);
+    const modelOfPiece = (pid) => noneEnv.model(pid);
+    const groups = (fixtureModels.get(id).variants.paint.groups || []).some(([channel]) => channel === 'antenna');
+    const available = paintAvailable(a.pieces, modelOfPiece, render, PAINT_SLOTS);
+    const before = paintAvailable(assemble(build, env).pieces, (pid) => env.model(pid), render, PAINT_SLOTS);
+    const defaults = paintDefaults(a.pieces, modelOfPiece, render);
+    if (groups) {
+      check(available.has('antenna'), `freestyle + ${id} without antennas: the antenna slot stays for the antenna group of its model (PaintPicker.available)`);
+    } else {
+      check(!available.has('antenna') && available.size === before.size - 1 && !('antenna' in defaults),
+        `freestyle + ${id} without antennas: no antenna slot (${available.size} slots, with antennas ${before.size}), no default antenna colour`);
+    }
+  }
+  {
+    const build = { ...base, frame: 'propwash:freestyle_5', video: 'propwash:digital_hd', accessories: {} };
+    const slots = (e) => paintAvailable(assemble(build, e).pieces, (pid) => e.model(pid), render, PAINT_SLOTS).size;
+    check(slots(env) === 11 && slots(noneEnv) === 10, `freestyle_5 + digital_hd: 11 paint slots with antennas, 10 without (got ${slots(env)}, ${slots(noneEnv)}), as in the game's self test`);
+  }
+  noneChecks = checks - start;
+}
+console.log(`without antennas: ${noneChecks} checks`);
+
+// ---------------------------------------------------------------------------------------------------------------
 // Headless Chrome
 
 const VIEWS = [[], [['ArrowLeft', 26]], [['ArrowLeft', 13], ['ArrowDown', 6]], [['ArrowRight', 26]], [['ArrowLeft', 26], ['ArrowDown', 11]], [['ArrowUp', 8]]];
@@ -700,6 +819,7 @@ async function browserChecks() {
   const { child, ws } = await launch(arg('--chrome') || CHROME, profile);
   const browser = cdp(ws);
   const errors = [];
+  let noneIds = null;
   try {
     await browser.ready;
     const { targetId } = await browser.send('Target.createTarget', { url: 'about:blank' });
@@ -720,7 +840,8 @@ async function browserChecks() {
         let text = null;
         if (/\/catalog\.json(\?|$)/.test(p.request.url)) {
           const { body, base64Encoded } = await send('Fetch.getResponseBody', { requestId: p.requestId });
-          text = JSON.stringify(withFixtureData(JSON.parse(base64Encoded ? Buffer.from(body, 'base64').toString('utf8') : body)));
+          const json = withFixtureData(JSON.parse(base64Encoded ? Buffer.from(body, 'base64').toString('utf8') : body));
+          text = JSON.stringify(noneIds ? withoutAntennas(json, noneIds) : json);
         } else {
           const parts = new URL(p.request.url).pathname.split('/');
           const id = `${parts.at(-3)}:${decodeURIComponent(parts.at(-1)).replace(/\.json$/, '')}`;
@@ -817,10 +938,13 @@ async function browserChecks() {
       { lang: 'de', frame: 'propwash:long_range_7', vtx: 'justmoreparts:digital_lr', viewport: { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false } },
       { lang: 'de', frame: 'propwash:whoop_65', vtx: 'propwash:analog_nano', viewport: { width: 390, height: 844, deviceScaleFactor: 3, mobile: true } },
       { lang: 'de', frame: 'justmoreparts:tp_2_x', vtx: 'propwash:digital_hd', battery: 'propwash:b1s_300_hv', viewport: { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false } },
+      { lang: 'en', frame: 'propwash:freestyle_5', vtx: 'propwash:digital_hd', none: true, viewport: { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false } },
+      { lang: 'de', frame: 'propwash:long_range_7', vtx: 'justmoreparts:digital_lr', none: true, viewport: { width: 390, height: 844, deviceScaleFactor: 3, mobile: true } },
     ];
-    for (const { lang, frame, vtx, battery, viewport } of LOADS) {
-      const label = `${lang} ${viewport.width} px ${frame} + ${vtx}`;
+    for (const { lang, frame, vtx, battery, none, viewport } of LOADS) {
+      const label = `${lang} ${viewport.width} px ${frame} + ${vtx}${none ? ' without antennas' : ''}`;
       const at = lang === 'de' ? 1 : 0;
+      noneIds = none ? new Set([vtx]) : null;
       if (langScript) await send('Page.removeScriptToEvaluateOnNewDocument', { identifier: langScript });
       ({ identifier: langScript } = await send('Page.addScriptToEvaluateOnNewDocument', {
         source: `try { localStorage.setItem('propwash-lang', '${lang}'); } catch (e) {} document.addEventListener('propwash:viewer', (e) => { window.__viewer = e.detail; });`,
@@ -849,6 +973,33 @@ async function browserChecks() {
       await evaluate('document.fonts.ready.then(() => true)');
       await sleep(600);
       await viewerToTop();
+
+      if (none) {
+        const pieces = await evaluate('window.__viewer.current().assembly.pieces');
+        const mask = fixtureModels.get(vtx).variants.base.antenna || [];
+        const videoPiece = pieces.find((p) => p.role === 'video');
+        check(!pieces.some((p) => p.role === 'antenna') && videoPiece && (mask.length ? same(videoPiece.hideFaces, mask) : !videoPiece.hideFaces),
+          `${label}: no antenna piece, the video unit leaves out its ${mask.length} antenna faces (${JSON.stringify(pieces.map((p) => p.role))})`);
+        const drawn = await evaluate('window.__viewer.highlights()');
+        check(!drawn.some((h) => h.role === 'antenna') && drawn.some((h) => h.role === 'video' && h.visible === true && h.triangles > 0),
+          `${label}: no antenna mesh, the video unit drawn (${JSON.stringify(drawn.map((h) => [h.role, h.visible]))})`);
+        await setTab('paint');
+        await sleep(150);
+        const rows = await evaluate("[...document.querySelectorAll('[data-paint-row]')].map((r) => r.dataset.paintRow)");
+        const groups = (fixtureModels.get(vtx).variants.paint.groups || []).some(([channel]) => channel === 'antenna');
+        check(rows.includes('camera') && rows.includes('antenna') === groups,
+          `${label}: ${groups ? 'the antenna row only for the antenna group of the VTX model (PaintPicker.available)' : 'no paint row for the antenna tips'} (${rows})`);
+        if (SHOTS) {
+          fs.mkdirSync(SHOTS, { recursive: true });
+          await turn([]);
+          await viewerToTop();
+          await sleep(150);
+          const shot = await send('Page.captureScreenshot', { format: 'png' });
+          fs.writeFileSync(path.join(SHOTS, `antenna-none-${lang}-${viewport.width}-${local(frame)}-${local(vtx)}.png`), Buffer.from(shot.data, 'base64'));
+        }
+        check(!errors.length, `${label}: no console errors (${errors.splice(0).join(' | ')})`);
+        continue;
+      }
 
       const spec = exportAntenna(fixtureVideos.find((p) => p.id === vtx));
       const pieces = await evaluate('window.__viewer.current().assembly.pieces');
