@@ -53,6 +53,7 @@ export const MAX_VTX_LEVELS = 8;
 export const DEFAULT_ANTENNA_TILT = 45.0;
 export const CAPS = Object.freeze(['whip', 'stubby', 'lollipop', 'pagoda', 'patch']);
 export const MAX_ANTENNA_COUNT = 2;
+export const NO_ANTENNA = 'none';
 export const MIN_ANTENNA_LENGTH_MM = 10.0;
 export const MAX_ANTENNA_LENGTH_MM = 250.0;
 const INT_MIN = -2147483648;
@@ -952,8 +953,7 @@ function video(id, basics, f) {
   const power = f.intOr('vtx_power_mw', 0);
   const watts = f.optDouble('power_w');
   const levels = f.optIntList('vtx_levels_mw') ?? [];
-  const antennaFields = f.optObject('antenna');
-  const antenna = antennaFields ? readAntenna(antennaFields) : null;
+  const antenna = videoAntennaOf(f);
   if (f.problems.hasErrors()) return null;
   const resolved = resolveBasics(basics, 1.0);
   if (link === null || latency < 0 || range < 0 || quality < 0) fail(`${id}: Masse, System, Latenz, Reichweite und Bildqualität sind Pflicht`);
@@ -981,13 +981,32 @@ function video(id, basics, f) {
   };
 }
 
-/** VideoAntenna: one or two antennas of 10 to 250 mm with a cap. */
+/**
+ * VideoAntenna: one or two antennas of 10 to 250 mm with a cap; count 0 is none (VideoAntenna.none(): length 0, cap
+ * whip, whatever was given).
+ */
 function videoAntenna(count, lengthMm, cap) {
-  if (count < 1 || count > MAX_ANTENNA_COUNT) fail(`Antennen-Anzahl muss 1 oder ${MAX_ANTENNA_COUNT} sein: ${count}`);
+  if (count === 0) return { count: 0, lengthMm: 0.0, cap: 'whip' };
+  if (count < 0 || count > MAX_ANTENNA_COUNT) fail(`Antennen-Anzahl muss 0 (keine), 1 oder ${MAX_ANTENNA_COUNT} sein: ${count}`);
   if (!(lengthMm >= MIN_ANTENNA_LENGTH_MM && lengthMm <= MAX_ANTENNA_LENGTH_MM)) {
     fail(`Antennen-Länge muss zwischen ${MIN_ANTENNA_LENGTH_MM.toFixed(1)} und ${MAX_ANTENNA_LENGTH_MM.toFixed(1)} mm liegen: ${lengthMm}`);
   }
   return { count, lengthMm, cap };
+}
+
+/**
+ * PartJson.videoAntenna: "antenna": "none" (no external antennas), an object (readAntenna), any other text an error;
+ * null without the field or with an error.
+ */
+function videoAntennaOf(f) {
+  const raw = f.raw('antenna');
+  if (typeof raw === 'string') {
+    if (raw === NO_ANTENNA) return videoAntenna(0, 0.0, 'whip');
+    f.error('antenna', `"${NO_ANTENNA}" oder Objekt erwartet, gefunden: ${show(raw)}`);
+    return null;
+  }
+  const fields = f.optObject('antenna');
+  return fields ? readAntenna(fields) : null;
 }
 
 /** PartJson.antenna: the VTX's own antennas (count 1 by default), null with an error in the part. */

@@ -235,7 +235,9 @@ Mob Defense:
   painted with the slot “Antenna tips” (which starts with the cap's colour) and hidden in the camera preview; the VTX
   model leaves out the faces of its elements named `antenna…` (add-on VTX, listed as `antenna` on the model file's
   base variant), so no antenna is drawn twice – a VTX model file without that list (data of an older export) keeps its
-  antennas and gets none at the holder
+  antennas and gets none at the holder; a VTX without external antennas (Propwash 0.6.0-rc.3, `VideoAntenna.none()`:
+  `"antenna": "none"` in its part file, `count` 0 in the web export) gets neither antennas nor holder and no slot
+  “Antenna tips” from them, its mass and figures stay as they are
 - FPV camera preview (switch “3D / FPV camera” in the viewer, or open `configurator/?view=camera#PW1-…`): the image the
   drone's camera sends, drawn like the game's FPV view (since Propwash 0.4.0): 16:9 rectilinear from the lens with the drone's
   camera angle and the field of view of the camera in the video unit (`camera_fov_deg`, e.g. analog race 125°, digital
@@ -286,7 +288,8 @@ node tools/build-addons.mjs --jar justmoreparts=<jar>   # the hosted export of J
 node tools/build-configurator-beginner.mjs # pictures of the builds for beginners (headless Chrome, cwebp)
 node tools/test-configurator.mjs           # share codes, conversion, presets, analysis, FPV camera, tune, explanations
 node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts, assembly, plugged battery, FPV hubs
-node tools/test-configurator-antenna.mjs   # VTX antennas at the frame's holder: rules, mask, jar, shapes, paint (Chrome)
+node tools/test-configurator-antenna.mjs   # VTX antennas at the frame's holder: rules, mask, jar, shapes, paint, VTX
+                                           # without external antennas ("none", count 0) (Chrome)
 node tools/test-configurator-pick.mjs      # clicks and taps on the parts in the 3D view (headless Chrome, ~1 min)
 node tools/test-configurator-flows.mjs     # converter, old links, explanations, builds for beginners (headless Chrome)
 node tools/test-configurator-creative.mjs  # PWD1 and creative PW3 codes in converter and configurator (headless Chrome)

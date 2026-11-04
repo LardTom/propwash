@@ -7,7 +7,9 @@
 // latency), cut to the frame's longest antenna (1.2 × wheelbase), and the renderer builds holder, SMA, sleeve, stalk
 // and cap as shapes at the holder, never turned by the camera angle: one antenna in the middle straight up and back, a
 // pair in a V from one point (15° each, narrower on small open frames). Elements whose name starts with "antenna" in a
-// VTX model (add-on VTX) are left out where the drone is drawn (AntennaMask), so no antenna sits twice.
+// VTX model (add-on VTX) are left out where the drone is drawn (AntennaMask), so no antenna sits twice. A VTX without
+// external antennas (VideoAntenna.none(), Propwash 0.6.0-rc.3: "antenna": "none" in its part file, count 0 in the web
+// export) has neither antennas nor holder.
 //
 // All lengths are millimetres in the drone's frame (x to the right, y up, z to the rear), like assembly.js.
 //
@@ -45,6 +47,8 @@ export const ABOVE_ELECTRONICS = 2.4;
 export const ABOVE_DUCTED_CAMERA_MM = 6.0;
 export const CAPS = Object.freeze(['whip', 'stubby', 'lollipop', 'pagoda', 'patch']);
 export const MAX_COUNT = 2;
+export const NO_ANTENNA = 'none';
+export const NONE = Object.freeze({ count: 0, lengthMm: 0.0, cap: 'whip' });
 export const MIN_LENGTH_MM = 10.0;
 export const MAX_LENGTH_MM = 250.0;
 
@@ -100,10 +104,18 @@ export function derivedAntenna(v) {
   }
 }
 
-/** VideoAntenna: a valid antenna (1 or 2, 10 to 250 mm, a known cap), else null. */
+/** VideoAntenna#isNone: no external antennas. */
+export const isNoAntenna = (a) => !!a && a.count === 0;
+
+/**
+ * VideoAntenna: a valid antenna (1 or 2, 10 to 250 mm, a known cap), NONE for count 0 or "none" (length and cap without
+ * meaning), else null.
+ */
 export function validAntenna(a) {
+  if (a === NO_ANTENNA) return { ...NONE };
   if (!a || typeof a !== 'object') return null;
   const count = a.count;
+  if (count === 0) return { ...NONE };
   const length = a.lengthMm !== undefined ? a.lengthMm : a.length_mm;
   if (!Number.isInteger(count) || count < 1 || count > MAX_COUNT) return null;
   if (!(finite(length) && length >= MIN_LENGTH_MM && length <= MAX_LENGTH_MM)) return null;
@@ -164,8 +176,8 @@ export function videoValues(part) {
 }
 
 /**
- * AntennaRules.antenna of a catalog entry: the export's antenna when it is valid, else derived; with its kind. With a
- * frame (AntennaRules.antenna(video, frame)) cut to the frame's longest antenna.
+ * AntennaRules.antenna of a catalog entry: the export's antenna when it is valid (count 0: none), else derived; with
+ * its kind. With a frame (AntennaRules.antenna(video, frame)) cut to the frame's longest antenna.
  */
 export function videoAntenna(part, frame) {
   const values = videoValues(part);
@@ -320,11 +332,12 @@ function whip(out, frame, antenna) {
  * AntennaGeometry.pieces / shape: the TPU holder (two boxes, the lower one reaching forward to the top plate, and by
  * behindPackMm further when the antenna sits behind an overhanging pack) and per antenna the SMA nut and the antenna
  * of its cap, tilted back by the holder's tilt – one antenna in the middle, a pair in a V from one point, each
- * leaning out by pairLeanDeg (15° by default) – around the holder at (0, 0, 0). matrix: the unit cube or cylinder
- * (−0.5…0.5, cylinder along y) into the drone's millimetres.
+ * leaning out by pairLeanDeg (15° by default) – around the holder at (0, 0, 0); none without external antennas.
+ * matrix: the unit cube or cylinder (−0.5…0.5, cylinder along y) into the drone's millimetres.
  */
 export function antennaPieces(antenna, tiltDeg, wheelbaseMm, pairLeanDeg, behindPackMm = 0) {
   const out = [];
+  if (isNoAntenna(antenna)) return out;
   const offset = antennaOffset(wheelbaseMm);
   const reach = reachMm(wheelbaseMm) + Math.max(0.0, finite(behindPackMm) ? behindPackMm : 0.0);
   const half = (antenna.count === 1 ? 0.0 : offset) + 3.5;
