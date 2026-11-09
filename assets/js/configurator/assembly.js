@@ -22,6 +22,10 @@
 // as before and gets no antenna piece, so no antenna sits twice. A VTX without external antennas
 // (VideoAntenna.none()) gets no antenna piece either: nothing drawn at the holder, no antenna paint slot from it.
 //
+// Recessed accessories (Propwash 0.6.0, recess_mm and drop_mm in the web export): the body is drawn at
+// AccessoryAnchor#modelOrigin (accessoryOrigin), that far behind the anchor and that far lower, turned by the anchor's
+// tilt; the top mount's base stays at the anchor.
+//
 // Battery plugged in (Propwash 0.6.0, PowerLead / PlugMask): a drone with its battery shows no plugs and no power leads.
 // The stack is drawn as its "_mounted" variant (without its own plug) and without its two power leads (pigtail), the
 // battery without its socket and the lead to it; `hide` lists the indices of the left-out model elements.
@@ -86,6 +90,22 @@ export function accessoryAnchor(frame, mount) {
   if (mount === 'top') return { position: [0, 0.16 * wb, -0.23 * wb], tilt: 15, length: 0 };
   if (mount === 'front') return { position: [0, 0, -0.3 * wb], tilt: 0, length: 0 };
   return { position: [0, -3, -0.25 * wb], tilt: 30, length: 0.15 * wb };
+}
+
+/**
+ * AccessoryAnchor#modelOrigin: where the body of an accessory is drawn. A recessed accessory (recess_mm, drop_mm of
+ * Propwash 0.6.0) sits that far behind the anchor and that far lower, turned by the anchor's tilt; without the fields
+ * the anchor itself.
+ */
+export function accessoryOrigin(anchor, data) {
+  const recess = (data && data.recess_mm) || 0;
+  const drop = (data && data.drop_mm) || 0;
+  if (recess === 0 && drop === 0) return anchor.position;
+  const tilt = anchor.tilt * Math.PI / 180;
+  const cos = Math.cos(tilt);
+  const sin = Math.sin(tilt);
+  const [x, y, z] = anchor.position;
+  return [x, y + (-drop * cos - recess * sin), z + (-drop * sin + recess * cos)];
 }
 
 /** DroneLayout.defaultAntenna: the frame's antenna holder (AntennaRules.anchor), {position, tilt}. */
@@ -405,7 +425,7 @@ export function assemble(build, env) {
     if (mount === 'top') {
       pieces.push({ role: 'accessory_base', id: `mount_${mount}`, mount, position: anchor.position, procedural: 'accessory_base' });
     }
-    pieces.push({ role: 'accessory', id, mount, position: anchor.position, tiltX: anchor.tilt, stretchX: stretch });
+    pieces.push({ role: 'accessory', id, mount, position: accessoryOrigin(anchor, type.data), tiltX: anchor.tilt, stretchX: stretch });
   }
   return { layout, cameraTilt: layout.cameraTilt, pieces, missing, plugsHidden: !!hidden };
 }
