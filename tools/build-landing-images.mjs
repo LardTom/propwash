@@ -76,6 +76,9 @@ export const IMAGES = [
   ['paint-screen-ui', 'paint_screen', [640, 1334], [294, 136, 1334, 808]],
   ['recipe-book-ui', 'recipe_book', [640, 1084], [379, 283, 1084, 511]],
   ['leaderboard-screen-ui', 'leaderboard_screen', [640, 1392], [263, 69, 1392, 933]],
+  ['trick-tutorial', 'trick_tutorial_player_flips_rolls', FULL],
+  ['advancements-tab', 'stats_advancements_en', [800, 960], [480, 225, 960, 540]],
+  ['replay-video', 'race_replay_video_chase_progress', FULL],
 ];
 
 // The link preview (og:image): the screenshot scaled to this width, cut to this height around its middle.

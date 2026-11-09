@@ -980,8 +980,8 @@
                 "de": "Programmierbare Kameradrohnen"
               },
               "text": {
-                "en": "Drones that fly on their own: waypoints, position hold, follow me, point of interest and a gimbal for a second pilot.",
-                "de": "Drohnen, die selbst fliegen: Wegpunkte, Position halten, Follow me, Point of Interest und ein Gimbal für einen zweiten Piloten."
+                "en": "Drones that fly on their own: waypoints, position hold, follow me, point of interest and a gimbal for a second pilot that holds its direction in the world while the pilot turns – plus a flight planner that changes several waypoints at once.",
+                "de": "Drohnen, die selbst fliegen: Wegpunkte, Position halten, Follow me, Point of Interest und ein Gimbal für einen zweiten Piloten, der seine Richtung in der Welt hält, während der Pilot dreht – dazu ein Flugplaner, der mehrere Wegpunkte auf einmal ändert."
               }
             }
           ]
