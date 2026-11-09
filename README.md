@@ -288,7 +288,8 @@ node tools/build-addons.mjs --jar justmoreparts=<jar>   # the hosted export of J
 node tools/build-configurator-beginner.mjs # pictures of the builds for beginners (headless Chrome, cwebp)
 node tools/test-configurator.mjs           # share codes, conversion, presets, analysis, FPV camera, tune, explanations
 node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts, assembly, plugged battery, FPV hubs,
-                                           # recessed accessories (recess_mm, drop_mm)
+                                           # recessed and straight-hanging accessories (recess_mm, drop_mm,
+                                           # hangs_straight)
 node tools/test-configurator-antenna.mjs   # VTX antennas at the frame's holder: rules, mask, jar, shapes, paint, VTX
                                            # without external antennas ("none", count 0) (Chrome)
 node tools/test-configurator-pick.mjs      # clicks and taps on the parts in the 3D view (headless Chrome, ~1 min)
@@ -357,11 +358,20 @@ pickers in headless Chrome.
 Recessed accessories (Propwash 0.6.0: `recess_mm` and `drop_mm` in the part file and in `data` of the web export, only
 when not 0) sit that far behind their anchor and that far lower, like an accessory that reaches back under the frame
 instead of hanging in front of the nose. `assembly.js` draws the body at the game's `AccessoryAnchor#modelOrigin`
-(`accessoryOrigin`: the anchor plus `[0, −drop_mm, recess_mm]` turned by the mount's tilt; the base of the top mount
-stays at the anchor), `analysis.js` moves the box for the centre of mass and the inertia like `AccessoryType`, and the
-jar path reads and exports both fields like `PartJson` and `PartData`. An export without the fields draws and analyses
-every accessory as before. `tools/test-configurator-render.mjs` checks every frame and mount, the analysis and the jar
-path.
+(`accessoryOrigin`: the anchor plus `[0, −drop_mm, recess_mm]` turned by the accessory's tilt; the base of the top
+mount stays at the anchor), `analysis.js` moves the box for the centre of mass and the inertia like `AccessoryType`, and
+the jar path reads and exports both fields like `PartJson` and `PartData`. An export without the fields draws and
+analyses every accessory as before. `tools/test-configurator-render.mjs` checks every frame and mount, the analysis and
+the jar path.
+
+Straight-hanging accessories (Propwash 0.6.0: `hangs_straight: true` in `data` of the web export for the gripper and
+every accessory with `hangs_straight` in its part file) hang without the mount's tilt and are not stretched to the
+anchor length, like `AccessoryAnchor#tiltFor` and `#stretch`; an accessory with an LED path is not stretched either.
+`assembly.js` (`accessoryTilt`, `accessoryStretch`, `accessoryOrigin`) and `analysis.js` (`tiltFor`, `anchorStretch`)
+read the field, the jar path writes it like `PartData` (only when true, last). The current data are from 0.6.0-rc.1,
+whose export did not have the field yet: the gripper in `catalog.json` carries it as the web export writes it since
+Propwash 0.6.0-rc.4 (FBW-1); the next export brings it by itself. With it, `freestyle_5` with the gripper below gives
+the game's figures (inertia Ixx 0.0015485, pitch authority 1819.1), checked by `tools/test-configurator-render.mjs`.
 
 `tools/fixtures/report-vectors.json` keeps share codes from bug reports with the build, analysis and FPV camera the
 mod gives for them (hand-maintained, not overwritten by the build scripts); the test decodes, re-encodes and analyses

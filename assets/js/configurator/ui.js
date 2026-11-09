@@ -2,19 +2,19 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText, createCatalog } from './data.js?v=e29fa41b';
+import { loadCatalog, localText, createCatalog } from './data.js?v=ba3541e9';
 import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=024bd980';
 import { parseUnknown, unknownId, unknownMarker, SHORT_KEY_PREFIX, creativeCounts } from './sharecode3.js?v=024bd980';
-import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=c8e100a5';
+import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=79ccb24d';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
-import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=fcc0ce5e';
+import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=11fbb0d2';
 import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
 import { batteryFit, fitsFrame } from './rules.js?v=6634f777';
-import { assemble, PROP_SLOTS } from './assembly.js?v=42fabeb2';
-import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=3285a442';
+import { assemble, PROP_SLOTS } from './assembly.js?v=4c00d7c2';
+import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=ed26e8eb';
 import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=167aea2f';
 import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=01d57f4b';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=c7799c53';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=5015e836';
 import { cameraCheck, isCameraDrone, navOf, gimbalOf, classOf as flightClassOf, lineNotes, noCameraFrameHint } from './camdrones.js?v=b1626e80';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
@@ -2265,7 +2265,7 @@ async function startViewer() {
   const button = $('[data-autorotate]');
   let mod;
   try {
-    mod = await import('./viewer.js?v=ed07016e');
+    mod = await import('./viewer.js?v=f1eaf480');
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;
