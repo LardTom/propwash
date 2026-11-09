@@ -452,6 +452,14 @@ something, the test names the file and the entry to write. The denylist is not p
 the same local file as the mod's public export (`PROPWASH_EXPORT_DENYLIST`, otherwise
 `~/.config/propwash/public-export-denylist.txt`, one term per line) and fails without it.
 
+`node tools/test-news-060.mjs` checks what the site says about the last fix block of Propwash 0.6.0, only what the
+merged code does: the sections of the player guide (laps the server doesn't count with the pass zone warning, the race
+line per course, replays as video, sculk, zone outlines in flight, the join overview without add-ons players don't need,
+mixed servers with Fabric as server loader, trick tutorials, *Unlock all* in the flight training, the advancement tab)
+with their pictures, the world rule `drones_trigger_sculk`, the cards of “What’s new” and the FAQ about NeoForge and
+Fabric players, the roadmap card of the camera drones, the changelog line about NeoForge players on Fabric servers, and
+that every dictionary in `tools/i18n/dict` has every text of the site (nothing missing, nothing stale).
+
 `node tools/test-protocol-texts.mjs` checks the network protocol of the described release: `PROTOCOL` in the test names
 it per Propwash version (0.6.0: 19 from 0.6.0-rc.4 on; rc.3 had 18, rc.1 and rc.2 had 17), and the docs data,
 `Constants.PROTOCOL_VERSION` at the Propwash commit the changelog page reads, every page under `docs/` (rows of other API
