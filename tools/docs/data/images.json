@@ -238,5 +238,53 @@
     "height": 1080,
     "small": 800,
     "large": 1600
+  },
+  "course_race_line": {
+    "name": "course-settings-race-line",
+    "src": "race_verdict_course_menu_en.png",
+    "width": 1708,
+    "height": 960,
+    "small": 800,
+    "large": 1600
+  },
+  "lap_verdict": {
+    "name": "lap-verdict-hud",
+    "src": "race_verdict_hud_en.png",
+    "width": 1708,
+    "height": 960,
+    "small": 800,
+    "large": 1600
+  },
+  "replay_video": {
+    "name": "replay-video-recording",
+    "src": "race_replay_video_chase_progress.png",
+    "width": 1708,
+    "height": 960,
+    "small": 800,
+    "large": 1600
+  },
+  "zones_flight": {
+    "name": "zones-in-flight-fpv",
+    "src": "zones_open_flight_fpv.png",
+    "width": 1708,
+    "height": 960,
+    "small": 800,
+    "large": 1600
+  },
+  "trick_tutorial": {
+    "name": "trick-tutorial-player",
+    "src": "trick_tutorial_player_flips_rolls.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
+  },
+  "advancements": {
+    "name": "advancements-tab",
+    "src": "stats_advancements_en.png",
+    "width": 1920,
+    "height": 1080,
+    "small": 800,
+    "large": 1600
   }
 }

@@ -444,7 +444,7 @@ The explanations are written in `tools/docs/pages/*.mjs` (English and German sid
 checks that the pages match the renderer, that every API type, part field, server setting and event has its
 explanation (and none is left for something that is gone), that the API history covers the current API version, that
 the API page lists the build problems and warnings of `DroneBuild` and names every accessory field added in Propwash
-0.6.0 in its API 1.7 overview, that every example command is valid, that every world rule is classified for races, that the German rules for add-ons
+0.6.0 in its API 1.7 overview and in the history of API 1.7 or 1.8, that every example command is valid, that every world rule is classified for races, that the German rules for add-ons
 follow the current `ADDONS.md` (hash and structure), and on every page: unique ids, working anchors and local links, English and German in
 pairs, balanced tags, real umlauts in German, and no local paths or terms from the local denylist. When a release adds
 something, the test names the file and the entry to write. The denylist is not part of this repository: the test reads
@@ -452,7 +452,7 @@ the same local file as the mod's public export (`PROPWASH_EXPORT_DENYLIST`, othe
 `~/.config/propwash/public-export-denylist.txt`, one term per line) and fails without it.
 
 `node tools/test-protocol-texts.mjs` checks the network protocol of the described release: `PROTOCOL` in the test names
-it per Propwash version (0.6.0: 18 from 0.6.0-rc.3 on; rc.1 and rc.2 had 17), and the docs data,
+it per Propwash version (0.6.0: 19 from 0.6.0-rc.4 on; rc.3 had 18, rc.1 and rc.2 had 17), and the docs data,
 `Constants.PROTOCOL_VERSION` at the Propwash commit the changelog page reads, every page under `docs/` (rows of other API
 versions in the API history excepted), the changelog entries of that release in English and German and the dictionaries
 must all name it. A release that raises the protocol adds its number there.

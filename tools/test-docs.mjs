@@ -129,18 +129,19 @@ for (const [lang, re] of [
 const checkedKeys = issues ? [...issues.problems, ...issues.warnings] : [];
 none(Object.keys(ISSUE_NOTES).filter((k) => !checkedKeys.includes(k)).map((k) => `ISSUE_NOTES erklärt ${k}, das DroneBuild nicht prüft (tools/docs/pages/api.mjs)`), 'Hinweise der Problemliste gehören zu geprüften Schlüsseln');
 
-// Accessory fields new in Propwash 0.6.0 (parts format) belong to API 1.7: the row "Accessory shape" of the API 1.7
-// overview and the 1.7 entry of the version history name each of them, in English and German.
+// Accessory fields new in Propwash 0.6.0 (parts format) belong to API 1.7 or 1.8 (both come with 0.6.0): the row
+// "Accessory shape" of the API 1.7 overview and the 1.7 or 1.8 entry of the version history name each of them, in
+// English and German.
 const shapeRow = (apiHtml.match(/<tr><th scope="row"><span lang="en">Accessory shape<\/span>[\s\S]*?<\/tr>/) || [''])[0];
 ok(!!shapeRow, 'docs/api/index.html: Zeile „Zubehör-Form“ in der Übersicht API 1.7');
 const onlyLang = (html, lang) => html.replace(new RegExp(`<span lang="${lang === 'en' ? 'de' : 'en'}">[\\s\\S]*?</span>`, 'g'), '');
-const history17 = API_HISTORY.find((h) => h.version === '1.7');
+const history060 = API_HISTORY.filter((h) => h.version === '1.7' || h.version === '1.8');
 const newAccessoryFields = FIELDS.accessory.filter((f) => /^Since Propwash 0\.6\.0/.test(f.desc.en)).map((f) => f.path);
 ok(newAccessoryFields.length > 0, 'Zubehör-Felder seit Propwash 0.6.0 im Teile-Format gefunden');
 for (const field of newAccessoryFields) {
   for (const lang of ['en', 'de']) {
     ok(onlyLang(shapeRow, lang).includes(`<code>${field}</code>`), `docs/api/index.html: Zeile „Zubehör-Form“ (${lang}) nennt das Zubehör-Feld ${field}`);
-    ok(!!history17 && history17.text[lang].includes(`<code>${field}</code>`), `API_HISTORY 1.7 (${lang}) nennt das Zubehör-Feld ${field}`);
+    ok(history060.some((h) => h.text[lang].includes(`<code>${field}</code>`)), `API_HISTORY 1.7 oder 1.8 (${lang}) nennt das Zubehör-Feld ${field}`);
   }
 }
 
