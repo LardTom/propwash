@@ -10,7 +10,7 @@
         "de": "Die FPV-Drohnen-Mod für Minecraft"
       },
       "source": {
-        "ref": "e880099f1d60c900b7b7e43c1b38566cdc0fb615"
+        "ref": "0124dd5132bb1ab6201e3df035ce96e36fac8c08"
       },
       "releases": [
         {
@@ -132,6 +132,10 @@
                 {
                   "en": "For add-ons: LED accessories light up along their own shape – a ring, an arc or a strip along the arms glows LED by LED along it in every LED mode (the rainbow runs around the ring), and accessories with more than 16 LEDs now light all of them.",
                   "de": "Für Add-ons: LED-Zubehör leuchtet entlang seiner eigenen Form – ein Ring, ein Bogen oder eine Leiste entlang der Arme glimmt in jedem LED-Modus LED für LED entlang (der Regenbogen läuft um den Ring), und Zubehör mit mehr als 16 LEDs lässt jetzt alle leuchten."
+                },
+                {
+                  "en": "NeoForge players can join Fabric servers that run the same Propwash version and add-ons, also behind Velocity. If the server has content the player is missing, the message names the mods.",
+                  "de": "NeoForge-Spieler können Fabric-Servern beitreten, die dieselbe Propwash-Version und dieselben Add-ons haben, auch hinter Velocity. Hat der Server Inhalte, die dem Spieler fehlen, nennt die Meldung die Mods."
                 }
               ]
             },
@@ -213,8 +217,8 @@
               "kind": "compatibility",
               "items": [
                 {
-                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · network protocol 18: client and server must both run 0.6.0 – 0.5.x can't join a 0.6.0 server and the other way round.",
-                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · Netzwerkprotokoll 18: Client und Server brauchen beide 0.6.0 – 0.5.x kann einem 0.6.0-Server nicht beitreten und umgekehrt."
+                  "en": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) or NeoForge (26.3.0.10-beta+) · Java 25 · network protocol 19: client and server must both run 0.6.0 – 0.5.x can't join a 0.6.0 server and the other way round.",
+                  "de": "Minecraft 26.3 · Fabric (Loader 0.19.5+, Fabric API 0.161.0+26.3) oder NeoForge (26.3.0.10-beta+) · Java 25 · Netzwerkprotokoll 19: Client und Server brauchen beide 0.6.0 – 0.5.x kann einem 0.6.0-Server nicht beitreten und umgekehrt."
                 },
                 {
                   "en": "Worlds, drones, courses, leaderboards, ghosts and settings from 0.5.x load unchanged. Courses get their course ID the first time they load, old leaderboards stay valid, the freecam rule starts off in every world, and bandos that are already generated stay as they are.",
