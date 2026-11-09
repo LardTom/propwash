@@ -86,7 +86,7 @@ this order (the ids are what the “Features” menu and older links use, so the
 | Hero | `#top` | what it is, Download and the configurator as the two buttons, version line, rotating FPV feed |
 | Get started | `#how` | four steps from building to racing, then the Flight School (`#learn`) for new pilots |
 | Online configurator | `#configurator` | what the configurator does, its picture, the button to open it |
-| What’s new | `#new` | three highlights of the latest feature release and its changelog link |
+| What’s new | `#new` | highlights of the latest feature release (0.6.0: three, then three of its last fix block) and its changelog link |
 | Flight &amp; tuning | `#flight` | flight model, tuning, the in-game configurator, the four ways to fly |
 | Video | `#video` | analog and digital video and how they break up (interactive) |
 | Racing &amp; freestyle | `#racing` | race line, gates, ghost, spectating, tricks, course building |
@@ -99,7 +99,8 @@ this order (the ids are what the “Features” menu and older links use, so the
 A new feature gets a line or a tile in the section it belongs to, not a section of its own; what only matters for one
 release goes into **What’s new** and moves into its section (or out) with the next release. For a release:
 
-- **What’s new** (`#new`) gets the three highlights of the release with one picture each and links to
+- **What’s new** (`#new`) gets the three highlights of the release with one picture each (0.6.0 has a second row of
+  three for its last fix block: trick tutorials, advancements, replays as video) and links to
   `changelog/#propwash-<version>`; the version line in the hero names the release and links to `#new`; numbers such as
   tricks, lessons and world rules come from the mod's `CHANGELOG.md`. Before the release, the cards may stand without
   pictures and link to `changelog/#propwash`: the pictures come from the screenshots of the release commit and the
