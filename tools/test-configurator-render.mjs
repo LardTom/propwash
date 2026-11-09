@@ -15,6 +15,10 @@
 //     without its socket, the two leads in front of it and what lies behind the pack's rear face (balance lead and
 //     plug), the pack drawn, no extra piece; the hidden part of the 1300 and of the whoop battery with the numbers of
 //     the mod's PlugAnchorsTest; the fallbacks (no mounted variant, no socket) draw stack and battery as before
+//   - recessed accessories (Propwash 0.6.0, recess_mm and drop_mm, finding AUTO60-1): on every frame and mount the body
+//     sits at AccessoryAnchor#modelOrigin (anchor plus [0, −drop, recess] turned by the tilt), not at the anchor; the
+//     top mount's base, tilt and stretch stay; the analysis moves the box like the game; the jar path reads and exports
+//     both fields like PartJson and PartData
 //   - VTX antennas (Propwash 0.6.0): every frame has an antenna holder; a VTX whose model lists the faces of its antenna
 //     elements (or a VTX without a model) adds one antenna piece drawn from shapes (category video, paint slot
 //     antenna), a VTX model of older data (antennas in the model) none; the rest: tools/test-configurator-antenna.mjs
@@ -33,6 +37,9 @@ import { batteryFit } from '../assets/js/configurator/rules.js';
 import { channelTint, rgbOf, paintTints, paintDefaults, paintAvailable, groupsOf, pieceSlots } from '../assets/js/configurator/paint.js';
 import { PAINT_SLOTS } from '../assets/js/configurator/sharecode.js';
 import { exportDir } from './build-configurator-data.mjs';
+import { decodePart } from '../assets/js/configurator/partjson.js';
+import { exportData } from '../assets/js/configurator/catalog-build.js';
+import { airframe } from '../assets/js/configurator/analysis.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const DATA = path.join(ROOT, 'assets/data/configurator');
@@ -169,6 +176,111 @@ check(proceduralAccessoryBase(0xd6333a).length === 8, 'top mount base shape');
   const wb = bare.data.wheelbase_mm;
   check(fallback && JSON.stringify(fallback.position) === JSON.stringify([0, 0, -0.3 * wb]) && fallback.tilt === 0 && fallback.length === 0,
     `front anchor without a table: 0, 0, -0.3 × wheelbase, no tilt (${fallback && JSON.stringify(fallback)})`);
+}
+
+// Recessed accessories (Propwash 0.6.0, recess_mm and drop_mm of an accessory, finding AUTO60-1): the box sits that far
+// behind the anchor and that far lower (AccessoryType#boxMinMm/boxMaxMm), the body is drawn at AccessoryAnchor#modelOrigin
+// – the anchor plus [0, −drop, recess] turned by the anchor's tilt – instead of at the anchor in front of the nose; the
+// base of the top mount stays at the anchor, tilt and stretch stay. The flight analysis moves the box with it (the same
+// figures as the plain accessory on an anchor moved to that origin). The jar path reads both fields like PartJson (0 up
+// to the depth or the height, else the game's refusal, never an unknown field) and exports them like PartData (only
+// when not 0, after everything else).
+{
+  const RECESS = 58;
+  const DROP = 1.5;
+  const near = (a, b) => Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(a), Math.abs(b));
+  const nearVec = (a, b) => Array.isArray(a) && a.length === b.length && a.every((v, i) => near(v, b[i]));
+  const origin = (pos, tilt, recess, drop) => {
+    const t = tilt * Math.PI / 180;
+    return [pos[0], pos[1] + (-drop * Math.cos(t) - recess * Math.sin(t)), pos[2] + (-drop * Math.sin(t) + recess * Math.cos(t))];
+  };
+  const json = JSON.parse(fs.readFileSync(path.join(DATA, 'catalog.json'), 'utf8'));
+  const gripper = json.parts.find((p) => p.id === 'propwash:gripper');
+  const testPart = (id, slot, size, extra) => ({ ...gripper, id, builtin: false, data: { ...gripper.data, slot, size_mm: size, ...extra } });
+  const shifted = { front: [RECESS, DROP], top: [12, 4], bottom: [30, 5] };
+  const sizes = { front: [62, 58, 64], top: [30, 22, 70], bottom: [24, 18, 90] };
+  for (const slot of ['front', 'top', 'bottom']) {
+    json.parts.push(testPart(`recesstest:${slot}`, slot, sizes[slot], { recess_mm: shifted[slot][0], drop_mm: shifted[slot][1] }));
+    json.parts.push(testPart(`recesstest:${slot}_plain`, slot, sizes[slot], {}));
+  }
+  const rc = createCatalog(json);
+  const renv = { catalog: rc, render, model: (id) => models.get(id.startsWith('recesstest:') ? gripper.id : id) || null };
+  const placed = { front: 0, top: 0, bottom: 0 };
+  for (const frame of rc.partsIn('frame')) {
+    const layout = frameLayout(frame, rc, render);
+    for (const slot of frame.data.accessory_mounts) {
+      const build = { ...rc.presetBuild('propwash:freestyle'), frame: frame.id, accessories: { [slot]: `recesstest:${slot}` } };
+      const a = assemble(build, renv);
+      const piece = a.pieces.find((x) => x.role === 'accessory' && x.mount === slot);
+      const plain = assemble({ ...build, accessories: { [slot]: `recesstest:${slot}_plain` } }, renv).pieces.find((x) => x.role === 'accessory' && x.mount === slot);
+      const anchor = layout.accessories[slot];
+      const expected = origin(anchor.position, anchor.tilt, ...shifted[slot]);
+      check(!!piece && nearVec(piece.position, expected),
+        `${frame.id}: ${slot} accessory with recess_mm ${shifted[slot][0]} and drop_mm ${shifted[slot][1]} at AccessoryAnchor#modelOrigin ${JSON.stringify(expected)}, not at ${JSON.stringify(piece && piece.position)}`);
+      check(!!plain && JSON.stringify(plain.position) === JSON.stringify(anchor.position), `${frame.id}: ${slot} accessory without the fields at the anchor`);
+      check(!!piece && !!plain && piece.tiltX === plain.tiltX && piece.stretchX === plain.stretchX, `${frame.id}: ${slot} recessed accessory keeps tilt and stretch`);
+      if (slot === 'top') {
+        const base = a.pieces.find((x) => x.role === 'accessory_base' && x.mount === 'top');
+        check(!!base && JSON.stringify(base.position) === JSON.stringify(anchor.position), `${frame.id}: the top mount's base stays at the anchor`);
+      }
+      placed[slot]++;
+    }
+  }
+  check(placed.front > 0 && placed.top > 0 && placed.bottom > 0, `frames with each mount (${JSON.stringify(placed)})`);
+
+  let analysed = 0;
+  for (const frame of rc.partsIn('frame').filter((f) => f.data.accessory_mounts.includes('front'))) {
+    const build = { ...rc.presetBuild('propwash:freestyle'), frame: frame.id, accessories: { front: 'recesstest:front' } };
+    const plainBuild = { ...build, accessories: { front: 'recesstest:front_plain' } };
+    const spec = frame.data.accessory_anchors && frame.data.accessory_anchors.front;
+    const pos = spec ? spec.pos : [0, 0, -0.3 * frame.data.wheelbase_mm];
+    const tilt = spec ? spec.tilt_deg : 0;
+    const moved = JSON.parse(JSON.stringify(json));
+    const movedFrame = moved.parts.find((p) => p.id === frame.id);
+    movedFrame.data.accessory_anchors = { ...(movedFrame.data.accessory_anchors || {}),
+      front: { pos: origin(pos, tilt, RECESS, DROP), tilt_deg: tilt, length_mm: spec ? spec.length_mm : 0 } };
+    const recessed = airframe(build, rc);
+    const atAnchor = airframe(plainBuild, rc);
+    const atOrigin = airframe(plainBuild, createCatalog(moved));
+    if (!recessed || !atOrigin || !atAnchor) {
+      check(false, `${frame.id}: analysis with the recessed front accessory`);
+      continue;
+    }
+    const keys = Object.keys(atOrigin).filter((k) => typeof atOrigin[k] === 'number');
+    const off = keys.filter((k) => !near(recessed[k], atOrigin[k]));
+    check(!off.length, `${frame.id}: the analysis moves the recessed box like the game (${off.slice(0, 4).map((k) => `${k} ${recessed[k]} ≠ ${atOrigin[k]}`).join(', ')})`);
+    check(!near(atAnchor.inertiaXx, atOrigin.inertiaXx), `${frame.id}: recess and drop change the inertia (${atAnchor.inertiaXx} / ${atOrigin.inertiaXx})`);
+    analysed++;
+  }
+  check(analysed > 0, `analyses with a recessed front accessory (${analysed})`);
+
+  const file = { format: 1, mass_g: 150.0, slot: 'front', size_mm: [62.0, 58.0, 64.0], flight_battery_w: 1.2, frontal_area_m2: 0.0036, sort: 0 };
+  const read = (extra) => decodePart('accessory', 'recesstest:dispenser', JSON.stringify({ ...file, ...extra }));
+  const r = read({ recess_mm: RECESS, drop_mm: DROP });
+  check(!!r.definition && r.definition.recessMm === RECESS && r.definition.dropMm === DROP, `partjson: recess_mm and drop_mm read (${r.definition && [r.definition.recessMm, r.definition.dropMm]})`);
+  check(!r.warnings.some((w) => w.includes('recess_mm') || w.includes('drop_mm')), `partjson: recess_mm and drop_mm are no unknown fields (${r.warnings.join(' | ')})`);
+  const out = r.definition ? exportData(r.definition) : {};
+  const keys = Object.keys(out);
+  check(out.recess_mm === RECESS && out.drop_mm === DROP && keys.indexOf('recess_mm') === keys.length - 2 && keys.indexOf('drop_mm') === keys.length - 1,
+    `jar export: recess_mm and drop_mm last, like PartData (${keys.join(', ')})`);
+  const none = read({});
+  check(!!none.definition && none.definition.recessMm === 0 && none.definition.dropMm === 0 && !('recess_mm' in exportData(none.definition)) && !('drop_mm' in exportData(none.definition)),
+    'partjson: without the fields 0, the export without them');
+  const recessOnly = read({ recess_mm: 23 });
+  check(!!recessOnly.definition && 'recess_mm' in exportData(recessOnly.definition) && !('drop_mm' in exportData(recessOnly.definition)), 'jar export: only the field that is set');
+  const deep = read({ recess_mm: 70 });
+  check(deep.definition === null && deep.errors.some((e) => e.includes('recess_mm muss zwischen 0 und der Tiefe 64')), `partjson: recess_mm beyond the depth refused (${deep.errors[0] || 'no error'})`);
+  const low = read({ drop_mm: -1 });
+  check(low.definition === null && low.errors.some((e) => e.includes('drop_mm muss zwischen 0 und der Höhe 58')), `partjson: a negative drop_mm refused (${low.errors[0] || 'no error'})`);
+  const text = read({ recess_mm: 'far' });
+  check(text.definition === null && text.errors.some((e) => e.includes('recess_mm')), `partjson: recess_mm as text refused (${text.errors[0] || 'no error'})`);
+  const fromJar = createCatalog({ ...json, parts: [...json.parts, testPart('recesstest:jar', 'front', [62, 58, 64], r.definition ? exportData(r.definition) : {})] });
+  const jarEnv = { catalog: fromJar, render, model: () => null };
+  const fs5 = fromJar.part('propwash:freestyle_5');
+  const jarPiece = assemble({ ...fromJar.presetBuild('propwash:freestyle'), accessories: { front: 'recesstest:jar' } }, jarEnv).pieces.find((x) => x.role === 'accessory');
+  const fs5Anchor = frameLayout(fs5, fromJar, render).accessories.front;
+  check(!!jarPiece && nearVec(jarPiece.position, origin(fs5Anchor.position, fs5Anchor.tilt, RECESS, DROP)),
+    `jar part with recess_mm on freestyle_5: ${JSON.stringify(jarPiece && jarPiece.position)} behind the anchor ${JSON.stringify(fs5Anchor.position)}`);
 }
 
 for (const preset of catalog.presets) {
