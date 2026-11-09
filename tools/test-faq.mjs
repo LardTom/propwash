@@ -11,8 +11,8 @@
 //     convert/, post next to the old code); languages (English and German in the game, the website languages exactly
 //     the active ones with a complete dictionary of tools/i18n/languages.json, no promises); add-ons (namespace,
 //     links to docs/api/#rules and addons/, both there)
-//   - “What’s new”: exactly three cards (freecam drone, RX block, share codes), each with div.shot and a picture that
-//     exists; “Everything in 0.6.0” links changelog/#propwash-<version of platforms.json>, an anchor of changelog.json
+//   - “What’s new”: exactly six cards – freecam drone, RX block, share codes, then the three of the last fix block
+//     (trick tutorials, advancements, replays as video) – each with div.shot and a picture that exists; “Everything in 0.6.0” links changelog/#propwash-<version of platforms.json>, an anchor of changelog.json
 //
 //   node tools/test-faq.mjs [--no-browser] [--chrome <path>]
 //
@@ -175,8 +175,9 @@ function whatsNew() {
   if (!sec) return;
   const doc = parse(sec.html);
   const figures = [...walk(doc)].filter((e) => e.name === 'figure');
-  check(figures.length === 3, `no. 12: #new has exactly three cards (${figures.length})`);
-  const WANT = [{ en: /^Freecam drone$/, de: /^Freecam-Drohne$/ }, { en: /^RX block$/, de: /^RX-Block$/ }, { en: /^Share codes\b/, de: /^Sharecodes\b/ }];
+  check(figures.length === 6, `no. 12: #new has exactly six cards (${figures.length})`);
+  const WANT = [{ en: /^Freecam drone$/, de: /^Freecam-Drohne$/ }, { en: /^RX block$/, de: /^RX-Block$/ }, { en: /^Share codes\b/, de: /^Sharecodes\b/ },
+    { en: /^Trick tutorials$/, de: /^Trick-Tutorials$/ }, { en: /^Advancements$/, de: /^Fortschritte$/ }, { en: /^Replays as video$/, de: /^Replays als Video$/ }];
   figures.forEach((f, i) => {
     const html = sec.html.slice(f.start, f.end);
     const fdoc = parse(html);
