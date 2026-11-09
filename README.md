@@ -287,7 +287,8 @@ node tools/build-configurator-heat.mjs --export <dir>   # heat figures of the ga
 node tools/build-addons.mjs --jar justmoreparts=<jar>   # the hosted export of Just More Parts the configurator shows
 node tools/build-configurator-beginner.mjs # pictures of the builds for beginners (headless Chrome, cwebp)
 node tools/test-configurator.mjs           # share codes, conversion, presets, analysis, FPV camera, tune, explanations
-node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts, assembly, plugged battery, FPV hubs
+node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts, assembly, plugged battery, FPV hubs,
+                                           # recessed accessories (recess_mm, drop_mm)
 node tools/test-configurator-antenna.mjs   # VTX antennas at the frame's holder: rules, mask, jar, shapes, paint, VTX
                                            # without external antennas ("none", count 0) (Chrome)
 node tools/test-configurator-pick.mjs      # clicks and taps on the parts in the 3D view (headless Chrome, ~1 min)
@@ -352,6 +353,15 @@ while it is built from an older export; a newer export brings the same entry. `t
 [--propwash-repo <dir>]` checks the reader, the rule, the order and texts of all rules against `RuleCheck` and the
 language files of that checkout, the dictionaries, the gimbals of an add-on checkout next to this one (if there) and the
 pickers in headless Chrome.
+
+Recessed accessories (Propwash 0.6.0: `recess_mm` and `drop_mm` in the part file and in `data` of the web export, only
+when not 0) sit that far behind their anchor and that far lower, like an accessory that reaches back under the frame
+instead of hanging in front of the nose. `assembly.js` draws the body at the game's `AccessoryAnchor#modelOrigin`
+(`accessoryOrigin`: the anchor plus `[0, −drop_mm, recess_mm]` turned by the mount's tilt; the base of the top mount
+stays at the anchor), `analysis.js` moves the box for the centre of mass and the inertia like `AccessoryType`, and the
+jar path reads and exports both fields like `PartJson` and `PartData`. An export without the fields draws and analyses
+every accessory as before. `tools/test-configurator-render.mjs` checks every frame and mount, the analysis and the jar
+path.
 
 `tools/fixtures/report-vectors.json` keeps share codes from bug reports with the build, analysis and FPV camera the
 mod gives for them (hand-maintained, not overwritten by the build scripts); the test decodes, re-encodes and analyses

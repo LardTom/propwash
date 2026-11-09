@@ -1130,12 +1130,16 @@ function accessory(id, basics, f) {
   const hangsStraight = f.boolOr('hangs_straight', false);
   const muzzle = f.optVector('muzzle_mm', 3);
   const frames = f.optIdList('frames');
+  const recess = f.doubleOr('recess_mm', 0.0);
+  const drop = f.doubleOr('drop_mm', 0.0);
   if (f.problems.hasErrors()) return null;
   const resolved = resolveBasics(basics, 1.0);
   if (slot === null || size[0] < 0) fail(`${id}: Masse, Halterung und Maße sind Pflicht`);
   const [width, height, depth] = size;
   const path = checkedLedPath(id, ledPath.map((p) => vec(p[0], p[1], p[2])), leds);
   if (!(width > 0 && width <= 500 && height > 0 && height <= 500 && depth > 0 && depth <= 500)) fail(`${id}: Zubehörmaße ungültig`);
+  if (!(recess >= 0 && recess <= depth)) fail(`${id}: recess_mm muss zwischen 0 und der Tiefe ${depth} mm liegen: ${recess}`);
+  if (!(drop >= 0 && drop <= height)) fail(`${id}: drop_mm muss zwischen 0 und der Höhe ${height} mm liegen: ${drop}`);
   if (!(watts >= 0 && watts <= 200)) fail(`${id}: Leistungsaufnahme ungültig: ${watts}`);
   if (!(frontal >= 0 && frontal <= 0.5)) fail(`${id}: Stirnfläche ungültig: ${frontal}`);
   if (leds < 0 || leds > MAX_LEDS) fail(`${id}: LED-Anzahl muss zwischen 0 und ${MAX_LEDS} liegen: ${leds}`);
@@ -1152,7 +1156,7 @@ function accessory(id, basics, f) {
   return {
     kind: 'accessory', id, basics: resolved, slot, widthMm: width, heightMm: height, depthMm: depth, flightBatteryWatts: watts,
     frontalAreaM2: frontal, ledCount: leds, actionCam: camera, lensXMm: lens[0], lensLengthMm: lens[1], ledPathMm: path, hangsStraight,
-    muzzleMm, frames: [...new Set(frames)].sort(idCompare),
+    muzzleMm, frames: [...new Set(frames)].sort(idCompare), recessMm: recess, dropMm: drop,
   };
 }
 

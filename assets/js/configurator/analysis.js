@@ -202,11 +202,21 @@ function anchorToFrame(anchor, lx, ly, lz) {
   return [anchor.x + lx, anchor.y + (ly * cos - lz * sin), anchor.z + (ly * sin + lz * cos)];
 }
 
-function accessoryBox(acc, slot) {
+function modelBox(acc, slot) {
   const [w, h, d] = acc.data.size_mm;
   if (slot === 'top') return { min: [-w / 2.0, HINGE_CLEARANCE_MM, -d / 2.0], max: [w / 2.0, HINGE_CLEARANCE_MM + h, d / 2.0] };
   if (slot === 'front') return { min: [-w / 2.0, -h, -d], max: [w / 2.0, 0.0, 0.0] };
   return { min: [-w / 2.0, -h, -d / 2.0], max: [w / 2.0, 0.0, d / 2.0] };
+}
+
+// AccessoryType#boxMinMm/boxMaxMm: a recessed accessory's box sits recess_mm further back and drop_mm lower.
+function accessoryBox(acc, slot) {
+  const box = modelBox(acc, slot);
+  const recess = acc.data.recess_mm || 0.0;
+  const drop = acc.data.drop_mm || 0.0;
+  if (recess === 0.0 && drop === 0.0) return box;
+  const move = (p) => [p[0], p[1] - drop, p[2] + recess];
+  return { min: move(box.min), max: move(box.max) };
 }
 
 function anchorStretch(anchor, acc, slot) {

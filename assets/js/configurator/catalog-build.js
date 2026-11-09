@@ -14,7 +14,7 @@
 import { crc32 } from './crc32.js?v=62ad0fa2';
 import { standIn } from './stand-ins.js?v=ac5c805f';
 import { antennaKind, derivedAntenna, fallbackAnchor, antennaFaces, maxLengthMm, pairLeanDeg } from './antenna.js?v=999e67f3';
-import { KINDS, ARM_KEYS, trueX, maxContinuousCurrent, landingCellVoltage, effectiveUsableFraction, SOC_GRID, splitId, tryParse, idCompare } from './partjson.js?v=0e4150b1';
+import { KINDS, ARM_KEYS, trueX, maxContinuousCurrent, landingCellVoltage, effectiveUsableFraction, SOC_GRID, splitId, tryParse, idCompare } from './partjson.js?v=1061e25f';
 
 export const LANGUAGES = Object.freeze(['de_de', 'en_us']);
 export const NOMINAL_CELL_V = 3.7;
@@ -433,6 +433,8 @@ export function exportData(def) {
         led_path: def.ledPathMm.map((p) => nums(...p)),
       };
       if (def.frames && def.frames.length) out.frames = [...def.frames];
+      if (def.recessMm) out.recess_mm = num(def.recessMm);
+      if (def.dropMm) out.drop_mm = num(def.dropMm);
       return out;
     }
     default: return {};

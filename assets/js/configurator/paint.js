@@ -6,7 +6,7 @@
 // colour of its cap (AntennaGeometry.capColor), and a colour on the slot recolours the caps (DroneVisuals.paintShape).
 
 import { capColor, paintedAntenna, antennaPieces } from './antenna.js?v=999e67f3';
-import { PROP_SLOTS } from './assembly.js?v=6a749aa6';
+import { PROP_SLOTS } from './assembly.js?v=42fabeb2';
 
 const CHANNEL_SLOT = Object.freeze({
   frame: 'frame', tpu: 'tpu', motor: 'motors', stack: 'stack', battery: 'battery', camera: 'camera', antenna: 'antenna',
