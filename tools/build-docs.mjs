@@ -66,6 +66,12 @@ export const IMAGES = {
   share_chat: { src: 'share-chat/share_chat_named_854x480_en.png', name: 'share-code-chat' },
   share_import: { src: 'share/share_missing_addons_854x480_en.png', name: 'share-code-missing-addon' },
   camera_angle: { src: 'configurator_video_camera_angle.png', name: 'camera-angle-video-tab' },
+  course_race_line: { src: 'race_verdict_course_menu_en.png', name: 'course-settings-race-line' },
+  lap_verdict: { src: 'race_verdict_hud_en.png', name: 'lap-verdict-hud' },
+  replay_video: { src: 'race_replay_video_chase_progress.png', name: 'replay-video-recording' },
+  zones_flight: { src: 'zones_open_flight_fpv.png', name: 'zones-in-flight-fpv' },
+  trick_tutorial: { src: 'trick_tutorial_player_flips_rolls.png', name: 'trick-tutorial-player' },
+  advancements: { src: 'stats_advancements_en.png', name: 'advancements-tab' },
 };
 const SIZES = [800, 1600];
 

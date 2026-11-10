@@ -116,7 +116,7 @@ const KEY_CALL = /\.(require[A-Za-z]*|opt[A-Za-z]*|[a-z]+Or|has|raw|enumList)\("
 const METHOD_CATEGORY = {
   decodeChemistry: 'chemistry', format: 'common', basics: 'common', recycle: 'common', visual: 'common',
   frame: 'frame', arms: 'frame', duct: 'frame', stack: 'stack', motor: 'motor', prop: 'prop', battery: 'battery',
-  video: 'video', accessory: 'accessory', actionCam: 'accessory', sensorInches: 'accessory',
+  video: 'video', videoAntenna: 'video', antenna: 'video', accessory: 'accessory', actionCam: 'accessory', sensorInches: 'accessory',
 };
 
 export function partJsonKeys(text) {

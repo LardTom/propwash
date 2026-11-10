@@ -23,8 +23,12 @@
 // (VideoAntenna.none()) gets no antenna piece either: nothing drawn at the holder, no antenna paint slot from it.
 //
 // Recessed accessories (Propwash 0.6.0, recess_mm and drop_mm in the web export): the body is drawn at
-// AccessoryAnchor#modelOrigin (accessoryOrigin), that far behind the anchor and that far lower, turned by the anchor's
-// tilt; the top mount's base stays at the anchor.
+// AccessoryAnchor#modelOrigin (accessoryOrigin), that far behind the anchor and that far lower, turned by the
+// accessory's tilt; the top mount's base stays at the anchor.
+//
+// Straight-hanging accessories (Propwash 0.6.0, hangs_straight in the web export: the gripper and accessories with the
+// field in their part file): no tilt of the mount (AccessoryAnchor#tiltFor, accessoryTilt) and no stretch to the anchor
+// length (#stretch, accessoryStretch); an accessory with an LED path is not stretched either.
 //
 // Battery plugged in (Propwash 0.6.0, PowerLead / PlugMask): a drone with its battery shows no plugs and no power leads.
 // The stack is drawn as its "_mounted" variant (without its own plug) and without its two power leads (pigtail), the
@@ -92,16 +96,37 @@ export function accessoryAnchor(frame, mount) {
   return { position: [0, -3, -0.25 * wb], tilt: 30, length: 0.15 * wb };
 }
 
+/** AccessoryType#hangsStraight as the web export says it (hangs_straight, Propwash 0.6.0). */
+export function hangsStraight(data) {
+  return !!(data && data.hangs_straight === true);
+}
+
+/** AccessoryAnchor#tiltFor: the mount's tilt, 0 for a straight-hanging accessory. */
+export function accessoryTilt(anchor, data) {
+  return hangsStraight(data) ? 0 : anchor.tilt;
+}
+
+/**
+ * AccessoryAnchor#stretch: an accessory of the bottom mount is stretched to the anchor length, unless it hangs straight
+ * or has an LED path.
+ */
+export function accessoryStretch(anchor, data) {
+  const width = data && data.size_mm ? data.size_mm[0] : 0;
+  const ledPath = data && Array.isArray(data.led_path) && data.led_path.length > 0;
+  if (data && data.slot === 'bottom' && !hangsStraight(data) && !ledPath && anchor.length > 0 && width > 0) return anchor.length / width;
+  return 1;
+}
+
 /**
  * AccessoryAnchor#modelOrigin: where the body of an accessory is drawn. A recessed accessory (recess_mm, drop_mm of
- * Propwash 0.6.0) sits that far behind the anchor and that far lower, turned by the anchor's tilt; without the fields
- * the anchor itself.
+ * Propwash 0.6.0) sits that far behind the anchor and that far lower, turned by the accessory's tilt (accessoryTilt);
+ * without the fields the anchor itself.
  */
 export function accessoryOrigin(anchor, data) {
   const recess = (data && data.recess_mm) || 0;
   const drop = (data && data.drop_mm) || 0;
   if (recess === 0 && drop === 0) return anchor.position;
-  const tilt = anchor.tilt * Math.PI / 180;
+  const tilt = accessoryTilt(anchor, data) * Math.PI / 180;
   const cos = Math.cos(tilt);
   const sin = Math.sin(tilt);
   const [x, y, z] = anchor.position;
@@ -420,12 +445,13 @@ export function assemble(build, env) {
       continue;
     }
     const anchor = layout.accessories[mount] || accessoryAnchor(frame, mount);
-    const width = type.data.size_mm ? type.data.size_mm[0] : 0;
-    const stretch = type.data.slot === 'bottom' && anchor.length > 0 && width > 0 ? anchor.length / width : 1;
     if (mount === 'top') {
       pieces.push({ role: 'accessory_base', id: `mount_${mount}`, mount, position: anchor.position, procedural: 'accessory_base' });
     }
-    pieces.push({ role: 'accessory', id, mount, position: accessoryOrigin(anchor, type.data), tiltX: anchor.tilt, stretchX: stretch });
+    pieces.push({
+      role: 'accessory', id, mount, position: accessoryOrigin(anchor, type.data), tiltX: accessoryTilt(anchor, type.data),
+      stretchX: accessoryStretch(anchor, type.data),
+    });
   }
   return { layout, cameraTilt: layout.cameraTilt, pieces, missing, plugsHidden: !!hidden };
 }

@@ -196,7 +196,8 @@ check(proceduralAccessoryBase(0xd6333a).length === 8, 'top mount base shape');
   };
   const json = JSON.parse(fs.readFileSync(path.join(DATA, 'catalog.json'), 'utf8'));
   const gripper = json.parts.find((p) => p.id === 'propwash:gripper');
-  const testPart = (id, slot, size, extra) => ({ ...gripper, id, builtin: false, data: { ...gripper.data, slot, size_mm: size, ...extra } });
+  const { hangs_straight: _straight, ...tiltedData } = gripper.data;
+  const testPart = (id, slot, size, extra) => ({ ...gripper, id, builtin: false, data: { ...tiltedData, slot, size_mm: size, ...extra } });
   const shifted = { front: [RECESS, DROP], top: [12, 4], bottom: [30, 5] };
   const sizes = { front: [62, 58, 64], top: [30, 22, 70], bottom: [24, 18, 90] };
   for (const slot of ['front', 'top', 'bottom']) {
@@ -281,6 +282,99 @@ check(proceduralAccessoryBase(0xd6333a).length === 8, 'top mount base shape');
   const fs5Anchor = frameLayout(fs5, fromJar, render).accessories.front;
   check(!!jarPiece && nearVec(jarPiece.position, origin(fs5Anchor.position, fs5Anchor.tilt, RECESS, DROP)),
     `jar part with recess_mm on freestyle_5: ${JSON.stringify(jarPiece && jarPiece.position)} behind the anchor ${JSON.stringify(fs5Anchor.position)}`);
+}
+
+// Straight-hanging accessories (Propwash 0.6.0, hangs_straight in the web export since FBW-1, finding G-AUTO60-1-1): the
+// gripper and every accessory with hangs_straight hang without the mount's tilt (AccessoryAnchor#tiltFor 0) and are not
+// stretched to the anchor length (#stretch 1.0); an accessory with an LED path is not stretched either. recess_mm and
+// drop_mm turn with that tilt (#modelOrigin). The flight analysis takes the same box (#centerOf, the size with #stretch):
+// on freestyle_5 the gripper below gives the game's inertiaXx 0.0015485 and authorityPitch 1819.1. The jar path exports
+// hangs_straight like PartData (only when true, last).
+{
+  const near = (a, b) => Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(a), Math.abs(b));
+  const nearVec = (a, b) => Array.isArray(a) && a.length === b.length && a.every((v, i) => near(v, b[i]));
+  const json = JSON.parse(fs.readFileSync(path.join(DATA, 'catalog.json'), 'utf8'));
+  const gripper = json.parts.find((p) => p.id === 'propwash:gripper');
+  check(!!gripper && gripper.data.hangs_straight === true, `catalog: the gripper carries hangs_straight like the web export of Propwash (${gripper && JSON.stringify(gripper.data.hangs_straight)})`);
+
+  const live = { ...catalog.presetBuild('propwash:freestyle'), accessories: { bottom: 'propwash:gripper' } };
+  const livePiece = assemble(live, env).pieces.find((x) => x.role === 'accessory' && x.mount === 'bottom');
+  check(live.frame === 'propwash:freestyle_5' && !!livePiece && livePiece.tiltX === 0 && livePiece.stretchX === 1,
+    `freestyle_5 with the gripper below: tiltX 0 and stretchX 1.0 like the game (${livePiece && [livePiece.tiltX, livePiece.stretchX]})`);
+  const liveAir = airframe(live, catalog);
+  check(!!liveAir && Math.abs(liveAir.inertiaXx - 0.0015485) < 5e-8 && Math.abs(liveAir.authorityPitch - 1819.1) < 0.05,
+    `freestyle_5 with the gripper below: inertiaXx 0.0015485 and authorityPitch 1819.1 like the game (${liveAir && [liveAir.inertiaXx, liveAir.authorityPitch]})`);
+
+  const { hangs_straight: _straight, ...tiltedData } = gripper.data;
+  const testPart = (id, extra) => ({ ...gripper, id, builtin: false, data: { ...tiltedData, size_mm: [24, 18, 40], ...extra } });
+  json.parts.push(testPart('hangtest:straight', { hangs_straight: true, recess_mm: 6, drop_mm: 2 }));
+  json.parts.push(testPart('hangtest:plain', { recess_mm: 6, drop_mm: 2 }));
+  json.parts.push(testPart('hangtest:leds', { leds: 2, led_path: [[-10, -2, 0], [10, -2, 0]] }));
+  const hc = createCatalog(json);
+  const henv = { catalog: hc, render, model: () => null };
+  let placed = 0;
+  let analysed = 0;
+  for (const frame of hc.partsIn('frame').filter((f) => f.data.accessory_mounts.includes('bottom'))) {
+    const layout = frameLayout(frame, hc, render);
+    const anchor = layout.accessories.bottom;
+    const build = (id) => ({ ...hc.presetBuild('propwash:freestyle'), frame: frame.id, accessories: { bottom: id } });
+    const piece = (id) => assemble(build(id), henv).pieces.find((x) => x.role === 'accessory' && x.mount === 'bottom');
+    const straight = piece('hangtest:straight');
+    const plain = piece('hangtest:plain');
+    const leds = piece('hangtest:leds');
+    const p = anchor.position;
+    check(!!straight && straight.tiltX === 0 && straight.stretchX === 1 && nearVec(straight.position, [p[0], p[1] - 2, p[2] + 6]),
+      `${frame.id}: hangs_straight below without tilt and stretch, recess and drop not turned (${straight && JSON.stringify([straight.tiltX, straight.stretchX, straight.position])})`);
+    check(!!plain && plain.tiltX === anchor.tilt, `${frame.id}: an accessory without hangs_straight keeps the tilt ${anchor.tilt} (${plain && plain.tiltX})`);
+    check(!!leds && leds.stretchX === 1 && leds.tiltX === anchor.tilt, `${frame.id}: an accessory with an LED path is not stretched (${leds && [leds.tiltX, leds.stretchX]})`);
+    placed++;
+
+    const spec = frame.data.accessory_anchors && frame.data.accessory_anchors.bottom;
+    const wheelbase = frame.data.wheelbase_mm;
+    const pos = spec ? spec.pos : [0, -3, -0.25 * wheelbase];
+    const tilt = spec ? spec.tilt_deg : 30;
+    const length = spec ? spec.length_mm : 0.15 * wheelbase;
+    const flat = JSON.parse(JSON.stringify(json));
+    const flatFrame = flat.parts.find((x) => x.id === frame.id);
+    flatFrame.data.accessory_anchors = { ...(flatFrame.data.accessory_anchors || {}), bottom: { pos, tilt_deg: 0, length_mm: 0 } };
+    const unstretched = JSON.parse(JSON.stringify(json));
+    const unstretchedFrame = unstretched.parts.find((x) => x.id === frame.id);
+    unstretchedFrame.data.accessory_anchors = { ...(unstretchedFrame.data.accessory_anchors || {}), bottom: { pos, tilt_deg: tilt, length_mm: 0 } };
+    const pairs = [
+      ['hangs_straight', airframe(build('hangtest:straight'), hc), airframe(build('hangtest:plain'), createCatalog(flat))],
+      ['LED path', airframe(build('hangtest:leds'), hc), airframe(build('hangtest:leds'), createCatalog(unstretched))],
+    ];
+    for (const [what, got, want] of pairs) {
+      if (!got || !want) {
+        check(false, `${frame.id}: analysis with the ${what} accessory below`);
+        continue;
+      }
+      const keys = Object.keys(want).filter((k) => typeof want[k] === 'number');
+      const off = keys.filter((k) => !near(got[k], want[k]));
+      check(!off.length, `${frame.id}: the analysis takes the ${what} accessory like the game (${off.slice(0, 4).map((k) => `${k} ${got[k]} ≠ ${want[k]}`).join(', ')})`);
+    }
+    if (length > 0 && tilt !== 0) {
+      const tilted = airframe(build('hangtest:plain'), hc);
+      const straightAir = airframe(build('hangtest:straight'), hc);
+      check(!!tilted && !!straightAir && !near(tilted.inertiaXx, straightAir.inertiaXx), `${frame.id}: hangs_straight changes the inertia (${tilted && tilted.inertiaXx} / ${straightAir && straightAir.inertiaXx})`);
+    }
+    analysed++;
+  }
+  check(placed > 0 && analysed > 0, `frames with a bottom mount (${placed})`);
+
+  const file = { format: 1, mass_g: 20.0, slot: 'bottom', size_mm: [24.0, 20.0, 22.0], flight_battery_w: 0.3, frontal_area_m2: 0.0004, sort: 0 };
+  const read = (extra) => decodePart('accessory', 'hangtest:claw', JSON.stringify({ ...file, ...extra }));
+  const yes = read({ hangs_straight: true, recess_mm: 4 });
+  const out = yes.definition ? exportData(yes.definition) : {};
+  const keys = Object.keys(out);
+  check(out.hangs_straight === true && keys.indexOf('hangs_straight') === keys.length - 1 && keys.indexOf('recess_mm') === keys.length - 2,
+    `jar export: hangs_straight true last, after recess_mm, like PartData (${keys.join(', ')})`);
+  const no = read({ hangs_straight: false });
+  check(!!no.definition && !('hangs_straight' in exportData(no.definition)), 'jar export: hangs_straight only when true');
+  const jarCatalog = createCatalog({ ...json, parts: [...json.parts, testPart('hangtest:jar', out)] });
+  const jarPiece = assemble({ ...jarCatalog.presetBuild('propwash:freestyle'), accessories: { bottom: 'hangtest:jar' } }, { catalog: jarCatalog, render, model: () => null })
+    .pieces.find((x) => x.role === 'accessory');
+  check(!!jarPiece && jarPiece.tiltX === 0 && jarPiece.stretchX === 1, `jar part with hangs_straight on freestyle_5 hangs straight (${jarPiece && [jarPiece.tiltX, jarPiece.stretchX]})`);
 }
 
 for (const preset of catalog.presets) {

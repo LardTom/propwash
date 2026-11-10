@@ -424,8 +424,8 @@
         "en": "Signal repeaters per link"
       },
       "description": {
-        "de": "Wie viele Signal-Repeater Bild und Funk zwischen Pilot und Drohne hintereinander weiterreichen dürfen (höchstens 4). Jeder Repeater reicht 128 Blöcke weit, das Signal läuft durch Wände und Decken wie sonst auch; Runden über Repeater zählen für Bestenlisten. 0 = Repeater aus.",
-        "en": "How many signal repeaters may pass video and control on between pilot and drone in a row (at most 4). Each repeater reaches 128 blocks, and the signal goes through walls and ceilings just as it otherwise would; laps flown over repeaters count for leaderboards. 0 = repeaters off."
+        "de": "Wie viele Signal-Repeater Bild und Funk zwischen Pilot und Drohne hintereinander weiterreichen dürfen (höchstens 4). Jede Teilstrecke reicht so weit wie eine direkte Verbindung – fürs Bild der Videosender der Drohne, für die Steuerung die Funke –, Wände und Decken dämpfen jede Teilstrecke wie sonst auch; Runden über Repeater zählen für Bestenlisten. 0 = Repeater aus.",
+        "en": "How many signal repeaters may pass video and control on between pilot and drone in a row (at most 4). Each hop reaches as far as a direct link – the drone's video transmitter for the picture, the remote for control – and walls and ceilings weaken every hop as usual; laps flown over repeaters count for leaderboards. 0 = repeaters off."
       },
       "values": {
         "0": {
@@ -502,6 +502,25 @@
       },
       "example": "/gamerule propwash:break_impact_scale 110",
       "race_relevant": true
+    },
+    {
+      "id": "propwash:drones_trigger_sculk",
+      "name": "drones_trigger_sculk",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": true,
+      "changes_physics": false,
+      "title": {
+        "de": "Drohnen lösen Sculk aus",
+        "en": "Drones trigger sculk"
+      },
+      "description": {
+        "de": "An (Standard): Eine fliegende Drohne erzeugt Vibrationen wie ein Spieler im Gleitflug mit Elytren – scharf und mit Motoren über dem Leerlauf, jede halbe Sekunde; ein Absturz zählt als Aufprall auf dem Boden. Sculk-Sensoren und Wärter reagieren darauf, Sculk-Kreischer rechnen sie dem Piloten zu. Wolle dazwischen schirmt wie gewohnt ab. Aus: Drohnen lösen nie Sculk aus, auch nicht beim Glasbruch oder wenn sie ohne Pilot aufsetzen.",
+        "en": "On (default): a flying drone sends vibrations like a player gliding with elytra – armed with the motors above idle, every half second; a crash counts as hitting the ground. Sculk sensors and wardens react, sculk shriekers count it as the pilot’s. Wool in between blocks the signal as usual. Off: drones never trigger sculk, also when they shatter glass or land unpiloted."
+      },
+      "example": "/gamerule propwash:drones_trigger_sculk false",
+      "race_relevant": false
     },
     {
       "id": "propwash:allow_3d_mode",
@@ -747,10 +766,149 @@
         "en": "Free course placement"
       },
       "description": {
-        "de": "An: Gates, Fahnen, Stangen und andere Kurs-Elemente dürfen ineinander oder überlappend stehen – für Gate-in-Gate-Aufbauten und enge Kurse. Jedes Element wertet und kollidiert weiter für sich. Aus (Standard): Ein Element lässt sich nicht dort setzen, wo es ein anderes überlappen würde. Blöcke müssen in beiden Fällen frei sein.",
-        "en": "On: gates, flags, poles and other course elements may be placed inside or overlapping each other – for gate-in-gate builds and tight layouts. Each element still scores and collides on its own. Off (default): an element can't be placed where it would overlap another one. Blocks still have to be free either way."
+        "de": "An: Gates, Fahnen, Stangen und andere Kurs-Elemente dürfen ineinander, überlappend und in Blöcken stehen – für Gate-in-Gate-Aufbauten, enge Kurse und Elemente in Wand oder Boden. Jedes Element wertet und kollidiert weiter für sich. Aus (Standard): Ein Element lässt sich nicht dort setzen, wo es ein anderes Element oder einen Block überlappen würde.",
+        "en": "On: gates, flags, poles and other course elements may be placed inside or overlapping each other and inside blocks – for gate-in-gate builds, tight layouts and elements set into walls or the ground. Each element still scores and collides on its own. Off (default): an element can't be placed where it would overlap another one or a block."
       },
       "example": "/gamerule propwash:free_course_placement true",
+      "race_relevant": false
+    },
+    {
+      "id": "propwash:foreign_ghosts",
+      "name": "foreign_ghosts",
+      "group": "gameplay",
+      "type": "integer",
+      "display": "levels",
+      "default": 2,
+      "min": 0,
+      "max": 2,
+      "step": 1,
+      "changes_physics": false,
+      "title": {
+        "de": "Fremde Geister und Replays",
+        "en": "Others' ghosts and replays"
+      },
+      "description": {
+        "de": "Wer das Replay der Bestenlisten-Zeit eines anderen Piloten ansehen und gegen dessen Geist fliegen darf. Alle (Standard): jeder Spieler. Admins: nur Operatoren. Aus: niemand fliegt gegen fremde Geister; Operatoren können trotzdem jedes Replay öffnen, etwa um bei einem Event Zeiten zu prüfen. Die eigenen Zeiten gehen immer.",
+        "en": "Who may watch the replay of another pilot's leaderboard time and fly against their ghost. All (default): every player. Admins: only operators. Off: nobody may fly against other pilots' ghosts; operators can still open every replay, for example to check times at an event. Your own times are always available."
+      },
+      "values": {
+        "0": {
+          "de": "Aus",
+          "en": "Off"
+        },
+        "1": {
+          "de": "Admins",
+          "en": "Admins"
+        },
+        "2": {
+          "de": "Alle",
+          "en": "All"
+        }
+      },
+      "example": "/gamerule propwash:foreign_ghosts 0",
+      "race_relevant": false
+    },
+    {
+      "id": "propwash:camera_chunks",
+      "name": "camera_chunks",
+      "group": "video",
+      "type": "integer",
+      "display": "number",
+      "default": 4,
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "changes_physics": false,
+      "title": {
+        "de": "Chunks um Kamera-Drohnen",
+        "en": "Chunks around camera drones"
+      },
+      "description": {
+        "de": "Größter Radius in Chunks, den der Server um die eigene Kamera-Drohne eines Spielers lädt und schickt, solange ein Add-on sie aufzeichnet, etwa für Flashback-Aufnahmen weit weg vom Spieler. Die Ansicht des Spielers ändert sich nicht. Höchstens 2 Bereiche je Spieler und 16 auf dem Server. 0 = aus.",
+        "en": "Largest radius in chunks that the server loads and sends around a player's own camera drone while an add-on records it, for example for Flashback replays far away from the player. The player's own view does not change. At most 2 areas per player and 16 on the server. 0 = off."
+      },
+      "values": {
+        "0": {
+          "de": "Aus",
+          "en": "Off"
+        }
+      },
+      "example": "/gamerule propwash:camera_chunks 5",
+      "race_relevant": false
+    },
+    {
+      "id": "propwash:autonomous_flights_per_player",
+      "name": "autonomous_flights_per_player",
+      "group": "gameplay",
+      "type": "integer",
+      "display": "number",
+      "default": 1,
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "changes_physics": false,
+      "title": {
+        "de": "Autonome Flüge je Spieler gleichzeitig",
+        "en": "Autonomous flights per player at once"
+      },
+      "description": {
+        "de": "Wie viele Drohnen ein Spieler gleichzeitig von Add-ons ohne Pilot fliegen lassen kann, etwa für Missionen, Folgen oder Halten. Ist das Budget voll, startet kein weiterer Flug und der Spieler bekommt eine Meldung mit dem Wert. GPS Rescue ohne Pilot hat Vorrang und behält daneben immer einen Platz je Spieler. 0 = keine.",
+        "en": "How many drones a player can have flown by add-ons without a pilot at the same time, for example for missions, follow or hold. When the budget is full, no further flight starts and the player gets a message with the value. GPS rescue without pilot has priority and always keeps one more place per player. 0 = none."
+      },
+      "values": {
+        "0": {
+          "de": "Keine",
+          "en": "None"
+        }
+      },
+      "example": "/gamerule propwash:autonomous_flights_per_player 2",
+      "race_relevant": false
+    },
+    {
+      "id": "propwash:autonomous_flights_total",
+      "name": "autonomous_flights_total",
+      "group": "gameplay",
+      "type": "integer",
+      "display": "number",
+      "default": 6,
+      "min": 0,
+      "max": 32,
+      "step": 1,
+      "changes_physics": false,
+      "title": {
+        "de": "Autonome Flüge gesamt",
+        "en": "Autonomous flights in total"
+      },
+      "description": {
+        "de": "Wie viele Drohnen auf dem ganzen Server gleichzeitig von Add-ons ohne Pilot fliegen dürfen. GPS Rescue ohne Pilot hat Vorrang und behält daneben immer zwei Plätze. 0 = keine.",
+        "en": "How many drones on the whole server may be flown by add-ons without a pilot at the same time. GPS rescue without pilot has priority and always keeps two more places. 0 = none."
+      },
+      "values": {
+        "0": {
+          "de": "Keine",
+          "en": "None"
+        }
+      },
+      "example": "/gamerule propwash:autonomous_flights_total 7",
+      "race_relevant": false
+    },
+    {
+      "id": "propwash:creative_fc_race_legal",
+      "name": "creative_fc_race_legal",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": false,
+      "changes_physics": false,
+      "title": {
+        "de": "Kreativ-FC renntauglich",
+        "en": "Creative FC race-legal"
+      },
+      "description": {
+        "de": "An: Ein verbauter Kreativ-Flugcontroller zählt im Rennen nicht als Flughilfe – Runden damit stehen in der Wertung ohne Flughilfe, die Bestenliste zeigt „Kreativ-FC erlaubt“. Aus (Standard): Der Kreativ-FC zählt als Flughilfe. Admins stellen das je Kurs in den Kurs-Einstellungen anders ein. Andere Flughilfen (Kreativ-Brille mit eigener Latenz, Halte-Modus, persönliche Regeln …) zählen weiter; bestehende Zeiten behalten ihre Wertung.",
+        "en": "On: an installed creative flight controller doesn't count as a flight assist in races – laps with it rank without assist and the leaderboard shows “Creative FC allowed”. Off (default): the creative FC counts as an assist. Admins can set this differently per course in the course settings. Other assists (creative goggles with their own latency, hold mode, personal rules …) still count; existing times keep their ranking."
+      },
+      "example": "/gamerule propwash:creative_fc_race_legal true",
       "race_relevant": false
     }
   ],
@@ -787,6 +945,7 @@
         "drone_hits_entities": true,
         "drones_break_blocks": false,
         "break_impact_scale": 100,
+        "drones_trigger_sculk": true,
         "allow_3d_mode": true,
         "part_compatibility": true,
         "autonomous_rescue": true,
@@ -799,7 +958,12 @@
         "allow_reset": true,
         "allow_freecam": false,
         "players_create_zones": true,
-        "free_course_placement": false
+        "free_course_placement": false,
+        "foreign_ghosts": 2,
+        "camera_chunks": 4,
+        "autonomous_flights_per_player": 1,
+        "autonomous_flights_total": 6,
+        "creative_fc_race_legal": false
       },
       "differs_from_default": [],
       "command": "/propwash rules preset realistic"
@@ -836,6 +1000,7 @@
         "drone_hits_entities": true,
         "drones_break_blocks": false,
         "break_impact_scale": 100,
+        "drones_trigger_sculk": true,
         "allow_3d_mode": true,
         "part_compatibility": true,
         "autonomous_rescue": true,
@@ -848,7 +1013,12 @@
         "allow_reset": true,
         "allow_freecam": false,
         "players_create_zones": true,
-        "free_course_placement": false
+        "free_course_placement": false,
+        "foreign_ghosts": 2,
+        "camera_chunks": 4,
+        "autonomous_flights_per_player": 1,
+        "autonomous_flights_total": 6,
+        "creative_fc_race_legal": false
       },
       "differs_from_default": [
         "hardware_limits",
@@ -893,6 +1063,7 @@
         "drone_hits_entities": false,
         "drones_break_blocks": false,
         "break_impact_scale": 100,
+        "drones_trigger_sculk": true,
         "allow_3d_mode": true,
         "part_compatibility": false,
         "autonomous_rescue": true,
@@ -905,7 +1076,12 @@
         "allow_reset": true,
         "allow_freecam": false,
         "players_create_zones": true,
-        "free_course_placement": false
+        "free_course_placement": false,
+        "foreign_ghosts": 2,
+        "camera_chunks": 4,
+        "autonomous_flights_per_player": 1,
+        "autonomous_flights_total": 6,
+        "creative_fc_race_legal": false
       },
       "differs_from_default": [
         "prop_wash",

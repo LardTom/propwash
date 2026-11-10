@@ -14,11 +14,11 @@
 //   - the status lines match the versions, the version in the compatibility list and in the add-on block is current,
 //     and the version of "What's new" belongs to the current release line
 //   - the roadmap draws download buttons only for products of platforms.json, through assets/js/i18n.js
-//   - the FAQ has an id on every question (the 15 of 0.6.0, in order) and no page, not even the roadmap data, names
+//   - the FAQ has an id on every question (the 16 of 0.6.0, in order) and no page, not even the roadmap data, names
 //     the deferred server add-on
 //   - the landing page links the pages of 0.6.0: "What's new" the changelog of the release, the converter (convert/),
 //     the add-on directory (addons/) and the rules for add-ons (docs/api/#rules); every card of "What's new" has a
-//     picture; the add-on texts say that Propwash 0.6.0 needs Just More Parts 1.2.0; no "race restart" (now Reset)
+//     picture (the three of 0.6.0 and the three of its last fix block); the add-on texts say that Propwash 0.6.0 needs Just More Parts 1.2.0; no "race restart" (now Reset)
 //
 //   node tools/test-platforms.mjs
 
@@ -245,7 +245,7 @@ check(/\bload\(\)/.test(view), 'roadmap view.js loads the texts of a translated 
 check(read('roadmap/index.html').includes('href="../assets/data/platforms.json"'), 'roadmap/index.html preloads assets/data/platforms.json');
 
 // 7. FAQ ids and the deferred server add-on.
-const FAQ = ['faq-radio', 'faq-radio-not-detected', 'faq-goggles', 'faq-realism', 'faq-learn', 'faq-multiplayer', 'faq-survival', 'faq-vr',
+const FAQ = ['faq-radio', 'faq-radio-not-detected', 'faq-goggles', 'faq-realism', 'faq-learn', 'faq-multiplayer', 'faq-mixed-loaders', 'faq-survival', 'faq-vr',
   'faq-motion-blur', 'faq-old-codes', 'faq-try', 'faq-download', 'faq-license', 'faq-addons', 'faq-languages'];
 const faq = section('faq');
 const faqHtml = faq ? home.slice(faq.start, faq.end) : '';
@@ -276,7 +276,7 @@ check(count(hrefs(newPart), releaseAnchor) === 1, `index.html: "What's new" link
 check(!hrefs(home).includes('changelog/#propwash'), 'index.html: links to changelog/#propwash instead of the release');
 const cards = [...newPart.matchAll(/<figure>([\s\S]*?)<\/figure>/g)].map((m) => m[1]);
 const pictured = cards.filter((c) => /^\s*<div class="shot[^"]*">\s*<img\s[^>]*\salt="[^"]+"[^>]*\sdata-de-alt="[^"]+"/.test(c));
-check(cards.length === 3 && pictured.length === 3, `index.html: every card of "What's new" starts with a picture with alt and data-de-alt (${pictured.length} of ${cards.length})`);
+check(cards.length === 6 && pictured.length === 6, `index.html: every card of "What's new" starts with a picture with alt and data-de-alt (${pictured.length} of ${cards.length})`);
 check(count(hrefs(newPart), 'convert/') === 2, 'index.html: the share-code card of "What\'s new" links the converter (convert/) in English and German');
 check(count(hrefs(part('faq-old-codes')), 'convert/') === 2, 'index.html: the FAQ about old share codes links the converter (convert/) in English and German');
 check(count(hrefs(part('faq-addons')), 'addons/') === 2, 'index.html: the FAQ about add-ons links the add-on directory (addons/) in English and German');

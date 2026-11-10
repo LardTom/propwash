@@ -435,6 +435,7 @@ export function exportData(def) {
       if (def.frames && def.frames.length) out.frames = [...def.frames];
       if (def.recessMm) out.recess_mm = num(def.recessMm);
       if (def.dropMm) out.drop_mm = num(def.dropMm);
+      if (def.hangsStraight || def.id === 'propwash:gripper') out.hangs_straight = true;
       return out;
     }
     default: return {};

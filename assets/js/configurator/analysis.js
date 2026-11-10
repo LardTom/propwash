@@ -195,8 +195,14 @@ function anchorOf(frame, slot) {
   return { x: 0.0, y: -3.0, z: -0.25 * wheelbase, tilt: 30.0, length: 0.15 * wheelbase };
 }
 
-function anchorToFrame(anchor, lx, ly, lz) {
-  const tilt = toRadians(anchor.tilt);
+// AccessoryAnchor#tiltFor: a straight-hanging accessory (hangs_straight of the web export, the gripper) has no tilt.
+function tiltFor(anchor, acc) {
+  return acc.data.hangs_straight === true ? 0.0 : anchor.tilt;
+}
+
+// AccessoryAnchor#toFrame with the accessory's tilt.
+function anchorToFrame(anchor, tiltDegrees, lx, ly, lz) {
+  const tilt = toRadians(tiltDegrees);
   const cos = Math.cos(tilt);
   const sin = Math.sin(tilt);
   return [anchor.x + lx, anchor.y + (ly * cos - lz * sin), anchor.z + (ly * sin + lz * cos)];
@@ -219,9 +225,11 @@ function accessoryBox(acc, slot) {
   return { min: move(box.min), max: move(box.max) };
 }
 
+// AccessoryAnchor#stretch: only a bottom accessory that neither hangs straight nor has an LED path.
 function anchorStretch(anchor, acc, slot) {
   const width = acc.data.size_mm[0];
-  if (slot === 'bottom' && anchor.length > 0.0 && width > 0.0) return anchor.length / width;
+  const ledPath = Array.isArray(acc.data.led_path) && acc.data.led_path.length > 0;
+  if (slot === 'bottom' && acc.data.hangs_straight !== true && !ledPath && anchor.length > 0.0 && width > 0.0) return anchor.length / width;
   return 1.0;
 }
 
@@ -303,7 +311,7 @@ function deriveAirframe(parts, catalog) {
     const anchor = anchorOf(frame, slot);
     const box = accessoryBox(acc, slot);
     const local = [(box.min[0] + box.max[0]) / 2.0, (box.min[1] + box.max[1]) / 2.0, (box.min[2] + box.max[2]) / 2.0];
-    const center = anchorToFrame(anchor, local[0], local[1], local[2]);
+    const center = anchorToFrame(anchor, tiltFor(anchor, acc), local[0], local[1], local[2]);
     const mass = acc.basics.mass_g / 1000.0;
     const c = [-center[0] / 1000.0, center[1] / 1000.0, -center[2] / 1000.0];
     accessoryMass.push(mass);

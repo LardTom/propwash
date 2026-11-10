@@ -86,7 +86,7 @@ this order (the ids are what the “Features” menu and older links use, so the
 | Hero | `#top` | what it is, Download and the configurator as the two buttons, version line, rotating FPV feed |
 | Get started | `#how` | four steps from building to racing, then the Flight School (`#learn`) for new pilots |
 | Online configurator | `#configurator` | what the configurator does, its picture, the button to open it |
-| What’s new | `#new` | three highlights of the latest feature release and its changelog link |
+| What’s new | `#new` | highlights of the latest feature release (0.6.0: three, then three of its last fix block) and its changelog link |
 | Flight &amp; tuning | `#flight` | flight model, tuning, the in-game configurator, the four ways to fly |
 | Video | `#video` | analog and digital video and how they break up (interactive) |
 | Racing &amp; freestyle | `#racing` | race line, gates, ghost, spectating, tricks, course building |
@@ -99,7 +99,8 @@ this order (the ids are what the “Features” menu and older links use, so the
 A new feature gets a line or a tile in the section it belongs to, not a section of its own; what only matters for one
 release goes into **What’s new** and moves into its section (or out) with the next release. For a release:
 
-- **What’s new** (`#new`) gets the three highlights of the release with one picture each and links to
+- **What’s new** (`#new`) gets the three highlights of the release with one picture each (0.6.0 has a second row of
+  three for its last fix block: trick tutorials, advancements, replays as video) and links to
   `changelog/#propwash-<version>`; the version line in the hero names the release and links to `#new`; numbers such as
   tricks, lessons and world rules come from the mod's `CHANGELOG.md`. Before the release, the cards may stand without
   pictures and link to `changelog/#propwash`: the pictures come from the screenshots of the release commit and the
@@ -288,7 +289,8 @@ node tools/build-addons.mjs --jar justmoreparts=<jar>   # the hosted export of J
 node tools/build-configurator-beginner.mjs # pictures of the builds for beginners (headless Chrome, cwebp)
 node tools/test-configurator.mjs           # share codes, conversion, presets, analysis, FPV camera, tune, explanations
 node tools/test-configurator-render.mjs    # model files, paint tints, frame layouts, assembly, plugged battery, FPV hubs,
-                                           # recessed accessories (recess_mm, drop_mm)
+                                           # recessed and straight-hanging accessories (recess_mm, drop_mm,
+                                           # hangs_straight)
 node tools/test-configurator-antenna.mjs   # VTX antennas at the frame's holder: rules, mask, jar, shapes, paint, VTX
                                            # without external antennas ("none", count 0) (Chrome)
 node tools/test-configurator-pick.mjs      # clicks and taps on the parts in the 3D view (headless Chrome, ~1 min)
@@ -357,11 +359,20 @@ pickers in headless Chrome.
 Recessed accessories (Propwash 0.6.0: `recess_mm` and `drop_mm` in the part file and in `data` of the web export, only
 when not 0) sit that far behind their anchor and that far lower, like an accessory that reaches back under the frame
 instead of hanging in front of the nose. `assembly.js` draws the body at the game's `AccessoryAnchor#modelOrigin`
-(`accessoryOrigin`: the anchor plus `[0, −drop_mm, recess_mm]` turned by the mount's tilt; the base of the top mount
-stays at the anchor), `analysis.js` moves the box for the centre of mass and the inertia like `AccessoryType`, and the
-jar path reads and exports both fields like `PartJson` and `PartData`. An export without the fields draws and analyses
-every accessory as before. `tools/test-configurator-render.mjs` checks every frame and mount, the analysis and the jar
-path.
+(`accessoryOrigin`: the anchor plus `[0, −drop_mm, recess_mm]` turned by the accessory's tilt; the base of the top
+mount stays at the anchor), `analysis.js` moves the box for the centre of mass and the inertia like `AccessoryType`, and
+the jar path reads and exports both fields like `PartJson` and `PartData`. An export without the fields draws and
+analyses every accessory as before. `tools/test-configurator-render.mjs` checks every frame and mount, the analysis and
+the jar path.
+
+Straight-hanging accessories (Propwash 0.6.0: `hangs_straight: true` in `data` of the web export for the gripper and
+every accessory with `hangs_straight` in its part file) hang without the mount's tilt and are not stretched to the
+anchor length, like `AccessoryAnchor#tiltFor` and `#stretch`; an accessory with an LED path is not stretched either.
+`assembly.js` (`accessoryTilt`, `accessoryStretch`, `accessoryOrigin`) and `analysis.js` (`tiltFor`, `anchorStretch`)
+read the field, the jar path writes it like `PartData` (only when true, last). The current data are from 0.6.0-rc.1,
+whose export did not have the field yet: the gripper in `catalog.json` carries it as the web export writes it since
+Propwash 0.6.0-rc.4 (FBW-1); the next export brings it by itself. With it, `freestyle_5` with the gripper below gives
+the game's figures (inertia Ixx 0.0015485, pitch authority 1819.1), checked by `tools/test-configurator-render.mjs`.
 
 `tools/fixtures/report-vectors.json` keeps share codes from bug reports with the build, analysis and FPV camera the
 mod gives for them (hand-maintained, not overwritten by the build scripts); the test decodes, re-encodes and analyses
@@ -434,15 +445,23 @@ The explanations are written in `tools/docs/pages/*.mjs` (English and German sid
 checks that the pages match the renderer, that every API type, part field, server setting and event has its
 explanation (and none is left for something that is gone), that the API history covers the current API version, that
 the API page lists the build problems and warnings of `DroneBuild` and names every accessory field added in Propwash
-0.6.0 in its API 1.7 overview, that every example command is valid, that every world rule is classified for races, that the German rules for add-ons
+0.6.0 in its API 1.7 overview and in the history of API 1.7 or 1.8, that every example command is valid, that every world rule is classified for races, that the German rules for add-ons
 follow the current `ADDONS.md` (hash and structure), and on every page: unique ids, working anchors and local links, English and German in
 pairs, balanced tags, real umlauts in German, and no local paths or terms from the local denylist. When a release adds
 something, the test names the file and the entry to write. The denylist is not part of this repository: the test reads
 the same local file as the mod's public export (`PROPWASH_EXPORT_DENYLIST`, otherwise
 `~/.config/propwash/public-export-denylist.txt`, one term per line) and fails without it.
 
+`node tools/test-news-060.mjs` checks what the site says about the last fix block of Propwash 0.6.0, only what the
+merged code does: the sections of the player guide (laps the server doesn't count with the pass zone warning, the race
+line per course, replays as video, sculk, zone outlines in flight, the join overview without add-ons players don't need,
+mixed servers with Fabric as server loader, trick tutorials, *Unlock all* in the flight training, the advancement tab)
+with their pictures, the world rule `drones_trigger_sculk`, the cards of “What’s new” and the FAQ about NeoForge and
+Fabric players, the roadmap card of the camera drones, the changelog line about NeoForge players on Fabric servers, and
+that every dictionary in `tools/i18n/dict` has every text of the site (nothing missing, nothing stale).
+
 `node tools/test-protocol-texts.mjs` checks the network protocol of the described release: `PROTOCOL` in the test names
-it per Propwash version (0.6.0: 18 from 0.6.0-rc.3 on; rc.1 and rc.2 had 17), and the docs data,
+it per Propwash version (0.6.0: 19 from 0.6.0-rc.4 on; rc.3 had 18, rc.1 and rc.2 had 17), and the docs data,
 `Constants.PROTOCOL_VERSION` at the Propwash commit the changelog page reads, every page under `docs/` (rows of other API
 versions in the API history excepted), the changelog entries of that release in English and German and the dictionaries
 must all name it. A release that raises the protocol adds its number there.

@@ -1,5 +1,5 @@
 {
-  "version": "1.7.0",
+  "version": "1.8.0",
   "packages": [
     {
       "name": "de.lardtom.propwash.api",
@@ -56,7 +56,7 @@
               "kind": "field",
               "name": "API_VERSION",
               "static": true,
-              "display": "static final String API_VERSION = \"1.7.0\""
+              "display": "static final String API_VERSION = \"1.8.0\""
             },
             {
               "kind": "field",
@@ -503,6 +503,24 @@
               "name": "triggerAction",
               "static": false,
               "display": "default boolean triggerAction(Entity drone, int number, boolean pressed, ServerPlayer actor)"
+            },
+            {
+              "kind": "method",
+              "name": "cargo",
+              "static": false,
+              "display": "default List<ItemStack> cargo(Entity drone)"
+            },
+            {
+              "kind": "method",
+              "name": "grabCargo",
+              "static": false,
+              "display": "default boolean grabCargo(Entity drone, ServerPlayer actor)"
+            },
+            {
+              "kind": "method",
+              "name": "releaseCargo",
+              "static": false,
+              "display": "default int releaseCargo(Entity drone, ServerPlayer actor)"
             }
           ],
           "types": [],
@@ -1604,6 +1622,75 @@
       "name": "de.lardtom.propwash.api.client",
       "types": [
         {
+          "name": "CameraChunkRequests",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "supported",
+              "static": false,
+              "display": "boolean supported()"
+            },
+            {
+              "kind": "method",
+              "name": "request",
+              "static": false,
+              "display": "boolean request(int entityId, int radiusChunks)"
+            },
+            {
+              "kind": "method",
+              "name": "release",
+              "static": false,
+              "display": "boolean release(int entityId)"
+            },
+            {
+              "kind": "method",
+              "name": "radius",
+              "static": false,
+              "display": "int radius(int entityId)"
+            },
+            {
+              "kind": "method",
+              "name": "answer",
+              "static": false,
+              "display": "Optional<CameraChunkResult.Status> answer(int entityId)"
+            },
+            {
+              "kind": "method",
+              "name": "request",
+              "static": false,
+              "display": "default boolean request(Entity drone, int radiusChunks)"
+            },
+            {
+              "kind": "method",
+              "name": "release",
+              "static": false,
+              "display": "default boolean release(Entity drone)"
+            },
+            {
+              "kind": "method",
+              "name": "radius",
+              "static": false,
+              "display": "default int radius(Entity drone)"
+            },
+            {
+              "kind": "method",
+              "name": "answer",
+              "static": false,
+              "display": "default Optional<CameraChunkResult.Status> answer(Entity drone)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/client/CameraChunkRequests.java"
+        },
+        {
           "name": "ClientInput",
           "kind": "interface",
           "modifiers": [],
@@ -2006,6 +2093,18 @@
             },
             {
               "kind": "method",
+              "name": "simulateFlightSchoolHold",
+              "static": true,
+              "display": "static boolean simulateFlightSchoolHold(int slot)"
+            },
+            {
+              "kind": "method",
+              "name": "stopSimulatedFlightSchoolHold",
+              "static": true,
+              "display": "static void stopSimulatedFlightSchoolHold()"
+            },
+            {
+              "kind": "method",
               "name": "osd",
               "static": true,
               "display": "static OsdLayoutAccess osd()"
@@ -2066,6 +2165,12 @@
             },
             {
               "kind": "method",
+              "name": "cameraChunks",
+              "static": true,
+              "display": "static CameraChunkRequests cameraChunks()"
+            },
+            {
+              "kind": "method",
               "name": "spectate",
               "static": true,
               "display": "static boolean spectate(Entity drone)"
@@ -2099,6 +2204,54 @@
               "name": "forceShiftHelp",
               "static": true,
               "display": "static void forceShiftHelp(@Nullable Boolean shown)"
+            },
+            {
+              "kind": "method",
+              "name": "simulateRadio",
+              "static": true,
+              "display": "static boolean simulateRadio(boolean gamepad)"
+            },
+            {
+              "kind": "method",
+              "name": "stopSimulatedRadio",
+              "static": true,
+              "display": "static void stopSimulatedRadio()"
+            },
+            {
+              "kind": "method",
+              "name": "setSimulatedAxis",
+              "static": true,
+              "display": "static boolean setSimulatedAxis(int axis, float value)"
+            },
+            {
+              "kind": "method",
+              "name": "setSimulatedButton",
+              "static": true,
+              "display": "static boolean setSimulatedButton(int button, boolean down)"
+            },
+            {
+              "kind": "method",
+              "name": "bindSimulatedSwitch",
+              "static": true,
+              "display": "static boolean bindSimulatedSwitch(Identifier id, int button)"
+            },
+            {
+              "kind": "method",
+              "name": "bindSimulatedSwitch",
+              "static": true,
+              "display": "static boolean bindSimulatedSwitch(Identifier id, int channel, int lowMicros, int highMicros)"
+            },
+            {
+              "kind": "method",
+              "name": "bindSimulatedAction",
+              "static": true,
+              "display": "static boolean bindSimulatedAction(int number, int button)"
+            },
+            {
+              "kind": "method",
+              "name": "bindSimulatedAction",
+              "static": true,
+              "display": "static boolean bindSimulatedAction(int number, int channel, int lowMicros, int highMicros)"
             },
             {
               "kind": "method",
@@ -2476,6 +2629,24 @@
               "name": "fovDegrees",
               "static": false,
               "display": "default double fovDegrees(GimbalContext context)"
+            },
+            {
+              "kind": "method",
+              "name": "showsProps",
+              "static": false,
+              "display": "default boolean showsProps(GimbalContext context)"
+            },
+            {
+              "kind": "method",
+              "name": "gimbalRotation",
+              "static": false,
+              "display": "default boolean gimbalRotation(GimbalContext context, Quaternionf rotation)"
+            },
+            {
+              "kind": "method",
+              "name": "gimbalFovDegrees",
+              "static": false,
+              "display": "default double gimbalFovDegrees(GimbalContext context)"
             }
           ],
           "types": [],
@@ -3062,6 +3233,12 @@
             },
             {
               "kind": "method",
+              "name": "notReadyReason",
+              "static": false,
+              "display": "default Optional<AutonomyNotReady> notReadyReason(Entity drone, AutonomyOptions options)"
+            },
+            {
+              "kind": "method",
               "name": "registerExitHandler",
               "static": false,
               "display": "void registerExitHandler(Identifier id, ExitHandler handler)"
@@ -3106,11 +3283,41 @@
             },
             {
               "name": "REPLACED"
+            },
+            {
+              "name": "TERRAIN_LIMIT"
             }
           ],
           "members": [],
           "types": [],
           "file": "common/src/main/java/de/lardtom/propwash/api/drone/AutonomyEnd.java"
+        },
+        {
+          "name": "AutonomyNotReady",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "NOT_ON_GROUND"
+            },
+            {
+              "name": "NO_TAKEOFF"
+            },
+            {
+              "name": "NO_BATTERY"
+            },
+            {
+              "name": "REMOVED"
+            }
+          ],
+          "members": [],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/drone/AutonomyNotReady.java"
         },
         {
           "name": "AutonomyOptions",
@@ -3384,6 +3591,174 @@
           ],
           "types": [],
           "file": "common/src/main/java/de/lardtom/propwash/api/drone/BlockContact.java"
+        },
+        {
+          "name": "CameraChunkResult",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "Status status",
+            "int radius"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "refused",
+              "static": true,
+              "display": "static CameraChunkResult refused(Status status)"
+            },
+            {
+              "kind": "method",
+              "name": "accepted",
+              "static": false,
+              "display": "boolean accepted()"
+            }
+          ],
+          "types": [
+            {
+              "name": "Status",
+              "kind": "enum",
+              "modifiers": [],
+              "typeParams": "",
+              "components": [],
+              "extends": "",
+              "implements": "",
+              "permits": "",
+              "constants": [
+                {
+                  "name": "OPENED"
+                },
+                {
+                  "name": "UPDATED"
+                },
+                {
+                  "name": "NOT_A_DRONE"
+                },
+                {
+                  "name": "NOT_OWN_DRONE"
+                },
+                {
+                  "name": "OTHER_DIMENSION"
+                },
+                {
+                  "name": "RULE_OFF"
+                },
+                {
+                  "name": "TOO_MANY"
+                },
+                {
+                  "name": "SERVER_BUSY"
+                },
+                {
+                  "name": "CLIENT_UNSUPPORTED"
+                },
+                {
+                  "name": "PLAYER_GONE"
+                }
+              ],
+              "members": [],
+              "types": []
+            }
+          ],
+          "file": "common/src/main/java/de/lardtom/propwash/api/drone/CameraChunkResult.java"
+        },
+        {
+          "name": "CameraChunkStatus",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "UUID drone",
+            "int entityId",
+            "ChunkPos center",
+            "int requestedRadius",
+            "int radius",
+            "boolean paused",
+            "int chunks",
+            "int sentChunks"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "method",
+              "name": "complete",
+              "static": false,
+              "display": "boolean complete()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/drone/CameraChunkStatus.java"
+        },
+        {
+          "name": "CameraChunkSupply",
+          "kind": "interface",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MAX_RADIUS",
+              "static": false,
+              "display": "int MAX_RADIUS = 8"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_PER_PLAYER",
+              "static": false,
+              "display": "int MAX_PER_PLAYER = 2"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_DISTANCE_CHUNKS",
+              "static": false,
+              "display": "int MAX_DISTANCE_CHUNKS = 128"
+            },
+            {
+              "kind": "method",
+              "name": "open",
+              "static": false,
+              "display": "CameraChunkResult open(ServerPlayer player, Entity drone, int radiusChunks)"
+            },
+            {
+              "kind": "method",
+              "name": "close",
+              "static": false,
+              "display": "boolean close(ServerPlayer player, Entity drone)"
+            },
+            {
+              "kind": "method",
+              "name": "closeAll",
+              "static": false,
+              "display": "int closeAll(ServerPlayer player)"
+            },
+            {
+              "kind": "method",
+              "name": "status",
+              "static": false,
+              "display": "Optional<CameraChunkStatus> status(ServerPlayer player, Entity drone)"
+            },
+            {
+              "kind": "method",
+              "name": "active",
+              "static": false,
+              "display": "List<CameraChunkStatus> active(ServerPlayer player)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/drone/CameraChunkSupply.java"
         },
         {
           "name": "CameraPose",
@@ -3665,6 +4040,12 @@
               "name": "operators",
               "static": false,
               "display": "default OperatorAccess operators()"
+            },
+            {
+              "kind": "method",
+              "name": "cameraChunks",
+              "static": false,
+              "display": "default CameraChunkSupply cameraChunks()"
             }
           ],
           "types": [],
@@ -3872,13 +4253,20 @@
             "Vec3 forward",
             "Vec3 up",
             "double massKg",
-            "Map<AccessorySlot, Identifier> accessories"
+            "Map<AccessorySlot, Identifier> accessories",
+            "double angleLimitDeg"
           ],
           "extends": "",
           "implements": "",
           "permits": "",
           "constants": [],
           "members": [
+            {
+              "kind": "constructor",
+              "name": "DroneView",
+              "static": false,
+              "display": "DroneView(Entity entity, Optional<UUID> pilot, boolean flying, boolean armed, boolean autopilot, Vec3 center, Vec3 velocity, Vec3 forward, Vec3 up, double massKg, Map<AccessorySlot, Identifier> accessories)"
+            },
             {
               "kind": "method",
               "name": "accessory",
@@ -4878,6 +5266,12 @@
               "name": "reset",
               "static": false,
               "display": "default void reset()"
+            },
+            {
+              "kind": "method",
+              "name": "modeNameKey",
+              "static": false,
+              "display": "default Optional<String> modeNameKey(StabilizationMode mode)"
             }
           ],
           "types": [],
@@ -4944,6 +5338,12 @@
               "name": "COMPASS_DISTURBED_DEG",
               "static": false,
               "display": "double COMPASS_DISTURBED_DEG = 15.0"
+            },
+            {
+              "kind": "field",
+              "name": "DEFAULT_ANGLE_LIMIT_DEG",
+              "static": false,
+              "display": "double DEFAULT_ANGLE_LIMIT_DEG = 60.0"
             },
             {
               "kind": "method",
@@ -5238,6 +5638,18 @@
               "name": "operatorAxis",
               "static": false,
               "display": "default double operatorAxis(int index)"
+            },
+            {
+              "kind": "method",
+              "name": "terrainLimit",
+              "static": false,
+              "display": "default boolean terrainLimit()"
+            },
+            {
+              "kind": "method",
+              "name": "angleLimitDeg",
+              "static": false,
+              "display": "default double angleLimitDeg()"
             },
             {
               "kind": "method",
@@ -5943,7 +6355,9 @@
             "List<Vec3Mm> ledPathMm",
             "boolean hangsStraight",
             "Optional<Vec3Mm> muzzleMm",
-            "Set<Identifier> frames"
+            "Set<Identifier> frames",
+            "double recessMm",
+            "double dropMm"
           ],
           "extends": "",
           "implements": "PartDefinition",
@@ -6003,6 +6417,12 @@
               "name": "AccessoryDefinition",
               "static": false,
               "display": "AccessoryDefinition(Identifier id, PartBasics basics, AccessorySlot slot, double widthMm, double heightMm, double depthMm, double flightBatteryWatts, double frontalAreaM2, int ledCount, Optional<ActionCamDefinition> actionCam, double lensXMm, double lensLengthMm, List<Vec3Mm> ledPathMm, boolean hangsStraight, Optional<Vec3Mm> muzzleMm)"
+            },
+            {
+              "kind": "constructor",
+              "name": "AccessoryDefinition",
+              "static": false,
+              "display": "AccessoryDefinition(Identifier id, PartBasics basics, AccessorySlot slot, double widthMm, double heightMm, double depthMm, double flightBatteryWatts, double frontalAreaM2, int ledCount, Optional<ActionCamDefinition> actionCam, double lensXMm, double lensLengthMm, List<Vec3Mm> ledPathMm, boolean hangsStraight, Optional<Vec3Mm> muzzleMm, Set<Identifier> frames)"
             },
             {
               "kind": "method",
@@ -6109,6 +6529,18 @@
                 },
                 {
                   "kind": "method",
+                  "name": "recess",
+                  "static": false,
+                  "display": "Builder recess(double mm)"
+                },
+                {
+                  "kind": "method",
+                  "name": "drop",
+                  "static": false,
+                  "display": "Builder drop(double mm)"
+                },
+                {
+                  "kind": "method",
                   "name": "actionCam",
                   "static": false,
                   "display": "Builder actionCam(ActionCamDefinition value)"
@@ -6211,7 +6643,8 @@
             "double cameraTiltDeg",
             "Vec3Mm frameCenterOfMassMm",
             "MassSplit massSplit",
-            "Map<AccessorySlot, AnchorSpec> accessoryAnchors"
+            "Map<AccessorySlot, AnchorSpec> accessoryAnchors",
+            "Optional<AnchorSpec> antennaAnchor"
           ],
           "extends": "",
           "implements": "",
@@ -6235,6 +6668,18 @@
               "name": "DEFAULT_CAMERA_TILT",
               "static": true,
               "display": "static final double DEFAULT_CAMERA_TILT = 20.0"
+            },
+            {
+              "kind": "field",
+              "name": "DEFAULT_ANTENNA_TILT",
+              "static": true,
+              "display": "static final double DEFAULT_ANTENNA_TILT = 45.0"
+            },
+            {
+              "kind": "constructor",
+              "name": "AirframeGeometry",
+              "static": false,
+              "display": "AirframeGeometry(List<MotorArm> arms, boolean batteryOnTop, double batteryPlateMm, double electronicsMm, Optional<Vec3Mm> cameraMm, double cameraTiltDeg, Vec3Mm frameCenterOfMassMm, MassSplit massSplit, Map<AccessorySlot, AnchorSpec> accessoryAnchors)"
             },
             {
               "kind": "method",
@@ -6302,6 +6747,54 @@
           ],
           "types": [],
           "file": "common/src/main/java/de/lardtom/propwash/api/part/AnchorSpec.java"
+        },
+        {
+          "name": "AntennaCap",
+          "kind": "enum",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [
+            {
+              "name": "WHIP",
+              "key": "whip"
+            },
+            {
+              "name": "STUBBY",
+              "key": "stubby"
+            },
+            {
+              "name": "LOLLIPOP",
+              "key": "lollipop"
+            },
+            {
+              "name": "PAGODA",
+              "key": "pagoda"
+            },
+            {
+              "name": "PATCH",
+              "key": "patch"
+            }
+          ],
+          "members": [
+            {
+              "kind": "method",
+              "name": "key",
+              "static": false,
+              "display": "String key()"
+            },
+            {
+              "kind": "method",
+              "name": "byKey",
+              "static": true,
+              "display": "static Optional<AntennaCap> byKey(String key)"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/AntennaCap.java"
         },
         {
           "name": "BatteryDefinition",
@@ -6746,6 +7239,12 @@
                   "name": "anchor",
                   "static": false,
                   "display": "Builder anchor(AccessorySlot slot, AnchorSpec anchor)"
+                },
+                {
+                  "kind": "method",
+                  "name": "antennaAnchor",
+                  "static": false,
+                  "display": "Builder antennaAnchor(AnchorSpec anchor)"
                 },
                 {
                   "kind": "method",
@@ -8074,6 +8573,55 @@
           "file": "common/src/main/java/de/lardtom/propwash/api/part/Vec3Mm.java"
         },
         {
+          "name": "VideoAntenna",
+          "kind": "record",
+          "modifiers": [],
+          "typeParams": "",
+          "components": [
+            "int count",
+            "double lengthMm",
+            "AntennaCap cap"
+          ],
+          "extends": "",
+          "implements": "",
+          "permits": "",
+          "constants": [],
+          "members": [
+            {
+              "kind": "field",
+              "name": "MAX_COUNT",
+              "static": true,
+              "display": "static final int MAX_COUNT = 2"
+            },
+            {
+              "kind": "field",
+              "name": "MIN_LENGTH_MM",
+              "static": true,
+              "display": "static final double MIN_LENGTH_MM = 10.0"
+            },
+            {
+              "kind": "field",
+              "name": "MAX_LENGTH_MM",
+              "static": true,
+              "display": "static final double MAX_LENGTH_MM = 250.0"
+            },
+            {
+              "kind": "method",
+              "name": "none",
+              "static": true,
+              "display": "static VideoAntenna none()"
+            },
+            {
+              "kind": "method",
+              "name": "isNone",
+              "static": false,
+              "display": "boolean isNone()"
+            }
+          ],
+          "types": [],
+          "file": "common/src/main/java/de/lardtom/propwash/api/part/VideoAntenna.java"
+        },
+        {
           "name": "VideoDefinition",
           "kind": "record",
           "modifiers": [],
@@ -8089,7 +8637,8 @@
             "OptionalDouble cameraFovDeg",
             "int vtxPowerMw",
             "OptionalDouble powerW",
-            "List<Integer> vtxLevelsMw"
+            "List<Integer> vtxLevelsMw",
+            "Optional<VideoAntenna> antenna"
           ],
           "extends": "",
           "implements": "PartDefinition",
@@ -8113,6 +8662,12 @@
               "name": "VideoDefinition",
               "static": false,
               "display": "VideoDefinition(Identifier id, PartBasics basics, VideoLink link, int latencyMs, int rangeBlocks, double imageQuality, double cameraWidthMm, OptionalDouble cameraFovDeg, int vtxPowerMw, OptionalDouble powerW)"
+            },
+            {
+              "kind": "constructor",
+              "name": "VideoDefinition",
+              "static": false,
+              "display": "VideoDefinition(Identifier id, PartBasics basics, VideoLink link, int latencyMs, int rangeBlocks, double imageQuality, double cameraWidthMm, OptionalDouble cameraFovDeg, int vtxPowerMw, OptionalDouble powerW, List<Integer> vtxLevelsMw)"
             },
             {
               "kind": "method",
@@ -8207,6 +8762,12 @@
                 },
                 {
                   "kind": "method",
+                  "name": "antenna",
+                  "static": false,
+                  "display": "Builder antenna(VideoAntenna value)"
+                },
+                {
+                  "kind": "method",
                   "name": "build",
                   "static": false,
                   "display": "VideoDefinition build()"
@@ -8295,7 +8856,8 @@
             "Category category",
             "List<String> assistReasons",
             "List<AssistInfo> assistDetails",
-            "List<RuleValue> rules"
+            "List<RuleValue> rules",
+            "Optional<List<RuleValue>> serverRules"
           ],
           "extends": "",
           "implements": "",
@@ -8306,7 +8868,19 @@
               "kind": "constructor",
               "name": "BoardEntry",
               "static": false,
+              "display": "BoardEntry(int rank, UUID player, String name, long timeMillis, long timeNanos, long dateMillis, String frame, TimeKind kind, int laps, Category category, List<String> assistReasons, List<AssistInfo> assistDetails, List<RuleValue> rules)"
+            },
+            {
+              "kind": "constructor",
+              "name": "BoardEntry",
+              "static": false,
               "display": "BoardEntry(int rank, UUID player, String name, long timeMillis, long timeNanos, long dateMillis, String frame, TimeKind kind, int laps, Category category, List<String> assistReasons, List<AssistInfo> assistDetails)"
+            },
+            {
+              "kind": "method",
+              "name": "serverRulesDiffer",
+              "static": false,
+              "display": "boolean serverRulesDiffer()"
             },
             {
               "kind": "method",
@@ -8364,7 +8938,7 @@
               "kind": "field",
               "name": "MAX_LIMIT",
               "static": true,
-              "display": "static final int MAX_LIMIT = 500"
+              "display": "static final int MAX_LIMIT"
             },
             {
               "kind": "method",
@@ -8815,6 +9389,12 @@
               "name": "standard",
               "static": false,
               "display": "default RaceStandardInfo standard(MinecraftServer server)"
+            },
+            {
+              "kind": "method",
+              "name": "serverRules",
+              "static": false,
+              "display": "default RaceStandardInfo serverRules(MinecraftServer server)"
             }
           ],
           "types": [],
