@@ -4,11 +4,12 @@
 //   - player guide (docs/guide/): a section for each new thing with its words from the game – laps the server doesn't
 //     count (verdict in HUD and chat, pass zone warning with “Shorten to …”, /propwash race trim, floor arrows), the race
 //     line per course in the course settings, replays recorded as video (“Record as video”, ffmpeg), sculk sensors with
-//     the world rule “Drones trigger sculk”, zone outlines in flight (“With tool or in flight” as default), add-ons that
+//     the world rule “Drones trigger sculk”, bosses fighting drones with the world rule “Bosses fight drones” (new in the
+//     release 0.6.0), zone outlines in flight (“With tool or in flight” as default), add-ons that
 //     players don't need left out of the join overview, mixed servers (Fabric as server loader, NeoForge players on
 //     Fabric servers, clean refusal on NeoForge servers), trick tutorials in the Freestyle tab, “Unlock all” in the
 //     flight training and the advancement tab “Propwash FPV”; every picture of the guide exists
-//   - world rules page: the rule drones_trigger_sculk with its anchor
+//   - world rules page: the rules drones_trigger_sculk and drones_boss_interactions with their anchors
 //   - landing page: “What’s new” shows the cards of the fix block (trick tutorials, advancements, replays as video)
 //     after the three of 0.6.0, the FAQ answers whether NeoForge and Fabric players can play together and links the
 //     guide; the roadmap card of the camera drones names what its merged code does
@@ -36,6 +37,10 @@ const GUIDE = [
   ['racing-edit', { en: [/Race line/, /Shown/, /Hidden/], de: [/Ideallinie/, /Sichtbar/, /Aus/] }],
   ['video-replay', { en: [/Record as video/, /ffmpeg/, /propwash_replay_/, /start and finish gate/], de: [/Als Video aufnehmen/, /ffmpeg/, /propwash_replay_/, /Start- und Ziel-Gate/] }],
   ['world-sculk', { en: [/Sculk sensors/, /warden/, /wool/, /Drones trigger sculk/], de: [/Sculk-Sensoren/, /Wärter/, /Wolle/, /Drohnen lösen Sculk aus/] }],
+  ['world-bosses', {
+    en: [/warden/, /sonic boom/, /darkness/, /ender dragon/, /wither/, /breeze/, /Bosses fight drones/, /every preset/],
+    de: [/Wärter/, /Schallschlag/, /Dunkelheit/, /Enderdrache/, /Wither/, /Breeze/, /Bosse kämpfen gegen Drohnen/, /jeder Voreinstellung/],
+  }],
   ['servers-zones', { en: [/With tool or in flight/, /Only with tool/, /Always/], de: [/Mit Werkzeug oder im Flug/, /Nur mit Werkzeug/, /Immer/] }],
   ['servers-addons', { en: [/propwash:client/, /left out/], de: [/propwash:client/, /fehlen in der Liste/] }],
   ['servers-mixed', { en: [/run Fabric on the server/, /Velocity/, /NeoForge players/, /This server runs NeoForge/, /\.optional\(\)/], de: [/nimm Fabric auf dem Server/, /Velocity/, /NeoForge-Spieler/, /Dieser Server läuft mit NeoForge/, /\.optional\(\)/] }],
@@ -52,6 +57,7 @@ for (const [id, want] of GUIDE) {
   }
 }
 check(/href="\.\.\/\.\.\/docs\/gamerules\/#rule-drones_trigger_sculk"/.test(guide), 'docs/guide links the world rule drones_trigger_sculk');
+check(/href="\.\.\/\.\.\/docs\/gamerules\/#rule-drones_boss_interactions"/.test(guide), 'docs/guide links the world rule drones_boss_interactions');
 check(/id="servers-mixed"/.test(guide) && /href="#servers-mixed"/.test(guide), 'docs/guide: #servers-mixed in the table of contents');
 
 for (const m of guide.matchAll(/<img\b[^>]*\bsrc="([^"]+)"/g)) {
@@ -64,6 +70,8 @@ for (const name of ['lap-verdict-hud', 'course-settings-race-line', 'replay-vide
 
 check(/id="rule-drones_trigger_sculk"/.test(gamerules), 'docs/gamerules: the rule drones_trigger_sculk');
 check(/Drones trigger sculk/.test(gamerules) && /Drohnen lösen Sculk aus/.test(gamerules), 'docs/gamerules: its English and German name');
+check(/id="rule-drones_boss_interactions"/.test(gamerules), 'docs/gamerules: the rule drones_boss_interactions');
+check(/Bosses fight drones/.test(gamerules) && /Bosse kämpfen gegen Drohnen/.test(gamerules), 'docs/gamerules: Bosses fight drones in English and German');
 
 const sec = byId(home, 'new');
 if (check(!!sec, 'index.html: #new there')) {

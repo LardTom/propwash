@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 // Network protocol of the Propwash release the site describes (finding PROTO18-1): Propwash 0.6.0 got protocol 17 in its
 // first commit, the release candidates rc.1 and rc.2 were published with it, rc.3 had 18 (personal rules, leaderboard
-// rows with the server rules), and from rc.4 on it is 19 (the last fix block: lap verdicts, the race line per course,
-// advancements, accessory sync with recessed accessories). The site names the protocol of the release it describes
+// rows with the server rules), rc.4 had 19 (the last fix block: lap verdicts, the race line per course, advancements,
+// accessory sync with recessed accessories), and the release 0.6.0 has 20 (the pilot's own lap for replays and ghosts
+// of the leaderboard, uploaded after the server asked for it). The site names the protocol of the release it describes
 // everywhere:
 //   - PROTOCOL below lists the network protocol of each Propwash release; the docs data (tools/docs/data/meta.json)
 //     carries the one of its version
@@ -23,7 +24,7 @@ import { LANGUAGES, loadDict } from './i18n/languages.mjs';
 
 const { check, note, finish } = counter('protocol texts');
 
-const PROTOCOL = { '0.5.2': 16, '0.6.0': 19 };
+const PROTOCOL = { '0.5.2': 16, '0.6.0': 20 };
 const MENTION = /\b(?:[Nn]etwork protocol|Netzwerkprotokoll|Netzprotokoll|protocol|Protokoll)\s+(\d+)\b/g;
 const plain = (html) => html.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
 const mentions = (text) => [...text.matchAll(MENTION)].map((m) => ({ number: Number(m[1]), where: text.slice(Math.max(0, m.index - 50), m.index + m[0].length + 10) }));
