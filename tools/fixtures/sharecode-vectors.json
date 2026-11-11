@@ -7631,7 +7631,7 @@
  {
   "name": "addon:camdrones:tour",
   "format": "PW3",
-  "code": "PW3-HdK5DIQR6FqDuNEArp5GgJjxlDf6AI0994HAhNFFypn6dPnqw7jrx31wqvRtLwMnjNuqn0GXNJbj0ysy2XGQEtTySehRgK3Vl",
+  "code": "PW3-K1N4VXpBlx7Ji4hgIHmJ88dgNGPU6k62KV65H4zN8kCtzl02lHnrcnrwwi3hRVhL2trQzAEL6um47RhumZpW9XM4h0lbsU231zZOF",
   "status": "OK",
   "layers": [
    "parts",
@@ -7676,7 +7676,7 @@
    "warnings": []
   },
   "analysis": {
-   "mass_grams": 720.0,
+   "mass_grams": 720,
    "thrust_to_weight": 3.5003541754396794,
    "hover_throttle_percent": 54.966050647750656,
    "hover_flight_time_min": 41.39814632113715,
@@ -7706,17 +7706,17 @@
     "key": "camdrones",
     "name": "Propwash: Camera Drones",
     "required_version": "1.0.0",
-    "link": "https://propwashfpv.com",
-    "clickable": false,
+    "link": "https://www.curseforge.com/minecraft/mc-mods/propwash-camera-drones",
+    "clickable": true,
     "parts": 7
    }
   ],
-  "source": "Propwash 0.6.0-rc.1 (Pw3Codec, ShareTables with the jars of Just More Parts 1.2.0-rc.1, Camera Drones 1.0.0-rc.1 and Mob Defense 1.0.0-rc.1; the same setup writes the 62 vectors of that web export byte for byte); check and analysis from that web export where it has the build, missing: MissingAddons without Camera Drones and Mob Defense"
+  "source": "Propwash 0.6.0 (Pw3Codec, ShareTables with the jars of Just More Parts 1.2.0, Camera Drones 1.0.0 and Mob Defense 1.0.0, whose metadata names the CurseForge page as homepage: the code links the add-on by its CurseForge slug, link type 2, as the 16 game vectors of the Camera Drones web export of the release do); check and analysis from the rc.1 web export where it had the build, missing: MissingAddons"
  },
  {
   "name": "addon:mobdefense:dispenser",
   "format": "PW3",
-  "code": "PW3-2v3ZmWlesaUVUxUzcEAmUPhqfFzt3PCgsLNm6w7sgmARhLAzK7et8DMf8p9Y8JUKgaumV8I0jvWjN",
+  "code": "PW3-C3alkNImnOfy3pfyPqWWDa93SM3XK44P2OIAee0Xoct8Mx2OpKXTDhBwDlIUxlcZNkAc9Z5q1T2J1C",
   "status": "OK",
   "layers": [
    "parts",
@@ -7780,7 +7780,7 @@
    "esc_load_percent": 49.69775174573256,
    "battery_load_percent": 73.86818810737691,
    "motor_response_ms": 12.256448646523973,
-   "crash_speed_ms": 8.0,
+   "crash_speed_ms": 8,
    "sustained_motor_temp_c": 100.48001310423227,
    "motor_temp_minute_c": 100.48001310423227,
    "mixed_motor_temp_c": 51.262507118169005,
@@ -7792,17 +7792,17 @@
     "key": "mobdefense",
     "name": "Propwash: Mob Defense",
     "required_version": "1.0.0",
-    "link": "https://propwashfpv.com",
-    "clickable": false,
+    "link": "https://www.curseforge.com/minecraft/mc-mods/propwash-mob-defense",
+    "clickable": true,
     "parts": 1
    }
   ],
-  "source": "Propwash 0.6.0-rc.1 (Pw3Codec, ShareTables with the jars of Just More Parts 1.2.0-rc.1, Camera Drones 1.0.0-rc.1 and Mob Defense 1.0.0-rc.1; the same setup writes the 62 vectors of that web export byte for byte); check and analysis from that web export where it has the build, missing: MissingAddons without Camera Drones and Mob Defense"
+  "source": "Propwash 0.6.0 (Pw3Codec, ShareTables with the jars of Just More Parts 1.2.0, Camera Drones 1.0.0 and Mob Defense 1.0.0, whose metadata names the CurseForge page as homepage: the code links the add-on by its CurseForge slug, link type 2, as the 16 game vectors of the Camera Drones web export of the release do); check and analysis from the rc.1 web export where it had the build, missing: MissingAddons"
  },
  {
   "name": "addon:mobdefense:all",
   "format": "PW3",
-  "code": "PW3-1D0vUS85KJPrRFAlyR6X8pHywzLvXJbwVlkYXRWjmVUIWjXrEj4gBtzrssLi1RLompkR0xOS2CUKdBEfZ5YTfJyFk",
+  "code": "PW3-0KcvEA2Yl5TgWtCZAEu3HEYhEhdsocqQVlW6GLHO1ZSOYqd6lddpC4fCyQxCgXHeE6haviKMySAUarRwVYlBvcDXXyKk",
   "status": "OK",
   "layers": [
    "parts",
@@ -7852,17 +7852,17 @@
     "key": "mobdefense",
     "name": "Propwash: Mob Defense",
     "required_version": "1.0.0",
-    "link": "https://propwashfpv.com",
-    "clickable": false,
+    "link": "https://www.curseforge.com/minecraft/mc-mods/propwash-mob-defense",
+    "clickable": true,
     "parts": 3
    }
   ],
-  "source": "Propwash 0.6.0-rc.1 (Pw3Codec, ShareTables with the jars of Just More Parts 1.2.0-rc.1, Camera Drones 1.0.0-rc.1 and Mob Defense 1.0.0-rc.1; the same setup writes the 62 vectors of that web export byte for byte); check and analysis from that web export where it has the build, missing: MissingAddons without Camera Drones and Mob Defense"
+  "source": "Propwash 0.6.0 (Pw3Codec, ShareTables with the jars of Just More Parts 1.2.0, Camera Drones 1.0.0 and Mob Defense 1.0.0, whose metadata names the CurseForge page as homepage: the code links the add-on by its CurseForge slug, link type 2, as the 16 game vectors of the Camera Drones web export of the release do); check and analysis from the rc.1 web export where it had the build, missing: MissingAddons"
  },
  {
   "name": "addon:all-three",
   "format": "PW3",
-  "code": "PW3-PTdkzcN1K24qQN3V5QQgQsveq17tR3POb9IegW7bK59J0W0H8KcTsfAZimcYKvWzsuYz6oESOVCrb57FWcC8AWZeNN2SkJ83qQ9Yd0pFhFuJceveLFD32a4JWLi2cCsv0elUhbWWvRGDIIiFlpsEIrvkAfFiYecdWOxq",
+  "code": "PW3-1vRaoEICceYDcst2SmwtqZjqSNdFsUgqpUa9nfUQAEPwGaLI1KM0BgyH97S13touOBVhNmrT7XM9TpjLu8ZgvzDdSQ8DGMBceSVzEQ36trXtH8atGrkbGkPScawOtLZceRxlU3N7yj7Dy13whUGBuEN4b3eTsnQtWvJBVYPEqT",
   "status": "OK",
   "layers": [
    "parts",
@@ -7922,19 +7922,19 @@
     "key": "camdrones",
     "name": "Propwash: Camera Drones",
     "required_version": "1.0.0",
-    "link": "https://propwashfpv.com",
-    "clickable": false,
+    "link": "https://www.curseforge.com/minecraft/mc-mods/propwash-camera-drones",
+    "clickable": true,
     "parts": 6
    },
    {
     "key": "mobdefense",
     "name": "Propwash: Mob Defense",
     "required_version": "1.0.0",
-    "link": "https://propwashfpv.com",
-    "clickable": false,
+    "link": "https://www.curseforge.com/minecraft/mc-mods/propwash-mob-defense",
+    "clickable": true,
     "parts": 1
    }
   ],
-  "source": "Propwash 0.6.0-rc.1 (Pw3Codec, ShareTables with the jars of Just More Parts 1.2.0-rc.1, Camera Drones 1.0.0-rc.1 and Mob Defense 1.0.0-rc.1; the same setup writes the 62 vectors of that web export byte for byte); check and analysis from that web export where it has the build, missing: MissingAddons without Camera Drones and Mob Defense"
+  "source": "Propwash 0.6.0 (Pw3Codec, ShareTables with the jars of Just More Parts 1.2.0, Camera Drones 1.0.0 and Mob Defense 1.0.0, whose metadata names the CurseForge page as homepage: the code links the add-on by its CurseForge slug, link type 2, as the 16 game vectors of the Camera Drones web export of the release do); check and analysis from the rc.1 web export where it had the build, missing: MissingAddons"
  }
 ]

@@ -2,7 +2,8 @@
 // Writes the heat figures of the game (Propwash 0.6.0 and later) into tools/fixtures/heat-vectors.json for
 // tools/test-configurator.mjs, read from a web export in format 2 (Propwash 0.6.0).
 //
-//   node tools/build-configurator-heat.mjs --export <web-export dir>     (or JMP_WEB_EXPORT)
+//   node tools/build-configurator-heat.mjs --export <web-export dir> …   (or JMP_WEB_EXPORT; several exports like
+//                                                                          tools/build-configurator-data.mjs)
 //
 // 0.6.0 changed the workbench heat model (20 °C instead of 25 °C, motor cooling by the bell size, eddy-current losses,
 // the ESC heats up and its temperature counts for the heat warning) and nothing else of the analysis. The file keeps
@@ -15,7 +16,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { exportDir } from './build-configurator-data.mjs';
+import { exportDirs } from './build-configurator-data.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'tools/fixtures/heat-vectors.json');
@@ -41,21 +42,33 @@ const buildKey = (b) => JSON.stringify({ ...b, accessories: Object.fromEntries(O
 
 const heatOf = (a) => HEAT_KEYS.map((k) => a[k]);
 
-export function buildHeat(dir) {
-  const manifest = read(dir, 'manifest.json');
-  if (manifest.format !== 2) throw new Error(`web export format ${manifest.format}, expected 2 (Propwash 0.6.0)`);
-  if (!atLeast(manifest.propwash, '0.6.0')) throw new Error(`web export of Propwash ${manifest.propwash}, expected 0.6.0 or later`);
+export function buildHeat(dirOrDirs) {
+  // One export or several (like tools/build-configurator-data.mjs): every namespace from the first export that has it,
+  // the share-code vectors of every export with base/.
+  const dirs = Array.isArray(dirOrDirs) ? dirOrDirs : [dirOrDirs];
+  const manifests = dirs.map((d) => read(d, 'manifest.json'));
+  for (const m of manifests) {
+    if (m.format !== 2) throw new Error(`web export format ${m.format}, expected 2 (Propwash 0.6.0)`);
+    if (!atLeast(m.propwash, '0.6.0')) throw new Error(`web export of Propwash ${m.propwash}, expected 0.6.0 or later`);
+  }
+  const dir = dirs[0];
+  const manifest = manifests[0];
   const parts = new Map();
   const presets = [];
   const files = [];
-  for (const ns of manifest.namespaces) {
-    for (const p of read(dir, `${ns}/parts.json`)) parts.set(p.id, p);
-    for (const p of read(dir, `${ns}/presets.json`)) presets.push(p);
-    const analysisDir = path.join(dir, ns, 'analysis');
-    if (fs.existsSync(analysisDir)) {
-      for (const f of fs.readdirSync(analysisDir).filter((x) => x.endsWith('.json')).sort()) files.push(read(analysisDir, f));
+  const owned = new Set();
+  dirs.forEach((at, i) => {
+    for (const ns of manifests[i].namespaces) {
+      if (owned.has(ns)) continue;
+      owned.add(ns);
+      for (const p of read(at, `${ns}/parts.json`)) parts.set(p.id, p);
+      for (const p of read(at, `${ns}/presets.json`)) presets.push(p);
+      const analysisDir = path.join(at, ns, 'analysis');
+      if (fs.existsSync(analysisDir)) {
+        for (const f of fs.readdirSync(analysisDir).filter((x) => x.endsWith('.json')).sort()) files.push(read(analysisDir, f));
+      }
     }
-  }
+  });
   presets.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 
   const seen = new Map();
@@ -84,7 +97,8 @@ export function buildHeat(dir) {
   }
 
   const builds = [];
-  for (const v of read(dir, 'base/sharecode/vectors.json')) {
+  const vectors = dirs.filter((d) => fs.existsSync(path.join(d, 'base/sharecode/vectors.json'))).flatMap((d) => read(d, 'base/sharecode/vectors.json'));
+  for (const v of vectors) {
     if (!v.analysis || !v.decoded) continue;
     const known = seen.has(buildKey(v.decoded.build));
     remember(v.decoded.build, v.analysis, v.name);
@@ -100,7 +114,8 @@ export function buildHeat(dir) {
       web_export_format: manifest.format,
       generator: manifest.generator,
       generated_at: manifest.generated_at,
-      mods: manifest.mods,
+      mods: Object.fromEntries(Object.entries(Object.assign({}, ...manifests.map((m) => m.mods || {}))).sort(([a], [b]) => (a < b ? -1 : 1))),
+      exports: dirs.length,
       propwash_api: manifest.propwash_api,
       fingerprint: manifest.fingerprint,
     },
@@ -156,12 +171,13 @@ export function refreshCatalog(catalog, heat) {
 }
 
 function main() {
-  const dir = exportDir();
-  if (!fs.existsSync(path.join(dir, 'manifest.json'))) {
-    console.error(`web export not found in ${dir} (use --export <dir> or JMP_WEB_EXPORT)`);
+  const dirs = exportDirs();
+  const missing = dirs.filter((d) => !fs.existsSync(path.join(d, 'manifest.json')));
+  if (!dirs.length || missing.length) {
+    console.error(`web export not found in ${missing.join(', ') || '(none)'} (use --export <dir> …, or JMP_WEB_EXPORT)`);
     process.exit(1);
   }
-  const heat = buildHeat(dir);
+  const heat = buildHeat(dirs);
   fs.writeFileSync(OUT, formatHeat(heat));
   const catalog = JSON.parse(fs.readFileSync(CATALOG, 'utf8'));
   const changed = refreshCatalog(catalog, heat);

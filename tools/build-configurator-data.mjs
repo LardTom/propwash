@@ -21,7 +21,8 @@
 //                                              chemistries and mounts of every namespace of the export(s), rules,
 //                                              paint, tune, the FPV layout data of every drone_layout.json, and for
 //                                              share codes the parts table of every namespace and the add-on directory
-//   tools/fixtures/pw3-export-vectors.json     the PW3 vectors of the export (base/sharecode/vectors.json): a code per
+//   tools/fixtures/pw3-export-vectors.json     the PW3 vectors of the exports (base/sharecode/vectors.json of each, every
+//                                              name once): a code per
 //                                              preset (parts only, and with paint and tune), with check and analysis
 //   tools/fixtures/sharecode/*.json            the golden files of Propwash (only with --goldens)
 //
@@ -483,7 +484,22 @@ function main() {
 
   const fixtures = path.join(ROOT, 'tools/fixtures');
   fs.mkdirSync(fixtures, { recursive: true });
-  const vectors = read(readExports(dirs).base, 'base/sharecode/vectors.json');
+  // The vectors of every export with base/ (the game writes them with that export's add-ons installed), each once;
+  // a vector of the same name must be the same in every export.
+  const vectors = [];
+  const byName = new Map();
+  for (const dir of dirs) {
+    if (!fs.existsSync(path.join(dir, 'base', 'sharecode', 'vectors.json'))) continue;
+    for (const v of read(dir, 'base/sharecode/vectors.json')) {
+      const seen = byName.get(v.name);
+      if (seen) {
+        if (seen.code !== v.code) throw new Error(`vector ${v.name}: ${seen.code} in one export, ${v.code} in ${dir}`);
+        continue;
+      }
+      byName.set(v.name, v);
+      vectors.push(v);
+    }
+  }
   fs.writeFileSync(path.join(fixtures, 'pw3-export-vectors.json'), JSON.stringify(vectors, null, 1) + '\n');
 
   console.log(`catalog.json: ${catalog.parts.length} parts, ${catalog.presets.length} presets, namespaces ${catalog.namespaces.map((n) => `${n.namespace} ${n.version}${n.homepage ? ` (${n.homepage})` : ''}`).join(', ')}, ${(text.length / 1024).toFixed(1)} KiB`);

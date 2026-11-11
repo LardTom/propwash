@@ -269,13 +269,17 @@ Mob Defense:
 ### Updating the data
 
 The data come from the web export of Propwash (format 2, `/propwash webexport all` with the add-ons installed). The
-current data: `runWebExport` of Propwash 0.6.0-rc.1 (810cdb410) with the rc.1 jars of Just More Parts (1.2.0-rc.1),
-Camera Drones (1.0.0-rc.1) and Mob Defense (1.0.0-rc.1) in `mods/`, all four namespaces in one export; `catalog.json`
-names it in `source.sources` (generator, time, namespaces) and the jars with their SHA-256 in `source.jars`:
+current data: the web exports of the release build of Propwash 0.6.0 (`release/0.6.0/web-export/` of the release:
+`propwash-fpv`, `just-more-parts` with Just More Parts 1.2.0 and `camera-drones` with Camera Drones 1.0.0, each made
+by `runWebExport` of Propwash 0.6.0 with that add-on) and Mob Defense 1.0.0 read from its release jar with
+`tools/build-addon-export.mjs` (its release brings only its own export in format 1, the raw part files); `catalog.json`
+names them in `source.sources` (generator, time, namespaces) and the jars with their SHA-256 in `source.jars`:
 
 ```sh
 # in a Propwash checkout of the release stand, with the add-on jars in one folder
 ./gradlew :fabric:runWebExport -PpropwashWebExportMods=<folder with the add-on jars>
+# an add-on without a format-2 export: read it from its jar like the configurator's jar loader does
+node tools/build-addon-export.mjs --jar <add-on jar> --out <folder>   # then pass <folder> as one more --export
 ```
 
 The build scripts read one export with all add-ons or several exports (`--export` repeated, or `JMP_WEB_EXPORT` with
@@ -284,15 +288,18 @@ that has it. Default: the newest `web-export` of `../propwash-justmoreparts/rele
 `../propwash-camera/release/<version>/` and `../propwash-mobdefense/release/<version>/` that exist. `--mods <jar or
 folder>` (or `PROPWASH_WEB_EXPORT_MODS`) gives the jars of the add-ons: their metadata (`fabric.mod.json` or
 `neoforge.mods.toml`) gives each namespace its homepage, which a PW3 code names for an add-on that is not in the add-on
-directory (Camera Drones and Mob Defense: `propwashfpv.com`, only as text) – without it the page's codes of those
-add-ons would differ from the game's:
+directory (Camera Drones and Mob Defense 1.0.0: their CurseForge pages, link type 2 of PW3, clickable; their rc.1 jars
+named `propwashfpv.com`, only as text) – without it the page's codes of those add-ons would differ from the game's.
+The PW3 vectors of every export with `base/` are kept (each name once; the same name must have the same code), so
+`tools/fixtures/pw3-export-vectors.json` holds the game's codes of all 31 presets (62 vectors), and
+`build-configurator-heat.mjs` reads several exports the same way:
 
 ```sh
 node tools/build-configurator-data.mjs --export <dir> --mods <jars> --goldens <propwash>/common/src/test/resources/sharecode
                                            # catalog.json, the export's PW3 vectors and the golden files of Propwash
 node tools/build-configurator-models.mjs --export <dir> --resources <propwash>/common/src/main/resources --resources <unpacked JMP jar>
                                            # render.json and models/ (with the plug anchors)
-node tools/build-configurator-heat.mjs --export <dir>   # heat figures of the game (tools/fixtures/heat-vectors.json)
+node tools/build-configurator-heat.mjs --export <dir> … # heat figures of the game (tools/fixtures/heat-vectors.json)
 node tools/build-addons.mjs --jar justmoreparts=<jar>   # the hosted export of Just More Parts the configurator shows
 node tools/build-configurator-beginner.mjs # pictures of the builds for beginners (headless Chrome, cwebp)
 node tools/test-configurator.mjs           # share codes, conversion, presets, analysis, FPV camera, tune, explanations
@@ -321,10 +328,11 @@ codes byte for byte. With `PROPWASH_SHARECODE_GOLDENS` set (or a `propwash` chec
 checks that the copies are current. `tools/fixtures/sharecode-vectors.json` keeps the PW1 and PW2 vectors of the last
 format-1 export (Just More Parts 1.1.1, frozen): they must still read, and convert to PW3 with the same build. Its PW3
 vectors are codes of the add-ons from the game: a camera drone (Tour with name and paint), the dispenser mount on the
-5″ freestyle preset, all three Mob Defense accessories and a build with parts of all three add-ons, written by the PW3
-codec of Propwash 0.6.0-rc.1 with the parts tables and mod data of the three rc.1 jars (the same setup writes the 62
-vectors of that web export byte for byte), with the game's check and analysis where the export has the build and the
-game's line for a missing add-on (name, version, `https://propwashfpv.com`, not clickable);
+5″ freestyle preset, all three Mob Defense accessories and a build with parts of all three add-ons, first written by
+the PW3 codec of Propwash 0.6.0-rc.1 with the three rc.1 jars, then with the 1.0.0 jars, whose metadata names the
+CurseForge page: the code links the add-on by its CurseForge slug (link type 2), like the 16 game vectors of the
+Camera Drones web export of the release; with the game's check and analysis where the export had the build and the
+game's line for a missing add-on (name, version, its CurseForge page, clickable);
 `tools/test-configurator.mjs` and `tools/test-configurator-addons.mjs` read and write them byte for byte.
 `tools/fixtures/pwd1-vectors.json` holds PWD1 codes with every edge of the mod's reader (Base64url, deflate, number
 forms of `Double.parseDouble`, the limits of the creative values) and what Propwash 0.6.0 makes of them (status, values,
@@ -341,7 +349,7 @@ namespaces, and `frames.json` with id, data and derived values of every frame of
 with `build-configurator-models.mjs --out <dir>` and checks the rules, the faces left out (the numbers of the game's
 own self test), the antennas behind an overhanging pack (with the packs of the game's self test the same 22
 combinations as in the game) and the antennas in the viewer.
-Since the site's data come from the web export of Propwash 0.6.0-rc.1 (810cdb410), its VTX models carry those lists
+Since the site's data come from the web exports of Propwash 0.6.0, its VTX models carry those lists
 and the catalog the holders with `max_length_mm` and `pair_lean_deg` and the antennas too; frames the fixture does not
 have (Camera Drones) take their holder from the catalog.
 
@@ -377,9 +385,8 @@ Straight-hanging accessories (Propwash 0.6.0: `hangs_straight: true` in `data` o
 every accessory with `hangs_straight` in its part file) hang without the mount's tilt and are not stretched to the
 anchor length, like `AccessoryAnchor#tiltFor` and `#stretch`; an accessory with an LED path is not stretched either.
 `assembly.js` (`accessoryTilt`, `accessoryStretch`, `accessoryOrigin`) and `analysis.js` (`tiltFor`, `anchorStretch`)
-read the field, the jar path writes it like `PartData` (only when true, last). The current data are from 0.6.0-rc.1,
-whose export did not have the field yet: the gripper in `catalog.json` carries it as the web export writes it since
-Propwash 0.6.0-rc.4 (FBW-1); the next export brings it by itself. With it, `freestyle_5` with the gripper below gives
+read the field, the jar path writes it like `PartData` (only when true, last). The web export of Propwash 0.6.0 brings
+it for the gripper (Propwash 0.6.0-rc.4, FBW-1). With it, `freestyle_5` with the gripper below gives
 the game's figures (inertia Ixx 0.0015485, pitch authority 1819.1), checked by `tools/test-configurator-render.mjs`.
 
 `tools/fixtures/report-vectors.json` keeps share codes from bug reports with the build, analysis and FPV camera the

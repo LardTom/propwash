@@ -19,8 +19,8 @@
 //     incomplete – also in the panel of the page for the game's case (tour frame with an FPV stack and no gimbal)
 //   - share codes from the game (tools/fixtures/sharecode-vectors.json, format PW3: a camera drone, a Mob Defense
 //     accessory, both Mob Defense accessories plus booster, all three add-ons): read and written byte for byte like the
-//     game; without the add-on the page names it like the game (“Needs Propwash: Camera Drones from 1.0.0”, the address
-//     propwashfpv.com only as text) and writes the code back unchanged
+//     game; without the add-on the page names it like the game (“Needs Propwash: Camera Drones from 1.0.0” with its
+//     CurseForge page, the homepage of the 1.0.0 jars, link type 2) and writes the code back unchanged
 //   - texts: the add-on filter and the camera drone texts in English and German, the class cinelifter, the figure
 //     ranges of camera drones
 //   - headless Chrome, English and German at 1280 and 390 px: the add-on filter of the part lists, the badges, the
@@ -50,7 +50,7 @@ const JMP = 'justmoreparts';
 const ADDONS = [JMP, CAM, MD];
 const NAMES = { [JMP]: 'Propwash: Just More Parts', [CAM]: 'Propwash: Camera Drones', [MD]: 'Propwash: Mob Defense' };
 const SHORT = { [JMP]: 'Just More Parts', [CAM]: 'Camera Drones', [MD]: 'Mob Defense' };
-const HOMEPAGE = { [CAM]: 'https://propwashfpv.com', [MD]: 'https://propwashfpv.com' };
+const HOMEPAGE = { [CAM]: 'https://www.curseforge.com/minecraft/mc-mods/propwash-camera-drones', [MD]: 'https://www.curseforge.com/minecraft/mc-mods/propwash-mob-defense' };
 const CAM_COUNTS = { frame: 3, stack: 2, motor: 3, prop: 3, video: 2, battery: 3, accessory: 3 };
 const CAM_PRESETS = ['camdrones:compact', 'camdrones:tour', 'camdrones:cine'];
 const CAM_FRAMES = ['camdrones:compact_fold_frame', 'camdrones:tour_fold_frame', 'camdrones:cine_frame'];
@@ -383,7 +383,7 @@ function vectorChecks() {
     for (const m of v.missing) {
       const report = w.namespaces.find((n) => n.namespace === m.key);
       check(report && report.result === 'MISSING' && report.min_version === m.required_version, `${v.name} without ${m.key}: MISSING from ${m.required_version} (${JSON.stringify(report)})`);
-      check(report && report.name === m.name && `https://${report.link}` === m.link && report.link_type === 3, `${v.name} without ${m.key}: name and address of the code like the game (${report && report.name}, ${report && report.link})`);
+      check(report && report.name === m.name && `https://www.curseforge.com/minecraft/mc-mods/${report.link}` === m.link && report.link_type === 2, `${v.name} without ${m.key}: name and CurseForge page of the code like the game (${report && report.name}, ${report && report.link_type} ${report && report.link})`);
       const unknown = w.unknownParts.filter((id) => id.includes(m.key));
       check(unknown.length === m.parts, `${v.name} without ${m.key}: ${m.parts} unknown parts (${unknown.length})`);
       for (const lang of ['en', 'de']) {
@@ -391,7 +391,7 @@ function vectorChecks() {
         const n = report ? attemptNote(() => addonNote(report, without, lang, '../addons/')) : null;
         delete globalThis.document;
         check(n && n.text.includes(m.name) && n.text.includes(m.required_version), `${v.name} ${lang}: the note names ${m.name} ${m.required_version} (${n && n.text})`);
-        check(n && n.links.length === 0 && n.free && n.free.includes('propwashfpv.com'), `${v.name} ${lang}: no link to click, the address only as text like the game (${n && JSON.stringify(n)})`);
+        check(n && m.clickable && n.links.some((l) => (l.href || l.url || l) === m.link || JSON.stringify(l).includes(m.link)) && !n.free, `${v.name} ${lang}: the CurseForge page to click like the game (${n && JSON.stringify(n)})`);
       }
     }
     const tables = withCodeAddons(without.shareTables(), codeAddons(w.namespaces));
@@ -663,8 +663,8 @@ async function browser() {
       const line = await p.evaluate("(() => { const n = document.querySelector('.addon-line'); return n ? { text: n.textContent.replace(/\\s+/g, ' ').trim(), links: [...n.querySelectorAll('a')].map((a) => a.href) } : null; })()");
       note(`${where}: hint ${line ? line.text : '(none)'}`);
       if (line) {
-        check(line.text.includes(NAMES[CAM]) && line.text.includes('1.0.0') && line.text.includes('propwashfpv.com'), `${where}: the hint names ${NAMES[CAM]} 1.0.0 and propwashfpv.com (${line.text})`);
-        check(!line.links.some((h) => h.includes('propwashfpv.com')), `${where}: the address of the code is no link (${line.links})`);
+        check(line.text.includes(NAMES[CAM]) && line.text.includes('1.0.0') && line.text.includes('CurseForge'), `${where}: the hint names ${NAMES[CAM]} 1.0.0 and CurseForge (${line.text})`);
+        check(line.links.includes(HOMEPAGE[CAM]), `${where}: the CurseForge page of the code is a link (${line.links})`);
       }
       check(p.errors.length === 0, `${where}: no console errors (${p.errors.slice(0, 2).join(' | ')})`);
       await p.close();
