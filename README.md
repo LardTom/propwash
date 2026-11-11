@@ -298,7 +298,8 @@ The PW3 vectors of every export with `base/` are kept (each name once; the same 
 node tools/build-configurator-data.mjs --export <dir> --mods <jars> --goldens <propwash>/common/src/test/resources/sharecode
                                            # catalog.json, the export's PW3 vectors and the golden files of Propwash
 node tools/build-configurator-models.mjs --export <dir> --resources <propwash>/common/src/main/resources --resources <unpacked JMP jar>
-                                           # render.json and models/ (with the plug anchors)
+                                           # render.json and models/ (with the plug anchors and the props'
+                                           # blur models for the simulator)
 node tools/build-configurator-heat.mjs --export <dir> … # heat figures of the game (tools/fixtures/heat-vectors.json)
 node tools/build-addons.mjs --jar justmoreparts=<jar>   # the hosted export of Just More Parts the configurator shows
 node tools/build-configurator-beginner.mjs # pictures of the builds for beginners (headless Chrome, cwebp)
