@@ -18,10 +18,10 @@
 
 import { normalizeCreative } from './sharecode3.js?v=024bd980';
 import { decodeObject, trueX, ARM_KEYS, PROPS_IN, MASS_SPLIT_OPEN, MASS_SPLIT_DUCTED } from './partjson.js?v=1061e25f';
-import { exportData, exportDerived } from './catalog-build.js?v=dadd8390';
-import { CREATIVE_FC } from './rules.js?v=6634f777';
+import { exportData, exportDerived } from './catalog-build.js?v=211c1389';
+import { CREATIVE_FC } from './rules.js?v=26a8eb49';
 import { cameraFov, UPTILT_MIN, UPTILT_MAX } from './fpv.js?v=76cdbbe6';
-import { airframe as airframeOf, analyze as analyzeBuild } from './analysis.js?v=f3f32120';
+import { airframe as airframeOf, analyze as analyzeBuild } from './analysis.js?v=293f859b';
 
 export { CREATIVE_FC };
 export const STACK_MIN_CELLS = 1;
