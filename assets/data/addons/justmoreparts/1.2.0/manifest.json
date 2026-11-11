@@ -5,14 +5,14 @@
  "mod": {
   "id": "justmoreparts",
   "name": "Propwash: Just More Parts",
-  "version": "1.2.0-rc.1"
+  "version": "1.2.0"
  },
  "short_id": 2,
  "table_source": "mod",
  "table_entries": 146,
  "table_crc": "c907a30d",
  "requires": {
-  "propwash": ">=0.6.0-"
+  "propwash": ">=0.6.0"
  },
  "languages": [
   "de_de",
@@ -29,9 +29,9 @@
   "chemistry": 4
  },
  "jar": {
-  "file": "justmoreparts-fabric-26.3-1.2.0-rc.1.jar",
-  "bytes": 4762083,
-  "sha256": "cb60050f9e15ff98e1917ed6aecd76d895601beace44ace41101dd792858c2ea",
+  "file": "justmoreparts-fabric-26.3-1.2.0.jar",
+  "bytes": 4762074,
+  "sha256": "fd0e36c2d1365d3adb04eade999698147333fc195372d9973705efab8141983e",
   "loader": "fabric"
  },
  "generator": "tools/build-addons.mjs (web export format 2, read from the jar like the configurator)",

@@ -372,7 +372,7 @@ button {
   left: 14px;
   bottom: 14px;
   z-index: 1;
-  max-width: calc(100% - 350px);
+  max-width: calc(100% - 440px);
   margin: 0;
   color: var(--faint);
   font: 600 0.64rem/1.45 var(--mono);
@@ -508,6 +508,21 @@ button {
 .viewer__btn[aria-expanded="true"] {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+/* Fly this drone in the simulator (sim/): the one accent button of the toolbar. */
+.viewer__btn--fly {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  text-decoration: none;
+}
+
+.viewer__btn--fly:hover,
+.viewer__btn--fly:focus-visible {
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
+  color: var(--on-accent);
 }
 
 /* Narrow screens: the screenshot button keeps only its icon, so the toolbar stays on one line. */
@@ -1037,6 +1052,32 @@ button {
   color: var(--accent);
 }
 
+.checks__list li.is-info {
+  background: rgba(192, 64, 255, 0.08);
+}
+
+.checks__list li.is-info::before {
+  content: "i";
+  color: var(--creative);
+}
+
+.checks__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.checks__link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .checks__tag {
   margin-right: 8px;
   padding: 1px 6px;
@@ -1103,8 +1144,9 @@ button {
 /* ---------- Tabs ---------- */
 
 .tabs-bar {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* Four tabs, five with the drone editor of a creative drone: one row, equal widths as long as every name fits
+     (a longer one takes the room of its longest word). */
+  display: flex;
   gap: 2px;
   padding: 3px;
   border: 1px solid var(--border);
@@ -1113,6 +1155,7 @@ button {
 }
 
 .tabs-bar [role="tab"] {
+  flex: 1 1 0;
   min-height: 44px;
   padding: 8px 6px;
   border: 0;
@@ -1299,6 +1342,18 @@ button {
 .badge--addon {
   border-color: var(--accent-dim);
   color: var(--accent);
+}
+
+/* The creative flight controller: creative mode only (the violet of its board in the game). */
+.badge--creative {
+  border-color: rgba(192, 64, 255, 0.55);
+  color: var(--creative);
+}
+
+.part__badges {
+  display: grid;
+  justify-items: end;
+  gap: 3px;
 }
 
 .part-help {
@@ -3050,4 +3105,213 @@ button {
 
 .cv-code__note.is-bad {
   color: var(--accent);
+}
+
+/* ---------- Drone editor of a creative drone (creative-editor.js, the tuning's rows) ---------- */
+
+.cfg-page {
+  --creative: #d38cff;
+}
+
+.ce-rules,
+.ce-pick-note {
+  border-left-color: rgba(192, 64, 255, 0.7);
+  font-size: 0.88rem;
+}
+
+.ce-pick-note {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  margin-top: 10px;
+}
+
+.ce-status {
+  min-height: 1.4em;
+  margin: -8px 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.ce-status.is-warn {
+  color: var(--accent);
+}
+
+.ce-status.is-ok {
+  color: var(--gate);
+}
+
+.ce-figures__list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px 12px;
+  margin: 0;
+}
+
+.ce-figure {
+  min-width: 0;
+}
+
+.ce-figure dt {
+  color: var(--faint);
+  font-size: 0.76rem;
+}
+
+.ce-figure dd {
+  margin: 0;
+  color: var(--text);
+  font: 600 0.95rem/1.3 var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.ce-figures__title {
+  margin-top: 6px;
+  color: var(--faint);
+  font-size: 0.76rem;
+}
+
+.ce-notes {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.88rem;
+}
+
+.ce-notes li {
+  position: relative;
+  padding-left: 16px;
+  color: var(--text-2);
+}
+
+.ce-notes li::before {
+  position: absolute;
+  left: 2px;
+  font-family: var(--mono);
+  font-weight: 700;
+}
+
+.ce-notes li.is-warn::before {
+  content: "!";
+  color: var(--accent);
+}
+
+.ce-notes li.is-ok::before {
+  content: "✓";
+  color: var(--gate);
+}
+
+.ce-template {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.ce-reset-all {
+  justify-self: start;
+}
+
+.ce-param {
+  grid-template-columns: minmax(0, 1fr) minmax(190px, 230px) 36px;
+}
+
+.ce-base {
+  grid-template-columns: minmax(70px, auto) minmax(0, 1fr) 36px;
+}
+
+.tune-table .ce-param {
+  grid-template-columns: minmax(0, 1fr) 28px;
+}
+
+.ce-param .tune__label {
+  flex-wrap: wrap;
+  gap: 0 6px;
+}
+
+.ce-auto {
+  color: var(--faint);
+  font-weight: 400;
+}
+
+/* Own value: highlighted like a changed tune value, the field with the accent's edge. */
+.ce-param.is-changed .tune__input .field__control {
+  border-color: var(--accent-dim);
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.ce-field {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 30px;
+  align-items: stretch;
+  gap: 3px;
+  min-width: 0;
+}
+
+.ce-step {
+  min-height: 38px;
+  padding: 0;
+  border: 1px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--panel);
+  color: var(--text-2);
+  font: 600 1rem/1 var(--mono);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.ce-step:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+.ce-toggle {
+  min-height: 38px;
+}
+
+.ce-param__note {
+  grid-column: 1 / -1;
+  margin: -2px 0 0;
+  color: var(--accent);
+  font-size: 0.8rem;
+}
+
+.ce-param__note:empty {
+  display: none;
+}
+
+.ce-arms__title {
+  color: var(--faint);
+  font-size: 0.76rem;
+}
+
+.ce-arms .tune__input .field__control {
+  padding-right: 6px;
+}
+
+.ce-hint {
+  color: var(--faint);
+}
+
+@media (max-width: 479px) {
+  .ce-param,
+  .ce-base {
+    grid-template-columns: minmax(0, 1fr) 36px;
+  }
+  .tune-table .ce-param {
+    grid-template-columns: minmax(0, 1fr) 28px;
+  }
+  .tune-table .ce-param .tune__reset {
+    display: grid;
+  }
+  .ce-figures__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .ce-template {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .ce-template > .tune__label {
+    grid-column: 1 / -1;
+  }
 }

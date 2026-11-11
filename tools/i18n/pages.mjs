@@ -21,6 +21,9 @@ export const PAGES = [
   { file: 'docs/gamerules/index.html', path: 'docs/gamerules/', current: 'docs-sub' },
   { file: 'docs/blackbox/index.html', path: 'docs/blackbox/', current: 'docs-sub' },
   { file: 'brand/index.html', path: 'brand/', current: 'brand' },
+  // App page without navigation and footer (tools/build-nav.mjs APP_PAGES): the banner goes where the page has the
+  // marker <!-- i18n-banner -->.
+  { file: 'sim/index.html', path: 'sim/', current: 'sim', app: true },
 ];
 
 // Texts drawn by scripts: "pairs" = every {en, de} object of a JSON file, "catalog" = the part texts of the
@@ -35,6 +38,7 @@ export const RUNTIME = [
   { file: 'assets/data/addons/registry.json', kind: 'pairs', optional: true },
   { file: 'assets/data/configurator/catalog.json', kind: 'catalog' },
   { file: 'assets/js/configurator/i18n.js', kind: 'js-arrays' },
+  { file: 'assets/js/sim/i18n.js', kind: 'js-arrays' },
   { file: 'assets/js/roadmap/view.js', kind: 'js', optional: true },
   { file: 'assets/js/changelog/view.js', kind: 'js', optional: true },
   { file: 'assets/js/main.js', kind: 'js', page: true },

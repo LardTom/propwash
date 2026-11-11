@@ -1,0 +1,718 @@
+/* FPV simulator page (sim/): full-window 3D view with the OSD on top, a slim bar, controller setup and help dialogs. */
+
+.sim-page {
+  overflow: hidden;
+  background: #000;
+}
+
+.sim {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.sim__stage {
+  position: absolute;
+  inset: 0;
+}
+
+.sim__stage canvas {
+  display: block;
+}
+
+.sim__osd {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.sim__bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px var(--gutter);
+  background: linear-gradient(rgba(10, 10, 10, 0.78), rgba(10, 10, 10, 0));
+  font-size: 0.875rem;
+  transition: opacity 0.4s var(--ease-out);
+}
+
+.sim__bar:hover,
+.sim__bar:focus-within {
+  opacity: 1 !important;
+}
+
+.sim__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 6px 10px 6px 6px;
+  border-radius: var(--radius);
+}
+
+.sim__back:hover,
+.sim__back:focus-visible {
+  color: var(--accent);
+}
+
+.sim__name {
+  font-family: var(--mono);
+  color: var(--muted);
+  font-size: 0.8125rem;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1 1 8em;
+}
+
+.sim__views,
+.sim__actions,
+.sim__lang {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.sim__sound {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Volume slider: thin track filled in the accent colour up to the value (--fill), grey while the sound is off. */
+.sim__volume {
+  --fill: 100%;
+  width: 92px;
+  height: 34px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.sim__volume::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--accent) var(--fill), rgba(255, 255, 255, 0.25) var(--fill));
+}
+
+.sim__volume::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(to right, var(--accent) var(--fill), rgba(255, 255, 255, 0.25) var(--fill));
+}
+
+.sim__volume::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
+  border: 2px solid var(--bg);
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.sim__volume::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: 2px solid var(--bg);
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.sim__volume.is-off::-webkit-slider-runnable-track {
+  background: linear-gradient(to right, var(--muted) var(--fill), rgba(255, 255, 255, 0.25) var(--fill));
+}
+
+.sim__volume.is-off::-moz-range-track {
+  background: linear-gradient(to right, var(--muted) var(--fill), rgba(255, 255, 255, 0.25) var(--fill));
+}
+
+.sim__volume.is-off::-webkit-slider-thumb {
+  background: var(--muted);
+}
+
+.sim__volume.is-off::-moz-range-thumb {
+  background: var(--muted);
+}
+
+.sim__volume:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.sim__btn {
+  font: inherit;
+  font-weight: 600;
+  color: var(--text);
+  background: rgba(34, 34, 34, 0.86);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 6px 12px;
+  min-height: 34px;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.sim__btn:hover {
+  border-color: var(--border-strong);
+  background: rgba(43, 43, 43, 0.92);
+}
+
+.sim__btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.sim__btn[aria-expanded="true"],
+.sim__btn[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.sim__btn--accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.sim__btn--accent:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.sim__btn--quiet {
+  background: transparent;
+  border-color: transparent;
+  color: var(--muted);
+  padding: 6px 8px;
+}
+
+.sim__device,
+.sim__notice {
+  position: absolute;
+  left: var(--gutter);
+  bottom: 10px;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.72);
+  text-shadow: 0 1px 2px #000;
+  pointer-events: none;
+  max-width: calc(100% - 2 * var(--gutter));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sim__notice {
+  bottom: auto;
+  top: calc(var(--bar-h, 54px) + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid var(--accent-dim);
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  white-space: normal;
+  text-align: center;
+  font-family: var(--font);
+  font-size: 0.875rem;
+}
+
+/* The note about the physics: shown at the start, closed with its button, Escape or the first arming, opened again
+   with "Physics" in the bar. Bottom centre, above the stage, never wider than a short paragraph. */
+.sim__about {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%);
+  width: min(36em, calc(100% - 2 * var(--gutter)));
+  max-height: calc(100% - 110px);
+  overflow: auto;
+  margin: 0;
+  padding: 12px 16px 12px;
+  border: 1px solid var(--accent-dim);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  background: rgba(16, 16, 16, 0.92);
+  color: var(--text);
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  z-index: 3;
+}
+
+.sim__about[hidden] {
+  display: none;
+}
+
+.sim__about-title {
+  margin: 0 0 6px;
+  font-size: 0.75rem;
+  font-family: var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.sim__about p {
+  margin: 0 0 8px;
+  max-width: none;
+}
+
+.sim__about-missing {
+  color: var(--muted);
+}
+
+.sim__about .i18n-banner {
+  margin: 0 0 8px;
+}
+
+.sim__about-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin-top: 4px;
+}
+
+.sim__legal {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.sim__legal a {
+  color: var(--muted);
+}
+
+.sim__legal a:hover,
+.sim__legal a:focus-visible {
+  color: var(--text);
+}
+
+@media (max-width: 560px) {
+  .sim__about {
+    bottom: 30px;
+    padding: 10px 12px;
+    font-size: 0.75rem;
+  }
+}
+
+/* Sound wanted but the browser still holds it back until a click or key: the hint and a pulsing sound button. */
+.sim__sound-hint {
+  position: absolute;
+  top: calc(var(--bar-h, 54px) + 6px);
+  right: var(--gutter);
+  max-width: min(30em, calc(100% - 2 * var(--gutter)));
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius);
+  background: rgba(20, 20, 20, 0.88);
+  color: var(--text);
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  pointer-events: none;
+}
+
+.sim__btn.is-waiting {
+  border-color: var(--accent);
+  animation: sim-wait 1.2s ease-in-out infinite;
+}
+
+@keyframes sim-wait {
+  50% {
+    box-shadow: 0 0 0 4px rgba(255, 187, 0, 0.35);
+  }
+}
+
+.sim__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  background: var(--bg);
+  color: var(--muted);
+  font-family: var(--mono);
+  padding: var(--gutter);
+  text-align: center;
+}
+
+body.is-ready.is-armed .sim__bar {
+  opacity: 0.18;
+}
+
+/* Dialogs */
+
+.sim-dialog {
+  width: min(760px, calc(100vw - 2 * var(--gutter)));
+  max-height: calc(100vh - 2 * var(--gutter));
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.sim-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.sim-dialog__head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.sim-dialog__head h2 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.sim-dialog__body {
+  padding: 4px 18px 18px;
+}
+
+.sim-dialog__body p {
+  margin: 12px 0;
+  max-width: none;
+}
+
+.sim-keys {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  margin: 14px 0;
+}
+
+.sim-keys th,
+.sim-keys td {
+  text-align: left;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--border-soft);
+  vertical-align: top;
+}
+
+.sim-keys th {
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.sim-keys kbd {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  background: var(--field);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* Controller setup */
+
+.su-sec {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.su-sec--end {
+  border-bottom: 0;
+}
+
+.su-sec h3 {
+  margin: 0 0 10px;
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.su-note {
+  color: var(--faint);
+  font-size: 0.8125rem;
+  margin: 8px 0 0 !important;
+}
+
+.su-select {
+  font: inherit;
+  color: var(--text);
+  background: var(--field);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 6px 8px;
+  width: 100%;
+  min-height: 34px;
+}
+
+.su-select--small {
+  width: auto;
+}
+
+.su-btn {
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--panel-hi);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 5px 12px;
+  min-height: 32px;
+  cursor: pointer;
+}
+
+.su-btn:hover {
+  border-color: var(--border-strong);
+}
+
+.su-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.su-btn--accent {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.su-btn--quiet {
+  background: transparent;
+  border-color: transparent;
+  color: var(--muted);
+}
+
+.su-modes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 6px;
+}
+
+.su-mode {
+  display: grid;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--field);
+  cursor: pointer;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.su-mode b {
+  color: var(--text);
+}
+
+.su-mode input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.su-mode.is-on {
+  border-color: var(--accent);
+}
+
+.su-mode:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.su-grid {
+  display: grid;
+  grid-template-columns: minmax(5.5em, auto) auto auto 1fr;
+  gap: 6px 10px;
+  align-items: center;
+}
+
+.su-grid--switch {
+  grid-template-columns: minmax(7em, auto) 1fr auto auto;
+}
+
+.su-grid__name {
+  font-weight: 600;
+}
+
+.su-grid__desc {
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.su-grid .su-btn {
+  justify-self: start;
+}
+
+.su-check {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.su-check input {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+}
+
+.su-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.su-monitor {
+  display: grid;
+  gap: 6px;
+}
+
+.su-bar {
+  display: grid;
+  grid-template-columns: 5.5em 1fr 3.5em;
+  gap: 10px;
+  align-items: center;
+  font-size: 0.8125rem;
+}
+
+.su-bar__track {
+  position: relative;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--field);
+  border: 1px solid var(--border-soft);
+  overflow: hidden;
+}
+
+.su-bar__fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  background: var(--accent);
+}
+
+.su-bar__val {
+  font-family: var(--mono);
+  text-align: right;
+  color: var(--muted);
+}
+
+.su-leds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.su-led {
+  font-size: 0.75rem;
+  padding: 3px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--faint);
+}
+
+.su-led.is-on {
+  border-color: var(--gate);
+  color: var(--gate);
+}
+
+.su-prompt {
+  position: sticky;
+  top: 60px;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: 10px 0 4px;
+  padding: 10px 12px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: #2a2412;
+}
+
+.su-prompt p {
+  margin: 0 !important;
+  flex: 1 1 16em;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .sim__bar {
+    font-size: 0.8125rem;
+    padding: 8px var(--gutter);
+  }
+
+  .sim__name {
+    flex-basis: 100%;
+    order: 3;
+  }
+
+  /* The actions wrap instead of running off the right edge; slimmer buttons and slider. */
+  .sim__actions {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+
+  .sim__btn {
+    padding: 5px 9px;
+    min-height: 32px;
+  }
+
+  .sim__volume {
+    width: 64px;
+  }
+
+  .su-grid {
+    grid-template-columns: 1fr auto;
+  }
+
+  .su-grid--switch {
+    grid-template-columns: 1fr auto auto;
+  }
+
+  .su-grid--switch .su-grid__desc {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sim__bar {
+    transition: none;
+  }
+
+  .sim__btn.is-waiting {
+    animation: none;
+  }
+}

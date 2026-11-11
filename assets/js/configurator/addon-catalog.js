@@ -17,7 +17,7 @@ import { bundledParts, splitId, partPath, DEFAULT_NAMESPACE } from './partjson.j
 import {
   resources, exportParts, exportChemistries, exportMounts, catalogPart, catalogOrder, partModel, renderAdditions, tableCrc, tableEntries,
   LANGUAGES,
-} from './catalog-build.js?v=dadd8390';
+} from './catalog-build.js?v=708313ba';
 import { parseTable } from './sharecode3.js?v=024bd980';
 
 const TABLE = (ns) => `data/${ns}/propwash_share/table.json`;
@@ -241,10 +241,14 @@ export function readAddon(input, { base = null, fileName = null, builtin = false
   for (const c of extra.length ? extraChemistries(extra) : baseChemistries(base)) if (!chemistries.some((x) => x.id === c.id)) chemistries.push(c);
   const chemistry = (id) => chemistries.find((c) => c.id === id) || null;
   const definitions = bundled.parts;
-  const exported = exportParts(definitions, res, {
+  // Propwash's own jar (builtin) also gives the parts of the game that exist only in creative mode (the creative flight
+  // controller): in the catalog piece and its models, marked creative_only, but not in the export, like the game's.
+  const all = exportParts(definitions, res, {
     builtin: (id) => builtin && splitId(id)[0] === DEFAULT_NAMESPACE,
     chemistry,
+    creative: builtin,
   });
+  const exported = all.filter((p) => !p.creative_only);
   const namespaces = [...new Set(definitions.map((d) => splitId(d.id)[0]))].sort();
   const exportByNamespace = {};
   for (const ns of namespaces) {
@@ -271,7 +275,7 @@ export function readAddon(input, { base = null, fileName = null, builtin = false
   const modelFiles = new Map();
   const failed = [];
   if (withModels) {
-    for (const p of exported) {
+    for (const p of all) {
       try {
         const model = partModel(p, res);
         if (model) modelFiles.set(p.id, model);
@@ -288,9 +292,9 @@ export function readAddon(input, { base = null, fileName = null, builtin = false
   if (failed.length) problems.push(problem('warning', 'addon.models_failed', { count: failed.length, first: failed[0].id, all: failed }));
 
   const render = renderAdditions(res);
-  const catalogParts = exported.map(catalogPart).sort(catalogOrder);
+  const catalogParts = all.map(catalogPart).sort(catalogOrder);
   const defaultColors = {};
-  for (const p of exported) if (p.paint && Object.keys(p.paint.default_colors).length) defaultColors[p.id] = p.paint.default_colors;
+  for (const p of all) if (p.paint && Object.keys(p.paint.default_colors).length) defaultColors[p.id] = p.paint.default_colors;
   const mounts = {};
   for (const { mounts: m } of Object.values(exportByNamespace)) {
     for (const [kind, list] of Object.entries(m)) {

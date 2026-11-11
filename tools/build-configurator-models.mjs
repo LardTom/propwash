@@ -2,10 +2,14 @@
 // Builds the 3D data of the configurator's drone viewer from the web export of Propwash (format 2).
 //
 //   node tools/build-configurator-models.mjs [--export <web-export dir> …] [--resources <mod resources dir> …] [--out <dir>]
+//                                           [--propwash-jar <jar>]
 //
 // Same export location rules as tools/build-configurator-data.mjs (one export with every add-on or several, sibling
 // checkouts, JMP_WEB_EXPORT or --export); base/ is not needed here.
 // --out writes render.json and models/ to another folder instead of assets/data/configurator (for tests).
+// --propwash-jar (or PROPWASH_JAR): the jar of the Propwash release of the export; the model files of the parts that
+// exist only in creative mode (the creative flight controller, which the web export leaves out) come from it, made by
+// the configurator's jar reader (catalog-build.js partModel, as for add-on jars), like build-configurator-data.mjs.
 //
 // Writes:
 //   assets/data/configurator/render.json                        frame layouts (drone_layout.json), motor seats, paint
@@ -25,8 +29,11 @@
 // assets/<namespace>/…, e.g. common/src/main/resources of Propwash or Just More Parts; PROPWASH_MOD_RESOURCES may list
 // several, separated like PATH) – and only if that folder's render definition and model of the stack's base variant
 // are byte-identical to the export's, the way the game only plugs a stack whose "_mounted" comes from the same pack as
-// its base model. The block models keep Minecraft's model units (0–16 per model block); worn, damaged, broken and blur
-// variants are left out because the configurator shows new parts at rest. A render definition may carry a vanilla
+// its base model. The block models keep Minecraft's model units (0–16 per model block); worn, damaged and broken
+// variants are left out because the configurator and the simulator show new parts. A prop's blur variants ("_blur" and
+// "_blur_paint", the spinning prop the game draws above its blur threshold) are kept for the FPV simulator (sim/); a
+// texture the model marks "force_translucent" (the blur disc) is listed by its index in the variant's "tl", the page
+// draws those faces translucent (texture alpha, no depth write) like the game's blur pass. A render definition may carry a vanilla
 // "transformation" (JMP X-Class frames: the model is shrunk to fit the −16…32 model limit and scaled back to real
 // size); it is baked into the element coordinates here.
 //
@@ -45,7 +52,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { exportDirs, readExports } from './build-configurator-data.mjs';
+import { exportDirs, readExports, propwashJar, creativeParts } from './build-configurator-data.mjs';
 import { antennaFaces } from '../assets/js/configurator/antenna.js';
 import { compactModel } from '../assets/js/configurator/catalog-build.js';
 import { standIn } from '../assets/js/configurator/stand-ins.js';
@@ -92,6 +99,19 @@ function corners(e) {
     [px, py] = [px * cz - py * sz, px * sz + py * cz];
     return [px + ox, py + oy, pz + oz];
   });
+}
+
+// Texture files (assets/<ns>/textures/<path>.png) a model marks "force_translucent" ({sprite, force_translucent: true}):
+// the game puts their quads into the translucent list of the baked model (the blur disc of a spinning prop).
+export function translucentTextures(model) {
+  const out = new Set();
+  for (const [key, ref] of Object.entries(model.textures || {})) {
+    if (key === 'particle' || !ref || typeof ref !== 'object' || ref.force_translucent !== true || typeof ref.sprite !== 'string') continue;
+    const colon = ref.sprite.indexOf(':');
+    const ns = colon < 0 ? 'minecraft' : ref.sprite.slice(0, colon);
+    out.add(`assets/${ns}/textures/${ref.sprite.slice(colon + 1)}.png`);
+  }
+  return out;
 }
 
 const IDENTITY_QUATERNION = [0, 0, 0, 1];
@@ -263,7 +283,7 @@ function main() {
   let files = 0;
   let bytes = 0;
   const withModel = [];
-  const counts = { sockets: 0, mounted: 0, mountedFromResources: 0, mountedMissing: [], videos: 0, masked: 0, maskedFaces: 0, standIns: [] };
+  const counts = { sockets: 0, mounted: 0, mountedFromResources: 0, mountedMissing: [], videos: 0, masked: 0, maskedFaces: 0, standIns: [], blurs: 0 };
   for (const p of parts) {
     const m = p.model || {};
     if (m.kind !== 'model' || !m.drone) continue;
@@ -310,6 +330,9 @@ function main() {
       }
       const entry = { tex: textureIndex(files.get(model.texture)) };
       if (model.faceTextures) entry.ftex = model.faceTextures.map((i) => textureIndex(files.get(model.textures[i])));
+      const translucent = translucentTextures(json);
+      const tl = model.textures.filter((rel) => translucent.has(rel)).map((rel) => textureIndex(files.get(rel)));
+      if (tl.length) entry.tl = tl;
       if (geometryOf) {
         const base = variants[geometryOf];
         if (JSON.stringify(base.el) !== JSON.stringify(model.elements)) throw new Error(`${def}: geometry differs from ${geometryOf}`);
@@ -329,6 +352,10 @@ function main() {
 
     add('base', '', null);
     if (p.category === 'prop' && add('ccw', '_ccw', null)) add('ccw_paint', '_ccw_paint', 'ccw');
+    if (p.category === 'prop' && add('blur', '_blur', null)) {
+      add('blur_paint', '_blur_paint', 'blur');
+      counts.blurs++;
+    }
     if (p.category === 'battery' && add('under', '_under', null)) add('under_paint', '_under_paint', 'under');
     if (p.category === 'stack') {
       // Battery plugged in: the stack drawn without its own plug ("_mounted"), the same pack as the base variant only.
@@ -353,7 +380,7 @@ function main() {
     }
     add('paint', '_paint', 'base');
     // Paint groups belong to the unpainted model (DroneRenderResources#paintGroups); keep them on the paint entry.
-    for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint'], ['mounted', 'mounted_paint']]) {
+    for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint'], ['mounted', 'mounted_paint'], ['blur', 'blur_paint']]) {
       if (variants[plain] && variants[plain].groups) {
         if (variants[painted]) variants[painted].groups = variants[plain].groups;
         delete variants[plain].groups;
@@ -390,6 +417,24 @@ function main() {
     withModel.push(p.id);
   }
 
+  // The parts of the game that exist only in creative mode, from Propwash's jar (the export leaves them out).
+  const jar = propwashJar(argv);
+  const creative = jar ? creativeParts(jar, { models: true }) : null;
+  if (creative && creative.jar.version !== exp.mods.propwash) throw new Error(`--propwash-jar is Propwash ${creative.jar.version}, the export has ${exp.mods.propwash}`);
+  for (const [id, model] of creative ? creative.models : []) {
+    if (withModel.includes(id)) throw new Error(`${id}: already in the export`);
+    const p = creative.parts.find((x) => x.id === id);
+    const [pns, ppath] = id.split(':');
+    const target = path.join(outModels, pns, p.category, `${ppath}.json`);
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    const text = JSON.stringify(model);
+    fs.writeFileSync(target, text + '\n');
+    files++;
+    bytes += text.length + 1;
+    withModel.push(id);
+    if (p.category === 'stack' && model.variants.mounted) counts.mounted++;
+  }
+
   // Frame layouts from drone_layout.json (keys resolved to full ids) and all motor seats.
   const layouts = {};
   const motorSeats = {};
@@ -423,6 +468,9 @@ function main() {
     + `${Object.keys(motorSeats).length} motor seats`);
   console.log(`VTX antennas at the frame's antenna holder: ${counts.videos} video models, ${counts.masked} of them with antenna elements `
     + `left out (${counts.maskedFaces} faces)`);
+  console.log(`spinning props: ${counts.blurs} props with a blur model`);
+  if (creative) console.log(`creative only, from ${creative.jar.file} (Propwash ${creative.jar.version}): ${[...creative.models.keys()].join(', ')}`);
+  else console.warn('warning: no --propwash-jar – no model files of the creative-only parts (creative flight controller)');
   if (counts.standIns.length) console.log(`textures of Minecraft drawn with the page's stand-in (assets/js/configurator/stand-ins.js): ${counts.standIns.join(', ')}`);
   console.log(`battery plugged in: ${counts.sockets} battery sockets, ${counts.mounted} mounted stacks`
     + `${counts.mountedFromResources ? ` (${counts.mountedFromResources} from the mod resources, the export lacks them)` : ''}`

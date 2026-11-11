@@ -1,17 +1,21 @@
 #!/usr/bin/env node
 // Checks the changelog page and its generated data (assets/data/changelog.json, written by tools/build-changelog.mjs):
-//   - the data passes the page's own validation (assets/js/changelog/data.js): both products, versions newest first,
-//     anchors product-x.y.z, known sections in page order, English and German for every title and entry, inline
-//     Markdown that parses, links https:// or relative, no HTML
+//   - the data passes the page's own validation (assets/js/changelog/data.js): the four products of PRODUCTS (Propwash
+//     and the add-ons Just More Parts, Camera Drones and Mob Defense) with their anchors (#propwash-0.6.0,
+//     #jmp-1.2.0, #camdrones-1.0.0, #mobdefense-1.0.0, #camdrones …), versions newest first, anchors product-x.y.z,
+//     known sections in page order (also "For server owners" of the add-ons), English and German for every title and
+//     entry, inline Markdown that parses, links https:// or relative, no HTML
 //   - the validator itself rejects broken copies (order, missing German, unclosed Markdown, javascript: links, …)
 //   - every German text of tools/changelog/de.json is still used, German uses real umlauts
-//   - when the Propwash and Just More Parts repositories are next to this one (or PROPWASH_SRC / JMP_SRC are set): the
+//   - when the repositories of the four products are next to this one (or PROPWASH_SRC / JMP_SRC / CAMDRONES_SRC /
+//     MOBDEFENSE_SRC are set): the
 //     data equals a fresh build from CHANGELOG.md at the recorded refs, and no newer release tag is missing; a release
 //     read from a commit (the website of a coming release) must not be tagged yet – once v<x.y.z> exists, the page is
 //     rebuilt from the tag
 //   - links to repository files in CHANGELOG.md lead to this site or to the public source repository
-//   - the page loads its script, styles and data; every page links to it in the main navigation and the footer;
-//     the released groups of the roadmap link to their changelog anchor
+//   - the page loads its script, styles and data, has a filter label, icon and colour for every product and a label and
+//     icon for every section; every page links to it in the main navigation and the footer; the released groups of the
+//     roadmap link to their changelog anchor
 //   - the other languages (/es/changelog/ …): view.js draws its texts through assets/js/i18n.js and has no texts as
 //     functions (counts are {en, de} templates with {placeholders}), and every text of changelog.json and view.js has
 //     a translation in every dictionary tools/i18n/dict/<lang>.json
@@ -67,6 +71,18 @@ for (const v of ['0.1.0', '0.2.0', '0.2.1', '0.3.0', '0.3.1']) {
   check(!propwash?.releases.some((r) => r.version === v), `propwash ${v} is internal and not on the page`);
 }
 check(data.products.find((p) => p.id === 'jmp')?.releases.some((r) => r.version === '1.0.0'), 'jmp 1.0.0 is on the page');
+for (const [id, version] of [['jmp', '1.2.0'], ['camdrones', '1.0.0'], ['mobdefense', '1.0.0']]) {
+  const product = data.products.find((p) => p.id === id);
+  check(product?.releases.some((r) => r.id === `${id}-${version}`), `${id} ${version} is on the page (anchor ${id}-${version})`);
+}
+for (const id of ['camdrones', 'mobdefense']) {
+  const release = data.products.find((p) => p.id === id)?.releases.find((r) => r.version === '1.0.0');
+  check(release?.sections.some((s) => s.kind === 'server-owners'), `${id} 1.0.0: the section "For server owners" of its CHANGELOG.md is on the page`);
+}
+for (const meta of PRODUCTS) {
+  check(!/[–—]/.test(`${meta.tagline.en} ${meta.tagline.de}`), `${meta.id}: tagline without dashes ("${meta.tagline.en}" / "${meta.tagline.de}")`);
+  check(/^https:\/\/github\.com\/LardTom\/[a-z-]+$/.test(meta.source), `${meta.id}: public source repository ${meta.source}`);
+}
 
 // Every highlight names its point in bold first, like the player changelog style.
 for (const p of data.products) {
@@ -113,6 +129,11 @@ for (const [what, mutate, expected] of broken) {
   const errs = validateChangelog(copy);
   check(errs.length === 0, `angle brackets inside a code span are allowed (got ${errs.slice(0, 3).join(' | ')})`);
 }
+{
+  const lone = parseInline('Default keys on the keypad / * − and *Insert*.');
+  check(!lone.errors.length && plainText(lone.nodes) === 'Default keys on the keypad / * − and Insert.' && lone.nodes.filter((n) => n.t === 'em').length === 1,
+    `a * with spaces on both sides is text, as in Markdown (Camera Drones: "keypad / * −"; got ${JSON.stringify(lone.nodes).slice(0, 120)} ${lone.errors.join(' | ')})`);
+}
 
 // The parser of CHANGELOG.md
 const sample = `# Changelog\n\nIntro text.\n\n## [Unreleased]\n### New\n- Not yet.\n\n## [1.1.0] — second\n\n### Fixed\n- A fix\n  over two lines.\n### Highlights\n- **Big:** thing.\n\n## [1.0.0] — first\n### New\n- One.\n`;
@@ -120,6 +141,9 @@ const parsed = parseChangelog(sample, 'sample');
 check(parsed.length === 2 && parsed[0].version === '1.1.0' && parsed[1].version === '1.0.0', 'parser: skips [Unreleased], newest first');
 check(parsed[0].sections.map((s) => s.kind).join() === 'highlights,fixed', 'parser: sections in page order');
 check(parsed[0].sections[1].items[0] === 'A fix over two lines.', 'parser: joins continuation lines');
+const addon = parseChangelog('## [1.0.0] - First release: a title\n### Compatibility\n- Needs Propwash.\n### For server owners\n- Rules.\n### New\n- One.\n', 'sample');
+check(addon[0]?.title === 'First release: a title', `parser: a hyphen before the title like in the add-ons' CHANGELOG.md ("${addon[0]?.title}")`);
+check(addon[0]?.sections.map((s) => s.kind).join() === 'new,server-owners,compatibility', `parser: "For server owners" between Fixed and Compatibility (${addon[0]?.sections.map((s) => s.kind).join()})`);
 for (const [what, text, expected] of [
   ['unknown section', '## [1.0.0] — x\n### Misc\n- a\n', 'unknown section'],
   ['bullet outside a section', '## [1.0.0] — x\n- a\n', 'outside'],
@@ -197,11 +221,25 @@ check(/data-cl-root/.test(page) && /data-cl-tally/.test(page) && /data-cl-latest
 const view = read('assets/js/changelog/view.js');
 const icons = new Set([...page.matchAll(/<symbol id="ri-([a-z0-9-]+)"/g)].map((m) => m[1]));
 const usedIcons = new Set([...view.matchAll(/icon\('([a-z0-9-]+)'/g)].map((m) => m[1]));
-for (const m of view.matchAll(/^\s+(?:highlights|new|improved|fixed|compatibility|'known-issues'): '([a-z0-9-]+)'/gm)) usedIcons.add(m[1]);
+for (const m of view.matchAll(/^\s+(?:highlights|new|improved|fixed|'server-owners'|compatibility|'known-issues'): '([a-z0-9-]+)'/gm)) usedIcons.add(m[1]);
 for (const m of view.matchAll(/productIcon: \{([^}]+)\}/g)) for (const n of m[1].matchAll(/'([a-z0-9-]+)'/g)) usedIcons.add(n[1]);
 const missingIcons = [...usedIcons].filter((n) => !icons.has(n));
 check(!missingIcons.length, `changelog/index.html: sprite has every icon the page uses (${missingIcons.join(', ')})`);
 for (const kind of KINDS) check(view.includes(kind.includes('-') ? `'${kind}'` : `${kind}:`), `view.js has a label and icon for the section "${kind}"`);
+const css = read('assets/css/changelog.css');
+const productIcons = /productIcon: \{([^}]+)\}/.exec(view)?.[1] || '';
+for (const meta of PRODUCTS) {
+  check(new RegExp(`\\b${meta.id}: '[a-z0-9-]+'`).test(productIcons), `view.js has an icon for the product ${meta.id}`);
+  if (meta.id === 'propwash') continue;
+  for (const rule of [`--cl-${meta.id}:`, `.cl-filter__btn--${meta.id}[aria-pressed="true"]`, `.cl-release--${meta.id}`, `.cl-product--${meta.id} .cl-product__badge`, `.cl-toc__group--${meta.id}`, `.cl-latest__item--${meta.id}`]) {
+    check(css.includes(rule), `assets/css/changelog.css colours the product ${meta.id} (${rule})`);
+  }
+}
+const lead = [...page.matchAll(/<p class="cl-hero__lead" lang="(en|de)">([\s\S]*?)<\/p>/g)];
+for (const [, l, text] of lead) {
+  for (const meta of PRODUCTS.slice(1)) check(text.includes(meta.short), `changelog/index.html: the lead (${l}) names ${meta.short}`);
+}
+check(lead.length === 2, 'changelog/index.html: the lead in English and German');
 
 function htmlPages(dir) {
   const out = [];

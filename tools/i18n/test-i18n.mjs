@@ -199,8 +199,13 @@ const extracted = extract();
   for (const page of sourcePages()) {
     const html = read(page.file);
     check(HEAD_PATTERN.test(html), `${page.file}: head script (tools/site-nav.mjs HEAD_PATTERN)`);
-    check(NAV_PATTERN.test(html) && FOOTER_PATTERN.test(html), `${page.file}: navigation and footer links`);
-    check(/<header class="site-header">/.test(html), `${page.file}: <header class="site-header">`);
+    if (page.app) {
+      // App page (the simulator): no navigation, the banner goes to its marker.
+      check(!NAV_PATTERN.test(html) && html.includes('<!-- i18n-banner -->'), `${page.file}: app page without navigation, with the marker <!-- i18n-banner -->`);
+    } else {
+      check(NAV_PATTERN.test(html) && FOOTER_PATTERN.test(html), `${page.file}: navigation and footer links`);
+      check(/<header class="site-header">/.test(html), `${page.file}: <header class="site-header">`);
+    }
     const { single, texts } = pageTexts(html);
     check(!single.length, `${page.file}: lang="en"/"de" without its partner: ${single.slice(0, 3).map((el) => html.slice(el.start, el.start + 60)).join(' | ')}`);
     const nested = findPairs(html).pairs.filter((p) => /\slang="(?:en|de)"/.test(inner(html, p.en)));
@@ -272,9 +277,11 @@ function checkGenerated(files, languages, label) {
       const banners = els.filter((e) => e.name === 'aside' && hasClass(e, 'i18n-banner'));
       check(banners.length === 1, `${where}: ${banners.length} banners`);
       const header = els.find((e) => e.name === 'header' && hasClass(e, 'site-header'));
-      if (banners[0] && header) {
+      const app = !header && !html.includes('<!-- i18n-banner -->') && /<main class="sim"/.test(html);
+      if (banners[0] && (header || app)) {
         const b = banners[0];
-        check(!html.slice(header.end, b.start).trim(), `${where}: banner right under the header`);
+        if (header) check(!html.slice(header.end, b.start).trim(), `${where}: banner right under the header`);
+        else check(/<aside class="sim__about"[\s\S]*<aside class="i18n-banner/.test(html), `${where}: banner inside the note of the app page`);
         eq(attr(b, 'role'), 'note', `${where}: banner role`);
         eq(attr(b, 'lang'), l.hreflang, `${where}: banner lang`);
         check(plain(inner(html, b)).includes(l.drafts.AI), `${where}: banner names the AI (${l.drafts.AI})`);

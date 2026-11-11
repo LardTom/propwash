@@ -29,6 +29,15 @@ export const HAND_PAGES = [
   ['brand/index.html', '../', 'brand'],
 ];
 
+/** Full-window app pages without the site navigation and footer (the FPV simulator), reached from the configurator:
+ * [file, prefix]; they get the head block (language, ?lang=, hreflang) like every page. */
+export const APP_PAGES = [['sim/index.html', '../']];
+
+/** An app page as this script writes it: head block and stamps, no navigation. */
+export function buildAppPage(html, prefix, file, options = {}, hashes = computeHashes()) {
+  return stampHtml(file, withHead(html, prefix, file, options), hashes);
+}
+
 /** A page with the current navigation and footer links (options as for siteNav). */
 export function withNav(html, prefix, current, file, options = {}) {
   if (!NAV_PATTERN.test(html)) throw new Error(`${file}: <nav class="site-nav"> not found`);
@@ -51,10 +60,10 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const check = process.argv.includes('--check');
   const hashes = computeHashes();
   const stale = [];
-  for (const [file, prefix, current] of HAND_PAGES) {
+  for (const [file, prefix, current] of [...HAND_PAGES, ...APP_PAGES.map(([f, p]) => [f, p, null])]) {
     const target = path.join(ROOT, file);
     const html = fs.readFileSync(target, 'utf8');
-    const next = buildPage(html, prefix, current, file, {}, hashes);
+    const next = current === null ? buildAppPage(html, prefix, file, {}, hashes) : buildPage(html, prefix, current, file, {}, hashes);
     if (next === html) continue;
     stale.push(file);
     if (!check) fs.writeFileSync(target, next);

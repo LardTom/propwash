@@ -28,11 +28,41 @@
         "url": "https://modrinth.com/mod/propwash-just-more-parts",
         "status": "review"
       }
+    },
+    "camdrones": {
+      "name": "Propwash: Camera Drones",
+      "short": "Camera Drones",
+      "version": "1.0.0",
+      "minecraft": "26.3",
+      "curseforge": {
+        "url": "https://www.curseforge.com/minecraft/mc-mods/propwash-camera-drones",
+        "status": "review"
+      },
+      "modrinth": {
+        "url": "https://modrinth.com/mod/propwash-camera-drones",
+        "status": "review"
+      }
+    },
+    "mobdefense": {
+      "name": "Propwash: Mob Defense",
+      "short": "Mob Defense",
+      "version": "1.0.0",
+      "minecraft": "26.3",
+      "curseforge": {
+        "url": "https://www.curseforge.com/minecraft/mc-mods/propwash-mob-defense",
+        "status": "review"
+      },
+      "modrinth": {
+        "url": "https://modrinth.com/mod/propwash-mob-defense",
+        "status": "review"
+      }
     }
   },
   "source": {
     "propwash": "https://github.com/LardTom/propwash-fpv",
-    "justmoreparts": "https://github.com/LardTom/propwash-justmoreparts"
+    "justmoreparts": "https://github.com/LardTom/propwash-justmoreparts",
+    "camdrones": "https://github.com/LardTom/propwash-camera-drones",
+    "mobdefense": "https://github.com/LardTom/propwash-mob-defense"
   },
   "labels": {
     "live": {

@@ -9,6 +9,15 @@
 //     writes the very same code (values kept), the layer “Creative values” can be left out and taken back
 //   - configurator/#PWD1-…: the old editor code opens, the address switches to its PW3 code with the creative values
 //     and the banner offers “Copy PW3”; pasting the PWD1 code into the import field does the same
+//   - the creative flight controller in the part picker (Stack): badge “Creative”, fits every frame, the note with the
+//     rules of the game; picked, the tab “Drone Editor” shows up and the share code carries the layer “Creative
+//     values” like the game's; taken out again, the tab goes and the code has no creative values (put back, they return)
+//   - the drone editor: groups and keys of the mod, a value of its own (highlighted, in the code, in the key figures
+//     like analysis.js computes them), clamped to the mod's range with a note, back to the base value with ↺, with
+//     Enter and Escape on the keyboard, a right-click and a tap on +; a preset as template computes exactly like the
+//     preset; the notes of CreativeCheck; the camera uptilt 0–80° (also the FPV view's slider), in the code's tune
+//   - every share code the page writes for a creative drone reads back to the same content and is written again byte
+//     for byte (the PW3 codec of the mod, tools/test-configurator.mjs)
 //   - no sideways scrolling, no console errors or uncaught exceptions
 //
 //   node tools/test-configurator-creative.mjs [--shots <dir>] [--chrome <path>]
@@ -20,6 +29,8 @@ import { ROOT, CHROME, serve, launch, cdp, sleep } from './headless-chrome.mjs';
 import { createCatalog } from '../assets/js/configurator/data.js';
 import { convertText } from '../assets/js/configurator/convert.js';
 import { entry } from '../assets/js/configurator/i18n.js';
+import { analyze } from '../assets/js/configurator/analysis.js';
+import { templateOf, CREATIVE_FC } from '../assets/js/configurator/creative.js';
 
 const catalog = createCatalog(JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/configurator/catalog.json'), 'utf8')));
 const vectors = JSON.parse(fs.readFileSync(path.join(ROOT, 'tools/fixtures/sharecode/pw3-creative-vectors.json'), 'utf8')).vectors;
@@ -44,6 +55,18 @@ const text = (key, lang, vars) => {
   let out = (entry(key) || [key, key])[lang === 'de' ? 1 : 0];
   for (const [k, v] of Object.entries(vars || {})) out = out.replace(`{${k}}`, String(v));
   return out;
+};
+// Numbers as the page shows them (i18n.js num).
+const fmt = (value, decimals, lang) => new Intl.NumberFormat(lang === 'de' ? 'de-DE' : 'en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals }).format(value);
+const FIGURES = ['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'top_speed_kmh', 'mixed_flight_time_min', 'full_throttle_current_a'];
+const figureTexts = (a, lang) => FIGURES.map((key) => {
+  const [, , unit, decimals] = entry(`stats.${key}`);
+  return Number.isFinite(a[key]) ? `${fmt(a[key], decimals, lang)}${unit.startsWith(':') ? unit : `\u00A0${unit}`}` : '';
+});
+/** The content of a code as the page encodes it again: the same code (a code the page writes reads back unchanged). */
+const roundTrip = (code) => {
+  const d = catalog.decode(code);
+  return d.ok && catalog.encode(d.content) === code ? d : null;
 };
 
 async function main() {
@@ -128,6 +151,187 @@ async function main() {
       };
     })()`;
     const creativeLine = (lang, v) => text('ui.importCreative', lang, { values: Object.keys(v.creative.values).length, base: Object.keys(v.creative.base).length });
+    const code = () => evaluate("document.querySelector('[data-code]').textContent");
+    const click = (selector) => evaluate(`(() => { const n = document.querySelector(${JSON.stringify(selector)}); if (n) n.click(); return !!n; })()`);
+    const setField = (id, value, how = 'change') => evaluate(`(() => {
+      const n = document.getElementById(${JSON.stringify(id)});
+      if (!n) return false;
+      n.focus();
+      n.value = ${JSON.stringify(String(value))};
+      n.dispatchEvent(new Event('input', { bubbles: true }));
+      if (${JSON.stringify(how)} === 'change') n.dispatchEvent(new Event('change', { bubbles: true }));
+      return true;
+    })()`);
+    const editorState = () => evaluate(`(() => {
+      const tab = document.querySelector('#tab-creative');
+      const row = (key) => document.querySelector('[data-ce-row="' + key + '"]');
+      const input = (key) => row(key) && row(key).querySelector('[data-ce-key]');
+      const panel = document.querySelector('#panel-creative');
+      return {
+        tab: !!tab && !tab.hidden, selected: !!tab && tab.getAttribute('aria-selected') === 'true', panelShown: !!panel && !panel.hidden,
+        groups: [...document.querySelectorAll('#panel-creative .ce-group legend')].map((l) => l.textContent),
+        rows: [...document.querySelectorAll('#panel-creative [data-ce-row]')].map((r) => r.dataset.ceRow),
+        kv: input('motor.kv') ? input('motor.kv').value : null, kvOwn: !!row('motor.kv') && row('motor.kv').classList.contains('is-changed'),
+        kvReset: !!row('motor.kv') && !row('motor.kv').querySelector('[data-ce-reset]').disabled,
+        rollAuto: !!row('inertia.roll') && !row('inertia.roll').querySelector('.ce-auto').hidden,
+        status: (document.querySelector('[data-ce-status]') || {}).textContent || '',
+        note: (document.querySelector('[data-ce-note="motor.kv"]') || {}).textContent || '',
+        figures: [...document.querySelectorAll('[data-ce-figures] dd')].map((d) => d.textContent),
+        notes: [...document.querySelectorAll('[data-ce-notes] li')].map((d) => d.textContent),
+        tilt: input('camera.uptiltDeg') ? input('camera.uptiltDeg').value : null,
+        fpvMax: document.querySelector('[data-fpv-tilt]').max,
+        bases: [...document.querySelectorAll('[data-ce-base]')].map((s) => s.value),
+        layer: !!document.querySelector('[data-layer="creative"]'),
+        sw: document.documentElement.scrollWidth,
+      };
+    })()`);
+    async function pick(category, id) {
+      await click(`[data-slots] [data-cat="${category}"]`);
+      await sleep(250);
+      await evaluate(`(() => { const n = [...document.querySelectorAll('#list-${category} [role="option"]')].find((o) => o.dataset.id === ${JSON.stringify(id)}); if (n) n.click(); return !!n; })()`);
+      await sleep(400);
+    }
+    const pickStack = (id) => pick('stack', id);
+    /** The share code of the page: reads back to the same content and is written again byte for byte. */
+    async function codeCheck(label, test) {
+      const c = await code();
+      const d = roundTrip(c);
+      check(d, `${label}: the code ${c} reads back and is written again byte for byte`);
+      if (d && test) check(test(d.content), `${label}: content of the code ${JSON.stringify(d.content.creative)} ${JSON.stringify(d.content.build)}`);
+      return d;
+    }
+
+    async function editorFlow(lang, width, tag) {
+      const preset = 'propwash:freestyle';
+      const pb = catalog.presetBuild(preset);
+      await open(`${base}/configurator/#${catalog.encode(catalog.presetContent(preset))}`, width, `editor ${tag}`, cfgReady);
+      // The creative FC in the picker: badge, fit, note
+      await click('[data-slots] [data-cat="stack"]');
+      await sleep(250);
+      const option = await evaluate(`(() => {
+        const n = [...document.querySelectorAll('#list-stack [role="option"]')].find((o) => o.dataset.id === ${JSON.stringify(CREATIVE_FC)});
+        return n ? { cls: n.className, badge: (n.querySelector('.badge--creative') || {}).textContent || '', title: (n.querySelector('.badge--creative') || {}).title || '' } : null;
+      })()`);
+      check(option && option.badge === text('creative.badge', lang) && option.title === text('creative.badgeLong', lang) && option.cls.includes('is-ok'),
+        `editor ${tag}: the creative FC in the stack list with its badge, fitting (${JSON.stringify(option)})`);
+      let e = await editorState();
+      check(!e.tab, `editor ${tag}: no drone editor without the creative FC`);
+      await pickStack(CREATIVE_FC);
+      e = await editorState();
+      const pickNote = await evaluate("(document.querySelector('.ce-pick-note') || {}).textContent || ''");
+      check(pickNote.includes(text('creative.note', lang)), `editor ${tag}: the picker names the rules of the creative FC (“${pickNote}”)`);
+      check(e.tab && !e.selected && e.layer, `editor ${tag}: the tab “Drone Editor” and the layer “Creative values” show up (${JSON.stringify({ tab: e.tab, layer: e.layer })})`);
+      const installed = { ...pb, stack: CREATIVE_FC, accessories: { ...pb.accessories } };
+      await codeCheck(`editor ${tag} creative FC`, (c) => c.build.stack === CREATIVE_FC && c.creative && !Object.keys(c.creative.values).length && !Object.keys(c.creative.base).length);
+      // The editor
+      await click('#tab-creative');
+      await sleep(300);
+      e = await editorState();
+      check(e.selected && e.panelShown, `editor ${tag}: the tab opens`);
+      check(e.groups.length === 8 && e.groups[0] === text('creative.group.mass', lang) && e.groups[7] === text('creative.group.camera', lang), `editor ${tag}: the mod's groups ${e.groups}`);
+      check(e.rows.length === 45 + 1 + 5, `editor ${tag}: 45 values, the camera uptilt and 5 base parts (${e.rows.length})`);
+      check(e.kv === '1750' && !e.kvOwn && !e.kvReset && e.rollAuto, `editor ${tag}: base value 1750 KV, the inertia automatic (${JSON.stringify({ kv: e.kv, own: e.kvOwn, auto: e.rollAuto })})`);
+      check(JSON.stringify(e.figures) === JSON.stringify(figureTexts(analyze(installed, catalog, { base: {}, values: {} }), lang)), `editor ${tag}: key figures ${e.figures}`);
+      check(e.fpvMax === '80', `editor ${tag}: the camera angle of a creative drone goes up to 80° (${e.fpvMax})`);
+      // A value of its own
+      await setField('ce-motor-kv', 2600);
+      await sleep(250);
+      e = await editorState();
+      let want = analyze(installed, catalog, { base: {}, values: { 'motor.kv': 2600 } });
+      check(e.kv === '2600' && e.kvOwn && e.kvReset && e.rollAuto, `editor ${tag}: KV of its own, highlighted (${JSON.stringify({ kv: e.kv, own: e.kvOwn })})`);
+      check(JSON.stringify(e.figures) === JSON.stringify(figureTexts(want, lang)), `editor ${tag}: key figures with 2600 KV ${e.figures} vs ${figureTexts(want, lang)}`);
+      await codeCheck(`editor ${tag} 2600 KV`, (c) => c.creative.values['motor.kv'] === 2600 && Object.keys(c.creative.values).length === 1);
+      // Clamped with a note
+      await setField('ce-motor-kv', 99999);
+      await sleep(250);
+      e = await editorState();
+      const clamped = text('creative.clamped', lang, { name: text('creative.param.motor.kv', lang), value: `${fmt(60000, 0, lang)} KV` });
+      check(e.kv === '60000' && e.status === clamped && e.note === clamped, `editor ${tag}: clamped to the mod's range with a note (“${e.status}”, field ${e.kv})`);
+      await codeCheck(`editor ${tag} clamped`, (c) => c.creative.values['motor.kv'] === 60000);
+      // Back to the base value
+      await click('[data-ce-reset="motor.kv"]');
+      await sleep(250);
+      e = await editorState();
+      check(e.kv === '1750' && !e.kvOwn, `editor ${tag}: ↺ goes back to the base value (${e.kv})`);
+      await codeCheck(`editor ${tag} reset`, (c) => !('motor.kv' in c.creative.values));
+      // Keyboard: Enter commits, Escape takes the typing back
+      await setField('ce-motor-kv', 2200, 'input');
+      await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 });
+      await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13 });
+      await sleep(250);
+      e = await editorState();
+      check(e.kv === '2200' && e.kvOwn, `editor ${tag}: Enter commits a typed value (${e.kv})`);
+      await setField('ce-motor-kv', 3333, 'input');
+      await send('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
+      await send('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Escape', code: 'Escape', windowsVirtualKeyCode: 27 });
+      await sleep(250);
+      e = await editorState();
+      check(e.kv === '2200', `editor ${tag}: Escape takes the typing back (${e.kv})`);
+      // + by touch (390 px) or mouse, right-click back to the base (1280 px)
+      const plus = await evaluate(`(() => { const b = document.querySelector('[data-ce-step="1"][data-ce-for="motor.kv"]'); b.scrollIntoView({ block: 'center' }); const r = b.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; })()`);
+      await sleep(150);
+      if (VIEWPORTS[width].mobile) {
+        await send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: plus.x, y: plus.y }] });
+        await send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      } else {
+        await send('Input.dispatchMouseEvent', { type: 'mousePressed', x: plus.x, y: plus.y, button: 'left', clickCount: 1 });
+        await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x: plus.x, y: plus.y, button: 'left', clickCount: 1 });
+      }
+      await sleep(300);
+      e = await editorState();
+      check(e.kv === '2210', `editor ${tag}: ${VIEWPORTS[width].mobile ? 'a tap' : 'a click'} on + adds a step of 10 KV (${e.kv})`);
+      if (!VIEWPORTS[width].mobile) {
+        const label = await evaluate(`(() => { const l = document.querySelector('[data-ce-row="motor.kv"] .tune__label'); const r = l.getBoundingClientRect(); return { x: r.left + 8, y: r.top + r.height / 2 }; })()`);
+        await send('Input.dispatchMouseEvent', { type: 'mousePressed', x: label.x, y: label.y, button: 'right', clickCount: 1 });
+        await send('Input.dispatchMouseEvent', { type: 'mouseReleased', x: label.x, y: label.y, button: 'right', clickCount: 1 });
+        await sleep(300);
+        e = await editorState();
+        check(e.kv === '1750' && !e.kvOwn, `editor ${tag}: a right-click goes back to the base value (${e.kv})`);
+      } else {
+        await click('[data-ce-reset="motor.kv"]');
+        await sleep(200);
+      }
+      // A preset as template computes exactly like the preset (with the preset's video system: it is never a base part)
+      const racer = catalog.presetBuild('propwash:racer');
+      await click('#tab-parts');
+      await pick('video', racer.video);
+      await click('#tab-creative');
+      await sleep(200);
+      await evaluate(`(() => { const s = document.querySelector('[data-ce-template]'); s.value = 'propwash:racer'; s.dispatchEvent(new Event('change', { bubbles: true })); return true; })()`);
+      await click('[data-ce-load]');
+      await sleep(300);
+      e = await editorState();
+      const viaTemplate = analyze({ ...installed, video: racer.video }, catalog, templateOf(racer));
+      const plain = analyze(racer, catalog);
+      check(['mass_grams', 'thrust_to_weight', 'hover_throttle_percent', 'top_speed_kmh', 'mixed_flight_time_min', 'full_throttle_current_a'].every((k) => Object.is(viaTemplate[k], plain[k])),
+        `editor ${tag}: the racer as template computes exactly like the racer preset`);
+      check(JSON.stringify(e.figures) === JSON.stringify(figureTexts(plain, lang)) && e.status === text('creative.template.loaded', lang, { name: catalog.presetName('propwash:racer', lang) }),
+        `editor ${tag}: template loaded, the figures of the racer ${e.figures} (“${e.status}”)`);
+      check(JSON.stringify(e.bases) === JSON.stringify(['race_5', 'stack_30', 'm2306_1860', 'p51_29_3b', 'b6s_1100']), `editor ${tag}: base parts of the racer ${e.bases}`);
+      await codeCheck(`editor ${tag} template`, (c) => c.creative.base.frame === 'race_5' && c.creative.base.motor === 'm2306_1860' && !Object.keys(c.creative.values).length);
+      // CreativeCheck: inertia far below the automatic value
+      await setField('ce-inertia-roll', 1);
+      await sleep(250);
+      e = await editorState();
+      check(e.notes.includes(text('creative.warning.inertia_low', lang)), `editor ${tag}: the note on a very low inertia (${e.notes})`);
+      // Camera uptilt 0–80°
+      await setField('ce-camera-uptiltDeg', 75);
+      await sleep(250);
+      e = await editorState();
+      check(e.tilt === '75', `editor ${tag}: camera uptilt 75° (${e.tilt})`);
+      await codeCheck(`editor ${tag} uptilt`, (c) => c.tune && c.tune['camera.uptiltDeg'] === 75 && c.creative.values['inertia.roll'] === 1);
+      await noSideways(`editor ${tag}`, width);
+      await shot(`creative-editor-${tag}`);
+      // Taken out, the values stay with the controller; put back, they return
+      await click('#tab-parts');
+      await pickStack('propwash:stack_30');
+      e = await editorState();
+      check(!e.tab && !e.layer, `editor ${tag}: another stack, no drone editor and no creative layer`);
+      await codeCheck(`editor ${tag} stack 30`, (c) => c.creative === null && c.build.stack === 'propwash:stack_30' && c.tune['camera.uptiltDeg'] === 50);
+      await pickStack(CREATIVE_FC);
+      await codeCheck(`editor ${tag} back`, (c) => c.creative && c.creative.base.frame === 'race_5' && c.creative.values['inertia.roll'] === 1);
+      await noSideways(`editor ${tag} back`, width);
+    }
 
     for (const lang of ['en', 'de']) {
       language = lang;
@@ -168,7 +372,15 @@ async function main() {
         check(s.code === C1.code, `creative link ${tag}: share box keeps the creative values (${s.code})`);
         check(s.banner.includes(text('ui.layers.creative', lang)) && s.banner.includes(creativeLine(lang, C1)), `creative link ${tag}: banner “${s.banner}”`);
         check(!s.banner.includes(text('ui.importUnknown', lang, { ids: '' }).trim()), `creative link ${tag}: the creative FC is no unknown part (“${s.banner}”)`);
-        check(s.checks.includes(text('ui.creativeExplain', lang)) && !s.checksBad, `creative link ${tag}: check list explains the creative drone (“${s.checks}”)`);
+        check(s.checks.includes(text('creative.checks', lang)) && s.checks.includes(text('creative.openEditor', lang)), `creative link ${tag}: check list names the creative drone (“${s.checks}”)`);
+        check(s.buttons.includes(text('creative.openEditor', lang)), `creative link ${tag}: the banner leads to the drone editor (${s.buttons})`);
+        {
+          // The page rates the creative drone like analysis.js with its values (the keystats of the 3D view).
+          const want = analyze(C1.content.build, catalog, C1.creative);
+          const keystats = await evaluate("[...document.querySelectorAll('[data-keystats] dd')].map((d) => d.textContent)");
+          check(want && keystats.some((x) => x.includes(fmt(want.thrust_to_weight, 1, lang))) && keystats.some((x) => x.includes(fmt(want.mass_grams, 1, lang))),
+            `creative link ${tag}: key figures with the creative values ${keystats} (thrust/weight ${want && want.thrust_to_weight})`);
+        }
         check(s.layer && s.layer.checked && !s.layer.disabled && s.layer.label.includes(text('ui.layers.creative', lang)), `creative link ${tag}: layer box ${JSON.stringify(s.layer)}`);
         await noSideways(`creative link ${tag}`, width);
         await shot(`creative-link-${tag}`);
@@ -183,6 +395,9 @@ async function main() {
           s = await evaluate(shareState);
           check(s.code === C1.code, `creative link ${tag}: the layer comes back (${s.code})`);
         }
+
+        // ---- the drone editor ----
+        await editorFlow(lang, width, tag);
 
         // ---- configurator/#PWD1-… ----
         await open(`${base}/configurator/#${D1.from}`, width, `PWD1 link ${tag}`, cfgReady);
@@ -228,7 +443,7 @@ async function main() {
     for (const f of failures) console.log(`  ${f}`);
     process.exitCode = 1;
   } else {
-    console.log(`PASS: ${checks} checks – PWD1 and creative PW3 codes in the converter and the configurator, English and German, 390 and 1280 px`);
+    console.log(`PASS: ${checks} checks: PWD1 and creative PW3 codes in the converter and the configurator, the creative flight controller in the picker and its drone editor, English and German, 390 and 1280 px`);
   }
 }
 

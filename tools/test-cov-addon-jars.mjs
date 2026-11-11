@@ -118,7 +118,15 @@ function addons() {
   const all = unlistedAddons(listed, arg('--addon-repos', 'PROPWASH_ADDON_REPOS'));
   const older = all.filter((a) => !/^0\.6\./.test(a.propwash || ''));
   if (older.length) note(`${older.length} unlisted add-on checkout(s) built for an older Propwash left out`);
-  return all.filter((a) => /^0\.6\./.test(a.propwash || ''));
+  // An add-on without parts (modes or tools only, e.g. propwash-onboard) has nothing for the configurator: “Open
+  // add-on jar” refuses it with addon.no_parts, which is right, and no. 139 is about parts.
+  const withParts = all.filter((a) => /^0\.6\./.test(a.propwash || '')).filter((a) => {
+    const r = readAddon(new Uint8Array(fs.readFileSync(a.jar)), { base, fileName: path.basename(a.jar) });
+    const none = r.problems.some((p) => p.code === 'addon.no_parts');
+    if (none) note(`the add-on of ${a.repo ? path.basename(a.repo) : path.basename(a.jar)} has no parts (addon.no_parts): left out`);
+    return !none;
+  });
+  return withParts;
 }
 
 function unit(addon, dir) {

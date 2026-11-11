@@ -24,6 +24,7 @@ import path from 'node:path';
 import { CHROME, launch, cdp, sleep } from './headless-chrome.mjs';
 import { ROOT, LANGUAGES } from './i18n/languages.mjs';
 import { buildSite } from './i18n/build-i18n.mjs';
+import { APP_PAGES } from './build-nav.mjs';
 
 function arg(name, fallback) {
   const i = process.argv.indexOf(name);
@@ -33,6 +34,7 @@ const WIDTHS = arg('--widths', '360,768,1100,1280').split(',').map(Number);
 const ONLY_PAGES = arg('--pages', null)?.split(',').map((p) => (p === '/' ? '' : p));
 const LANGS = arg('--langs', ['en', 'de', ...LANGUAGES.map((l) => l.code)].join(',')).split(',');
 const HEIGHT = 900;
+const APP_PATHS = APP_PAGES.map(([file]) => file.replace(/index\.html$/, ''));
 const FONTS = { sans: /^Saira\b/, mono: /^JetBrains Mono\b/, cyrillic: /^Exo 2\b/ };
 
 let checks = 0;
@@ -231,9 +233,20 @@ async function main() {
           check(m.lang === (extra ? extra.hreflang : lang), `${where}: page language ${m.lang}`);
           check(m.scrollWidth <= m.vw + 1, `${where}: horizontal overflow ${m.scrollWidth} > ${m.vw} px (${m.overflow.join('; ')})`);
           check(!m.clipped.length, `${where}: ${m.clipped.slice(0, 3).join('; ')}`);
-          check(!m.overlap.length, `${where}: header ${m.overlap.slice(0, 3).join('; ')}`);
-          check(m.header === 61, `${where}: header bar ${m.header} px high, expected 61`);
-          if (extra) {
+          // The simulator is an app page (tools/build-nav.mjs APP_PAGES): its own bar instead of the site header, the AI
+          // banner inside the note about the physics, the OSD and the device line in JetBrains Mono on purpose.
+          const app = APP_PATHS.includes(page);
+          if (!app) {
+            check(!m.overlap.length, `${where}: header ${m.overlap.slice(0, 3).join('; ')}`);
+            check(m.header === 61, `${where}: header bar ${m.header} px high, expected 61`);
+          } else {
+            const bar = await evaluate("(() => { const b = document.querySelector('.sim__bar'); const r = b.getBoundingClientRect(); const right = Math.max(...[...b.querySelectorAll('button, a, input')].filter((x) => x.offsetParent).map((x) => x.getBoundingClientRect().right)); return { h: r.height, right, vw: document.documentElement.clientWidth }; })()");
+            check(bar.h > 0 && bar.right <= bar.vw + 1, `${where}: the simulator's bar fits the width (${Math.round(bar.right)} of ${bar.vw} px)`);
+          }
+          if (extra && app) {
+            const b = await evaluate("(() => { const n = document.querySelector('.sim__about .i18n-banner'); if (!n) return null; const r = n.getBoundingClientRect(); return { visible: r.height > 0 && r.width > 0, lang: n.getAttribute('lang'), text: n.textContent }; })()");
+            check(!!b && b.visible && b.lang === extra.hreflang && b.text.includes(extra.drafts.AI), `${where}: AI banner in the note of the simulator (${JSON.stringify(b)})`);
+          } else if (extra) {
             const b = m.banner;
             check(!!b && b.visible && b.after && Math.abs(b.top - b.headerBottom) <= 1 && !b.cut, `${where}: banner missing, cut off or not right under the header (${JSON.stringify(b && { top: b.top, header: b.headerBottom, after: b.after, cut: b.cut })})`);
             if (b) {
@@ -249,12 +262,12 @@ async function main() {
           } else {
             check(!m.banner, `${where}: banner on an English/German page`);
           }
-          const sans = await fontsOf('h1, h2, h3, .site-nav > a, p');
-          const mono = await fontsOf('.kicker, .mono, kbd', 40);
+          const sans = await fontsOf(app ? '.sim__about p, .sim-dialog p, .sim__btn' : 'h1, h2, h3, .site-nav > a, p');
+          const mono = await fontsOf(app ? '.sim__about-title, .sim__device, kbd' : '.kicker, .mono, kbd', 40);
           const sansOk = (f) => FONTS.sans.test(f) || (lang === 'ru' && FONTS.cyrillic.test(f));
           for (const [family, glyphs] of sans) if (glyphs) check(sansOk(family), `${where}: headings or text drawn with ${family} (${glyphs} glyphs, ${sans.where.get(family)}), not with the site's fonts`);
           for (const [family, glyphs] of mono) if (glyphs) check(FONTS.mono.test(family) || sansOk(family), `${where}: monospaced text drawn with ${family} (${glyphs} glyphs, ${mono.where.get(family)})`);
-          if (lang === 'ru') {
+          if (lang === 'ru' && !app) {
             const heads = await fontsOf('h1, h2', 6);
             const cyr = [...heads].filter(([f]) => FONTS.cyrillic.test(f)).reduce((n, [, g]) => n + g, 0);
             check(cyr > 0, `${where}: Cyrillic headings not drawn with Exo 2 (${[...heads].map(([f, g]) => `${f} ${g}`).join(', ')})`);

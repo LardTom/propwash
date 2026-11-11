@@ -18,6 +18,8 @@ import { KINDS, ARM_KEYS, trueX, maxContinuousCurrent, landingCellVoltage, effec
 
 export const LANGUAGES = Object.freeze(['de_de', 'en_us']);
 export const NOMINAL_CELL_V = 3.7;
+// Parts of the game that exist only in creative mode (no recipe): the web export of the game leaves them out; the
+// configurator takes them from the Propwash jar (exportParts with creative: true) and marks them creative_only.
 export const CREATIVE_ONLY = Object.freeze(['propwash:creative_fc']);
 export const PROPWASH = 'propwash';
 export const CHANNEL_SLOTS = Object.freeze({
@@ -38,6 +40,19 @@ const cmp = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
 export { idCompare };
 /** '#rrggbb' of an RGB int (ExportJson.hex). */
 export const hex = (rgb) => `#${(rgb & 0xffffff).toString(16).padStart(6, '0')}`;
+
+// Texture files (assets/<ns>/textures/<path>.png) a block model marks "force_translucent" ({sprite, force_translucent:
+// true}): the game draws their quads translucent (the blur disc of a spinning prop).
+export function translucentTextures(model) {
+  const out = new Set();
+  for (const [key, ref] of Object.entries((model && model.textures) || {})) {
+    if (key === 'particle' || !ref || typeof ref !== 'object' || ref.force_translucent !== true || typeof ref.sprite !== 'string') continue;
+    const colon = ref.sprite.indexOf(':');
+    const ns = colon < 0 ? 'minecraft' : ref.sprite.slice(0, colon);
+    out.add(`assets/${ns}/textures/${ref.sprite.slice(colon + 1)}.png`);
+  }
+  return out;
+}
 
 function parseJsonText(data) {
   try {
@@ -498,14 +513,16 @@ export const partSort = (a, b) => (KINDS.indexOf(a.kind) - KINDS.indexOf(b.kind)
 /**
  * The parts.json entries of the given definitions (one namespace or several), in the export's order.
  * options: builtin(id) – whether Propwash itself registers the part (default: the propwash namespace),
- * chemistry(id) – the registered chemistries for the battery energy.
+ * chemistry(id) – the registered chemistries for the battery energy, creative – also the parts of the game that exist
+ * only in creative mode (CREATIVE_ONLY, the web export of the game leaves them out), marked creative_only: true.
  */
-export function exportParts(definitions, res, { builtin = (id) => splitId(id)[0] === PROPWASH, chemistry = () => null } = {}) {
+export function exportParts(definitions, res, { builtin = (id) => splitId(id)[0] === PROPWASH, chemistry = () => null, creative = false } = {}) {
   const out = [];
-  for (const def of definitions.filter((d) => !CREATIVE_ONLY.includes(d.id)).sort(partSort)) {
+  for (const def of definitions.filter((d) => creative || !CREATIVE_ONLY.includes(d.id)).sort(partSort)) {
     const [namespace, path] = splitId(def.id);
     const isBuiltin = builtin(def.id);
     const entry = { id: def.id, category: def.kind, builtin: isBuiltin, name: res.both(`part.${namespace}.${path}`) };
+    if (CREATIVE_ONLY.includes(def.id)) entry.creative_only = true;
     if (def.kind === 'frame') {
       const key = isBuiltin ? `propwash.content.frame_short.${path}` : `${namespace}.frame_short.${path}`;
       entry.short_name = res.hasText(key) ? res.both(key) : null;
@@ -635,6 +652,7 @@ export function compactHelp(h) {
 export function catalogPart(p) {
   const b = p.basics;
   const out = { id: p.id, category: p.category, builtin: p.builtin, name: p.name };
+  if (p.creative_only) out.creative_only = true;
   if (p.short_name) out.short_name = p.short_name;
   const h = compactHelp(p.help);
   if (h) out.help = h;
@@ -962,6 +980,10 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
     }
     const entry = { tex: textureIndex(model.texture) };
     if (model.faceTextures) entry.ftex = model.faceTextures.map((i) => textureIndex(model.textures[i]));
+    // Textures the model marks "force_translucent" (the blur disc of a spinning prop), like build-configurator-models.
+    const translucent = translucentTextures(json);
+    const tl = model.textures.filter((rel) => translucent.has(rel)).map((rel) => textureIndex(rel));
+    if (tl.length) entry.tl = tl;
     if (geometryOf) {
       const base = variants[geometryOf];
       if (JSON.stringify(base.el) !== JSON.stringify(model.elements)) throw new Error(`${def}: geometry differs from ${geometryOf}`);
@@ -980,6 +1002,8 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
   };
   add('base', '', null);
   if (p.category === 'prop' && add('ccw', '_ccw', null)) add('ccw_paint', '_ccw_paint', 'ccw');
+  // The spinning prop (blur disc and hub) for the FPV simulator, as tools/build-configurator-models.mjs writes it.
+  if (p.category === 'prop' && add('blur', '_blur', null)) add('blur_paint', '_blur_paint', 'blur');
   if (p.category === 'battery' && add('under', '_under', null)) add('under_paint', '_under_paint', 'under');
   if (p.category === 'stack' && add('mounted', '_mounted', null, true)) {
     const pigtail = pigtailOf(raw.mounted.elements);
@@ -991,7 +1015,7 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
     }
   }
   add('paint', '_paint', 'base');
-  for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint'], ['mounted', 'mounted_paint']]) {
+  for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint'], ['mounted', 'mounted_paint'], ['blur', 'blur_paint']]) {
     if (variants[plain] && variants[plain].groups) {
       if (variants[painted]) variants[painted].groups = variants[plain].groups;
       delete variants[plain].groups;

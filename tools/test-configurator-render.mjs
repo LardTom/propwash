@@ -55,6 +55,7 @@ function check(ok, message) {
 }
 
 // Models
+const MAX_TINT_INDEX = 8; // MAX_TINTS of viewer.js: indices beyond the groups keep the default tint (white)
 const models = new Map();
 for (const part of catalog.parts) {
   const [ns, p] = part.id.split(':');
@@ -79,7 +80,10 @@ for (const part of catalog.parts) {
     if (v.of) {
       const faces = model.variants[v.of].el.reduce((n, e) => n + e[7].filter(Boolean).length, 0);
       check(v.tint.length === faces, `${part.id}/${name}: one tint index per face`);
-      check(v.groups && v.tint.every((t) => t < v.groups.length), `${part.id}/${name}: tint index within the groups`);
+      // A VTX without external antennas (count 0) keeps the antenna faces' tint index in its paint model while the
+      // game drops their paint group (camdrones cam links since 1.0.0): those faces stay untinted, as in the game.
+      const noAntenna = part.category === 'video' && part.data.antenna && part.data.antenna.count === 0;
+      check(v.groups && v.tint.every((t) => t < v.groups.length || (noAntenna && t < MAX_TINT_INDEX)), `${part.id}/${name}: tint index within the groups`);
     }
   }
   if (part.category === 'prop') check(!!model.variants.ccw, `${part.id}: counter-clockwise model`);
@@ -385,7 +389,9 @@ for (const preset of catalog.presets) {
   }
   const a = assemble(build, env);
   check(a.missing.length === 0 && a.layout, `${preset.id}: assembles`);
-  const antenna = antennaMask(models.get(build.video) || null) === null ? 0 : 1;
+  // Antennas at the holder: a VTX with antenna elements, unless it has no external antennas (count 0, "none").
+  const videoAntenna = (catalog.part(build.video).data || {}).antenna;
+  const antenna = antennaMask(models.get(build.video) || null) === null || (videoAntenna && videoAntenna.count === 0) ? 0 : 1;
   const expected = 1 + 3 + 8 + antenna + Object.keys(build.accessories).length + (build.accessories.top ? 1 : 0);
   check(a.pieces.length === expected, `${preset.id}: ${a.pieces.length} pieces, expected ${expected}`);
   check(a.pieces.every((p) => finiteVec(p.position)), `${preset.id}: finite positions`);

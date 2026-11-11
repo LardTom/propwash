@@ -1,14 +1,18 @@
 #!/usr/bin/env node
 // Builds the changelog page data (assets/data/changelog.json, rendered by changelog/index.html) from the player-facing
-// CHANGELOG.md of Propwash FPV and Propwash: Just More Parts, read from git – by default at the newest release tag
-// (v<x.y.z>), so the page never shows notes of a release that is not tagged yet.
+// CHANGELOG.md of Propwash FPV and its official add-ons Propwash: Just More Parts, Propwash: Camera Drones and
+// Propwash: Mob Defense (PRODUCTS), read from git – by default at the newest release tag (v<x.y.z>), so the page never
+// shows notes of a release that is not tagged yet.
 //
 //   node tools/build-changelog.mjs [--propwash <dir>] [--propwash-ref <ref>] [--jmp <dir>] [--jmp-ref <ref>]
-//                                  [--add-missing] [--check]
+//                                  [--camdrones <dir>] [--camdrones-ref <ref>] [--mobdefense <dir>]
+//                                  [--mobdefense-ref <ref>] [--add-missing] [--check]
 //
-//   --propwash / --jmp     the repositories (default: PROPWASH_SRC / JMP_SRC, otherwise the folders "propwash" and
-//                          "propwash-justmoreparts" next to this repository or next to its main checkout)
-//   --propwash-ref / --jmp-ref
+//   --propwash / --jmp / --camdrones / --mobdefense
+//                          the repositories (default: PROPWASH_SRC / JMP_SRC / CAMDRONES_SRC / MOBDEFENSE_SRC, otherwise
+//                          the folders "propwash", "propwash-justmoreparts", "propwash-camera" and "propwash-mobdefense"
+//                          next to this repository or next to its main checkout)
+//   --propwash-ref / --jmp-ref / --camdrones-ref / --mobdefense-ref
 //                          tag, branch or commit to read CHANGELOG.md from (default: the newest v<x.y.z> tag). For a
 //                          release that is not tagged yet (the website of a coming release), pass the commit of the
 //                          release candidate: the JSON records its full hash, and tools/test-changelog.mjs fails once
@@ -17,9 +21,10 @@
 //                          value, ready to be filled in
 //   --check                writes nothing; exits with 1 when assets/data/changelog.json is not up to date
 //
-// CHANGELOG.md format: "## [x.y.z] — Title" per release (other "## [...]" headings such as [Unreleased] are skipped),
-// "### Highlights|New|Improved|Fixed|Compatibility|Known issues" sections and "- " bullets with inline Markdown
-// (**strong**, *emphasis*, `code`, [text](https://…)). Anything else inside a release stops the build with the line.
+// CHANGELOG.md format: "## [x.y.z] — Title" per release (also "–" or "-" before the title; other "## [...]" headings
+// such as [Unreleased] are skipped), "### Highlights|New|Improved|Fixed|For server owners|Compatibility|Known issues"
+// sections and "- " bullets with inline Markdown (**strong**, *emphasis*, `code`, [text](https://…)). Anything else
+// inside a release stops the build with the line.
 //
 // Links to files of the repository ([`ADDONS.md`](ADDONS.md)) become addresses on this site where one exists
 // (REPO_LINKS) and otherwise links to the file in the public source repository.
@@ -59,6 +64,26 @@ export const PRODUCTS = [
     env: 'JMP_SRC',
     option: 'jmp',
     source: 'https://github.com/LardTom/propwash-justmoreparts'
+  },
+  {
+    id: 'camdrones',
+    name: 'Propwash: Camera Drones',
+    short: 'Camera Drones',
+    tagline: { en: 'The add-on with GPS camera drones and a flight planner', de: 'Das Add-on mit GPS-Kamera-Drohnen und Flugplaner' },
+    folder: 'propwash-camera',
+    env: 'CAMDRONES_SRC',
+    option: 'camdrones',
+    source: 'https://github.com/LardTom/propwash-camera-drones'
+  },
+  {
+    id: 'mobdefense',
+    name: 'Propwash: Mob Defense',
+    short: 'Mob Defense',
+    tagline: { en: 'The add-on that arms your drone against mobs', de: 'Das Add-on, das deine Drohne gegen Mobs bewaffnet' },
+    folder: 'propwash-mobdefense',
+    env: 'MOBDEFENSE_SRC',
+    option: 'mobdefense',
+    source: 'https://github.com/LardTom/propwash-mob-defense'
   }
 ];
 
@@ -83,6 +108,7 @@ const SECTION_KINDS = {
   new: 'new',
   improved: 'improved',
   fixed: 'fixed',
+  'for server owners': 'server-owners',
   compatibility: 'compatibility',
   'known issues': 'known-issues'
 };
@@ -321,10 +347,9 @@ function parseArgs(argv) {
       if (i + 1 >= argv.length) throw new Error(`${arg} needs a value`);
       return argv[++i];
     };
-    if (arg === '--propwash') options.propwash = path.resolve(value());
-    else if (arg === '--jmp') options.jmp = path.resolve(value());
-    else if (arg === '--propwash-ref') options.propwashRef = value();
-    else if (arg === '--jmp-ref') options.jmpRef = value();
+    const product = PRODUCTS.find((p) => arg === `--${p.option}` || arg === `--${p.option}-ref`);
+    if (product && arg === `--${product.option}`) options[product.option] = path.resolve(value());
+    else if (product) options[`${product.option}Ref`] = value();
     else if (arg === '--add-missing') options.addMissing = true;
     else if (arg === '--check') options.check = true;
     else throw new Error(`unknown option ${arg}`);

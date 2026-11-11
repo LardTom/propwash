@@ -28,7 +28,7 @@ import { parse, findPairs, walk, attr, hasClass, inner, splice, escapeAttr } fro
 import { pseudo } from './pseudo.mjs';
 import { normalize } from '../../assets/js/i18n.js';
 import { siteNav, siteFooterLinks, NAV_PATTERN, FOOTER_PATTERN, HEAD_PATTERN, TREE_HEAD_SCRIPT } from '../site-nav.mjs';
-import { withNav, withHead, buildPage as buildHandPage, HAND_PAGES } from '../build-nav.mjs';
+import { withNav, withHead, buildPage as buildHandPage, buildAppPage, HAND_PAGES, APP_PAGES } from '../build-nav.mjs';
 import { computeHashes, stampHtml } from '../stamp-assets.mjs';
 
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
@@ -118,17 +118,23 @@ function setAttr(el, name, value, edits) {
   if (a) edits.push({ start: a.start, end: a.end, text: ` ${name}="${escapeAttr(value)}"` });
 }
 
+// Where an app page (no site header) wants the banner.
+const BANNER_MARKER = '<!-- i18n-banner -->';
+
 /** One page of a language. */
 export function buildPage(page, lang, { tr, languages, hashes, pageTexts = {} }) {
   const code = lang.code;
   const pages = translatedPaths();
   const treeFile = `${code}/${page.file}`;
   let html = read(page.file);
-  if (!NAV_PATTERN.test(html) || !FOOTER_PATTERN.test(html)) throw new Error(`${page.file}: navigation or footer links not found`);
+  if (!page.app && (!NAV_PATTERN.test(html) || !FOOTER_PATTERN.test(html))) throw new Error(`${page.file}: navigation or footer links not found`);
+  if (page.app && !html.includes(BANNER_MARKER)) throw new Error(`${page.file}: app page without the marker ${BANNER_MARKER}`);
   if (!HEAD_PATTERN.test(html)) throw new Error(`${page.file}: head script not found`);
-  html = html
-    .replace(NAV_PATTERN, () => siteNav(page.prefix, page.current, { tr, lang: code, languages, path: page.path }))
-    .replace(FOOTER_PATTERN, () => siteFooterLinks(page.prefix, page.current, { tr, lang: code }));
+  if (!page.app) {
+    html = html
+      .replace(NAV_PATTERN, () => siteNav(page.prefix, page.current, { tr, lang: code, languages, path: page.path }))
+      .replace(FOOTER_PATTERN, () => siteFooterLinks(page.prefix, page.current, { tr, lang: code }));
+  }
 
   const doc = parse(html);
   const edits = [];
@@ -164,7 +170,7 @@ export function buildPage(page, lang, { tr, languages, hashes, pageTexts = {} })
     }
     if (el.name === 'link' && attr(el, 'rel') === 'canonical') setAttr(el, 'href', `${SITE}${code}/${page.path}`, edits);
   }
-  if (!header) throw new Error(`${page.file}: <header class="site-header"> not found`);
+  if (!header && !page.app) throw new Error(`${page.file}: <header class="site-header"> not found`);
   const texts = Object.fromEntries(Object.keys(pageTexts).sort().map((k) => [k, pageTexts[k]]));
   head.push(
     `<meta name="pw-root" content="../${page.prefix}">`,
@@ -183,7 +189,12 @@ export function buildPage(page, lang, { tr, languages, hashes, pageTexts = {} })
     <p>${tr(PHRASES.banner)} <span class="i18n-banner__links"><a href="?lang=en" hreflang="en">${tr(PHRASES.english)}</a> · <a href="?lang=de" hreflang="de">${tr(PHRASES.german)}</a></span></p>
   </div>
 </aside>`;
-  edits.push({ start: header.end, end: header.end, text: banner });
+  if (page.app) {
+    const at = html.indexOf(BANNER_MARKER);
+    edits.push({ start: at, end: at + BANNER_MARKER.length, text: banner.trim().replace('<div class="wrap i18n-banner__inner">', '<div class="i18n-banner__inner">') });
+  } else {
+    edits.push({ start: header.end, end: header.end, text: banner });
+  }
   html = splice(html, edits);
   html = rewriteLinks(html, page, code, pages);
   return stampHtml(treeFile, html, hashes);
@@ -212,6 +223,7 @@ export function buildSite({ languages = activeLanguages(), mode = 'strict', with
   }
   if (withRoot) {
     for (const [file, prefix, current] of HAND_PAGES) files.set(file, buildHandPage(read(file), prefix, current, file, { languages }, hashes));
+    for (const [file, prefix] of APP_PAGES) files.set(file, buildAppPage(read(file), prefix, file, { languages }, hashes));
     for (const page of extracted.pages.filter((p) => p.file.startsWith('docs/'))) {
       const html = withHead(withNav(read(page.file), page.prefix, page.current, page.file, { languages, path: page.path }), page.prefix, page.file, { languages });
       files.set(page.file, stampHtml(page.file, html, hashes));
@@ -289,7 +301,8 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
       key: k, words: words(k), sources: [...e.sources].sort(), ...(lang.drafts && lang.drafts[k] !== undefined ? { draft: lang.drafts[k] } : {}),
     }));
     const stale = Object.keys(dict.entries).filter((k) => !entries.has(k));
-    console.log(JSON.stringify({ lang: lang.code, texts: entries.size, translated: entries.size - missing.length, missing, stale }, null, 1));
+    // Written before the exit: a long list on a pipe (test-news-060 reads it) would be cut off by process.exit().
+    await new Promise((resolve) => process.stdout.write(`${JSON.stringify({ lang: lang.code, texts: entries.size, translated: entries.size - missing.length, missing, stale }, null, 1)}\n`, resolve));
     process.exit(0);
   }
   const out = arg('--out');
