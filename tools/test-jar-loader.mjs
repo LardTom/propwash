@@ -607,7 +607,11 @@ function testTexts() {
   let named = 0;
   for (const file of scriptsIn(path.join(ROOT, 'assets/js'))) {
     const src = fs.readFileSync(file, 'utf8');
-    if (file === path.join(ROOT, 'assets/js/configurator/i18n.js') || !/from '(?:\.\/|\.\.\/configurator\/)i18n\.js(?:\?v=\w+)?'/.test(src)) continue;
+    // Only scripts with the configurator's texts: './i18n.js' inside assets/js/configurator, '../configurator/i18n.js'
+    // elsewhere (the simulator, assets/js/sim, has an i18n.js of its own).
+    const own = path.dirname(file) === path.join(ROOT, 'assets/js/configurator');
+    const uses = own ? /from '\.\/i18n\.js(?:\?v=\w+)?'/ : /from '\.\.\/configurator\/i18n\.js(?:\?v=\w+)?'/;
+    if (file === path.join(ROOT, 'assets/js/configurator/i18n.js') || !uses.test(src)) continue;
     for (const m of src.matchAll(/'([a-zA-Z]+)\.([\w.]+)'/g)) {
       if (!groups.has(m[1]) || /^(?:json|js|css|png|svg|html)$/.test(m[2])) continue;
       named++;
