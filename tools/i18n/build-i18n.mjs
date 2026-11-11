@@ -301,7 +301,8 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
       key: k, words: words(k), sources: [...e.sources].sort(), ...(lang.drafts && lang.drafts[k] !== undefined ? { draft: lang.drafts[k] } : {}),
     }));
     const stale = Object.keys(dict.entries).filter((k) => !entries.has(k));
-    console.log(JSON.stringify({ lang: lang.code, texts: entries.size, translated: entries.size - missing.length, missing, stale }, null, 1));
+    // Written before the exit: a long list on a pipe (test-news-060 reads it) would be cut off by process.exit().
+    await new Promise((resolve) => process.stdout.write(`${JSON.stringify({ lang: lang.code, texts: entries.size, translated: entries.size - missing.length, missing, stale }, null, 1)}\n`, resolve));
     process.exit(0);
   }
   const out = arg('--out');
