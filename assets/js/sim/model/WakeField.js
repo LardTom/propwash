@@ -1,4 +1,5 @@
 // Port of de.lardtom.propwash.sim.WakeField (1:1).
+import { StrictMath } from './StrictMath.js?v=e765e983';
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
 import { SimMath } from './SimMath.js?v=44da8aea';
 
@@ -29,8 +30,8 @@ export class WakeField {
 
   configure(updateDt) {
     this.updateDt = updateDt;
-    this.velocityDecay = Math.exp(-updateDt / WakeField.VELOCITY_TAU);
-    this.strengthDecay = Math.exp(-updateDt / WakeField.STRENGTH_TAU);
+    this.velocityDecay = StrictMath.exp(-updateDt / WakeField.VELOCITY_TAU);
+    this.strengthDecay = StrictMath.exp(-updateDt / WakeField.STRENGTH_TAU);
   }
 
   reset() {

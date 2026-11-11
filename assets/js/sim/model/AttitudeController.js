@@ -1,9 +1,10 @@
 import { SimMath } from './SimMath.js?v=44da8aea';
 import { Pt1 } from './Pt1.js?v=afe0b0dc';
 import { FcAxes } from './FcAxes.js?v=3da14453';
+import { StrictMath } from './StrictMath.js?v=e765e983';
 
 // Port of de.lardtom.propwash.sim.AttitudeController
-// StrictMath.atan2 -> Math.atan2 (closest JS equivalent; not guaranteed bit-identical to fdlibm).
+// StrictMath.atan2 is the fdlibm port of StrictMath.js (bit-identical to the JVM).
 export class AttitudeController {
   ffPitch = new Pt1();
   ffRoll = new Pt1();
@@ -36,7 +37,7 @@ export class AttitudeController {
     if (n < 1e-12) {
       return fallback;
     }
-    return SimMath.wrapPi(2.0 * Math.atan2(b.qy, b.qw));
+    return SimMath.wrapPi(2.0 * StrictMath.atan2(b.qy, b.qw));
   }
 
   levelError(b, rollTargetDeg, pitchTargetDeg) {
@@ -80,7 +81,7 @@ export class AttitudeController {
     const cz = ux * ty - uy * tx;
     const cn = Math.sqrt(cx * cx + cy * cy + cz * cz);
     const dot = ux * tx + uy * ty + uz * tz;
-    const alpha = Math.atan2(cn, dot);
+    const alpha = StrictMath.atan2(cn, dot);
     let ex;
     let ey;
     let ez;
