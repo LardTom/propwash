@@ -1,11 +1,11 @@
-// Changelog page (changelog/index.html): renders assets/data/changelog.json – a filter (all / one product), a version
-// list with anchors, and one card per release with highlights and the sections New, Improved, Fixed, Compatibility and
-// Known issues. On the English/German page every text is written in both languages (lang="en"/"de" spans), so the
+// Changelog page (changelog/index.html): renders assets/data/changelog.json – a filter (all / one product: Propwash
+// and its add-ons), a version list with anchors, and one card per release with highlights and the sections New,
+// Improved, Fixed, For server owners, Compatibility and Known issues. On the English/German page every text is written in both languages (lang="en"/"de" spans), so the
 // site's language switch works without re-rendering; on the pages of the other languages (assets/js/i18n.js) in that
 // one language, entries included (their translations come from assets/i18n/<lang>.json). Texts go in via textContent
 // only; the entries' inline Markdown is turned into elements.
 
-import { loadChangelog, validateChangelog, parseInline, tally, KINDS } from './data.js?v=7e0fef0c';
+import { loadChangelog, validateChangelog, parseInline, tally, KINDS } from './data.js?v=89ef6424';
 import { OFFICIAL, fill, lang, translated, load, text, spans, href } from '../i18n.js?v=6ae64da4';
 
 const doc = document;
@@ -20,6 +20,7 @@ const UI = {
     new: { en: 'New', de: 'Neu' },
     improved: { en: 'Improved', de: 'Verbessert' },
     fixed: { en: 'Fixed', de: 'Behoben' },
+    'server-owners': { en: 'For server owners', de: 'Für Server-Betreiber' },
     compatibility: { en: 'Compatibility', de: 'Kompatibilität' },
     'known-issues': { en: 'Known issues', de: 'Bekannte Probleme' }
   },
@@ -28,10 +29,11 @@ const UI = {
     new: 'plus',
     improved: 'up',
     fixed: 'bug',
+    'server-owners': 'server',
     compatibility: 'port',
     'known-issues': 'alert'
   },
-  productIcon: { propwash: 'prop', jmp: 'puzzle' },
+  productIcon: { propwash: 'prop', jmp: 'puzzle', camdrones: 'camera', mobdefense: 'shield' },
   all: { en: 'All', de: 'Alle' },
   show: { en: 'Show', de: 'Anzeigen' },
   versions: { en: 'Versions', de: 'Versionen' },
