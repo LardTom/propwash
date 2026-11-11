@@ -8,14 +8,14 @@
 //   (class) are exported and attached as statics.
 // - StrictMath.exp/pow are the fdlibm port (StrictMath.js); StrictMath.log/sin of the prop tables and the cruise point
 //   (analysis only, not used in flight) stay Math.log/sin, which may differ in the last bit.
-import { AirframeSpec } from './AirframeSpec.js?v=cfbc2e85';
+import { AirframeSpec } from './AirframeSpec.js?v=d12a0862';
 import { javaEnum } from './Enum.js?v=d8aa4520';
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
-import { OperatingPoints } from './OperatingPoints.js?v=f7f7e885';
+import { OperatingPoints } from './OperatingPoints.js?v=047f5bd2';
 import { RotorAero } from './RotorAero.js?v=22dc31b6';
 import { SimMath } from './SimMath.js?v=44da8aea';
 import { StrictMath } from './StrictMath.js?v=e765e983';
-import { Thermal } from './Thermal.js?v=f7f45aaf';
+import { Thermal } from './Thermal.js?v=4b9beec5';
 
 export const Profile = javaEnum(['HOVER', 'CRUISE', 'MIXED', 'AGGRESSIVE']);
 

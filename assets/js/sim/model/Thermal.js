@@ -1,7 +1,7 @@
 // Port of de.lardtom.propwash.sim.Thermal (1:1, Propwash 0.6.0: ESC heat of the board size, eddy losses, airflow
 // cooling, motor torque loss when hot, ESC power limit).
 import { StrictMath } from './StrictMath.js?v=e765e983';
-import { AirframeSpec } from './AirframeSpec.js?v=cfbc2e85';
+import { AirframeSpec } from './AirframeSpec.js?v=d12a0862';
 import { SimMath } from './SimMath.js?v=44da8aea';
 
 export class Thermal {

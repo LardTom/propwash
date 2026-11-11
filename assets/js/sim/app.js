@@ -2,25 +2,25 @@
 // training map with Propwash's flight model (model/, a port of the mod's sim package), its tune (rates, PIDs, filters,
 // camera angle) and the pilot's radio, gamepad or keyboard.
 
-import { loadCatalog } from '../configurator/data.js?v=e9c7448c';
+import { loadCatalog } from '../configurator/data.js?v=e5691260';
 import { codeFromHash } from '../configurator/sharecode.js?v=024bd980';
-import { simAirframe } from './creative-airframe.js?v=a94aef8e';
+import { simAirframe } from './creative-airframe.js?v=b6ec03f0';
 import { droneUptilt } from '../configurator/fpv.js?v=76cdbbe6';
-import { FlightControllerConfig } from './model/FlightControllerConfig.js?v=dddf154c';
+import { FlightControllerConfig } from './model/FlightControllerConfig.js?v=aa2f34ca';
 import { SimTuning } from './model/SimTuning.js?v=30961ab0';
-import { DroneSim } from './model/DroneSim.js?v=0b50a5d4';
+import { DroneSim } from './model/DroneSim.js?v=6c89bd62';
 import { StabMode } from './model/StabMode.js?v=ef37a80a';
 import { ArmBlocker } from './model/ArmBlocker.js?v=3bfdfa7f';
 import { SimEventType } from './model/SimEventType.js?v=7000a262';
 import { parseGlb, VoxelWorld } from './world.js?v=3d604f11';
-import { Flight } from './flight.js?v=8767573d';
+import { Flight } from './flight.js?v=bc29550b';
 import { SimScene } from './scene.js?v=cd36ad06';
 import { Osd } from './osd.js?v=eac48f7a';
 import { PilotInputSource } from './input.js?v=4b632cf7';
 import { ControllerSetup } from './setup.js?v=b99a9196';
 import { loadDroneModel } from './drone-model.js?v=1dca666b';
 import { mountFpvPropsSetting } from './props-setting.js?v=472251ae';
-import { DroneAudio } from './audio.js?v=bd89b39c';
+import { DroneAudio } from './audio.js?v=096de8eb';
 import { BatteryState } from './model/BatteryState.js?v=de4ddff2';
 import { t, lang, loadTexts } from './i18n.js?v=80cca2de';
 

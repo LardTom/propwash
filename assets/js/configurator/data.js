@@ -7,13 +7,13 @@
 // addon-catalog.js) or take them out (the switches of the add-on bar), like installing or removing the mod in the game.
 
 import { check as checkBuild } from './rules.js?v=26a8eb49';
-import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=293f859b';
+import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=6f4b7497';
 import {
   encode as encodeCode, decode as decodeCode, convert as convertCode, hexColor, createShareTables, frozenTables, displayId,
 } from './sharecode.js?v=024bd980';
 import { sharedOnly } from './tune.js?v=f4084d0e';
-import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=f228e891';
-import { catalogOrder } from './catalog-build.js?v=211c1389';
+import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=84d6ba95';
+import { catalogOrder } from './catalog-build.js?v=708313ba';
 
 export const CATALOG_URL = new URL('../../data/configurator/catalog.json', import.meta.url);
 export const CATEGORIES = Object.freeze(['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory']);

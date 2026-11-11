@@ -17,7 +17,7 @@ import { bundledParts, splitId, partPath, DEFAULT_NAMESPACE } from './partjson.j
 import {
   resources, exportParts, exportChemistries, exportMounts, catalogPart, catalogOrder, partModel, renderAdditions, tableCrc, tableEntries,
   LANGUAGES,
-} from './catalog-build.js?v=211c1389';
+} from './catalog-build.js?v=708313ba';
 import { parseTable } from './sharecode3.js?v=024bd980';
 
 const TABLE = (ns) => `data/${ns}/propwash_share/table.json`;

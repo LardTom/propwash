@@ -13,7 +13,7 @@
 import {
   PARAMS, GROUPS, BASE_KINDS, ARMS, param as paramOf, isAuto, isToggle, value as valueOf, baseOf, setValue, setBase, basePart,
   load, templateOf, check, spec as specOf, without, partKey,
-} from './creative.js?v=293f859b';
+} from './creative.js?v=6f4b7497';
 import { t, num, lang, NB, entry } from './i18n.js?v=530a1534';
 import { CAMERA_UPTILT, droneUptilt } from './fpv.js?v=76cdbbe6';
 

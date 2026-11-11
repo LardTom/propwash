@@ -23,7 +23,7 @@
 
 import { resolveBuild, batteryContinuousCurrent } from './rules.js?v=26a8eb49';
 import { rig as fpvRig, occlusionPercent, cameraView as rigCameraView } from './fpv.js?v=76cdbbe6';
-import { creativeFlight, isCreative, uptiltRange } from './creative.js?v=293f859b';
+import { creativeFlight, isCreative, uptiltRange } from './creative.js?v=6f4b7497';
 
 // ---------------------------------------------------------------------------------------------------------------
 // Constants of the model

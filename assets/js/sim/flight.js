@@ -9,14 +9,14 @@
 // Left out: entity colliders (other drones, boats), soft ground (snow), fluids, collision flags of add-ons (ghost).
 // The stand points are turned with the sim's double-precision rotation (the mod turns the entity's float quaternion).
 
-import { DroneSim } from './model/DroneSim.js?v=0b50a5d4';
+import { DroneSim } from './model/DroneSim.js?v=6c89bd62';
 import { PilotInput } from './model/PilotInput.js?v=d7d531ac';
-import { SimEnvironment } from './model/SimEnvironment.js?v=7f47fec9';
+import { SimEnvironment } from './model/SimEnvironment.js?v=7adb2a2f';
 import { StepResult } from './model/StepResult.js?v=786e7d96';
 import { MoveReport } from './model/MoveReport.js?v=b44086c1';
 import { StabMode } from './model/StabMode.js?v=ef37a80a';
 import { SurfaceResponse } from './model/SurfaceResponse.js?v=bc7fb0a6';
-import { AirframeSpec } from './model/AirframeSpec.js?v=cfbc2e85';
+import { AirframeSpec } from './model/AirframeSpec.js?v=d12a0862';
 
 const EPS = 1e-7;
 // PilotSession

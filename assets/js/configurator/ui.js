@@ -2,21 +2,21 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText, createCatalog } from './data.js?v=e9c7448c';
+import { loadCatalog, localText, createCatalog } from './data.js?v=e5691260';
 import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=024bd980';
 import { parseUnknown, unknownId, unknownMarker, SHORT_KEY_PREFIX, creativeCounts } from './sharecode3.js?v=024bd980';
-import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=f228e891';
+import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=84d6ba95';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
-import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=293f859b';
+import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=6f4b7497';
 import { occlusionPercent, droneUptilt, mountRange, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
-import { isCreative, spec as creativeSpec } from './creative.js?v=293f859b';
-import { creativeEditor } from './creative-editor.js?v=b32d397b';
+import { isCreative, spec as creativeSpec } from './creative.js?v=6f4b7497';
+import { creativeEditor } from './creative-editor.js?v=905c9527';
 import { batteryFit, fitsFrame, stackFits } from './rules.js?v=26a8eb49';
 import { assemble, PROP_SLOTS } from './assembly.js?v=4c00d7c2';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=ed26e8eb';
 import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=166ec38e';
 import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=530a1534';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=e8bb9456';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=a28e4f99';
 import { cameraCheck, isCameraDrone, navOf, gimbalOf, classOf as flightClassOf, lineNotes, noCameraFrameHint } from './camdrones.js?v=b1626e80';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);

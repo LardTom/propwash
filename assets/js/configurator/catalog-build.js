@@ -41,6 +41,19 @@ export { idCompare };
 /** '#rrggbb' of an RGB int (ExportJson.hex). */
 export const hex = (rgb) => `#${(rgb & 0xffffff).toString(16).padStart(6, '0')}`;
 
+// Texture files (assets/<ns>/textures/<path>.png) a block model marks "force_translucent" ({sprite, force_translucent:
+// true}): the game draws their quads translucent (the blur disc of a spinning prop).
+export function translucentTextures(model) {
+  const out = new Set();
+  for (const [key, ref] of Object.entries((model && model.textures) || {})) {
+    if (key === 'particle' || !ref || typeof ref !== 'object' || ref.force_translucent !== true || typeof ref.sprite !== 'string') continue;
+    const colon = ref.sprite.indexOf(':');
+    const ns = colon < 0 ? 'minecraft' : ref.sprite.slice(0, colon);
+    out.add(`assets/${ns}/textures/${ref.sprite.slice(colon + 1)}.png`);
+  }
+  return out;
+}
+
 function parseJsonText(data) {
   try {
     return JSON.parse(text(data));
@@ -967,6 +980,10 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
     }
     const entry = { tex: textureIndex(model.texture) };
     if (model.faceTextures) entry.ftex = model.faceTextures.map((i) => textureIndex(model.textures[i]));
+    // Textures the model marks "force_translucent" (the blur disc of a spinning prop), like build-configurator-models.
+    const translucent = translucentTextures(json);
+    const tl = model.textures.filter((rel) => translucent.has(rel)).map((rel) => textureIndex(rel));
+    if (tl.length) entry.tl = tl;
     if (geometryOf) {
       const base = variants[geometryOf];
       if (JSON.stringify(base.el) !== JSON.stringify(model.elements)) throw new Error(`${def}: geometry differs from ${geometryOf}`);
@@ -985,6 +1002,8 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
   };
   add('base', '', null);
   if (p.category === 'prop' && add('ccw', '_ccw', null)) add('ccw_paint', '_ccw_paint', 'ccw');
+  // The spinning prop (blur disc and hub) for the FPV simulator, as tools/build-configurator-models.mjs writes it.
+  if (p.category === 'prop' && add('blur', '_blur', null)) add('blur_paint', '_blur_paint', 'blur');
   if (p.category === 'battery' && add('under', '_under', null)) add('under_paint', '_under_paint', 'under');
   if (p.category === 'stack' && add('mounted', '_mounted', null, true)) {
     const pigtail = pigtailOf(raw.mounted.elements);
@@ -996,7 +1015,7 @@ export function partModel(p, res, { textureBytes = (path) => res.get(path) } = {
     }
   }
   add('paint', '_paint', 'base');
-  for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint'], ['mounted', 'mounted_paint']]) {
+  for (const [plain, painted] of [['base', 'paint'], ['ccw', 'ccw_paint'], ['under', 'under_paint'], ['mounted', 'mounted_paint'], ['blur', 'blur_paint']]) {
     if (variants[plain] && variants[plain].groups) {
       if (variants[painted]) variants[painted].groups = variants[plain].groups;
       delete variants[plain].groups;

@@ -1,5 +1,5 @@
 import { SimMath } from './SimMath.js?v=44da8aea';
-import { AirframeSpec } from './AirframeSpec.js?v=cfbc2e85';
+import { AirframeSpec } from './AirframeSpec.js?v=d12a0862';
 import { FcAxes } from './FcAxes.js?v=3da14453';
 
 // Port of de.lardtom.propwash.sim.GyroModel

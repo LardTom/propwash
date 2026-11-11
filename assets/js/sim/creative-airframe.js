@@ -3,8 +3,8 @@
 // inertia override (configurator/creative.js) through AirframeSpec.of(build, catalog, creative). creativeFlight gives
 // the inertia as [xx, yy, zz] (pitch, yaw, roll); AirframeSpec takes [roll, pitch, yaw] like CreativeFlight#inertia.
 
-import { creativeFlight, CREATIVE_FC } from '../configurator/creative.js?v=293f859b';
-import { AirframeSpec } from './model/AirframeSpec.js?v=cfbc2e85';
+import { creativeFlight, CREATIVE_FC } from '../configurator/creative.js?v=6f4b7497';
+import { AirframeSpec } from './model/AirframeSpec.js?v=d12a0862';
 
 /** {creative, flight}: the creative values of a decoded content (or null) and AirframeSpec's third argument (or null). */
 export function creativeOf(catalog, content) {
