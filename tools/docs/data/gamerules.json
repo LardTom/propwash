@@ -523,6 +523,25 @@
       "race_relevant": false
     },
     {
+      "id": "propwash:drones_boss_interactions",
+      "name": "drones_boss_interactions",
+      "group": "gameplay",
+      "type": "boolean",
+      "display": "toggle",
+      "default": true,
+      "changes_physics": false,
+      "title": {
+        "de": "Bosse kämpfen gegen Drohnen",
+        "en": "Bosses fight drones"
+      },
+      "description": {
+        "de": "An (Standard): Wärter hören fliegende Drohnen und werden wütend wie bei Spielern; ihr Schallschlag trifft die Drohne hart (Schaden wie bei einem harten Absturz, die Drohne wird weggeschleudert), und in der Nähe eines Wärters pulsiert seine Dunkelheit durch das FPV-Bild. Der Enderdrache schleudert Drohnen mit seinen Flügeln und seiner Turbulenz weg, rammt Drohnen in seiner Nähe, und sein Atem beschädigt sie. Die Seitenköpfe des Withers schießen ihre Schädel auch auf geflogene Drohnen. Windkugeln der Breeze stoßen geflogene Drohnen weg (Windkugeln von Spielern wie bisher nur mit einem Add-on). Aus: Bosse und Breezes lassen Drohnen in Ruhe (außer ein Add-on regelt den Rückstoß selbst).",
+        "en": "On (default): wardens hear flying drones and get angry like at players; their sonic boom hits the drone hard (crash damage like a hard crash, the drone is thrown), and near a warden its darkness pulses through the FPV image. The ender dragon throws drones away with its wings and its turbulence, rams drones near it, and its breath damages them. The wither’s side heads also shoot skulls at flown drones. Breeze wind charges push flown drones away (player wind charges only with an add-on, as before). Off: bosses and breezes leave drones alone (unless an add-on handles knockback itself)."
+      },
+      "example": "/gamerule propwash:drones_boss_interactions false",
+      "race_relevant": true
+    },
+    {
       "id": "propwash:allow_3d_mode",
       "name": "allow_3d_mode",
       "group": "gameplay",
@@ -946,6 +965,7 @@
         "drones_break_blocks": false,
         "break_impact_scale": 100,
         "drones_trigger_sculk": true,
+        "drones_boss_interactions": true,
         "allow_3d_mode": true,
         "part_compatibility": true,
         "autonomous_rescue": true,
@@ -1001,6 +1021,7 @@
         "drones_break_blocks": false,
         "break_impact_scale": 100,
         "drones_trigger_sculk": true,
+        "drones_boss_interactions": true,
         "allow_3d_mode": true,
         "part_compatibility": true,
         "autonomous_rescue": true,
@@ -1064,6 +1085,7 @@
         "drones_break_blocks": false,
         "break_impact_scale": 100,
         "drones_trigger_sculk": true,
+        "drones_boss_interactions": true,
         "allow_3d_mode": true,
         "part_compatibility": false,
         "autonomous_rescue": true,
