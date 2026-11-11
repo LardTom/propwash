@@ -42,7 +42,7 @@ function findPages(dir = '') {
 const known = new Map(HAND_PAGES.map(([file, prefix, current]) => [file, { prefix, current }]));
 const pages = findPages();
 for (const file of pages) {
-  if (APP_PAGES.includes(file)) {
+  if (APP_PAGES.some(([f]) => f === file)) {
     check(!NAV_PATTERN.test(read(file)), `${file}: app page without the site navigation`);
     continue;
   }
@@ -69,7 +69,7 @@ check(pages.length >= HAND_PAGES.length, 'all hand-written pages found');
 // 1b. The brand kit page is a hand-written page, and the footer of every page leads to it.
 check(pages.includes('brand/index.html'), 'brand/index.html (brand kit) is a page of the site');
 check(known.has('brand/index.html'), 'brand/index.html is in HAND_PAGES of tools/build-nav.mjs');
-for (const file of pages.filter((f) => !APP_PAGES.includes(f))) {
+for (const file of pages.filter((f) => !APP_PAGES.some(([a]) => a === f))) {
   const links = (read(file).match(FOOTER_PATTERN) || [''])[0];
   check(/<a href="(?:\.\/|(?:\.\.\/)*brand\/)"><span lang="en">Brand kit<\/span><span lang="de">Presse &amp; Brand<\/span><\/a>/.test(links), `${file}: the footer links to the brand kit (brand/)`);
 }

@@ -17,11 +17,11 @@ import { Flight } from './flight.js?v=a29918a7';
 import { SimScene } from './scene.js?v=05eee6eb';
 import { Osd } from './osd.js?v=eac48f7a';
 import { PilotInputSource } from './input.js?v=4b632cf7';
-import { ControllerSetup } from './setup.js?v=7aa7a465';
+import { ControllerSetup } from './setup.js?v=16d6d233';
 import { loadDroneModel } from './drone-model.js?v=c6ea11cb';
 import { DroneAudio } from './audio.js?v=707480ba';
 import { BatteryState } from './model/BatteryState.js?v=de4ddff2';
-import { t, lang } from './i18n.js?v=f01636b9';
+import { t, lang, loadTexts } from './i18n.js?v=ce7dd41e';
 
 const MAP_URL = new URL('../../data/sim/map.glb', import.meta.url);
 const DEFAULT_PRESET = 'justmoreparts:deadcat5_6s';
@@ -87,7 +87,52 @@ function buildSim(catalog, content) {
   return { sim, airframe, rig, uptilt, build };
 }
 
+// The note about the physics (sim/index.html, [data-about]): open at the start, closed with its button, Escape or the
+// first arming (it never covers a flight), opened again with "Physics" in the bar.
+const about = {
+  panel: null,
+  button: null,
+  set(open) {
+    if (!this.panel) return;
+    this.panel.hidden = !open;
+    this.button.setAttribute('aria-expanded', String(open));
+  },
+};
+
+// The hints under the bar sit below it however many rows it wraps into (narrow screens).
+function trackBarHeight() {
+  const bar = $('.sim__bar');
+  const sim = $('.sim');
+  if (!bar || !sim) return;
+  const update = () => sim.style.setProperty('--bar-h', `${Math.ceil(bar.getBoundingClientRect().height)}px`);
+  update();
+  if (typeof ResizeObserver === 'function') new ResizeObserver(update).observe(bar);
+  else window.addEventListener('resize', update);
+}
+
+function wireAbout() {
+  about.panel = $('[data-about]');
+  about.button = $('[data-open-about]');
+  if (!about.panel || !about.button) return;
+  about.set(true);
+  about.button.addEventListener('click', () => about.set(about.panel.hidden));
+  $('[data-about-close]').addEventListener('click', () => {
+    about.set(false);
+    about.button.focus();
+  });
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !about.panel.hidden && !document.querySelector('dialog[open]')) about.set(false);
+  });
+}
+
 async function boot() {
+  try {
+    await loadTexts();
+  } catch {
+    // A translated page without its texts shows the English ones.
+  }
+  wireAbout();
+  trackBarHeight();
   if (!webglAvailable()) {
     loadingText(t('ui.noWebgl'));
     return;
@@ -342,6 +387,7 @@ async function boot() {
         const type = e.type;
         if (type === SimEventType.CRASH) say(t('msg.crash'), 1.8, '#ff5a3c');
         else if (type === SimEventType.ARMED) say(t('msg.armed'), 1.0);
+        if (type === SimEventType.ARMED) about.set(false);
         else if (type === SimEventType.ARM_BLOCKED) say(t('msg.blocked'), 1.6, '#ffbb00');
         if (type === SimEventType.ARMED) audio.event('arm');
         else if (type === SimEventType.DISARMED) audio.event('disarm');
