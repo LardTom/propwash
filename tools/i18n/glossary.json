@@ -2,7 +2,8 @@
   "schema": 1,
   "about": "Terms every language keeps as they are (names, FPV words, codes). A dictionary can add fixed translations of its own under \"glossary\". The names of the game's tabs, buttons, keys and world rules come from the mod (ui-terms.json, node tools/i18n/build-i18n.mjs --propwash <repository>); part names stay English as well.",
   "keep": [
-    "Propwash", "Propwash FPV", "Propwash: Just More Parts", "Just More Parts",
+    "Propwash", "Propwash FPV", "Propwash: Just More Parts", "Just More Parts", "Propwash: Camera Drones", "Camera Drones",
+    "Propwash: Mob Defense", "Mob Defense",
     "Minecraft", "Fabric", "NeoForge", "CurseForge", "Modrinth", "Discord", "GitHub", "Mojang", "Microsoft", "Iris",
     "Betaflight", "EdgeTX", "OpenTX", "ExpressLRS", "DJI", "Walksnail", "HDZero",
     "FPV", "OSD", "VTX", "ESC", "AIO", "PID", "TPA", "KV", "LiPo", "LiHV", "XT60",
