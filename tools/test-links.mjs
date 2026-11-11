@@ -16,10 +16,13 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://propwashfpv.com/';
-// Addresses that go live with the release: the public source repositories and the Modrinth pages in review.
+// Addresses that go live with the release: the public source repositories (Propwash and the add-ons Just More Parts,
+// Camera Drones and Mob Defense) and the Modrinth pages in review.
 export const PENDING = [
   'https://github.com/LardTom/propwash-fpv',
   'https://github.com/LardTom/propwash-justmoreparts',
+  'https://github.com/LardTom/propwash-camera-drones',
+  'https://github.com/LardTom/propwash-mob-defense',
   'https://modrinth.com/mod/propwash-fpv',
 ];
 const SKIP_DIRS = new Set(['node_modules', 'tools', 'assets']);

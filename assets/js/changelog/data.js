@@ -5,7 +5,7 @@
 export const CHANGELOG_URL = new URL('../../data/changelog.json', import.meta.url);
 export const LANGS = Object.freeze(['en', 'de']);
 // Order on the page; the generator maps the "###" headings of CHANGELOG.md onto these.
-export const KINDS = Object.freeze(['highlights', 'new', 'improved', 'fixed', 'compatibility', 'known-issues']);
+export const KINDS = Object.freeze(['highlights', 'new', 'improved', 'fixed', 'server-owners', 'compatibility', 'known-issues']);
 
 const ID_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const VERSION_RE = /^(\d+)\.(\d+)\.(\d+)$/;
@@ -42,12 +42,14 @@ export function isSafeHref(href) {
 }
 
 /**
- * Parses the inline Markdown of one entry: **strong**, *emphasis*, `code`, [text](link) and \-escapes.
+ * Parses the inline Markdown of one entry: **strong**, *emphasis*, `code`, [text](link) and \-escapes. As in Markdown,
+ * a * or ** with whitespace on both sides is plain text ("keypad / * −").
  * Returns { nodes, errors }; nodes are { t: 'text'|'code', v } or { t: 'strong'|'em'|'link', c: nodes, href? }.
  */
 export function parseInline(src) {
   const errors = [];
   let i = 0;
+  const lone = (at, length) => /^\s?$/.test(src.charAt(at - 1)) && /^\s?$/.test(src.charAt(at + length)) && at > 0;
 
   function run(stop) {
     const out = [];
@@ -58,6 +60,12 @@ export function parseInline(src) {
     };
     while (i < src.length) {
       const ch = src[i];
+      const star = src.startsWith('**', i) ? 2 : ch === '*' ? 1 : 0;
+      if (star && lone(i, star)) {
+        buf += src.slice(i, i + star);
+        i += star;
+        continue;
+      }
       if (stop === '**' && src.startsWith('**', i)) { i += 2; flush(); return { out, closed: true }; }
       if (stop === '*' && ch === '*' && !src.startsWith('**', i)) { i += 1; flush(); return { out, closed: true }; }
       if (ch === '\\' && i + 1 < src.length && /[\\`*_[\]()#+\-.!]/.test(src[i + 1])) {

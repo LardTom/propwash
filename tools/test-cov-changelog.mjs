@@ -2,9 +2,12 @@
 // Coverage of the changelog and the texts of Just More Parts 1.2.0 (check plan 0.6.0, 5.7 no. 48 and 4.5 no. 34),
 // English and German. The stand comes from assets/data/platforms.json: a live platform means the release stand.
 //   - Propwash 0.6.0 and Just More Parts 1.2.0 in changelog.json: two or three highlights, the sections New, Improved,
-//     Fixed and Compatibility, and the pressure plate entry of Propwash names bluepanee; before the release a version
-//     that is not in changelog.json yet is looked up in the CHANGELOG.md of its integration branch and otherwise
-//     reported, from the release on it is required
+//     Fixed and Compatibility (Just More Parts 1.2.0 fixes nothing, its CHANGELOG.md has no Fixed), and the pressure
+//     plate entry of Propwash names bluepanee; before the release a version that is not in changelog.json yet is
+//     looked up in the CHANGELOG.md of its integration branch and otherwise reported, from the release on it is required
+//   - the first releases of the add-ons Camera Drones and Mob Defense (1.0.0, or the version of platforms.json once it
+//     lists them) in changelog.json with their anchors: two or three highlights, New, For server owners and
+//     Compatibility, German for every entry, and Compatibility names Propwash FPV 0.6.0 and add-on API 1.8
 //   - Just More Parts 1.2.0 on /addons/just-more-parts/ and in its changelog entry: whoop motors, the preset “65 mm
 //     race whoop”, plugged batteries, share codes through Propwash, “Propwash 0.6.0” as the requirement of
 //     registry.json and what Propwash 0.6.0 does with Just More Parts 1.1 (it refuses it: breaks <1.2.0- in Propwash's
@@ -41,12 +44,13 @@ const CATEGORY_WORDS = {
   prop: [/^(Props|Propellers?)$/i, /^(Props|Propeller)$/], video: [/^Video systems?$/i, /^Videosysteme?$/], battery: [/^Batteries$/i, /^Akkus$/],
 };
 const KINDS = ['highlights', 'new', 'improved', 'fixed', 'compatibility'];
+const ADDON_KINDS = ['highlights', 'new', 'server-owners', 'compatibility'];
 
-function releaseChecks(rel, label, { pressure = false } = {}) {
+function releaseChecks(rel, label, { pressure = false, kinds: want = KINDS } = {}) {
   const kinds = rel.sections.map((s) => s.kind);
   const hl = rel.sections.find((s) => s.kind === 'highlights');
   check(!!hl && hl.items.length >= 2 && hl.items.length <= 3, `no. 48 ${label}: two or three highlights (${hl ? hl.items.length : 0})`);
-  for (const k of KINDS.slice(1)) check(kinds.includes(k), `no. 48 ${label}: section ${k} (${kinds.join(', ')})`);
+  for (const k of want.slice(1)) check(kinds.includes(k), `no. 48 ${label}: section ${k} (${kinds.join(', ')})`);
   for (const s of rel.sections) for (const i of s.items) check(typeof i.en === 'string' && i.en && (i.de === undefined || typeof i.de === 'string'), `no. 48 ${label}: ${s.kind} entry with text`);
   if (pressure) {
     const plates = rel.sections.flatMap((s) => s.items).filter((i) => /pressure plate/i.test(i.en));
@@ -75,15 +79,19 @@ function changelogs(jmp) {
     for (const s of pw.sections) for (const i of s.items) check(typeof i.de === 'string' && i.de.trim(), `no. 48 Propwash ${PW}: German text of “${i.en.slice(0, 40)}”`);
   }
   const j = released('jmp', JMP);
+  // Just More Parts 1.2.0 fixes nothing: its CHANGELOG.md has no Fixed section, and the page shows none either.
+  const jmpKinds = JMP === '1.2.0' ? KINDS.filter((k) => k !== 'fixed') : KINDS;
+  if (JMP === '1.2.0') note(`no. 48: Just More Parts ${JMP} has no section Fixed in its CHANGELOG.md, so none is required`);
   let source = null;
   if (j) {
-    releaseChecks(j, `Just More Parts ${JMP}`);
+    releaseChecks(j, `Just More Parts ${JMP}`, { kinds: jmpKinds });
+    for (const s of j.sections) for (const i of s.items) check(typeof i.de === 'string' && i.de.trim(), `no. 48 Just More Parts ${JMP}: German text of “${i.en.slice(0, 40)}”`);
   } else if (jmp) {
     const md = gitShow(jmp.repo, jmp.ref, 'CHANGELOG.md');
     const rel = md ? parseChangelog(md, `CHANGELOG.md (${jmp.ref})`).find((r) => r.version === JMP) : null;
     if (rel) {
       source = rel;
-      releaseChecks({ sections: rel.sections.map((s) => ({ kind: s.kind, items: s.items.map((en) => ({ en })) })) }, `Just More Parts ${JMP} (CHANGELOG.md of ${jmp.ref})`);
+      releaseChecks({ sections: rel.sections.map((s) => ({ kind: s.kind, items: s.items.map((en) => ({ en })) })) }, `Just More Parts ${JMP} (CHANGELOG.md of ${jmp.ref})`, { kinds: jmpKinds });
     }
   }
   if (!j) {
@@ -94,13 +102,33 @@ function changelogs(jmp) {
   return { j, source };
 }
 
+function addonChangelogs() {
+  for (const [id, key, name] of [['camdrones', 'camdrones', 'Camera Drones'], ['mobdefense', 'mobdefense', 'Mob Defense']]) {
+    const version = platforms.products[key]?.version || '1.0.0';
+    if (!platforms.products[key]) note(`${name}: not in platforms.json yet, checked as ${version}`);
+    const product = changelog.products.find((p) => p.id === id);
+    check(!!product, `${name}: a product “${id}” in changelog.json (anchor #${id})`);
+    const rel = released(id, version);
+    check(!!rel, `${name} ${version} is in changelog.json (anchor ${id}-${version})`);
+    if (!rel) continue;
+    check(rel.id === `${id}-${version}`, `${name} ${version}: anchor ${id}-${version} (${rel.id})`);
+    releaseChecks(rel, `${name} ${version}`, { kinds: ADDON_KINDS });
+    for (const s of rel.sections) for (const i of s.items) check(typeof i.de === 'string' && i.de.trim(), `${name} ${version}: German text of “${i.en.slice(0, 40)}”`);
+    const compat = rel.sections.find((s) => s.kind === 'compatibility');
+    for (const lang of ['en', 'de']) {
+      const text = compat ? compat.items.map((i) => i[lang] || '').join(' ') : '';
+      check(/Propwash FPV 0\.6\.0/.test(text) && /API 1\.8/.test(text), `${name} ${version} (${lang}): Compatibility names Propwash FPV 0.6.0 and add-on API 1.8`);
+    }
+  }
+}
+
 function jmpTexts(entry) {
   const page = read(jmpEntry.page + 'index.html');
   const main = (/<main[\s\S]*<\/main>/.exec(page) || [''])[0];
   const want = {
-    en: [[/whoop motors|motors of very high KV/i, 'whoop motors'], [/65\s*mm race whoop/i, 'the preset “65 mm race whoop”'], [/battery plug|plugged in/i, 'plugged batteries'],
+    en: [[/whoop motors|motors of very high KV/i, 'whoop motors'], [/65\s*mm race whoop/i, 'the preset “65 mm race whoop”'], [/battery plug|plugged[ -]in/i, 'plugged batteries'],
       [/share codes (are now|from) Propwash|Propwash[’']s PW3 codes/i, 'share codes through Propwash'], [new RegExp(`needs Propwash ${jmpEntry.requires.propwash.replace(/\./g, '\\.')}`), `needs Propwash ${jmpEntry.requires.propwash}`]],
-    de: [[/Renn-Whoop-Motoren|Motoren sehr hoher KV/, 'Whoop-Motoren'], [/65-mm-Renn-Whoop/, 'das Preset „65-mm-Renn-Whoop“'], [/Akku gesteckt|Akku-Stecker/, 'gesteckte Akkus'],
+    de: [[/Renn-Whoop-Motoren|Motoren sehr hoher KV/, 'Whoop-Motoren'], [/65-mm-Renn-Whoop/, 'das Preset „65-mm-Renn-Whoop“'], [/Akku gesteckt|Akku-Stecker|gesteckte[rn]? Akku/, 'gesteckte Akkus'],
       [/Sharecodes von Propwash|PW3-Codes von Propwash/, 'Sharecodes über Propwash'], [new RegExp(`(braucht|Braucht) Propwash (ab )?${jmpEntry.requires.propwash.replace(/\./g, '\\.')}`), `braucht Propwash ${jmpEntry.requires.propwash}`]],
   };
   for (const lang of ['en', 'de']) {
@@ -183,10 +211,11 @@ function main() {
   note(`stand: ${STAND} (Propwash ${PW}, Just More Parts ${JMP})`);
   const jmp = jmpRepo();
   const { j, source } = changelogs(jmp);
+  addonChangelogs();
   const entry = j || (source ? { sections: source.sections.map((s) => ({ kind: s.kind, items: s.items.map((en) => ({ en })) })) } : null);
   jmpTexts(entry);
   partCounts(jmp, entry);
-  finish(`${STAND} stand; Propwash ${PW}${j ? `, Just More Parts ${JMP}` : ''}; ${N} parts of Just More Parts ${JMP}`);
+  finish(`${STAND} stand; Propwash ${PW}${j ? `, Just More Parts ${JMP}` : ''}, Camera Drones and Mob Defense; ${N} parts of Just More Parts ${JMP}`);
 }
 
 main();

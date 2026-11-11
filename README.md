@@ -479,8 +479,9 @@ another export. `--images` converts the in-game screenshots the pages use (`IMAG
 (needs `cwebp`); `--image <key>` (repeatable) converts only these entries and keeps the others, and `--screenshots <dir>`
 takes the screenshots from another folder, for example the unpacked screenshots of a release self-test run. Look at every
 picture before it goes on the site. `--version <x.y.z>` overrides the version from `gradle.properties` for a preview of
-a release that is not versioned yet (the docs of 0.6.0 were built from a `0.6.0-dev` checkout with `--version 0.6.0`);
-the real release build runs without it. `--render-only` rebuilds the pages from `tools/docs/data/` alone, without a
+a release that is not versioned yet (the preview docs of 0.6.0 came from a `0.6.0-dev` checkout with `--version 0.6.0`);
+the real release build runs without it (0.6.0: from the release commit `bba73caea`, with the world rules exported from
+an archive of that commit). `--render-only` rebuilds the pages from `tools/docs/data/` alone, without a
 Propwash checkout.
 
 What comes from the code (`tools/docs/extract.mjs`, written to `tools/docs/data/*.json`):
@@ -515,14 +516,15 @@ the same local file as the mod's public export (`PROPWASH_EXPORT_DENYLIST`, othe
 
 `node tools/test-news-060.mjs` checks what the site says about the last fix block of Propwash 0.6.0, only what the
 merged code does: the sections of the player guide (laps the server doesn't count with the pass zone warning, the race
-line per course, replays as video, sculk, zone outlines in flight, the join overview without add-ons players don't need,
-mixed servers with Fabric as server loader, trick tutorials, *Unlock all* in the flight training, the advancement tab)
-with their pictures, the world rule `drones_trigger_sculk`, the cards of “What’s new” and the FAQ about NeoForge and
+line per course, replays as video, sculk, bosses fighting drones, zone outlines in flight, the join overview without
+add-ons players don't need, mixed servers with Fabric as server loader, trick tutorials, *Unlock all* in the flight
+training, the advancement tab) with their pictures, the world rules `drones_trigger_sculk` and
+`drones_boss_interactions` (new in the release), the cards of “What’s new” and the FAQ about NeoForge and
 Fabric players, the roadmap card of the camera drones, the changelog line about NeoForge players on Fabric servers, and
 that every dictionary in `tools/i18n/dict` has every text of the site (nothing missing, nothing stale).
 
 `node tools/test-protocol-texts.mjs` checks the network protocol of the described release: `PROTOCOL` in the test names
-it per Propwash version (0.6.0: 19 from 0.6.0-rc.4 on; rc.3 had 18, rc.1 and rc.2 had 17), and the docs data,
+it per Propwash version (0.6.0: 20 in the release; rc.4 had 19, rc.3 had 18, rc.1 and rc.2 had 17), and the docs data,
 `Constants.PROTOCOL_VERSION` at the Propwash commit the changelog page reads, every page under `docs/` (rows of other API
 versions in the API history excepted), the changelog entries of that release in English and German and the dictionaries
 must all name it. A release that raises the protocol adds its number there.
@@ -699,25 +701,37 @@ node tools/test-roadmap.mjs   # validates roadmap.json, the icons, and that ever
 
 ## Changelog
 
-`changelog/` lists every release of Propwash FPV and Propwash: Just More Parts point by point, newest first: title line,
-highlights, then New, Improved, Fixed, Compatibility and Known issues. A switch shows both or one of them, the version
-list links every release, and each release has a fixed anchor for roadmap cards and Discord posts:
-`changelog/#propwash-0.4.0`, `changelog/#jmp-1.0.0`, `changelog/#propwash` / `changelog/#jmp` for a whole product.
+`changelog/` lists every release of Propwash FPV and its official add-ons point by point, newest first: Propwash: Just
+More Parts, Propwash: Camera Drones and Propwash: Mob Defense (`PRODUCTS` in `tools/build-changelog.mjs`, ids `jmp`,
+`camdrones` and `mobdefense`). Each release shows its title line, highlights, then New, Improved, Fixed, For server owners,
+Compatibility and Known issues. A filter shows all products or one of them (*All* on its own row above the four
+products), the version list links every release, and each release has a fixed anchor for roadmap cards and Discord
+posts: `changelog/#propwash-0.6.0`, `changelog/#jmp-1.2.0`, `changelog/#camdrones-1.0.0`,
+`changelog/#mobdefense-1.0.0`, and `changelog/#propwash`, `#jmp`, `#camdrones` or `#mobdefense` for a whole product. Each
+product has its own colour and symbol (`productIcon` in `assets/js/changelog/view.js`, `--cl-<id>` in
+`assets/css/changelog.css`).
 
-Nothing on the page is written by hand. `tools/build-changelog.mjs` reads the player-facing `CHANGELOG.md` of both mods
-from git – by default at the newest release tag `v<x.y.z>`, so notes of an untagged release never show – and writes
+Nothing on the page is written by hand. `tools/build-changelog.mjs` reads the player-facing `CHANGELOG.md` of the four
+mods from git – by default at the newest release tag `v<x.y.z>`, so notes of an untagged release never show – and writes
 `assets/data/changelog.json`:
 
 ```sh
-# after tagging a release of Propwash or Just More Parts
+# after tagging a release of Propwash or one of its add-ons
 node tools/build-changelog.mjs                   # writes assets/data/changelog.json, lists entries without German text
 node tools/build-changelog.mjs --add-missing     # adds those entries to tools/changelog/de.json with an empty value
 node tools/test-changelog.mjs
+node tools/test-cov-changelog.mjs                # releases of 0.6.0, Just More Parts 1.2.0 and the two new add-ons
 ```
 
-The repositories default to `PROPWASH_SRC` / `JMP_SRC`, otherwise `propwash` and `propwash-justmoreparts` next to this
-repository (or next to its main checkout when you work in a worktree); `--propwash <dir>`, `--jmp <dir>`,
-`--propwash-ref <ref>` and `--jmp-ref <ref>` override them, `--check` only reports whether the JSON is up to date.
+The repositories default to `PROPWASH_SRC`, `JMP_SRC`, `CAMDRONES_SRC` and `MOBDEFENSE_SRC`, otherwise `propwash`,
+`propwash-justmoreparts`, `propwash-camera` and `propwash-mobdefense` next to this repository (or next to its main
+checkout when you work in a worktree); `--propwash <dir>`, `--jmp <dir>`, `--camdrones <dir>`, `--mobdefense <dir>` and
+`--propwash-ref`, `--jmp-ref`, `--camdrones-ref`, `--mobdefense-ref <ref>` override them, `--check` only reports whether
+the JSON is up to date. The page of 0.6.0 was built before the tags from the release commits:
+
+```sh
+node tools/build-changelog.mjs --propwash-ref bba73caea --jmp-ref 70da15d --camdrones-ref b807ab2 --mobdefense-ref 6b9b90e
+```
 
 A coming release is shown before its tag by reading `CHANGELOG.md` from the commit of the release candidate
 (`--propwash-ref <commit>`; the JSON records the full hash). `test-changelog.mjs` accepts that only while the version
@@ -726,10 +740,14 @@ shown is not tagged: once `v<x.y.z>` exists it fails until the page is rebuilt f
 where the file has a place (`REPO_LINKS` in `tools/build-changelog.mjs`: `ADDONS.md` → `docs/api/#rules`) and otherwise
 to the file in the public source repository.
 
-`CHANGELOG.md` format: `## [x.y.z] — Title` per release (`## [Unreleased]` and other non-version headings are skipped),
-`### Highlights|New|Improved|Fixed|Compatibility|Known issues` and `- ` bullets with `**bold**`, `*emphasis*`, `` `code` ``
-and `[links](https://…)`. Anything else inside a release stops the build and names the line. Highlights start with their
-name in bold (`**Flight training:** …`); the page shows that name as the card title.
+`CHANGELOG.md` format: `## [x.y.z] — Title` per release (`–` or `-` before the title work as well, as in the
+changelogs of 0.6.0 and the add-ons; `## [Unreleased]` and other non-version headings are skipped),
+`### Highlights|New|Improved|Fixed|For server owners|Compatibility|Known issues` and `- ` bullets with `**bold**`,
+`*emphasis*`, `` `code` `` and `[links](https://…)`; as in Markdown, a `*` with spaces on both sides is plain text
+(“keypad / * −”). Anything else inside a release stops the build and names the line. Highlights start with their name in
+bold (`**Flight training:** …`); the page shows that name as the card title. A repository without a release tag yet
+(Camera Drones and Mob Defense before their first tag `v1.0.0`) needs its `--<id>-ref`, otherwise the build stops and
+says so.
 
 German: the changelogs are English, the German texts live in `tools/changelog/de.json` – per product and version, the
 English source line as key and its German text as value. A line repeated word for word in a later release reuses its
@@ -764,7 +782,8 @@ node tools/test-links.mjs --write-sitemap # rewrites sitemap.xml after adding or
 All local links are relative, so the pages also work under a sub-path. The anchors the changelog draws from its data
 (`#propwash-0.5.0`, `#jmp-1.1.0`, …) count as present. Addresses that only work once a release is published – the
 public source repositories on GitHub (`https://github.com/LardTom/propwash-fpv`,
-`https://github.com/LardTom/propwash-justmoreparts`) and the Modrinth page in review – are listed under `PENDING` in the
+`https://github.com/LardTom/propwash-justmoreparts`, `https://github.com/LardTom/propwash-camera-drones`,
+`https://github.com/LardTom/propwash-mob-defense`) and the Modrinth page in review – are listed under `PENDING` in the
 script and marked “after publishing” in the list. The source repositories are named in one place per page type:
 `SOURCE` in `tools/site-nav.mjs` (footer of every page), `SOURCE_JMP` in `tools/docs/html.mjs` (docs), the download
 section and the FAQ of `index.html`, and the roadmap card “Source code goes public”.

@@ -3,10 +3,13 @@
 .cl-page {
   --cl-propwash: var(--accent);
   --cl-jmp: #b99cff;
+  --cl-camdrones: #4fd3c4;
+  --cl-mobdefense: #ff7b9c;
   --cl-highlights: var(--accent);
   --cl-new: var(--gate);
   --cl-improved: #5bb8ff;
   --cl-fixed: #ff9a5c;
+  --cl-server-owners: #8fb0d6;
   --cl-compatibility: #a8a8a8;
   --cl-known-issues: var(--danger);
 }
@@ -197,6 +200,14 @@
   --tone: var(--cl-jmp);
 }
 
+.cl-latest__item--camdrones {
+  --tone: var(--cl-camdrones);
+}
+
+.cl-latest__item--mobdefense {
+  --tone: var(--cl-mobdefense);
+}
+
 .cl-latest__product {
   grid-area: product;
   color: var(--tone);
@@ -328,11 +339,12 @@
   min-width: 0;
 }
 
-/* Filter: one segmented switch like the language switch */
+/* Filter: one segmented switch like the language switch; "All" on its own row above the four products in the side
+   column and on phones, all five in one row in between */
 
 .cl-filter {
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 2px;
   padding: 2px;
   border: 1px solid var(--border);
@@ -364,8 +376,20 @@
   color: var(--on-accent);
 }
 
+.cl-filter__btn--all {
+  grid-column: 1 / -1;
+}
+
 .cl-filter__btn--jmp[aria-pressed="true"] {
   background: var(--cl-jmp);
+}
+
+.cl-filter__btn--camdrones[aria-pressed="true"] {
+  background: var(--cl-camdrones);
+}
+
+.cl-filter__btn--mobdefense[aria-pressed="true"] {
+  background: var(--cl-mobdefense);
 }
 
 /* The other languages have longer words for "All": narrower padding, and a label that still doesn't fit wraps
@@ -375,18 +399,17 @@ html:is([lang="es"], [lang="fr"], [lang="pt-BR"], [lang="pl"], [lang="ru"]) .cl-
   white-space: normal;
 }
 
-@media (max-width: 999px) {
+@media (min-width: 640px) and (max-width: 999px) {
   .cl-filter {
-    grid-template-columns: auto auto auto;
+    grid-template-columns: repeat(5, auto);
     justify-content: start;
+  }
+  .cl-filter__btn--all {
+    grid-column: auto;
   }
 }
 
 @media (max-width: 459px) {
-  .cl-filter {
-    grid-template-columns: repeat(3, auto);
-    justify-content: stretch;
-  }
   .cl-filter__btn {
     padding-inline: 8px;
     font-size: 0.88rem;
@@ -479,6 +502,14 @@ html:is([lang="es"], [lang="fr"], [lang="pt-BR"], [lang="pl"], [lang="ru"]) .cl-
   color: var(--cl-jmp);
 }
 
+.cl-toc__group--camdrones .cl-toc__product a {
+  color: var(--cl-camdrones);
+}
+
+.cl-toc__group--mobdefense .cl-toc__product a {
+  color: var(--cl-mobdefense);
+}
+
 .cl-toc__product a:hover {
   color: var(--text);
 }
@@ -533,6 +564,14 @@ html:is([lang="es"], [lang="fr"], [lang="pt-BR"], [lang="pl"], [lang="ru"]) .cl-
   border-left-color: var(--cl-jmp);
 }
 
+.cl-toc__group--camdrones .cl-toc__list a.is-active {
+  border-left-color: var(--cl-camdrones);
+}
+
+.cl-toc__group--mobdefense .cl-toc__list a.is-active {
+  border-left-color: var(--cl-mobdefense);
+}
+
 .cl-toc__list a.is-active .cl-toc__version {
   color: var(--text);
 }
@@ -578,6 +617,14 @@ html:is([lang="es"], [lang="fr"], [lang="pt-BR"], [lang="pl"], [lang="ru"]) .cl-
   --tone: var(--cl-jmp);
 }
 
+.cl-product--camdrones .cl-product__badge {
+  --tone: var(--cl-camdrones);
+}
+
+.cl-product--mobdefense .cl-product__badge {
+  --tone: var(--cl-mobdefense);
+}
+
 .cl-product__words {
   min-width: 0;
 }
@@ -613,6 +660,14 @@ html:is([lang="es"], [lang="fr"], [lang="pt-BR"], [lang="pl"], [lang="ru"]) .cl-
 
 .cl-release--jmp {
   --tone: var(--cl-jmp);
+}
+
+.cl-release--camdrones {
+  --tone: var(--cl-camdrones);
+}
+
+.cl-release--mobdefense {
+  --tone: var(--cl-mobdefense);
 }
 
 .cl-release::before {
@@ -800,6 +855,14 @@ html:is([lang="es"], [lang="fr"], [lang="pt-BR"], [lang="pl"], [lang="ru"]) .cl-
     var(--panel);
 }
 
+.cl-release--camdrones .cl-highlight,
+.cl-release--mobdefense .cl-highlight {
+  border-color: color-mix(in srgb, var(--tone) 22%, var(--border));
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--tone) 8%, transparent), transparent 60%),
+    var(--panel);
+}
+
 .cl-highlight__icon {
   margin-top: 4px;
   color: var(--tone);
@@ -833,6 +896,7 @@ html:is([lang="es"], [lang="fr"], [lang="pt-BR"], [lang="pl"], [lang="ru"]) .cl-
 .cl-section--new { --st: var(--cl-new); }
 .cl-section--improved { --st: var(--cl-improved); }
 .cl-section--fixed { --st: var(--cl-fixed); }
+.cl-section--server-owners { --st: var(--cl-server-owners); }
 .cl-section--compatibility { --st: var(--cl-compatibility); }
 .cl-section--known-issues { --st: var(--cl-known-issues); }
 
