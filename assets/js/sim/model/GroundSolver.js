@@ -1,7 +1,8 @@
-// Port of de.lardtom.propwash.sim.GroundSolver (1:1). StrictMath.pow -> Math.pow (may differ in the last bit).
-import { AirframeSpec } from './AirframeSpec.js?v=0d4a93ac';
+// Port of de.lardtom.propwash.sim.GroundSolver (1:1).
+import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
 import { SimMath } from './SimMath.js?v=44da8aea';
+import { StrictMath } from './StrictMath.js?v=e765e983';
 
 export class GroundSolver {
   static POINTS = AirframeSpec.GROUND_POINTS;
@@ -29,6 +30,7 @@ export class GroundSolver {
   massZ = new Float64Array(GroundSolver.POINTS);
   active = new Array(GroundSolver.POINTS).fill(false);
   touching = new Array(GroundSolver.POINTS).fill(false);
+  depth = new Float64Array(GroundSolver.POINTS);
   wasTouching = new Array(GroundSolver.POINTS).fill(false);
   warmN = new Float64Array(GroundSolver.POINTS);
   warmX = new Float64Array(GroundSolver.POINTS);
@@ -113,7 +115,7 @@ export class GroundSolver {
       return 0.0;
     }
     const onset = Math.max(GroundSolver.LOSS_ONSET * crashSpeed, ModelConstants.BOUNCE_MIN);
-    const loss = speed > onset ? Math.pow(speed / onset, -GroundSolver.LOSS_EXPONENT) : 1.0;
+    const loss = speed > onset ? StrictMath.pow(speed / onset, -GroundSolver.LOSS_EXPONENT) : 1.0;
     return SimMath.clamp(base * loss, 0.0, ModelConstants.RESTITUTION_MAX);
   }
 
@@ -121,11 +123,22 @@ export class GroundSolver {
     return k < AirframeSpec.HULL_POINTS && k !== 8 && k !== 9 && k !== 11;
   }
 
+  static absorbs(k) {
+    return k >= AirframeSpec.ACCESSORY_GROUND;
+  }
+
   static soft(k) {
     return k === 8 || k === 9 || (k >= AirframeSpec.HULL_POINTS && k < AirframeSpec.HULL_POINTS + 4);
   }
 
-  solve(p, b, plane, h, mu, bounce, softBounce, crashSpeed, substep, vx0, vy0, vz0, lx0, ly0, lz0) {
+  // Java overloads, dispatched on arguments.length:
+  //   solve(p, b, plane, h, mu, bounce, softBounce, crashSpeed, substep, vx0, vy0, vz0, lx0, ly0, lz0)
+  //   solve(p, b, plane, planes, h, mu, bounce, softBounce, crashSpeed, substep, vx0, vy0, vz0, lx0, ly0, lz0)
+  solve(p, b, plane, planes, h, mu, bounce, softBounce, crashSpeed, substep, vx0, vy0, vz0, lx0, ly0, lz0) {
+    if (arguments.length === 15) {
+      // planes is h here, and so on: shift the arguments of the short form by one.
+      return this.solve(p, b, plane, null, planes, h, mu, bounce, softBounce, crashSpeed, substep, vx0, vy0, vz0, lx0);
+    }
     this.vx = vx0;
     this.vy = vy0;
     this.vz = vz0;
@@ -146,6 +159,7 @@ export class GroundSolver {
       this.lambda[k] = 0.0;
       this.frictionX[k] = 0.0;
       this.frictionZ[k] = 0.0;
+      this.depth[k] = -Infinity;
     }
     for (let k = 0; k < count; k++) {
       if (!p.groundUsed(k)) {
@@ -154,7 +168,8 @@ export class GroundSolver {
       const x = b.r00 * p.groundX(k) + b.r01 * p.groundY(k) + b.r02 * p.groundZ(k);
       const y = b.r10 * p.groundX(k) + b.r11 * p.groundY(k) + b.r12 * p.groundZ(k);
       const z = b.r20 * p.groundX(k) + b.r21 * p.groundY(k) + b.r22 * p.groundZ(k);
-      const depth = plane - (b.py + y);
+      const depth = (planes == null ? plane : planes[k]) - (b.py + y);
+      this.depth[k] = depth;
       if (!(depth > -GroundSolver.REACH)) {
         continue;
       }
@@ -178,7 +193,7 @@ export class GroundSolver {
       } else {
         goal = 0.0;
       }
-      const base = GroundSolver.soft(k) ? softBounce : bounce;
+      const base = GroundSolver.absorbs(k) ? 0.0 : GroundSolver.soft(k) ? softBounce : bounce;
       if (!this.wasTouching[k]) {
         this.grip[k] = 1.0;
       }

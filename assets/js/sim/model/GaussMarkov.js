@@ -1,4 +1,5 @@
 // Port of de.lardtom.propwash.sim.GaussMarkov (1:1).
+import { StrictMath } from './StrictMath.js?v=e765e983';
 
 export class GaussMarkov {
   phi = 0.0;
@@ -6,7 +7,7 @@ export class GaussMarkov {
   value = 0.0;
 
   configure(tauSeconds, dt) {
-    this.phi = Math.exp(-dt / Math.max(dt, tauSeconds));
+    this.phi = StrictMath.exp(-dt / Math.max(dt, tauSeconds));
     this.drive = Math.sqrt(Math.max(0.0, 1.0 - this.phi * this.phi));
   }
 

@@ -1,5 +1,5 @@
 // Port of de.lardtom.propwash.sim.HullShape (1:1).
-import { AirframeSpec } from './AirframeSpec.js?v=0d4a93ac';
+import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
 
 export class HullShape {
   static CONTACT_BAND = 0.003;

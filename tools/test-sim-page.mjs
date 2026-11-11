@@ -122,11 +122,11 @@ async function main() {
         check(s.inside, `${where}: the note fits the window`);
         if (language === 'en') {
           check(/not 100\s?% the same as in the mod/.test(s.text) && /crash/.test(s.text) && /never disarms/.test(s.text), `${where}: the note says the physics are not 100 % the mod's, above all crashes, no crash disarm (${s.text})`);
-          check(/Not included:.*GPS rescue.*altitude hold.*3D mode.*turtle mode.*water.*cobwebs.*breaking blocks.*wear/.test(s.text), `${where}: the note lists what is not included`);
+          check(/Not included:.*GPS rescue.*altitude and position hold.*3D mode.*turtle mode.*water.*cobwebs.*breaking blocks.*wear.*flight assists of add-ons.*entities/.test(s.text), `${where}: the note lists what is not included`);
           check(/does not disarm it/.test(s.help), `${where}: the help says a crash does not disarm`);
         } else if (language === 'de') {
           check(/nicht zu 100\s?% der Mod/.test(s.text) && /Crash/.test(s.text) && /nie/.test(s.text), `${where}: Hinweis auf Deutsch (${s.text})`);
-          check(/Nicht dabei:.*GPS-Rescue.*Höhe halten.*3D-Modus.*Turtle-Modus.*Wasser.*Spinnweben.*Blöcke durchbrechen.*Verschleiß/.test(s.text), `${where}: Liste „Nicht dabei“`);
+          check(/Nicht dabei:.*GPS-Rescue.*Höhe und Position halten.*3D-Modus.*Turtle-Modus.*Wasser.*Spinnweben.*Blöcke durchbrechen.*Verschleiß.*Flughilfen von Add-ons.*Entitys/.test(s.text), `${where}: Liste „Nicht dabei“`);
           check(/entschärft ein Crash sie nicht/.test(s.help), `${where}: die Hilfe sagt, dass ein Crash nicht entschärft`);
         } else {
           check(s.banner, `${where}: the banner of the AI translation sits in the note`);

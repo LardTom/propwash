@@ -8,6 +8,7 @@ export class Telemetry {
   time = 0.0;
   substeps = 0;
   armBlockers = 0;
+  autoArmPending = false;
   failsafeStage = 0;
   faults = 0;
   crashCount = 0;
@@ -34,7 +35,8 @@ export class Telemetry {
   motorTempC = new Float64Array(4);
   escTempC = new Float64Array(4);
   motorPowerLimit = Float64Array.of(1.0, 1.0, 1.0, 1.0);
-  motorDerating = false;
+  motorHot = false;
+  escDerating = false;
   escBurned = false;
   totalCurrentA = 0.0;
   packVoltage = 0.0;
@@ -98,6 +100,7 @@ export class Telemetry {
     dst.time = this.time;
     dst.substeps = this.substeps;
     dst.armBlockers = this.armBlockers;
+    dst.autoArmPending = this.autoArmPending;
     dst.failsafeStage = this.failsafeStage;
     dst.faults = this.faults;
     dst.crashCount = this.crashCount;
@@ -124,7 +127,8 @@ export class Telemetry {
     dst.motorTempC.set(this.motorTempC.subarray(0, 4));
     dst.escTempC.set(this.escTempC.subarray(0, 4));
     dst.motorPowerLimit.set(this.motorPowerLimit.subarray(0, 4));
-    dst.motorDerating = this.motorDerating;
+    dst.motorHot = this.motorHot;
+    dst.escDerating = this.escDerating;
     dst.escBurned = this.escBurned;
     dst.totalCurrentA = this.totalCurrentA;
     dst.packVoltage = this.packVoltage;

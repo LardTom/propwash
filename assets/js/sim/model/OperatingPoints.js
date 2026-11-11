@@ -1,8 +1,12 @@
 // Port of de.lardtom.propwash.sim.OperatingPoints (1:1). OperatingPoints.Point is exported and attached as a static.
+// StrictMath.exp/pow are the fdlibm port (StrictMath.js); StrictMath.sin/cos of the level-flight points (top speed and
+// cruise of the analysis, not used in flight) stay Math.sin/cos, which may differ in the last bit.
 import { CellCurve } from './CellCurve.js?v=0c22cd1a';
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
-import { PowerSystem } from './PowerSystem.js?v=0990bf11';
+import { PowerSystem } from './PowerSystem.js?v=a626586a';
 import { RotorAero } from './RotorAero.js?v=22dc31b6';
+import { StrictMath } from './StrictMath.js?v=e765e983';
+import { Thermal } from './Thermal.js?v=24b8e070';
 
 // java.lang.Math.toRadians multiplies by this constant.
 const DEGREES_TO_RADIANS = 0.017453292519943295;
@@ -39,7 +43,7 @@ export class OperatingPoints {
 
   static lowSoc(soc) {
     const x = Math.min(1.0, Math.max(0.0, ModelConstants.LOW_SOC_KNEE - soc) / ModelConstants.LOW_SOC_KNEE);
-    return Math.pow(x, ModelConstants.LOW_SOC_EXPONENT);
+    return StrictMath.pow(x, ModelConstants.LOW_SOC_EXPONENT);
   }
 
   static rateFactor(p, batteryCurrent) {
@@ -339,10 +343,10 @@ export class OperatingPoints {
         OperatingPoints.steadyMotor(p, p.hoverOmega, current, soc, true, 0.0, true, pt);
       }
       const seconds = p.capacityMah / OperatingPoints.HEAT_SEGMENTS * 3.6 / Math.max(pt.batteryCurrent, 1e-3);
-      const power = pt.phaseCurrent * pt.phaseCurrent * p.motorResistance + p.kt * p.idleCurrent * pt.omega;
-      const g = (p.motorCoolingBase + p.motorCoolingPerOmega * pt.omega) * p.motorCoolingScale;
+      const power = Thermal.motorLoss(p, pt.phaseCurrent, pt.omega, p.motorResistance);
+      const g = Thermal.motorCooling(p, pt.omega);
       const inf = ambient + power / g;
-      temp = inf + (temp - inf) * Math.exp(-seconds * g / p.motorHeatCapacity);
+      temp = inf + (temp - inf) * StrictMath.exp(-seconds * g / p.motorHeatCapacity);
       if (!Number.isFinite(temp)) {
         return NaN;
       }

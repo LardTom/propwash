@@ -428,8 +428,24 @@ switches say; without a code the simulator flies the default preset (`justmorepa
   relax, anti-gravity, TPA, airmode, Acro/Angle/Horizon, filters, gyro model), arming checks, ground and hull contact,
   crashes and prop strikes (crash disarm is off in the simulator). `AirframeSpec.fromBuild(build, catalog)` derives the airframe from the
   catalog parts (ParamDerivation, reusing `analysis.js`), `FlightControllerConfig.fromTune(tune, airframe)` the flight
-  controller from the effective tune (`tuning.js`). Left out: GPS/altitude hold and rescue, 3D mode, turtle mode, water,
-  cobwebs, breaking blocks, part wear, add-on flight assists.
+  controller from the effective tune (`tuning.js`). Left out: GPS rescue, altitude and position hold (with the compass
+  error and the takeover after a rescue), 3D mode, turtle mode, water, cobwebs, breaking blocks, part wear, add-on
+  flight assists, axes and collision flags, entities as obstacles.
+- **Flight model 0.6.0:** `assets/js/sim/model/` follows Propwash 0.6.0: crashes that do not disarm (props touching
+  ground or walls lose thrust, the flight controller stays calm when the drone lies or was knocked over at idle), the
+  support grid under the drone (tipping over edges, accessory stands), surfaces, ESC heat with its power limit and hot
+  motors losing torque. `model/StrictMath.js` ports fdlibm so the model computes exp, atan2, acos, asin and pow like
+  the JVM. The first port followed Propwash `main` (the 0.5.2 line); the classes of 0.6.0 that came after
+  (`GroundSupport`, `SurfaceResponse`) are ported too.
+- **Drone editor:** `AirframeSpec.of(build, catalog, creative)` derives an edited drone like
+  `ParamDerivation#compute(source, flight, inertia)`: `creative = { build, catalog, inertia, hash? }` with the flight
+  build, a catalog holding the edited parts and the inertia override `[roll, pitch, yaw]` in kg·m² (NaN for automatic).
+- **Checks:** `node tools/test-sim-model.mjs` compares the model with the classes of the release jar: the mod's
+  AirframeGoldenTest, every AirframeSpec field and 13 flights frame by frame, bit for bit (vectors in
+  `tools/fixtures/sim/`, made by `node tools/build-sim-vectors.mjs --jar <release jar> --propwash <checkout>` with JDK
+  25, without Minecraft). The configurator's `analysis.js` keeps JavaScript's `Math.pow`, which is 1 ulp off at three
+  inputs (`kTorque` of 76 and 152 mm props, the cooling scale of two motors); the test computes those with the jar's
+  pow and reports the difference.
 - **World:** `world.js` turns the map into 0.5 m cells (every face marks the cell behind it); the ground continues at
   the map's floor level all around. `flight.js` runs the mod's pilot loop (environment probes, wind of a clear overworld
   day, frame slicing at speed, block clipping like `rescue.VoxelFlight`, `afterMove`), `eye.js` the FPV eye guard

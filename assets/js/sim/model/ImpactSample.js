@@ -4,7 +4,7 @@
 // int struck, float strikeSpin): the components are private fields (here `_name`, since a JS field would hide the
 // accessor) read through the accessors `speed()`, `tangential()`, … The float components are rounded with
 // Math.fround like Java's float storage; float arithmetic in sanitized() rounds every operation to float.
-import { AirframeSpec } from './AirframeSpec.js?v=0d4a93ac';
+import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
 
 const f32 = Math.fround;
 

@@ -1,5 +1,6 @@
 // Port of de.lardtom.propwash.sim.PropWash (1:1).
-import { AirframeSpec } from './AirframeSpec.js?v=0d4a93ac';
+import { StrictMath } from './StrictMath.js?v=e765e983';
+import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
 import { SimMath } from './SimMath.js?v=44da8aea';
 
@@ -42,7 +43,7 @@ export class PropWash {
     const a = (sink - 1.0) / ModelConstants.WASH_SINK_WIDTH;
     const b = cross / ModelConstants.WASH_CROSS_WIDTH;
     const load = previousThrust > 0.0 ? Math.min(1.0, previousThrust / (0.25 * hoverThrust)) : 0.0;
-    return Math.exp(-(a * a) - b * b) * load;
+    return StrictMath.exp(-(a * a) - b * b) * load;
   }
 
   factor(i, vrsWeight, wakeWeight, scale, loss, noiseAmp) {

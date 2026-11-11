@@ -1,6 +1,7 @@
 // Port of de.lardtom.propwash.sim.RigidBody (1:1).
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
 import { SimMath } from './SimMath.js?v=44da8aea';
+import { StrictMath } from './StrictMath.js?v=e765e983';
 
 export class RigidBody {
   static MIDPOINT_ITERATIONS = 2;
@@ -216,11 +217,11 @@ export class RigidBody {
   }
 
   tiltRad() {
-    return Math.acos(SimMath.clamp(this.r11, -1.0, 1.0));
+    return StrictMath.acos(SimMath.clamp(this.r11, -1.0, 1.0));
   }
 
   headingRad() {
-    return Math.atan2(this.r02, this.r22);
+    return StrictMath.atan2(this.r02, this.r22);
   }
 
   kineticEnergy() {
