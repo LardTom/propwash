@@ -443,6 +443,23 @@ switches say; without a code the simulator flies the default preset (`justmorepa
   inversion, calibration, throttle mode and switches; profiles stay in the browser (`localStorage`,
   `propwash-sim-input`). Sound switch and volume slider in the bar (`propwash-sim-sound`, `propwash-sim-volume`). After a reset (`Backspace`) or flip the drone arms again as soon as the throttle is low while
   the arm switch stays on. `window.propwashSim` exposes the running sim for debugging in the console.
+- **Note about the physics:** the page opens with a note (`[data-about]` in `sim/index.html`, bottom centre) that the
+  physics are not 100 % the mod's, above all crashes (a crash never disarms here), and what is not included (the
+  left-out list above in player words). It closes with *Got it*, Escape or the first arming and opens again with
+  **Physics** in the bar; the help says the same. Note and help link the legal notice and the privacy policy, because
+  the page has no footer. Keep the list in the note in step with the flight model.
+- **Languages:** the page is an app page (`APP_PAGES` of `tools/build-nav.mjs`: head block, no navigation) and is
+  translated like the other pages for players (`tools/i18n/pages.mjs`, `app: true`): the banner of the AI translation
+  goes into the note at the marker `<!-- i18n-banner -->`, the scripts' texts are `['English', 'Deutsch']` pairs in
+  `assets/js/sim/i18n.js` (source `js-arrays`), and on a translated page EN/DE open the English/German page with the
+  same drone. The configurator's **Fly** link stays in the language tree.
+
+```sh
+node tools/test-sim-page.mjs   # note about the physics, help, legal links, bar at 390 px (headless Chrome, en/de and
+                               # every generated language)
+node tools/test-sim-fly.mjs    # airframes of every preset and game vector, the Fly link from the configurator, arming
+                               # and climbing in the simulator (headless Chrome; --no-browser for the node part)
+```
 
 ## Documentation (`docs/`)
 
