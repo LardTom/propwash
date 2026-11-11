@@ -192,20 +192,30 @@ export function createCatalog(json) {
     /** Stored tune defaults of a preset (flight keys only), or null. */
     presetTuneDefaults: (presetId) => (json.tune.defaults[presetId] ? { ...json.tune.defaults[presetId] } : null),
 
+    // creative (optional, last): the values of a creative drone ({base, values}, creative.js); they count only with the
+    // creative flight controller, like in the game.
     /** Compatibility check (rules.js). */
     check: (build) => checkBuild(build, catalog),
     /** Flight analysis like the mod's workbench (analysis.js); null if a part is unknown. */
-    analyze: (build) => analyzeBuild(build, catalog),
+    analyze: (build, creative = null) => analyzeBuild(build, catalog, creative),
     /** FPV camera like the web export's camera_view, with the rig for the camera preview (fpv.js); null if unknown. */
-    cameraView: (build) => cameraViewOf(build, catalog),
+    cameraView: (build, creative = null) => cameraViewOf(build, catalog, creative),
     /** Full default flight tune of a build (tuning.js); throws for unknown parts. */
-    defaultTune: (build) => defaultTune(build, catalog),
+    defaultTune: (build, creative = null) => defaultTune(build, catalog, creative),
     /** Every flight value the build flies with for a stored tune. */
-    effectiveTune: (stored, build) => effectiveTune(stored, build, catalog),
+    effectiveTune: (stored, build, creative = null) => effectiveTune(stored, build, catalog, creative),
     /** Stored form of a tune: only values that differ from the build's defaults. */
-    normalizeTune: (tune, build) => normalizeTune(tune, build, catalog),
+    normalizeTune: (tune, build, creative = null) => normalizeTune(tune, build, catalog, creative),
     /** Applies edited values like the mod's configurator and returns the new stored tune. */
-    applyTuneEdit: (stored, edited, build) => applyTuneEdit(stored, edited, build, catalog),
+    applyTuneEdit: (stored, edited, build, creative = null) => applyTuneEdit(stored, edited, build, catalog, creative),
+    /**
+     * This catalog with some parts replaced by entries of the same id (the detached parts of a creative drone's flight
+     * build, creative.js): a new catalog with the same interface.
+     */
+    withParts(list) {
+      const replaced = new Map(list.map((p) => [p.id, p]));
+      return createCatalog({ ...json, parts: json.parts.map((p) => replaced.get(p.id) || p) });
+    },
     /** What the share codes of this catalog know: the parts tables, the directory, versions and the part lookup. */
     shareTables() {
       if (!shareTables) {
