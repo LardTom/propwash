@@ -9,7 +9,7 @@ import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=1ff606
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
 import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=f3f32120';
 import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
-import { batteryFit, fitsFrame } from './rules.js?v=6634f777';
+import { batteryFit, fitsFrame, stackFits } from './rules.js?v=6634f777';
 import { assemble, PROP_SLOTS } from './assembly.js?v=4c00d7c2';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=ed26e8eb';
 import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=49f45987';
@@ -237,7 +237,7 @@ function computeRoles() {
       case 'frame': roles = new Set([p.data.role]); break;
       case 'motor': roles = rolesWhere((f) => f.data.motor_mounts.includes(p.data.mount)); break;
       case 'prop': roles = rolesWhere((f) => p.data.diameter_mm >= f.data.props_mm[0] && p.data.diameter_mm <= f.data.props_mm[1]); break;
-      case 'stack': roles = rolesWhere((f) => f.data.stack_mounts.includes(p.data.mount)); break;
+      case 'stack': roles = rolesWhere((f) => stackFits(p, f)); break;
       case 'battery': roles = rolesWhere((f) => ['ok', 'weak'].includes(batteryFit(f, p))); break;
       case 'video': roles = new Set([p.data.link]); break;
       case 'accessory': roles = new Set([p.data.slot]); break;

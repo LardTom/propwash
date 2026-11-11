@@ -1,5 +1,6 @@
 // Build compatibility check, a port of Propwash 0.4.0 BuildAccess#check (DroneBuild problems/warnings,
-// BatteryFit), in the form of the web export's rules.json.
+// BatteryFit), in the form of the web export's rules.json. The creative flight controller fits every frame (Propwash
+// 0.6.0 StackType#fits); its other rules are those of any stack (1–12S, 60 A).
 //
 // Result: { unknownParts, problems, warnings } with issue keys in Propwash's order.
 // Unknown ids (not in the catalog, or a part of another category in that field) stop the check with the
@@ -16,6 +17,8 @@ export const MOTOR_COUNT = 4;
 export const ESC_MARGIN = 1.15;
 export const BATTERY_MARGIN = 1.3;
 export const UNIVERSAL_PROP_MOUNT = 'propwash:universal';
+/** The creative flight controller (StackType.CREATIVE_FC): fits every frame, 1–12S; its build is a creative drone. */
+export const CREATIVE_FC = 'propwash:creative_fc';
 
 const FIELDS = ['frame', 'stack', 'motor', 'prop', 'video', 'battery'];
 
@@ -72,6 +75,11 @@ export function fitsFrame(accessory, frameId) {
   return !frames || !frames.length || frames.includes(frameId);
 }
 
+/** StackType#fits: the creative flight controller fits every frame, any other stack the frame's stack mounts. */
+export function stackFits(stack, frame) {
+  return stack.id === CREATIVE_FC || frame.data.stack_mounts.includes(stack.data.mount);
+}
+
 export function propFits(motorPropMount, propMount) {
   return motorPropMount === UNIVERSAL_PROP_MOUNT || propMount === UNIVERSAL_PROP_MOUNT || motorPropMount === propMount;
 }
@@ -93,7 +101,7 @@ export function check(build, catalog) {
   if (prop.data.diameter_mm > f.props_mm[1]) problems.push('prop_too_large');
   if (prop.data.diameter_mm < f.props_mm[0]) problems.push('prop_too_small');
   if (!propFits(motor.data.prop_mount, prop.data.mount)) problems.push('prop_mount');
-  if (!f.stack_mounts.includes(stack.data.mount)) problems.push('stack_mount');
+  if (!stackFits(stack, frame)) problems.push('stack_mount');
   const fit = batteryFit(frame, battery);
   if (fit !== 'ok' && fit !== 'weak') problems.push('battery_frame');
   for (const slot of Object.keys(parts.accessories)) {
