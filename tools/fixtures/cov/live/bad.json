@@ -347,6 +347,364 @@
   "https://modrinth.com/mod/propwash-just-more-parts": {
    "status": 404,
    "text": "<html><head><title>Propwash: Just More Parts</title></head></html>"
+  },
+  "https://api.modrinth.com/v2/project/propwash-camera-drones": {
+   "status": 200,
+   "json": {
+    "id": "pwCam2Cc",
+    "slug": "propwash-camera-drones",
+    "title": "Propwash: Camera Drones",
+    "status": "approved",
+    "project_type": "mod"
+   }
+  },
+  "https://api.modrinth.com/v2/project/propwash-camera-drones/version": {
+   "status": 200,
+   "json": [
+    {
+     "id": "pwCam2Cc",
+     "project_id": "pwCam2Cc",
+     "version_number": "1.0.0+fabric",
+     "name": "1.0.0+fabric",
+     "status": "listed",
+     "version_type": "release",
+     "date_published": "2026-11-02T11:00:00.000000Z",
+     "loaders": [
+      "fabric"
+     ],
+     "game_versions": [
+      "26.3"
+     ],
+     "dependencies": [
+      {
+       "project_id": "pwFpv0Aa",
+       "version_id": null,
+       "dependency_type": "required"
+      },
+      {
+       "project_id": "P7dR8mSH",
+       "version_id": null,
+       "dependency_type": "required"
+      }
+     ],
+     "files": [
+      {
+       "url": "https://cdn.modrinth.com/data/pwCam2Cc/versions/1.0.0+fabric/file.jar",
+       "primary": true,
+       "filename": "file.jar"
+      }
+     ]
+    },
+    {
+     "id": "pwCam2Cc",
+     "project_id": "pwCam2Cc",
+     "version_number": "1.0.0+neoforge",
+     "name": "1.0.0+neoforge",
+     "status": "listed",
+     "version_type": "release",
+     "date_published": "2026-11-02T11:01:00.000000Z",
+     "loaders": [
+      "neoforge"
+     ],
+     "game_versions": [
+      "26.3"
+     ],
+     "dependencies": [
+      {
+       "project_id": "pwFpv0Aa",
+       "version_id": null,
+       "dependency_type": "required"
+      }
+     ],
+     "files": [
+      {
+       "url": "https://cdn.modrinth.com/data/pwCam2Cc/versions/1.0.0+neoforge/file.jar",
+       "primary": true,
+       "filename": "file.jar"
+      }
+     ]
+    },
+    {
+     "id": "pwCam2Cc",
+     "project_id": "pwCam2Cc",
+     "version_number": "1.1.1+fabric",
+     "name": "1.1.1+fabric",
+     "status": "listed",
+     "version_type": "release",
+     "date_published": "2026-10-12T11:00:00.000000Z",
+     "loaders": [
+      "fabric"
+     ],
+     "game_versions": [
+      "26.3"
+     ],
+     "dependencies": [
+      {
+       "project_id": "pwFpv0Aa",
+       "version_id": null,
+       "dependency_type": "required"
+      }
+     ],
+     "files": [
+      {
+       "url": "https://cdn.modrinth.com/data/pwCam2Cc/versions/1.1.1+fabric/file.jar",
+       "primary": true,
+       "filename": "file.jar"
+      }
+     ]
+    }
+   ]
+  },
+  "https://api.curseforge.com/v1/mods/search?gameId=432&classId=6&slug=propwash-camera-drones": {
+   "status": 200,
+   "json": {
+    "data": [
+     {
+      "id": 1796829,
+      "slug": "propwash-camera-drones",
+      "name": "Propwash: Camera Drones",
+      "links": {
+       "websiteUrl": "https://www.curseforge.com/minecraft/mc-mods/propwash-camera-drones"
+      }
+     }
+    ]
+   }
+  },
+  "https://api.curseforge.com/v1/mods/1796829/files?pageSize=50": {
+   "status": 200,
+   "json": {
+    "data": [
+     {
+      "id": 7300002,
+      "displayName": "camdrones-fabric-26.3-1.0.0.jar",
+      "fileName": "camdrones-fabric-26.3-1.0.0.jar",
+      "fileDate": "2026-11-02T11:00:00Z",
+      "fileStatus": 4,
+      "isAvailable": true,
+      "releaseType": 1,
+      "gameVersions": [
+       "26.3",
+       "Fabric"
+      ],
+      "dependencies": [
+       {
+        "modId": 1711041,
+        "relationType": 3
+       },
+       {
+        "modId": 306612,
+        "relationType": 3
+       }
+      ]
+     },
+     {
+      "id": 7300003,
+      "displayName": "camdrones-neoforge-26.3-1.0.0.jar",
+      "fileName": "camdrones-neoforge-26.3-1.0.0.jar",
+      "fileDate": "2026-11-02T11:01:00Z",
+      "fileStatus": 4,
+      "isAvailable": true,
+      "releaseType": 1,
+      "gameVersions": [
+       "26.3",
+       "NeoForge"
+      ],
+      "dependencies": [
+       {
+        "modId": 1711041,
+        "relationType": 3
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "https://www.curseforge.com/minecraft/mc-mods/propwash-camera-drones": {
+   "status": 200,
+   "text": "<html><head><title>Propwash: Camera Drones</title></head></html>"
+  },
+  "https://modrinth.com/mod/propwash-camera-drones": {
+   "status": 200,
+   "text": "<html><head><title>Propwash: Camera Drones</title></head></html>"
+  },
+  "https://api.modrinth.com/v2/project/propwash-mob-defense": {
+   "status": 200,
+   "json": {
+    "id": "pwMob3Dd",
+    "slug": "propwash-mob-defense",
+    "title": "Propwash: Mob Defense",
+    "status": "approved",
+    "project_type": "mod"
+   }
+  },
+  "https://api.modrinth.com/v2/project/propwash-mob-defense/version": {
+   "status": 200,
+   "json": [
+    {
+     "id": "pwMob3Dd",
+     "project_id": "pwMob3Dd",
+     "version_number": "1.0.0+fabric",
+     "name": "1.0.0+fabric",
+     "status": "listed",
+     "version_type": "release",
+     "date_published": "2026-11-02T11:00:00.000000Z",
+     "loaders": [
+      "fabric"
+     ],
+     "game_versions": [
+      "26.3"
+     ],
+     "dependencies": [
+      {
+       "project_id": "pwFpv0Aa",
+       "version_id": null,
+       "dependency_type": "required"
+      },
+      {
+       "project_id": "P7dR8mSH",
+       "version_id": null,
+       "dependency_type": "required"
+      }
+     ],
+     "files": [
+      {
+       "url": "https://cdn.modrinth.com/data/pwMob3Dd/versions/1.0.0+fabric/file.jar",
+       "primary": true,
+       "filename": "file.jar"
+      }
+     ]
+    },
+    {
+     "id": "pwMob3Dd",
+     "project_id": "pwMob3Dd",
+     "version_number": "1.0.0+neoforge",
+     "name": "1.0.0+neoforge",
+     "status": "listed",
+     "version_type": "release",
+     "date_published": "2026-11-02T11:01:00.000000Z",
+     "loaders": [
+      "neoforge"
+     ],
+     "game_versions": [
+      "26.3"
+     ],
+     "dependencies": [
+      {
+       "project_id": "pwFpv0Aa",
+       "version_id": null,
+       "dependency_type": "required"
+      }
+     ],
+     "files": [
+      {
+       "url": "https://cdn.modrinth.com/data/pwMob3Dd/versions/1.0.0+neoforge/file.jar",
+       "primary": true,
+       "filename": "file.jar"
+      }
+     ]
+    },
+    {
+     "id": "pwMob3Dd",
+     "project_id": "pwMob3Dd",
+     "version_number": "1.1.1+fabric",
+     "name": "1.1.1+fabric",
+     "status": "listed",
+     "version_type": "release",
+     "date_published": "2026-10-12T11:00:00.000000Z",
+     "loaders": [
+      "fabric"
+     ],
+     "game_versions": [
+      "26.3"
+     ],
+     "dependencies": [
+      {
+       "project_id": "pwFpv0Aa",
+       "version_id": null,
+       "dependency_type": "required"
+      }
+     ],
+     "files": [
+      {
+       "url": "https://cdn.modrinth.com/data/pwMob3Dd/versions/1.1.1+fabric/file.jar",
+       "primary": true,
+       "filename": "file.jar"
+      }
+     ]
+    }
+   ]
+  },
+  "https://api.curseforge.com/v1/mods/search?gameId=432&classId=6&slug=propwash-mob-defense": {
+   "status": 200,
+   "json": {
+    "data": [
+     {
+      "id": 1796706,
+      "slug": "propwash-mob-defense",
+      "name": "Propwash: Mob Defense",
+      "links": {
+       "websiteUrl": "https://www.curseforge.com/minecraft/mc-mods/propwash-mob-defense"
+      }
+     }
+    ]
+   }
+  },
+  "https://api.curseforge.com/v1/mods/1796706/files?pageSize=50": {
+   "status": 200,
+   "json": {
+    "data": [
+     {
+      "id": 7400002,
+      "displayName": "mobdefense-fabric-26.3-1.0.0.jar",
+      "fileName": "mobdefense-fabric-26.3-1.0.0.jar",
+      "fileDate": "2026-11-02T11:00:00Z",
+      "fileStatus": 4,
+      "isAvailable": true,
+      "releaseType": 1,
+      "gameVersions": [
+       "26.3",
+       "Fabric"
+      ],
+      "dependencies": [
+       {
+        "modId": 1711041,
+        "relationType": 3
+       },
+       {
+        "modId": 306612,
+        "relationType": 3
+       }
+      ]
+     },
+     {
+      "id": 7400003,
+      "displayName": "mobdefense-neoforge-26.3-1.0.0.jar",
+      "fileName": "mobdefense-neoforge-26.3-1.0.0.jar",
+      "fileDate": "2026-11-02T11:01:00Z",
+      "fileStatus": 4,
+      "isAvailable": true,
+      "releaseType": 1,
+      "gameVersions": [
+       "26.3",
+       "NeoForge"
+      ],
+      "dependencies": [
+       {
+        "modId": 1711041,
+        "relationType": 3
+       }
+      ]
+     }
+    ]
+   }
+  },
+  "https://www.curseforge.com/minecraft/mc-mods/propwash-mob-defense": {
+   "status": 200,
+   "text": "<html><head><title>Propwash: Mob Defense</title></head></html>"
+  },
+  "https://modrinth.com/mod/propwash-mob-defense": {
+   "status": 200,
+   "text": "<html><head><title>Propwash: Mob Defense</title></head></html>"
   }
  }
 }
