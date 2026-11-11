@@ -2869,6 +2869,7 @@ html.lightbox-open {
 .community{margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border, #383838)}
 .community p{margin:.4rem 0 0;color:#bdbdbd;max-width:42rem}
 .community .hero__cta{margin-top:1rem}
+.community .hero__cta + p,.community .hero__cta + p + p{margin-top:1.4rem}
 .community .btn svg{margin-right:.45rem;flex:none}
 .site-footer__links{margin:.5rem 0 0;font-size:.875rem}
 .site-footer__links a{color:inherit;text-decoration:underline;text-underline-offset:3px}
