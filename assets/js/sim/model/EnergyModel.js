@@ -6,12 +6,16 @@
 //   video.data.link === 'digital', massGrams() -> video.basics.mass_g (as in analysis.js).
 // - Nested types: Profile (enum), Mix / Flight / Heat (records: accessor methods cruise(), minutes(), ...), Points
 //   (class) are exported and attached as statics.
-import { AirframeSpec } from './AirframeSpec.js?v=0d4a93ac';
+// - StrictMath.exp/pow are the fdlibm port (StrictMath.js); StrictMath.log/sin of the prop tables and the cruise point
+//   (analysis only, not used in flight) stay Math.log/sin, which may differ in the last bit.
+import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
 import { javaEnum } from './Enum.js?v=d8aa4520';
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
-import { OperatingPoints } from './OperatingPoints.js?v=0990bf11';
+import { OperatingPoints } from './OperatingPoints.js?v=a626586a';
 import { RotorAero } from './RotorAero.js?v=22dc31b6';
 import { SimMath } from './SimMath.js?v=44da8aea';
+import { StrictMath } from './StrictMath.js?v=e765e983';
+import { Thermal } from './Thermal.js?v=24b8e070';
 
 export const Profile = javaEnum(['HOVER', 'CRUISE', 'MIXED', 'AGGRESSIVE']);
 
@@ -47,16 +51,17 @@ export class Flight {
 }
 Flight.NONE = new Flight(NaN, NaN, NaN, NaN);
 
-/** record Heat(double minute, double sustained) */
+/** record Heat(double minute, double sustained, double escSustained) */
 export class Heat {
-  constructor(minute, sustained) {
+  constructor(minute, sustained, escSustained) {
     this.minute = () => minute;
     this.sustained = () => sustained;
+    this.escSustained = () => escSustained;
     Object.freeze(this);
   }
 
   toString() {
-    return `Heat[minute=${this.minute()}, sustained=${this.sustained()}]`;
+    return `Heat[minute=${this.minute()}, sustained=${this.sustained()}, escSustained=${this.escSustained()}]`;
   }
 }
 
@@ -85,8 +90,6 @@ export class EnergyModel {
   static BLADE_INTERFERENCE_MM = 45.0;
   static BLADE_INTERFERENCE_FADE_MM = 10.0;
   static WHOOP_SMALL_PROP_M = 0.035;
-  static AIRFLOW_COOLING = 0.6;
-  static AIRFLOW_REFERENCE_MS = 10.0;
 
   static Profile = Profile;
   static Mix = Mix;
@@ -239,7 +242,7 @@ export class EnergyModel {
   }
 
   static driveLossAtHover(motorGrams, blades, diameterMm, shaftPowerHover) {
-    return EnergyModel.DRIVE_LOSS_W * Math.pow(Math.max(motorGrams, 0.1), EnergyModel.DRIVE_LOSS_MASS_EXP)
+    return EnergyModel.DRIVE_LOSS_W * StrictMath.pow(Math.max(motorGrams, 0.1), EnergyModel.DRIVE_LOSS_MASS_EXP)
       + EnergyModel.bladeLoss(blades, diameterMm) * shaftPowerHover;
   }
 
@@ -248,7 +251,7 @@ export class EnergyModel {
     if (!(w > 0.0)) {
       return 0.0;
     }
-    return p.driveLossHover * Math.pow(w / p.hoverOmega, EnergyModel.DRIVE_LOSS_SPEED_EXP);
+    return p.driveLossHover * StrictMath.pow(w / p.hoverOmega, EnergyModel.DRIVE_LOSS_SPEED_EXP);
   }
 
   static extraPower(p, omega, active) {
@@ -285,7 +288,7 @@ export class EnergyModel {
   }
 
   static motorHeat(p, pt) {
-    return pt.phaseCurrent * pt.phaseCurrent * p.motorResistance + p.kt * p.idleCurrent * pt.omega;
+    return Thermal.motorLoss(p, pt.phaseCurrent, pt.omega, p.motorResistance);
   }
 
   static fly(pts, profile, ambient) {
@@ -310,7 +313,7 @@ export class EnergyModel {
         EnergyModel.reach(EnergyModel.loadedVoltage(p, start, pts.motion), EnergyModel.loadedVoltage(p, end, pts.motion), cutoff));
       const dt = part * step * 3.6 / current;
       const inf = ambient + pts.heat / cooling;
-      temp = inf + (temp - inf) * Math.exp(-dt * cooling / p.motorHeatCapacity);
+      temp = inf + (temp - inf) * StrictMath.exp(-dt * cooling / p.motorHeatCapacity);
       seconds += dt;
       used += part * step;
       landed = EnergyModel.loadedVoltage(p, 1.0 - used / capacity, pts.motion);
@@ -342,6 +345,9 @@ export class EnergyModel {
     const capacity = p.capacityMah;
     let temp = ambient;
     let max = ambient;
+    let esc = ambient;
+    let escMax = ambient;
+    const escC = Thermal.escHeatCapacity(p);
     let minute = NaN;
     let seconds = 0.0;
     const step = capacity / EnergyModel.HEAT_STEPS;
@@ -351,20 +357,24 @@ export class EnergyModel {
       const current = Math.max(EnergyModel.packCurrent(p, pt), 1e-3);
       const dt = step * 3.6 / current;
       const power = EnergyModel.motorHeat(p, pt);
-      const g = (p.motorCoolingBase + p.motorCoolingPerOmega * pt.omega) * p.motorCoolingScale;
+      const g = Thermal.motorCooling(p, pt.omega);
       const inf = ambient + power / g;
       if (Number.isNaN(minute) && seconds + dt >= windowSeconds) {
-        const partial = inf + (temp - inf) * Math.exp(-(windowSeconds - seconds) * g / p.motorHeatCapacity);
+        const partial = inf + (temp - inf) * StrictMath.exp(-(windowSeconds - seconds) * g / p.motorHeatCapacity);
         minute = Math.max(max, partial);
       }
-      temp = inf + (temp - inf) * Math.exp(-dt * g / p.motorHeatCapacity);
-      if (!Number.isFinite(temp)) {
-        return new Heat(NaN, NaN);
+      temp = inf + (temp - inf) * StrictMath.exp(-dt * g / p.motorHeatCapacity);
+      const ge = Thermal.escCooling(p, pt.omega);
+      const infE = ambient + Thermal.escLoss(p, pt.phaseCurrent, pt.busVoltage) / ge;
+      esc = infE + (esc - infE) * StrictMath.exp(-dt * ge / escC);
+      if (!Number.isFinite(temp + esc)) {
+        return new Heat(NaN, NaN, NaN);
       }
       max = Math.max(max, temp);
+      escMax = Math.max(escMax, esc);
       seconds += dt;
     }
-    return new Heat(Number.isNaN(minute) ? max : minute, max);
+    return new Heat(Number.isNaN(minute) ? max : minute, max, escMax);
   }
 }
 
@@ -379,9 +389,11 @@ export class Points {
   motion = 0.0;
   calm = 0.0;
   heat = 0.0;
+  escHeat = 0.0;
   idlePack = NaN;
   idleMotion = 0.0;
   idleHeat = 0.0;
+  idleEscHeat = 0.0;
 
   constructor(p, topSpeed, topTilt) {
     this.p = p;
@@ -463,6 +475,7 @@ export class Points {
     this.pack += weight * packCurrent;
     this.motion += weight * this.scratch.batteryCurrent;
     this.heat += weight * EnergyModel.motorHeat(this.p, this.scratch);
+    this.escHeat += weight * Thermal.escLoss(this.p, this.scratch.phaseCurrent, this.scratch.busVoltage);
   }
 
   evaluate(profile, soc) {
@@ -474,17 +487,20 @@ export class Points {
     const motion = this.motion;
     const calm = this.calm;
     const heat = this.heat;
+    const escHeat = this.escHeat;
     this.evaluate(Profile.values()[profile.ordinal - 1], soc);
     this.pack = Math.max(pack, this.pack);
     this.motion = Math.max(motion, this.motion);
     this.calm = Math.max(calm, this.calm);
     this.heat = Math.max(heat, this.heat);
+    this.escHeat = Math.max(escHeat, this.escHeat);
   }
 
   single(profile, soc) {
     this.pack = 0.0;
     this.motion = 0.0;
     this.heat = 0.0;
+    this.escHeat = 0.0;
     switch (profile) {
       case Profile.HOVER: {
         this.add(1.0, this.hover(soc));
@@ -510,10 +526,12 @@ export class Points {
             this.idlePack = this.idle(EnergyModel.IDLE_SOC);
             this.idleMotion = this.scratch.batteryCurrent;
             this.idleHeat = EnergyModel.motorHeat(this.p, this.scratch);
+            this.idleEscHeat = Thermal.escLoss(this.p, this.scratch.phaseCurrent, this.scratch.busVoltage);
           }
           this.pack += m.idle() * this.idlePack;
           this.motion += m.idle() * this.idleMotion;
           this.heat += m.idle() * this.idleHeat;
+          this.escHeat += m.idle() * this.idleEscHeat;
         }
       }
     }
@@ -538,8 +556,7 @@ export class Points {
         throw new Error(`Unknown Profile ${profile}`);
     }
     const speed = profile === Profile.HOVER ? 0.0 : this.cruiseSpeed;
-    const airflow = 1.0 + EnergyModel.AIRFLOW_COOLING * Math.sqrt(speed / EnergyModel.AIRFLOW_REFERENCE_MS);
-    return (this.p.motorCoolingBase + this.p.motorCoolingPerOmega * omega) * this.p.motorCoolingScale * airflow;
+    return Thermal.motorCooling(this.p, omega) * Thermal.airflow(speed);
   }
 }
 EnergyModel.Points = Points;

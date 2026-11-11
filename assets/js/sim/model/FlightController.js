@@ -1,17 +1,17 @@
 import { SimMath } from './SimMath.js?v=44da8aea';
-import { AirframeSpec } from './AirframeSpec.js?v=0d4a93ac';
+import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
 import { StabMode } from './StabMode.js?v=ef37a80a';
 import { TpaMode } from './TpaMode.js?v=9b682a25';
 import { ItermRelaxMode } from './ItermRelaxMode.js?v=2be3e748';
 import { FcAxes } from './FcAxes.js?v=3da14453';
 import { Pt1 } from './Pt1.js?v=afe0b0dc';
 import { RcProcessor } from './RcProcessor.js?v=6af61b2c';
-import { AttitudeController } from './AttitudeController.js?v=76cd8769';
-import { AxisPidController } from './AxisPidController.js?v=23574e9c';
-import { Mixer } from './Mixer.js?v=0cf4ec61';
+import { AttitudeController } from './AttitudeController.js?v=921bddd2';
+import { AxisPidController } from './AxisPidController.js?v=f9c42c86';
+import { Mixer } from './Mixer.js?v=bc8f1ac9';
 import { RateCurves } from './RateCurves.js?v=13dd073e';
 import { ThrottleCurve } from './ThrottleCurve.js?v=6243615e';
-import { FlightControllerConfig } from './FlightControllerConfig.js?v=d9c99f71';
+import { FlightControllerConfig } from './FlightControllerConfig.js?v=547c5a1a';
 
 // DroneSim is not part of this port batch; only its PHYSICS_HZ constant is needed here (Java: DroneSim.PHYSICS_HZ = 2000).
 const DroneSim = { PHYSICS_HZ: 2000 };
@@ -23,6 +23,17 @@ export class FlightController {
   static ANTI_GRAVITY_HZ = 5.0;
   static SAG_FILTER_HZ = 1.0;
   static REVERSAL_ITERM_HOLD_S = 0.25;
+  static CONTACT_IDLE_THROTTLE = 0.05;
+  static CONTACT_GRACE_S = 0.3;
+  static KNOCKED_GRACE_S = 0.1;
+  static TOUCH_GRACE_S = 0.1;
+  static CONTACT_FADE_S = 0.15;
+  static CONTACT_RELEASE_S = 0.3;
+  // Math.cos(Math.toRadians(30.0)) and Math.cos(Math.toRadians(60.0)) of the JVM.
+  static KNOCKED_UP = Math.cos(30.0 * 0.017453292519943295);
+  static KNOCKED_DPS = 400.0;
+  static LYING_UP = Math.cos(60.0 * 0.017453292519943295);
+  static CONTACT_STICK = 0.05;
 
   rc = new RcProcessor();
   attitude = new AttitudeController();
@@ -52,6 +63,16 @@ export class FlightController {
   mode3dActive = false;
   direction3d = 1;
   reversalHoldS = 0.0;
+  contact = false;
+  contactHeld = false;
+  knocked = false;
+  contactIdleS = 0.0;
+  contactFreeS = 0.0;
+  lyingS = 0.0;
+  throttled = false;
+  touchIdleS = 0.0;
+  restS = 0.0;
+  contactAuthority = 1.0;
   antiGravity3dPrimed = false;
 
   configure(params, config, filters) {
@@ -109,6 +130,16 @@ export class FlightController {
     this.mode3dActive = false;
     this.direction3d = 1;
     this.reversalHoldS = 0.0;
+    this.contact = false;
+    this.contactHeld = false;
+    this.knocked = false;
+    this.contactIdleS = 0.0;
+    this.contactFreeS = 0.0;
+    this.lyingS = 0.0;
+    this.throttled = false;
+    this.touchIdleS = 0.0;
+    this.restS = 0.0;
+    this.contactAuthority = 1.0;
     this.antiGravity3dPrimed = false;
     for (let i = 0; i < AirframeSpec.MOTORS; i++) {
       this.duty[i] = 0.0;
@@ -182,8 +213,15 @@ export class FlightController {
       this.airmodeLatched = true;
       this.airmodeJustLatched = true;
     }
-    const airmodeActive = armed && pid.airmode && this.airmodeLatched;
+    let airmodeActive = armed && pid.airmode && this.airmodeLatched;
     let iActive = armed && (pid.airmode ? this.airmodeLatched : thr > 0.05);
+    this.updateContact(body, rollStick, pitchStick, yawStick, armed && thr <= FlightController.CONTACT_IDLE_THROTTLE, armed, dt);
+    if (this.knocked || this.restS > 0.0) {
+      airmodeActive = false;
+    }
+    if (this.contactIdleS > 0.0 || this.lyingS > FlightController.CONTACT_GRACE_S) {
+      iActive = false;
+    }
     let ag;
     if (mode3d) {
       if (this.reversalHoldS > 0.0) {
@@ -219,12 +257,20 @@ export class FlightController {
     }
     const tl = pid.thrustLinearPercent / 100.0;
     const reversed = mode3d && this.direction3d < 0;
+    let rollOut = this.axes[FcAxes.ROLL].output;
+    let pitchOut = this.axes[FcAxes.PITCH].output;
+    let yawOut = this.axes[FcAxes.YAW].output;
+    if (this.contactAuthority < 1.0) {
+      rollOut *= this.contactAuthority;
+      pitchOut *= this.contactAuthority;
+      yawOut *= this.contactAuthority;
+    }
     if (reversed) {
-      this.mixer.mix(this.params, -this.axes[FcAxes.ROLL].output, -this.axes[FcAxes.PITCH].output, -this.axes[FcAxes.YAW].output,
-        FlightController.compensateThrustLinear(thr, tl), airmodeActive, pid.propsOut);
+      this.mixer.mix(this.params, -rollOut, -pitchOut, -yawOut, FlightController.compensateThrustLinear(thr, tl), airmodeActive,
+        pid.propsOut);
     } else {
-      this.mixer.mix(this.params, this.axes[FcAxes.ROLL].output, this.axes[FcAxes.PITCH].output, this.axes[FcAxes.YAW].output,
-        FlightController.compensateThrustLinear(thr, tl), airmodeActive, pid.propsOut);
+      this.mixer.mix(this.params, rollOut, pitchOut, yawOut, FlightController.compensateThrustLinear(thr, tl), airmodeActive,
+        pid.propsOut);
     }
     this.saturatedPrev = anySumSat || this.mixer.saturated;
     this.throttleOut = this.mixer.throttle;
@@ -239,6 +285,47 @@ export class FlightController {
         this.duty[i] = armed ? idle + range * o : 0.0;
       }
     }
+  }
+
+  updateContact(body, rollStick, pitchStick, yawStick, idleThrottle, armed, dt) {
+    if (this.contact) {
+      this.contactHeld = true;
+      this.contactFreeS = 0.0;
+    } else if (this.contactHeld && this.contactFreeS < FlightController.CONTACT_RELEASE_S) {
+      this.contactFreeS += dt;
+    } else {
+      this.contactHeld = false;
+      this.contactFreeS = 0.0;
+    }
+    const idle = idleThrottle && Math.abs(rollStick) <= FlightController.CONTACT_STICK && Math.abs(pitchStick) <= FlightController.CONTACT_STICK
+      && Math.abs(yawStick) <= FlightController.CONTACT_STICK;
+    if (!idle) {
+      this.knocked = false;
+    } else if (this.contactHeld && (body.r11 < FlightController.KNOCKED_UP || this.spinning())) {
+      this.knocked = true;
+    }
+    this.contactIdleS = idle && (this.contactHeld || this.knocked) ? this.contactIdleS + dt : 0.0;
+    this.lyingS = armed && this.contactHeld && body.r11 < FlightController.LYING_UP ? this.lyingS + dt : 0.0;
+    this.throttled = armed && (this.throttled || !idleThrottle);
+    if (this.throttled && idle && this.contactHeld) {
+      if (this.contact) {
+        this.touchIdleS += dt;
+      }
+      this.restS = this.touchIdleS > FlightController.TOUCH_GRACE_S ? this.restS + dt : 0.0;
+    } else {
+      this.touchIdleS = 0.0;
+      this.restS = 0.0;
+    }
+    if (this.knocked) {
+      this.contactAuthority = 1.0 - SimMath.clamp01((this.contactIdleS - FlightController.KNOCKED_GRACE_S) / FlightController.CONTACT_FADE_S);
+    } else {
+      this.contactAuthority = 1.0 - SimMath.clamp01(this.restS / FlightController.CONTACT_FADE_S);
+    }
+  }
+
+  spinning() {
+    return Math.abs(this.gyro[FcAxes.ROLL]) > FlightController.KNOCKED_DPS || Math.abs(this.gyro[FcAxes.PITCH]) > FlightController.KNOCKED_DPS
+      || Math.abs(this.gyro[FcAxes.YAW]) > FlightController.KNOCKED_DPS;
   }
 
   magnitude3d(stick, deadband, armed) {

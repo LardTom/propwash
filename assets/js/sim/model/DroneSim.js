@@ -1,53 +1,67 @@
-// Port of de.lardtom.propwash.sim.DroneSim (Propwash FPV): the 2 kHz flight model that steps rigid body, motors, ESCs,
-// battery, rotor aerodynamics, flight controller and ground contact, and reacts to the moves the world allows
-// (afterMove). Same field and method names as the Java; see PORTING.md for the conventions.
+// Port of de.lardtom.propwash.sim.DroneSim (Propwash FPV 0.6.0): the 2 kHz flight model that steps rigid body, motors,
+// ESCs, battery, rotor aerodynamics, flight controller and ground contact, and reacts to the moves the world allows
+// (afterMove). Same field and method names as the Java; the conventions are at the top of AirframeSpec.js (fields
+// that share their name with an accessor are stored as _name: _stickySides, _ghost, _pushOuts). StrictMath is the
+// fdlibm port of StrictMath.js. tools/test-sim-model.mjs flies it against the classes of the release, bit for bit.
+//
+// With 0.6.0: crashes without disarm (props touching ground or walls lose thrust, the flight controller holds still
+// and gives up authority when the drone lies or was knocked over at idle), the support grid under the drone
+// (GroundSupport: ground and hull points over lower or higher ground, tipping over edges, accessory stands), surfaces
+// (bouncy, cushion and sticky blocks, damage scale), pass-through moves (ghost), depenetration (pushOut), arming again
+// after a reset (homeReset, autoArm), the ESC heat of the board size with its power limit and the motor torque loss
+// when hot.
 //
 // Left out on purpose (not needed in the browser simulator, the code paths stay switched off as in a plain flight):
-// GPS/altitude hold (NavHold), flight assists and force providers (API), external pushes/impulses, cobweb snag,
-// breaking through blocks, water/waterproof drones, turtle mode, 3D mode (reversible motors), part wear (pristine),
-// the FC sample listener and snapshot sync (only the rollback used by the fault handler is kept).
+// GPS/altitude hold (NavHold, with its compass error and the settled hold of a takeover, settleForTakeover), flight
+// assists, operator and add-on axes and force providers (API), external pushes/impulses, cobweb snag, breaking through
+// blocks, water/waterproof drones, turtle mode (and its floor and lifting onto the hull), 3D mode (reversible motors),
+// part wear (pristine), the FC sample listener and snapshot sync (only the rollback used by the fault handler is kept).
 
-import { AirframeSpec } from './AirframeSpec.js?v=0d4a93ac';
-import { FlightControllerConfig } from './FlightControllerConfig.js?v=d9c99f71';
+import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
+import { FlightControllerConfig } from './FlightControllerConfig.js?v=547c5a1a';
 import { SimTuning } from './SimTuning.js?v=30961ab0';
-import { RigidBody } from './RigidBody.js?v=619ffcc8';
-import { PowerSystem } from './PowerSystem.js?v=0990bf11';
-import { FlightController } from './FlightController.js?v=f4ea056d';
-import { GyroModel } from './GyroModel.js?v=72869943';
-import { PropWash } from './PropWash.js?v=96a3def9';
-import { WakeField } from './WakeField.js?v=51f12299';
+import { RigidBody } from './RigidBody.js?v=4c63c124';
+import { PowerSystem } from './PowerSystem.js?v=a626586a';
+import { FlightController } from './FlightController.js?v=24bbeaf9';
+import { GyroModel } from './GyroModel.js?v=09cea50d';
+import { PropWash } from './PropWash.js?v=196c83aa';
+import { WakeField } from './WakeField.js?v=0669fab4';
 import { Gusts } from './Gusts.js?v=b0ab9beb';
-import { Thermal } from './Thermal.js?v=76d6a18a';
+import { Thermal } from './Thermal.js?v=24b8e070';
 import { BodyAero } from './BodyAero.js?v=0daf7225';
-import { CollisionSolver } from './CollisionSolver.js?v=667044f3';
-import { GroundSolver } from './GroundSolver.js?v=2e1281e6';
-import { Arming } from './Arming.js?v=f32d1ede';
+import { CollisionSolver } from './CollisionSolver.js?v=d0012d80';
+import { GroundSolver } from './GroundSolver.js?v=51a23193';
+import { Arming } from './Arming.js?v=3b6dd6c4';
 import { SimRandom } from './SimRandom.js?v=99061467';
-import { Telemetry } from './Telemetry.js?v=083c2c96';
-import { EventQueue } from './EventQueue.js?v=42e42d57';
-import { ImpactLog } from './ImpactLog.js?v=e11ffcd4';
+import { Telemetry } from './Telemetry.js?v=79ff5f8e';
+import { EventQueue } from './EventQueue.js?v=be78f801';
+import { ImpactLog } from './ImpactLog.js?v=90c36cf2';
 import { PilotInput } from './PilotInput.js?v=d7d531ac';
-import { SimEnvironment } from './SimEnvironment.js?v=93ebd229';
-import { OperatingPoints } from './OperatingPoints.js?v=0990bf11';
+import { SimEnvironment } from './SimEnvironment.js?v=799ee963';
+import { OperatingPoints } from './OperatingPoints.js?v=a626586a';
 import { Pt1 } from './Pt1.js?v=afe0b0dc';
 import { BatteryAlarm } from './BatteryAlarm.js?v=e883ec27';
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
 import { SimMath } from './SimMath.js?v=44da8aea';
 import { RotorAero } from './RotorAero.js?v=22dc31b6';
 import { GroundEffect } from './GroundEffect.js?v=e1f30152';
-import { EnergyModel } from './EnergyModel.js?v=0990bf11';
+import { EnergyModel } from './EnergyModel.js?v=a626586a';
 import { CellCurve } from './CellCurve.js?v=0c22cd1a';
 import { ThrottleCurve } from './ThrottleCurve.js?v=6243615e';
 import { RcProcessor } from './RcProcessor.js?v=6af61b2c';
-import { PidAutoTune } from './PidAutoTune.js?v=89367845';
+import { PidAutoTune } from './PidAutoTune.js?v=7b785c0c';
 import { StabMode } from './StabMode.js?v=ef37a80a';
 import { PidSource } from './PidSource.js?v=bf62fdc1';
 import { DisarmReason } from './DisarmReason.js?v=b5a5924f';
 import { Fluid } from './Fluid.js?v=3fdbbd97';
 import { BatteryState } from './BatteryState.js?v=de4ddff2';
 import { HoldMode } from './HoldMode.js?v=b25be63f';
-import { SimEventType } from './SimEventType.js?v=e546d059';
+import { SimEventType } from './SimEventType.js?v=7000a262';
 import { ArmBlocker } from './ArmBlocker.js?v=3bfdfa7f';
+import { GroundSupport } from './GroundSupport.js?v=6263bde5';
+import { SurfaceResponse } from './SurfaceResponse.js?v=bc7fb0a6';
+import { MoveReport } from './MoveReport.js?v=b44086c1';
+import { StrictMath } from './StrictMath.js?v=e765e983';
 
 const javaRound = (x) => (Number.isNaN(x) ? 0 : Math.floor(x + 0.5));
 
@@ -88,6 +102,18 @@ export class DroneSim {
   static OBLIQUE_SAME_CONTACT = 0.95;
   static OBLIQUE_GROUND = 0.7;
   static IMPACT_RECORD_SPEED = 1.0;
+  static STICKY_DRAG = 18.0;
+  static STICKY_STEP = (1.0 - StrictMath.exp(-DroneSim.STICKY_DRAG * DroneSim.H)) / DroneSim.H;
+  static STICKY_HOLD = 4.0;
+  static STICKY_SECONDS = 1.0;
+  static EDGE_SLIDE = 0.25;
+  static PROP_CONTACT_THRUST = 0.1;
+  static PROP_CONTACT_ON_S = 0.01;
+  static PROP_CONTACT_OFF_S = 0.1;
+  static PROP_CONTACT_ON = 1.0 - StrictMath.exp(-DroneSim.H / DroneSim.PROP_CONTACT_ON_S);
+  static PROP_CONTACT_OFF = 1.0 - StrictMath.exp(-DroneSim.H / DroneSim.PROP_CONTACT_OFF_S);
+  static PROP_CONTACT_MIN = 1.0E-3;
+  static PROP_CONTACT_GAP = 0.003;
 
   /**
    * @param {AirframeSpec} params
@@ -109,6 +135,7 @@ export class DroneSim {
     this.collision = new CollisionSolver();
     this.ground = new GroundSolver();
     this.arming = new Arming();
+    this.support = new GroundSupport();
     this.rng = new SimRandom(seed);
     this.telemetry = new Telemetry();
     this.events = new EventQueue();
@@ -131,6 +158,9 @@ export class DroneSim {
     this.escEventCooldown = new Float64Array(M);
     this.wearThrust = Float64Array.of(1.0, 1.0, 1.0, 1.0);
     this.motorDead = new Array(M).fill(false);
+    this.propContact = new Float64Array(M);
+    this.groundProps = 0;
+    this.wallProps = 0;
     this.fluidThrust = Float64Array.of(1.0, 1.0, 1.0, 1.0);
     this.hardwareFault = false;
     this.escBurned = false;
@@ -171,9 +201,20 @@ export class DroneSim {
     this.groundHeight = 0.0;
     this.groundGrip = 1.0;
     this.groundBounce = -1.0;
+    this.groundImpact = 1.0;
+    this._stickySides = 0;
+    this.stickyPull = 0.0;
+    this.contactScale = 1.0;
     this.normalForce = 0.0;
     this.planeValid = false;
     this.planeY = 0.0;
+    this.rayFloor = -Infinity;
+    this.edgeActive = false;
+    this.edgeAx = 0.0;
+    this.edgeAz = 0.0;
+    this.edgeTx = 0.0;
+    this.edgeTz = 0.0;
+    this._ghost = false;
     this.frameTouch = false;
     this.frameApproach = 0.0;
     this.frameTangential = 0.0;
@@ -207,6 +248,7 @@ export class DroneSim {
     this.crashCount = 0;
     this.impactCount = 0;
     this.propStrikeCount = 0;
+    this._pushOuts = 0;
     this.lastImpactSpeed = 0.0;
     this.faultWindowStart = -Infinity;
     this.faultsInWindow = 0;
@@ -284,6 +326,7 @@ export class DroneSim {
     this.clearDuties();
     this.clearTransientState();
     this.thermal.reset(this.env.ambientTempC);
+    this.power.torqueScale.set(this.thermal.torque);
     this.fc.reset(this.gyroModel.raw, this.power.busVoltage, 0.0, 0.0, 0.0, 0.0);
     this.accumulatorNanos = 0;
     this.rampInitialized = false;
@@ -341,6 +384,12 @@ export class DroneSim {
     this.obliqueFrames = 0;
     this.planeValid = false;
     this.ground.forget();
+    this.edgeActive = false;
+    this._stickySides = 0;
+    this.stickyPull = 0.0;
+    this.groundProps = 0;
+    this.wallProps = 0;
+    for (let i = 0; i < AirframeSpec.MOTORS; i++) this.propContact[i] = 0.0;
     this.clearFrameContacts();
   }
 
@@ -357,9 +406,13 @@ export class DroneSim {
   choosePlane() {
     let plane = this.groundedFrames > 0 ? this.groundHeight : -Infinity;
     const distance = this.env.solidDistance;
-    if (distance < Infinity) plane = Math.max(plane, this.visY - distance);
+    this.rayFloor = -Infinity;
+    if (distance < Infinity) {
+      this.rayFloor = this.visY - distance;
+      plane = Math.max(plane, this.rayFloor);
+    }
     this.planeY = plane;
-    this.planeValid = plane > -Infinity && this.body.py - plane < DroneSim.PLANE_RANGE;
+    this.planeValid = !this._ghost && plane > -Infinity && this.body.py - plane < DroneSim.PLANE_RANGE;
     if (!this.planeValid) this.ground.forget();
   }
 
@@ -390,14 +443,15 @@ export class DroneSim {
     if (struck) b.updateRates();
   }
 
-  groundImpulse(p, b, plane, grip, restitution) {
+  groundImpulse(p, b, plane, grip, restitution, impactScale) {
     const gs = this.ground;
     const t = this.tuning;
     const bounce = (restitution >= 0.0 ? restitution : p.restitution) * t.restitutionScale;
     const soft = (restitution >= 0.0 ? restitution : Math.min(p.restitution, ModelConstants.RESTITUTION_BATTERY)) * t.restitutionScale;
     b.updateDerived();
-    if (!gs.solve(p, b, plane, DroneSim.H, p.friction * grip, bounce, soft, p.impactTolerance * t.crashSpeedScale, false, b.vx, b.vy, b.vz,
-      b.lx, b.ly, b.lz)) {
+    const crashSpeed = DroneSim.lossSpeed(p.impactTolerance * t.crashSpeedScale, impactScale);
+    const planes = this.support.groundPlanes(p, b, plane, this.support.overhang(b, plane));
+    if (!gs.solve(p, b, plane, planes, DroneSim.H, p.friction * grip, bounce, soft, crashSpeed, false, b.vx, b.vy, b.vz, b.lx, b.ly, b.lz)) {
       return false;
     }
     b.vx = gs.vx;
@@ -449,6 +503,15 @@ export class DroneSim {
     }
   }
 
+  stickySides() {
+    return this._stickySides;
+  }
+
+  stickyHold() {
+    return (this._stickySides & MoveReport.STICKY_FLOOR) !== 0 && this.groundedFrames > 0
+      ? DroneSim.STICKY_HOLD * (1.0 - this.stickyPull / DroneSim.STICKY_SECONDS) : 0.0;
+  }
+
   buildable() {
     return this.tuning.partCompatibility ? this.params.buildable : this.params.assemblable;
   }
@@ -476,6 +539,7 @@ export class DroneSim {
     }
     this.sanitizeInput(inp);
     this.sanitizeEnvironment(environment);
+    this.support.load(this.env);
     this.accumulatorNanos += nanos;
     let n = Math.trunc(this.accumulatorNanos / DroneSim.SUBSTEP_NANOS);
     if (n > DroneSim.MAX_SUBSTEPS) {
@@ -559,6 +623,7 @@ export class DroneSim {
       d.fluid = Fluid.NONE;
       d.skyView = 1.0;
       d.waterSurface = -Infinity;
+      d.clearSupport();
       return;
     }
     d.groundDistance = Number.isNaN(e.groundDistance) ? Infinity : Math.max(0.0, e.groundDistance);
@@ -572,6 +637,7 @@ export class DroneSim {
     d.fluid = Fluid.NONE;
     d.skyView = SimMath.sanitize(e.skyView, 0.0, 1.0, 1.0);
     d.waterSurface = -Infinity;
+    GroundSupport.sanitize(e, d);
   }
 
   frameArming() {
@@ -582,17 +648,20 @@ export class DroneSim {
       a.crashCooldownSubsteps > 0, a.rebootSubsteps > 0, Fluid.NONE, this.hardwareFault || this.escBurned);
     if (a.pendingSwitchCheck) {
       a.pendingSwitchCheck = false;
-      if (switchOn && !a.armed) {
+      if (switchOn && !a.armed && !a.autoArm) {
         a.switchNeedsReset = true;
         this.emit(SimEventType.ARM_BLOCKED, conditions | ArmBlocker.ARM_SWITCH_NOT_RESET.bit(), -1);
       }
       a.lastSwitch = switchOn;
     }
     if (!switchOn) a.switchNeedsReset = false;
+    if (!switchOn || a.armed) a.autoArm = false;
     const rising = switchOn && !a.lastSwitch;
+    const auto = !rising && a.autoArm && !a.armed && (conditions & Arming.AUTO_ARM_WAIT) === 0;
     if (a.armed) {
       if (!switchOn) this.disarm(DisarmReason.SWITCH);
-    } else if (rising) {
+    } else if (rising || auto) {
+      a.autoArm = false;
       let mask = conditions | (a.switchNeedsReset ? ArmBlocker.ARM_SWITCH_NOT_RESET.bit() : 0);
       if (mask === 0 && this.tuning.escOvervoltage && this.params.escOvervoltage) {
         this.escBurned = true;
@@ -603,6 +672,7 @@ export class DroneSim {
       if (mask === 0) {
         a.turtle = false;
         this.arm();
+        a.autoArmed = auto;
       } else {
         this.emit(SimEventType.ARM_BLOCKED, mask, -1);
         a.switchNeedsReset = true;
@@ -629,6 +699,7 @@ export class DroneSim {
     const a = this.arming;
     if (!a.armed) return;
     a.armed = false;
+    a.autoArmed = false;
     a.turtle = false;
     a.turtleDone = false;
     a.lastDisarmReason = reason;
@@ -659,7 +730,31 @@ export class DroneSim {
   }
 
   requireArmSwitchReset() {
-    if (!this.arming.armed) this.arming.pendingSwitchCheck = true;
+    if (!this.arming.armed) {
+      this.arming.pendingSwitchCheck = true;
+      this.arming.autoArm = false;
+    }
+  }
+
+  homeReset(autoArm) {
+    this.disarm(DisarmReason.FORCED);
+    this.requireArmSwitchReset();
+    if (autoArm) {
+      this.arming.switchNeedsReset = false;
+      this.arming.autoArm = true;
+    }
+  }
+
+  cancelAutoArm() {
+    this.arming.autoArm = false;
+  }
+
+  autoArmPending() {
+    return this.arming.autoArm && !this.arming.armed;
+  }
+
+  autoArmed() {
+    return this.arming.armed && this.arming.autoArmed;
   }
 
   wakeUp() {
@@ -708,6 +803,7 @@ export class DroneSim {
         mode = StabMode.ANGLE;
       }
       const fcArmed = a.armed;
+      this.fc.contact = this.touchingBlocks();
       this.fc.update(r, pt, y, thr, mode, fcArmed, b, this.gyroModel.raw, this.power.busVoltage);
       if (this.fc.airmodeJustLatched) this.emit(SimEventType.AIRMODE_ACTIVE, 0.0, -1);
       for (let i = 0; i < AirframeSpec.MOTORS; i++) {
@@ -778,6 +874,7 @@ export class DroneSim {
     }
     this.maxGroundFactor = maxGe;
 
+    this.updatePropContact(p, t, a, b);
     const hoverThrust = p.hoverThrust();
     let fx = 0.0;
     let fy = 0.0;
@@ -806,6 +903,7 @@ export class DroneSim {
       let ti = thrustScale * p.kThrust * rhoRatio * RotorAero.ductFactor(p.ducted, p.ductGain, lam) * axialFactor
         * tl * this.groundFactor[i] * Math.max(0.0, fw) * w * w * this.wearThrust[i] * this.fluidThrust[i];
       if (p.propFlex !== 0.0) ti *= RotorAero.flexFactor(p, w);
+      if (this.propContact[i] > 0.0) ti *= 1.0 - (1.0 - DroneSim.PROP_CONTACT_THRUST) * this.propContact[i];
       this.thrust[i] = ti;
       this.prevThrust[i] = Number.isFinite(ti) ? ti : 0.0;
       sumThrust += ti;
@@ -859,6 +957,36 @@ export class DroneSim {
     let contactY = 0.0;
     let contactZ = 0.0;
     const boxResting = this.groundedFrames > 0 && b.py <= this.groundHeight - p.hitboxFootOffset + DroneSim.BOX_TOLERANCE;
+    // Turtle mode is not ported: hullGround and turtleHeld of the Java are always false.
+    const resting = this.groundedFrames > 0 && (boxResting || this.planeValid);
+    const edge = resting && !this.sleeping && !this.poseLocked && this.support.overhang(b, this.groundHeight);
+    this.edgeActive = edge;
+    let stickX = 0.0;
+    let stickY = 0.0;
+    let stickZ = 0.0;
+    let adhesion = 0.0;
+    if (this._stickySides !== 0 && !this.sleeping && !this.poseLocked) {
+      stickX = -b.vx * DroneSim.STICKY_STEP;
+      stickY = -b.vy * DroneSim.STICKY_STEP;
+      stickZ = -b.vz * DroneSim.STICKY_STEP;
+      if ((this._stickySides & MoveReport.STICKY_FLOOR) !== 0 && this.groundedFrames > 0) {
+        const pulling = sumThrust * b.r11 + buoyancy > m * g;
+        this.stickyPull = SimMath.clamp(this.stickyPull + (pulling ? h : -h), 0.0, DroneSim.STICKY_SECONDS);
+        adhesion = m * DroneSim.STICKY_HOLD * g * (1.0 - this.stickyPull / DroneSim.STICKY_SECONDS);
+        stickY -= adhesion / m;
+      } else {
+        this.stickyPull = 0.0;
+      }
+      accX += stickX;
+      accY += stickY;
+      accZ += stickZ;
+      twx -= b.lx * DroneSim.STICKY_STEP;
+      twy -= b.ly * DroneSim.STICKY_STEP;
+      twz -= b.lz * DroneSim.STICKY_STEP;
+    } else {
+      this.stickyPull = 0.0;
+    }
+    this.groundProps = 0;
     if (this.planeValid && !this.sleeping && !this.poseLocked) {
       const gs = this.ground;
       let plane = this.planeY;
@@ -866,8 +994,14 @@ export class DroneSim {
       const bounce = (this.groundBounce >= 0.0 ? this.groundBounce : p.restitution) * t.restitutionScale;
       const soft = (this.groundBounce >= 0.0 ? this.groundBounce : Math.min(p.restitution, ModelConstants.RESTITUTION_BATTERY))
         * t.restitutionScale;
-      if (gs.solve(p, b, plane, h, p.friction * this.groundGrip, bounce, soft, p.impactTolerance * t.crashSpeedScale, true,
-        b.vx + h * accX, b.vy + h * accY, b.vz + h * accZ, b.lx + h * twx, b.ly + h * twy, b.lz + h * twz)) {
+      const crashSpeed = DroneSim.lossSpeed(p.impactTolerance * t.crashSpeedScale, this.groundImpact);
+      const touched = gs.solve(p, b, plane, this.support.groundPlanes(p, b, plane, edge), h, p.friction * this.groundGrip, bounce,
+        soft, crashSpeed, true,
+        b.vx + h * accX, b.vy + h * accY, b.vz + h * accZ, b.lx + h * twx, b.ly + h * twy, b.lz + h * twz);
+      for (let i = 0; i < AirframeSpec.MOTORS; i++) {
+        if (gs.depth[i] > -DroneSim.PROP_CONTACT_GAP) this.groundProps |= 1 << i;
+      }
+      if (touched) {
         contactX = gs.impulseX / h;
         contactY = gs.impulseY / h;
         contactZ = gs.impulseZ / h;
@@ -883,11 +1017,11 @@ export class DroneSim {
     }
     if (boxResting && !this.sleeping) {
       if (b.vy <= 0.0) {
-        const load = Math.max(0.0, m * g - sumThrust * b.r11 - buoyancy) - this.normalForce;
+        const load = Math.max(0.0, m * g + adhesion - sumThrust * b.r11 - buoyancy) - this.normalForce;
         b.vy = 0.0;
         if (accY < 0.0) accY = 0.0;
         const vxz = Math.sqrt(b.vx * b.vx + b.vz * b.vz);
-        if (load > 0.0 && vxz > 0.0) {
+        if (!edge && load > 0.0 && vxz > 0.0) {
           const dv = Math.min(vxz, p.friction * this.groundGrip * load / m * h);
           b.vx -= dv * b.vx / vxz;
           b.vz -= dv * b.vz / vxz;
@@ -896,7 +1030,20 @@ export class DroneSim {
           contactY += load;
           this.normalForce += load;
         }
+        if (edge && load > 0.0) {
+          this.edgeSupport(p, b, load);
+          accX += this.edgeAx;
+          accZ += this.edgeAz;
+          twx += this.edgeTx;
+          twz += this.edgeTz;
+        }
       }
+    }
+
+    if (this._stickySides !== 0) {
+      contactX += m * stickX;
+      contactY += m * stickY;
+      contactZ += m * stickZ;
     }
 
     this.specificX = fx / m + (b.r00 * contactX + b.r10 * contactY + b.r20 * contactZ) / m;
@@ -948,6 +1095,62 @@ export class DroneSim {
       return;
     }
     this.dutyCur.set(this.dutyNext);
+  }
+
+  updatePropContact(p, t, a, b) {
+    const able = a.armed && !a.turtle && !p.ducted;
+    const ground = b.r11 < CollisionSolver.STRIKE_NORMAL_LIMIT;
+    for (let i = 0; i < AirframeSpec.MOTORS; i++) {
+      let c = this.propContact[i];
+      if (able && ((ground && (this.groundProps & (1 << i)) !== 0) || (this.wallProps & (1 << i)) !== 0)) {
+        c += (1.0 - c) * DroneSim.PROP_CONTACT_ON;
+      } else if (c > 0.0) {
+        c -= c * DroneSim.PROP_CONTACT_OFF;
+        if (c < DroneSim.PROP_CONTACT_MIN) c = 0.0;
+      }
+      this.propContact[i] = c;
+    }
+  }
+
+  notePropContact(b, nx, ny, nz) {
+    if (b.r01 * nx + b.r11 * ny + b.r21 * nz >= CollisionSolver.STRIKE_NORMAL_LIMIT) return;
+    for (let i = 0; i < AirframeSpec.MOTORS; i++) {
+      if (this.collision.hull.inContact[i]) this.wallProps |= 1 << i;
+    }
+  }
+
+  touchingBlocks() {
+    return this.groundedFrames > 0 || this.ground.touchMask !== 0 || this.contactFrames[0] > 0 || this.contactFrames[1] > 0
+      || this.contactFrames[2] > 0 || this.obliqueFrames > 0;
+  }
+
+  edgeSupport(p, b, load) {
+    const s = this.support;
+    const rx = s.edgeX - b.px;
+    const ry = s.edgeLevel - b.py;
+    const rz = s.edgeZ - b.pz;
+    const reach = Math.sqrt(rx * rx + rz * rz);
+    this.edgeAx = 0.0;
+    this.edgeAz = 0.0;
+    this.edgeTx = 0.0;
+    this.edgeTz = 0.0;
+    if (!(reach > 1.0E-9)) return;
+    const ux = -rx / reach;
+    const uz = -rz / reach;
+    const ax = -uz;
+    const az = ux;
+    const ex = ax * b.r00 + az * b.r20;
+    const ey = ax * b.r01 + az * b.r21;
+    const ez = ax * b.r02 + az * b.r22;
+    const inertia = ex * ex * b.ixx + ey * ey * b.iyy + ez * ez * b.izz;
+    const pivot = inertia / (inertia + p.massKg * (rx * rx + ry * ry + rz * rz));
+    this.edgeTx = -rz * load * pivot;
+    this.edgeTz = rx * load * pivot;
+    const side = b.r11 >= 0.0 ? 1.0 : -1.0;
+    const tip = Math.max(0.0, side * (b.r01 * ux + b.r21 * uz));
+    const push = load / p.massKg * (DroneSim.EDGE_SLIDE + tip);
+    this.edgeAx = push * ux;
+    this.edgeAz = push * uz;
   }
 
   static undeadband(stick, band) {
@@ -1002,7 +1205,8 @@ export class DroneSim {
     } else {
       this.wakeWeight = 0.0;
     }
-    this.thermal.advance(p, this.power, this.env.ambientTempC, DroneSim.SLOW_DT, t.thermalEffects);
+    const airspeed = SimMath.hypot3(b.vx - this.windX, b.vy - this.windY, b.vz - this.windZ);
+    this.thermal.advance(p, this.power, this.env.ambientTempC, airspeed, DroneSim.SLOW_DT, t.thermalEffects);
     for (let i = 0; i < AirframeSpec.MOTORS; i++) {
       const temp = this.thermal.motorTemp[i];
       if (!this.thermal.overheated[i] && temp > p.motorMaxTempC) {
@@ -1041,19 +1245,35 @@ export class DroneSim {
     const th = this.thermal;
     if (!t.thermalLimits) {
       th.limit[i] = 1.0;
-      if (th.derating[i]) {
-        th.derating[i] = false;
-        this.emit(SimEventType.MOTOR_DERATE, 0.0, i);
+      th.torque[i] = 1.0;
+      this.power.torqueScale[i] = 1.0;
+      if (th.escDerating[i]) {
+        th.escDerating[i] = false;
+        this.emit(SimEventType.ESC_DERATE, 0.0, i);
+      }
+      if (th.motorHot[i]) {
+        th.motorHot[i] = false;
+        this.emit(SimEventType.MOTOR_HOT, 0.0, i);
       }
       return;
     }
-    th.limit[i] = Thermal.powerLimit(p, temp);
-    if (!th.derating[i] && temp > p.motorDerateStartC) {
-      th.derating[i] = true;
-      this.emit(SimEventType.MOTOR_DERATE, 1.0, i);
-    } else if (th.derating[i] && temp < p.motorDerateStartC - Thermal.HYSTERESIS_C) {
-      th.derating[i] = false;
-      this.emit(SimEventType.MOTOR_DERATE, 0.0, i);
+    const esc = th.escTemp[i];
+    th.limit[i] = Thermal.escPowerLimit(esc);
+    if (!th.escDerating[i] && esc > Thermal.ESC_LIMIT_C) {
+      th.escDerating[i] = true;
+      this.emit(SimEventType.ESC_DERATE, 1.0, i);
+    } else if (th.escDerating[i] && esc < Thermal.ESC_LIMIT_C - Thermal.HYSTERESIS_C) {
+      th.escDerating[i] = false;
+      this.emit(SimEventType.ESC_DERATE, 0.0, i);
+    }
+    th.torque[i] = Thermal.torqueFactor(p, temp);
+    this.power.torqueScale[i] = th.torque[i];
+    if (!th.motorHot[i] && temp > p.motorDerateStartC) {
+      th.motorHot[i] = true;
+      this.emit(SimEventType.MOTOR_HOT, 1.0, i);
+    } else if (th.motorHot[i] && temp < p.motorDerateStartC - Thermal.HYSTERESIS_C) {
+      th.motorHot[i] = false;
+      this.emit(SimEventType.MOTOR_HOT, 0.0, i);
     }
     const rate = Thermal.wearRate(p, temp);
     if (rate > 0.0) {
@@ -1282,12 +1502,23 @@ export class DroneSim {
     this.visX += cx;
     this.visY += cy;
     this.visZ += cz;
+    this._ghost = report.ghost;
+    if (this._ghost) {
+      this.passThrough(b);
+      return;
+    }
+    this._stickySides = report.stickySides & MoveReport.STICKY_ALL;
+    this.wallProps = 0;
     const grip = SimMath.sanitize(report.surfaceGrip, 0.0, 4.0, 1.0);
     const supportKnown = !Number.isNaN(report.supportGap);
     const lift = this.planeValid ? Math.max(0.0, this.visY + p.hitboxFootOffset - this.planeY) : 0.0;
-    const unsupported = supportKnown && report.supportGap > lift + DroneSim.SUPPORT_TOLERANCE;
+    const floorAtHull = this.planeValid && Math.abs(this.rayFloor - (this.visY + p.hitboxFootOffset)) <= DroneSim.SUPPORT_TOLERANCE;
+    const unsupported = supportKnown && !floorAtHull && report.supportGap > lift + DroneSim.SUPPORT_TOLERANCE;
     const restitution = Number.isNaN(report.surfaceRestitution) || report.surfaceRestitution < 0.0 ? -1.0
       : Math.min(report.surfaceRestitution, 1.0);
+    const scale = SurfaceResponse.impactScaleOf(report.surfaceImpactScale);
+    const crashSpeed = p.impactTolerance * this.tuning.crashSpeedScale;
+    this.contactScale = scale;
     let hitGround = false;
     let boxGround = false;
     let groundImpact = 0.0;
@@ -1335,15 +1566,18 @@ export class DroneSim {
         if (axis === 0) { saved = b.vx; b.vx = impact; } else if (axis === 1) { saved = b.vy; b.vy = impact; } else { saved = b.vz; b.vz = impact; }
       }
       if (ny > 0.0) {
-        const pushed = this.groundImpulse(p, b, this.visY + p.hitboxFootOffset, grip, restitution);
+        const pushed = this.groundImpulse(p, b, this.visY + p.hitboxFootOffset, grip, restitution, scale);
         if (useImpact && !pushed) b.vy = saved;
         hitGround = true;
         boxGround = true;
         this.groundGrip = grip;
         this.groundBounce = restitution;
+        this.groundImpact = scale;
         continue;
       }
-      this.collision.resolve(p, b, this.power, this.tuning, this.spinSign, nx, ny, nz, grip, restitution, approach);
+      this.collision.resolve(p, b, this.power, this.tuning, this.spinSign, nx, ny, nz, grip, restitution,
+        DroneSim.lossApproach(approach, crashSpeed, scale));
+      this.notePropContact(b, nx, ny, nz);
       if (useImpact && !this.collision.resolved) {
         if (axis === 0) b.vx = saved; else if (axis === 1) b.vy = saved; else b.vz = saved;
       }
@@ -1371,7 +1605,9 @@ export class DroneSim {
         this.obliqueX = nx;
         this.obliqueY = ny;
         this.obliqueZ = nz;
-        this.collision.resolve(p, b, this.power, this.tuning, this.spinSign, nx, ny, nz, grip, restitution, approach);
+        this.collision.resolve(p, b, this.power, this.tuning, this.spinSign, nx, ny, nz, grip, restitution,
+          DroneSim.lossApproach(approach, crashSpeed, scale));
+        this.notePropContact(b, nx, ny, nz);
         if (ny > DroneSim.OBLIQUE_GROUND) {
           hitGround = true;
           groundImpact = Math.max(groundImpact, this.collision.impactSpeed);
@@ -1405,6 +1641,7 @@ export class DroneSim {
       if (boxGround) this.groundHeight = this.visY + p.hitboxFootOffset;
       this.groundGrip = grip;
       this.groundBounce = restitution;
+      this.groundImpact = scale;
       if (!wasGrounded && groundImpact < 1.5 && b.tiltRad() * SimMath.DEG < 30.0) this.emit(SimEventType.LANDED, -groundImpact, -1);
     } else if (!this.sleeping && this.groundedFrames > 0) {
       const resting = Math.abs(this.visY + p.hitboxFootOffset - this.groundHeight) < DroneSim.RESTING_TOLERANCE && b.vy <= 1e-6;
@@ -1417,6 +1654,11 @@ export class DroneSim {
         if (this.groundedFrames === 0) this.emit(SimEventType.TAKEOFF, b.vy, -1);
       }
     }
+    if (!hitGround && touched === 0 && !report.obliqueContact()) {
+      this.groundGrip = grip;
+      this.groundBounce = restitution;
+      this.groundImpact = scale;
+    }
     if (this.sleeping) {
       const clearance = this.env.solidDistance + this.ground.lowest(p, b);
       if (unsupported) {
@@ -1427,6 +1669,27 @@ export class DroneSim {
       }
     }
     this.fillTelemetry(this.telemetry.substeps);
+  }
+
+  passThrough(b) {
+    this.clearContacts();
+    this.leaveGround(b);
+    if (this.sleeping) this.wakeUp();
+    this.fillTelemetry(this.telemetry.substeps);
+  }
+
+  ghost() {
+    return this._ghost;
+  }
+
+  static lossSpeed(crashSpeed, impactScale) {
+    if (impactScale >= 1.0) return crashSpeed;
+    return impactScale > 0.0 ? crashSpeed / impactScale : Number.MAX_VALUE;
+  }
+
+  static lossApproach(approach, crashSpeed, impactScale) {
+    if (impactScale >= 1.0) return approach;
+    return Math.min(approach, Math.max(ModelConstants.BOUNCE_MIN, impactScale * crashSpeed));
   }
 
   leaveGround(b) {
@@ -1451,6 +1714,12 @@ export class DroneSim {
   }
 
   classify(v, tangential, contacts, struck, struckRpm, nx, ny, nz) {
+    const scale = this.contactScale;
+    if (scale < 1.0) {
+      v *= scale;
+      tangential *= scale;
+      if (!(scale > 0.0)) struck = 0;
+    }
     const vcr = this.params.impactTolerance * this.tuning.crashSpeedScale;
     this.recordImpact(v, tangential, contacts, struck, struckRpm, nx, ny, nz);
     for (let i = 0; i < AirframeSpec.MOTORS; i++) {
@@ -1515,6 +1784,37 @@ export class DroneSim {
     this.wakeUp();
   }
 
+  pushOut(dx, dy, dz) {
+    const length = Math.sqrt(dx * dx + dy * dy + dz * dz);
+    if (!Number.isFinite(length) || length <= 0.0) return;
+    const b = this.body;
+    this.wake.shift(dx, dy, dz);
+    b.px += dx;
+    b.py += dy;
+    b.pz += dz;
+    this.visX += dx;
+    this.visY += dy;
+    this.visZ += dz;
+    this.frameStartY += dy;
+    const nx = dx / length;
+    const ny = dy / length;
+    const nz = dz / length;
+    const inward = b.vx * nx + b.vy * ny + b.vz * nz;
+    if (inward < 0.0) {
+      b.vx -= inward * nx;
+      b.vy -= inward * ny;
+      b.vz -= inward * nz;
+    }
+    this.groundedFrames = 0;
+    this.clearContacts();
+    this._pushOuts++;
+    this.wakeUp();
+  }
+
+  pushOuts() {
+    return this._pushOuts;
+  }
+
   pendingNanos() {
     return this.accumulatorNanos;
   }
@@ -1531,6 +1831,7 @@ export class DroneSim {
     tm.time = this.time;
     tm.substeps = substeps;
     tm.armBlockers = this.arming.blockers;
+    tm.autoArmPending = this.arming.autoArm && !this.arming.armed;
     tm.failsafeStage = this.arming.failsafeStage;
     tm.faults = this.faults;
     tm.crashCount = this.crashCount;
@@ -1551,7 +1852,8 @@ export class DroneSim {
     tm.batteryState = this.batteryState;
     let sumThrust = 0.0;
     let maxVrs = 0.0;
-    let derating = false;
+    let motorHot = false;
+    let escDerating = false;
     for (let i = 0; i < AirframeSpec.MOTORS; i++) {
       tm.motorRpm[i] = pw.omega[i] * 60.0 / SimMath.TWO_PI;
       tm.motorOutput[i] = this.arming.armed ? this.fc.motorOutput[i] : 0.0;
@@ -1561,11 +1863,13 @@ export class DroneSim {
       tm.motorTempC[i] = this.thermal.motorTemp[i];
       tm.escTempC[i] = this.thermal.escTemp[i];
       tm.motorPowerLimit[i] = this.thermal.limit[i];
-      derating = derating || this.thermal.derating[i];
+      motorHot = motorHot || this.thermal.motorHot[i];
+      escDerating = escDerating || this.thermal.escDerating[i];
       sumThrust += this.thrust[i];
       maxVrs = Math.max(maxVrs, this.wash.vrs[i]);
     }
-    tm.motorDerating = derating;
+    tm.motorHot = motorHot;
+    tm.escDerating = escDerating;
     tm.escBurned = this.escBurned;
     tm.totalCurrentA = pw.batteryCurrent;
     tm.packVoltage = pw.busVoltage;
@@ -1595,8 +1899,8 @@ export class DroneSim {
     tm.airspeed = SimMath.hypot3(b.vx - this.windX, b.vy - this.windY, b.vz - this.windZ);
     tm.verticalSpeed = b.vy;
     tm.heightAboveGround = this.env.groundDistance - (b.py - this.frameStartY) + p.hitboxFootOffset;
-    tm.rollDeg = Math.asin(SimMath.clamp(b.r10, -1.0, 1.0)) * SimMath.DEG;
-    tm.pitchDeg = Math.asin(SimMath.clamp(-b.r12, -1.0, 1.0)) * SimMath.DEG;
+    tm.rollDeg = StrictMath.asin(SimMath.clamp(b.r10, -1.0, 1.0)) * SimMath.DEG;
+    tm.pitchDeg = StrictMath.asin(SimMath.clamp(-b.r12, -1.0, 1.0)) * SimMath.DEG;
     tm.headingDeg = b.headingRad() * SimMath.DEG;
     tm.tiltDeg = b.tiltRad() * SimMath.DEG;
     for (let a = 0; a < 3; a++) {

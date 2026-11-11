@@ -1,16 +1,20 @@
-// Port of de.lardtom.propwash.sim.AirframeSpec (1:1) and of the parts of sim.ParamDerivation the live simulation needs.
+// Port of de.lardtom.propwash.sim.AirframeSpec (1:1) and of the parts of sim.ParamDerivation the live simulation needs
+// (Propwash 0.6.0).
 //
-// AirframeSpec.of(build, catalog) / fromBuild(build, catalog) derive the airframe of a configurator build
-// ({frame, stack, motor, prop, video, battery, accessories: {top?, bottom?}} part ids; catalog from
-// configurator/data.js) like ParamDerivation.derive(DroneBuild). Everything assets/js/configurator/analysis.js already
-// derives (mass, rotor constants, motor positions, inertia, lens, thermal, energy factors, hover voltage, control
-// authority, …; verified against the mod to the last digit) is taken from its airframe(); the rest is ported here from
-// ParamDerivation.java: hull and ground points, hitbox, rotational damping, spin directions, throttle weights (mixer
+// AirframeSpec.of(build, catalog[, creative]) / fromBuild(build, catalog[, creative]) derive the airframe of a
+// configurator build ({frame, stack, motor, prop, video, battery, accessories: {top?, bottom?, front?}} part ids;
+// catalog from configurator/data.js) like ParamDerivation.derive(DroneBuild); with `creative` like an edited drone of
+// the drone editor, ParamDerivation.compute(source, flight, inertia) (see fromBuild). Everything
+// assets/js/configurator/analysis.js already derives (mass, rotor constants, motor positions, inertia, lens, motor and
+// ESC heat, energy factors, hover voltage, control authority, …; verified against the mod to the last digit) is taken
+// from its airframe(); the rest is ported here from ParamDerivation.java: hull and ground points with the stand points
+// of accessories that reach below the hull, hitbox, rotational damping, spin directions, throttle weights (mixer
 // throttle column), motor spacing, restitution/friction, prop wash loss/noise, prop brittleness, reverse thrust/torque,
-// brownout voltage, motor heat wear, camera tilt/FOV, build key and buildable/assemblable.
-// Checked against the mod's AirframeGoldenTest (bit-exact SHA-256 dumps of the built-in airframes, accessory variants
-// included): all groups match once Math.pow returns StrictMath.pow's value; JS Math.pow(0.076, 5) and (0.152, 5) are one
-// ulp off fdlibm, so kTorque (analysis.js) of 76/152 mm props and what follows from it differ in the last bit.
+// brownout voltage, motor heat wear, camera tilt/FOV, the inertia override, build key and buildable/assemblable.
+// tools/test-sim-model.mjs checks every field against the classes of the release (presets, accessory variants, drones
+// of the drone editor) and the mod's AirframeGoldenTest: all groups match once Math.pow returns StrictMath.pow's value
+// for three inputs of analysis.js, which are one ulp off fdlibm in JS: 0.076^5 (kTorque of 76 mm props, also 152 mm add-on
+// props) and (m / 33 g)^(2/3) of the 9 g and 47 g motors (motorCoolingScale).
 //
 // Conventions of the port:
 // - Private arrays whose Java name equals an accessor (motorX[] / motorX(i), spin[] / spin(i), groundCount /
@@ -19,35 +23,43 @@
 // - chemistry is the catalog chemistry object with the Java-named fullCellVoltage / emptyCellVoltage / cutoffCellVoltage
 //   added (see javaChemistry); role is the lower-case FrameRole key of analysis.js ('freestyle', 'race', …).
 // - Extra (not in the Java class): fpv, the FPV rig of analysis.js/fpv.js, unchanged, for the renderer; parts, the
-//   resolved catalog parts {frame, stack, motor, prop, video, battery, accessories: {top?, bottom?}} of the build
-//   (Java reaches them through spec.build: e.g. EnergyModel.videoSupplyW(p.build.video()) -> p.parts.video).
-// - Creative edits (DroneBuild.flight()/inertiaOverride()) and part wear do not exist in the configurator: every build
-//   is derived like an unedited build.
+//   resolved catalog parts {frame, stack, motor, prop, video, battery, accessories: {top?, bottom?, front?}} of the
+//   build (Java reaches them through spec.build: e.g. EnergyModel.videoSupplyW(p.build.video()) -> p.parts.video); for
+//   a drone of the drone editor both are those of the flight build, `build` stays the built-in build like in the mod.
+// - Part wear does not exist in the configurator: every build is derived pristine.
 
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
 import { RotorAero } from './RotorAero.js?v=22dc31b6';
 import { SimMath } from './SimMath.js?v=44da8aea';
 import { PropFailure } from './PropFailure.js?v=35d07a01';
 import { FrameGeometry } from './FrameGeometry.js?v=4d41b5f3';
-import { airframe, anchorOf, accessoryBox, anchorToFrame, anchorStretch } from '../../configurator/analysis.js?v=f3f32120';
+import { airframe, anchorOf, accessoryBox, anchorToFrame, anchorStretch, tiltFor } from '../../configurator/analysis.js?v=f3f32120';
 import { resolveBuild, check } from '../../configurator/rules.js?v=6634f777';
 import { cameraFov } from '../../configurator/fpv.js?v=76cdbbe6';
 
 const SQRT2 = Math.sqrt(2.0);
 // ParamDerivation.MIN_THROTTLE_WEIGHT
 const MIN_THROTTLE_WEIGHT = 0.2;
+// ParamDerivation.ACCESSORY_STAND_MIN, FOOT_CORNERS
+const ACCESSORY_STAND_MIN = 0.005;
+const FOOT_CORNERS = 4;
+// StackType.CREATIVE_FC: fits every frame (StackType#fits).
+const CREATIVE_FC = 'propwash:creative_fc';
 // PartWear.SIM_MOTOR_BY_POSITION: arm position (front left, front right, rear left, rear right) -> motor index.
 const SIM_MOTOR_BY_POSITION = [3, 1, 2, 0];
 const ARM_KEYS = ['front_left', 'front_right', 'rear_left', 'rear_right'];
 // PartIndex.DEFAULT_NAMESPACE
 const DEFAULT_NAMESPACE = 'propwash';
-// AccessoryMount order of Accessories (EnumMap): TOP, BOTTOM.
-const ACCESSORY_SLOTS = ['top', 'bottom'];
+// AccessoryMount order of Accessories (EnumMap): TOP, BOTTOM, FRONT.
+const ACCESSORY_SLOTS = ['top', 'bottom', 'front'];
 
 export class AirframeSpec {
   static MOTORS = 4;
   static HULL_POINTS = 12;
-  static GROUND_POINTS = AirframeSpec.HULL_POINTS + 8;
+  static ACCESSORY_GROUND = AirframeSpec.HULL_POINTS + 8;
+  static ACCESSORY_POINTS = 8;
+  static STAND_LEGS = AirframeSpec.MOTORS;
+  static GROUND_POINTS = AirframeSpec.ACCESSORY_GROUND + AirframeSpec.ACCESSORY_POINTS + AirframeSpec.STAND_LEGS;
   static LEGACY_LENS_UP = 0.015;
   static LEGACY_LENS_FORWARD_FACTOR = 0.7;
 
@@ -134,6 +146,8 @@ export class AirframeSpec {
     this.motorCoolingBase = d.motorCoolingBase;
     this.motorCoolingPerOmega = d.motorCoolingPerOmega;
     this.motorCoolingScale = d.motorCoolingScale;
+    this.motorEddyLoss = d.motorEddyLoss;
+    this.escCooling = d.escCooling;
     this.motorDerateStartC = d.motorDerateStartC;
     this.motorMaxTempC = d.motorMaxTempC;
     this.motorHeatWearPerSecond = d.motorHeatWearPerSecond;
@@ -182,6 +196,7 @@ export class AirframeSpec {
     this._hullZ.set(d.hullZ.subarray(0, AirframeSpec.HULL_POINTS));
     this._groundCount = d.groundCount;
     this.groundMask = d.groundMask;
+    this.accessoryCorners = d.standCount;
     this._groundX.set(d.groundX.subarray(0, AirframeSpec.GROUND_POINTS));
     this._groundY.set(d.groundY.subarray(0, AirframeSpec.GROUND_POINTS));
     this._groundZ.set(d.groundZ.subarray(0, AirframeSpec.GROUND_POINTS));
@@ -192,9 +207,12 @@ export class AirframeSpec {
 
   /**
    * AirframeSpec.of(DroneBuild) / ParamDerivation.derive: cached per catalog and build (the spec is immutable).
-   * Returns null if a part is unknown or an accessory sits in the wrong slot.
+   * Returns null if a part is unknown or an accessory sits in the wrong slot. With `creative` (see fromBuild) the drone
+   * is derived like an edited build of the drone editor (ParamDerivation.computeEdited); such specs are not cached here
+   * (the mod keeps the last 128 in an LRU).
    */
-  static of(build, catalog) {
+  static of(build, catalog, creative = null) {
+    if (creative != null) return AirframeSpec.fromBuild(build, catalog, creative);
     let cache = DERIVED.get(catalog);
     if (!cache) {
       cache = new Map();
@@ -207,13 +225,38 @@ export class AirframeSpec {
     return spec;
   }
 
-  /** Derives a fresh AirframeSpec of a configurator build (ParamDerivation.compute), or null if it cannot be derived. */
-  static fromBuild(build, catalog) {
+  /**
+   * Derives a fresh AirframeSpec of a configurator build (ParamDerivation.compute), or null if it cannot be derived.
+   *
+   * creative (optional, a drone of the drone editor: ParamDerivation.compute(source, flight, inertia)):
+   *   { build, catalog, inertia, hash? }
+   *   - build: the flight build (DroneBuild.flight(), CreativeFlight#flight) as part ids like `build`;
+   *   - catalog: the catalog that knows the parts of the flight build with their edited data (same interface as
+   *     configurator/data.js; only part(id) and chemistry(id) are asked);
+   *   - inertia: CreativeFlight#inertia in kg·m², in its order [roll, pitch, yaw] = [inertiaZz, inertiaXx, inertiaYy],
+   *     NaN for an axis left automatic; or null for no override;
+   *   - hash (optional): the last part of the build key (PartIndex.hashOf of the creative values in the mod); without it
+   *     16 hex digits of a 64-bit FNV-1a hash of the flight parts and the inertia.
+   *   `build` (with `catalog`) stays the built-in build: AirframeSpec.build, buildable/assemblable and the build key's
+   *   "/creative/<stack>/<hash>" come from it (a part `catalog` does not know, like the creative flight controller, is
+   *   looked up in creative.catalog); every physical value comes from the flight build, the inertia override is applied
+   *   after the geometry and the control authority is computed with it. Without `creative` nothing changes.
+   */
+  static fromBuild(build, catalog, creative = null) {
+    if (creative != null) {
+      const flight = creative.build;
+      const flightCatalog = creative.catalog;
+      const { parts, unknown, misplaced } = resolveBuild(flight, flightCatalog);
+      if (unknown.length || misplaced) return null;
+      const derived = airframe(flight, flightCatalog);
+      if (!derived) return null;
+      return compute(build, parts, catalog, derived, creative);
+    }
     const { parts, unknown, misplaced } = resolveBuild(build, catalog);
     if (unknown.length || misplaced) return null;
     const derived = airframe(build, catalog);
     if (!derived) return null;
-    return compute(build, parts, catalog, derived);
+    return compute(build, parts, catalog, derived, null);
   }
 
   static defaultBrownoutVoltage(escMinCells) {
@@ -296,6 +339,47 @@ export class AirframeSpec {
     return this._groundZ[k];
   }
 
+  accessoryPointCount() {
+    return this.accessoryCorners;
+  }
+
+  standPointCount() {
+    return Math.max(0, this._groundCount - AirframeSpec.ACCESSORY_GROUND);
+  }
+
+  accessoryX(k) {
+    return this._groundX[AirframeSpec.ACCESSORY_GROUND + k];
+  }
+
+  accessoryY(k) {
+    return this._groundY[AirframeSpec.ACCESSORY_GROUND + k];
+  }
+
+  accessoryZ(k) {
+    return this._groundZ[AirframeSpec.ACCESSORY_GROUND + k];
+  }
+
+  /** How far the accessory stands reach below the hitbox; orientation {x, y, z, w} (the Java takes a float Quaternionfc). */
+  accessoryDepth(orientation) {
+    const count = this.accessoryPointCount();
+    if (count === 0) {
+      return 0.0;
+    }
+    const qx = orientation.x;
+    const qy = orientation.y;
+    const qz = orientation.z;
+    const qw = orientation.w;
+    const ax = 2.0 * (qx * qy + qw * qz);
+    const ay = 1.0 - 2.0 * (qx * qx + qz * qz);
+    const az = 2.0 * (qy * qz - qw * qx);
+    let lowest = Infinity;
+    for (let k = 0; k < count; k++) {
+      lowest = Math.min(lowest, -ax * this.accessoryX(k) + ay * this.accessoryY(k) - az * this.accessoryZ(k));
+    }
+    const depth = this.hitboxFootOffset - lowest;
+    return Number.isFinite(depth) && depth > 0.0 ? depth : 0.0;
+  }
+
   hullMotor(k) {
     return k < AirframeSpec.MOTORS ? k : -1;
   }
@@ -316,7 +400,8 @@ const DERIVED = new WeakMap();
 
 function cacheKey(build) {
   const acc = build.accessories || {};
-  return JSON.stringify([build.frame, build.stack, build.motor, build.prop, build.video, build.battery, acc.top ?? null, acc.bottom ?? null]);
+  return JSON.stringify([build.frame, build.stack, build.motor, build.prop, build.video, build.battery, acc.top ?? null, acc.bottom ?? null,
+    acc.front ?? null]);
 }
 
 /** ParamDerivation.Draft */
@@ -404,6 +489,8 @@ export class Draft {
   motorCoolingBase = 0.0;
   motorCoolingPerOmega = 0.0;
   motorCoolingScale = 0.0;
+  motorEddyLoss = 0.0;
+  escCooling = 0.0;
   motorDerateStartC = 0.0;
   motorMaxTempC = 0.0;
   motorHeatWearPerSecond = 0.0;
@@ -438,6 +525,10 @@ export class Draft {
   groundX = new Float64Array(AirframeSpec.GROUND_POINTS);
   groundY = new Float64Array(AirframeSpec.GROUND_POINTS);
   groundZ = new Float64Array(AirframeSpec.GROUND_POINTS);
+  standCount = 0;
+  standX = new Float64Array(AirframeSpec.ACCESSORY_POINTS);
+  standY = new Float64Array(AirframeSpec.ACCESSORY_POINTS);
+  standZ = new Float64Array(AirframeSpec.ACCESSORY_POINTS);
   // Not in the Java Draft: the FPV rig of analysis.js and the resolved catalog parts.
   fpv = null;
   parts = null;
@@ -475,8 +566,45 @@ function keyOf(id) {
   return namespace === DEFAULT_NAMESPACE ? id.slice(colon + 1) : id;
 }
 
-/** ParamDerivation.compute(DroneBuild): `derived` is analysis.js's airframe() of the same build. */
-function compute(source, parts, catalog, derived) {
+/**
+ * DroneBuild.problems() of the built-in build: rules.js check(). The creative flight controller fits every frame
+ * (StackType#fits) and is no part of the web catalog: problems() asks the stack for nothing else, so a build with it is
+ * checked with the flight build's stack in its place and without stack_mount.
+ */
+function sourceProblems(source, catalog, creative) {
+  const lookup = creative == null ? catalog : {
+    part: (id) => catalog.part(id) || creative.catalog.part(id),
+    chemistry: (id) => (catalog.chemistry && catalog.chemistry(id)) || creative.catalog.chemistry(id),
+  };
+  if (source.stack !== CREATIVE_FC) return check(source, lookup).problems;
+  const stand = lookup.part(source.stack) || creative == null ? source : { ...source, stack: creative.build.stack };
+  return check(stand, lookup).problems.filter((issue) => issue !== 'stack_mount');
+}
+
+/** 16 hex digits of the 64-bit FNV-1a hash of a string (UTF-16 code units). */
+function fnv64(text) {
+  let h = 0xcbf29ce484222325n;
+  for (let i = 0; i < text.length; i++) {
+    h ^= BigInt(text.charCodeAt(i));
+    h = (h * 0x100000001b3n) & 0xffffffffffffffffn;
+  }
+  return h.toString(16).padStart(16, '0');
+}
+
+function creativeHash(parts, creative) {
+  if (typeof creative.hash === 'string') return creative.hash;
+  const slots = ACCESSORY_SLOTS.filter((slot) => parts.accessories[slot]);
+  const data = (p) => [p.id, p.basics, p.data];
+  const inertia = creative.inertia == null ? null : Array.from(creative.inertia, (v) => (Number.isNaN(v) ? 'auto' : v));
+  return fnv64(JSON.stringify([data(parts.frame), data(parts.stack), data(parts.motor), data(parts.prop), data(parts.video),
+    data(parts.battery), slots.map((slot) => data(parts.accessories[slot])), inertia]));
+}
+
+/**
+ * ParamDerivation.compute(source, flight, inertia): `derived` is analysis.js's airframe() of the flight build, `parts`
+ * its resolved parts; `source` and `catalog` the built-in build (the same build without `creative`).
+ */
+function compute(source, parts, catalog, derived, creative) {
   const d = new Draft();
   const { frame, stack, motor, prop, video, battery } = parts;
   const fd = frame.data;
@@ -489,10 +617,11 @@ function compute(source, parts, catalog, derived) {
   const slots = ACCESSORY_SLOTS.filter((slot) => parts.accessories[slot]);
   const accessoriesKey = slots.map((slot) => `${slot}=${keyOf(parts.accessories[slot].id)}`).join('+');
   d.buildKey = keyOf(frame.id) + '/' + keyOf(stack.id) + '/' + keyOf(motor.id) + '/' + keyOf(prop.id) + '/' + keyOf(video.id) + '/'
-    + keyOf(battery.id) + (slots.length === 0 ? '' : '/' + accessoriesKey);
+    + keyOf(battery.id) + (slots.length === 0 ? '' : '/' + accessoriesKey)
+    + (creative == null ? '' : '/creative/' + keyOf(source.stack) + '/' + creativeHash(parts, creative));
   // DroneBuild.buildable(): no problems; buildable(PartCompatibility.LIFTED): no problem that is not a compatibility
-  // issue (only MISSING_PART, which a resolved build never has).
-  const problems = check(source, catalog).problems;
+  // issue (only MISSING_PART, which a resolved build never has). Both of the built-in build.
+  const problems = sourceProblems(source, catalog, creative);
   d.buildable = problems.length === 0;
   d.assemblable = problems.every((issue) => issue !== 'missing_part');
 
@@ -548,6 +677,8 @@ function compute(source, parts, catalog, derived) {
   d.motorCoolingBase = derived.motorCoolingBase;
   d.motorCoolingPerOmega = derived.motorCoolingPerOmega;
   d.motorCoolingScale = derived.motorCoolingScale;
+  d.motorEddyLoss = derived.motorEddyLoss;
+  d.escCooling = derived.escCooling;
   d.motorDerateStartC = derived.motorDerateStartC;
   d.motorMaxTempC = derived.motorMaxTempC;
   d.areaZ = derived.areaZ;
@@ -599,6 +730,7 @@ function compute(source, parts, catalog, derived) {
   } else {
     const density = d.chemistry.density_g_cm3;
     const volumeCm3 = battery.basics.mass_g / density;
+    // StrictMath.cbrt in the mod; Math.cbrt like analysis.js (may differ in the last bit; only parts without pack_mm).
     const heightCm = Math.cbrt(volumeCm3 / (ModelConstants.BATTERY_LENGTH * ModelConstants.BATTERY_WIDTH));
     bh = heightCm / 100.0;
     bw = ModelConstants.BATTERY_WIDTH * bh;
@@ -612,8 +744,10 @@ function compute(source, parts, catalog, derived) {
   let accessoryTop = -Infinity;
   let accessoryTopX = 0.0;
   let accessoryTopZ = 0.0;
+  const accessoryFeet = [];
   for (const slot of slots) {
     const acc = parts.accessories[slot];
+    accessoryFeet.push(slot !== 'top' ? feet(anchorCorners(frame, acc, slot)) : null);
     accessoryMassGrams += acc.basics.mass_g;
     if (slot === 'top') {
       for (const corner of anchorCorners(frame, acc, slot)) {
@@ -647,29 +781,108 @@ function compute(source, parts, catalog, derived) {
   d.cameraTiltDeg = fd.camera.tilt_deg;
   d.cameraFovDeg = cameraFov(video);
 
-  const body = { batteryY, bw, bh, bl, electronicsY, accessoryTop, accessoryTopX, accessoryTopZ, batteryOnTop: geo.batteryOnTop() };
+  const body = { batteryY, bw, bh, bl, electronicsY, accessoryTop, accessoryTopX, accessoryTopZ, accessoryFeet,
+    batteryOnTop: geo.batteryOnTop() };
   if (fd.arms_explicit) {
     geometric(d, fd, body);
   } else {
     legacy(d, body);
   }
+  const inertia = creative == null ? null : creative.inertia;
+  if (inertia != null) {
+    d.inertiaZz = Number.isNaN(inertia[0]) ? d.inertiaZz : inertia[0];
+    d.inertiaXx = Number.isNaN(inertia[1]) ? d.inertiaXx : inertia[1];
+    d.inertiaYy = Number.isNaN(inertia[2]) ? d.inertiaYy : inertia[2];
+    authority(d);
+  }
   return new AirframeSpec(d);
 }
 
 /**
- * AccessoryAnchor.corners(type) of an accessory on the frame (mm, frame coordinates). Only top-mounted accessories
- * are asked for their corners, so tiltFor/stretch need not know AccessoryType.hangsStraight() (the bottom gripper).
+ * The control authority at the end of ParamDerivation.compute, again with the overridden inertia (analysis.js computed
+ * it with the automatic one). The hover operating point does not depend on the inertia, so its bus voltage is
+ * analysis.js's hoverVoltage.
  */
+function authority(d) {
+  const kt = d.kt;
+  const rm = d.motorResistance + d.escResistance;
+  const kQ = d.kTorque;
+  const omegaH = d.hoverOmega;
+  const damping = kt * kt / rm + 2.0 * kQ * omegaH;
+  const vh = d.hoverVoltage;
+  const idle = ModelConstants.IDLE_REFERENCE;
+  const dOmegaDDuty = (kt * vh / rm) / damping;
+  const dThrustDOmega = 2.0 * d.kThrust * d.ductGain * omegaH;
+  if (d.explicitArms) {
+    const rollLever = lever(d.motorX, d.mixRoll, 1.0);
+    const pitchLever = lever(d.motorZ, d.mixPitch, -1.0);
+    d.authorityRoll = rollLever * dThrustDOmega * dOmegaDDuty * (1.0 - idle) / d.inertiaZz;
+    d.authorityPitch = pitchLever * dThrustDOmega * dOmegaDDuty * (1.0 - idle) / d.inertiaXx;
+  } else {
+    const s = d.motorOffset;
+    d.authorityRoll = 4.0 * s * dThrustDOmega * dOmegaDDuty * (1.0 - idle) / d.inertiaZz;
+    d.authorityPitch = 4.0 * s * dThrustDOmega * dOmegaDDuty * (1.0 - idle) / d.inertiaXx;
+  }
+  d.authorityYawSteady = 4.0 * (2.0 * kQ * omegaH) * dOmegaDDuty * (1.0 - idle) / d.inertiaYy;
+  d.authorityYawInstant = 4.0 * kt * vh * (1.0 - idle) / (rm * d.inertiaYy);
+}
+
+/** ParamDerivation.lever */
+function lever(position, mix, sign) {
+  let sum = 0.0;
+  for (let i = 0; i < AirframeSpec.MOTORS; i++) sum += sign * position[i] * mix[i];
+  return Math.max(sum, 1e-4);
+}
+
+/** Double.compare */
+function doubleCompare(a, b) {
+  if (a < b) return -1;
+  if (a > b) return 1;
+  const x = Object.is(a, -0) ? -0.5 : Number.isNaN(a) ? 2 : 0;
+  const y = Object.is(b, -0) ? -0.5 : Number.isNaN(b) ? 2 : 0;
+  return x < y ? -1 : x > y ? 1 : 0;
+}
+
+/** ParamDerivation.feet: the four lowest corners of an accessory box (stable sort by height), in sim axes and metres. */
+function feet(corners) {
+  const order = corners.map((_, c) => c).sort((a, b) => doubleCompare(corners[a][1], corners[b][1]));
+  const out = [];
+  for (let c = 0; c < FOOT_CORNERS; c++) {
+    const corner = corners[order[c]];
+    out.push([-corner[0] / 1000.0, corner[1] / 1000.0, -corner[2] / 1000.0]);
+  }
+  return out;
+}
+
+/** ParamDerivation.standOnAccessories: the feet of accessories that reach below the hull stand on the ground. */
+function standOnAccessories(d, body, cx, cy, cz, bottom) {
+  d.standCount = 0;
+  for (const f of body.accessoryFeet) {
+    if (f == null || d.standCount + f.length > AirframeSpec.ACCESSORY_POINTS) continue;
+    let lowest = Infinity;
+    for (const foot of f) lowest = Math.min(lowest, foot[1] - cy);
+    if (!(lowest < bottom - ACCESSORY_STAND_MIN)) continue;
+    for (const foot of f) {
+      d.standX[d.standCount] = foot[0] - cx;
+      d.standY[d.standCount] = foot[1] - cy;
+      d.standZ[d.standCount] = foot[2] - cz;
+      d.standCount++;
+    }
+  }
+}
+
+/** AccessoryAnchor.corners(type) of an accessory on the frame (mm, frame coordinates), with tiltFor and stretch. */
 function anchorCorners(frame, acc, slot) {
   const anchor = anchorOf(frame, slot);
   const box = accessoryBox(acc, slot);
   const stretch = anchorStretch(anchor, acc, slot);
+  const tilt = tiltFor(anchor, acc);
   const out = [];
   for (let c = 0; c < 8; c++) {
     const lx = ((c & 1) === 0 ? box.min[0] : box.max[0]) * stretch;
     const ly = (c & 2) === 0 ? box.min[1] : box.max[1];
     const lz = (c & 4) === 0 ? box.min[2] : box.max[2];
-    out.push(anchorToFrame(anchor, lx, ly, lz));
+    out.push(anchorToFrame(anchor, tilt, lx, ly, lz));
   }
   return out;
 }
@@ -732,6 +945,7 @@ function legacy(d, body) {
   d.hullX[11] = 0.0;
   d.hullY[11] = bottom;
   d.hullZ[11] = 0.0;
+  standOnAccessories(d, body, 0.0, yCom, 0.0, bottom);
   groundPoints(d, 0.0, batteryFace, bw, bl, 0.0, d.ducted, bottom);
   let minY = Infinity;
   let maxY = -Infinity;
@@ -844,6 +1058,7 @@ function geometric(d, fd, body) {
   d.hullX[11] = -cx;
   d.hullY[11] = bottom;
   d.hullZ[11] = -cz;
+  standOnAccessories(d, body, cx, cy, cz, bottom);
   groundPoints(d, -cx, batteryFace, body.bw, body.bl, -cz, d.ducted, bottom);
   let minY = Infinity;
   let maxY = -Infinity;
@@ -885,6 +1100,31 @@ function groundPoints(d, x, face, width, length, z, ducted, bottom) {
       if (d.groundY[n] <= d.hullY[4 + i]) {
         mask &= ~(1 << (4 + i));
       }
+      n++;
+    }
+  }
+  if (d.standCount > 0) {
+    for (; n < AirframeSpec.ACCESSORY_GROUND; n++) {
+      const copy = n - AirframeSpec.HULL_POINTS;
+      d.groundX[n] = d.hullX[copy];
+      d.groundY[n] = d.hullY[copy];
+      d.groundZ[n] = d.hullZ[copy];
+    }
+    let plane = Infinity;
+    for (let k = 0; k < d.standCount; k++) {
+      d.groundX[n] = d.standX[k];
+      d.groundY[n] = d.standY[k];
+      d.groundZ[n] = d.standZ[k];
+      plane = Math.min(plane, d.standY[k]);
+      mask |= 1 << n;
+      n++;
+    }
+    for (let i = 0; i < AirframeSpec.STAND_LEGS; i++) {
+      const corner = ducted ? AirframeSpec.HULL_POINTS + 4 + i : 4 + i;
+      d.groundX[n] = ducted ? d.groundX[corner] : d.hullX[corner];
+      d.groundY[n] = plane;
+      d.groundZ[n] = ducted ? d.groundZ[corner] : d.hullZ[corner];
+      mask |= 1 << n;
       n++;
     }
   }

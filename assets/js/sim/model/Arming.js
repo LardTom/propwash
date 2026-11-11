@@ -8,11 +8,15 @@ export class Arming {
   static CRASH_COOLDOWN_S = 1.0;
   static REBOOT_S = 0.5;
   static BATTERY_EMPTY_SOC = 0.03;
+  static AUTO_ARM_WAIT = ArmBlocker.THROTTLE_NOT_LOW.bit() | ArmBlocker.THROTTLE_NOT_CENTERED.bit() | ArmBlocker.CRASH_COOLDOWN.bit()
+    | ArmBlocker.REBOOTING.bit() | ArmBlocker.TURTLE_AIRBORNE.bit();
 
   armed = false;
   lastSwitch = false;
   switchNeedsReset = false;
   pendingSwitchCheck = true;
+  autoArm = false;
+  autoArmed = false;
   crashCooldownSubsteps = 0;
   rebootSubsteps = 0;
   linkLostSubsteps = 0;
@@ -27,6 +31,8 @@ export class Arming {
     this.armed = false;
     this.switchNeedsReset = false;
     this.pendingSwitchCheck = true;
+    this.autoArm = false;
+    this.autoArmed = false;
     this.linkLostSubsteps = 0;
     this.landingSubsteps = 0;
     this.failsafeStage = 0;

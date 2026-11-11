@@ -1,5 +1,6 @@
-// Port of de.lardtom.propwash.sim.HullContact (1:1). StrictMath.tanh -> Math.tanh (may differ in the last bit).
-import { AirframeSpec } from './AirframeSpec.js?v=0d4a93ac';
+// Port of de.lardtom.propwash.sim.HullContact (1:1). Only turtle mode uses it (not ported in DroneSim), so StrictMath.tanh
+// stays Math.tanh here (may differ in the last bit).
+import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
 
 export class HullContact {
   static STATIC_SINK = 0.002;
@@ -35,7 +36,21 @@ export class HullContact {
     return low;
   }
 
-  solve(p, b, groundY, mu, gravity) {
+  static deepest(p, b, planes) {
+    let deep = -Infinity;
+    for (let k = 0; k < AirframeSpec.HULL_POINTS; k++) {
+      deep = Math.max(deep, planes[k] - (b.py + b.r10 * p.hullX(k) + b.r11 * p.hullY(k) + b.r12 * p.hullZ(k)));
+    }
+    return deep;
+  }
+
+  // Java overloads, dispatched on arguments.length:
+  //   solve(p, b, groundY, mu, gravity)
+  //   solve(p, b, groundY, planes, mu, gravity)
+  solve(p, b, groundY, planes, mu, gravity) {
+    if (arguments.length === 5) {
+      return this.solve(p, b, groundY, null, planes, mu);
+    }
     this.clear();
     const m = p.massKg;
     const k = m * gravity / HullContact.STATIC_SINK;
@@ -47,7 +62,7 @@ export class HullContact {
       const rx = b.r00 * hx + b.r01 * hy + b.r02 * hz;
       const ry = b.r10 * hx + b.r11 * hy + b.r12 * hz;
       const rz = b.r20 * hx + b.r21 * hy + b.r22 * hz;
-      const depth = groundY - (b.py + ry);
+      const depth = (planes == null ? groundY : planes[i]) - (b.py + ry);
       if (depth <= 0.0) {
         continue;
       }
