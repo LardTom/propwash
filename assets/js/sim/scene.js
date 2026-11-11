@@ -2,8 +2,10 @@
 // around it, the drone with the configurator's block models (like the mod's drone renderer: model pivot at the centre of
 // mass, comHeight above the frame origin) and two cameras – FPV from the drone's lens (like Propwash's FpvView: body
 // orientation turned 180° about its up axis, lens offset right/up/−forward, camera uptilt about the lens' x axis,
-// horizontal FOV of the video unit on a 16:9 image, the own drone hidden except its props, spinning props as translucent
-// blur discs) and line of sight from a pilot standing behind the start pad.
+// horizontal FOV of the video unit on a 16:9 image, the own drone hidden; its props, motors and arms in the camera's own
+// pass like FpvProps, see prop-view.js) and line of sight from a pilot standing behind the start pad. The props turn
+// with the rotor speed of their motor and show their blur model when spinning (prop-view.js, prop-spin.js); until the
+// block models are loaded (or without render data) translucent blur discs stand in for them.
 
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Group, Mesh, BufferGeometry, BufferAttribute, ShaderMaterial, Vector3,
@@ -11,6 +13,7 @@ import {
 import { verticalFov, discCenter, ASPECT as FPV_ASPECT, SLOTS } from '../configurator/fpv.js?v=76cdbbe6';
 import { rgbOf, shade, slotOf } from '../configurator/paint.js?v=ed26e8eb';
 import { FpvEyeGuard, VANILLA_NEAR } from './eye.js?v=2df6b5d1';
+import { PropView } from './prop-view.js?v=da7a50d0';
 
 const DEG = Math.PI / 180;
 const SKY = [0.47, 0.65, 1.0];
@@ -40,8 +43,6 @@ const BLUR_BANDS = [[null, 0.6, 0x58, 0x4c], [0.6, 0.85, 0x4c, 0x40], [0.85, 1.0
 const BLUR_SHADE = 0.85;
 const PROP_MATERIAL_COLOR = { carbon: 0x2b2c31, carbon_fiber_nylon: 0x3a3c42, glass_fiber_nylon: 0x5c6068 };
 const PROP_DEFAULT_COLOR = 0xe4e4ea;
-// Rotor speed (share of the maximum) from which the props are drawn as blur discs instead of still blades.
-const SPIN_BLUR = 0.04;
 
 const BLOCK_VERTEX = /* glsl */ `
 attribute vec3 color;
@@ -275,6 +276,12 @@ export class SimScene {
     this.airframe = options.airframe;
     this.rig = options.rig;
     this.buildDiscs(options);
+    this.hasModel = false;
+    this.props = new PropView({
+      airframe: options.airframe, rig: options.rig, uptiltDeg: options.uptiltDeg, frame: options.frame, prop: options.prop,
+      paint: options.paint, propsInFpv: options.propsInFpv,
+    });
+    this.scene.add(this.props.fpvGroup);
 
     this.fpvCamera = new PerspectiveCamera(70, 16 / 9, VANILLA_NEAR, FAR);
     this.eyeGuard = new FpvEyeGuard(this.world);
@@ -290,6 +297,13 @@ export class SimScene {
   setModel(group) {
     this.model.clear();
     this.model.add(group);
+    this.props.setModel(group);
+    this.hasModel = !!(group.userData.drone && group.userData.drone.props.length);
+  }
+
+  /** Setting "Props in FPV view" (FpvProps, on by default): props, motors and arms in the FPV image. */
+  setFpvProps(on) {
+    this.props.setPropsInFpv(on);
   }
 
   buildDiscs(options) {
@@ -349,38 +363,47 @@ export class SimScene {
 
   setUptilt(deg) {
     this.uptiltDeg = deg;
+    this.props.setTilt(deg);
   }
 
   setView(view) {
     this.view = view;
   }
 
-  /** Shows the parts for the view: in FPV only the props (the game hides the own drone), else everything. */
-  showParts(fpv, spinning) {
-    for (const piece of this.model.children.length ? this.model.children[0].children : []) {
-      const role = piece.userData.role;
-      piece.visible = role === 'prop' ? !spinning : !fpv;
+  /**
+   * Shows the parts for the view: the block model in line of sight (the props turned and blurred by prop-view.js), the
+   * camera pass in FPV (the game hides the own drone there). Without the block model the blur discs stand in: always in
+   * FPV, in line of sight while a prop blurs.
+   */
+  showParts(fpv) {
+    this.model.visible = !fpv;
+    if (this.hasModel) {
+      this.discs.visible = false;
+      return;
     }
-    this.discs.visible = spinning;
+    let blur = false;
+    for (let slot = 0; slot < SLOTS; slot++) blur = blur || this.props.blur(slot);
+    this.discs.visible = fpv || blur;
   }
 
   /**
    * Draws a frame.
    * @param {{x, y, z}} com centre of mass (world)
    * @param {{x, y, z, w}} q sim body orientation
-   * @param {number[]} rpmFraction four 0..1 rotor speeds (prop blur strength)
+   * @param {number[]} rpmFraction four 0..1 rotor speeds (|rpm| / maximum rpm, flight-model motor order)
    * @param {number} dt seconds since the last frame
    * @param {{x, y, z}} home the line-of-sight pilot position
+   * @param {boolean} [armed] the drone is armed (props spin up and blur only while armed); default: any rotor turns
    */
-  render(com, q, rpmFraction, dt, home) {
+  render(com, q, rpmFraction, dt, home, armed = rpmFraction.some((r) => r > 0)) {
     // Render orientation = sim orientation ⊗ rotation of π about y (x 0, y 1, z 0, w 0) = (−qz, qw, qx, −qy).
     this.drone.quaternion.set(-q.z, q.w, q.x, -q.y);
     this.drone.position.set(com.x, com.y, com.z);
     this.drone.updateMatrix();
     this.drone.updateMatrixWorld(true);
+    this.props.update(dt, rpmFraction, armed);
     const spin = rpmFraction.reduce((a, b) => a + b, 0) / 4;
     this.discMaterial.uniforms.strength.value = Math.min(1, 0.25 + spin * 1.5);
-    const spinning = spin > SPIN_BLUR;
 
     let camera;
     if (this.view === 'fpv') {
@@ -400,10 +423,12 @@ export class SimScene {
         camera.near = near;
         camera.updateProjectionMatrix();
       }
-      this.showParts(true, spinning);
+      this.showParts(true);
+      this.props.poseFpv(camera, this.drone.quaternion);
     } else {
       camera = this.losCamera;
-      this.showParts(false, spinning);
+      this.showParts(false);
+      this.props.poseLineOfSight();
       camera.position.set(home.x, home.y + 1.62, home.z);
       camera.lookAt(com.x, com.y, com.z);
       const d = Math.hypot(com.x - home.x, com.y - home.y - 1.62, com.z - home.z);
@@ -413,8 +438,23 @@ export class SimScene {
     this.renderer.render(this.scene, camera);
   }
 
+  /**
+   * Draws the last frame again and reads the canvas (tests): { width, height, pixels (RGBA, bottom row first) }.
+   */
+  readPixels() {
+    const camera = this.view === 'fpv' ? this.fpvCamera : this.losCamera;
+    this.renderer.render(this.scene, camera);
+    const gl = this.renderer.getContext();
+    const width = gl.drawingBufferWidth;
+    const height = gl.drawingBufferHeight;
+    const pixels = new Uint8Array(width * height * 4);
+    gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+    return { width, height, pixels };
+  }
+
   dispose() {
     window.removeEventListener('resize', this.onResize);
+    this.props.dispose();
     this.renderer.dispose();
   }
 }

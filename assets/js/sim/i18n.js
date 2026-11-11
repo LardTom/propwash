@@ -60,6 +60,8 @@ const TEXT = {
   'ui.cannotFly': ['This build cannot fly (unknown part). Flying the default drone instead.', 'Dieser Aufbau kann nicht fliegen (unbekanntes Teil). Du fliegst stattdessen die Standarddrohne.'],
   'view.fpv': ['FPV', 'FPV'],
   'view.los': ['Line of sight', 'Sichtflug'],
+  'view.fpvProps': ['Props', 'Props'],
+  'view.fpvPropsTitle': ['Props in FPV view: your own props with their motors and arms, where the camera sees them', 'Props im FPV-Bild: die eigenen Props samt Motoren und Armen, dort wo die Kamera sie sieht'],
   'msg.crash': ['CRASH', 'CRASH'],
   'msg.armed': ['ARMED', 'SCHARF'],
   'msg.reset': ['RESET', 'ZURÜCKGESETZT'],

@@ -298,7 +298,8 @@ The PW3 vectors of every export with `base/` are kept (each name once; the same 
 node tools/build-configurator-data.mjs --export <dir> --mods <jars> --goldens <propwash>/common/src/test/resources/sharecode
                                            # catalog.json, the export's PW3 vectors and the golden files of Propwash
 node tools/build-configurator-models.mjs --export <dir> --resources <propwash>/common/src/main/resources --resources <unpacked JMP jar>
-                                           # render.json and models/ (with the plug anchors)
+                                           # render.json and models/ (with the plug anchors and the props'
+                                           # blur models for the simulator)
 node tools/build-configurator-heat.mjs --export <dir> … # heat figures of the game (tools/fixtures/heat-vectors.json)
 node tools/build-addons.mjs --jar justmoreparts=<jar>   # the hosted export of Just More Parts the configurator shows
 node tools/build-configurator-beginner.mjs # pictures of the builds for beginners (headless Chrome, cwebp)
@@ -450,9 +451,25 @@ switches say; without a code the simulator flies the default preset (`justmorepa
   the map's floor level all around. `flight.js` runs the mod's pilot loop (environment probes, wind of a clear overworld
   day, frame slicing at speed, block clipping like `rescue.VoxelFlight`, `afterMove`), `eye.js` the FPV eye guard
   (`EyeClearance`). The start pad is `SPAWN` in `app.js`.
-- **Views:** FPV from the lens with the drone's camera angle and the video unit's field of view, props as blur discs
-  (like the configurator's camera preview) and line of sight (`C`) with the drone's block models (`drone-model.js`,
-  `createPartMeshes` of `viewer.js`); Betaflight-style OSD with the craft name.
+- **Views:** FPV from the lens with the drone's camera angle and the video unit's field of view and line of sight (`C`)
+  with the drone's block models (`drone-model.js`, `createPartMeshes` of `viewer.js`); Betaflight-style OSD with the
+  craft name.
+- **Props** like Propwash 0.6.0 (`prop-spin.js`, `fpv-props.js`, `prop-view.js`): every prop turns with the rotor speed
+  of its own motor in the flight model (QuadcopterEntity: 20 ticks per second, 0.9 rad per tick at idle up to 3.2 at
+  full output, 35 % response per tick, drawn between the ticks) in the spin direction of that motor (props in: front
+  left and rear right clockwise seen from above, the `_ccw` model on the other two). An armed prop whose motor output
+  lies above the blur threshold 0.12 shows its blur model instead of the blades: a translucent disc in the slot's prop
+  paint with a sharp hub and nut (the variants `_blur` and `_blur_paint` of the web export; `tl` in the model file names
+  the translucent texture). In FPV the own drone is hidden; with **Props** on in the bar (the game's setting *Props in
+  FPV view*, on by default, kept in `localStorage` as `propwash-sim-fpv-props`) the camera's own pass draws what the
+  real camera would see (FpvProps): the props of the slots whose motor hangs on an arm of the frame and whose disc
+  reaches into the image (blades, or the blur disc and the blur model's hub), the frame's arms and those motors, all
+  placed from the lens, scaled by `nearScale`, clipped and pushed out like in the game, so they keep their place in the
+  image. The duct rings of a whoop or cinewhoop show like the game's default *Ducts in FPV view* (on). Not like the
+  game: every prop shows its own motor (Propwash 0.6.0 swaps front left and rear right when it draws them), no worn,
+  damaged or broken props (no part wear), no video feed filter on the FPV image, and a camera drone's gimbal does not
+  hide the props. `tools/test-sim-props.mjs` checks the formulas against the mod and the page in headless Chrome
+  (`--shots <dir>` keeps its screenshots).
 - **Input:** radios over USB (“USB Joystick (HID)”), gamepads (browser Gamepad API) and the keyboard, with the mod's
   defaults (AETR, AUX1 arm, AUX2 Acro/Horizon/Angle; gamepad Mode 2 with right shoulder arm; keyboard W/S A/D, arrows,
   `Z`, `R`, `Backspace`, `U`). The **Controller** dialog sets device, stick mode 1–4, channels (with detection),

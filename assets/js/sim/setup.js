@@ -2,7 +2,7 @@
 // switch functions and live channel monitor. Works on the profiles of input.js (one per device, kept in localStorage).
 
 import { STICKS, FUNCTIONS, STICK_MODES, KEYBOARD_ID, defaultProfile, channelValue, throttleTravel, looksLikeRadio } from './input.js?v=4b632cf7';
-import { t } from './i18n.js?v=ce7dd41e';
+import { t } from './i18n.js?v=020c3cd3';
 
 function el(tag, attrs, ...children) {
   const node = document.createElement(tag);

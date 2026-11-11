@@ -2276,7 +2276,7 @@ async function startViewer() {
   const button = $('[data-autorotate]');
   let mod;
   try {
-    mod = await import('./viewer.js?v=7b1420f0');
+    mod = await import('./viewer.js?v=b7ed8f78');
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;
