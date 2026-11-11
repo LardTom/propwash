@@ -2,8 +2,8 @@
 // with their motors and arms in the FPV image) as a switch in the simulator's bar, next to the camera buttons. The
 // choice stays in the browser (localStorage, FPV_PROPS_KEY).
 
-import { t } from './i18n.js?v=020c3cd3';
-import { FPV_PROPS_KEY } from './prop-view.js?v=da7a50d0';
+import { t } from './i18n.js?v=80cca2de';
+import { FPV_PROPS_KEY } from './prop-view.js?v=3d6048f4';
 
 
 /**

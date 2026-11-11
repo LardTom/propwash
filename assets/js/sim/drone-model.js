@@ -9,7 +9,7 @@
 
 import { Group } from '../../vendor/three/three.min.js';
 import { assemble } from '../configurator/assembly.js?v=4c00d7c2';
-import { createPartMeshes } from '../configurator/viewer.js?v=b7ed8f78';
+import { createPartMeshes } from '../configurator/viewer.js?v=d03840d8';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
 const MODEL_ROOT = new URL('../../data/configurator/models/', import.meta.url);

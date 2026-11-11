@@ -522,7 +522,10 @@ export function discColor(prop, model, paint, slot) {
  * the mod's drone renderer. Shared by the configurator's viewer and the FPV simulator (sim/).
  * @param {{catalog: object, render: object, onTextureLoad?: () => void}} options
  */
-export function createPartMeshes({ catalog, render, onTextureLoad }) {
+export function createPartMeshes(options) {
+  // setData swaps catalog and render data (an add-on jar came, went or was switched), like the viewer's setData.
+  let { catalog, render } = options;
+  const { onTextureLoad } = options;
   const textureCache = new Map();
   const geometryCache = new Map();
   let white = null;
@@ -651,7 +654,12 @@ export function createPartMeshes({ catalog, render, onTextureLoad }) {
     return mesh;
   }
 
-  return { texture, whiteTexture, material, geometryFor, pieceMesh, pieceMeshes };
+  function setData(nextCatalog, nextRender) {
+    catalog = nextCatalog;
+    render = nextRender;
+  }
+
+  return { texture, whiteTexture, material, geometryFor, pieceMesh, pieceMeshes, setData };
 }
 
 export function webglAvailable() {
@@ -1282,6 +1290,7 @@ export function createViewer(container, options) {
     setData(nextCatalog, nextRender) {
       catalog = nextCatalog;
       render = nextRender;
+      partMeshes.setData(nextCatalog, nextRender);
     },
     setAutoRotate(on) {
       controls.autoRotate = !!on;

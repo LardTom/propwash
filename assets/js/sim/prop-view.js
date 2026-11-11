@@ -15,7 +15,7 @@
 // drone's render orientation and scaled by 0.001.
 
 import { Group, Mesh, BufferGeometry, BufferAttribute, ShaderMaterial, Vector3 } from '../../vendor/three/three.min.js';
-import { discGeometry, discColor } from '../configurator/viewer.js?v=b7ed8f78';
+import { discGeometry, discColor } from '../configurator/viewer.js?v=d03840d8';
 import { shade } from '../configurator/paint.js?v=ed26e8eb';
 import { PropSpin, SLOTS, SLOT_SIM_MOTOR, PROPS_IN_CCW, packedOutput } from './prop-spin.js?v=9659ba54';
 import { FpvPropGeometry, FpvArmZone, FpvGuardZone, lensPolygon, viewTangents } from './fpv-props.js?v=83d63f01';

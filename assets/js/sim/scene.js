@@ -13,7 +13,7 @@ import {
 import { verticalFov, discCenter, ASPECT as FPV_ASPECT, SLOTS } from '../configurator/fpv.js?v=76cdbbe6';
 import { rgbOf, shade, slotOf } from '../configurator/paint.js?v=ed26e8eb';
 import { FpvEyeGuard, VANILLA_NEAR } from './eye.js?v=2df6b5d1';
-import { PropView } from './prop-view.js?v=da7a50d0';
+import { PropView } from './prop-view.js?v=3d6048f4';
 
 const DEG = Math.PI / 180;
 const SKY = [0.47, 0.65, 1.0];

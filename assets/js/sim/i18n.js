@@ -1,4 +1,4 @@
-// Texts of the simulator page: ['English', 'Deutsch'] per key, like the configurator's texts. On the English and German
+// Texts of the simulator page: an array of the English and the German text per key, like the configurator's texts. On the English and German
 // pages the page language (<html lang>) picks one; on a translated page (/es/sim/, …) t() gives the translation of the
 // English text from assets/i18n/<lang>.json (tools/i18n/pages.mjs lists this file as "js-arrays"; call loadTexts()
 // before the first text).
