@@ -1,6 +1,6 @@
 // Port of de.lardtom.propwash.sim.SimEnvironment (1:1).
 import { Fluid } from './Fluid.js?v=3fdbbd97';
-import { SnagField } from './SnagField.js?v=09d2c021';
+import { SnagField } from './SnagField.js?v=45b55541';
 
 export class SimEnvironment {
   groundDistance = Infinity;

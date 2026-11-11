@@ -29,8 +29,8 @@ import { RotorAero } from './RotorAero.js?v=22dc31b6';
 import { SimMath } from './SimMath.js?v=44da8aea';
 import { PropFailure } from './PropFailure.js?v=35d07a01';
 import { FrameGeometry } from './FrameGeometry.js?v=4d41b5f3';
-import { airframe, anchorOf, accessoryBox, anchorToFrame, anchorStretch } from '../../configurator/analysis.js?v=f3f32120';
-import { resolveBuild, check } from '../../configurator/rules.js?v=6634f777';
+import { airframe, anchorOf, accessoryBox, anchorToFrame, anchorStretch } from '../../configurator/analysis.js?v=293f859b';
+import { resolveBuild, check } from '../../configurator/rules.js?v=26a8eb49';
 import { cameraFov } from '../../configurator/fpv.js?v=76cdbbe6';
 
 const SQRT2 = Math.sqrt(2.0);

@@ -1,6 +1,6 @@
 import { SimMath } from './SimMath.js?v=44da8aea';
 import { Pt1 } from './Pt1.js?v=afe0b0dc';
-import { PidAutoTune } from './PidAutoTune.js?v=89367845';
+import { PidAutoTune } from './PidAutoTune.js?v=5cb0e123';
 
 // Port of de.lardtom.propwash.sim.AxisPidController
 export class AxisPidController {

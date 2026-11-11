@@ -1,5 +1,5 @@
 // Port of de.lardtom.propwash.sim.Thermal (1:1).
-import { AirframeSpec } from './AirframeSpec.js?v=0d4a93ac';
+import { AirframeSpec } from './AirframeSpec.js?v=840a3158';
 import { SimMath } from './SimMath.js?v=44da8aea';
 
 export class Thermal {

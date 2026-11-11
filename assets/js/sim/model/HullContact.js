@@ -1,5 +1,5 @@
 // Port of de.lardtom.propwash.sim.HullContact (1:1). StrictMath.tanh -> Math.tanh (may differ in the last bit).
-import { AirframeSpec } from './AirframeSpec.js?v=0d4a93ac';
+import { AirframeSpec } from './AirframeSpec.js?v=840a3158';
 
 export class HullContact {
   static STATIC_SINK = 0.002;

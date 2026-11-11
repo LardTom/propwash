@@ -1,5 +1,5 @@
 import { SimMath } from './SimMath.js?v=44da8aea';
-import { AirframeSpec } from './AirframeSpec.js?v=0d4a93ac';
+import { AirframeSpec } from './AirframeSpec.js?v=840a3158';
 import { StabMode } from './StabMode.js?v=ef37a80a';
 import { TpaMode } from './TpaMode.js?v=9b682a25';
 import { ItermRelaxMode } from './ItermRelaxMode.js?v=2be3e748';
@@ -7,11 +7,11 @@ import { FcAxes } from './FcAxes.js?v=3da14453';
 import { Pt1 } from './Pt1.js?v=afe0b0dc';
 import { RcProcessor } from './RcProcessor.js?v=6af61b2c';
 import { AttitudeController } from './AttitudeController.js?v=76cd8769';
-import { AxisPidController } from './AxisPidController.js?v=23574e9c';
-import { Mixer } from './Mixer.js?v=0cf4ec61';
+import { AxisPidController } from './AxisPidController.js?v=661b5c57';
+import { Mixer } from './Mixer.js?v=88427457';
 import { RateCurves } from './RateCurves.js?v=13dd073e';
 import { ThrottleCurve } from './ThrottleCurve.js?v=6243615e';
-import { FlightControllerConfig } from './FlightControllerConfig.js?v=d9c99f71';
+import { FlightControllerConfig } from './FlightControllerConfig.js?v=5a211240';
 
 // DroneSim is not part of this port batch; only its PHYSICS_HZ constant is needed here (Java: DroneSim.PHYSICS_HZ = 2000).
 const DroneSim = { PHYSICS_HZ: 2000 };

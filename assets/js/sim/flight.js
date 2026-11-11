@@ -2,9 +2,9 @@
 // (drone.client.PilotSession: environment probes, frame slicing, entity move with block collision, afterMove report)
 // with the block clipping of rescue.VoxelFlight, generalised to the map's 0.5 m cells.
 
-import { DroneSim } from './model/DroneSim.js?v=523318a3';
+import { DroneSim } from './model/DroneSim.js?v=aeac31b2';
 import { PilotInput } from './model/PilotInput.js?v=d7d531ac';
-import { SimEnvironment } from './model/SimEnvironment.js?v=93ebd229';
+import { SimEnvironment } from './model/SimEnvironment.js?v=c5f1bbd8';
 import { StepResult } from './model/StepResult.js?v=786e7d96';
 import { MoveReport } from './model/MoveReport.js?v=79f0bfaa';
 import { StabMode } from './model/StabMode.js?v=ef37a80a';

@@ -4,7 +4,7 @@ import { PidProfile } from './PidProfile.js?v=92830202';
 import { FilterSettings } from './FilterSettings.js?v=3ec8b75c';
 import { PidLoopRate } from './PidLoopRate.js?v=2a3568bc';
 import { PidSource } from './PidSource.js?v=bf62fdc1';
-import { OperatingPoints } from './OperatingPoints.js?v=0990bf11';
+import { OperatingPoints } from './OperatingPoints.js?v=8508fc63';
 
 // DroneSim is not part of this port batch; only its PHYSICS_HZ constant is needed here (Java: DroneSim.PHYSICS_HZ = 2000).
 const DroneSim = { PHYSICS_HZ: 2000 };

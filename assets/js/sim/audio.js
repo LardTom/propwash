@@ -23,7 +23,7 @@
 import { MotorControl } from './audio/MotorControl.js?v=e5eb5688';
 import { MotorTimbre } from './audio/MotorTimbre.js?v=d8807f99';
 import { SoundReach } from './audio/SoundReach.js?v=fa418e95';
-import { OperatingPoints } from './model/OperatingPoints.js?v=0990bf11';
+import { OperatingPoints } from './model/OperatingPoints.js?v=8508fc63';
 import { ModelConstants } from './model/ModelConstants.js?v=760466ce';
 import { PROCESSOR_NAME, WORKLET_URL } from './audio-worklet.js?v=63c26855';
 
@@ -361,7 +361,7 @@ class DroneVoice {
 }
 
 export class DroneAudio {
-  /** @param {import('./model/AirframeSpec.js?v=0d4a93ac').AirframeSpec} airframe */
+  /** @param {import('./model/AirframeSpec.js?v=840a3158').AirframeSpec} airframe */
   constructor(airframe) {
     this.airframe = airframe;
     let timbre = MotorTimbre.DEFAULT;
@@ -512,7 +512,7 @@ export class DroneAudio {
 
   /**
    * Every rendered frame, after the sim stepped.
-   * @param {import('./model/DroneSim.js?v=523318a3').DroneSim} sim
+   * @param {import('./model/DroneSim.js?v=aeac31b2').DroneSim} sim
    * @param {{fpv: boolean, x?: number, y?: number, z?: number}} listener
    */
   update(sim, listener) {

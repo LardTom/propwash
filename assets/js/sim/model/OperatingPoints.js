@@ -1,7 +1,7 @@
 // Port of de.lardtom.propwash.sim.OperatingPoints (1:1). OperatingPoints.Point is exported and attached as a static.
 import { CellCurve } from './CellCurve.js?v=0c22cd1a';
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
-import { PowerSystem } from './PowerSystem.js?v=0990bf11';
+import { PowerSystem } from './PowerSystem.js?v=8508fc63';
 import { RotorAero } from './RotorAero.js?v=22dc31b6';
 
 // java.lang.Math.toRadians multiplies by this constant.

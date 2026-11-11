@@ -6,10 +6,10 @@
 //   video.data.link === 'digital', massGrams() -> video.basics.mass_g (as in analysis.js).
 // - Nested types: Profile (enum), Mix / Flight / Heat (records: accessor methods cruise(), minutes(), ...), Points
 //   (class) are exported and attached as statics.
-import { AirframeSpec } from './AirframeSpec.js?v=0d4a93ac';
+import { AirframeSpec } from './AirframeSpec.js?v=840a3158';
 import { javaEnum } from './Enum.js?v=d8aa4520';
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
-import { OperatingPoints } from './OperatingPoints.js?v=0990bf11';
+import { OperatingPoints } from './OperatingPoints.js?v=8508fc63';
 import { RotorAero } from './RotorAero.js?v=22dc31b6';
 import { SimMath } from './SimMath.js?v=44da8aea';
 

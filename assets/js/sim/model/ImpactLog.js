@@ -1,6 +1,6 @@
 // Port of de.lardtom.propwash.sim.ImpactLog (1:1). float[] -> Float32Array (stores Java float values).
 // The private fields `size` and `dropped` are stored as `_size` / `_dropped` (a JS field would hide the methods).
-import { ImpactSample } from './ImpactSample.js?v=51d53257';
+import { ImpactSample } from './ImpactSample.js?v=71cc8dfe';
 
 export class ImpactLog {
   static CAPACITY = 16;

@@ -1,8 +1,8 @@
 // Port of de.lardtom.propwash.sim.PowerSystem (1:1).
-import { AirframeSpec } from './AirframeSpec.js?v=0d4a93ac';
-import { EnergyModel } from './EnergyModel.js?v=0990bf11';
+import { AirframeSpec } from './AirframeSpec.js?v=840a3158';
+import { EnergyModel } from './EnergyModel.js?v=8508fc63';
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
-import { OperatingPoints } from './OperatingPoints.js?v=0990bf11';
+import { OperatingPoints } from './OperatingPoints.js?v=8508fc63';
 import { RotorAero } from './RotorAero.js?v=22dc31b6';
 import { SimMath } from './SimMath.js?v=44da8aea';
 
