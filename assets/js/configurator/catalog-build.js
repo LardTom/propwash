@@ -18,6 +18,8 @@ import { KINDS, ARM_KEYS, trueX, maxContinuousCurrent, landingCellVoltage, effec
 
 export const LANGUAGES = Object.freeze(['de_de', 'en_us']);
 export const NOMINAL_CELL_V = 3.7;
+// Parts of the game that exist only in creative mode (no recipe): the web export of the game leaves them out; the
+// configurator takes them from the Propwash jar (exportParts with creative: true) and marks them creative_only.
 export const CREATIVE_ONLY = Object.freeze(['propwash:creative_fc']);
 export const PROPWASH = 'propwash';
 export const CHANNEL_SLOTS = Object.freeze({
@@ -498,14 +500,16 @@ export const partSort = (a, b) => (KINDS.indexOf(a.kind) - KINDS.indexOf(b.kind)
 /**
  * The parts.json entries of the given definitions (one namespace or several), in the export's order.
  * options: builtin(id) – whether Propwash itself registers the part (default: the propwash namespace),
- * chemistry(id) – the registered chemistries for the battery energy.
+ * chemistry(id) – the registered chemistries for the battery energy, creative – also the parts of the game that exist
+ * only in creative mode (CREATIVE_ONLY, the web export of the game leaves them out), marked creative_only: true.
  */
-export function exportParts(definitions, res, { builtin = (id) => splitId(id)[0] === PROPWASH, chemistry = () => null } = {}) {
+export function exportParts(definitions, res, { builtin = (id) => splitId(id)[0] === PROPWASH, chemistry = () => null, creative = false } = {}) {
   const out = [];
-  for (const def of definitions.filter((d) => !CREATIVE_ONLY.includes(d.id)).sort(partSort)) {
+  for (const def of definitions.filter((d) => creative || !CREATIVE_ONLY.includes(d.id)).sort(partSort)) {
     const [namespace, path] = splitId(def.id);
     const isBuiltin = builtin(def.id);
     const entry = { id: def.id, category: def.kind, builtin: isBuiltin, name: res.both(`part.${namespace}.${path}`) };
+    if (CREATIVE_ONLY.includes(def.id)) entry.creative_only = true;
     if (def.kind === 'frame') {
       const key = isBuiltin ? `propwash.content.frame_short.${path}` : `${namespace}.frame_short.${path}`;
       entry.short_name = res.hasText(key) ? res.both(key) : null;
@@ -635,6 +639,7 @@ export function compactHelp(h) {
 export function catalogPart(p) {
   const b = p.basics;
   const out = { id: p.id, category: p.category, builtin: p.builtin, name: p.name };
+  if (p.creative_only) out.creative_only = true;
   if (p.short_name) out.short_name = p.short_name;
   const h = compactHelp(p.help);
   if (h) out.help = h;

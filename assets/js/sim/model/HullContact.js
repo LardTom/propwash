@@ -1,6 +1,6 @@
 // Port of de.lardtom.propwash.sim.HullContact (1:1). Only turtle mode uses it (not ported in DroneSim), so StrictMath.tanh
 // stays Math.tanh here (may differ in the last bit).
-import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
+import { AirframeSpec } from './AirframeSpec.js?v=cfbc2e85';
 
 export class HullContact {
   static STATIC_SINK = 0.002;

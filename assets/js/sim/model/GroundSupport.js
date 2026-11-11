@@ -2,9 +2,9 @@
 // of SimEnvironment (5 × 5 heights across the hitbox, plus the points under accessory stands). Ground contact points
 // and hull points over a lower or higher column get their own plane, and a drone resting with its centre over an edge
 // tips over it (overhang).
-import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
-import { GroundSolver } from './GroundSolver.js?v=51a23193';
-import { SimEnvironment } from './SimEnvironment.js?v=799ee963';
+import { AirframeSpec } from './AirframeSpec.js?v=cfbc2e85';
+import { GroundSolver } from './GroundSolver.js?v=1abc0289';
+import { SimEnvironment } from './SimEnvironment.js?v=7f47fec9';
 import { SimMath } from './SimMath.js?v=44da8aea';
 import { StrictMath } from './StrictMath.js?v=e765e983';
 

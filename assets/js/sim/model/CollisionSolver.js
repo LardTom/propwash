@@ -1,6 +1,6 @@
 // Port of de.lardtom.propwash.sim.CollisionSolver (1:1).
-import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
-import { HullShape } from './HullShape.js?v=92bb25c1';
+import { AirframeSpec } from './AirframeSpec.js?v=cfbc2e85';
+import { HullShape } from './HullShape.js?v=f1056173';
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
 import { SimMath } from './SimMath.js?v=44da8aea';
 

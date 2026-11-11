@@ -2,10 +2,14 @@
 // Builds the 3D data of the configurator's drone viewer from the web export of Propwash (format 2).
 //
 //   node tools/build-configurator-models.mjs [--export <web-export dir> …] [--resources <mod resources dir> …] [--out <dir>]
+//                                           [--propwash-jar <jar>]
 //
 // Same export location rules as tools/build-configurator-data.mjs (one export with every add-on or several, sibling
 // checkouts, JMP_WEB_EXPORT or --export); base/ is not needed here.
 // --out writes render.json and models/ to another folder instead of assets/data/configurator (for tests).
+// --propwash-jar (or PROPWASH_JAR): the jar of the Propwash release of the export; the model files of the parts that
+// exist only in creative mode (the creative flight controller, which the web export leaves out) come from it, made by
+// the configurator's jar reader (catalog-build.js partModel, as for add-on jars), like build-configurator-data.mjs.
 //
 // Writes:
 //   assets/data/configurator/render.json                        frame layouts (drone_layout.json), motor seats, paint
@@ -48,7 +52,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { exportDirs, readExports } from './build-configurator-data.mjs';
+import { exportDirs, readExports, propwashJar, creativeParts } from './build-configurator-data.mjs';
 import { antennaFaces } from '../assets/js/configurator/antenna.js';
 import { compactModel } from '../assets/js/configurator/catalog-build.js';
 import { standIn } from '../assets/js/configurator/stand-ins.js';
@@ -413,6 +417,24 @@ function main() {
     withModel.push(p.id);
   }
 
+  // The parts of the game that exist only in creative mode, from Propwash's jar (the export leaves them out).
+  const jar = propwashJar(argv);
+  const creative = jar ? creativeParts(jar, { models: true }) : null;
+  if (creative && creative.jar.version !== exp.mods.propwash) throw new Error(`--propwash-jar is Propwash ${creative.jar.version}, the export has ${exp.mods.propwash}`);
+  for (const [id, model] of creative ? creative.models : []) {
+    if (withModel.includes(id)) throw new Error(`${id}: already in the export`);
+    const p = creative.parts.find((x) => x.id === id);
+    const [pns, ppath] = id.split(':');
+    const target = path.join(outModels, pns, p.category, `${ppath}.json`);
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    const text = JSON.stringify(model);
+    fs.writeFileSync(target, text + '\n');
+    files++;
+    bytes += text.length + 1;
+    withModel.push(id);
+    if (p.category === 'stack' && model.variants.mounted) counts.mounted++;
+  }
+
   // Frame layouts from drone_layout.json (keys resolved to full ids) and all motor seats.
   const layouts = {};
   const motorSeats = {};
@@ -447,6 +469,8 @@ function main() {
   console.log(`VTX antennas at the frame's antenna holder: ${counts.videos} video models, ${counts.masked} of them with antenna elements `
     + `left out (${counts.maskedFaces} faces)`);
   console.log(`spinning props: ${counts.blurs} props with a blur model`);
+  if (creative) console.log(`creative only, from ${creative.jar.file} (Propwash ${creative.jar.version}): ${[...creative.models.keys()].join(', ')}`);
+  else console.warn('warning: no --propwash-jar – no model files of the creative-only parts (creative flight controller)');
   if (counts.standIns.length) console.log(`textures of Minecraft drawn with the page's stand-in (assets/js/configurator/stand-ins.js): ${counts.standIns.join(', ')}`);
   console.log(`battery plugged in: ${counts.sockets} battery sockets, ${counts.mounted} mounted stacks`
     + `${counts.mountedFromResources ? ` (${counts.mountedFromResources} from the mod resources, the export lacks them)` : ''}`

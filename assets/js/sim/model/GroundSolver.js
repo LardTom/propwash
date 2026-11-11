@@ -1,5 +1,5 @@
 // Port of de.lardtom.propwash.sim.GroundSolver (1:1).
-import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
+import { AirframeSpec } from './AirframeSpec.js?v=cfbc2e85';
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
 import { SimMath } from './SimMath.js?v=44da8aea';
 import { StrictMath } from './StrictMath.js?v=e765e983';

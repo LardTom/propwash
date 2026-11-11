@@ -1,8 +1,8 @@
 // Port of de.lardtom.propwash.sim.SimEnvironment (1:1, with the support grid of Propwash 0.6.0: heights of the
 // ground under a 5 × 5 grid across the hitbox and under the stand points of accessories, filled by the pilot loop).
-import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
+import { AirframeSpec } from './AirframeSpec.js?v=cfbc2e85';
 import { Fluid } from './Fluid.js?v=3fdbbd97';
-import { SnagField } from './SnagField.js?v=3222fc63';
+import { SnagField } from './SnagField.js?v=9acc5e95';
 
 export class SimEnvironment {
   static SUPPORT_SIDE = 5;

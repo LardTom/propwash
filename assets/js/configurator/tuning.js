@@ -7,7 +7,7 @@
 //
 // All values are float32 like in the mod. Keys outside the flight groups (hold, camera, led, vtx) are ignored.
 
-import { airframe, hoverStick } from './analysis.js?v=f3f32120';
+import { airframe, hoverStick } from './analysis.js?v=293f859b';
 import { tuneGroup, isFlightKey } from './tune.js?v=f4084d0e';
 import { CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
 
@@ -337,8 +337,8 @@ function same(a, b) {
   return Math.abs(Math.fround(a - b)) <= EPSILON * Math.max(1.0, Math.abs(b));
 }
 
-function paramsOf(build, catalog) {
-  const params = airframe(build, catalog);
+function paramsOf(build, catalog, creative = null) {
+  const params = airframe(build, catalog, creative);
   if (!params) throw new Error('tune: build has unknown parts');
   return params;
 }
@@ -353,14 +353,15 @@ function flightTune(tune) {
  * Full default flight tune of a build (TuneMapping.defaults), keys sorted. Throws for builds with unknown parts.
  * @param {object} build part ids
  * @param {object} catalog from data.js
+ * @param {{base, values}|null} creative the values of a creative drone (its PIDs derive from its flight model)
  */
-export function defaultTune(build, catalog) {
-  return fromConfig(toConfig({}, paramsOf(build, catalog)));
+export function defaultTune(build, catalog, creative = null) {
+  return fromConfig(toConfig({}, paramsOf(build, catalog, creative)));
 }
 
 /** Every flight value the drone flies with for a stored tune (TuneMapping.effective, flight keys). */
-export function effectiveTune(stored, build, catalog) {
-  return fromConfig(toConfig(flightTune(stored), paramsOf(build, catalog)));
+export function effectiveTune(stored, build, catalog, creative = null) {
+  return fromConfig(toConfig(flightTune(stored), paramsOf(build, catalog, creative)));
 }
 
 function normalizeWith(tune, params, base) {
@@ -384,8 +385,8 @@ function keepCamera(out, source) {
 
 /** Stored form of a tune: only values that differ from the build's defaults (TuneMapping.normalize, flight keys), plus
  * the drone's camera angle. */
-export function normalizeTune(tune, build, catalog) {
-  const params = paramsOf(build, catalog);
+export function normalizeTune(tune, build, catalog, creative = null) {
+  const params = paramsOf(build, catalog, creative);
   return keepCamera(normalizeWith(flightTune(tune), params, fromConfig(toConfig({}, params))), tune);
 }
 
@@ -395,8 +396,8 @@ export function normalizeTune(tune, build, catalog) {
  * @param {object} stored current stored tune
  * @param {object} edited edited values (any subset of flight keys, typically all values shown in the editor)
  */
-export function applyTuneEdit(stored, edited, build, catalog) {
-  const params = paramsOf(build, catalog);
+export function applyTuneEdit(stored, edited, build, catalog, creative = null) {
+  const params = paramsOf(build, catalog, creative);
   const before = fromConfig(toConfig(flightTune(stored), params));
   const merged = {};
   for (const [key, value] of Object.entries(edited || {})) {

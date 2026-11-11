@@ -2,25 +2,25 @@
 // training map with Propwash's flight model (model/, a port of the mod's sim package), its tune (rates, PIDs, filters,
 // camera angle) and the pilot's radio, gamepad or keyboard.
 
-import { loadCatalog } from '../configurator/data.js?v=f1d2acbd';
+import { loadCatalog } from '../configurator/data.js?v=e9c7448c';
 import { codeFromHash } from '../configurator/sharecode.js?v=024bd980';
+import { simAirframe } from './creative-airframe.js?v=a94aef8e';
 import { droneUptilt } from '../configurator/fpv.js?v=76cdbbe6';
-import { AirframeSpec } from './model/AirframeSpec.js?v=259f604e';
-import { FlightControllerConfig } from './model/FlightControllerConfig.js?v=547c5a1a';
+import { FlightControllerConfig } from './model/FlightControllerConfig.js?v=dddf154c';
 import { SimTuning } from './model/SimTuning.js?v=30961ab0';
-import { DroneSim } from './model/DroneSim.js?v=b5885e0c';
+import { DroneSim } from './model/DroneSim.js?v=0b50a5d4';
 import { StabMode } from './model/StabMode.js?v=ef37a80a';
 import { ArmBlocker } from './model/ArmBlocker.js?v=3bfdfa7f';
 import { SimEventType } from './model/SimEventType.js?v=7000a262';
 import { parseGlb, VoxelWorld } from './world.js?v=3d604f11';
-import { Flight } from './flight.js?v=7ac2b3ad';
+import { Flight } from './flight.js?v=8767573d';
 import { SimScene } from './scene.js?v=9fb80428';
 import { Osd } from './osd.js?v=eac48f7a';
 import { PilotInputSource } from './input.js?v=4b632cf7';
 import { ControllerSetup } from './setup.js?v=a76a0c0f';
 import { loadDroneModel } from './drone-model.js?v=7abbaf78';
 import { mountFpvPropsSetting } from './props-setting.js?v=09571248';
-import { DroneAudio } from './audio.js?v=a57887bc';
+import { DroneAudio } from './audio.js?v=bd89b39c';
 import { BatteryState } from './model/BatteryState.js?v=de4ddff2';
 import { t, lang, loadTexts } from './i18n.js?v=020c3cd3';
 
@@ -74,15 +74,15 @@ function craftName(catalog, content) {
 
 function buildSim(catalog, content) {
   const build = content.build;
-  const airframe = AirframeSpec.fromBuild(build, catalog);
+  const { airframe, creative } = simAirframe(catalog, content);
   if (!airframe) return null;
-  const tune = catalog.effectiveTune(content.tune || {}, build);
+  const tune = catalog.effectiveTune(content.tune || {}, build, creative);
   const config = FlightControllerConfig.fromTune(tune, airframe);
   const tuning = new SimTuning();
   // A crash does not disarm the drone in the simulator.
   tuning.crashDisarm = false;
   const sim = new DroneSim(airframe, config, tuning, (Date.now() & 0x7fffffff) | 1);
-  const view = catalog.cameraView(build);
+  const view = catalog.cameraView(build, creative);
   const rig = view ? view.rig : null;
   const uptilt = rig ? droneUptilt(rig.range, content.tune || {}) : 25;
   return { sim, airframe, rig, uptilt, build };

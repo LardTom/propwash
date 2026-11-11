@@ -3,10 +3,10 @@
 // cruise of the analysis, not used in flight) stay Math.sin/cos, which may differ in the last bit.
 import { CellCurve } from './CellCurve.js?v=0c22cd1a';
 import { ModelConstants } from './ModelConstants.js?v=760466ce';
-import { PowerSystem } from './PowerSystem.js?v=a626586a';
+import { PowerSystem } from './PowerSystem.js?v=f7f7e885';
 import { RotorAero } from './RotorAero.js?v=22dc31b6';
 import { StrictMath } from './StrictMath.js?v=e765e983';
-import { Thermal } from './Thermal.js?v=24b8e070';
+import { Thermal } from './Thermal.js?v=f7f45aaf';
 
 // java.lang.Math.toRadians multiplies by this constant.
 const DEGREES_TO_RADIANS = 0.017453292519943295;

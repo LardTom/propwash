@@ -2,19 +2,21 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText, createCatalog } from './data.js?v=f1d2acbd';
+import { loadCatalog, localText, createCatalog } from './data.js?v=e9c7448c';
 import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=024bd980';
 import { parseUnknown, unknownId, unknownMarker, SHORT_KEY_PREFIX, creativeCounts } from './sharecode3.js?v=024bd980';
-import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=1ff606c1';
+import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=f228e891';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
-import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=f3f32120';
-import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
-import { batteryFit, fitsFrame } from './rules.js?v=6634f777';
+import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=293f859b';
+import { occlusionPercent, droneUptilt, mountRange, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
+import { isCreative, spec as creativeSpec } from './creative.js?v=293f859b';
+import { creativeEditor } from './creative-editor.js?v=b32d397b';
+import { batteryFit, fitsFrame, stackFits } from './rules.js?v=26a8eb49';
 import { assemble, PROP_SLOTS } from './assembly.js?v=4c00d7c2';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=ed26e8eb';
-import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=49f45987';
-import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=20a73ee6';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=66b4dc76';
+import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=166ec38e';
+import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=530a1534';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=e8bb9456';
 import { cameraCheck, isCameraDrone, navOf, gimbalOf, classOf as flightClassOf, lineNotes, noCameraFrameHint } from './camdrones.js?v=b1626e80';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
@@ -79,7 +81,9 @@ const state = {
   paint: {},
   tune: {},
   name: '',
-  // Values of a creative drone from an opened code (drone editor of the game): kept and written back as they are.
+  // Values of a creative drone (drone editor; from an opened code they are written back as they are): null for no
+  // layer (a code without one), else {base, values}. They count only while the creative flight controller is in;
+  // taken out and put back, it brings them along like the controller in the game.
   creative: null,
   layers: { paint: true, tune: true, osd: false, name: true, creative: true },
   osd: { source: 'preset', preset: 'standard', imported: null },
@@ -138,6 +142,9 @@ const partOf = (id, category) => {
   return p && (!category || p.category === category) ? p : null;
 };
 
+/** The creative values a build flies with: only with the creative flight controller (DroneBuild drops them else). */
+const creativeFor = (build) => (isCreative(build) ? state.creative : null);
+
 function knownBuild(build) {
   return FIELDS.every((f) => partOf(build[f], f)) && Object.values(build.accessories || {}).every((id) => partOf(id, 'accessory'));
 }
@@ -147,15 +154,16 @@ function knownBuild(build) {
 
 function recompute() {
   const build = state.build;
+  const creative = creativeFor(build);
   derived.check = catalog.check(build);
-  derived.analysis = catalog.analyze(build);
-  derived.camera = catalog.cameraView(build);
+  derived.analysis = catalog.analyze(build, creative);
+  derived.camera = catalog.cameraView(build, creative);
   derived.defaults = null;
   derived.effective = null;
   if (knownBuild(build)) {
     try {
-      derived.defaults = catalog.defaultTune(build);
-      derived.effective = catalog.effectiveTune(state.tune, build);
+      derived.defaults = catalog.defaultTune(build, creative);
+      derived.effective = catalog.effectiveTune(state.tune, build, creative);
     } catch {
       derived.defaults = null;
     }
@@ -193,7 +201,7 @@ function content() {
     tune: state.layers.tune ? { ...state.tune } : null,
     osd: state.layers.osd ? osdSpec() : null,
     name,
-    creative: state.layers.creative && state.creative ? state.creative : null,
+    creative: state.layers.creative ? creativeFor(state.build) : null,
   };
 }
 
@@ -217,7 +225,7 @@ function flyCode() {
   try {
     const paint = Object.keys(state.paint).length ? { ...state.paint } : null;
     const name = state.name && state.name.trim() ? state.name.trim() : null;
-    return catalog.encode({ build: state.build, paint, tune: { ...state.tune }, osd: null, name });
+    return catalog.encode({ build: state.build, paint, tune: { ...state.tune }, osd: null, name, creative: creativeFor(state.build) });
   } catch {
     return null;
   }
@@ -237,7 +245,7 @@ function computeRoles() {
       case 'frame': roles = new Set([p.data.role]); break;
       case 'motor': roles = rolesWhere((f) => f.data.motor_mounts.includes(p.data.mount)); break;
       case 'prop': roles = rolesWhere((f) => p.data.diameter_mm >= f.data.props_mm[0] && p.data.diameter_mm <= f.data.props_mm[1]); break;
-      case 'stack': roles = rolesWhere((f) => f.data.stack_mounts.includes(p.data.mount)); break;
+      case 'stack': roles = rolesWhere((f) => stackFits(p, f)); break;
       case 'battery': roles = rolesWhere((f) => ['ok', 'weak'].includes(batteryFit(f, p))); break;
       case 'video': roles = new Set([p.data.link]); break;
       case 'accessory': roles = new Set([p.data.slot]); break;
@@ -393,8 +401,13 @@ function matches(part, filter, cls, src = 'all') {
   return true;
 }
 
-/** Where a part comes from: Propwash, Just More Parts (JMP) or another add-on, named in the tooltip. */
+/** Where a part comes from: Propwash, Just More Parts (JMP) or another add-on, named in the tooltip; a part of the
+    creative mode (creative flight controller) gets a second badge. */
 function partBadge(part) {
+  if (part.creative_only) {
+    return el('span', { class: 'part__badges' }, el('span', { class: 'badge badge--pw', title: t('ui.builtinLong') }, t('ui.builtin')),
+      el('span', { class: 'badge badge--creative', title: t('creative.badgeLong') }, t('creative.badge')));
+  }
   if (part.builtin) return el('span', { class: 'badge badge--pw', title: t('ui.builtinLong') }, t('ui.builtin'));
   const ns = part.id.split(':')[0];
   if (ns === 'justmoreparts') return el('span', { class: 'badge badge--jmp', title: t('ui.addonLong') }, t('ui.addon'));
@@ -475,7 +488,8 @@ function picker() {
         partBadge(current)),
       el('p', { class: 'part-help__summary' }, (help && help.summary) || facts(current)),
       more ? el('details', { class: 'picker__more', open: detailsOpen || null, ontoggle: (e) => { detailsOpen = e.currentTarget.open; } },
-        el('summary', null, t('ui.prosCons')), helpBlock(current, false, true)) : null);
+        el('summary', null, t('ui.prosCons')), helpBlock(current, false, true)) : null,
+      current.creative_only ? creativeNote() : null);
   }
 
   const search = el('input', {
@@ -622,6 +636,12 @@ function picker() {
   list.addEventListener('scroll', () => { listScroll[category] = list.scrollTop; }, { passive: true });
 }
 
+/** The rules of the creative flight controller in the game, with the way to its editor. */
+function creativeNote() {
+  return el('div', { class: 'cfg-note ce-pick-note' }, el('p', null, t('creative.note')),
+    el('button', { type: 'button', class: 'btn btn--ghost btn--small', onclick: () => selectTab('creative', true) }, t('creative.openEditor')));
+}
+
 const listScroll = {};
 // Focus moved by a pick in the 3D view: no part tip then (it would cover the view).
 let quietFocus = false;
@@ -639,7 +659,7 @@ function showTip(node, part) {
     tip.replaceChildren(el('p', { class: 'part-tip__name' }, catalog.partName(part.id, lang())), helpBlock(part, true));
     const selected = part.category === 'accessory' ? (state.build.accessories || {})[part.data.slot] === part.id : state.build[part.category] === part.id;
     if (!selected && derived.analysis) {
-      const after = catalog.analyze(swapped(part));
+      const after = catalog.analyze(swapped(part), creativeFor(swapped(part)));
       if (after) {
         const rows = el('dl', { class: 'part-tip__delta' });
         for (const key of ['mass_grams', 'thrust_to_weight', 'mixed_flight_time_min', 'top_speed_kmh']) {
@@ -978,6 +998,7 @@ function setUptilt(degrees) {
   renderCamera();
   renderShare();
   scheduleHash();
+  editor.update();
 }
 
 function cameraLabel(percent) {
@@ -1030,17 +1051,12 @@ function renderChecks() {
   const c = derived.check;
   const a = derived.analysis;
   const flight = a ? a.warnings : [];
-  // The creative flight controller is no unknown part: the game has it in creative mode only, so the page can't rate the drone.
-  const creative = (c.unknownParts || []).filter((id) => catalog.creativeOnly(id));
-  const unknown = (c.unknownParts || []).filter((id) => !catalog.creativeOnly(id));
+  const unknown = c.unknownParts || [];
   let level;
   let label;
   if (unknown.length) {
     level = 'bad';
     label = t('ui.statusUnknown');
-  } else if (creative.length) {
-    level = 'warn';
-    label = t('ui.statusCreative');
   } else if (c.problems.length) {
     level = 'bad';
     label = t('ui.statusProblems');
@@ -1052,10 +1068,13 @@ function renderChecks() {
     label = t('ui.statusOk');
   }
   const list = el('ul', { class: 'checks__list' });
-  if (creative.length) list.append(el('li', { class: 'is-warn' }, t('ui.creativeExplain')));
+  // A creative drone: the figures use the drone editor's values (creative.js, like the game's workbench).
+  if (isCreative(state.build) && !unknown.length) {
+    list.append(el('li', { class: 'is-info' }, t('creative.checks'), ' ',
+      el('button', { type: 'button', class: 'checks__link', onclick: () => selectTab('creative', true) }, t('creative.openEditor'))));
+  }
   if (unknown.length) list.append(el('li', { class: 'is-bad' }, t('ui.unknownExplain'), el('span', { class: 'mono' }, unknown.join(', '))));
-  const missing = unknown.length || creative.length;
-  for (const k of c.problems) if (!(missing && k === 'missing_part')) list.append(el('li', { class: 'is-bad' }, catalog.issueText(k, lang())));
+  for (const k of c.problems) if (!(unknown.length && k === 'missing_part')) list.append(el('li', { class: 'is-bad' }, catalog.issueText(k, lang())));
   for (const k of c.warnings) list.append(el('li', { class: 'is-warn' }, catalog.issueText(k, lang())));
   for (const k of flight) list.append(el('li', { class: 'is-warn' }, el('span', { class: 'checks__tag' }, t('ui.flightWarning')), catalog.analysisWarningText(k, lang())));
   box.replaceChildren(el('p', { class: `checks__status is-${level}` }, el('span', { class: 'checks__led', 'aria-hidden': 'true' }), label), list.children.length ? list : '');
@@ -1469,12 +1488,12 @@ function onTuneInput(target, commit) {
     return;
   }
   const edited = { ...derived.effective, [key]: value };
-  setTune(catalog.applyTuneEdit(state.tune, edited, state.build), key);
+  setTune(catalog.applyTuneEdit(state.tune, edited, state.build, creativeFor(state.build)), key);
 }
 
 function resetTuneKey(key) {
   const edited = { ...derived.effective, [key]: derived.defaults[key] };
-  setTune(catalog.applyTuneEdit(state.tune, edited, state.build), key);
+  setTune(catalog.applyTuneEdit(state.tune, edited, state.build, creativeFor(state.build)), key);
   const input = $(`[data-key="${key}"]`);
   if (input) input.focus();
 }
@@ -1659,7 +1678,7 @@ function renderLayers() {
     ['osd', state.layers.osd, true, state.layers.osd ? '' : t('ui.layerNoOsd')],
     ['name', state.layers.name, hasName, hasName ? '' : t('ui.layerNoName')],
   ];
-  if (state.creative) items.push(['creative', state.layers.creative, true, '']);
+  if (creativeFor(state.build)) items.push(['creative', state.layers.creative, true, '']);
   for (const [key, checked, enabled, note] of items) {
     box.append(el('label', { class: `check layer${enabled ? '' : ' is-off'}` },
       el('input', {
@@ -1910,11 +1929,18 @@ function conversionNote(result, conversion) {
 /** The banner of a code opened from a link, while it is shown (applyAddons renews it when its add-on comes). */
 let shownLink = null;
 
+/** A creative drone with values opened: the banner leads to its drone editor (the page computes it now). */
+function editorAction(result) {
+  const c = result.content;
+  return c && c.creative && isCreative(c.build) ? { label: () => t('creative.openEditor'), run: () => selectTab('creative', true) } : null;
+}
+
 /** Banner of a readable code opened from a link: what it brought along. */
 function linkBanner(code, result, conversion) {
   const warn = result.unknownParts.length || result.wrongKind.length || (conversion && conversion.status !== 'OK');
   const note = conversionNote(result, conversion);
-  banner(() => [...(note.text ? [note.text(), ' '] : []), ...joined(t('ui.linkLoaded'), importDetails(result))], warn ? 'warn' : 'ok', false, note.action);
+  banner(() => [...(note.text ? [note.text(), ' '] : []), ...joined(t('ui.linkLoaded'), importDetails(result))], warn ? 'warn' : 'ok', false,
+    note.action || editorAction(result));
   shownLink = { code, conversion, message: lastBanner.message };
 }
 
@@ -2014,7 +2040,7 @@ function loadCode(code, source) {
   } else {
     const note = conversionNote(result, conversion);
     const warn = result.unknownParts.length || result.wrongKind.length || (conversion && conversion.status !== 'OK');
-    banner(() => (note.text ? [note.text(), ' ', t('ui.importLoaded')] : t('ui.importLoaded')), warn ? 'warn' : 'ok', true, note.action);
+    banner(() => (note.text ? [note.text(), ' ', t('ui.importLoaded')] : t('ui.importLoaded')), warn ? 'warn' : 'ok', true, note.action || editorAction(result));
   }
   return result;
 }
@@ -2193,7 +2219,17 @@ function setBuild(build, { keepFocus } = {}) {
     const tune = { ...state.tune };
     delete tune[CAMERA_UPTILT];
     state.tune = tune;
+  } else if (isCreative(state.build) && !isCreative(build) && CAMERA_UPTILT in state.tune) {
+    // Without the creative flight controller the camera goes back into the frame's mount (CameraMount.sanitize).
+    const range = mountRange(catalog.part(build.frame));
+    const value = droneUptilt(range, state.tune);
+    const tune = { ...state.tune };
+    if (value === range.standard) delete tune[CAMERA_UPTILT];
+    else tune[CAMERA_UPTILT] = value;
+    state.tune = tune;
   }
+  // A creative drone shares its creative values like the game's (the layer even without values of its own).
+  if (isCreative(build) && !state.creative) state.creative = creativeSpec(null);
   state.build = build;
   const before = state.presetId;
   syncPreset();
@@ -2204,6 +2240,7 @@ function setBuild(build, { keepFocus } = {}) {
   renderStats();
   renderChecks();
   renderTune();
+  renderCreative();
   renderShare();
   scheduleHash();
   updateViewerAndPaint();
@@ -2229,9 +2266,82 @@ function refreshAll() {
   renderStats();
   renderChecks();
   renderTune();
+  renderCreative();
   renderOsd();
   renderShare();
   updateViewerAndPaint();
+}
+
+// ---------------------------------------------------------------------------------------------------------------
+// Drone editor of a creative drone (creative-editor.js): a tab of its own while the creative flight controller is in
+
+const editor = creativeEditor({
+  el,
+  icon: useIcon,
+  catalog: () => catalog,
+  build: () => state.build,
+  creative: () => creativeFor(state.build),
+  analysis: () => derived.analysis,
+  camera: () => derived.camera,
+  tune: () => state.tune,
+  presets: () => {
+    const groups = [];
+    for (const ns of [...new Set(['propwash', 'justmoreparts', ...catalog.namespaces.map((n) => n.namespace)])]) {
+      const presets = catalog.presets.filter((x) => x.id.startsWith(`${ns}:`)).map((x) => ({ id: x.id, name: catalog.presetName(x.id, lang()) }));
+      const label = ns === 'propwash' ? t('ui.presetGroupPropwash') : ns === 'justmoreparts' ? t('ui.presetGroupJmp') : sourceName(ns);
+      if (presets.length) groups.push({ label, presets });
+    }
+    return groups;
+  },
+  setCreative: (spec) => {
+    state.creative = spec;
+    state.layers.creative = true;
+    recompute();
+    renderStats();
+    renderChecks();
+    renderTune();
+    renderShare();
+    scheduleHash();
+    editor.update();
+  },
+  setUptilt: (degrees) => setUptilt(degrees),
+  openTune: () => selectTab('tune', true),
+});
+
+/** Shows the tab “Drone Editor” for a creative drone (and leaves it for another stack), builds its panel. */
+function renderCreative() {
+  const tab = $('#tab-creative');
+  const panel = $('[data-panel-creative]');
+  if (!tab || !panel) return;
+  const on = isCreative(state.build) && !!catalog.part(state.build.stack);
+  tab.textContent = t('creative.tab');
+  tab.hidden = !on;
+  if (!on) {
+    panel.replaceChildren();
+    if (state.tab === 'creative') selectTab('parts', false);
+    return;
+  }
+  const active = doc.activeElement && panel.contains(doc.activeElement) ? doc.activeElement.id : null;
+  editor.render(panel);
+  if (active) {
+    const again = doc.getElementById(active);
+    if (again) again.focus({ preventScroll: true });
+  }
+}
+
+/** The tab and panel of the drone editor, made once (the page's markup has no creative tab). */
+function mountCreativeTab() {
+  const before = $('#tab-tune');
+  const tab = el('button', {
+    type: 'button', role: 'tab', id: 'tab-creative', 'aria-controls': 'panel-creative', 'aria-selected': 'false', tabindex: '-1', hidden: true,
+    dataset: { tab: 'creative' },
+  }, t('creative.tab'));
+  before.before(tab);
+  const panel = el('section', {
+    class: 'tab-panel', role: 'tabpanel', id: 'panel-creative', 'aria-labelledby': 'tab-creative', hidden: true, dataset: { panelCreative: '' },
+  });
+  $('#panel-tune').before(panel);
+  editor.wire(panel);
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -2251,19 +2361,25 @@ function selectTab(name, focus) {
 }
 
 function wireTabs() {
-  const tabs = [...doc.querySelectorAll('[data-tab]')];
-  tabs.forEach((tab, i) => {
-    tab.addEventListener('click', () => selectTab(tab.dataset.tab, false));
-    tab.addEventListener('keydown', (e) => {
-      let j = null;
-      if (e.key === 'ArrowRight') j = (i + 1) % tabs.length;
-      else if (e.key === 'ArrowLeft') j = (i - 1 + tabs.length) % tabs.length;
-      else if (e.key === 'Home') j = 0;
-      else if (e.key === 'End') j = tabs.length - 1;
-      if (j === null) return;
-      e.preventDefault();
-      selectTab(tabs[j].dataset.tab, true);
-    });
+  const bar = $('[data-tabs]');
+  bar.addEventListener('click', (e) => {
+    const tab = e.target.closest('[data-tab]');
+    if (tab) selectTab(tab.dataset.tab, false);
+  });
+  bar.addEventListener('keydown', (e) => {
+    const tab = e.target.closest('[data-tab]');
+    if (!tab) return;
+    // The tabs shown now (the drone editor's only for a creative drone).
+    const tabs = [...bar.querySelectorAll('[data-tab]')].filter((x) => !x.hidden);
+    const i = tabs.indexOf(tab);
+    let j = null;
+    if (e.key === 'ArrowRight') j = (i + 1) % tabs.length;
+    else if (e.key === 'ArrowLeft') j = (i - 1 + tabs.length) % tabs.length;
+    else if (e.key === 'Home') j = 0;
+    else if (e.key === 'End') j = tabs.length - 1;
+    if (j === null) return;
+    e.preventDefault();
+    selectTab(tabs[j].dataset.tab, true);
   });
 }
 
@@ -2824,6 +2940,7 @@ async function boot() {
   panel.hidden = false;
   cfg.setAttribute('aria-busy', 'false');
 
+  mountCreativeTab();
   wireTabs();
   wireEvents();
   wireStatHelp();

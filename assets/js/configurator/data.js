@@ -6,14 +6,14 @@
 // composeCatalog() and composeRender() put add-ons into the catalog (an add-on jar read in the browser,
 // addon-catalog.js) or take them out (the switches of the add-on bar), like installing or removing the mod in the game.
 
-import { check as checkBuild } from './rules.js?v=6634f777';
-import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=f3f32120';
+import { check as checkBuild } from './rules.js?v=26a8eb49';
+import { analyze as analyzeBuild, cameraView as cameraViewOf } from './analysis.js?v=293f859b';
 import {
   encode as encodeCode, decode as decodeCode, convert as convertCode, hexColor, createShareTables, frozenTables, displayId,
 } from './sharecode.js?v=024bd980';
 import { sharedOnly } from './tune.js?v=f4084d0e';
-import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=1ff606c1';
-import { catalogOrder, CREATIVE_ONLY } from './catalog-build.js?v=dadd8390';
+import { defaultTune, effectiveTune, normalizeTune, applyTuneEdit } from './tuning.js?v=f228e891';
+import { catalogOrder } from './catalog-build.js?v=211c1389';
 
 export const CATALOG_URL = new URL('../../data/configurator/catalog.json', import.meta.url);
 export const CATEGORIES = Object.freeze(['frame', 'stack', 'motor', 'prop', 'video', 'battery', 'accessory']);
@@ -77,15 +77,6 @@ export function createCatalog(json) {
     .map((n) => [n.namespace, { name: n.name, homepage: n.homepage || null }]));
   let shareTables = null;
   let frozen = null;
-  // Parts of the game the web export leaves out (the creative flight controller): known to the share codes by their
-  // kind in the Propwash table, so a code of a creative drone names them as what they are, not as unknown parts.
-  const creativeOnly = new Map();
-  for (const id of CREATIVE_ONLY) {
-    const path = id.slice(id.indexOf(':') + 1);
-    for (const [kind, list] of Object.entries(((json.sharecode.tables || {}).propwash || {}).parts || {})) {
-      if (list.some((e) => e && e.id === path)) creativeOnly.set(id, kind);
-    }
-  }
 
   const catalog = {
     json,
@@ -104,8 +95,11 @@ export function createCatalog(json) {
     part: (id) => byId.get(id) || null,
     /** Category of a part id, or null (lookup for the share code decoder). */
     category: (id) => (byId.get(id) || {}).category || null,
-    /** True for a part of the game that only exists in creative mode and is not in this catalog (the creative flight controller). */
-    creativeOnly: (id) => creativeOnly.has(id),
+    /**
+     * True for a part of the game that only exists in creative mode (creative_only: the creative flight controller,
+     * taken from Propwash's jar because the web export leaves it out; no recipe, creative inventory and /give only).
+     */
+    creativeOnly: (id) => !!(byId.get(id) && byId.get(id).creative_only),
     /** All parts of a category in the mod's order. */
     partsIn: (category) => byCategory.get(category) || [],
     chemistry: (id) => chemistries.get(id) || null,
@@ -198,26 +192,36 @@ export function createCatalog(json) {
     /** Stored tune defaults of a preset (flight keys only), or null. */
     presetTuneDefaults: (presetId) => (json.tune.defaults[presetId] ? { ...json.tune.defaults[presetId] } : null),
 
+    // creative (optional, last): the values of a creative drone ({base, values}, creative.js); they count only with the
+    // creative flight controller, like in the game.
     /** Compatibility check (rules.js). */
     check: (build) => checkBuild(build, catalog),
     /** Flight analysis like the mod's workbench (analysis.js); null if a part is unknown. */
-    analyze: (build) => analyzeBuild(build, catalog),
+    analyze: (build, creative = null) => analyzeBuild(build, catalog, creative),
     /** FPV camera like the web export's camera_view, with the rig for the camera preview (fpv.js); null if unknown. */
-    cameraView: (build) => cameraViewOf(build, catalog),
+    cameraView: (build, creative = null) => cameraViewOf(build, catalog, creative),
     /** Full default flight tune of a build (tuning.js); throws for unknown parts. */
-    defaultTune: (build) => defaultTune(build, catalog),
+    defaultTune: (build, creative = null) => defaultTune(build, catalog, creative),
     /** Every flight value the build flies with for a stored tune. */
-    effectiveTune: (stored, build) => effectiveTune(stored, build, catalog),
+    effectiveTune: (stored, build, creative = null) => effectiveTune(stored, build, catalog, creative),
     /** Stored form of a tune: only values that differ from the build's defaults. */
-    normalizeTune: (tune, build) => normalizeTune(tune, build, catalog),
+    normalizeTune: (tune, build, creative = null) => normalizeTune(tune, build, catalog, creative),
     /** Applies edited values like the mod's configurator and returns the new stored tune. */
-    applyTuneEdit: (stored, edited, build) => applyTuneEdit(stored, edited, build, catalog),
+    applyTuneEdit: (stored, edited, build, creative = null) => applyTuneEdit(stored, edited, build, catalog, creative),
+    /**
+     * This catalog with some parts replaced by entries of the same id (the detached parts of a creative drone's flight
+     * build, creative.js): a new catalog with the same interface.
+     */
+    withParts(list) {
+      const replaced = new Map(list.map((p) => [p.id, p]));
+      return createCatalog({ ...json, parts: json.parts.map((p) => replaced.get(p.id) || p) });
+    },
     /** What the share codes of this catalog know: the parts tables, the directory, versions and the part lookup. */
     shareTables() {
       if (!shareTables) {
         shareTables = createShareTables({
           tables: Object.values(json.sharecode.tables || {}), directory: json.sharecode.directory, versions, mods,
-          lookup: (id) => catalog.category(id) || creativeOnly.get(id) || null,
+          lookup: (id) => catalog.category(id),
         });
       }
       return shareTables;

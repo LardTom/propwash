@@ -6,6 +6,13 @@
 // Only the parts of the model that BuildStats needs are ported; every formula keeps the mod's operation order so
 // the numbers match the mod's (the web export's test vectors) to the last digits.
 //
+// Creative drones (creative flight controller, Propwash 0.6.0): analyze(build, catalog, creative) and the other entry
+// points take the creative values ({base, values}, creative.js) and compute like BuildAnalysis with the creative build:
+// the airframe of the flight build (creative.js creativeFlight: base parts, values in the part data) with the inertia
+// set after the lens (ParamDerivation#compute(source, flight, inertia)), the camera occlusion of the installed parts
+// (FpvRig.of(build)) with the camera angle free from 0 to 80° (CameraMount.range(DroneBuild)), the ESC load against the
+// installed stack. Without the creative flight controller the values are ignored, like DroneBuild does.
+//
 // analyze(build, catalog) returns null when a part is unknown or an accessory sits in the wrong slot, else
 //   { mass_grams, thrust_to_weight, hover_throttle_percent, hover_flight_time_min, cruise_flight_time_min,
 //     mixed_flight_time_min, aggressive_flight_time_min, cruise_speed_kmh, hover_current_a, cruise_current_a,
@@ -14,8 +21,9 @@
 //     motor_temp_minute_c, mixed_motor_temp_c, props_in_view_percent, warnings }
 // NaN (e.g. flight times of a build that cannot hover) means "no value".
 
-import { resolveBuild, batteryContinuousCurrent } from './rules.js?v=6634f777';
+import { resolveBuild, batteryContinuousCurrent } from './rules.js?v=26a8eb49';
 import { rig as fpvRig, occlusionPercent, cameraView as rigCameraView } from './fpv.js?v=76cdbbe6';
+import { creativeFlight, isCreative, uptiltRange } from './creative.js?v=293f859b';
 
 // ---------------------------------------------------------------------------------------------------------------
 // Constants of the model
@@ -236,7 +244,11 @@ export function anchorStretch(anchor, acc, slot) {
 // ---------------------------------------------------------------------------------------------------------------
 // Airframe (ParamDerivation) without the parts only the live simulation needs (hull, hitbox, drag of the body)
 
-function deriveAirframe(parts, catalog) {
+/**
+ * ParamDerivation#compute of resolved parts. creative (a creative drone): {parts, catalog, inertia} – the installed
+ * parts and catalog for the camera rig and the ESC load, the inertia [xx, yy, zz] (kg·m², NaN = automatic) or null.
+ */
+function deriveAirframe(parts, catalog, creative = null) {
   const { frame, stack, motor, prop, video, battery } = parts;
   const fd = frame.data;
   const md = motor.data;
@@ -407,12 +419,41 @@ function deriveAirframe(parts, catalog) {
   if (fd.arms_explicit) geometric(p, fd, body);
   else legacy(p, fd, body);
   lens(p, fd);
+  // The inertia of a creative drone (roll = zz, pitch = xx, yaw = yy) replaces the derived one; everything after it
+  // (control authority, derived PIDs) computes with it.
+  if (creative && creative.inertia) {
+    const [xx, yy, zz] = creative.inertia;
+    if (!Number.isNaN(zz)) p.inertiaZz = zz;
+    if (!Number.isNaN(xx)) p.inertiaXx = xx;
+    if (!Number.isNaN(yy)) p.inertiaYy = yy;
+  }
   // ParamDerivation: rotor speed at full throttle on a full pack, the end of the load scale of the prop factor.
   const fullPoint = newPoint();
   uniformDuty(p, 1.0, 1.0, false, 0.0, 0.0, fullPoint);
   p.fullLoadOmega = fullPoint.omega;
-  p.fpv = fpvRig(parts, p, catalog);
+  p.fpv = creative ? fpvRig(creative.parts, p, creative.catalog) : fpvRig(parts, p, catalog);
+  if (creative) p.fpv.range = uptiltRange(p.fpv.range);
+  // BuildAnalysis: the ESC load is the phase current against the installed stack (the creative FC's for a creative drone).
+  p.escLoadCurrent = creative ? creative.parts.stack.data.esc_continuous_a : escCurrentPerMotor;
   return p;
+}
+
+/**
+ * The derived airframe of a build (null: unknown part, accessory in the wrong slot); a creative drone computes with its
+ * flight build and inertia (creative.js creativeFlight).
+ */
+function derive(build, catalog, creative) {
+  const installed = resolveBuild(build, catalog);
+  if (installed.unknown.length || installed.misplaced) return null;
+  if (!isCreative(build)) return deriveAirframe(installed.parts, catalog);
+  const flight = creativeFlight(build, creative, catalog);
+  let parts = installed.parts;
+  if (flight.build !== build) {
+    const resolved = resolveBuild(flight.build, flight.catalog);
+    if (resolved.unknown.length || resolved.misplaced) return null;
+    parts = resolved.parts;
+  }
+  return deriveAirframe(parts, flight.catalog, { parts: installed.parts, catalog, inertia: flight.inertia });
 }
 
 // Lowest hull point below the centre of mass (AirframeSpec.hitboxFootOffset); the FPV rig only needs its sign. The
@@ -469,6 +510,7 @@ function legacy(p, fd, body) {
   const s = armLength / SQRT2;
   p.armLength = armLength;
   p.motorOffset = s;
+  p.motorSpacing = 2.0 * s;
   const rotorY = body.rotorY;
   const yCom = (body.batteryMass * body.batteryY + body.electronicsMass * body.electronicsY + 4.0 * body.motorMass * rotorY / 2.0
     + 4.0 * body.propMass * rotorY + body.accessoryMoment) / m;
@@ -633,6 +675,19 @@ function geometric(p, fd, body) {
   p.motorOffset = offset / MOTORS;
   p.armLength = reach / MOTORS;
   p.rotorPlaneOffset = rotorPlane / MOTORS;
+  let spacing = 0.0;
+  for (let i = 0; i < MOTORS; i++) {
+    let nearest = Infinity;
+    for (let k = 0; k < MOTORS; k++) {
+      if (k !== i) {
+        const dx = px[i] - px[k];
+        const dz = pz[i] - pz[k];
+        nearest = Math.min(nearest, Math.sqrt(dx * dx + dz * dz));
+      }
+    }
+    spacing += nearest;
+  }
+  p.motorSpacing = spacing / MOTORS;
   for (let i = 0; i < MOTORS; i++) {
     p.mixRoll[i] = maxX > 1e-6 ? px[i] / maxX : 0.0;
     p.mixPitch[i] = maxZ > 1e-6 ? -pz[i] / maxZ : 0.0;
@@ -1504,7 +1559,7 @@ function compute(p) {
     avionics_power_w: p.avionicsPower,
     top_speed_kmh: topSpeed * 3.6,
     full_throttle_current_a: fullCurrent,
-    esc_load_percent: 100.0 * full.phaseCurrent / p.escCurrentPerMotor,
+    esc_load_percent: 100.0 * full.phaseCurrent / p.escLoadCurrent,
     battery_load_percent: 100.0 * fullCurrent / p.continuousCurrent,
     motor_response_ms: p.motorTauPhys * 1000.0,
     crash_speed_ms: p.impactTolerance,
@@ -1526,12 +1581,10 @@ function compute(p) {
 
 /**
  * Derived airframe parameters of a build (mass, rotor constants, motor positions, inertia, control authority, …),
- * or null if the build cannot be analysed. Used by the tune defaults.
+ * or null if the build cannot be analysed. Used by the tune defaults; creative: the values of a creative drone.
  */
-export function airframe(build, catalog) {
-  const { parts, unknown, misplaced } = resolveBuild(build, catalog);
-  if (unknown.length || misplaced) return null;
-  const p = deriveAirframe(parts, catalog);
+export function airframe(build, catalog, creative = null) {
+  const p = derive(build, catalog, creative);
   return p ? authority(p) : null;
 }
 
@@ -1553,10 +1606,8 @@ export const STAT_KEYS = Object.freeze(['mass_grams', 'thrust_to_weight', 'hover
  * FPV camera of a build like the web export's camera_view (BuildAccess#cameraView): lens, uptilt, goggle FOV, the four
  * prop discs and the props-in-view share; with `rig` for the camera preview. Null if the build cannot be analysed.
  */
-export function cameraView(build, catalog) {
-  const { parts, unknown, misplaced } = resolveBuild(build, catalog);
-  if (unknown.length || misplaced) return null;
-  const p = deriveAirframe(parts, catalog);
+export function cameraView(build, catalog, creative = null) {
+  const p = derive(build, catalog, creative);
   if (!p) return null;
   return { ...rigCameraView(p.fpv), rig: p.fpv };
 }
@@ -1565,12 +1616,11 @@ export function cameraView(build, catalog) {
  * Analyses a build like the mod's workbench.
  * @param {{frame, stack, motor, prop, video, battery, accessories?}} build part ids
  * @param {object} catalog from data.js
+ * @param {{base, values}|null} creative the values of a creative drone (only with the creative flight controller)
  * @returns {object|null} BuildStats as described at the top of this file, null if the build cannot be analysed
  */
-export function analyze(build, catalog) {
-  const { parts, unknown, misplaced } = resolveBuild(build, catalog);
-  if (unknown.length || misplaced) return null;
-  const p = deriveAirframe(parts, catalog);
+export function analyze(build, catalog, creative = null) {
+  const p = derive(build, catalog, creative);
   if (!p) return null;
   return compute(p);
 }

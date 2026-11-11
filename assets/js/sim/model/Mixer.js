@@ -1,5 +1,5 @@
 import { SimMath } from './SimMath.js?v=44da8aea';
-import { AirframeSpec } from './AirframeSpec.js?v=259f604e';
+import { AirframeSpec } from './AirframeSpec.js?v=cfbc2e85';
 
 // Port of de.lardtom.propwash.sim.Mixer
 export class Mixer {

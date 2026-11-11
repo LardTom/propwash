@@ -183,6 +183,28 @@ Mob Defense:
   carries – the 3D view draws it with a texture of the site's own (`stand-ins.js`, named in the model file's
   `stand_ins`)
 
+- the Creative Flight Controller (`propwash:creative_fc`, Propwash 0.6.0): in the Stack list with the badge
+  “Creative”, it fits every frame and takes 1–12S like `DroneBuild`/`StackType#fits` (`rules.js stackFits`), and its
+  card says what the game says about it (creative inventory or `/give`, no recipe, values editable in creative mode
+  only and read only in survival, creative drones count as assisted on leaderboards unless the world rule *Creative FC
+  race-legal* or the course allows them). With it fitted the panel gets the tab “Drone Editor” (`creative-editor.js`,
+  like `CreativeEditorTab`): key figures and the notes of `CreativeCheck` and the workbench, templates (installed parts
+  or any preset; a preset as template flies exactly like the preset), the base parts (frame, FC/ESC, motors, props,
+  battery; never the video), the 45 values in the mod's groups with their ranges, steps, decimals and units, automatic
+  values marked “(auto)”, own values highlighted, ↺ or a right-click back to the base or automatic value, clamping to
+  the mod's ranges with a note (`CreativeLimits`), +/− for mouse and touch, Enter and Escape on the keyboard, and the
+  camera uptilt free from 0 to 80° (`CameraMount.range(DroneBuild)`, also the FPV view's slider). The analysis, the
+  key figures, the tune defaults and the camera rate a creative drone like `BuildAnalysis`: `creative.js` ports
+  `CreativeParam`, `CreativeSpec`, `CreativeFlight`, `CreativeLimits` and `CreativeCheck`;
+  `creativeFlight(build, creative, catalog)` gives the flight build (the base parts with the values written into their
+  part data through a port of `PartJson.encode`, `partjson.js` decode and `catalog-build.js` export – detached parts
+  with the same id –, the flight stack always 1–12S with the brownout rule, motor positions and camera position
+  automatic until set), a catalog with the same interface whose `part(id)` gives the changed data (`withParts`) and
+  the inertia `[xx, yy, zz]` in kg·m² (NaN automatic) or null; `analysis.js` sets the inertia after the lens like
+  `ParamDerivation`, takes the camera occlusion from the installed parts like `FpvRig.of(build)` and the ESC load
+  against the installed stack. The simulator flies the same flight build. Taken out, the controller keeps its values
+  for when it comes back (like the item in the game); a share code of a creative drone carries the layer “Creative
+  values” like the game's
 - builds for beginners above the parts: three Propwash presets (`assets/data/configurator/beginner.json`) with a picture,
   their key figures, “Load” and “Copy code” (the PW3 code is written when copied, so it stays right when a table grows),
   and the hint to start in Angle mode with a link to the Flight School
@@ -214,9 +236,10 @@ Mob Defense:
   or CurseForge link (from the add-on directory, else from the code; a free address in a code is only shown as text),
   a code for another version of a loaded add-on as “doesn't match the loaded version”. Unknown parts keep their place
   and are written back unchanged. Tuning-preset codes (`PWT1`) get a hint where they belong. A creative drone keeps its
-  values (layer “Creative values”, PW3 extension 0): the banner says “Creative drone: N own values, M base parts”, the
-  share box writes them back unchanged (or without them when the layer is unticked), and the check list names the
-  Creative Flight Controller instead of an unknown part – the page can't rate a creative drone. A PWD1 code (or a link
+  values (layer “Creative values”, PW3 extension 0): the banner says “Creative drone: N own values, M base parts” and
+  leads to the drone editor, the share box writes them back unchanged (or without them when the layer is unticked),
+  and the check list says that the figures use the drone editor's values – the page rates a creative drone like the
+  workbench of the game. A PWD1 code (or a link
   `#PWD1-…`) opens like an old code: the Flight School's freestyle drone with the Creative Flight Controller and the
   code's values, the address switches to its PW3 code and “Copy PW3” is offered
 - converter `/convert/`: paste any text – a whole Discord post – and every PW1, PW2 and PWD1 code in it (also inside
@@ -268,7 +291,9 @@ Mob Defense:
 
 ### Updating the data
 
-The data come from the web export of Propwash (format 2, `/propwash webexport all` with the add-ons installed). The
+The data come from the web export of Propwash (format 2, `/propwash webexport all` with the add-ons installed), except
+the parts of the game that exist only in creative mode (the Creative Flight Controller), which the export leaves out:
+they come from the release jar of Propwash (`--propwash-jar`, below). The
 current data: the web exports of the release build of Propwash 0.6.0 (`release/0.6.0/web-export/` of the release:
 `propwash-fpv`, `just-more-parts` with Just More Parts 1.2.0 and `camera-drones` with Camera Drones 1.0.0, each made
 by `runWebExport` of Propwash 0.6.0 with that add-on) and Mob Defense 1.0.0 read from its release jar with
@@ -295,11 +320,13 @@ The PW3 vectors of every export with `base/` are kept (each name once; the same 
 `build-configurator-heat.mjs` reads several exports the same way:
 
 ```sh
-node tools/build-configurator-data.mjs --export <dir> --mods <jars> --goldens <propwash>/common/src/test/resources/sharecode
+node tools/build-configurator-data.mjs --export <dir> --mods <jars> --goldens <propwash>/common/src/test/resources/sharecode \
+                                       --propwash-jar <propwash release jar>
                                            # catalog.json, the export's PW3 vectors and the golden files of Propwash
-node tools/build-configurator-models.mjs --export <dir> --resources <propwash>/common/src/main/resources --resources <unpacked JMP jar>
-                                           # render.json and models/ (with the plug anchors and the props'
-                                           # blur models for the simulator)
+node tools/build-configurator-models.mjs --export <dir> --resources <propwash>/common/src/main/resources --resources <unpacked JMP jar> \
+                                         --propwash-jar <propwash release jar>
+                                           # render.json and models/ (with the plug anchors, the props' blur models for
+                                           # the simulator and the creative-only parts of the Propwash jar)
 node tools/build-configurator-heat.mjs --export <dir> … # heat figures of the game (tools/fixtures/heat-vectors.json)
 node tools/build-addons.mjs --jar justmoreparts=<jar>   # the hosted export of Just More Parts the configurator shows
 node tools/build-configurator-beginner.mjs # pictures of the builds for beginners (headless Chrome, cwebp)
@@ -311,7 +338,11 @@ node tools/test-configurator-antenna.mjs   # VTX antennas at the frame's holder:
                                            # without external antennas ("none", count 0) (Chrome)
 node tools/test-configurator-pick.mjs      # clicks and taps on the parts in the 3D view (headless Chrome, ~1 min)
 node tools/test-configurator-flows.mjs     # converter, old links, explanations, builds for beginners (headless Chrome)
-node tools/test-configurator-creative.mjs  # PWD1 and creative PW3 codes in converter and configurator (headless Chrome)
+node tools/test-configurator-creative.mjs  # PWD1 and creative PW3 codes in converter and configurator, the creative FC in
+                                           # the picker and its drone editor: values, clamping, reset, template, notes,
+                                           # uptilt, codes, figures, keyboard and touch (headless Chrome, en/de, 390/1280 px)
+node tools/test-creative-flight.mjs        # creative.js and the analysis of creative drones against the mod's classes
+                                           # (creative-analysis-vectors.json) and CreativeFlightTest on every preset (Node)
 node tools/test-plug-texts.mjs             # battery plugged in: texts, dictionaries and model data say plugs are hidden
 node tools/test-beginner-images.mjs        # pictures of the builds for beginners match a fresh render (Chrome, dwebp)
 node tools/test-configurator-frames.mjs    # accessories only for some frames: reader, accessory_frame, pickers (Chrome)
@@ -341,6 +372,23 @@ PW3 conversion), made with the mod's classes (`ShareFormat.decode`, `ShareConver
 `PROPWASH_DISCORD_CODES` may name a local file of real codes (one per line, never in this repository); each must
 convert. `tools/test-configurator-flows.mjs --post <file>` converts a real post instead of the built-in one, and
 `--shots <dir>` keeps its screenshots.
+
+`--propwash-jar` (or `PROPWASH_JAR`) names the jar of the Propwash release of the export
+(`release/0.6.0/propwash-fpv/propwash-fabric-26.3-0.6.0.jar`): the build scripts read the parts of the game that exist
+only in creative mode (`CREATIVE_ONLY` in `catalog-build.js`: the Creative Flight Controller) from it with the page's
+own jar reader (`readAddon` with `builtin`, `exportParts` with `creative`, `catalogPart`, `partModel` – the path
+`tools/test-jar-loader.mjs` holds against the game's export for every other part of Propwash) and put them into
+`catalog.json` marked `creative_only: true` (the jar with its SHA-256 in `source.creative`) and into `models/`; without
+the option the catalog has no creative flight controller (a warning says so). `catalog.creativeOnly(id)` reads that mark.
+
+`tools/fixtures/creative-analysis-vectors.json` holds 370 creative drones computed with the classes of the release jar
+of Propwash 0.6.0 (`tools/creative-java/CreativeVectors.java`, run with `tools/creative-java/run.sh`: the jar, Minecraft
+26.3 from the Fabric Loom cache and its libraries from the Gradle cache on the class path, no Minecraft bootstrap, no
+Gradle build): the 45 parameters, per build and values the sanitized values and notes, every value and base value, the
+inertia, the flight build with the part files of the changed parts, `AirframeSpec`, `BuildAnalysis`, `CreativeCheck` and
+`CameraMount.range` – the cases of `CreativeFlightTest` and `CreativeRobustnessTest` and 120 random ones. Add-on parts
+are not in it (their mod registers them at start); `tools/test-creative-flight.mjs` checks them with the expectations
+of `CreativeFlightTest` on every preset of the catalog instead.
 
 `tools/fixtures/antenna-export` is a web export cut down to the VTX of Propwash 0.6.0 and Just More Parts 1.2.0-rc.1
 (made by `runWebExport` of Propwash 810cdb410 with the Just More Parts jar: the VTX entries of `parts.json` with their

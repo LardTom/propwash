@@ -4,6 +4,10 @@
 //     Mob Defense accessories) and every build of the game's share-code vectors (tools/fixtures/pw3-export-vectors.json,
 //     the add-on vectors of sharecode-vectors.json) gives the simulator an airframe with finite values; the share code
 //     the configurator hands over (paint, tune, name) reads back to the same build
+//   - creative drones: the simulator's airframe of the 370 creative vectors of the release jar
+//     (tools/fixtures/creative-analysis-vectors.json, AirframeSpec of CreativeFlight with ParamDerivation) equals the
+//     mod's: numbers bit for bit or within 1e-14 (JavaScript's Math.pow in analysis.js is 1 ulp off at a few inputs),
+//     the build key up to its hash (a cache key: FNV here, PartIndex.hashOf in the mod)
 //   - headless Chrome: the configurator's “Fly” link carries the drone as it is (preset, a changed tune, paint and
 //     name), the simulator opens that very drone without a notice, arms with the keyboard and climbs with throttle;
 //     an old PW2 link and a PW3 code with a missing add-on still open; no console errors
@@ -16,6 +20,7 @@ import path from 'node:path';
 import { ROOT, CHROME, serve, launch, cdp, sleep } from './headless-chrome.mjs';
 import { createCatalog } from '../assets/js/configurator/data.js';
 import { AirframeSpec } from '../assets/js/sim/model/AirframeSpec.js';
+import { simAirframe } from '../assets/js/sim/creative-airframe.js';
 
 function arg(name, fallback) {
   const i = process.argv.indexOf(name);
@@ -57,6 +62,29 @@ for (const [name, build] of builds) {
   check(Number.isFinite(a.comHeight), `${name}: comHeight finite (${a.comHeight})`);
 }
 check(catalog.presets.some((p) => p.id === 'justmoreparts:whoop65_race_1s'), 'the catalog has Just More Parts 1.2.0 “Race Whoop 65 · 1S”');
+
+// 1b. Creative drones against the mod's AirframeSpec.
+const creativeVectors = readJson('tools/fixtures/creative-analysis-vectors.json').vectors;
+let creativeFields = 0;
+let creativeExact = 0;
+for (const v of creativeVectors) {
+  const { airframe } = simAirframe(catalog, { build: v.build, creative: v.creative });
+  if (!check(!!airframe, `creative ${v.name}: the simulator gets an airframe`)) continue;
+  for (const [k, want] of Object.entries(v.airframe)) {
+    let got = typeof airframe[k] === 'function' ? airframe[k]() : airframe[k];
+    if (got === undefined) got = airframe[`_${k}`];
+    if (typeof want === 'number') {
+      creativeFields++;
+      if (got === want) creativeExact++;
+      else check(Math.abs(got - want) <= 1e-14 * Math.max(Math.abs(want), 1e-300), `creative ${v.name}: ${k} ${got} like the mod's ${want}`);
+    } else if (k === 'buildKey') {
+      const cut = (key) => String(key).replace(/\/[0-9a-f]{16}$/, '');
+      check(cut(got) === cut(want), `creative ${v.name}: build key ${got} like the mod's ${want} (without the hash)`);
+    } else if (typeof want === 'boolean') {
+      check(got === want, `creative ${v.name}: ${k} ${got} like the mod's ${want}`);
+    }
+  }
+}
 
 // 2. The code the configurator hands over (flyCode in ui.js: build, paint, tune, no OSD, name) reads back to the drone.
 for (const p of catalog.presets) {
@@ -150,9 +178,25 @@ async function browserPart() {
       check(y1 - y0 > 0.3, `${where}: armed and climbed with throttle (${(y1 - y0).toFixed(2)} m)`);
     }
 
+    where = 'sim with a creative drone (PW3 with creative values)';
+    const creativeCode = readJson('tools/fixtures/sharecode/pw3-creative-vectors.json').vectors.find((v) => v.name.startsWith('C1_'));
+    if (check(!!creativeCode, 'golden vector C1 of the creative share codes found')) {
+      const decoded = catalog.decode(creativeCode.code);
+      const want = simAirframe(catalog, decoded.content).airframe;
+      await send('Page.navigate', { url: 'about:blank' });
+      await sleep(100);
+      await send('Page.navigate', { url: `${base}/sim/#${creativeCode.code}` });
+      await waitFor('!!(window.propwashSim && document.body.classList.contains("is-ready"))', 40000, 'simulator');
+      const got = await evaluate("(() => { const n = document.querySelector('[data-notice]'); return { notice: n && !n.hidden ? n.textContent : null, mass: window.propwashSim.airframe.massKg, ixx: window.propwashSim.airframe.inertiaXx, key: window.propwashSim.airframe.buildKey }; })()");
+      check(!got.notice, `${where}: no notice (${got.notice})`);
+      check(decoded.content.creative && got.mass === want.massKg && got.ixx === want.inertiaXx && got.key === want.buildKey, `${where}: flies the creative airframe (${got.key}, ${got.mass} kg)`);
+    }
+
     where = 'sim with an old PW2 code';
     const pw2 = readJson('tools/fixtures/sharecode-vectors.json').find((v) => v.format === 'PW2' && v.status === 'OK');
     if (pw2) {
+      await send('Page.navigate', { url: 'about:blank' });
+      await sleep(100);
       await send('Page.navigate', { url: `${base}/sim/#${pw2.code}` });
       await waitFor('!!(window.propwashSim && document.body.classList.contains("is-ready"))', 40000, 'simulator');
       const notice = await evaluate("(() => { const n = document.querySelector('[data-notice]'); return n && !n.hidden ? n.textContent : null; })()");
@@ -178,5 +222,5 @@ if (failures.length) {
   for (const f of failures.slice(0, 40)) console.log(`  ${f}`);
   process.exitCode = 1;
 } else {
-  console.log(`PASS: ${checks} checks – “Fly”: ${airframes} airframes of presets and game vectors, fly codes of ${catalog.presets.length} presets, configurator to simulator in Chrome`);
+  console.log(`PASS: ${checks} checks – “Fly”: ${airframes} airframes of presets and game vectors, ${creativeVectors.length} creative drones like the mod (${creativeExact} of ${creativeFields} numbers bit for bit), fly codes of ${catalog.presets.length} presets, configurator to simulator in Chrome`);
 }

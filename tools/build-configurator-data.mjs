@@ -3,6 +3,7 @@
 // with the add-ons installed (`/propwash webexport all`: Just More Parts, Camera Drones, Mob Defense).
 //
 //   node tools/build-configurator-data.mjs [--export <web-export dir> …] [--mods <jar or folder> …] [--goldens <dir>]
+//                                         [--propwash-jar <jar>]
 //
 // Add-on sources: one export with every add-on (runWebExport of Propwash with the add-on jars in mods/), or several
 // exports, e.g. one per add-on (`--export` repeated, or JMP_WEB_EXPORT with paths separated like PATH). The first
@@ -14,7 +15,10 @@
 // the address a PW3 code names for an add-on that is not in the directory, like the game (ModMeta). --goldens (or
 // PROPWASH_SHARECODE_GOLDENS) names the folder with the share-code golden files of Propwash
 // (common/src/test/resources/sharecode/); they are copied unchanged, so the mod's JUnit tests and
-// tools/test-configurator.mjs check the very same files.
+// tools/test-configurator.mjs check the very same files. --propwash-jar (or PROPWASH_JAR) names the jar of the Propwash
+// release of the export: the parts of the game that exist only in creative mode (the creative flight controller), which
+// the web export leaves out, are read from it with the configurator's jar reader (addon-catalog.js readAddon, as
+// tools/test-jar-loader.mjs holds it against the game) and go into the catalog marked creative_only: true.
 //
 // Writes:
 //   assets/data/configurator/catalog.json      everything the configurator needs at runtime: the parts, presets,
@@ -34,7 +38,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { jarMeta } from '../assets/js/configurator/addon-catalog.js';
+import { jarMeta, readAddon } from '../assets/js/configurator/addon-catalog.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -169,6 +173,31 @@ export function modMetas(jars) {
     }
   }
   return out;
+}
+
+/** The jar of Propwash named by --propwash-jar / PROPWASH_JAR, or null. */
+export function propwashJar(argv = process.argv.slice(2)) {
+  return argValue(argv, '--propwash-jar', 'PROPWASH_JAR');
+}
+
+/**
+ * The parts of the game that exist only in creative mode (CREATIVE_ONLY: the creative flight controller), read from
+ * Propwash's jar like the configurator's jar reader reads it: {parts: catalog entries (creative_only: true), models: Map
+ * id → model file (with models: true), defaultColors, jar: {mod, version, file, sha256}}.
+ */
+export function creativeParts(file, { models = false } = {}) {
+  const bytes = new Uint8Array(fs.readFileSync(file));
+  const r = readAddon(bytes, { builtin: true, fileName: path.basename(file), models });
+  if (!r.ok) throw new Error(`${file}: ${r.problems.map((p) => p.code).join(', ')}`);
+  if (r.mod.id !== 'propwash') throw new Error(`${file}: the jar is ${r.mod.id}, not Propwash`);
+  const parts = r.fragment.parts.filter((p) => p.creative_only);
+  const ids = new Set(parts.map((p) => p.id));
+  return {
+    parts,
+    models: new Map([...(r.models || new Map())].filter(([id]) => ids.has(id))),
+    defaultColors: Object.fromEntries(Object.entries(r.fragment.default_colors).filter(([id]) => ids.has(id))),
+    jar: { mod: r.mod.id, version: r.mod.version, file: path.basename(file), sha256: crypto.createHash('sha256').update(bytes).digest('hex') },
+  };
 }
 
 const DROP_VARIANT = /_(worn|damaged|broken)(_|\.json$|\.png$)/;
@@ -346,9 +375,9 @@ function compactDirectory(directory) {
 
 /**
  * The catalog of one or several web exports (readExports); metas: the add-on jars' metadata by mod id (modMetas),
- * for the homepage of every namespace.
+ * for the homepage of every namespace; creative: the creative-only parts of Propwash's jar (creativeParts), or null.
  */
-export function buildCatalog(dirs, { metas = {} } = {}) {
+export function buildCatalog(dirs, { metas = {}, creative = null } = {}) {
   const exp = readExports(dirs);
   const { manifest, namespaces, dirOf } = exp;
   const dir = exp.base;
@@ -395,6 +424,16 @@ export function buildCatalog(dirs, { metas = {} } = {}) {
 
   const defaultColors = {};
   for (const p of parts) if (p.paint && p.paint.default_colors && Object.keys(p.paint.default_colors).length) defaultColors[p.id] = p.paint.default_colors;
+  if (creative && creative.jar.version !== exp.mods.propwash) {
+    throw new Error(`--propwash-jar is Propwash ${creative.jar.version}, the export has ${exp.mods.propwash}`);
+  }
+  const catalogParts = parts.map(part);
+  for (const p of creative ? creative.parts : []) {
+    if (catalogParts.some((x) => x.id === p.id)) throw new Error(`${p.id}: already in the export`);
+    catalogParts.push(p);
+    if (creative.defaultColors[p.id]) defaultColors[p.id] = creative.defaultColors[p.id];
+  }
+  catalogParts.sort(partOrder);
 
   const layouts = {};
   for (const [owner, json] of Object.entries(layoutFiles(dirOf, namespaces))) layouts[owner] = fpvLayout(json, owner);
@@ -414,10 +453,11 @@ export function buildCatalog(dirs, { metas = {} } = {}) {
       sources: exp.sources,
       jars: Object.values(metas).filter((m) => exp.namespaces.includes(m.id)).sort((a, b) => (a.id < b.id ? -1 : 1))
         .map((m) => ({ mod: m.id, version: m.version, file: m.file, sha256: m.sha256, used: m.version === exp.mods[m.id] })),
+      ...(creative ? { creative: { ...creative.jar, parts: creative.parts.map((p) => p.id) } } : {}),
     },
     namespaces: info,
     categories: CATEGORIES,
-    parts: parts.map(part),
+    parts: catalogParts,
     chemistries: [...chemistries.values()].map(({ used_by, ...c }) => c),
     mounts,
     rules,
@@ -472,7 +512,9 @@ function main() {
     process.exit(1);
   }
   const metas = modMetas(modJars(argv));
-  const catalog = buildCatalog(dirs, { metas });
+  const jar = propwashJar(argv);
+  const creative = jar ? creativeParts(jar) : null;
+  const catalog = buildCatalog(dirs, { metas, creative });
   for (const n of catalog.namespaces) {
     const meta = metas[n.namespace];
     if (meta && meta.version !== n.version) console.warn(`warning: ${meta.file} is ${n.namespace} ${meta.version}, the export has ${n.version} – its homepage is not used`);
@@ -503,6 +545,8 @@ function main() {
   fs.writeFileSync(path.join(fixtures, 'pw3-export-vectors.json'), JSON.stringify(vectors, null, 1) + '\n');
 
   console.log(`catalog.json: ${catalog.parts.length} parts, ${catalog.presets.length} presets, namespaces ${catalog.namespaces.map((n) => `${n.namespace} ${n.version}${n.homepage ? ` (${n.homepage})` : ''}`).join(', ')}, ${(text.length / 1024).toFixed(1)} KiB`);
+  if (creative) console.log(`creative only, from ${creative.jar.file} (Propwash ${creative.jar.version}): ${creative.parts.map((p) => p.id).join(', ')}`);
+  else console.warn('warning: no --propwash-jar – the catalog has no creative-only parts (creative flight controller)');
   console.log(`sources: ${catalog.source.sources.map((x) => `${x.generator} ${x.generated_at} [${x.namespaces.join(', ')}]`).join('; ')}`);
   console.log(`pw3-export-vectors.json: ${vectors.length} vectors`);
   const goldens = argValue(argv, '--goldens', 'PROPWASH_SHARECODE_GOLDENS');
