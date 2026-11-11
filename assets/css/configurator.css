@@ -372,7 +372,7 @@ button {
   left: 14px;
   bottom: 14px;
   z-index: 1;
-  max-width: calc(100% - 350px);
+  max-width: calc(100% - 440px);
   margin: 0;
   color: var(--faint);
   font: 600 0.64rem/1.45 var(--mono);
@@ -508,6 +508,21 @@ button {
 .viewer__btn[aria-expanded="true"] {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+/* Fly this drone in the simulator (sim/): the one accent button of the toolbar. */
+.viewer__btn--fly {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
+  text-decoration: none;
+}
+
+.viewer__btn--fly:hover,
+.viewer__btn--fly:focus-visible {
+  border-color: var(--accent-hover);
+  background: var(--accent-hover);
+  color: var(--on-accent);
 }
 
 /* Narrow screens: the screenshot button keeps only its icon, so the toolbar stays on one line. */

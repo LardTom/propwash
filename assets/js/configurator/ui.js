@@ -2,19 +2,19 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText, createCatalog } from './data.js?v=ba3541e9';
+import { loadCatalog, localText, createCatalog } from './data.js?v=f1d2acbd';
 import { shareLink, codeFromHash, PAINT_SLOTS, displayId, compact } from './sharecode.js?v=024bd980';
 import { parseUnknown, unknownId, unknownMarker, SHORT_KEY_PREFIX, creativeCounts } from './sharecode3.js?v=024bd980';
-import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=79ccb24d';
+import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=1ff606c1';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
-import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=11fbb0d2';
+import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=f3f32120';
 import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
 import { batteryFit, fitsFrame } from './rules.js?v=6634f777';
 import { assemble, PROP_SLOTS } from './assembly.js?v=4c00d7c2';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=ed26e8eb';
 import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=167aea2f';
 import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=01d57f4b';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=5015e836';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=b41ce9be';
 import { cameraCheck, isCameraDrone, navOf, gimbalOf, classOf as flightClassOf, lineNotes, noCameraFrameHint } from './camdrones.js?v=b1626e80';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
@@ -209,6 +209,17 @@ function currentCode() {
     const messages = { UNKNOWN_ENTRIES: 'ui.encodeUnknownEntries', NOT_CONVERTIBLE: 'ui.encodeLegacyUnknown', TOO_LARGE: 'ui.encodeTooLarge', CORRUPT: 'ui.encodeBadId' };
     const key = e && messages[e.status];
     return { code: null, error: key ? t(key) : (e && e.message) || String(e) };
+  }
+}
+
+/** Share code for the simulator: always with paint, tune and name, whatever the layer switches say. */
+function flyCode() {
+  try {
+    const paint = Object.keys(state.paint).length ? { ...state.paint } : null;
+    const name = state.name && state.name.trim() ? state.name.trim() : null;
+    return catalog.encode({ build: state.build, paint, tune: { ...state.tune }, osd: null, name });
+  } catch {
+    return null;
   }
 }
 
@@ -2265,7 +2276,7 @@ async function startViewer() {
   const button = $('[data-autorotate]');
   let mod;
   try {
-    mod = await import('./viewer.js?v=f1eaf480');
+    mod = await import('./viewer.js?v=7b1420f0');
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;
@@ -2870,6 +2881,13 @@ function wireEvents() {
     const { code } = currentCode();
     if (code) copy(shareLink(code, pageUrl()), t('ui.linkCopied'));
   });
+  // The simulator link carries the drone as it is now (set just before the browser follows it).
+  const fly = $('[data-fly]');
+  const aimFly = () => {
+    const code = flyCode();
+    fly.href = code ? `../sim/#${code}` : '../sim/';
+  };
+  for (const type of ['pointerdown', 'focus', 'mouseenter', 'click']) fly.addEventListener(type, aimFly);
   const input = $('[data-import]');
   let importTimer = 0;
   // The code last loaded from the field: typing around it (blanks, a line break) does not load it again.

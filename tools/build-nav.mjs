@@ -29,6 +29,9 @@ export const HAND_PAGES = [
   ['brand/index.html', '../', 'brand'],
 ];
 
+/** Full-window app pages without the site navigation and footer (the FPV simulator), reached from the configurator. */
+export const APP_PAGES = ['sim/index.html'];
+
 /** A page with the current navigation and footer links (options as for siteNav). */
 export function withNav(html, prefix, current, file, options = {}) {
   if (!NAV_PATTERN.test(html)) throw new Error(`${file}: <nav class="site-nav"> not found`);

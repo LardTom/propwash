@@ -186,7 +186,7 @@ function cellOcv(chem, soc) {
 // ---------------------------------------------------------------------------------------------------------------
 // Accessories on their anchors
 
-function anchorOf(frame, slot) {
+export function anchorOf(frame, slot) {
   const spec = frame.data.accessory_anchors && frame.data.accessory_anchors[slot];
   if (spec) return { x: spec.pos[0], y: spec.pos[1], z: spec.pos[2], tilt: spec.tilt_deg, length: spec.length_mm };
   const wheelbase = frame.data.wheelbase_mm;
@@ -196,12 +196,12 @@ function anchorOf(frame, slot) {
 }
 
 // AccessoryAnchor#tiltFor: a straight-hanging accessory (hangs_straight of the web export, the gripper) has no tilt.
-function tiltFor(anchor, acc) {
+export function tiltFor(anchor, acc) {
   return acc.data.hangs_straight === true ? 0.0 : anchor.tilt;
 }
 
 // AccessoryAnchor#toFrame with the accessory's tilt.
-function anchorToFrame(anchor, tiltDegrees, lx, ly, lz) {
+export function anchorToFrame(anchor, tiltDegrees, lx, ly, lz) {
   const tilt = toRadians(tiltDegrees);
   const cos = Math.cos(tilt);
   const sin = Math.sin(tilt);
@@ -216,7 +216,7 @@ function modelBox(acc, slot) {
 }
 
 // AccessoryType#boxMinMm/boxMaxMm: a recessed accessory's box sits recess_mm further back and drop_mm lower.
-function accessoryBox(acc, slot) {
+export function accessoryBox(acc, slot) {
   const box = modelBox(acc, slot);
   const recess = acc.data.recess_mm || 0.0;
   const drop = acc.data.drop_mm || 0.0;
@@ -226,7 +226,7 @@ function accessoryBox(acc, slot) {
 }
 
 // AccessoryAnchor#stretch: only a bottom accessory that neither hangs straight nor has an LED path.
-function anchorStretch(anchor, acc, slot) {
+export function anchorStretch(anchor, acc, slot) {
   const width = acc.data.size_mm[0];
   const ledPath = Array.isArray(acc.data.led_path) && acc.data.led_path.length > 0;
   if (slot === 'bottom' && acc.data.hangs_straight !== true && !ledPath && anchor.length > 0.0 && width > 0.0) return anchor.length / width;

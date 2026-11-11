@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FPV simulator – Propwash FPV</title>
+<meta name="description" content="Fly the drone you built in the Propwash configurator in your browser, with the game's flight model, your radio, gamepad or keyboard.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<link rel="canonical" href="https://propwashfpv.com/sim/">
+<meta property="og:url" content="https://propwashfpv.com/sim/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="FPV simulator – Propwash FPV">
+<meta property="og:description" content="Fly the drone you built in the Propwash configurator in your browser, with the game's flight model.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/css/style.css?v=99b3d8b7">
+<link rel="stylesheet" href="../assets/css/sim.css?v=03a3cc31">
+<script>
+(function () {
+  var d = document.documentElement, lang = null;
+  d.className = d.className.replace('no-js', 'js');
+  try { lang = localStorage.getItem('propwash-lang'); } catch (e) {}
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="sim-page">
+<main class="sim" aria-label="FPV simulator" data-de-aria-label="FPV-Simulator">
+  <div class="sim__stage" data-stage></div>
+  <canvas class="sim__osd" data-osd aria-hidden="true"></canvas>
+
+  <header class="sim__bar">
+    <a class="sim__back" href="../configurator/" data-back>
+      <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>
+      <span lang="en">Configurator</span><span lang="de">Konfigurator</span>
+    </a>
+    <span class="sim__name" data-drone-name></span>
+    <div class="sim__views" role="group" aria-label="Camera" data-de-aria-label="Kamera">
+      <button type="button" class="sim__btn" data-view="fpv" aria-pressed="true">FPV</button>
+      <button type="button" class="sim__btn" data-view="los" aria-pressed="false"><span lang="en">Line of sight</span><span lang="de">Sichtflug</span></button>
+    </div>
+    <div class="sim__actions">
+      <span class="sim__sound">
+        <button type="button" class="sim__btn" data-sound aria-pressed="true" title="Motor sound on/off" data-de-title="Motorsound an/aus"><span lang="en">Sound</span><span lang="de">Ton</span></button>
+        <input type="range" class="sim__volume" min="0" max="100" step="1" value="100" data-volume aria-label="Volume" data-de-aria-label="Lautstärke" title="Volume" data-de-title="Lautstärke">
+      </span>
+      <button type="button" class="sim__btn" data-reset title="Backspace"><span lang="en">Reset</span><span lang="de">Zurücksetzen</span></button>
+      <button type="button" class="sim__btn sim__btn--accent" data-open-setup><span lang="en">Controller</span><span lang="de">Controller</span></button>
+      <button type="button" class="sim__btn" data-open-help aria-label="Help" data-de-aria-label="Hilfe">?</button>
+      <span class="sim__lang" role="group" aria-label="Language">
+        <button type="button" class="sim__btn sim__btn--quiet" data-set-lang="en">EN</button>
+        <button type="button" class="sim__btn sim__btn--quiet" data-set-lang="de">DE</button>
+      </span>
+    </div>
+  </header>
+
+  <p class="sim__device" data-device aria-live="polite"></p>
+  <p class="sim__sound-hint" data-sound-hint hidden><span lang="en">Click into the picture or press a key to start the sound (the browser does not count radio or gamepad input).</span><span lang="de">Klick ins Bild oder drück eine Taste, damit der Ton startet (Funke und Gamepad zählen für den Browser nicht).</span></p>
+  <p class="sim__notice" data-notice hidden role="status"></p>
+  <p class="sim__loading" data-loading><span lang="en">Loading the flying field …</span><span lang="de">Flugplatz wird geladen …</span></p>
+</main>
+
+<dialog class="sim-dialog sim-dialog--setup" data-setup aria-labelledby="setup-title">
+  <div class="sim-dialog__head">
+    <h2 id="setup-title"><span lang="en">Controller setup</span><span lang="de">Controller einrichten</span></h2>
+    <button type="button" class="sim__btn" data-setup-close><span lang="en">Done</span><span lang="de">Fertig</span></button>
+  </div>
+  <div class="sim-dialog__body" data-setup-body></div>
+</dialog>
+
+<dialog class="sim-dialog" data-help aria-labelledby="help-title">
+  <div class="sim-dialog__head">
+    <h2 id="help-title"><span lang="en">How to fly</span><span lang="de">So fliegst du</span></h2>
+    <button type="button" class="sim__btn" data-help-close><span lang="en">Close</span><span lang="de">Schließen</span></button>
+  </div>
+  <div class="sim-dialog__body">
+    <p lang="en">The drone flies with Propwash's own flight model and the tune stored on it in the configurator: rates, PIDs, filters, airmode and camera angle. To arm, the throttle must be low and the drone level. A crash disarms it, just like in the game.</p>
+    <p lang="de">Die Drohne fliegt mit Propwashs eigenem Flugmodell und dem Tuning, das im Konfigurator auf ihr gespeichert ist: Rates, PIDs, Filter, Airmode und Kamerawinkel. Zum Scharfschalten muss das Gas unten und die Drohne waagrecht sein. Ein Crash entschärft sie, genau wie im Spiel.</p>
+    <table class="sim-keys">
+      <thead><tr><th><span lang="en">Action</span><span lang="de">Aktion</span></th><th><span lang="en">Keyboard</span><span lang="de">Tastatur</span></th><th><span lang="en">Radio</span><span lang="de">Funke</span></th><th>Gamepad</th></tr></thead>
+      <tbody>
+        <tr><td><span lang="en">Arm / disarm</span><span lang="de">Scharf / entschärfen</span></td><td><kbd>Z</kbd></td><td>AUX1</td><td><span lang="en">right shoulder</span><span lang="de">rechte Schultertaste</span></td></tr>
+        <tr><td><span lang="en">Flight mode</span><span lang="de">Flugmodus</span></td><td><kbd>R</kbd>, <kbd>Num 1–3</kbd></td><td><span lang="en">AUX2 (low Acro, mid Horizon, high Angle)</span><span lang="de">AUX2 (unten Acro, Mitte Horizon, oben Angle)</span></td><td><span lang="en">left shoulder (Angle)</span><span lang="de">linke Schultertaste (Angle)</span></td></tr>
+        <tr><td><span lang="en">Throttle / yaw</span><span lang="de">Gas / Gier</span></td><td><kbd>W</kbd> <kbd>S</kbd> / <kbd>A</kbd> <kbd>D</kbd></td><td colspan="2"><span lang="en">sticks (Mode 2: left stick)</span><span lang="de">Knüppel (Mode 2: links)</span></td></tr>
+        <tr><td><span lang="en">Pitch / roll</span><span lang="de">Nick / Roll</span></td><td><kbd>↑</kbd> <kbd>↓</kbd> / <kbd>←</kbd> <kbd>→</kbd></td><td colspan="2"><span lang="en">sticks (Mode 2: right stick)</span><span lang="de">Knüppel (Mode 2: rechts)</span></td></tr>
+        <tr><td><span lang="en">Reset to the start pad</span><span lang="de">Zurück zum Start</span></td><td><kbd>Backspace</kbd></td><td><span lang="en">assignable</span><span lang="de">belegbar</span></td><td>Back</td></tr>
+        <tr><td><span lang="en">Flip upright (disarmed)</span><span lang="de">Aufrichten (entschärft)</span></td><td><kbd>U</kbd></td><td><span lang="en">assignable</span><span lang="de">belegbar</span></td><td><span lang="en">left face button</span><span lang="de">linke Aktionstaste</span></td></tr>
+        <tr><td><span lang="en">Camera FPV / line of sight</span><span lang="de">Kamera FPV / Sichtflug</span></td><td><kbd>C</kbd></td><td></td><td></td></tr>
+      </tbody>
+    </table>
+    <p lang="en">Radio: connect it via USB and choose <b>USB Joystick (HID)</b> on the radio, then move a stick so the browser sees it. Open <b>Controller</b> to check the channels, calibrate and assign switches.</p>
+    <p lang="de">Funke: per USB verbinden und an der Funke <b>USB Joystick (HID)</b> wählen, dann einen Knüppel bewegen, damit der Browser sie sieht. Unter <b>Controller</b> prüfst du die Kanäle, kalibrierst und belegst Schalter.</p>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  var buttons = document.querySelectorAll('[data-set-lang]');
+  // Titles and labels in the page language: data-de-title / data-de-aria-label hold the German text.
+  var labelled = document.querySelectorAll('[data-de-title], [data-de-aria-label]');
+  for (var j = 0; j < labelled.length; j++) {
+    var node = labelled[j];
+    if (node.hasAttribute('title')) node.setAttribute('data-en-title', node.getAttribute('title'));
+    if (node.hasAttribute('aria-label')) node.setAttribute('data-en-aria-label', node.getAttribute('aria-label'));
+  }
+  function mark() {
+    var lang = document.documentElement.lang === 'de' ? 'de' : 'en';
+    for (var i = 0; i < buttons.length; i++) buttons[i].setAttribute('aria-pressed', String(buttons[i].getAttribute('data-set-lang') === lang));
+    for (var k = 0; k < labelled.length; k++) {
+      var n = labelled[k];
+      var title = n.getAttribute('data-' + lang + '-title');
+      var label = n.getAttribute('data-' + lang + '-aria-label');
+      if (title != null) n.setAttribute('title', title);
+      if (label != null) n.setAttribute('aria-label', label);
+    }
+  }
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].addEventListener('click', function (e) {
+      var l = e.currentTarget.getAttribute('data-set-lang');
+      document.documentElement.lang = l;
+      try { localStorage.setItem('propwash-lang', l); } catch (err) {}
+      mark();
+    });
+  }
+  mark();
+})();
+</script>
+<script type="module" src="../assets/js/sim/app.js?v=77ede6cf"></script>
+</body>
+</html>
