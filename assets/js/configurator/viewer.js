@@ -107,7 +107,11 @@ void main() {
   float light = min(1.0, (max(0.0, dot(light0, n)) + max(0.0, dot(light1, n))) * 0.6 + 0.4);
   vec3 color = texel.rgb * vColor * light;
   vec3 lifted = color * (1.0 + 0.55 * vHighlight) + 0.08 * vHighlight;
+#ifdef TRANSLUCENT
+  gl_FragColor = vec4(mix(lifted, ${HIGHLIGHT_GLSL}, 0.28 * vHighlight), texel.a);
+#else
   gl_FragColor = vec4(mix(lifted, ${HIGHLIGHT_GLSL}, 0.28 * vHighlight), 1.0);
+#endif
 }`;
 
 // FpvProps.buildBlur: bands [from, to] as share of the tip radius (null = hub), alpha at both edges; colour × 0.85.
@@ -472,7 +476,7 @@ function hitTriangles(geometry, o, d, cull, alpha) {
 // Viewer
 
 /** Blur disc of one prop (FpvProps.buildBlur) around its centre in the drone's frame, colour 0xRRGGBB. */
-function discGeometry(center, hubRadius, radius, rgb) {
+export function discGeometry(center, hubRadius, radius, rgb) {
   const positions = [];
   const colors = [];
   const index = [];
@@ -503,7 +507,7 @@ function discGeometry(center, hubRadius, radius, rgb) {
 }
 
 /** FpvProps.blurRgb: the prop's paint at this position, else the prop channel of its model, else its accent colour. */
-function discColor(prop, model, paint, slot) {
+export function discColor(prop, model, paint, slot) {
   const painted = paint && paint[slotOf('prop', slot)];
   if (painted) return rgbOf(painted);
   const groups = model && model.variants && model.variants.paint && model.variants.paint.groups;
@@ -558,7 +562,9 @@ export function createPartMeshes({ catalog, render, onTextureLoad }) {
     return white;
   }
 
-  function material(map) {
+  // translucent: a texture the model marks "force_translucent" (a prop's blur disc, only drawn by the simulator): texture
+  // alpha blended over what lies behind, no depth write, like the game's blur pass.
+  function material(map, translucent = false) {
     const tints = [];
     for (let i = 0; i < MAX_TINTS; i++) tints.push(new Vector3(1, 1, 1));
     return new ShaderMaterial({
@@ -568,6 +574,7 @@ export function createPartMeshes({ catalog, render, onTextureLoad }) {
         map: { value: map }, tints: { value: tints }, light0: { value: LIGHT0 }, light1: { value: LIGHT1 },
         highlight: { value: new Array(MAX_TINTS).fill(0) }, highlightAll: { value: 0 },
       },
+      ...(translucent ? { defines: { TRANSLUCENT: '' }, transparent: true, depthWrite: false } : {}),
     });
   }
 
@@ -598,10 +605,12 @@ export function createPartMeshes({ catalog, render, onTextureLoad }) {
   }
 
   // One mesh per placed piece (per texture of it, see pieceMeshes); painting swaps between the plain and the "_paint"
-  // model. userData: role, faces (the geometry carries the tint group of every face), dispose (own geometry).
+  // model. userData: role, faces (the geometry carries the tint group of every face), dispose (own geometry),
+  // translucent (faces of a "force_translucent" texture, listed in the variant's "tl").
   function pieceMesh(piece, model, paint, layout, tex = -1) {
     let mesh;
     let faces = false;
+    let translucent = false;
     if (piece.procedural === 'accessory_base') {
       const groups = groupsOf(piece, null, render) || [['tpu', '#262628']];
       const tpu = (paint && paint.tpu) || groups[0][1];
@@ -620,7 +629,9 @@ export function createPartMeshes({ catalog, render, onTextureLoad }) {
       const tints = model.variants[painted] ? paintTints(model.variants[painted].groups, paint, piece.paintPosition || 0, render.channels) : null;
       const name = tints ? painted : plain;
       const variant = model.variants[name];
-      const mat = material(texture(model.tex[tex >= 0 ? tex : variant.tex]));
+      const used = tex >= 0 ? tex : variant.tex;
+      translucent = Array.isArray(variant.tl) && variant.tl.includes(used);
+      const mat = material(texture(model.tex[used]), translucent);
       if (tints) {
         tints.forEach((rgb, i) => {
           if (i < MAX_TINTS) mat.uniforms.tints.value[i].set(((rgb >> 16) & 255) / 255, ((rgb >> 8) & 255) / 255, (rgb & 255) / 255);
@@ -631,6 +642,7 @@ export function createPartMeshes({ catalog, render, onTextureLoad }) {
     }
     mesh.userData.role = piece.role;
     mesh.userData.faces = faces;
+    if (translucent) mesh.userData.translucent = true;
     const [x, y, z] = piece.position;
     mesh.position.set(x, y, z);
     if (piece.tiltX) mesh.rotation.x = piece.tiltX * DEG;

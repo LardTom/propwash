@@ -14,11 +14,12 @@ import { ArmBlocker } from './model/ArmBlocker.js?v=3bfdfa7f';
 import { SimEventType } from './model/SimEventType.js?v=e546d059';
 import { parseGlb, VoxelWorld } from './world.js?v=3d604f11';
 import { Flight } from './flight.js?v=a29918a7';
-import { SimScene } from './scene.js?v=05eee6eb';
+import { SimScene } from './scene.js?v=9fb80428';
 import { Osd } from './osd.js?v=eac48f7a';
 import { PilotInputSource } from './input.js?v=4b632cf7';
 import { ControllerSetup } from './setup.js?v=7aa7a465';
-import { loadDroneModel } from './drone-model.js?v=c6ea11cb';
+import { loadDroneModel } from './drone-model.js?v=7abbaf78';
+import { mountFpvPropsSetting } from './props-setting.js?v=a74f1d14';
 import { DroneAudio } from './audio.js?v=707480ba';
 import { BatteryState } from './model/BatteryState.js?v=de4ddff2';
 import { t, lang } from './i18n.js?v=f01636b9';
@@ -135,6 +136,8 @@ async function boot() {
   const scene = new SimScene(stage, {
     world, primitives, airframe, rig, uptiltDeg: uptilt, prop: catalog.part(build.prop), paint: content.paint || {},
   });
+  // Props: the switch "Props in FPV view" in the bar (props-setting.js).
+  mountFpvPropsSetting(scene);
   const osd = new Osd($('[data-osd]'));
   const input = new PilotInputSource();
   const setup = new ControllerSetup($('[data-setup]'), input);
@@ -371,7 +374,7 @@ async function boot() {
     const rpmMax = airframe.omegaMax * 60 / (2 * Math.PI);
     const rpm = Array.from(tm.motorRpm, (r) => (rpmMax > 0 ? Math.min(1, Math.abs(r) / rpmMax) : 0));
     const o = flight.result.orientation;
-    scene.render({ x: flight.x, y: flight.y, z: flight.z }, { x: o.x, y: o.y, z: o.z, w: o.w }, rpm, dt, home);
+    scene.render({ x: flight.x, y: flight.y, z: flight.z }, { x: o.x, y: o.y, z: o.z, w: o.w }, rpm, dt, home, sim.arming.armed);
     const blockers = [];
     if (!sim.arming.armed) {
       for (const b of ArmBlocker.values()) if (b.isSet(tm.armBlockers)) blockers.push(b.name);
