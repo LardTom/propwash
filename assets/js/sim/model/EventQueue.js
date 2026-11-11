@@ -1,6 +1,6 @@
 // Port of de.lardtom.propwash.sim.EventQueue (1:1).
 // The private field `size` is stored as `_size` (a JS field would hide the method size()).
-import { SimEventType } from './SimEventType.js?v=e546d059';
+import { SimEventType } from './SimEventType.js?v=7000a262';
 
 export class EventQueue {
   static CAPACITY = 32;
