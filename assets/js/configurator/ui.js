@@ -12,9 +12,9 @@ import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe
 import { batteryFit, fitsFrame } from './rules.js?v=6634f777';
 import { assemble, PROP_SLOTS } from './assembly.js?v=4c00d7c2';
 import { paintDefaults, paintAvailable, randomPaint, PAINT_SWATCHES, swatchOf, shade, hexOf, rgbOf } from './paint.js?v=ed26e8eb';
-import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=167aea2f';
-import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=01d57f4b';
-import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=b41ce9be';
+import { reasonText, addonNote, codeAddons, withCodeAddons } from './convert.js?v=49f45987';
+import { t, tk, entry, num, lang, NB, glue, tr, loadTexts, pageHref } from './i18n.js?v=20a73ee6';
+import { mountAddonBar, localModel, openJarPicker } from '../addons/configurator-addons.js?v=66b4dc76';
 import { cameraCheck, isCameraDrone, navOf, gimbalOf, classOf as flightClassOf, lineNotes, noCameraFrameHint } from './camdrones.js?v=b1626e80';
 
 const RENDER_URL = new URL('../../data/configurator/render.json', import.meta.url);
@@ -955,9 +955,9 @@ function renderCamera() {
   readout.classList.toggle('is-warn', percent > PROPS_IN_VIEW_WARNING);
   const video = catalog.part(state.build.video);
   const link = t(`ui.fpvLink.${video && video.data.link in (entry('ui.fpvLink') || {}) ? video.data.link : 'analog'}`);
-  note.textContent = standard
-    ? t('ui.fpvNoteDefault', { tilt: num(view.uptilt_deg, 0), fov: num(fov, 0), link })
-    : t('ui.fpvNoteChanged', { tilt: num(view.uptilt_deg, 0), percent: num(view.props_in_view_percent, 1) });
+  // One note for every angle (the frame default and the workbench figure), so the panel keeps its size while the
+  // slider moves; the readout and the reset button tell an own angle from the default.
+  note.textContent = t('ui.fpvNote', { tilt: num(view.uptilt_deg, 0), fov: num(fov, 0), link, percent: num(view.props_in_view_percent, 1) });
   if (isCameraDrone(state.build, cameraData)) note.textContent += ` ${t('ui.fpvGimbalNote')}`;
   if (viewer) viewer.setCamera({ on: fpvState.on, tilt, fov, spinning: !fpvState.still, frame: fpvState.frame, mark: fpvState.mark });
   cameraLabel(percent);
