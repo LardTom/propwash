@@ -467,6 +467,118 @@ function discColor(prop, model, paint, slot) {
   return PROP_MATERIAL_COLOR[prop.data.material] || PROP_DEFAULT_COLOR;
 }
 
+/**
+ * Meshes of a drone's placed parts (assembly.js pieces) with their block models, textures and paint tints, drawn like
+ * the mod's drone renderer. Shared by the configurator's viewer and the FPV simulator (sim/).
+ * @param {{catalog: object, render: object, onTextureLoad?: () => void}} options
+ */
+export function createPartMeshes({ catalog, render, onTextureLoad }) {
+  const textureCache = new Map();
+  const geometryCache = new Map();
+  let white = null;
+
+  function texture(dataUrl) {
+    let t = textureCache.get(dataUrl);
+    if (!t) {
+      const image = new Image();
+      t = new Texture(image);
+      t.magFilter = NearestFilter;
+      t.minFilter = NearestFilter;
+      t.generateMipmaps = false;
+      t.colorSpace = NoColorSpace;
+      t.flipY = false;
+      image.onload = () => {
+        t.needsUpdate = true;
+        if (onTextureLoad) onTextureLoad();
+      };
+      image.src = dataUrl;
+      textureCache.set(dataUrl, t);
+    }
+    return t;
+  }
+
+  function whiteTexture() {
+    if (!white) {
+      const c = document.createElement('canvas');
+      c.width = c.height = 2;
+      const ctx = c.getContext('2d');
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, 2, 2);
+      white = new CanvasTexture(c);
+      white.colorSpace = NoColorSpace;
+      white.magFilter = NearestFilter;
+      white.minFilter = LinearFilter;
+    }
+    return white;
+  }
+
+  function material(map) {
+    const tints = [];
+    for (let i = 0; i < MAX_TINTS; i++) tints.push(new Vector3(1, 1, 1));
+    return new ShaderMaterial({
+      vertexShader: VERTEX,
+      fragmentShader: FRAGMENT,
+      uniforms: {
+        map: { value: map }, tints: { value: tints }, light0: { value: LIGHT0 }, light1: { value: LIGHT1 },
+        highlight: { value: new Array(MAX_TINTS).fill(0) }, highlightAll: { value: 0 },
+      },
+    });
+  }
+
+  function geometryFor(model, id, variantName) {
+    const key = `${id}#${variantName}`;
+    let g = geometryCache.get(key);
+    if (!g) {
+      const variant = model.variants[variantName];
+      const source = variant.of ? model.variants[variant.of] : variant;
+      g = modelGeometry(source.el, variant.tint || null, faceGroups(model, variantName));
+      geometryCache.set(key, g);
+    }
+    return g;
+  }
+
+  // One mesh per placed piece; painting swaps between the plain and the "_paint" model. userData: role, faces (the
+  // geometry carries the tint group of every face), dispose (own geometry).
+  function pieceMesh(piece, model, paint, layout) {
+    let mesh;
+    let faces = false;
+    if (piece.procedural === 'accessory_base') {
+      const groups = groupsOf(piece, null, render) || [['tpu', '#262628']];
+      const tpu = (paint && paint.tpu) || groups[0][1];
+      mesh = new Mesh(shapeGeometry(proceduralAccessoryBase(rgbOf(tpu))), material(whiteTexture()));
+      mesh.userData.dispose = true;
+    } else if (piece.procedural === 'frame') {
+      const frame = catalog.part(piece.id);
+      mesh = new Mesh(shapeGeometry(proceduralFrame(frame, layout, catalog)), material(whiteTexture()));
+      mesh.userData.dispose = true;
+    } else {
+      const plain = piece.variant && piece.variant !== 'base' && model.variants[piece.variant] ? piece.variant : 'base';
+      const painted = plain === 'base' ? 'paint' : `${plain}_paint`;
+      const tints = model.variants[painted] ? paintTints(model.variants[painted].groups, paint, piece.paintPosition || 0, render.channels) : null;
+      const name = tints ? painted : plain;
+      const variant = model.variants[name];
+      const mat = material(texture(model.tex[variant.tex]));
+      if (tints) {
+        tints.forEach((rgb, i) => {
+          if (i < MAX_TINTS) mat.uniforms.tints.value[i].set(((rgb >> 16) & 255) / 255, ((rgb >> 8) & 255) / 255, (rgb & 255) / 255);
+        });
+      }
+      mesh = new Mesh(geometryFor(model, piece.id, name), mat);
+      faces = !!faceGroups(model, name);
+    }
+    mesh.userData.role = piece.role;
+    mesh.userData.faces = faces;
+    const [x, y, z] = piece.position;
+    mesh.position.set(x, y, z);
+    if (piece.tiltX) mesh.rotation.x = piece.tiltX * DEG;
+    if (piece.spinY) mesh.rotation.y = piece.spinY;
+    if (piece.stretchX && piece.stretchX !== 1) mesh.scale.set(piece.stretchX, 1, 1);
+    return mesh;
+  }
+
+  return { texture, whiteTexture, material, geometryFor, pieceMesh };
+}
+
 export function webglAvailable() {
   try {
     const canvas = document.createElement('canvas');
@@ -549,9 +661,8 @@ export function createViewer(container, options) {
   shadow.rotation.x = -Math.PI / 2;
   scene.add(shadow);
 
-  const textureCache = new Map();
-  const geometryCache = new Map();
-  let white = null;
+  const partMeshes = createPartMeshes({ catalog, render, onTextureLoad: () => requestRender() });
+  const { material, whiteTexture } = partMeshes;
   let current = null;
   let generation = 0;
   let needsRender = true;
@@ -560,66 +671,6 @@ export function createViewer(container, options) {
   let fitted = false;
   let lastRadius = 0;
   let disposed = false;
-
-  function texture(dataUrl) {
-    let t = textureCache.get(dataUrl);
-    if (!t) {
-      const image = new Image();
-      t = new Texture(image);
-      t.magFilter = NearestFilter;
-      t.minFilter = NearestFilter;
-      t.generateMipmaps = false;
-      t.colorSpace = NoColorSpace;
-      t.flipY = false;
-      image.onload = () => {
-        t.needsUpdate = true;
-        requestRender();
-      };
-      image.src = dataUrl;
-      textureCache.set(dataUrl, t);
-    }
-    return t;
-  }
-
-  function whiteTexture() {
-    if (!white) {
-      const c = document.createElement('canvas');
-      c.width = c.height = 2;
-      const ctx = c.getContext('2d');
-      ctx.fillStyle = '#fff';
-      ctx.fillRect(0, 0, 2, 2);
-      white = new CanvasTexture(c);
-      white.colorSpace = NoColorSpace;
-      white.magFilter = NearestFilter;
-      white.minFilter = LinearFilter;
-    }
-    return white;
-  }
-
-  function material(map) {
-    const tints = [];
-    for (let i = 0; i < MAX_TINTS; i++) tints.push(new Vector3(1, 1, 1));
-    return new ShaderMaterial({
-      vertexShader: VERTEX,
-      fragmentShader: FRAGMENT,
-      uniforms: {
-        map: { value: map }, tints: { value: tints }, light0: { value: LIGHT0 }, light1: { value: LIGHT1 },
-        highlight: { value: new Array(MAX_TINTS).fill(0) }, highlightAll: { value: 0 },
-      },
-    });
-  }
-
-  function geometryFor(model, id, variantName) {
-    const key = `${id}#${variantName}`;
-    let g = geometryCache.get(key);
-    if (!g) {
-      const variant = model.variants[variantName];
-      const source = variant.of ? model.variants[variant.of] : variant;
-      g = modelGeometry(source.el, variant.tint || null, faceGroups(model, variantName));
-      geometryCache.set(key, g);
-    }
-    return g;
-  }
 
   // What a click on a piece picks (see createViewer); faces: the geometry carries the tint group of every face.
   function pickInfo(piece, model, faces) {
@@ -637,41 +688,10 @@ export function createViewer(container, options) {
     };
   }
 
-  // One mesh per placed piece; painting swaps between the plain and the "_paint" model.
+  // One mesh per placed piece (createPartMeshes) plus what a click on it picks.
   function pieceMesh(piece, model, paint) {
-    let mesh;
-    let faces = false;
-    if (piece.procedural === 'accessory_base') {
-      const groups = groupsOf(piece, null, render) || [['tpu', '#262628']];
-      const tpu = (paint && paint.tpu) || groups[0][1];
-      mesh = new Mesh(shapeGeometry(proceduralAccessoryBase(rgbOf(tpu))), material(whiteTexture()));
-      mesh.userData.dispose = true;
-    } else if (piece.procedural === 'frame') {
-      const frame = catalog.part(piece.id);
-      mesh = new Mesh(shapeGeometry(proceduralFrame(frame, current.layout, catalog)), material(whiteTexture()));
-      mesh.userData.dispose = true;
-    } else {
-      const plain = piece.variant && piece.variant !== 'base' && model.variants[piece.variant] ? piece.variant : 'base';
-      const painted = plain === 'base' ? 'paint' : `${plain}_paint`;
-      const tints = model.variants[painted] ? paintTints(model.variants[painted].groups, paint, piece.paintPosition || 0, render.channels) : null;
-      const name = tints ? painted : plain;
-      const variant = model.variants[name];
-      const mat = material(texture(model.tex[variant.tex]));
-      if (tints) {
-        tints.forEach((rgb, i) => {
-          if (i < MAX_TINTS) mat.uniforms.tints.value[i].set(((rgb >> 16) & 255) / 255, ((rgb >> 8) & 255) / 255, (rgb & 255) / 255);
-        });
-      }
-      mesh = new Mesh(geometryFor(model, piece.id, name), mat);
-      faces = !!faceGroups(model, name);
-    }
-    mesh.userData.role = piece.role;
-    mesh.userData.pick = pickInfo(piece, model, faces);
-    const [x, y, z] = piece.position;
-    mesh.position.set(x, y, z);
-    if (piece.tiltX) mesh.rotation.x = piece.tiltX * DEG;
-    if (piece.spinY) mesh.rotation.y = piece.spinY;
-    if (piece.stretchX && piece.stretchX !== 1) mesh.scale.set(piece.stretchX, 1, 1);
+    const mesh = partMeshes.pieceMesh(piece, model, paint, current.layout);
+    mesh.userData.pick = pickInfo(piece, model, mesh.userData.faces);
     return mesh;
   }
 

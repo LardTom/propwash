@@ -14,7 +14,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { siteNav, siteFooterLinks, FEATURES, NAV_PATTERN, FOOTER_PATTERN } from './site-nav.mjs';
-import { HAND_PAGES } from './build-nav.mjs';
+import { HAND_PAGES, APP_PAGES } from './build-nav.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (rel) => fs.readFileSync(path.join(ROOT, rel), 'utf8');
@@ -41,6 +41,10 @@ function findPages(dir = '') {
 const known = new Map(HAND_PAGES.map(([file, prefix, current]) => [file, { prefix, current }]));
 const pages = findPages();
 for (const file of pages) {
+  if (APP_PAGES.includes(file)) {
+    check(!NAV_PATTERN.test(read(file)), `${file}: app page without the site navigation`);
+    continue;
+  }
   let spec = known.get(file);
   if (!spec && file.startsWith('docs/')) {
     const depth = file.split('/').length - 1;

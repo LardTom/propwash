@@ -2,11 +2,11 @@
 // share code (copy, link, import) and the 3D viewer. Everything runs in the browser; the only requests go to this
 // site's own data files.
 
-import { loadCatalog, localText } from './data.js?v=35a5dfd4';
+import { loadCatalog, localText } from './data.js?v=2432ff6d';
 import { shareLink, codeFromHash, PAINT_SLOTS } from './sharecode.js?v=ff46f4e6';
-import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=89743f12';
+import { TUNE_PARAMS, PID_SOURCE, sanitizeTuneValue } from './tuning.js?v=3ff219e9';
 import { FLIGHT_GROUPS } from './tune.js?v=f4084d0e';
-import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=24407feb';
+import { PROPS_IN_VIEW_WARNING } from './analysis.js?v=40d5b226';
 import { occlusionPercent, droneUptilt, CAMERA_UPTILT } from './fpv.js?v=76cdbbe6';
 import { batteryFit } from './rules.js?v=147e54d1';
 import { assemble, PROP_SLOTS } from './assembly.js?v=ac181a91';
@@ -184,6 +184,17 @@ function currentCode() {
     return { code: catalog.encode(content()), error: null };
   } catch (e) {
     return { code: null, error: e.message || String(e) };
+  }
+}
+
+/** Share code for the simulator: always with paint, tune and name, whatever the layer switches say. */
+function flyCode() {
+  try {
+    const paint = Object.keys(state.paint).length ? { ...state.paint } : null;
+    const name = state.name && state.name.trim() ? state.name.trim() : null;
+    return catalog.encode({ build: state.build, paint, tune: { ...state.tune }, osd: null, name });
+  } catch {
+    return null;
   }
 }
 
@@ -1694,7 +1705,7 @@ async function startViewer() {
   const button = $('[data-autorotate]');
   let mod;
   try {
-    mod = await import('./viewer.js?v=759013f2');
+    mod = await import('./viewer.js?v=52afc48d');
   } catch {
     fallback.textContent = t('ui.viewerFailed');
     fallback.hidden = false;
@@ -2272,6 +2283,13 @@ function wireEvents() {
     const { code } = currentCode();
     if (code) copy(shareLink(code, pageUrl()), t('ui.linkCopied'));
   });
+  // The simulator link carries the drone as it is now (set just before the browser follows it).
+  const fly = $('[data-fly]');
+  const aimFly = () => {
+    const code = flyCode();
+    fly.href = code ? `../sim/#${code}` : '../sim/';
+  };
+  for (const type of ['pointerdown', 'focus', 'mouseenter', 'click']) fly.addEventListener(type, aimFly);
   const input = $('[data-import]');
   let importTimer = 0;
   const tryImport = () => {

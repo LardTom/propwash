@@ -23,6 +23,9 @@ export const HAND_PAGES = [
   ['datenschutz/index.html', '../', 'datenschutz'],
 ];
 
+/** Full-window app pages without the site navigation and footer (the FPV simulator), reached from the configurator. */
+export const APP_PAGES = ['sim/index.html'];
+
 export function withNav(html, prefix, current, file) {
   if (!NAV_PATTERN.test(html)) throw new Error(`${file}: <nav class="site-nav"> not found`);
   if (!FOOTER_PATTERN.test(html)) throw new Error(`${file}: <p class="site-footer__links"> not found`);

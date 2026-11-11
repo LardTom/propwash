@@ -170,7 +170,7 @@ function cellOcv(chem, soc) {
 // ---------------------------------------------------------------------------------------------------------------
 // Accessories on their anchors
 
-function anchorOf(frame, slot) {
+export function anchorOf(frame, slot) {
   const spec = frame.data.accessory_anchors && frame.data.accessory_anchors[slot];
   if (spec) return { x: spec.pos[0], y: spec.pos[1], z: spec.pos[2], tilt: spec.tilt_deg, length: spec.length_mm };
   const wheelbase = frame.data.wheelbase_mm;
@@ -178,20 +178,20 @@ function anchorOf(frame, slot) {
   return { x: 0.0, y: -3.0, z: -0.25 * wheelbase, tilt: 30.0, length: 0.15 * wheelbase };
 }
 
-function anchorToFrame(anchor, lx, ly, lz) {
+export function anchorToFrame(anchor, lx, ly, lz) {
   const tilt = toRadians(anchor.tilt);
   const cos = Math.cos(tilt);
   const sin = Math.sin(tilt);
   return [anchor.x + lx, anchor.y + (ly * cos - lz * sin), anchor.z + (ly * sin + lz * cos)];
 }
 
-function accessoryBox(acc, slot) {
+export function accessoryBox(acc, slot) {
   const [w, h, d] = acc.data.size_mm;
   if (slot === 'top') return { min: [-w / 2.0, HINGE_CLEARANCE_MM, -d / 2.0], max: [w / 2.0, HINGE_CLEARANCE_MM + h, d / 2.0] };
   return { min: [-w / 2.0, -h, -d / 2.0], max: [w / 2.0, 0.0, d / 2.0] };
 }
 
-function anchorStretch(anchor, acc, slot) {
+export function anchorStretch(anchor, acc, slot) {
   const width = acc.data.size_mm[0];
   if (slot === 'bottom' && anchor.length > 0.0 && width > 0.0) return anchor.length / width;
   return 1.0;

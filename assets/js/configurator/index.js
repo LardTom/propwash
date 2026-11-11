@@ -5,9 +5,9 @@
 //   catalog.check(build); catalog.analyze(build); catalog.defaultTune(build);
 //   const code = catalog.encode({ build, paint, tune, name }); const result = catalog.decode(code);
 
-export { loadCatalog, createCatalog, localText, langKey, CATEGORIES, CATALOG_URL } from './data.js?v=35a5dfd4';
+export { loadCatalog, createCatalog, localText, langKey, CATEGORIES, CATALOG_URL } from './data.js?v=2432ff6d';
 export * as sharecode from './sharecode.js?v=ff46f4e6';
 export * as rules from './rules.js?v=147e54d1';
-export * as analysis from './analysis.js?v=24407feb';
+export * as analysis from './analysis.js?v=40d5b226';
 export * as tune from './tune.js?v=f4084d0e';
-export * as tuning from './tuning.js?v=89743f12';
+export * as tuning from './tuning.js?v=3ff219e9';
