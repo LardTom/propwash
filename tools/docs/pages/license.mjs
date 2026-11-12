@@ -61,7 +61,7 @@ ${note('This page explains the licenses in plain words. It is not legal advice, 
 
   const allowed = section('allowed', toc[1].title, `
 ${list([
-    ['<strong>Play</strong> Propwash and its add-ons, alone, with friends or on your own server, public or private.',
+    ['<strong>Playing:</strong> Propwash and its add-ons, alone, with friends or on your own server, public or private.',
       '<strong>Spielen:</strong> Propwash und seine Add-ons, allein, mit Freunden oder auf deinem eigenen Server, öffentlich oder privat.'],
     [`<strong>Show it:</strong> videos, streams, screenshots and articles about Propwash are welcome. The <a href="${prefix}brand/">brand kit</a> has the logo, the colors and the rules for using them.`,
       `<strong>Zeigen:</strong> Videos, Streams, Screenshots und Artikel über Propwash sind willkommen. Das <a href="${prefix}brand/">Brand-Kit</a> hat das Logo, die Farben und die Regeln dazu.`],
