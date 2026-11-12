@@ -6,7 +6,8 @@
 //   - the cards ANALOG and DIGITAL on the right switch the system like the switch below the picture: a radio group
 //     with one radio per card, Tab reaches the checked one, Space/Enter and the arrow keys switch, a click anywhere
 //     on a card switches; the active card stands out (accent border and heading), both switches always agree
-//   - the picture “Clean HD” is a clean digital picture, not the action cam's recording overlay
+//   - the picture “Clean HD” is a clean digital picture, not the action cam's recording overlay, of the same flight as
+//     “Blur & blocks” next to it (same scene and view, only the signal differs)
 //   - headless Chrome at 1280 px, 1728 px Retina (2×) and 390 px (touch), English and German; no script errors
 //
 //   node tools/test-vlab.mjs [--no-browser]
@@ -33,7 +34,14 @@ for (const mode of ['analog', 'digital']) {
 }
 const clean = (/<div class="vlab__set" data-system="digital"[^>]*>\s*<img [^>]*>/.exec(lab) || [''])[0];
 check(clean && !/action-cam/.test(clean), 'the picture “Clean HD” is not the action cam recording (REC overlay)');
-check(/src="assets\/img\/osd-flight-1600\.webp"/.test(clean), 'the picture “Clean HD” is the digital FPV picture osd-flight (VTX CH1, LQ/VID 100)');
+check(/src="assets\/img\/video-digital-clean-1600\.webp"/.test(clean), 'the picture “Clean HD” is video-digital-clean (digital, LQ/VID 100, no REC overlay)');
+const blur = (/<div class="vlab__set" data-system="digital"[^>]*>\s*<img [^>]*>\s*<img [^>]*>/.exec(lab) || [''])[0].slice(clean.length);
+check(/src="assets\/img\/video-digital-breakup-1600\.webp"/.test(blur), 'the picture “Blur & blocks” is video-digital-breakup');
+// Same flight in both pictures (SITE-NACH2-3): both come from one self-test scene, shot one after the other in the same
+// run, so the slider only changes the signal, not the place or the view.
+const images = fs.readFileSync(path.join(ROOT, 'tools', 'build-landing-images.mjs'), 'utf8');
+check(/\['video-digital-clean', 'video_digital_clean', FULL\]/.test(images) && /\['video-digital-breakup', 'video_digital_breakup', FULL\]/.test(images),
+  'Clean HD and Blur & blocks are the shots video_digital_clean and video_digital_breakup of the same scene');
 check(/ alt="Digital video: [^"]{20,}"/.test(clean) && / data-de-alt="Digitales Video: [^"]{20,}"/.test(clean), 'the picture “Clean HD” has a description in English and German');
 
 // 2. In the browser.

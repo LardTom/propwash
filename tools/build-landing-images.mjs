@@ -48,8 +48,14 @@ export const IMAGES = [
   ['video-analog-stage3', 'video_analog_stage3', FULL],
   ['video-analog-stage4', 'video_analog_stage4', FULL],
   ['video-analog-stage5', 'video_analog_stage5', FULL],
+  // “Clean HD” and “Blur & blocks” of the video section: one scene of the self test shot twice in the same run, first
+  // with a full signal and then with a weak one, so the slider shows the same flight.
+  ['video-digital-clean', 'video_digital_clean', FULL],
   ['video-digital-breakup', 'video_digital_breakup', FULL],
   ['workbench-freestyle', 'workbench_freestyle', FULL],
+  // The configurator in the game (K), shot at GUI scale 3 in 2560 × 1440: the window keeps its largest size and the
+  // world shows dimmed around it. configurator_tricks is the Freestyle tab with all families and the tutorial preview
+  // of a trick under the pointer.
   ['configurator-rates', 'configurator_rates', FULL],
   ['configurator-pid', 'configurator_pid', FULL],
   ['configurator-osd', 'configurator_osd', FULL],
@@ -73,7 +79,8 @@ export const IMAGES = [
   ['drone-closeup-paint-race-team', 'drone_closeup_paint_race_team', [800, 1120], DRONE],
   ['headlight-cave-crop', 'headlight_cave', [640, 960], [640, 360, 1280, 720]],
   ['headlight-cave-off-crop', 'headlight_cave_off', [640, 960], [640, 360, 1280, 720]],
-  ['dust-closeup', 'dust_takeoff_max', [640, 768], [772, 512, 1024, 576]],
+  // Over sand: on grass the rotor dust hardly shows with shaders.
+  ['dust-closeup', 'dust_takeoff_max', [640, 768], [752, 420, 1024, 576]],
   ['flight-school-race', 'flight_school_race', [640, 1280], [440, 160, 1280, 720]],
 
   // The workbench of the release has its tabs Build and Recycle above the window: the cut-out takes them in (taller).
