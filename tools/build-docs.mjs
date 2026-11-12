@@ -12,7 +12,8 @@
 // 2. Images (--images): converts the in-game screenshots the pages use from <dir>/docs/screenshots (or --screenshots
 //    <dir>, e.g. the screenshots of a release self-test run) to WebP (assets/img/docs/, 800 and 1600 px wide, never
 //    wider than the screenshot; needs cwebp). --image <key> (repeatable) converts only these entries of IMAGES and keeps
-//    the others as recorded in tools/docs/data/images.json.
+//    the others as recorded in tools/docs/data/images.json. With --render-only, --image <key> … --screenshots <dir>
+//    converts only these pictures and needs no Propwash checkout.
 // 3. Render: writes docs/**/index.html (and docs/gamerules/gamerules.json) from tools/docs/data and the texts in
 //    tools/docs/pages/; the header navigation comes from tools/site-nav.mjs (rebuild after changing it there). Rendering only needs the data files, so the pages can be rebuilt without a Propwash checkout.
 
@@ -168,6 +169,17 @@ export function renderAll(data) {
 
 function main() {
   const renderOnly = process.argv.includes('--render-only');
+  if (renderOnly && args('--image').length) {
+    // Only pictures, without a Propwash checkout: --render-only --image <key> … --screenshots <dir> converts these
+    // entries of IMAGES, keeps the others as recorded and leaves every other data file alone (0.6.0: the shots of the
+    // release in real worlds laid over the self-test screenshots).
+    if (!arg('--screenshots')) throw new Error('--render-only mit --image braucht --screenshots <ordner>');
+    const recorded = path.join(DATA_DIR, 'images.json');
+    const previous = JSON.parse(fs.readFileSync(recorded, 'utf8'));
+    const images = buildImages(path.resolve(arg('--screenshots')), previous, args('--image'));
+    fs.writeFileSync(recorded, JSON.stringify(images, null, 2) + '\n');
+    console.log(`${args('--image').length} Bild(er) neu aus ${arg('--screenshots')}`);
+  }
   if (!renderOnly) {
     const propwash = path.resolve(arg('--propwash') || defaultPropwashDir());
     const gamerules = path.resolve(arg('--gamerules') || path.join(propwash, 'build/web-export/gamerules.json'));

@@ -98,8 +98,8 @@
   "block_break": {
     "name": "block-break-pane",
     "src": "block_break_pane.png",
-    "width": 1920,
-    "height": 1080,
+    "width": 1708,
+    "height": 960,
     "small": 800,
     "large": 1600
   },

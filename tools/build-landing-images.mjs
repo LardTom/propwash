@@ -3,12 +3,16 @@
 //
 //   node tools/build-landing-images.mjs [--propwash <dir>] [--only <name>[,<name>…]] [--check]
 //
-// Source: <dir>/docs/screenshots/*.png (1920 × 1080, written by the mod's self test on the release commit).
+// Source: <dir>/docs/screenshots/*.png, written by the mod's self test on the release commit (1920 × 1080), or a
+// folder in the same layout with newer shots laid over them (0.6.0: the shots of the release in real worlds, with
+// shaders, 2560 × 1440, plus the pictures of the community server and the add-on pages). The size of every source
+// is read from the PNG, so a whole screenshot may be 1920 or 2560 wide.
 // Target: assets/img/<name>-<width>.webp, one file per width. Needs ImageMagick (magick) and cwebp.
 //
 // An entry is [name, source, widths] for a whole screenshot or [name, source, widths, crop] with
-// crop = [x, y, width, height] in source pixels. The largest width of a cropped image is the crop width,
-// so those stay pixel-exact. --check only reports names whose source screenshot is missing.
+// crop = [x, y, width, height] in source pixels. A crop is cut from the source it was measured on: the crops of the
+// 2560 shots are the 1920 ones × 4/3, and their widths stay what the pages use (no longer pixel-exact, sharper).
+// --check only reports names whose source screenshot is missing and crops that leave their source.
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -18,7 +22,11 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'assets', 'img');
 const FULL = [800, 1600];
-const DRONE = [397, 310, 1120, 630];
+// WebP quality: 82 for the 1920 shots; the 2560 shots with shaders carry far more detail (foliage, light, grain) and
+// look the same at 76, about a fifth lighter.
+const QUALITY = (sourceWidth) => (sourceWidth > 1920 ? '76' : '82');
+// Drone close-ups of the 0.6.0 shots (2560 × 1440): [397, 310, 1120, 630] of the 1920 shots × 4/3.
+const DRONE = [529, 413, 1493, 840];
 
 export const IMAGES = [
   ['osd-flight', 'osd_flight', FULL],
@@ -63,22 +71,35 @@ export const IMAGES = [
   ['drone-closeup-action-cam-heavy', 'drone_closeup_action_cam_heavy', [800, 1120], DRONE],
   ['drone-closeup-paint-neon', 'drone_closeup_paint_neon', [800, 1120], DRONE],
   ['drone-closeup-paint-race-team', 'drone_closeup_paint_race_team', [800, 1120], DRONE],
-  ['headlight-cave-crop', 'headlight_cave', [640, 960], [480, 270, 960, 540]],
-  ['headlight-cave-off-crop', 'headlight_cave_off', [640, 960], [480, 270, 960, 540]],
-  ['dust-closeup', 'dust_takeoff_max', [640, 768], [579, 384, 768, 432]],
+  ['headlight-cave-crop', 'headlight_cave', [640, 960], [640, 360, 1280, 720]],
+  ['headlight-cave-off-crop', 'headlight_cave_off', [640, 960], [640, 360, 1280, 720]],
+  ['dust-closeup', 'dust_takeoff_max', [640, 768], [772, 512, 1024, 576]],
   ['flight-school-race', 'flight_school_race', [640, 1280], [440, 160, 1280, 720]],
 
-  ['workbench-freestyle-ui', 'workbench_freestyle', [640, 944], [488, 201, 944, 680]],
+  // The workbench of the release has its tabs Build and Recycle above the window: the cut-out takes them in (taller).
+  ['workbench-freestyle-ui', 'workbench_freestyle', [640, 944], [651, 240, 1258, 957]],
   ['charger-gui-ui', 'charger_gui', [538], [692, 222, 538, 634]],
   ['drone-condition-ui', 'drone_condition', [640, 1060], [764, 222, 1060, 858]],
   ['drone-service-menu-ui', 'drone_service_menu', [640, 720], [600, 166, 720, 748]],
-  ['action-cam-recordings-ui', 'action_cam_recordings', [640, 1280], [204, 20, 1512, 486]],
+  ['action-cam-recordings-ui', 'action_cam_recordings', [640, 1280], [272, 27, 2016, 648]],
   ['paint-screen-ui', 'paint_screen', [640, 1334], [294, 136, 1334, 808]],
   ['recipe-book-ui', 'recipe_book', [640, 1084], [379, 283, 1084, 511]],
   ['leaderboard-screen-ui', 'leaderboard_screen', [640, 1392], [263, 69, 1392, 933]],
   ['trick-tutorial', 'trick_tutorial_player_flips_rolls', FULL],
-  ['advancements-tab', 'stats_advancements_en', [800, 960], [480, 225, 960, 540]],
+  ['advancements-tab', 'stats_advancements_en', [800, 960], [640, 300, 1280, 720]],
   ['replay-video', 'race_replay_video_chase_progress', FULL],
+
+  // The community server (mc.propwashfpv.com): the spawn with its portals, from the air, the shop and races in the arena.
+  ['server-spawn-portals', 'server-spawn-portale', FULL],
+  ['server-spawn-air', 'server-spawn-luft', FULL],
+  ['server-animal-shop', 'server-animal-shop', FULL],
+  ['server-arena-race', 'server-arena-rennen', FULL],
+  ['server-arena-start', 'server-arena-start', FULL],
+
+  // The pictures of the official add-ons (/addons/ and their pages).
+  ['addon-just-more-parts', 'addon-jmp-aufstellung', FULL],
+  ['addon-camera-drones', 'addon-camdrones', FULL],
+  ['addon-mob-defense', 'addon-mobdefense', FULL],
 ];
 
 // The link preview (og:image): the screenshot scaled to this width, cut to this height around its middle.
@@ -97,11 +118,23 @@ function findPropwash() {
   throw new Error('Propwash repository not found: pass --propwash <dir> or set PROPWASH_SRC');
 }
 
+function pngSize(file) {
+  const buf = fs.readFileSync(file);
+  if (buf.toString('ascii', 1, 4) !== 'PNG') throw new Error(`${file} is not a PNG`);
+  return [buf.readUInt32BE(16), buf.readUInt32BE(20)];
+}
+
 function build() {
   const shots = path.join(findPropwash(), 'docs', 'screenshots');
   const only = arg('--only') ? new Set(arg('--only').split(',')) : null;
   const missing = IMAGES.filter(([, src]) => !fs.existsSync(path.join(shots, `${src}.png`)));
   if (missing.length) throw new Error(`missing screenshots: ${missing.map(([, src]) => src).join(', ')}`);
+  const outside = IMAGES.filter(([, src, , crop]) => {
+    if (!crop) return false;
+    const [sw, sh] = pngSize(path.join(shots, `${src}.png`));
+    return crop[0] + crop[2] > sw || crop[1] + crop[3] > sh;
+  });
+  if (outside.length) throw new Error(`crops outside their screenshot: ${outside.map(([name]) => name).join(', ')}`);
   if (process.argv.includes('--check')) {
     console.log(`${IMAGES.length} images, every source screenshot is there`);
     return;
@@ -111,8 +144,8 @@ function build() {
   for (const [name, src, widths, crop] of IMAGES) {
     if (only && !only.has(name)) continue;
     let input = path.join(shots, `${src}.png`);
-    let w = 1920;
-    let h = 1080;
+    let [w, h] = pngSize(input);
+    const quality = QUALITY(w);
     if (crop) {
       const [x, y, cw, ch] = crop;
       const cut = path.join(tmp, `${name}.png`);
@@ -125,7 +158,7 @@ function build() {
       if (width > w) throw new Error(`${name}: width ${width} is larger than its source (${w})`);
       const height = Math.round((h * width) / w);
       const target = path.join(OUT, `${name}-${width}.webp`);
-      execFileSync('cwebp', ['-quiet', '-q', '82', '-m', '6', '-metadata', 'none', '-resize', String(width), String(height), input, '-o', target]);
+      execFileSync('cwebp', ['-quiet', '-q', quality, '-m', '6', '-metadata', 'none', '-resize', String(width), String(height), input, '-o', target]);
       files++;
     }
   }
