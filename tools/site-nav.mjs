@@ -16,6 +16,8 @@ export const DISCORD_PATH = 'M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0
 
 // Sections of the landing page, in page order. Every href is an id in index.html (tools/test-nav.mjs checks it).
 export const FEATURES = [
+  { href: '#server', title: { en: 'Community server', de: 'Community-Server' },
+    text: { en: 'mc.propwashfpv.com, with Fabric or NeoForge', de: 'mc.propwashfpv.com, mit Fabric oder NeoForge' } },
   { href: '#how', title: { en: 'Get started', de: 'Loslegen' },
     text: { en: 'Build, bind, fly and race in four steps', de: 'Bauen, binden, fliegen, rennen in vier Schritten' } },
   { href: '#new', title: { en: 'What’s new', de: 'Neuigkeiten' },

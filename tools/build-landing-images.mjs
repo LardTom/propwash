@@ -89,12 +89,13 @@ export const IMAGES = [
   ['advancements-tab', 'stats_advancements_en', [800, 960], [640, 300, 1280, 720]],
   ['replay-video', 'race_replay_video_chase_progress', FULL],
 
-  // The community server (mc.propwashfpv.com): the spawn with its portals, from the air, the shop and races in the arena.
+  // The community server (mc.propwashfpv.com): the spawn with its portals, drones in front of it, from the air, the shop
+  // and a race in an arena (server-arena-start is the same shot as race_start_go, which the page already shows).
   ['server-spawn-portals', 'server-spawn-portale', FULL],
   ['server-spawn-air', 'server-spawn-luft', FULL],
   ['server-animal-shop', 'server-animal-shop', FULL],
   ['server-arena-race', 'server-arena-rennen', FULL],
-  ['server-arena-start', 'server-arena-start', FULL],
+  ['server-drones', 'server-drohnen', FULL],
 
   // The pictures of the official add-ons (/addons/ and their pages).
   ['addon-just-more-parts', 'addon-jmp-aufstellung', FULL],
