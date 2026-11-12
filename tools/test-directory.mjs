@@ -79,10 +79,16 @@ for (const a of registry.addons) {
     const m = hosted[a.namespace][v];
     const table = tableOf(a.namespace, v);
     if (!check(table, `${a.namespace} ${v}: parts table`)) continue;
-    check(table.format === 1 && table.namespace === a.namespace && table.short_id === a.short_id, `${a.namespace} ${v}: table of ${table.namespace} with short id ${table.short_id}`);
+    check(table.format === 1 && table.namespace === a.namespace && (table.short_id ?? null) === a.short_id, `${a.namespace} ${v}: table of ${table.namespace} with short id ${table.short_id}`);
     check(tableCrc(table) === m.table_crc && tableEntries(table) === m.table_entries, `${a.namespace} ${v}: checksum ${m.table_crc} and ${m.table_entries} entries`);
-    const entry = directory.addons.find((x) => x.namespace === a.namespace).versions.find((x) => x.version === v);
-    check(entry && entry.table_crc === m.table_crc && entry.catalog === versionDir(a.namespace, v), `${a.namespace} ${v}: directory.json names the table and the hosted data`);
+    const listedIn = directory.addons.find((x) => x.namespace === a.namespace);
+    if (a.short_id === null) {
+      // No short id yet: not in directory.json, which Propwash copies; its codes carry the full namespace.
+      check(!listedIn, `${a.namespace} ${v}: without a short id it stays out of directory.json`);
+    } else {
+      const entry = listedIn && listedIn.versions.find((x) => x.version === v);
+      check(entry && entry.table_crc === m.table_crc && entry.catalog === versionDir(a.namespace, v), `${a.namespace} ${v}: directory.json names the table and the hosted data`);
+    }
     for (const [kind, entries] of Object.entries(table.parts)) {
       for (let i = 1; i < entries.length; i++) {
         check(compareVersions(entries[i - 1].since.split('-')[0], entries[i].since.split('-')[0]) <= 0, `${a.namespace} ${v} ${kind} #${i + 1}: since ${entries[i].since} after ${entries[i - 1].since}`);

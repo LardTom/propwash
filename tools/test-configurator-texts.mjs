@@ -119,8 +119,10 @@ for (const [ns, version] of Object.entries((json.source && json.source.mods) || 
     if (!check(part, `${hosted.id}: in the hosted export of ${ns} ${version}, missing in catalog.json`)) continue;
     check(JSON.stringify(part.name) === JSON.stringify(hosted.name), `${hosted.id}: name in catalog.json differs from the hosted export of ${ns} ${version}`);
     for (const lang of new Set([...Object.keys(part.help || {}), ...Object.keys(hosted.help || {})])) {
-      const mine = (part.help || {})[lang];
-      const theirs = (hosted.help || {})[lang];
+      // An empty list and a missing one say the same (the jar reader writes "what": [], the catalog leaves it out).
+      const bare = (h) => (h && typeof h === 'object' ? Object.fromEntries(Object.entries(h).filter(([, v]) => !(Array.isArray(v) && !v.length))) : h);
+      const mine = bare((part.help || {})[lang]);
+      const theirs = bare((hosted.help || {})[lang]);
       if (JSON.stringify(mine) === JSON.stringify(theirs)) {
         check(true);
         continue;
