@@ -48,6 +48,9 @@ export const IMAGES = [
   ['video-analog-stage3', 'video_analog_stage3', FULL],
   ['video-analog-stage4', 'video_analog_stage4', FULL],
   ['video-analog-stage5', 'video_analog_stage5', FULL],
+  // “Clean HD” and “Blur & blocks” of the video section: one scene of the self test shot twice in the same run, first
+  // with a full signal and then with a weak one, so the slider shows the same flight.
+  ['video-digital-clean', 'video_digital_clean', FULL],
   ['video-digital-breakup', 'video_digital_breakup', FULL],
   ['workbench-freestyle', 'workbench_freestyle', FULL],
   ['configurator-rates', 'configurator_rates', FULL],
