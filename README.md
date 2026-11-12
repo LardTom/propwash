@@ -100,13 +100,18 @@ this order (the ids are what the “Features” menu and older links use, so the
 | Online configurator | `#configurator` | what the configurator does, its picture, the button to open it |
 | What’s new | `#new` | highlights of the latest feature release (0.6.0: three, then three of its last fix block) and its changelog link |
 | Flight &amp; tuning | `#flight` | flight model, tuning, the in-game configurator, the four ways to fly |
-| Video | `#video` | analog and digital video and how they break up (interactive) |
+| Video | `#video` | analog and digital video and how they break up (interactive): the signal slider runs without steps and changes the picture where the next stage begins, the cards ANALOG and DIGITAL switch the system like the switch below the picture; checked by `tools/test-vlab.mjs` |
 | Racing &amp; freestyle | `#racing` | race line, gates, ghost, spectating, tricks, course building |
 | Survival | `#survival` | crafting, loot, batteries, wear and repair |
 | More details | `#extras` | six tiles: lights, action cams, paint, sound and dust, bandos, a world that reacts |
-| Screenshots | `#gallery` | pictures the page does not show elsewhere |
+| Screenshots | `#gallery` | pictures the page does not show elsewhere; every screenshot of the page opens in the lightbox, with the close button top right (a click beside the picture and Escape close it too); checked by `tools/test-lightbox.mjs` |
 | FAQ | `#faq` | questions before the download, each with its own id (`#faq-goggles`, `#faq-license`, …) for links from the Discord |
 | Download | `#download` (old: `#release`) | version, platforms, compatibility, community (`#community`), add-on (`#addon`), source code and license (`#source`) |
+
+Everything on the landing page that looks operable has to do something: `node tools/test-landing-controls.mjs` clicks
+every link, button, switch, slider, summary and anything with the pointer cursor at 1280 px (mouse, English) and taps
+it at 390 px (touch, German) in headless Chrome, and fails on a control without effect or with something on top of it
+(`--width 1280|390` runs one of them).
 
 A new feature gets a line or a tile in the section it belongs to, not a section of its own; what only matters for one
 release goes into **What’s new** and moves into its section (or out) with the next release. For a release:
@@ -144,14 +149,16 @@ Pictures also used by the docs (`assets/img/docs/`) are not converted twice. Aft
 mod, check the cut-outs by eye. Needs ImageMagick and `cwebp`. The link previews come from
 `tools/build-og-images.mjs` (see [Link previews](#link-previews)).
 
-The picture of the configurator section is the configurator itself (3D view and flight figures of the default preset,
-English, standing still), taken in headless Chrome:
+The picture of the configurator section is the configurator itself (3D view and flight figures, English, standing
+still), taken in headless Chrome. It shows the preset *Freestyle Drone* of Propwash, the drone of the mod's own
+screenshots, with the block models and figures of the catalog in `assets/data/configurator/`:
 
 ```sh
-node tools/build-configurator-shot.mjs   # assets/img/configurator-preview-640.webp and -1200.webp
+node tools/build-configurator-shot.mjs   # assets/img/configurator-preview-640.webp and -1200.webp, height in index.html
 ```
 
-Run it again after the configurator or its default preset changes; `--code <share code>` shows another drone,
+Run it again after the configurator data or the configurator changes (the result is byte-identical while nothing
+changes); `--preset <id>` picks another preset of the catalog, `--code <share code>` opens a share code,
 `--zoom <steps>` zooms in like the <kbd>+</kbd> key (default 2). Needs Google Chrome and `cwebp`.
 
 ## Navigation

@@ -496,18 +496,33 @@
     function imgsOf(m) { return $$('.feed__img', sets[m]); }
     function ticksOf(m) { return $$('button', tickGroups[m]); }
 
-    function setStage(s, animate) {
+    // The slider runs from 0 to 100 without steps, so the thumb follows the pointer (owner finding OF-10: with one step
+    // per stage it only jumped once the pointer was half way to the next stage and felt stuck); each stage has an equal
+    // band of it. Stage buttons and keys put the thumb at stage * 100 / (stages - 1), which lies in that stage's band.
+    function stageAt(v) {
+      var n = imgsOf(mode).length;
+      return Math.max(0, Math.min(n - 1, Math.floor(v * n / 100)));
+    }
+
+    function valueOf(s) {
+      var n = imgsOf(mode).length;
+      return n > 1 ? Math.round(s * 100 / (n - 1)) : 0;
+    }
+
+    function setStage(s, animate, value) {
       var imgs = imgsOf(mode);
-      stage = Math.max(0, Math.min(imgs.length - 1, s));
-      if (animate) flashStatic(screen);
+      var next = Math.max(0, Math.min(imgs.length - 1, s));
+      var changed = next !== stage;
+      stage = next;
+      if (animate && changed) flashStatic(screen);
       imgs.forEach(function (img, i) { img.classList.toggle('is-active', i === stage); });
       var ticks = ticksOf(mode);
       ticks.forEach(function (b, i) { b.setAttribute('aria-pressed', String(i === stage)); });
       var name = localText(ticks[stage]);
       if (range) {
-        range.value = String(stage);
-        var max = Number(range.max) || 1;
-        range.style.setProperty('--fill', (stage / max) * 100 + '%');
+        var v = value === undefined ? valueOf(stage) : value;
+        if (value === undefined) range.value = String(v);
+        range.style.setProperty('--fill', v + '%');
         range.setAttribute('aria-valuetext', name);
       }
       if (stageNameEl) stageNameEl.textContent = name;
@@ -519,6 +534,7 @@
       }
     }
 
+    // Both switches, below the picture and the cards on the right, are radio groups of the same choice.
     function setMode(m, animate) {
       if (!sets[m]) return;
       loadAll();
@@ -535,14 +551,27 @@
       });
       notes.forEach(function (nEl) { nEl.classList.toggle('is-active', nEl.getAttribute('data-vnote') === m); });
       if (systemEl) systemEl.textContent = m === 'analog' ? 'ANALOG' : 'DIGITAL';
-      if (range) range.max = String(imgsOf(m).length - 1);
+      stage = -1;
       setStage(0, animate);
     }
 
     if (range) {
       range.addEventListener('input', function () {
         loadAll();
-        setStage(Number(range.value), true);
+        var v = Number(range.value);
+        setStage(stageAt(v), true, v);
+      });
+      range.addEventListener('keydown', function (e) {
+        var last = imgsOf(mode).length - 1;
+        var to = null;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'PageUp') to = stage + 1;
+        else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown' || e.key === 'PageDown') to = stage - 1;
+        else if (e.key === 'Home') to = 0;
+        else if (e.key === 'End') to = last;
+        if (to === null) return;
+        e.preventDefault();
+        loadAll();
+        setStage(Math.max(0, Math.min(last, to)), true);
       });
     }
     Object.keys(tickGroups).forEach(function (k) {
@@ -553,13 +582,17 @@
         });
       });
     });
-    modeBtns.forEach(function (b, i) {
-      b.addEventListener('click', function () { setMode(b.getAttribute('data-vlab-mode'), true); });
+    modeBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        if (b.getAttribute('data-vlab-mode') !== mode) setMode(b.getAttribute('data-vlab-mode'), true);
+      });
       b.addEventListener('keydown', function (e) {
         if (['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp'].indexOf(e.key) === -1) return;
         e.preventDefault();
+        var group = $$('[data-vlab-mode]', b.closest('[role="radiogroup"]') || lab);
+        var i = group.indexOf(b);
         var step = (e.key === 'ArrowRight' || e.key === 'ArrowDown') ? 1 : -1;
-        var target = modeBtns[(i + step + modeBtns.length) % modeBtns.length];
+        var target = group[(i + step + group.length) % group.length];
         target.focus();
         setMode(target.getAttribute('data-vlab-mode'), true);
       });
