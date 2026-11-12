@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "about": "Roadmap item ids the owner (lardtom) has approved: every item of the live stand of main (aaf7501, 19.10.2026). tools/test-cov-roadmap.mjs fails on an id that is not listed here until the owner approves it and it is added.",
+ "about": "Roadmap item ids the owner (lardtom) has approved: every item of the live stand of main (aaf7501, 19.10.2026). tools/test-cov-roadmap.mjs fails on an id that is not listed here until the owner approves it and it is added. Owner finding OF-2 (11.11.2026): with the release of 0.6.0 the add-ons Just More Parts 1.2.0, Camera Drones 1.0.0 and Mob Defense 1.0.0 are out as well, so they stand done in the group of 0.6.0 (released_with_release); after it only the backport to Minecraft 1.21.1 remains planned.",
  "source": "main aaf7501",
  "ids": [
   "fisheye",
@@ -69,13 +69,16 @@
   "community"
  ],
  "order_after_release": [
-  "mob-defense",
-  "camera-drones",
   "port-1-21-1"
  ],
  "pre_release_now": [
   "sharecodes-pw3",
   "addon-api",
   "jmp-next"
+ ],
+ "released_with_release": [
+  "jmp-next",
+  "camera-drones",
+  "mob-defense"
  ]
 }
