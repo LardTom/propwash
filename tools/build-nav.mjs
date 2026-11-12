@@ -26,6 +26,8 @@ export const HAND_PAGES = [
   ['convert/index.html', '../', 'convert'],
   ['addons/index.html', '../', 'addons'],
   ['addons/just-more-parts/index.html', '../../', 'addons-sub'],
+  ['addons/camera-drones/index.html', '../../', 'addons-sub'],
+  ['addons/mob-defense/index.html', '../../', 'addons-sub'],
   ['brand/index.html', '../', 'brand'],
 ];
 

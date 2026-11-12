@@ -78,6 +78,10 @@
   margin-top: 6px;
 }
 
+.addons-list--steps li {
+  padding-left: 4px;
+}
+
 .addons-list--parts {
   columns: 2 16em;
   column-gap: 24px;
@@ -124,7 +128,7 @@
 
 .addons-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 34rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
   gap: 14px;
   margin: 16px 0 0;
   padding: 0;
@@ -140,6 +144,82 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--panel-2);
+}
+
+/* The picture of an add-on: on top of its card, edge to edge. */
+.addon-card__shot {
+  margin: -18px -18px 4px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  border-radius: var(--radius) var(--radius) 0 0;
+  aspect-ratio: 16 / 9;
+  background: var(--panel);
+}
+
+.addon-card__shot img,
+.addon-shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The picture under the lead of an add-on page. */
+.addon-shot {
+  max-width: 960px;
+  margin: 22px 0 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  aspect-ratio: 16 / 9;
+  background: var(--panel);
+}
+
+/* The community server, pointed to from the add-on pages. */
+.addon-server {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  max-width: 46em;
+  margin-top: 18px;
+  padding: 10px 14px;
+  border: 1px solid var(--accent-dim);
+  border-radius: var(--radius);
+  background: var(--panel-2);
+  color: var(--text-2);
+}
+
+.addon-server svg {
+  flex: none;
+  color: var(--accent);
+}
+
+.addon-server .mono {
+  color: var(--text);
+}
+
+/* The questions of an add-on page. */
+.addon-faq {
+  max-width: 46em;
+  border-bottom: 1px solid var(--border);
+}
+
+.addon-faq:first-of-type {
+  margin-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.addon-faq summary {
+  padding: 14px 4px;
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.addon-faq p {
+  padding: 0 4px 16px;
+  color: var(--text-2);
 }
 
 .addon-card[hidden] {

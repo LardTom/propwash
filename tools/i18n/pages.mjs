@@ -14,12 +14,15 @@ export const PAGES = [
   { file: 'convert/index.html', path: 'convert/', current: 'convert', optional: true },
   { file: 'addons/index.html', path: 'addons/', current: 'addons', optional: true },
   { file: 'addons/just-more-parts/index.html', path: 'addons/just-more-parts/', current: 'addons-sub', optional: true },
+  { file: 'addons/camera-drones/index.html', path: 'addons/camera-drones/', current: 'addons-sub', optional: true },
+  { file: 'addons/mob-defense/index.html', path: 'addons/mob-defense/', current: 'addons-sub', optional: true },
   { file: 'roadmap/index.html', path: 'roadmap/', current: 'roadmap' },
   { file: 'changelog/index.html', path: 'changelog/', current: 'changelog' },
   { file: 'docs/index.html', path: 'docs/', current: 'docs' },
   { file: 'docs/guide/index.html', path: 'docs/guide/', current: 'docs-sub' },
   { file: 'docs/gamerules/index.html', path: 'docs/gamerules/', current: 'docs-sub' },
   { file: 'docs/blackbox/index.html', path: 'docs/blackbox/', current: 'docs-sub' },
+  { file: 'docs/license/index.html', path: 'docs/license/', current: 'docs-sub' },
   { file: 'brand/index.html', path: 'brand/', current: 'brand' },
   // App page without navigation and footer (tools/build-nav.mjs APP_PAGES): the banner goes where the page has the
   // marker <!-- i18n-banner -->.

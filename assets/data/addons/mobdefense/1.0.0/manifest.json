@@ -1,0 +1,45 @@
+{
+ "format": 2,
+ "namespace": "mobdefense",
+ "listed_as": "1.0.0",
+ "mod": {
+  "id": "mobdefense",
+  "name": "Propwash: Mob Defense",
+  "version": "1.0.0"
+ },
+ "short_id": null,
+ "table_source": "mod",
+ "table_entries": 3,
+ "table_crc": "02ffa46a",
+ "requires": {
+  "propwash": ">=0.6.0"
+ },
+ "languages": [
+  "de_de",
+  "en_us"
+ ],
+ "counts": {
+  "frame": 0,
+  "stack": 0,
+  "motor": 0,
+  "prop": 0,
+  "video": 0,
+  "battery": 0,
+  "accessory": 3,
+  "chemistry": 0
+ },
+ "jar": {
+  "file": "mobdefense-fabric-26.3-1.0.0.jar",
+  "bytes": 382786,
+  "sha256": "3bc1e16aca2bb1310ba5fdec1722e026d272c2d8d54843e6784dc6d756d6c3f3",
+  "loader": "fabric"
+ },
+ "generator": "tools/build-addons.mjs (web export format 2, read from the jar like the configurator)",
+ "files": [
+  "chemistries.json",
+  "manifest.json",
+  "mounts.json",
+  "parts.json",
+  "share_table.json"
+ ]
+}
