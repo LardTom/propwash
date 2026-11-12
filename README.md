@@ -144,14 +144,16 @@ Pictures also used by the docs (`assets/img/docs/`) are not converted twice. Aft
 mod, check the cut-outs by eye. Needs ImageMagick and `cwebp`. The link previews come from
 `tools/build-og-images.mjs` (see [Link previews](#link-previews)).
 
-The picture of the configurator section is the configurator itself (3D view and flight figures of the default preset,
-English, standing still), taken in headless Chrome:
+The picture of the configurator section is the configurator itself (3D view and flight figures, English, standing
+still), taken in headless Chrome. It shows the preset *Freestyle Drone* of Propwash, the drone of the mod's own
+screenshots, with the block models and figures of the catalog in `assets/data/configurator/`:
 
 ```sh
-node tools/build-configurator-shot.mjs   # assets/img/configurator-preview-640.webp and -1200.webp
+node tools/build-configurator-shot.mjs   # assets/img/configurator-preview-640.webp and -1200.webp, height in index.html
 ```
 
-Run it again after the configurator or its default preset changes; `--code <share code>` shows another drone,
+Run it again after the configurator data or the configurator changes (the result is byte-identical while nothing
+changes); `--preset <id>` picks another preset of the catalog, `--code <share code>` opens a share code,
 `--zoom <steps>` zooms in like the <kbd>+</kbd> key (default 2). Needs Google Chrome and `cwebp`.
 
 ## Navigation

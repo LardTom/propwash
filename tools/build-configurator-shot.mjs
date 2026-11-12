@@ -2,13 +2,17 @@
 // Takes the picture of the online configurator for the landing page (section #configurator): the 3D view with the
 // flight figures below it, exactly as the page shows them.
 //
-//   node tools/build-configurator-shot.mjs [--code <share code>] [--zoom <steps>] [--chrome <path>] [--keep <file.png>]
+//   node tools/build-configurator-shot.mjs [--preset <id> | --code <share code>] [--zoom <steps>] [--chrome <path>]
+//                                          [--keep <file.png>]
 //
-// Serves this folder on a free local port, opens configurator/ (the default preset, or configurator/#<code>) in
+// Serves this folder on a free local port, opens configurator/ (PRESET, or configurator/#<code>) in
 // headless Chrome (English, reduced motion, so the drone does not turn and the view is the same every time), waits
 // until the parts are loaded and the drone is drawn, and cuts out the 3D view and the flight figures below it at
-// twice the CSS size. --zoom zooms in like the + key on the 3D view (default 2 steps). Target: assets/img/configurator-preview-<width>.webp
-// for every width in WIDTHS. Needs Google Chrome and cwebp. --keep also writes the uncut PNG for checking.
+// twice the CSS size. --preset picks a preset of the catalog like the preset list of the page (default PRESET, the
+// Freestyle Drone of Propwash itself, the drone the mod's own 0.6.0 screenshots show), --code opens a share code
+// instead. --zoom zooms in like the + key on the 3D view (default 2 steps). Target: assets/img/configurator-preview-<width>.webp
+// for every width in WIDTHS; the height of the picture in index.html follows. Needs Google Chrome and cwebp. --keep
+// also writes the uncut PNG for checking.
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -19,6 +23,7 @@ const OUT = path.join(ROOT, 'assets', 'img');
 const NAME = 'configurator-preview';
 const WIDTHS = [640, 1200];
 const VIEWPORT = { width: 1440, height: 1000, deviceScaleFactor: 2 };
+export const PRESET = 'propwash:freestyle';
 
 function arg(name, fallback) {
   const i = process.argv.indexOf(name);
@@ -27,6 +32,7 @@ function arg(name, fallback) {
 
 async function main() {
   const code = arg('--code');
+  const preset = code ? null : arg('--preset', PRESET);
   const zoom = Number(arg('--zoom', '2'));
   const chrome = arg('--chrome', CHROME);
   const keep = arg('--keep');
@@ -53,10 +59,25 @@ async function main() {
       const cfg = document.querySelector('[data-cfg]');
       return !!(stage && !stage.hidden && cfg && cfg.getAttribute('aria-busy') !== 'true' && document.querySelector('[data-viewer-canvas] canvas'));
     })()`;
-    const start = Date.now();
-    while (!(await evaluate(ready))) {
-      if (Date.now() - start > 30000) throw new Error('configurator did not finish loading within 30 s');
-      await sleep(250);
+    const waitReady = async () => {
+      const start = Date.now();
+      while (!(await evaluate(ready))) {
+        if (Date.now() - start > 30000) throw new Error('configurator did not finish loading within 30 s');
+        await sleep(250);
+      }
+    };
+    await waitReady();
+    if (preset) {
+      const picked = await evaluate(`(() => {
+        const select = document.querySelector('[data-preset]');
+        if (![...select.options].some((o) => o.value === ${JSON.stringify(preset)})) return false;
+        select.value = ${JSON.stringify(preset)};
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+        return true;
+      })()`);
+      if (!picked) throw new Error(`preset ${preset} is not in the catalog`);
+      await sleep(500);
+      await waitReady();
     }
     await evaluate('document.fonts.ready.then(() => true)');
     await evaluate("document.querySelector('[data-viewer]').scrollIntoView({ block: 'center' }), true");
@@ -82,6 +103,13 @@ async function main() {
       execFileSync('cwebp', ['-quiet', '-q', '84', '-m', '6', '-metadata', 'none', '-resize', String(w), String(h), png, '-o', target]);
       console.log(`${path.relative(ROOT, target)}  ${w} × ${h}`);
     }
+    const big = Math.max(...WIDTHS);
+    const index = path.join(ROOT, 'index.html');
+    const html = fs.readFileSync(index, 'utf8');
+    const tag = new RegExp(`(<img src="assets/img/${NAME}-[^>]*?width="${big}" height=")(\\d+)(")`);
+    if (!tag.test(html)) throw new Error(`index.html: no <img> of ${NAME} with width="${big}"`);
+    const next = html.replace(tag, `$1${Math.round(big * full.height / full.width)}$3`);
+    if (next !== html) { fs.writeFileSync(index, next); console.log('index.html: height of the picture updated'); }
   } finally {
     browser.close();
     child.kill();
