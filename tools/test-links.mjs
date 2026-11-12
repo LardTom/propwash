@@ -13,18 +13,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { pendingAddresses } from './pending-addresses.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://propwashfpv.com/';
-// Addresses that go live with the release: the public source repositories (Propwash and the add-ons Just More Parts,
-// Camera Drones and Mob Defense) and the Modrinth pages in review.
-export const PENDING = [
-  'https://github.com/LardTom/propwash-fpv',
-  'https://github.com/LardTom/propwash-justmoreparts',
-  'https://github.com/LardTom/propwash-camera-drones',
-  'https://github.com/LardTom/propwash-mob-defense',
-  'https://modrinth.com/mod/propwash-fpv',
-];
+// Addresses that go live with the release: the public source repositories and the platform pages that are not live
+// yet (tools/pending-addresses.mjs, from assets/data/platforms.json).
+export const PENDING = pendingAddresses(JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/platforms.json'), 'utf8')));
 const SKIP_DIRS = new Set(['node_modules', 'tools', 'assets']);
 
 const failures = [];
