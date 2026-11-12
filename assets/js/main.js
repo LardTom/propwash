@@ -610,6 +610,38 @@
 
   /* ---------- Lightbox ---------- */
 
+  // Copy buttons (the address of the community server): the value goes to the clipboard, the button says Copied
+  // for a moment and a status line tells screen readers what was copied.
+  (function copyButtons() {
+    function copyText(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(text);
+      return new Promise(function (resolve, reject) {
+        var area = doc.createElement('textarea');
+        area.value = text;
+        area.setAttribute('readonly', '');
+        area.style.position = 'fixed';
+        area.style.opacity = '0';
+        doc.body.appendChild(area);
+        area.select();
+        try { if (doc.execCommand('copy')) resolve(); else reject(new Error('copy')); } catch (e) { reject(e); }
+        area.remove();
+      });
+    }
+    $$('main .server__copy[data-copy-value]').forEach(function (btn) {
+      var timer = 0;
+      var status = btn.parentNode.querySelector('[data-copy-status]');
+      btn.addEventListener('click', function () {
+        var value = btn.getAttribute('data-copy-value');
+        copyText(value).then(function () {
+          btn.classList.add('is-done');
+          if (status) status.textContent = localText(btn.querySelector('.server__copy-done') || btn) + ': ' + value;
+          window.clearTimeout(timer);
+          timer = window.setTimeout(function () { btn.classList.remove('is-done'); }, 1800);
+        }, function () {});
+      });
+    });
+  })();
+
   (function lightbox() {
     var dlg = $('[data-lightbox]');
     if (!dlg || typeof dlg.showModal !== 'function') return;

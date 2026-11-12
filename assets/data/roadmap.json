@@ -19,6 +19,225 @@
       "download": "propwash",
       "groups": [
         {
+          "version": "0.6.0",
+          "title": {
+            "en": "Freecam, RX block and three add-ons",
+            "de": "Freecam, RX-Block und drei Add-ons"
+          },
+          "items": [
+            {
+              "id": "sharecodes-pw3",
+              "icon": "code",
+              "status": "done",
+              "title": {
+                "en": "Share codes for every add-on",
+                "de": "Sharecodes für alle Add-ons"
+              },
+              "text": {
+                "en": "One share code (PW3) for drones with parts from any add-on – your old codes are converted automatically.",
+                "de": "Ein Sharecode (PW3) für Drohnen mit Teilen aus jedem Add-on – deine alten Codes werden automatisch umgewandelt."
+              }
+            },
+            {
+              "id": "addon-api",
+              "icon": "puzzle",
+              "status": "done",
+              "title": {
+                "en": "More add-on API",
+                "de": "Mehr Add-on-API"
+              },
+              "text": {
+                "en": "Switch functions, OSD elements and collision hooks for add-ons.",
+                "de": "Schalterfunktionen, OSD-Elemente und Kollisions-Haken für Add-ons."
+              }
+            },
+            {
+              "id": "addon-guidelines",
+              "icon": "book",
+              "status": "done",
+              "title": {
+                "en": "Add-on guidelines",
+                "de": "Richtlinien für Add-ons"
+              },
+              "text": {
+                "en": "Clear guidelines for add-on makers, and the namespace “propwash” is reserved for Propwash itself.",
+                "de": "Klare Richtlinien für Add-on-Macher, und der Namensraum „propwash“ ist für Propwash selbst reserviert."
+              }
+            },
+            {
+              "id": "flight-path-marker",
+              "icon": "compass",
+              "status": "done",
+              "title": {
+                "en": "Velocity vector in the OSD",
+                "de": "Geschwindigkeitsvektor im OSD"
+              },
+              "text": {
+                "en": "A marker in the OSD that shows where your drone is really flying, not just where its nose points.",
+                "de": "Eine Markierung im OSD, die zeigt, wohin deine Drohne wirklich fliegt – nicht nur, wohin ihre Nase zeigt."
+              }
+            },
+            {
+              "id": "freecam-drone",
+              "icon": "cinema",
+              "status": "done",
+              "title": {
+                "en": "Freecam drone",
+                "de": "Freecam-Drohne"
+              },
+              "text": {
+                "en": "A drone that flies through blocks like a free camera – for scouting, filming and looking around.",
+                "de": "Eine Drohne, die wie eine freie Kamera durch Blöcke fliegt – zum Erkunden, Filmen und Umschauen."
+              }
+            },
+            {
+              "id": "rx-block",
+              "icon": "gate",
+              "status": "done",
+              "title": {
+                "en": "RX block",
+                "de": "RX-Block"
+              },
+              "text": {
+                "en": "A receiver block that turns one channel of your radio into a redstone signal – while you keep flying.",
+                "de": "Ein Empfänger-Block, der einen Kanal deiner Funke in ein Redstone-Signal verwandelt – während du weiterfliegst."
+              }
+            },
+            {
+              "id": "race-data",
+              "icon": "flag",
+              "status": "done",
+              "title": {
+                "en": "Race data for servers and bots",
+                "de": "Renndaten für Server und Bots"
+              },
+              "text": {
+                "en": "Every course gets its own ID with its leaderboards – servers and Discord bots read them through the API.",
+                "de": "Jeder Kurs bekommt eine eigene ID mit seinen Bestenlisten – Server und Discord-Bots lesen sie über die API."
+              }
+            },
+            {
+              "id": "race-gates",
+              "icon": "gate",
+              "status": "done",
+              "title": {
+                "en": "Better courses",
+                "de": "Bessere Kurse"
+              },
+              "text": {
+                "en": "Stacked gates count to the bottom, poles score, loops in a course, fine nudging and visible scoring areas.",
+                "de": "Gestapelte Gates zählen bis unten, Pfosten werten, Schleifen im Kurs, Gates fein verschieben, Wertungsflächen sichtbar."
+              }
+            },
+            {
+              "id": "camera-angle-menu",
+              "icon": "tilt",
+              "status": "done",
+              "title": {
+                "en": "Camera angle in the K menu",
+                "de": "Kamerawinkel im K-Menü"
+              },
+              "text": {
+                "en": "Set the camera angle in the configurator too, not only in the drone’s service menu.",
+                "de": "Den Kamerawinkel auch im Konfigurator einstellen, nicht nur im Wartungsmenü der Drohne."
+              }
+            },
+            {
+              "id": "gate-tutorial",
+              "icon": "school",
+              "status": "done",
+              "title": {
+                "en": "Gate tutorial",
+                "de": "Gate-Tutorial"
+              },
+              "text": {
+                "en": "A short tutorial the first time you place a gate, so you find everything gates can do.",
+                "de": "Ein kurzes Tutorial, wenn du zum ersten Mal ein Gate setzt – damit du alles findest, was Gates können."
+              }
+            },
+            {
+              "id": "slime-wool",
+              "icon": "impact",
+              "status": "done",
+              "title": {
+                "en": "Slime and wool",
+                "de": "Schleim und Wolle"
+              },
+              "text": {
+                "en": "Slime blocks bounce your drone back, wool catches it softly – and you can take off from wool.",
+                "de": "Schleimblöcke federn deine Drohne zurück, Wolle fängt sie weich ab – und von Wolle kannst du starten."
+              }
+            },
+            {
+              "id": "jmp-next",
+              "icon": "prop",
+              "status": "done",
+              "title": {
+                "en": "Just More Parts 1.2.0",
+                "de": "Just More Parts 1.2.0"
+              },
+              "text": {
+                "en": "Motors of very high KV for 1S race whoops and Propwash’s new share codes for drones with parts from every add-on.",
+                "de": "Motoren sehr hoher KV für 1S-Renn-Whoops und die neuen Sharecodes von Propwash für Drohnen mit Teilen aus jedem Add-on."
+              },
+              "link": {
+                "href": "../addons/just-more-parts/",
+                "label": {
+                  "en": "About the add-on",
+                  "de": "Mehr zum Add-on"
+                }
+              }
+            },
+            {
+              "id": "camera-drones",
+              "icon": "cinema",
+              "status": "done",
+              "title": {
+                "en": "Propwash: Camera Drones",
+                "de": "Propwash: Camera Drones"
+              },
+              "text": {
+                "en": "Camera drones that fly themselves: waypoints, follow me, point of interest and a gimbal that holds its heading in the world.",
+                "de": "Kameradrohnen, die selbst fliegen: Wegpunkte, Follow me, Point of Interest und ein Gimbal, der seine Richtung in der Welt hält."
+              },
+              "link": {
+                "href": "../addons/camera-drones/",
+                "label": {
+                  "en": "About the add-on",
+                  "de": "Mehr zum Add-on"
+                }
+              }
+            },
+            {
+              "id": "mob-defense",
+              "icon": "gripper",
+              "status": "done",
+              "title": {
+                "en": "Propwash: Mob Defense",
+                "de": "Propwash: Mob Defense"
+              },
+              "text": {
+                "en": "Drone accessories against mobs: a dispenser at the front, a spear and a rocket booster, and mobs that react to drones.",
+                "de": "Drohnen-Zubehör gegen Mobs: vorn ein Dispenser, ein Speer und ein Raketen-Booster, und Mobs, die auf Drohnen reagieren."
+              },
+              "link": {
+                "href": "../addons/mob-defense/",
+                "label": {
+                  "en": "About the add-on",
+                  "de": "Mehr zum Add-on"
+                }
+              }
+            }
+          ],
+          "link": {
+            "href": "../changelog/#propwash-0.6.0",
+            "label": {
+              "en": "Full changelog",
+              "de": "Alle Änderungen"
+            }
+          }
+        },
+        {
           "version": "0.5.2",
           "title": {
             "en": "Fisheye, water and zones",
@@ -733,210 +952,6 @@
       ]
     },
     {
-      "id": "now",
-      "icon": "prop",
-      "label": {
-        "en": "Now",
-        "de": "Jetzt"
-      },
-      "title": {
-        "en": "In the next release",
-        "de": "Im nächsten Update"
-      },
-      "intro": {
-        "en": "What we're building now: the next big update after 0.5.2 – together with the next version of Just More Parts.",
-        "de": "Daran bauen wir gerade: das nächste große Update nach 0.5.2 – zusammen mit der nächsten Version von Just More Parts."
-      },
-      "groups": [
-        {
-          "version": "0.6.0",
-          "title": {
-            "en": "Share codes, race data and add-on API",
-            "de": "Sharecodes, Renndaten und Add-on-API"
-          },
-          "items": [
-            {
-              "id": "sharecodes-pw3",
-              "icon": "code",
-              "status": "progress",
-              "title": {
-                "en": "Share codes for every add-on",
-                "de": "Sharecodes für alle Add-ons"
-              },
-              "text": {
-                "en": "One share code (PW3) for drones with parts from any add-on – your old codes are converted automatically.",
-                "de": "Ein Sharecode (PW3) für Drohnen mit Teilen aus jedem Add-on – deine alten Codes werden automatisch umgewandelt."
-              }
-            },
-            {
-              "id": "addon-api",
-              "icon": "puzzle",
-              "status": "progress",
-              "title": {
-                "en": "More add-on API",
-                "de": "Mehr Add-on-API"
-              },
-              "text": {
-                "en": "Switch functions, OSD elements and collision hooks for add-ons.",
-                "de": "Schalterfunktionen, OSD-Elemente und Kollisions-Haken für Add-ons."
-              }
-            },
-            {
-              "id": "addon-guidelines",
-              "icon": "book",
-              "status": "progress",
-              "title": {
-                "en": "Add-on guidelines",
-                "de": "Richtlinien für Add-ons"
-              },
-              "text": {
-                "en": "Clear guidelines for add-on makers, and the namespace “propwash” is reserved for Propwash itself.",
-                "de": "Klare Richtlinien für Add-on-Macher, und der Namensraum „propwash“ ist für Propwash selbst reserviert."
-              }
-            },
-            {
-              "id": "flight-path-marker",
-              "icon": "compass",
-              "status": "progress",
-              "title": {
-                "en": "Velocity vector in the OSD",
-                "de": "Geschwindigkeitsvektor im OSD"
-              },
-              "text": {
-                "en": "A marker in the OSD that shows where your drone is really flying, not just where its nose points.",
-                "de": "Eine Markierung im OSD, die zeigt, wohin deine Drohne wirklich fliegt – nicht nur, wohin ihre Nase zeigt."
-              }
-            },
-            {
-              "id": "freecam-drone",
-              "icon": "cinema",
-              "status": "progress",
-              "title": {
-                "en": "Freecam drone",
-                "de": "Freecam-Drohne"
-              },
-              "text": {
-                "en": "A drone that flies through blocks like a free camera – for scouting, filming and looking around.",
-                "de": "Eine Drohne, die wie eine freie Kamera durch Blöcke fliegt – zum Erkunden, Filmen und Umschauen."
-              }
-            },
-            {
-              "id": "rx-block",
-              "icon": "gate",
-              "status": "progress",
-              "title": {
-                "en": "RX block",
-                "de": "RX-Block"
-              },
-              "text": {
-                "en": "A receiver block that turns one channel of your radio into a redstone signal – while you keep flying.",
-                "de": "Ein Empfänger-Block, der einen Kanal deiner Funke in ein Redstone-Signal verwandelt – während du weiterfliegst."
-              }
-            },
-            {
-              "id": "race-data",
-              "icon": "flag",
-              "status": "progress",
-              "title": {
-                "en": "Race data for servers and bots",
-                "de": "Renndaten für Server und Bots"
-              },
-              "text": {
-                "en": "Every course gets its own ID with its leaderboards – servers and Discord bots read them through the API.",
-                "de": "Jeder Kurs bekommt eine eigene ID mit seinen Bestenlisten – Server und Discord-Bots lesen sie über die API."
-              }
-            },
-            {
-              "id": "race-gates",
-              "icon": "gate",
-              "status": "progress",
-              "title": {
-                "en": "Better courses",
-                "de": "Bessere Kurse"
-              },
-              "text": {
-                "en": "Stacked gates count to the bottom, poles score, loops in a course, fine nudging and visible scoring areas.",
-                "de": "Gestapelte Gates zählen bis unten, Pfosten werten, Schleifen im Kurs, Gates fein verschieben, Wertungsflächen sichtbar."
-              }
-            },
-            {
-              "id": "camera-angle-menu",
-              "icon": "tilt",
-              "status": "progress",
-              "title": {
-                "en": "Camera angle in the K menu",
-                "de": "Kamerawinkel im K-Menü"
-              },
-              "text": {
-                "en": "Set the camera angle in the configurator too, not only in the drone’s service menu.",
-                "de": "Den Kamerawinkel auch im Konfigurator einstellen, nicht nur im Wartungsmenü der Drohne."
-              }
-            },
-            {
-              "id": "gate-tutorial",
-              "icon": "school",
-              "status": "progress",
-              "title": {
-                "en": "Gate tutorial",
-                "de": "Gate-Tutorial"
-              },
-              "text": {
-                "en": "A short tutorial the first time you place a gate, so you find everything gates can do.",
-                "de": "Ein kurzes Tutorial, wenn du zum ersten Mal ein Gate setzt – damit du alles findest, was Gates können."
-              }
-            },
-            {
-              "id": "slime-wool",
-              "icon": "impact",
-              "status": "progress",
-              "title": {
-                "en": "Slime and wool",
-                "de": "Schleim und Wolle"
-              },
-              "text": {
-                "en": "Slime blocks bounce your drone back, wool catches it softly – and you can take off from wool.",
-                "de": "Schleimblöcke federn deine Drohne zurück, Wolle fängt sie weich ab – und von Wolle kannst du starten."
-              }
-            },
-            {
-              "id": "website-faq-languages",
-              "icon": "chat",
-              "status": "progress",
-              "title": {
-                "en": "More FAQ and languages on the website",
-                "de": "Mehr FAQ und Sprachen auf der Website"
-              },
-              "text": {
-                "en": "More answers in the FAQ and the website in more languages.",
-                "de": "Mehr Antworten in den FAQ und die Website in weiteren Sprachen."
-              }
-            }
-          ]
-        },
-        {
-          "title": {
-            "en": "Add-on with 0.6.0",
-            "de": "Add-on zu 0.6.0"
-          },
-          "items": [
-            {
-              "id": "jmp-next",
-              "icon": "prop",
-              "status": "progress",
-              "title": {
-                "en": "Next version of Just More Parts",
-                "de": "Nächste Version von Just More Parts"
-              },
-              "text": {
-                "en": "More high-KV motors for whoops and the new share codes for drones with parts from every add-on.",
-                "de": "Mehr Motoren mit hoher KV für Whoops und die neuen Sharecodes für Drohnen mit Teilen aus jedem Add-on."
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
       "id": "later",
       "icon": "port",
       "label": {
@@ -954,34 +969,21 @@
       "groups": [
         {
           "title": {
-            "en": "Official add-ons",
-            "de": "Offizielle Add-ons"
+            "en": "On the website",
+            "de": "Auf der Website"
           },
           "items": [
             {
-              "id": "mob-defense",
-              "icon": "gripper",
-              "status": "planned",
+              "id": "website-faq-languages",
+              "icon": "chat",
+              "status": "progress",
               "title": {
-                "en": "Propwash: Mob Defense",
-                "de": "Propwash: Mob Defense"
+                "en": "More FAQ and languages on the website",
+                "de": "Mehr FAQ und Sprachen auf der Website"
               },
               "text": {
-                "en": "Drone accessories against mobs: a dispenser at the front, spears and a rocket boost – and mobs that react to drones.",
-                "de": "Drohnen-Zubehör gegen Mobs: Dispenser vorne, Speere und Raketen-Boost – und Mobs, die auf Drohnen reagieren."
-              }
-            },
-            {
-              "id": "camera-drones",
-              "icon": "cinema",
-              "status": "planned",
-              "title": {
-                "en": "Programmable camera drones",
-                "de": "Programmierbare Kameradrohnen"
-              },
-              "text": {
-                "en": "Self-flying drones: waypoints, follow me, point of interest and a gimbal for pilot 2 that holds its heading in the world.",
-                "de": "Selbst fliegende Drohnen: Wegpunkte, Follow me, Point of Interest und ein Gimbal für Pilot 2, der seine Richtung in der Welt hält."
+                "en": "More answers in the FAQ and the website in more languages.",
+                "de": "Mehr Antworten in den FAQ und die Website in weiteren Sprachen."
               }
             }
           ]

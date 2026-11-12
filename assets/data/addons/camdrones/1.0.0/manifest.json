@@ -1,0 +1,45 @@
+{
+ "format": 2,
+ "namespace": "camdrones",
+ "listed_as": "1.0.0",
+ "mod": {
+  "id": "camdrones",
+  "name": "Propwash: Camera Drones",
+  "version": "1.0.0"
+ },
+ "short_id": null,
+ "table_source": "mod",
+ "table_entries": 19,
+ "table_crc": "5c960120",
+ "requires": {
+  "propwash": ">=0.6.0"
+ },
+ "languages": [
+  "de_de",
+  "en_us"
+ ],
+ "counts": {
+  "frame": 3,
+  "stack": 2,
+  "motor": 3,
+  "prop": 3,
+  "video": 2,
+  "battery": 3,
+  "accessory": 3,
+  "chemistry": 2
+ },
+ "jar": {
+  "file": "camdrones-fabric-26.3-1.0.0.jar",
+  "bytes": 1681981,
+  "sha256": "d16e25eec1d2b7ba7d55e48bec591234516b6bc4391155d4c661b8069dbbb48d",
+  "loader": "fabric"
+ },
+ "generator": "tools/build-addons.mjs (web export format 2, read from the jar like the configurator)",
+ "files": [
+  "chemistries.json",
+  "manifest.json",
+  "mounts.json",
+  "parts.json",
+  "share_table.json"
+ ]
+}

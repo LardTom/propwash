@@ -2,11 +2,20 @@
 // site), the docs menu, bilingual text helpers, tables and highlighted code blocks.
 
 import { siteNav, siteFooterLinks, DISCORD, DISCORD_PATH, CURSEFORGE, MODRINTH, SOURCE } from '../site-nav.mjs';
+import { ogFor, ogTags } from '../og-meta.mjs';
 
 export { DISCORD, CURSEFORGE, MODRINTH, SOURCE };
 export const SITE = 'https://propwashfpv.com/';
 export const SOURCE_JMP = 'https://github.com/LardTom/propwash-justmoreparts';
 export const SHIELD = 'https://polyformproject.org/licenses/shield/1.0.0';
+// The public source repositories of Propwash and its official add-ons (the same addresses as "source" in
+// assets/data/platforms.json; tools/test-license.mjs compares them).
+export const SOURCES = {
+  propwash: SOURCE,
+  justmoreparts: SOURCE_JMP,
+  camdrones: 'https://github.com/LardTom/propwash-camera-drones',
+  mobdefense: 'https://github.com/LardTom/propwash-mob-defense',
+};
 
 // Groups of the docs menu and the cards on the overview page, in this order. A new docs page: an entry in PAGES with
 // its group, a builder in tools/docs/pages/ registered in BUILDERS of tools/build-docs.mjs, and a card in
@@ -14,6 +23,7 @@ export const SHIELD = 'https://polyformproject.org/licenses/shield/1.0.0';
 export const GROUPS = [
   { id: 'play', title: { en: 'Play', de: 'Spielen' } },
   { id: 'addons', title: { en: 'Make add-ons', de: 'Add-ons bauen' } },
+  { id: 'use', title: { en: 'Use and share', de: 'Nutzen und weitergeben' } },
 ];
 
 export const PAGES = [
@@ -24,6 +34,7 @@ export const PAGES = [
   { path: 'docs/api/', id: 'api', group: 'addons', title: { en: 'Add-on API', de: 'Add-on-API' } },
   { path: 'docs/api/reference/', id: 'reference', group: 'addons', sub: true, title: { en: 'API reference', de: 'API-Referenz' } },
   { path: 'docs/parts-format/', id: 'parts-format', group: 'addons', title: { en: 'Parts format (JSON)', de: 'Teile-Format (JSON)' } },
+  { path: 'docs/license/', id: 'license', group: 'use', title: { en: 'License in plain words', de: 'Lizenz in klaren Worten' } },
 ];
 
 export function esc(value) {
@@ -277,10 +288,7 @@ export function page({ id, prefix, title, description, kicker, heading, lead, to
 <meta property="og:site_name" content="Propwash FPV">
 <meta property="og:title" content="${t(title.en)}">
 <meta property="og:description" content="${t(description.en)}">
-<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
-<link rel="icon" type="image/png" sizes="32x32" href="${prefix}assets/img/favicon-32.png">
+${ogTags(ogFor(PAGES.find((p) => p.id === id).path), { title: t(title.en), description: t(description.en), raw: true })}<link rel="icon" type="image/png" sizes="32x32" href="${prefix}assets/img/favicon-32.png">
 <link rel="apple-touch-icon" href="${prefix}assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="${prefix}assets/css/style.css">
 <link rel="stylesheet" href="${prefix}assets/css/docs.css">

@@ -145,7 +145,7 @@ function facts(ctx, a, prefix) {
     const detail = CATEGORIES.filter((k) => counts[k]).map((k) => `${counts[k]}&nbsp;${bi(COUNTED[k])}`).join(' · ');
     rows.push([{ en: 'Parts', de: 'Teile' }, `<span class="mono" data-addon-parts-total>${total(counts)}</span>${prefix !== null ? ` <span class="addon-facts__soft">(${detail})</span>` : ''}`]);
   }
-  rows.push([{ en: 'Short id', de: 'Kurzkennung' }, `<span class="mono">${a.short_id}</span>`]);
+  if (a.short_id !== null) rows.push([{ en: 'Short id', de: 'Kurzkennung' }, `<span class="mono">${a.short_id}</span>`]);
   if (prefix !== null) rows.push([{ en: 'License', de: 'Lizenz' }, esc(LICENSES[a.license] || a.license)]);
   return [
     '<dl class="addon-facts">',
@@ -165,8 +165,15 @@ function card(ctx, a, prefix) {
   const actions = [`<!-- platforms:buttons ${a.platforms} -->`, '<!-- /platforms -->'];
   if (a.web_export) actions.push(`<a class="btn btn--ghost" href="${prefix}configurator/?addon=${esc(a.namespace)}">${bi({ en: 'Show in the configurator', de: 'Im Konfigurator zeigen' })}</a>`);
   actions.push(`<a class="btn btn--ghost" href="${esc(pageHref)}">${bi({ en: 'About the add-on', de: 'Mehr zum Add-on' })}</a>`);
+  const img = prefix === null ? '../' : prefix;
+  const picture = a.image ? [
+    '  <div class="addon-card__shot">',
+    `    <img src="${img}assets/img/${esc(a.image.name)}-800.webp" srcset="${img}assets/img/${esc(a.image.name)}-800.webp 800w, ${img}assets/img/${esc(a.image.name)}-1600.webp 1600w" sizes="(min-width: 1100px) 340px, (min-width: 760px) 50vw, 100vw" width="1600" height="900" loading="lazy" decoding="async" alt="${esc(a.image.alt.en)}" data-de-alt="${esc(a.image.alt.de)}">`,
+    '  </div>',
+  ] : [];
   const lines = [
     `<li class="addon-card" id="addon-${esc(a.namespace)}" data-addon="${esc(a.namespace)}" data-kinds="${esc(kinds)}">`,
+    ...picture,
     '  <div class="addon-card__head">',
     `    <h3 class="addon-card__name"><a href="${esc(pageHref)}">${esc(a.name)}</a></h3>`,
     `    <p class="addon-card__badges">${badges.join(' ')}</p>`,
@@ -194,7 +201,7 @@ function cards(ctx, which, prefix) {
 function shortIds(ctx) {
   const rows = [
     [1, 'propwash', esc(ctx.registry.base.name), bi({ en: 'Propwash itself', de: 'Propwash selbst' })],
-    ...ctx.registry.addons.map((a) => [a.short_id, a.namespace, esc(a.name), a.status === 'listed' ? bi({ en: 'listed', de: 'eingetragen' }) : bi({ en: 'withdrawn', de: 'zurückgezogen' })]),
+    ...ctx.registry.addons.filter((a) => a.short_id !== null).map((a) => [a.short_id, a.namespace, esc(a.name), a.status === 'listed' ? bi({ en: 'listed', de: 'eingetragen' }) : bi({ en: 'withdrawn', de: 'zurückgezogen' })]),
   ];
   return [
     '<div class="addons-table-wrap">',

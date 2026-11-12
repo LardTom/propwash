@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "note": "Allocation list of the official add-on directory (propwashfpv.com/addons/): append only. A namespace and its short id are never given again; an add-on that leaves the directory stays with status withdrawn. Short id 1 is Propwash itself.",
+  "note": "Allocation list of the official add-on directory (propwashfpv.com/addons/): append only. A namespace and its short id are never given again; an add-on that leaves the directory stays with status withdrawn. Short id 1 is Propwash itself. An add-on may be listed with short_id null: share codes name it with its full namespace, and directory.json (Propwash's copy) leaves it out until a Propwash release knows its short id.",
   "base": {
     "namespace": "propwash",
     "short_id": 1,
@@ -16,16 +16,105 @@
       "official": true,
       "status": "listed",
       "since": "2026-10",
-      "kinds": ["parts"],
+      "kinds": [
+        "parts"
+      ],
       "page": "addons/just-more-parts/",
       "license": "PolyForm-Shield-1.0.0",
-      "requires": { "propwash": "0.6.0" },
+      "requires": {
+        "propwash": "0.6.0"
+      },
       "platforms": "justmoreparts",
-      "web_export": { "version": "1.2.0", "path": "assets/data/addons/justmoreparts/1.2.0/" },
-      "versions": ["1.2.0"],
+      "web_export": {
+        "version": "1.2.0",
+        "path": "assets/data/addons/justmoreparts/1.2.0/"
+      },
+      "versions": [
+        "1.2.0"
+      ],
       "text": {
         "en": "Many more realistic parts for Propwash, from 65 mm whoops to 13″ X-Class: frames in new shapes (stretched, squashed, deadcat, H-frame, ducts), motors, props, stacks, cameras and batteries, plus ready-to-fly presets.",
         "de": "Viele weitere realistische Teile für Propwash, vom 65-mm-Whoop bis zur 13-Zoll-X-Class: Rahmen in neuen Formen (Stretched, Squashed, Deadcat, H-Frame, Ducts), Motoren, Props, Stacks, Kameras und Akkus, dazu flugfertige Presets."
+      },
+      "image": {
+        "name": "addon-just-more-parts",
+        "alt": {
+          "en": "Five drones of Just More Parts lined up on a paddock: an X-Class 13″, a 7″ deadcat, an H-frame, a cinewhoop and a whoop",
+          "de": "Fünf Drohnen aus Just More Parts nebeneinander auf einem Fahrerlager: eine X-Class 13 Zoll, ein 7-Zoll-Deadcat, ein H-Frame, ein Cinewhoop und ein Whoop"
+        }
+      }
+    },
+    {
+      "namespace": "camdrones",
+      "short_id": null,
+      "name": "Propwash: Camera Drones",
+      "author": "lardtom",
+      "official": true,
+      "status": "listed",
+      "since": "2026-11",
+      "kinds": [
+        "parts",
+        "tools"
+      ],
+      "page": "addons/camera-drones/",
+      "license": "PolyForm-Shield-1.0.0",
+      "requires": {
+        "propwash": "0.6.0"
+      },
+      "platforms": "camdrones",
+      "web_export": {
+        "version": "1.0.0",
+        "path": "assets/data/addons/camdrones/1.0.0/"
+      },
+      "versions": [
+        "1.0.0"
+      ],
+      "image": {
+        "name": "addon-camera-drones",
+        "alt": {
+          "en": "A cine drone with its gimbal camera hovers over a meadow in the evening light, two folding drones fly behind it with their trails",
+          "de": "Eine Cine-Drohne mit Gimbal-Kamera schwebt im Abendlicht über einer Wiese, dahinter fliegen zwei Faltdrohnen mit ihren Spuren"
+        }
+      },
+      "text": {
+        "en": "Camera drones that fly themselves: let go of the sticks and the drone holds its position by GPS. A stabilized 3-axis gimbal, missions on the Flight Planner tablet with waypoints, follow me and point of interest, and a second player as camera operator.",
+        "de": "Kameradrohnen, die selbst fliegen: Lass die Knüppel los, und die Drohne hält ihre Position per GPS. Ein stabilisiertes 3-Achsen-Gimbal, Missionen auf dem Tablet Flugplaner mit Wegpunkten, Follow me und Point of Interest und ein zweiter Spieler als Kameramann."
+      }
+    },
+    {
+      "namespace": "mobdefense",
+      "short_id": null,
+      "name": "Propwash: Mob Defense",
+      "author": "lardtom",
+      "official": true,
+      "status": "listed",
+      "since": "2026-11",
+      "kinds": [
+        "accessories"
+      ],
+      "page": "addons/mob-defense/",
+      "license": "PolyForm-Shield-1.0.0",
+      "requires": {
+        "propwash": "0.6.0"
+      },
+      "platforms": "mobdefense",
+      "web_export": {
+        "version": "1.0.0",
+        "path": "assets/data/addons/mobdefense/1.0.0/"
+      },
+      "versions": [
+        "1.0.0"
+      ],
+      "image": {
+        "name": "addon-mob-defense",
+        "alt": {
+          "en": "At sunset a drone of Mob Defense hovers between a skeleton, zombies and a creeper, two more drones fly behind it",
+          "de": "Bei Sonnenuntergang schwebt eine Drohne aus Mob Defense zwischen einem Skelett, Zombies und einem Creeper, dahinter fliegen zwei weitere Drohnen"
+        }
+      },
+      "text": {
+        "en": "Three accessories for your drones: a dispenser mount in front that fires arrows, potions, wind charges and TNT, a spear mount below and a rocket booster on top. And the mobs fight back: zombies come closer, skeletons shoot, phantoms hunt.",
+        "de": "Drei Zubehörteile für deine Drohnen: vorn eine Dispenser-Halterung, die Pfeile, Tränke, Windkugeln und TNT abfeuert, unten eine Speer-Halterung und oben ein Raketen-Booster. Und die Mobs wehren sich: Zombies kommen näher, Skelette schießen, Phantome jagen."
       }
     }
   ]

@@ -8,8 +8,12 @@
 //     wool, in English and German, also as item ids), and “In the next release” holds exactly share codes, the
 //     add-on API and the next version of Just More Parts
 //   - release stand (no. 42): 0.6.0 is the first group of the released horizon, all done, with highlights and the link
-//     ../changelog/#propwash-0.6.0 (an anchor of changelog.json); after it, in this order, the official add-ons and the
-//     backport to Minecraft 1.21.1; no server add-on (owner decision of 19.10., test-platforms keeps it off the site)
+//     ../changelog/#propwash-0.6.0 (an anchor of changelog.json); the official add-ons released with it (Just More
+//     Parts 1.2.0, Camera Drones 1.0.0, Mob Defense 1.0.0, owner finding OF-2) stand done in that group with a link
+//     to their page; after it, in this order, what is still planned (the backport to Minecraft 1.21.1); no server
+//     add-on (owner decision of 19.10., test-platforms keeps it off the site)
+//   - the branch of the release (release/0.6.0) carries the release stand already, because it only goes live with the
+//     release: the release checks then run on the file itself, also before the platforms say live
 //   - before the release the release checks run on the stand the README's “Releasing” steps make of the current file
 //     (a dry run) and on broken copies of it, so the checks are known to work when the release comes
 //
@@ -115,6 +119,11 @@ function releaseProblems(roadmap) {
     fail(first.link && first.link.label && first.link.label.en && first.link.label.de, `${VERSION}: the changelog link has a label in English and German`);
     fail(changelog.products.some((p) => p.releases.some((r) => r.id === `propwash-${VERSION}`)), `the anchor propwash-${VERSION} is in changelog.json`);
   }
+  for (const id of approved.released_with_release || []) {
+    const item = first && first.items.find((i) => i.id === id);
+    fail(item && item.status === 'done', `released with ${VERSION}: ${id} stands done in the group of ${VERSION}`);
+    fail(item && item.link && /^\.\.\/(addons\/[a-z-]+\/|changelog\/#[a-z]+-\d)/.test(item.link.href), `released with ${VERSION}: ${id} links its page or changelog (${item && item.link && item.link.href})`);
+  }
   const after = items(roadmap, (h) => h.id !== 'released').map((i) => i.id);
   const order = approved.order_after_release.map((id) => after.indexOf(id));
   fail(order.every((x) => x >= 0) && order.every((x, i) => i === 0 || x > order[i - 1]), `after ${VERSION} in this order: ${approved.order_after_release.join(', ')} (positions ${order.join(', ')})`);
@@ -129,7 +138,14 @@ function release(roadmap, label) {
   return problems;
 }
 
+/** Whether the file already shows the release stand (the first released group is the version of platforms.json). */
+const isReleaseStand = (roadmap) => {
+  const rel = roadmap.horizons.find((h) => h.id === 'released');
+  return !!rel && !!rel.groups[0] && rel.groups[0].version === VERSION;
+};
+
 function releaseOf(roadmap) {
+  if (isReleaseStand(roadmap)) return structuredClone(roadmap);
   const r = structuredClone(roadmap);
   const now = r.horizons.find((h) => h.id === 'now');
   const rel = r.horizons.find((h) => h.id === 'released');
@@ -148,7 +164,14 @@ function dryRun() {
   check(!clean.length, `no. 42 dry run: the release checks pass on the stand the README's releasing steps give`);
   const broken = [
     ['an id the owner has not approved', (d) => { d.horizons.find((h) => h.id === 'ideas').groups[0].items.push({ id: 'cov-new-idea', icon: 'prop', status: 'idea', title: { en: 'New idea', de: 'Neue Idee' }, text: { en: 'Something new.', de: 'Etwas Neues.' } }); }, 'ids'],
-    ['add-ons in the wrong order', (d) => { const g = d.horizons.find((h) => h.id === 'later').groups[0]; g.items.reverse(); }, 'in this order'],
+    ['an add-on of the release still planned', (d) => {
+      const rel = d.horizons.find((h) => h.id === 'released').groups[0];
+      const at = rel.items.findIndex((i) => i.id === (approved.released_with_release || [])[1]);
+      if (at < 0) return;
+      const [item] = rel.items.splice(at, 1);
+      d.horizons.find((h) => h.id === 'later').groups[0].items.unshift({ ...item, status: 'planned' });
+    }, 'released with'],
+    ['the backport missing', (d) => { for (const h of d.horizons) for (const g of h.groups) g.items = g.items.filter((i) => i.id !== 'port-1-21-1'); }, 'in this order'],
     ['no changelog link', (d) => { delete d.horizons[0].groups[0].link; }, 'links the changelog'],
     ['a server add-on', (d) => { d.horizons.find((h) => h.id === 'later').groups.push({ title: { en: 'Servers', de: 'Server' }, items: [{ id: 'propwash-server', icon: 'prop', status: 'planned', title: { en: 'Propwash: Server', de: 'Propwash: Server' }, text: { en: 'A server add-on.', de: 'Ein Server-Add-on.' } }] }); }, 'no server add-on'],
   ];
@@ -165,6 +188,7 @@ function dryRun() {
   }
   const preSpoilers = spoilers(current);
   check(spoilers(releaseOf(current)).length < preSpoilers.length || !preSpoilers.length, 'no. 41 dry run: the spoiler check sees the items of 0.6.0 outside the released horizon');
+  if (isReleaseStand(current)) check(!spoilers(current).length, 'no. 41: the release stand keeps nothing of 0.6.0 outside the released horizon');
 }
 
 function main() {
@@ -182,7 +206,10 @@ function main() {
       note(`no ref ${PRE_REF}: no. 41 checks only the current file`);
     }
     const found = spoilers(current);
-    if (found.length) note(`no. 41: the current roadmap.json (the live stand of main) names ${found.length} things of ${VERSION} before the release (${found.slice(0, 3).join('; ')} …) – the owner keeps that stand live; the stand without spoilers is ${PRE_REF}`);
+    if (isReleaseStand(current)) {
+      note(`no. 41/42: roadmap.json already shows the release stand of ${VERSION} (owner finding OF-2: this branch goes live with the release); the release checks run on it`);
+      release(current, 'roadmap.json');
+    } else if (found.length) note(`no. 41: the current roadmap.json (the live stand of main) names ${found.length} things of ${VERSION} before the release (${found.slice(0, 3).join('; ')} …) – the owner keeps that stand live; the stand without spoilers is ${PRE_REF}`);
     else preRelease(current, 'roadmap.json');
     dryRun();
   } else {

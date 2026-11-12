@@ -14,12 +14,19 @@
 <meta property="og:site_name" content="Propwash FPV">
 <meta property="og:title" content="Parts format (JSON) – Propwash FPV docs">
 <meta property="og:description" content="The JSON format of Propwash FPV drone parts: frames, stacks, motors, props, video units, batteries, accessories and cell chemistries, with every field, type and default.">
-<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-docs.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Propwash FPV docs: logo and wordmark over the community spawn at dusk, with the line “Player guide, world rules and add-on API”">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
+<meta name="twitter:title" content="Parts format (JSON) – Propwash FPV docs">
+<meta name="twitter:description" content="The JSON format of Propwash FPV drone parts: frames, stacks, motors, props, video units, batteries, accessories and cell chemistries, with every field, type and default.">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-docs.jpg">
+<meta name="twitter:image:alt" content="Propwash FPV docs: logo and wordmark over the community spawn at dusk, with the line “Player guide, world rules and add-on API”">
 <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon-32.png">
 <link rel="apple-touch-icon" href="../../assets/img/apple-touch-icon.png">
-<link rel="stylesheet" href="../../assets/css/style.css?v=3529aa30">
+<link rel="stylesheet" href="../../assets/css/style.css?v=48517aa3">
 <link rel="stylesheet" href="../../assets/css/docs.css?v=80085e2b">
 <script>
 (function () {
@@ -53,6 +60,7 @@
       <div class="nav-group" data-nav-group>
         <button type="button" class="nav-group__toggle" aria-expanded="false" aria-controls="nav-features" data-nav-group-toggle><span lang="en">Features</span><span lang="de">Funktionen</span><svg class="nav-group__chev" aria-hidden="true" viewBox="0 0 12 12" width="12" height="12"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
         <ul class="nav-group__panel" id="nav-features">
+          <li><a href="../../#server"><span class="nav-group__title"><span lang="en">Community server</span><span lang="de">Community-Server</span></span><span class="nav-group__text"><span lang="en">mc.propwashfpv.com, with Fabric or NeoForge</span><span lang="de">mc.propwashfpv.com, mit Fabric oder NeoForge</span></span></a></li>
           <li><a href="../../#how"><span class="nav-group__title"><span lang="en">Get started</span><span lang="de">Loslegen</span></span><span class="nav-group__text"><span lang="en">Build, bind, fly and race in four steps</span><span lang="de">Bauen, binden, fliegen, rennen in vier Schritten</span></span></a></li>
           <li><a href="../../#new"><span class="nav-group__title"><span lang="en">What’s new</span><span lang="de">Neuigkeiten</span></span><span class="nav-group__text"><span lang="en">The highlights of the latest update</span><span lang="de">Die Highlights des neuesten Updates</span></span></a></li>
           <li><a href="../../#flight"><span class="nav-group__title"><span lang="en">Flight &amp; tuning</span><span lang="de">Flug &amp; Tuning</span></span><span class="nav-group__text"><span lang="en">Flight model, Betaflight-style tuning, radio or gamepad</span><span lang="de">Flugmodell, Tuning wie in Betaflight, Funke oder Gamepad</span></span></a></li>
@@ -113,6 +121,10 @@
 <li class="docs-menu__item docs-menu__item--sub"><a href="../../docs/api/reference/"><span lang="en">API reference</span><span lang="de">API-Referenz</span></a></li>
 <li class="docs-menu__item is-current"><a href="../../docs/parts-format/" aria-current="page"><span lang="en">Parts format (JSON)</span><span lang="de">Teile-Format (JSON)</span></a>
 <ol class="docs-menu__toc"><li><a href="#files"><span lang="en">Files and loading</span><span lang="de">Dateien und Laden</span></a></li><li><a href="#conventions"><span lang="en">Conventions</span><span lang="de">Konventionen</span></a></li><li><a href="#common"><span lang="en">Fields of every part</span><span lang="de">Felder jedes Teils</span></a></li><li><a href="#frame"><span lang="en">Frame</span><span lang="de">Rahmen</span></a></li><li><a href="#stack"><span lang="en">Stack (flight controller and ESC)</span><span lang="de">Stack (Flight-Controller und ESC)</span></a></li><li><a href="#motor">Motor</a></li><li><a href="#prop">Propeller</a></li><li><a href="#video"><span lang="en">Video unit</span><span lang="de">Videomodul</span></a></li><li><a href="#battery"><span lang="en">Battery</span><span lang="de">Akku</span></a></li><li><a href="#accessory"><span lang="en">Accessory</span><span lang="de">Zubehör</span></a></li><li><a href="#chemistry"><span lang="en">Cell chemistry</span><span lang="de">Zellchemie</span></a></li><li><a href="#builtin"><span lang="en">Built-in ids</span><span lang="de">Eingebaute Ids</span></a></li><li><a href="#example-addon"><span lang="en">Example with own arms</span><span lang="de">Beispiel mit eigenen Armen</span></a></li><li><a href="#errors"><span lang="en">Errors and warnings</span><span lang="de">Fehler und Warnungen</span></a></li></ol></li>
+</ol></li>
+<li class="docs-menu__group"><span class="docs-menu__heading" id="docs-menu-use"><span lang="en">Use and share</span><span lang="de">Nutzen und weitergeben</span></span>
+<ol class="docs-menu__sublist" aria-labelledby="docs-menu-use">
+<li class="docs-menu__item"><a href="../../docs/license/"><span lang="en">License in plain words</span><span lang="de">Lizenz in klaren Worten</span></a></li>
 </ol></li>
 </ol>
 </details>
@@ -639,7 +651,7 @@
   </div>
 </footer>
 
-<script src="../../assets/js/main.js?v=0380d111" defer></script>
+<script src="../../assets/js/main.js?v=ec58625d" defer></script>
 <script src="../../assets/js/docs.js?v=d4f13a7d" defer></script>
 </body>
 </html>

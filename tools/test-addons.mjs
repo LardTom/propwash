@@ -1,12 +1,16 @@
 #!/usr/bin/env node
 // The add-on directory, its data and its pages (website design 0.6.0, 3.6 and 6.2):
 //   - assets/data/addons/registry.json: valid, namespaces and short ids unique, propwash never given to an add-on,
+//     an add-on without a short id yet (short_id null: share codes name it with its full namespace) is fine and stays
+//     out of directory.json, which Propwash copies (0.6.0 knows the short ids 1 and 2 only),
 //     no download address of its own (downloads come only from assets/data/platforms.json: CurseForge and Modrinth),
 //     only appended to against the last release (newest tag v*, else origin/main, or --against <ref>); the validator
 //     refuses broken copies
 //   - only released official add-ons and no page for anything else: the add-on pages are exactly the listed ones,
-//     nothing for the deferred server add-on, nothing for the namespaces of the add-ons still in development (read
-//     from the sibling checkouts propwash-camera and propwash-mobdefense, if they are there)
+//     nothing for the deferred server add-on, nothing for the namespaces of add-ons still in development (the sibling
+//     checkouts propwash-camera and propwash-mobdefense, if they are there, whose mod id is no product of
+//     platforms.json); the official add-ons of the release (Just More Parts, Camera Drones, Mob Defense) are listed
+//     with a card that has its picture, the version, the Propwash it needs and its downloads, and a page of their own
 //   - the hosted web export of every listed version exists and loads into the configurator's catalog; with --release
 //     it must be built from the release jar itself, not a pre-release
 //   - /addons/ and the pages of the add-ons are up to date (node tools/build-addons.mjs): cards, short ids, facts,
@@ -67,6 +71,20 @@ for (const [what, mutate, expected] of broken) {
   const errs = validateRegistry(copy, platforms);
   check(errs.some((e) => e.includes(expected)), `validator misses: ${what} (got ${errs.join(' | ') || 'no error'})`);
 }
+{
+  const later = structuredClone(registry);
+  later.addons.push({ ...structuredClone(registry.addons[0]), namespace: 'noshortid', short_id: null, official: false });
+  check(!validateRegistry(later, platforms).some((e) => e.includes('short_id')), 'validator: an add-on without a short id yet (null) is fine');
+  const twice = structuredClone(later);
+  twice.addons.push({ ...structuredClone(registry.addons[0]), namespace: 'noshortid2', short_id: null, official: false });
+  check(!validateRegistry(twice, platforms).some((e) => e.includes('given twice')), 'validator: two add-ons without a short id do not clash');
+  const given = structuredClone(later);
+  given.addons[given.addons.length - 1].short_id = 7;
+  check(!appendOnly(later, given).length, 'append-only: a short id given later to an add-on that had none is fine');
+  const taken = structuredClone(given);
+  taken.addons[taken.addons.length - 1].short_id = null;
+  check(appendOnly(given, taken).length > 0, 'append-only: a given short id is never taken back');
+}
 const appended = structuredClone(registry);
 appended.addons.push({ ...structuredClone(registry.addons[0]), namespace: 'later', short_id: 3, official: false });
 check(!appendOnly(registry, appended).length, 'append-only: a new add-on at the end is fine');
@@ -123,14 +141,67 @@ for (const repo of ['propwash-camera', 'propwash-mobdefense']) {
   const props = path.resolve(home, repo, 'gradle.properties');
   if (!fs.existsSync(props)) continue;
   const id = /^mod_id\s*=\s*(\S+)/m.exec(fs.readFileSync(props, 'utf8'));
-  if (id) blocked.push(id[1]);
+  // Released (a product of platforms.json, like Camera Drones and Mob Defense with 0.6.0) or still in development.
+  if (id && !platforms.products[id[1]]) blocked.push(id[1]);
 }
 for (const ns of blocked) {
   check(!registry.addons.some((a) => a.namespace === ns), 'an add-on still in development is not in the registry');
   check(!exists(`assets/data/addons/${ns}`), 'no hosted data for an add-on still in development');
   check(!dirs.some((d) => d.includes(ns)), 'no page for an add-on still in development');
 }
-if (!blocked.length) notes.push('no sibling checkouts of the add-ons in development – their namespaces are not checked');
+if (!blocked.length) notes.push('no sibling checkout of an add-on in development – nothing to keep off the site');
+
+// The official add-ons of the release: listed with a card and a page of their own.
+const OFFICIAL = { justmoreparts: 'addons/just-more-parts/', camdrones: 'addons/camera-drones/', mobdefense: 'addons/mob-defense/' };
+const directoryJson = JSON.parse(read('assets/data/addons/directory.json'));
+const copied = directoryJson.addons.map((a) => a.namespace);
+for (const a of registry.addons) {
+  check(a.short_id == null ? !copied.includes(a.namespace) : copied.includes(a.namespace),
+    `${a.namespace}: directory.json (Propwash's copy) lists exactly the add-ons with a short id (short id ${a.short_id})`);
+}
+{
+  const dirHtml = read('addons/index.html');
+  const official = (/<section[^>]*aria-labelledby="official-title"[\s\S]*?<\/section>/.exec(dirHtml) || [''])[0];
+  for (const [ns, page] of Object.entries(OFFICIAL)) {
+    const a = registry.addons.find((x) => x.namespace === ns);
+    if (!check(a && a.official && a.status === 'listed' && a.page === page, `${ns}: listed as an official add-on with the page ${page}`)) continue;
+    const product = platforms.products[a.platforms];
+    const card = (new RegExp(`<li class="addon-card[^"]*" id="addon-${ns}"[\\s\\S]*?</li>\\n\\s*(?=<li class="addon-card|</ul>)`).exec(official) || [''])[0];
+    check(card, `/addons/: the card of ${ns} under “Official add-ons”`);
+    check(/<img [^>]*src="[^"]*assets\/img\/addon-[a-z-]+-800\.webp"[^>]*alt="[^"]{20,}"/.test(card), `/addons/: the card of ${ns} has its picture with a description`);
+    check(card.includes(`<span class="mono">${product.version}</span>`), `/addons/: the card of ${ns} names version ${product.version}`);
+    check(card.includes(`Propwash ${a.requires.propwash} or newer`) && card.includes(`Propwash ${a.requires.propwash} oder neuer`), `/addons/: the card of ${ns} names the Propwash it needs`);
+    check(card.includes(product.curseforge.url) && card.includes(product.modrinth.url), `/addons/: the card of ${ns} has its CurseForge and Modrinth buttons`);
+    const html = exists(`${page}index.html`) ? read(`${page}index.html`) : '';
+    check(/<img [^>]*src="(?:\.\.\/)+assets\/img\/addon-[a-z-]+-(?:800|1600)\.webp"/.test(html), `${page}: the page shows the add-on's picture`);
+    check(html.includes(product.curseforge.url) && html.includes(product.modrinth.url), `${page}: downloads on CurseForge and Modrinth`);
+    check(/href="(?:\.\.\/)+#server"/.test(html), `${page}: points to the community server on the landing page`);
+  }
+}
+{
+  const said = (page, lang) => [...read(page).matchAll(new RegExp(`<([a-z0-9]+)[^>]*lang="${lang}"[^>]*>([\\s\\S]*?)</\\1>`, 'g'))].map((m) => m[2].replace(/<[^>]+>/g, '')).join(' ');
+  const cam = 'addons/camera-drones/index.html';
+  const mob = 'addons/mob-defense/index.html';
+  if (exists(cam)) {
+    const en = said(cam, 'en');
+    const de = said(cam, 'de');
+    for (const [e, d] of [[/Getting started/, /Erste Schritte/], [/Flight modes/, /Flugmodi/], [/Flight Planner/, /Flugplaner/], [/[Tt]wo pilots/, /[Zz]wei Piloten/]]) {
+      check(e.test(en) && d.test(de), `Camera Drones page: the section ${e.source} / ${d.source}`);
+    }
+    check(/server and on every client/.test(en) && /Server und auf jedem Client/.test(de), 'Camera Drones page: installed on the server and on every client');
+  } else check(false, `${cam} exists`);
+  if (exists(mob)) {
+    const html = read(mob);
+    const en = said(mob, 'en');
+    const de = said(mob, 'de');
+    for (const [e, d] of [[/Dispenser Mount/, /Dispenser-Halterung/], [/Spear Mount/, /Speer-Halterung/], [/Rocket Booster/, /Raketen-Booster/], [/Getting started/, /Erste Schritte/]]) {
+      check(e.test(en) && d.test(de), `Mob Defense page: names ${e.source} / ${d.source}`);
+    }
+    check(/<table[\s\S]*?\bMob\b[\s\S]*?<\/table>/.test(html), 'Mob Defense page: a table of the mobs and how they react');
+    check(/<table[\s\S]*?mobdefense:[a-z_]+[\s\S]*?<\/table>/.test(html), 'Mob Defense page: a table of its world rules with their ids');
+    check(/server and on every client/.test(en) && /Server und auf jedem Client/.test(de), 'Mob Defense page: installed on the server and on every client');
+  } else check(false, `${mob} exists`);
+}
 for (const a of registry.addons) check(a.official || a.status !== 'listed' || a.versions.length, `${a.namespace}: listed with a released version`);
 
 // 4. Hosted exports exist and load into the configurator.

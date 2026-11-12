@@ -13,18 +13,14 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { pendingAddresses } from './pending-addresses.mjs';
+import { ogFor, OG_VARIANTS, OG_SIZE } from './og-meta.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SITE = 'https://propwashfpv.com/';
-// Addresses that go live with the release: the public source repositories (Propwash and the add-ons Just More Parts,
-// Camera Drones and Mob Defense) and the Modrinth pages in review.
-export const PENDING = [
-  'https://github.com/LardTom/propwash-fpv',
-  'https://github.com/LardTom/propwash-justmoreparts',
-  'https://github.com/LardTom/propwash-camera-drones',
-  'https://github.com/LardTom/propwash-mob-defense',
-  'https://modrinth.com/mod/propwash-fpv',
-];
+// Addresses that go live with the release: the public source repositories and the platform pages that are not live
+// yet (tools/pending-addresses.mjs, from assets/data/platforms.json).
+export const PENDING = pendingAddresses(JSON.parse(fs.readFileSync(path.join(ROOT, 'assets/data/platforms.json'), 'utf8')));
 const SKIP_DIRS = new Set(['node_modules', 'tools', 'assets']);
 
 const failures = [];
@@ -138,9 +134,34 @@ for (const page of pages) {
   check(canonical === expected, `${page}: canonical is ${canonical || 'missing'}, expected ${expected}`);
   const ogUrl = (html.match(/<meta property="og:url" content="([^"]+)">/) || [])[1];
   check(ogUrl === expected, `${page}: og:url is ${ogUrl || 'missing'}, expected ${expected}`);
-  check(/<meta property="og:image" content="https:\/\/propwashfpv\.com\/assets\/img\/og-image\.jpg">/.test(html), `${page}: og:image`);
+  const og = ogFor(page);
+  const ogImage = `https://propwashfpv.com/assets/img/${og.file}`;
+  check(html.includes(`<meta property="og:image" content="${ogImage}">`) && html.includes(`<meta name="twitter:image" content="${ogImage}">`), `${page}: og:image and twitter:image are ${og.file}`);
+  check(html.includes('<meta property="og:image:width" content="1200">') && html.includes('<meta property="og:image:height" content="630">') && /<meta property="og:image:alt" content="[^"]{20,}">/.test(html), `${page}: og:image with size and description`);
+  const ogTitle = (html.match(/<meta property="og:title" content="([^"]*)">/) || [])[1];
+  const ogDescription = (html.match(/<meta property="og:description" content="([^"]*)">/) || [])[1];
+  check(ogTitle && html.includes(`<meta name="twitter:title" content="${ogTitle}">`) && ogDescription && html.includes(`<meta name="twitter:description" content="${ogDescription}">`), `${page}: twitter:title and twitter:description as og:title and og:description`);
+  check(!/API 1\.[0-7]\.\d|Propwash FPV 0\.5\.\d/.test(`${ogTitle} ${ogDescription}`), `${page}: og texts name the 0.6.0 stand (${ogDescription})`);
   check(/<meta name="description" content="[^"]{50,}">/.test(html), `${page}: description`);
   check(/<title>[^<]{5,}<\/title>/.test(html), `${page}: title`);
+}
+
+// The link previews: every variant is a 1200 × 630 JPEG and some page points to it.
+for (const v of OG_VARIANTS) {
+  const file = `assets/img/${v.file}`;
+  if (!check(exists(file), `${file} exists (node tools/build-og-images.mjs)`)) continue;
+  const buf = fs.readFileSync(path.join(ROOT, file));
+  let size = null;
+  for (let i = 2; i < buf.length - 9;) {
+    if (buf[i] !== 0xff) break;
+    const marker = buf[i + 1];
+    const len = buf.readUInt16BE(i + 2);
+    if (marker >= 0xc0 && marker <= 0xc3) { size = { height: buf.readUInt16BE(i + 5), width: buf.readUInt16BE(i + 7) }; break; }
+    i += 2 + len;
+  }
+  check(size && size.width === OG_SIZE.width && size.height === OG_SIZE.height, `${file} is ${OG_SIZE.width} × ${OG_SIZE.height} (${size && `${size.width} × ${size.height}`})`);
+  check(buf.length < 300 * 1024, `${file} stays under 300 KB (${Math.round(buf.length / 1024)} KB)`);
+  check(pages.some((p) => ogFor(p).id === v.id), `${file}: a page points to it`);
 }
 
 // Links inside the data files of the roadmap and the changelog.
@@ -167,7 +188,7 @@ for (const dir of ['assets/img', 'assets/img/docs']) {
   for (const f of fs.readdirSync(path.join(ROOT, dir))) {
     if (!/\.(webp|png|jpg)$/.test(f)) continue;
     const file = `${dir}/${f}`;
-    const metaOnly = f === 'og-image.jpg';
+    const metaOnly = /^og-[a-z-]+\.jpg$/.test(f);
     check(used.has(file) || metaOnly || scripts.includes(f), `${file}: not used by any page`);
   }
 }

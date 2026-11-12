@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js" data-title-en="Propwash: Camera Drones · Propwash FPV" data-title-de="Propwash: Camera Drones · Propwash FPV" data-description-en="Propwash: Camera Drones, the official add-on for camera drones in Propwash FPV: GPS hold, a 3-axis gimbal, missions on the Flight Planner and a second pilot for the camera, for Propwash 0.6.0." data-description-de="Propwash: Camera Drones, das offizielle Add-on für Kameradrohnen in Propwash FPV: GPS-Halten, 3-Achsen-Gimbal, Missionen auf dem Flugplaner und ein zweiter Pilot für die Kamera, für Propwash 0.6.0.">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propwash: Camera Drones · Propwash FPV</title>
+<meta name="description" content="Propwash: Camera Drones, the official add-on for camera drones in Propwash FPV: GPS hold, a 3-axis gimbal, missions on the Flight Planner and a second pilot for the camera, for Propwash 0.6.0.">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="color-scheme" content="dark">
+<meta name="referrer" content="no-referrer">
+<link rel="canonical" href="https://propwashfpv.com/addons/camera-drones/">
+<meta property="og:url" content="https://propwashfpv.com/addons/camera-drones/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Propwash FPV">
+<meta property="og:title" content="Propwash: Camera Drones · Propwash FPV">
+<meta property="og:description" content="Camera drones that fly themselves: GPS hold, a 3-axis gimbal and missions on the Flight Planner, for Propwash FPV 0.6.0.">
+<meta property="og:image" content="https://propwashfpv.com/assets/img/og-addons.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Propwash FPV add-ons: logo and wordmark over the community spawn at dusk, with the line “Just More Parts, Camera Drones and Mob Defense”">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Propwash: Camera Drones · Propwash FPV">
+<meta name="twitter:description" content="Camera drones that fly themselves: GPS hold, a 3-axis gimbal and missions on the Flight Planner, for Propwash FPV 0.6.0.">
+<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-addons.jpg">
+<meta name="twitter:image:alt" content="Propwash FPV add-ons: logo and wordmark over the community spawn at dusk, with the line “Just More Parts, Camera Drones and Mob Defense”">
+<link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../../assets/img/apple-touch-icon.png">
+<link rel="stylesheet" href="../../assets/css/style.css?v=48517aa3">
+<link rel="stylesheet" href="../../assets/css/addons.css?v=35d56a5d">
+<meta name="pw-root" content="../../">
+<script data-pw-head>
+(function () {
+  var d = document.documentElement, lang = null, q = /[?&]lang=(en|de)(?:&|$)/.exec(location.search);
+  d.className = d.className.replace('no-js', 'js');
+  try {
+    if (q) localStorage.setItem('propwash-lang', q[1]);
+    lang = localStorage.getItem('propwash-lang');
+    if (localStorage.getItem('propwash-motion') === 'paused') d.className += ' motion-paused';
+  } catch (e) {}
+  if (q) {
+    lang = q[1];
+    try {
+      var s = location.search.slice(1).split('&').filter(function (p) { return p && !/^lang=/.test(p); }).join('&');
+      history.replaceState(history.state, '', location.pathname + (s ? '?' + s : '') + location.hash);
+    } catch (e) {}
+  }
+  if (lang !== 'en' && lang !== 'de') {
+    var langs = navigator.languages || [navigator.language || 'en'];
+    lang = String(langs[0] || 'en').toLowerCase().indexOf('de') === 0 ? 'de' : 'en';
+  }
+  d.lang = lang;
+})();
+</script>
+</head>
+<body class="addons-page addons-page--addon">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></symbol>
+</svg>
+<a class="skip" href="#parts"><span lang="en">Skip to the parts</span><span lang="de">Zu den Teilen springen</span></a>
+
+<header class="site-header">
+  <div class="wrap site-header__inner">
+    <a class="brand" href="../../" aria-label="Propwash FPV – home page" data-de-aria-label="Propwash FPV – Startseite">
+      <img src="../../assets/img/logo-96.webp" width="36" height="36" alt="">
+      <span class="brand__word">Propwash<span class="brand__fpv">FPV</span></span>
+    </a>
+    <nav class="site-nav" id="site-nav" aria-label="Main" data-de-aria-label="Hauptmenü">
+      <div class="nav-group" data-nav-group>
+        <button type="button" class="nav-group__toggle" aria-expanded="false" aria-controls="nav-features" data-nav-group-toggle><span lang="en">Features</span><span lang="de">Funktionen</span><svg class="nav-group__chev" aria-hidden="true" viewBox="0 0 12 12" width="12" height="12"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></button>
+        <ul class="nav-group__panel" id="nav-features">
+          <li><a href="../../#server"><span class="nav-group__title"><span lang="en">Community server</span><span lang="de">Community-Server</span></span><span class="nav-group__text"><span lang="en">mc.propwashfpv.com, with Fabric or NeoForge</span><span lang="de">mc.propwashfpv.com, mit Fabric oder NeoForge</span></span></a></li>
+          <li><a href="../../#how"><span class="nav-group__title"><span lang="en">Get started</span><span lang="de">Loslegen</span></span><span class="nav-group__text"><span lang="en">Build, bind, fly and race in four steps</span><span lang="de">Bauen, binden, fliegen, rennen in vier Schritten</span></span></a></li>
+          <li><a href="../../#new"><span class="nav-group__title"><span lang="en">What’s new</span><span lang="de">Neuigkeiten</span></span><span class="nav-group__text"><span lang="en">The highlights of the latest update</span><span lang="de">Die Highlights des neuesten Updates</span></span></a></li>
+          <li><a href="../../#flight"><span class="nav-group__title"><span lang="en">Flight &amp; tuning</span><span lang="de">Flug &amp; Tuning</span></span><span class="nav-group__text"><span lang="en">Flight model, Betaflight-style tuning, radio or gamepad</span><span lang="de">Flugmodell, Tuning wie in Betaflight, Funke oder Gamepad</span></span></a></li>
+          <li><a href="../../#video"><span class="nav-group__title">Video</span><span class="nav-group__text"><span lang="en">Analog or digital, and how the picture breaks up</span><span lang="de">Analog oder digital, und wie das Bild zerfällt</span></span></a></li>
+          <li><a href="../../#racing"><span class="nav-group__title"><span lang="en">Racing &amp; freestyle</span><span lang="de">Rennen &amp; Freestyle</span></span><span class="nav-group__text"><span lang="en">Gates, ghosts, leaderboards and tricks</span><span lang="de">Gates, Geister, Bestenlisten und Tricks</span></span></a></li>
+          <li><a href="../../#survival"><span class="nav-group__title"><span lang="en">Survival</span><span lang="de">Überlebensmodus</span></span><span class="nav-group__text"><span lang="en">Crafting, loot, batteries and part wear</span><span lang="de">Herstellen, Beute, Akkus und Verschleiß</span></span></a></li>
+          <li><a href="../../#extras"><span class="nav-group__title"><span lang="en">More details</span><span lang="de">Mehr Details</span></span><span class="nav-group__text"><span lang="en">Lights, action cams, paint, sound and bandos</span><span lang="de">Licht, Action-Cams, Lack, Sound und Bandos</span></span></a></li>
+          <li><a href="../../#gallery"><span class="nav-group__title">Screenshots</span><span class="nav-group__text"><span lang="en">Straight from the game</span><span lang="de">Direkt aus dem Spiel</span></span></a></li>
+          <li><a href="../../#faq"><span class="nav-group__title">FAQ</span><span class="nav-group__text"><span lang="en">Questions before take-off</span><span lang="de">Fragen vor dem Start</span></span></a></li>
+        </ul>
+      </div>
+      <a href="../../docs/"><span lang="en">Docs</span><span lang="de">Doku</span></a>
+      <a href="../../addons/">Add-ons</a>
+      <a href="../../changelog/">Changelog</a>
+      <a href="../../roadmap/">Roadmap</a>
+      <a href="../../#download">Download</a>
+      <a class="site-nav__social" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="16" height="16"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a>
+      <a class="site-nav__cta" href="../../configurator/"><svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18" class="quad-icon"><path d="M6.2 6.2l7.6 7.6M13.8 6.2l-7.6 7.6"/><circle cx="5" cy="5" r="3"/><circle cx="15" cy="5" r="3"/><circle cx="5" cy="15" r="3"/><circle cx="15" cy="15" r="3"/><rect x="8" y="8" width="4" height="4" rx="1"/></svg><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a>
+    </nav>
+    <div class="social">
+      <a class="social__link" href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener" aria-label="Discord" title="Discord"><svg aria-hidden="true" width="20" height="20"><use href="#i-discord"/></svg></a>
+    </div>
+    <div class="lang-switch needs-js" role="group" aria-label="Language" data-de-aria-label="Sprache">
+      <button type="button" data-set-lang="en" aria-pressed="true" lang="en" class="keep">EN</button>
+      <button type="button" data-set-lang="de" aria-pressed="false" lang="de" class="keep">DE</button>
+    </div>
+    <button type="button" class="nav-toggle needs-js" aria-expanded="false" aria-controls="site-nav" aria-label="Menu" data-de-aria-label="Menü" data-nav-toggle>
+      <svg aria-hidden="true" viewBox="0 0 20 20" width="20" height="20"><path class="nav-toggle__open" d="M3 5.5h14M3 10h14M3 14.5h14"/><path class="nav-toggle__close" d="M4.5 4.5l11 11m0-11-11 11"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+  <section class="addons-intro" aria-labelledby="cam-title">
+    <div class="wrap">
+      <p class="kicker"><a href="../">Add-ons</a><span aria-hidden="true"> · </span><span lang="en">Official add-on</span><span lang="de">Offizielles Add-on</span></p>
+      <h1 id="cam-title" class="addons-title">Propwash: Camera Drones</h1>
+      <p class="addons-lead" lang="en">Camera drones that fly themselves, for Propwash FPV. Let go of the sticks and the drone stops in the air: it holds its position by GPS, carries a stabilized 3-axis gimbal camera and flies missions you plan on a tablet. A second player can steer the camera with their own radio.</p>
+      <p class="addons-lead" lang="de">Kameradrohnen, die selbst fliegen, für Propwash FPV. Lass die Knüppel los, und die Drohne bleibt in der Luft stehen: Sie hält ihre Position per GPS, trägt eine stabilisierte 3-Achsen-Gimbal-Kamera und fliegt Missionen, die du auf einem Tablet planst. Ein zweiter Spieler kann die Kamera mit seiner eigenen Funke steuern.</p>
+      <figure class="addon-shot">
+        <img src="../../assets/img/addon-camera-drones-1600.webp" srcset="../../assets/img/addon-camera-drones-800.webp 800w, ../../assets/img/addon-camera-drones-1600.webp 1600w" sizes="(min-width: 1100px) 960px, 100vw" width="1600" height="900" fetchpriority="high" decoding="async" alt="A cine drone with its gimbal camera hovers over a meadow in the evening light, two folding drones fly behind it with their trails" data-de-alt="Eine Cine-Drohne mit Gimbal-Kamera schwebt im Abendlicht über einer Wiese, dahinter fliegen zwei Faltdrohnen mit ihren Spuren">
+      </figure>
+      <!-- addons:facts camdrones -->
+      <dl class="addon-facts">
+        <div><dt>Version</dt><dd><span class="mono">1.0.0</span></dd></div>
+        <div><dt><span lang="en">Needs</span><span lang="de">Braucht</span></dt><dd><span lang="en">Propwash 0.6.0 or newer</span><span lang="de">Propwash 0.6.0 oder neuer</span></dd></div>
+        <div><dt>Minecraft</dt><dd>26.3 <span class="addon-facts__soft">· Fabric · NeoForge</span></dd></div>
+        <div><dt><span lang="en">Parts</span><span lang="de">Teile</span></dt><dd><span class="mono" data-addon-parts-total>19</span> <span class="addon-facts__soft">(3&nbsp;<span lang="en">frames</span><span lang="de">Rahmen</span> · 2&nbsp;<span lang="en">stacks</span><span lang="de">Stacks</span> · 3&nbsp;<span lang="en">motors</span><span lang="de">Motoren</span> · 3&nbsp;<span lang="en">props</span><span lang="de">Props</span> · 2&nbsp;<span lang="en">video systems</span><span lang="de">Videosysteme</span> · 3&nbsp;<span lang="en">batteries</span><span lang="de">Akkus</span> · 3&nbsp;<span lang="en">accessories</span><span lang="de">Zubehörteile</span>)</span></dd></div>
+        <div><dt><span lang="en">License</span><span lang="de">Lizenz</span></dt><dd>PolyForm Shield 1.0.0</dd></div>
+      </dl>
+      <!-- /addons -->
+      <div class="addons-actions">
+        <!-- platforms:buttons camdrones -->
+        <a class="btn btn--ghost" href="https://www.curseforge.com/minecraft/mc-mods/propwash-camera-drones" target="_blank" rel="noopener" aria-label="Camera Drones: CurseForge · in review" data-de-aria-label="Camera Drones: CurseForge · in Prüfung"><span class="soon-dot" aria-hidden="true"></span><span lang="en">CurseForge · in review</span><span lang="de">CurseForge · in Prüfung</span></a>
+        <a class="btn btn--ghost" href="https://modrinth.com/mod/propwash-camera-drones" target="_blank" rel="noopener" aria-label="Camera Drones: Modrinth · in review" data-de-aria-label="Camera Drones: Modrinth · in Prüfung"><span class="soon-dot" aria-hidden="true"></span><span lang="en">Modrinth · in review</span><span lang="de">Modrinth · in Prüfung</span></a>
+        <a class="btn btn--ghost btn--icon" href="https://github.com/LardTom/propwash-camera-drones" target="_blank" rel="noopener" aria-label="Source code of Propwash: Camera Drones" data-de-aria-label="Quellcode von Propwash: Camera Drones" title="Source code of Propwash: Camera Drones" data-de-title="Quellcode von Propwash: Camera Drones"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg></a>
+        <!-- /platforms -->
+        <a class="btn btn--ghost" href="../../configurator/?addon=camdrones"><span lang="en">Show in the configurator</span><span lang="de">Im Konfigurator zeigen</span></a>
+      </div>
+      <p class="addon-server"><svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><rect x="2" y="2.5" width="12" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="2" y="9.5" width="12" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="5" cy="4.5" r="0.9" fill="currentColor"/><circle cx="5" cy="11.5" r="0.9" fill="currentColor"/></svg><span lang="en">Play Propwash with others on the community server <span class="mono">mc.propwashfpv.com</span>, with Fabric or NeoForge.</span><span lang="de">Spiel Propwash mit anderen auf dem Community-Server <span class="mono">mc.propwashfpv.com</span>, mit Fabric oder NeoForge.</span> <a href="../../#server"><span lang="en">About the server</span><span lang="de">Zum Server</span></a></p>
+    </div>
+  </section>
+
+  <div class="wrap addon-page">
+    <section class="addons-group" id="brings" aria-labelledby="brings-title">
+      <h2 id="brings-title" class="addons-h2"><span lang="en">What it brings</span><span lang="de">Was es mitbringt</span></h2>
+      <ul class="addons-list">
+        <li lang="en"><strong>Compact, Tour and Cine:</strong> 244 g and about 30 min of hover, 720 g and about 41 min with a wide and a tele camera, or 3.8 kg and about 26 min with a 360° gimbal and lenses of 24, 50 and 85 mm. Ready to fly in their own creative tab.</li>
+        <li lang="de"><strong>Compact, Tour und Cine:</strong> 244 g und etwa 30 min Schwebeflug, 720 g und etwa 41 min mit Weitwinkel- und Telekamera oder 3,8 kg und etwa 26 min mit 360°-Gimbal und Objektiven mit 24, 50 und 85 mm. Flugfertig in ihrem eigenen Kreativ-Tab.</li>
+        <li lang="en"><strong>19 parts with real-world values:</strong> folding frames, nav flight controllers with GPS, compass and barometer, low-KV motors, folding props, smart batteries, digital camera links and gimbals. Every part has a survival recipe, and you build at Propwash’s workbench.</li>
+        <li lang="de"><strong>19 Teile mit echten Werten:</strong> Faltrahmen, Nav-Flight-Controller mit GPS, Kompass und Barometer, Motoren mit niedriger KV, Faltpropeller, Smart-Akkus, digitale Kameralinks und Gimbals. Jedes Teil hat ein Rezept im Überlebensmodus, gebaut wird an der Werkbank von Propwash.</li>
+        <li lang="en"><strong>Propwash’s own physics:</strong> wind, gusts, prop wash and the battery curve stay as they are. The add-on brings the parts and a flight assist on top.</li>
+        <li lang="de"><strong>Die Physik von Propwash:</strong> Wind, Böen, Propwash und die Akkukurve bleiben, wie sie sind. Das Add-on bringt die Teile und eine Flughilfe obendrauf.</li>
+        <li lang="en"><strong>Obstacle sensors:</strong> the Nav Flight Controller Pro (Tour and Cine) slows down in front of walls and stops about 1.5 m away, with a beep that gets faster.</li>
+        <li lang="de"><strong>Hindernissensoren:</strong> Der Nav Flight Controller Pro (Tour und Cine) bremst vor Wänden und hält etwa 1,5 m davor, mit einem Piepen, das schneller wird.</li>
+        <li lang="en"><strong>Two cameras:</strong> the FPV camera is for the pilot, the stabilized gimbal for the shot, and <kbd>Delete</kbd> switches your view. Save the gimbal picture as a video or photo, or record its camera path for Flashback (Fabric).</li>
+        <li lang="de"><strong>Zwei Kameras:</strong> Die FPV-Kamera ist für den Piloten, das stabilisierte Gimbal für die Aufnahme, und <kbd>Entf</kbd> wechselt die Sicht. Speichere das Gimbal-Bild als Video oder Foto oder nimm seinen Kamerapfad für Flashback (Fabric) auf.</li>
+      </ul>
+    </section>
+    <section class="addons-group" id="start" aria-labelledby="start-title">
+      <h2 id="start-title" class="addons-h2"><span lang="en">Getting started</span><span lang="de">Erste Schritte</span></h2>
+      <ol class="addons-list addons-list--steps">
+        <li><span lang="en">Put Camera Drones next to Propwash FPV 0.6.0 into the <span class="mono">mods</span> folder (Fabric or NeoForge), on the server and on every client.</span><span lang="de">Leg Camera Drones neben Propwash FPV 0.6.0 in den Ordner <span class="mono">mods</span> (Fabric oder NeoForge), auf dem Server und auf jedem Client.</span></li>
+        <li><span lang="en">Take a ready-to-fly <em>Compact</em>, <em>Tour</em> or <em>Cine</em> from the add-on’s creative tab, or craft the parts and build the drone at Propwash’s workbench.</span><span lang="de">Nimm eine flugfertige <em>Compact</em>, <em>Tour</em> oder <em>Cine</em> aus dem Kreativ-Tab des Add-ons, oder stell die Teile her und bau die Drohne an der Werkbank von Propwash.</span></li>
+        <li><span lang="en">Fly it like any Propwash drone. Let go of the sticks and it holds its position.</span><span lang="de">Flieg sie wie jede Drohne von Propwash. Lässt du die Knüppel los, hält sie ihre Position.</span></li>
+        <li><span lang="en">Sneak and right-click your parked drone with the <strong>Flight Planner</strong> to pair it. Click blocks to set waypoints, then press <em>Send</em> and <em>Start</em>.</span><span lang="de">Klick deine abgestellte Drohne schleichend mit dem <strong>Flugplaner</strong> an, um sie zu koppeln. Klick Blöcke an, um Wegpunkte zu setzen, und drück dann <em>Senden</em> und <em>Start</em>.</span></li>
+      </ol>
+      <p lang="en">Four Flight School chapters show the add-on in short scenes: hold <kbd>M</kbd> over a camera part, the Flight Planner or the landing pad.</p>
+      <p lang="de">Vier Kapitel der Flugschule zeigen das Add-on in kurzen Szenen: Halt <kbd>M</kbd> über ein Kamerateil, den Flugplaner oder den Landeplatz.</p>
+    </section>
+    <section class="addons-group" id="modes" aria-labelledby="modes-title">
+      <h2 id="modes-title" class="addons-h2"><span lang="en">Flight modes</span><span lang="de">Flugmodi</span></h2>
+      <p lang="en">Camera drones fly by speed, not by rotation rates: the sticks set how fast the drone moves, and when you let go it brakes and holds. The flight mode key and the flight mode switch of your radio choose the mode, just like Propwash’s modes.</p>
+      <p lang="de">Kameradrohnen fliegen nach Tempo, nicht nach Drehraten: Die Knüppel geben vor, wie schnell sich die Drohne bewegt, und lässt du los, bremst sie und hält. Die Flugmodus-Taste und der Flugmodus-Schalter deiner Funke wählen den Modus, genau wie die Modi von Propwash.</p>
+      <div class="addons-table-wrap">
+        <table class="addons-table">
+          <thead><tr><th scope="col"><span lang="en">Mode</span><span lang="de">Modus</span></th><th scope="col"><span lang="en">What it does</span><span lang="de">Was er macht</span></th></tr></thead>
+          <tbody>
+            <tr><td class="mono">N</td><td><span lang="en">Normal: the sticks set the speed, let go and the drone brakes and holds its position by GPS. The default, on Propwash’s mode <em>Angle</em>.</span><span lang="de">Normal: Die Knüppel geben das Tempo vor, loslassen bremst, und die Drohne hält ihre Position per GPS. Der Standard, auf dem Modus <em>Angle</em> von Propwash.</span></td></tr>
+            <tr><td class="mono">C</td><td><span lang="en">Cine: like N with smoothed sticks, cine speed and a slow yaw for calm shots. On <em>Horizon</em>.</span><span lang="de">Cine: wie N mit geglätteten Knüppeln, Cine-Tempo und langsamer Gier für ruhige Aufnahmen. Auf <em>Horizon</em>.</span></td></tr>
+            <tr><td class="mono">S</td><td><span lang="en">Sport: manual flight up to the Sport speed of the class, without obstacle braking. The fastest mode, on <em>Acro</em>.</span><span lang="de">Sport: manueller Flug bis zum Sport-Tempo der Klasse, ohne Bremsen vor Hindernissen. Der schnellste Modus, auf <em>Acro</em>.</span></td></tr>
+            <tr><td class="mono">ATTI</td><td><span lang="en">Without a GPS fix (in caves, under blocks) or with a compass error the drone only holds its height and drifts with the wind; the OSD says so.</span><span lang="de">Ohne GPS-Empfang (in Höhlen, unter Blöcken) oder mit Kompassfehler hält die Drohne nur ihre Höhe und treibt mit dem Wind; das OSD sagt es an.</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p lang="en">By default the drone climbs at most 120 m above its take-off point, a world rule. Propwash’s GPS rescue brings it home like every Propwash drone, and at 20 % battery the flight assist starts the return home once by itself.</p>
+      <p lang="de">Standardmäßig steigt die Drohne höchstens 120 m über ihren Startpunkt, eine Welt-Regel. Die GPS-Rettung von Propwash holt sie zurück wie jede Drohne von Propwash, und bei 20 % Akku startet die Flughilfe die Heimkehr einmal von selbst.</p>
+    </section>
+    <section class="addons-group" id="planner" aria-labelledby="planner-title">
+      <h2 id="planner-title" class="addons-h2"><span lang="en">Flight Planner</span><span lang="de">Flugplaner</span></h2>
+      <p lang="en">The Flight Planner is a tablet you hold in your hand; your radio stays Propwash’s radio. Click blocks to drop waypoints into the world, add them in flight or record a flight. The editor shows a map from above and a list of waypoints with height, speed, wait time, gimbal tilt, look direction and photo or recording actions, templates for a circle, a reveal and a line, and the length, time and battery a mission needs.</p>
+      <p lang="de">Der Flugplaner ist ein Tablet, das du in der Hand hältst; deine Funke bleibt die Funke von Propwash. Klick Blöcke an, um Wegpunkte in die Welt zu setzen, setz sie im Flug oder nimm einen Flug auf. Der Editor zeigt eine Karte von oben und eine Liste der Wegpunkte mit Höhe, Tempo, Wartezeit, Gimbal-Neigung, Blickrichtung und Foto- oder Aufnahme-Aktionen, Vorlagen für einen Kreis, einen Reveal und eine Linie und die Länge, Zeit und den Akku, die eine Mission braucht.</p>
+      <ul class="addons-list">
+        <li lang="en"><strong>Send and start:</strong> the drone takes off by itself, flies the mission and keeps flying when you take off the goggles. Put them back on and you take over.</li>
+        <li lang="de"><strong>Senden und starten:</strong> Die Drohne startet von selbst, fliegt die Mission und fliegt weiter, wenn du die Brille absetzt. Setzt du sie wieder auf, übernimmst du.</li>
+        <li lang="en"><strong>Hold, follow me, point of interest and course lock:</strong> an air tripod for minutes at a time, a drone that follows you, circles what is in the middle of the picture or flies straight while the camera turns.</li>
+        <li lang="de"><strong>Halten, Follow me, Point of Interest und Kurs halten:</strong> ein Stativ in der Luft für Minuten, eine Drohne, die dir folgt, kreist um das, was in der Bildmitte ist, oder geradeaus fliegt, während die Kamera dreht.</li>
+        <li lang="en"><strong>Landing pad:</strong> put it where the drone should land. A camera drone flying without a pilot centres itself above the pad and touches down in its middle.</li>
+        <li lang="de"><strong>Landeplatz:</strong> Stell ihn dorthin, wo die Drohne landen soll. Eine Kameradrohne, die ohne Pilot fliegt, richtet sich über dem Platz aus und setzt in seiner Mitte auf.</li>
+        <li lang="en"><strong>Waypoint actions:</strong> take a photo, start or stop a recording, or press an accessory action like the keys in flight, for example a dispenser of Mob Defense or Propwash’s gripper.</li>
+        <li lang="de"><strong>Wegpunkt-Aktionen:</strong> ein Foto machen, eine Aufnahme starten oder stoppen oder eine Zubehör-Aktion auslösen wie die Tasten im Flug, etwa einen Dispenser aus Mob Defense oder den Greifer von Propwash.</li>
+        <li lang="en"><strong>FPV drones too:</strong> the planner also flies freestyle, race and long-range drones on the GPS of their flight controller, as long as nobody is wearing the goggles.</li>
+        <li lang="de"><strong>Auch FPV-Drohnen:</strong> Der Planer fliegt auch Freestyle-, Race- und Long-Range-Drohnen über das GPS ihres Flight-Controllers, solange niemand die Brille trägt.</li>
+      </ul>
+    </section>
+    <section class="addons-group" id="pilots" aria-labelledby="pilots-title">
+      <h2 id="pilots-title" class="addons-h2"><span lang="en">Gimbal and two pilots</span><span lang="de">Gimbal und zwei Piloten</span></h2>
+      <p lang="en">The gimbal keeps the horizon level while the drone rolls, tilts down to −90° and never shows the props. Invite a player within 16 blocks as camera operator, with <em>Crew</em> in the drone’s service menu or <span class="mono">/camdrones crew invite &lt;player&gt;</span>: they pan, tilt, zoom, record and take photos with their own radio while you fly. The camera keeps its direction in the world when you turn the drone; the cine gimbal pans all the way round.</p>
+      <p lang="de">Das Gimbal hält den Horizont gerade, während die Drohne rollt, neigt sich bis −90° und zeigt nie die Props. Lade einen Spieler im Umkreis von 16 Blöcken als Kameramann ein, mit <em>Crew</em> im Wartungsmenü der Drohne oder <span class="mono">/camdrones crew invite &lt;spieler&gt;</span>: Er schwenkt, neigt, zoomt, nimmt auf und macht Fotos mit seiner eigenen Funke, während du fliegst. Die Kamera behält ihre Richtung in der Welt, wenn du die Drohne drehst; das Cine-Gimbal schwenkt ganz herum.</p>
+    </section>
+    <section class="addons-group" id="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title" class="addons-h2"><span lang="en">FAQ</span><span lang="de">Häufige Fragen</span></h2>
+      <details class="addon-faq" id="cam-faq-1">
+        <summary><span lang="en">What is different from FPV?</span><span lang="de">Was ist anders als FPV?</span></summary>
+        <p lang="en">A camera drone flies by speed, not by rotation rates: let go of the sticks and it stops in the air. It flies slower, much longer and films with a stabilized camera. For acrobatics and racing, take an FPV quad.</p>
+      <p lang="de">Eine Kameradrohne fliegt nach Tempo, nicht nach Drehraten: Lass die Knüppel los, und sie bleibt in der Luft stehen. Sie fliegt langsamer, viel länger und filmt mit einer stabilisierten Kamera. Für Akrobatik und Rennen nimm einen FPV-Quad.</p>
+      </details>
+      <details class="addon-faq" id="cam-faq-2">
+        <summary><span lang="en">Why does my drone say ATTI?</span><span lang="de">Warum steht ATTI im OSD?</span></summary>
+        <p lang="en">It has no usable position: no GPS fix under blocks or in caves, or a compass error. In ATTI it holds only its height, drifts with the wind and the obstacle sensors don’t brake. Fly back into the open; with a compass error, land and start again.</p>
+      <p lang="de">Sie hat keine brauchbare Position: kein GPS-Empfang unter Blöcken oder in Höhlen oder einen Kompassfehler. In ATTI hält sie nur ihre Höhe, treibt mit dem Wind, und die Hindernissensoren bremsen nicht. Flieg zurück ins Freie; bei einem Kompassfehler lande und starte neu.</p>
+      </details>
+      <details class="addon-faq" id="cam-faq-3">
+        <summary><span lang="en">Why did my mission end?</span><span lang="de">Warum endet die Mission?</span></summary>
+        <p lang="en">The chat message tells you why: you put the goggles on and took over, the drone landed, the battery ran low, you went offline, the drone left radio range, the time limit of the world rule was reached, someone stopped it, or another flight without a pilot replaced it.</p>
+      <p lang="de">Die Chatnachricht sagt es dir: Du hast die Brille aufgesetzt und übernommen, die Drohne ist gelandet, der Akku wurde knapp, du bist offline gegangen, die Drohne hat die Funkreichweite verlassen, das Zeitlimit der Welt-Regel war erreicht, jemand hat sie gestoppt, oder ein anderer Flug ohne Pilot hat sie abgelöst.</p>
+      </details>
+      <details class="addon-faq" id="cam-faq-4">
+        <summary><span lang="en">Can I use the Flight Planner with my freestyle drone?</span><span lang="de">Kann ich den Flugplaner mit meiner Freestyle-Drohne nutzen?</span></summary>
+        <p lang="en">Yes. Every Propwash drone has GPS in its flight controller. It needs a clear view of the sky and flies missions only without a pilot.</p>
+      <p lang="de">Ja. Jede Drohne von Propwash hat GPS im Flight-Controller. Sie braucht freie Sicht zum Himmel und fliegt Missionen nur ohne Pilot.</p>
+      </details>
+      <details class="addon-faq" id="cam-faq-5">
+        <summary><span lang="en">Why was a waypoint action skipped?</span><span lang="de">Warum wurde eine Wegpunkt-Aktion übersprungen?</span></summary>
+        <p lang="en">The chat message and the tooltip in the editor name the reason, for example no accessory with actions on the drone or no gripper for <em>Release gripper</em>. A dispenser follows its own rules: empty slot, cooldown, spawn protection or adventure mode.</p>
+      <p lang="de">Die Chatnachricht und der Tooltip im Editor nennen den Grund, etwa kein Zubehör mit Aktionen an der Drohne oder kein Greifer für <em>Greifer öffnen</em>. Ein Dispenser folgt seinen eigenen Regeln: leerer Slot, Abklingzeit, Spawn-Schutz oder Abenteuermodus.</p>
+      </details>
+      <details class="addon-faq" id="cam-faq-6">
+        <summary><span lang="en">Can I share a camera drone as a share code?</span><span lang="de">Kann ich eine Kamera-Drohne als Sharecode teilen?</span></summary>
+        <p lang="en">Yes, like every Propwash drone: in the game, in the configurator and on this website. Missions are not part of share codes. Someone without the add-on sees its name and where to get it, and a stand-in built from Propwash parts.</p>
+      <p lang="de">Ja, wie jede Drohne von Propwash: im Spiel, im Konfigurator und auf dieser Website. Missionen gehören nicht zum Sharecode. Wer das Add-on nicht hat, sieht seinen Namen und wo es es gibt, dazu einen Ersatz aus Teilen von Propwash.</p>
+      </details>
+      <details class="addon-faq" id="cam-faq-7">
+        <summary><span lang="en">Does it need to be installed on the server?</span><span lang="de">Muss das Add-on auf den Server?</span></summary>
+        <p lang="en">Yes, on the server and on every client. A player without the add-on gets Propwash’s join message with the name and version of the missing add-on instead of an error.</p>
+      <p lang="de">Ja, auf den Server und auf jeden Client. Ein Spieler ohne das Add-on bekommt beim Beitreten die Meldung von Propwash mit Name und Version des fehlenden Add-ons statt eines Fehlers.</p>
+      </details>
+    </section>
+    <section class="addons-group" id="compatibility" aria-labelledby="compatibility-title">
+      <h2 id="compatibility-title" class="addons-h2"><span lang="en">Versions and servers</span><span lang="de">Versionen und Server</span></h2>
+      <ul class="addons-list">
+        <li lang="en">Camera Drones 1.0.0 needs Propwash 0.6.0 or newer, on Fabric or NeoForge, on the server and on every client.</li>
+        <li lang="de">Camera Drones 1.0.0 braucht Propwash ab 0.6.0, auf Fabric oder NeoForge, auf dem Server und auf jedem Client.</li>
+        <li lang="en">The server decides: it checks every mission, follow target and crew request. World rules in their own section <em>Camera Drones</em> set flights without a pilot, following other players (off by default and always with their consent), the second pilot, the altitude and distance limit and the time limit of flights without a pilot. None of them touches FPV races.</li>
+        <li lang="de">Der Server entscheidet: Er prüft jede Mission, jedes Ziel von Follow me und jede Crew-Anfrage. Welt-Regeln in ihrem eigenen Abschnitt <em>Camera Drones</em> legen Flüge ohne Pilot fest, das Folgen anderer Spieler (standardmäßig aus und immer mit ihrer Zustimmung), den zweiten Piloten, die Höhen- und Entfernungsgrenze und das Zeitlimit für Flüge ohne Pilot. Keine davon berührt FPV-Rennen.</li>
+        <li lang="en">Works with Just More Parts and Mob Defense. Camera drones and Mob Defense both use the front mount, so one drone carries either a gimbal or a Mob Defense accessory.</li>
+        <li lang="de">Läuft zusammen mit Just More Parts und Mob Defense. Kameradrohnen und Mob Defense nutzen beide die vordere Halterung, eine Drohne trägt also entweder ein Gimbal oder ein Zubehörteil aus Mob Defense.</li>
+      </ul>
+    </section>
+
+    <section class="addons-group" id="parts" aria-labelledby="parts-title">
+      <h2 id="parts-title" class="addons-h2"><span lang="en">All parts</span><span lang="de">Alle Teile</span></h2>
+      <!-- addons:parts camdrones -->
+      <details class="addon-parts" data-category="frame">
+        <summary><span lang="en">Frames</span><span lang="de">Rahmen</span> <span class="addon-parts__count">3</span></summary>
+        <ul class="addon-parts__list">
+          <li data-part="camdrones:compact_fold_frame"><span lang="en">Compact Folding Frame (250 mm)</span><span lang="de">Faltrahmen Kompakt (250 mm)</span></li>
+          <li data-part="camdrones:tour_fold_frame"><span lang="en">Tour Folding Frame (380 mm)</span><span lang="de">Faltrahmen Tour (380 mm)</span></li>
+          <li data-part="camdrones:cine_frame"><span lang="en">Cine Frame (695 mm)</span><span lang="de">Kino-Rahmen (695 mm)</span></li>
+        </ul>
+      </details>
+      <details class="addon-parts" data-category="stack">
+        <summary>Stacks <span class="addon-parts__count">2</span></summary>
+        <ul class="addon-parts__list">
+          <li data-part="camdrones:nav_fc_compact"><span lang="en">Nav Flight Controller Compact (2–4S, 12 A)</span><span lang="de">Nav-FC Kompakt (2–4S, 12 A)</span></li>
+          <li data-part="camdrones:nav_fc_pro"><span lang="en">Nav Flight Controller Pro (3–6S, 45 A)</span><span lang="de">Nav-FC Pro (3–6S, 45 A)</span></li>
+        </ul>
+      </details>
+      <details class="addon-parts" data-category="motor">
+        <summary><span lang="en">Motors</span><span lang="de">Motoren</span> <span class="addon-parts__count">3</span></summary>
+        <ul class="addon-parts__list">
+          <li data-part="camdrones:m1404_1600"><span lang="en">1404 Motor, 1600 KV</span><span lang="de">1404-Motor, 1600 KV</span></li>
+          <li data-part="camdrones:m2008_500"><span lang="en">2008 Motor, 500 KV</span><span lang="de">2008-Motor, 500 KV</span></li>
+          <li data-part="camdrones:m4114_320"><span lang="en">4114 Motor, 320 KV</span><span lang="de">4114-Motor, 320 KV</span></li>
+        </ul>
+      </details>
+      <details class="addon-parts" data-category="prop">
+        <summary>Props <span class="addon-parts__count">3</span></summary>
+        <ul class="addon-parts__list">
+          <li data-part="camdrones:fold_6"><span lang="en">6″ Folding Propeller (2-blade, 3.3″ pitch)</span><span lang="de">6-Zoll-Faltpropeller (Zweiblatt, 3,3″ Steigung)</span></li>
+          <li data-part="camdrones:fold_9"><span lang="en">9″ Folding Propeller (2-blade, 4.5″ pitch)</span><span lang="de">9-Zoll-Faltpropeller (Zweiblatt, 4,5″ Steigung)</span></li>
+          <li data-part="camdrones:fold_15"><span lang="en">15″ Folding Propeller (2-blade, 7.5″ pitch, carbon-fiber nylon)</span><span lang="de">15-Zoll-Faltpropeller (Zweiblatt, 7,5″ Steigung, Carbon-Nylon)</span></li>
+        </ul>
+      </details>
+      <details class="addon-parts" data-category="video">
+        <summary>Video <span class="addon-parts__count">2</span></summary>
+        <ul class="addon-parts__list">
+          <li data-part="camdrones:cam_link_compact"><span lang="en">Camera Link Compact (digital, 120 ms)</span><span lang="de">Kamera-Funk Kompakt (digital, 120 ms)</span></li>
+          <li data-part="camdrones:cam_link_pro"><span lang="en">Camera Link Pro (digital, 100 ms)</span><span lang="de">Kamera-Funk Pro (digital, 100 ms)</span></li>
+        </ul>
+      </details>
+      <details class="addon-parts" data-category="battery">
+        <summary><span lang="en">Batteries</span><span lang="de">Akkus</span> <span class="addon-parts__count">3</span></summary>
+        <ul class="addon-parts__list">
+          <li data-part="camdrones:smart_2s_3850_lion"><span lang="en">2S 3850 mAh Smart Battery (Li-Ion)</span><span lang="de">2S-Smart-Akku 3850 mAh (Li-Ion)</span></li>
+          <li data-part="camdrones:smart_4s_4240_hv"><span lang="en">4S 4240 mAh Smart Battery (LiHV)</span><span lang="de">4S-Smart-Akku 4240 mAh (LiHV)</span></li>
+          <li data-part="camdrones:smart_6s_8560_hv"><span lang="en">6S 8560 mAh Smart Double Pack (LiHV)</span><span lang="de">6S-Smart-Doppelpack 8560 mAh (LiHV)</span></li>
+        </ul>
+      </details>
+      <details class="addon-parts" data-category="accessory">
+        <summary><span lang="en">Accessories</span><span lang="de">Zubehör</span> <span class="addon-parts__count">3</span></summary>
+        <ul class="addon-parts__list">
+          <li data-part="camdrones:gimbal_compact"><span lang="en">3-Axis Gimbal Compact</span><span lang="de">3-Achsen-Gimbal Kompakt</span></li>
+          <li data-part="camdrones:gimbal_tour"><span lang="en">3-Axis Gimbal Tour (wide and tele)</span><span lang="de">3-Achsen-Gimbal Tour (Weitwinkel und Tele)</span></li>
+          <li data-part="camdrones:gimbal_cine"><span lang="en">360° Cine Gimbal (lens bay)</span><span lang="de">360°-Kino-Gimbal (Objektiv-Fach)</span></li>
+        </ul>
+      </details>
+      <!-- /addons -->
+    </section>
+
+    <section class="addons-group" id="license" aria-labelledby="license-title">
+      <h2 id="license-title" class="addons-h2"><span lang="en">License and source code</span><span lang="de">Lizenz und Quellcode</span></h2>
+      <p lang="en">Camera Drones is source-available under the <a href="https://polyformproject.org/licenses/shield/1.0.0" target="_blank" rel="noopener">PolyForm Shield License 1.0.0</a> with additional permissions, like Propwash FPV: modpacks may include the unchanged release files, and an exit clause makes the code MIT licensed after 12 months without a release or maintainer activity. The documentation is MIT licensed. <a href="../../docs/license/">What the licenses allow, in plain words</a>.</p>
+      <p lang="de">Camera Drones ist wie Propwash FPV source-available, unter der <a href="https://polyformproject.org/licenses/shield/1.0.0" target="_blank" rel="noopener">PolyForm Shield License 1.0.0</a> mit Zusatzerlaubnissen: Modpacks dürfen die unveränderten Release-Dateien enthalten, und eine Ausstiegsklausel stellt den Code unter MIT, wenn es 12 Monate lang kein Release und keine Aktivität des Maintainers gibt. Die Doku steht unter der MIT-Lizenz. <a href="../../docs/license/">Was die Lizenzen erlauben, in klaren Worten</a>.</p>
+      <div class="addons-actions">
+        <!-- platforms:source camdrones -->
+        <a class="btn btn--ghost btn--icon" href="https://github.com/LardTom/propwash-camera-drones" target="_blank" rel="noopener" aria-label="Source code of Propwash: Camera Drones" data-de-aria-label="Quellcode von Propwash: Camera Drones" title="Source code of Propwash: Camera Drones" data-de-title="Quellcode von Propwash: Camera Drones"><svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 .3a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.3.7-4-1.4-4-1.4-.6-1.4-1.4-1.8-1.4-1.8-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.7-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.7 1.7.3 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .3"/></svg></a>
+        <!-- /platforms -->
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap site-footer__inner">
+    <div class="site-footer__brand">
+      <img src="../../assets/img/logo-96.webp" width="40" height="40" alt="" loading="lazy">
+      <p><strong>Propwash FPV</strong> by lardtom</p>
+      <p class="site-footer__links"><a href="https://discord.gg/bNhkSXYSgZ" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14"><path fill="currentColor" d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg> Discord</a> · <a href="https://www.curseforge.com/minecraft/mc-mods/propwash-fpv" target="_blank" rel="noopener">CurseForge</a> · <a href="https://modrinth.com/mod/propwash-fpv" target="_blank" rel="noopener">Modrinth</a> · <a href="../../configurator/"><span lang="en">Configurator</span><span lang="de">Konfigurator</span></a> · <a href="../../docs/"><span lang="en">Docs</span><span lang="de">Doku</span></a> · <a href="../../changelog/">Changelog</a> · <a href="../../roadmap/">Roadmap</a> · <a href="https://github.com/LardTom/propwash-fpv" target="_blank" rel="noopener"><span lang="en">Source code</span><span lang="de">Quellcode</span></a> · <a href="../../brand/"><span lang="en">Brand kit</span><span lang="de">Presse &amp; Brand</span></a> · <a href="../../impressum/"><span lang="en">Legal notice</span><span lang="de">Impressum</span></a> · <a href="../../datenschutz/"><span lang="en">Privacy policy</span><span lang="de">Datenschutz</span></a></p>
+    </div>
+    <div class="site-footer__legal">
+      <p lang="en" class="keep legal-mc">Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</p>
+      <p lang="de" class="keep legal-mc">Kein offizielles Minecraft-Produkt. Nicht von Mojang oder Microsoft genehmigt oder mit Mojang oder Microsoft verbunden.</p>
+      <p class="site-footer__small" lang="en">No cookies, no tracking&nbsp;– only your language choice and whether you paused the animations are kept in your browser. An add-on jar you open in the configurator is only read in your browser and never uploaded. Fonts: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> and <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (both SIL Open Font License), served from this site.</p>
+      <p class="site-footer__small" lang="de">Keine Cookies, kein Tracking&nbsp;– nur deine Sprachwahl und ob du die Animationen angehalten hast, bleiben in deinem Browser. Ein Add-on-Jar, das du im Konfigurator öffnest, liest nur dein Browser; es wird nie hochgeladen. Schriften: <a href="../../assets/fonts/OFL-Saira.txt">Saira</a> und <a href="../../assets/fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> (beide SIL Open Font License), direkt von dieser Seite geladen.</p>
+    </div>
+    <a class="site-footer__top" href="#main"><span lang="en">Back to top</span><span lang="de">Nach oben</span></a>
+  </div>
+</footer>
+
+<script src="../../assets/js/main.js?v=ec58625d" defer></script>
+
+</body>
+</html>

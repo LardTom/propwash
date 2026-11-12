@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "source": "Propwash 0.6.0-dev.14, assets/propwash/lang/en_us.json",
+ "source": "Propwash 0.6.0, assets/propwash/lang/en_us.json",
  "terms": [
   "A / Cross",
   "Above the Build Limit",
@@ -196,6 +196,7 @@
   "Blocky",
   "Blue",
   "Boost",
+  "Bosses fight drones",
   "Bottom accessory",
   "Bottom Y",
   "Box",
