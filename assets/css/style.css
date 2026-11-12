@@ -1842,12 +1842,17 @@ html.motion-paused .tape__track {
 .signal__range {
   --fill: 0%;
   width: 100%;
-  height: 32px;
+  height: 36px;
   margin: 0;
   background: transparent;
   cursor: pointer;
+  touch-action: pan-y;
   -webkit-appearance: none;
   appearance: none;
+}
+
+.signal__range:active {
+  cursor: grabbing;
 }
 
 .signal__range::-webkit-slider-runnable-track {
@@ -1859,9 +1864,9 @@ html.motion-paused .tape__track {
 .signal__range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 22px;
-  height: 22px;
-  margin-top: -8px;
+  width: 24px;
+  height: 24px;
+  margin-top: -9px;
   border: 3px solid var(--field);
   border-radius: 4px;
   background: var(--accent);
@@ -1938,12 +1943,14 @@ html.motion-paused .tape__track {
   min-width: 0;
 }
 
+.vlab__systems {
+  display: grid;
+  gap: 14px;
+}
+
 @media (min-width: 700px) and (max-width: 1059px) {
-  .vlab__notes {
+  .vlab__systems {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .vnote--plain {
-    grid-column: 1 / -1;
   }
 }
 
@@ -1954,6 +1961,77 @@ html.motion-paused .tape__track {
   background: var(--bg);
   color: var(--muted);
   transition: border-color 0.3s, background-color 0.3s;
+}
+
+/* The cards ANALOG and DIGITAL switch the system (owner finding OF-10): the radio in the heading stretches over the
+   whole card, a box in front of the name shows which one is on. */
+.vlab__systems .vnote {
+  position: relative;
+}
+
+.vlab__systems .vnote:hover {
+  border-color: var(--border-strong);
+}
+
+.vlab__systems .vnote.is-active,
+.vlab__systems .vnote.is-active:hover {
+  border-color: var(--accent);
+}
+
+.vlab__systems .vnote:has(.vnote__pick:focus-visible) {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.vnote__pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.vnote__pick::before {
+  content: "";
+  box-sizing: border-box;
+  width: 14px;
+  height: 14px;
+  flex: none;
+  border: 2px solid var(--border-strong);
+  border-radius: 3px;
+  background: transparent;
+  transition: border-color 0.2s, background-color 0.2s, box-shadow 0.2s;
+}
+
+.vnote__pick[aria-checked="true"]::before {
+  border-color: var(--accent);
+  background: var(--accent);
+  box-shadow: inset 0 0 0 2px var(--bg);
+}
+
+.vnote__pick::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.vnote__pick:focus-visible {
+  outline: none;
+}
+
+html.no-js .vnote__pick {
+  pointer-events: none;
+}
+
+html.no-js .vnote__pick::before {
+  display: none;
 }
 
 .vnote h3 {

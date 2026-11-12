@@ -26,7 +26,7 @@
 <meta name="twitter:image:alt" content="Propwash FPV: logo and wordmark over the community spawn at dusk, with the line “Real FPV drone racing in Minecraft”">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
-<link rel="stylesheet" href="assets/css/style.css?v=a4545679">
+<link rel="stylesheet" href="assets/css/style.css?v=65fe2d7e">
 <meta name="pw-root" content="./">
 <script data-pw-head>
 (function () {
@@ -544,7 +544,7 @@
               <img class="feed__img" loading="lazy" src="assets/img/video-analog-stage5-1600.webp" srcset="assets/img/video-analog-stage5-800.webp 800w, assets/img/video-analog-stage5-1600.webp 1600w" sizes="(min-width: 1060px) 760px, 100vw" width="1600" height="900" decoding="async" alt="Analog video lost: full static and NO VIDEO in the OSD" data-de-alt="Analoges Video weg: volles Rauschen, im OSD „NO VIDEO“">
             </div>
             <div class="vlab__set" data-system="digital" hidden>
-              <img class="feed__img is-active" loading="lazy" src="assets/img/action-cam-rec-osd-1600.webp" srcset="assets/img/action-cam-rec-osd-800.webp 800w, assets/img/action-cam-rec-osd-1600.webp 1600w" sizes="(min-width: 1060px) 760px, 100vw" width="1600" height="900" decoding="async" alt="Digital video: a clean HD picture of the race gates and the race line" data-de-alt="Digitales Video: klares HD-Bild der Renn-Gates mit Ideallinie">
+              <img class="feed__img is-active" loading="lazy" src="assets/img/osd-flight-1600.webp" srcset="assets/img/osd-flight-800.webp 800w, assets/img/osd-flight-1600.webp 1600w" sizes="(min-width: 1060px) 760px, 100vw" width="1600" height="900" decoding="async" alt="Digital video: a clean HD picture through the checkered start/finish gate in the arena, with the OSD" data-de-alt="Digitales Video: klares HD-Bild durch das karierte Start-/Ziel-Gate in der Arena, mit OSD">
               <img class="feed__img" loading="lazy" src="assets/img/video-digital-breakup-1600.webp" srcset="assets/img/video-digital-breakup-800.webp 800w, assets/img/video-digital-breakup-1600.webp 1600w" sizes="(min-width: 1060px) 760px, 100vw" width="1600" height="900" decoding="async" alt="Digital video breaking up: blur and block artifacts smear the picture" data-de-alt="Digitales Video bricht ein: Unschärfe und Blockartefakte verschmieren das Bild">
             </div>
             <span class="feed__static" aria-hidden="true"></span>
@@ -560,7 +560,7 @@
           </div>
           <div class="signal">
             <label class="signal__label" for="vlab-range"><span lang="en">Signal</span><span lang="de">Signal</span></label>
-            <input class="signal__range" id="vlab-range" type="range" min="0" max="3" step="1" value="0" data-vlab-range>
+            <input class="signal__range" id="vlab-range" type="range" min="0" max="100" step="1" value="0" data-vlab-range>
             <div class="signal__ends" aria-hidden="true" data-vlab-ends="analog"><span><span lang="en">strong</span><span lang="de">stark</span></span><span><span lang="en">lost</span><span lang="de">weg</span></span></div>
             <div class="signal__ends" aria-hidden="true" data-vlab-ends="digital" hidden><span><span lang="en">strong</span><span lang="de">stark</span></span><span><span lang="en">weak</span><span lang="de">schwach</span></span></div>
           </div>
@@ -578,15 +578,17 @@
       </div>
 
       <div class="vlab__notes">
-        <div class="vnote" data-vnote="analog">
-          <h3>Analog</h3>
-          <p lang="en">Almost no latency. The picture breaks up in stages&nbsp;– torn lines, fading color, snow with sync jumps and finally full static.</p>
-          <p lang="de">Kaum Verzögerung. Das Bild zerfällt in Stufen&nbsp;– verrissene Zeilen, verblassende Farben, Schnee mit Bildsprüngen und zuletzt volles Rauschen.</p>
-        </div>
-        <div class="vnote" data-vnote="digital">
-          <h3>Digital</h3>
-          <p lang="en">A clean HD picture with a little more latency. At the edge of range: blur, block artifacts, stutter and freezes&nbsp;– then a hard cut to <span class="mono nowrap">NO SIGNAL</span>. Never analog snow.</p>
-          <p lang="de">Klares HD-Bild mit etwas mehr Latenz. Am Rand der Reichweite: Unschärfe, Blockartefakte, Ruckler und Standbild&nbsp;– dann bricht das Bild hart auf <span class="mono nowrap">KEIN SIGNAL</span> ab. Nie analoger Schnee.</p>
+        <div class="vlab__systems" role="radiogroup" aria-label="Video system" data-de-aria-label="Videosystem">
+          <div class="vnote" data-vnote="analog">
+            <h3><button type="button" class="vnote__pick" role="radio" aria-checked="true" data-vlab-mode="analog">Analog</button></h3>
+            <p lang="en">Almost no latency. The picture breaks up in stages&nbsp;– torn lines, fading color, snow with sync jumps and finally full static.</p>
+            <p lang="de">Kaum Verzögerung. Das Bild zerfällt in Stufen&nbsp;– verrissene Zeilen, verblassende Farben, Schnee mit Bildsprüngen und zuletzt volles Rauschen.</p>
+          </div>
+          <div class="vnote" data-vnote="digital">
+            <h3><button type="button" class="vnote__pick" role="radio" aria-checked="false" data-vlab-mode="digital">Digital</button></h3>
+            <p lang="en">A clean HD picture with a little more latency. At the edge of range: blur, block artifacts, stutter and freezes&nbsp;– then a hard cut to <span class="mono nowrap">NO SIGNAL</span>. Never analog snow.</p>
+            <p lang="de">Klares HD-Bild mit etwas mehr Latenz. Am Rand der Reichweite: Unschärfe, Blockartefakte, Ruckler und Standbild&nbsp;– dann bricht das Bild hart auf <span class="mono nowrap">KEIN SIGNAL</span> ab. Nie analoger Schnee.</p>
+          </div>
         </div>
         <div class="vnote vnote--plain">
           <h3><span lang="en">Real channels</span><span lang="de">Echte Kanäle</span></h3>
@@ -1059,6 +1061,6 @@
   </div>
 </dialog>
 
-<script src="assets/js/main.js?v=ec58625d" defer></script>
+<script src="assets/js/main.js?v=b0d7e001" defer></script>
 </body>
 </html>
