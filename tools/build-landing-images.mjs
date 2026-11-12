@@ -53,6 +53,9 @@ export const IMAGES = [
   ['video-digital-clean', 'video_digital_clean', FULL],
   ['video-digital-breakup', 'video_digital_breakup', FULL],
   ['workbench-freestyle', 'workbench_freestyle', FULL],
+  // The configurator in the game (K), shot at GUI scale 3 in 2560 × 1440: the window keeps its largest size and the
+  // world shows dimmed around it. configurator_tricks is the Freestyle tab with all families and the tutorial preview
+  // of a trick under the pointer.
   ['configurator-rates', 'configurator_rates', FULL],
   ['configurator-pid', 'configurator_pid', FULL],
   ['configurator-osd', 'configurator_osd', FULL],
