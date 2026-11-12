@@ -2,6 +2,7 @@
 // site), the docs menu, bilingual text helpers, tables and highlighted code blocks.
 
 import { siteNav, siteFooterLinks, DISCORD, DISCORD_PATH, CURSEFORGE, MODRINTH, SOURCE } from '../site-nav.mjs';
+import { ogFor, ogTags } from '../og-meta.mjs';
 
 export { DISCORD, CURSEFORGE, MODRINTH, SOURCE };
 export const SITE = 'https://propwashfpv.com/';
@@ -287,10 +288,7 @@ export function page({ id, prefix, title, description, kicker, heading, lead, to
 <meta property="og:site_name" content="Propwash FPV">
 <meta property="og:title" content="${t(title.en)}">
 <meta property="og:description" content="${t(description.en)}">
-<meta property="og:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://propwashfpv.com/assets/img/og-image.jpg">
-<link rel="icon" type="image/png" sizes="32x32" href="${prefix}assets/img/favicon-32.png">
+${ogTags(ogFor(PAGES.find((p) => p.id === id).path), { title: t(title.en), description: t(description.en), raw: true })}<link rel="icon" type="image/png" sizes="32x32" href="${prefix}assets/img/favicon-32.png">
 <link rel="apple-touch-icon" href="${prefix}assets/img/apple-touch-icon.png">
 <link rel="stylesheet" href="${prefix}assets/css/style.css">
 <link rel="stylesheet" href="${prefix}assets/css/docs.css">

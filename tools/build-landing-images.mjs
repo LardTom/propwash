@@ -103,8 +103,7 @@ export const IMAGES = [
   ['addon-mob-defense', 'addon-mobdefense', FULL],
 ];
 
-// The link preview (og:image): the screenshot scaled to this width, cut to this height around its middle.
-const OG_IMAGE = ['osd_flight', 1200, 630];
+// The link previews (og:image) come from tools/build-og-images.mjs.
 
 function arg(name) {
   const i = process.argv.indexOf(name);
@@ -162,12 +161,6 @@ function build() {
       execFileSync('cwebp', ['-quiet', '-q', quality, '-m', '6', '-metadata', 'none', '-resize', String(width), String(height), input, '-o', target]);
       files++;
     }
-  }
-  if (!only || only.has('og-image')) {
-    const [src, w, h] = OG_IMAGE;
-    execFileSync('magick', [path.join(shots, `${src}.png`), '-resize', `${w}x`, '-gravity', 'center', '-crop', `${w}x${h}+0+0`, '+repage',
-      '-strip', '-interlace', 'Plane', '-quality', '86', path.join(OUT, 'og-image.jpg')]);
-    files++;
   }
   fs.rmSync(tmp, { recursive: true, force: true });
   console.log(`${files} files written to assets/img/`);
