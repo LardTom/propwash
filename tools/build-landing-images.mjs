@@ -79,7 +79,8 @@ export const IMAGES = [
   ['drone-closeup-paint-race-team', 'drone_closeup_paint_race_team', [800, 1120], DRONE],
   ['headlight-cave-crop', 'headlight_cave', [640, 960], [640, 360, 1280, 720]],
   ['headlight-cave-off-crop', 'headlight_cave_off', [640, 960], [640, 360, 1280, 720]],
-  ['dust-closeup', 'dust_takeoff_max', [640, 768], [772, 512, 1024, 576]],
+  // Over sand: on grass the rotor dust hardly shows with shaders.
+  ['dust-closeup', 'dust_takeoff_max', [640, 768], [752, 420, 1024, 576]],
   ['flight-school-race', 'flight_school_race', [640, 1280], [440, 160, 1280, 720]],
 
   // The workbench of the release has its tabs Build and Recycle above the window: the cut-out takes them in (taller).
