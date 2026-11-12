@@ -31,6 +31,7 @@ import apiPage from './docs/pages/api.mjs';
 import referencePage from './docs/pages/reference.mjs';
 import partsFormatPage from './docs/pages/parts-format.mjs';
 import blackboxPage from './docs/pages/blackbox.mjs';
+import licensePage from './docs/pages/license.mjs';
 
 export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const DATA_DIR = path.join(ROOT, 'tools/docs/data');
@@ -84,6 +85,7 @@ const BUILDERS = {
   api: apiPage,
   reference: referencePage,
   'parts-format': partsFormatPage,
+  license: licensePage,
 };
 
 function arg(name) {
