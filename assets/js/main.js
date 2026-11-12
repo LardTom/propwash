@@ -627,7 +627,7 @@
         area.remove();
       });
     }
-    $$('main [data-copy-value]').forEach(function (btn) {
+    $$('main .server__copy[data-copy-value]').forEach(function (btn) {
       var timer = 0;
       var status = btn.parentNode.querySelector('[data-copy-status]');
       btn.addEventListener('click', function () {
