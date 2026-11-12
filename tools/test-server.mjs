@@ -59,7 +59,7 @@ check(read('addons/index.html').includes('href="../#server"'), 'addons/index.htm
 function pages(dir = '') {
   const out = [];
   for (const e of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
-    if (['node_modules', 'tools', '.git', '.claude'].includes(e.name)) continue;
+    if (e.name.startsWith('.') || ['node_modules', 'tools'].includes(e.name)) continue;
     const rel = path.join(dir, e.name);
     if (e.isDirectory()) out.push(...pages(rel));
     else if (/\.(html|json)$/.test(e.name)) out.push(rel);

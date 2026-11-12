@@ -44,7 +44,7 @@ for (const [key, p] of Object.entries(here.products)) {
 // 1. A copy of the site.
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'pw-go-live-'));
 try {
-  fs.cpSync(ROOT, tmp, { recursive: true, filter: (src) => !/[/\\](\.git|node_modules|\.claude)$/.test(src) });
+  fs.cpSync(ROOT, tmp, { recursive: true, filter: (src) => src === ROOT || !(path.basename(src).startsWith('.') || path.basename(src) === 'node_modules') });
   const before = fs.readFileSync(path.join(tmp, 'index.html'), 'utf8');
 
   const dry = run(tmp, 'curseforge', '--check');

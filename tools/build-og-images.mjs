@@ -122,7 +122,7 @@ async function renderImages() {
 // The <head> of the hand-written pages: og:image and twitter:image of their kind, size, type and description of the
 // picture, and the twitter texts the same as the og texts.
 
-const SKIP = new Set(['node_modules', 'tools', 'assets', 'docs', '.git', '.claude']);
+const SKIP = new Set(['node_modules', 'tools', 'assets', 'docs']);
 export function handPages(dir = '') {
   const out = [];
   for (const e of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
