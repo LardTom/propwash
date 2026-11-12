@@ -100,7 +100,7 @@ this order (the ids are what the “Features” menu and older links use, so the
 | Online configurator | `#configurator` | what the configurator does, its picture, the button to open it |
 | What’s new | `#new` | highlights of the latest feature release (0.6.0: three, then three of its last fix block) and its changelog link |
 | Flight &amp; tuning | `#flight` | flight model, tuning, the in-game configurator, the four ways to fly |
-| Video | `#video` | analog and digital video and how they break up (interactive): the signal slider runs without steps and changes the picture where the next stage begins, the cards ANALOG and DIGITAL switch the system like the switch below the picture; checked by `tools/test-vlab.mjs` |
+| Video | `#video` | analog and digital video and how they break up (interactive): the signal slider runs without steps and changes the picture where the next stage begins, the cards ANALOG and DIGITAL switch the system like the switch below the picture; the digital pictures “Clean HD” and “Blur & blocks” are one flight (`video_digital_clean` and `video_digital_breakup`, shot one after the other in the same run); checked by `tools/test-vlab.mjs` |
 | Racing &amp; freestyle | `#racing` | race line, gates, ghost, spectating, tricks, course building |
 | Survival | `#survival` | crafting, loot, batteries, wear and repair |
 | More details | `#extras` | six tiles: lights, action cams, paint, sound and dust, bandos, a world that reacts |
@@ -130,7 +130,12 @@ release goes into **What’s new** and moves into its section (or out) with the 
   (`assets/js/main.js`, checked by `tools/test-faq.mjs`)
 - the pictures are the mod's own screenshots of the release commit; since 0.6.0 the scenes with a background are shot
   again in real worlds with shaders (2560 × 1440, Propwash Arena, Driftpark, a landscape with a fixed seed and the
-  community spawn) and laid over the self-test screenshots in a folder of the same layout:
+  community spawn) and laid over the self-test screenshots in a folder of the same layout. Exceptions without shaders:
+  the cave with the LED headlight and the race ghost (under Complementary Reimagined the headlight hardly lights the
+  cave and the ghost loses its see-through look). The configurator in the game (`configurator_*`) is shot at GUI
+  scale 3, so its window keeps its largest size and the world shows dimmed around it; the dust close-up is over sand,
+  where the rotor dust shows; `video_digital_clean` has no counterpart in the self test (a full signal in the scene of
+  `video_digital_breakup`):
 
 ```sh
 S=$(mktemp -d); mkdir -p $S/docs/screenshots
