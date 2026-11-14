@@ -8,7 +8,7 @@
 // and cap as shapes at the holder, never turned by the camera angle: one antenna in the middle straight up and back, a
 // pair in a V from one point (15° each, narrower on small open frames). Elements whose name starts with "antenna" in a
 // VTX model (add-on VTX) are left out where the drone is drawn (AntennaMask), so no antenna sits twice. A VTX without
-// external antennas (VideoAntenna.none(), Propwash 0.6.0-rc.3: "antenna": "none" in its part file, count 0 in the web
+// external antennas (VideoAntenna.none(), Propwash 0.6.0: "antenna": "none" in its part file, count 0 in the web
 // export) has neither antennas nor holder.
 //
 // All lengths are millimetres in the drone's frame (x to the right, y up, z to the rear), like assembly.js.

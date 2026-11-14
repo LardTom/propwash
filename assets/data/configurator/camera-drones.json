@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "about": "What the add-on Propwash: Camera Drones keeps in its code and the web export does not carry, written by hand from its sources (SensorTable, GimbalTable, LensItems, FlightClass, CamPresets, CameraCheck): the nav boards with GPS, compass, barometer and their obstacle sensors, the gimbals with tilt, pan and lenses, and the three flight classes with their camera frame, preset and the speeds of the flight modes Cine, Normal and Sport. tools/test-configurator-addons.mjs compares it with a checkout of the add-on next to this repository.",
-  "source": "Propwash: Camera Drones 1.0.0-rc.1",
+  "source": "Propwash: Camera Drones 1.0.0",
   "namespace": "camdrones",
   "nav_boards": {
     "camdrones:nav_fc_compact": { "gps": true, "compass": true, "barometer": true, "sensors": ["down"] },
