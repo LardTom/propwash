@@ -70,6 +70,8 @@ This repository contains only the website, no mod source code.
 - `assets/img/` – real in-game screenshots as WebP (800 and 1600 px wide, plus cropped shots) and `og-image.jpg` for link
   previews, converted by `tools/build-landing-images.mjs` (see [Landing page](#landing-page)); `assets/img/docs/` – the
   pictures of the docs pages
+- `assets/listing/modpack/` – pictures of the CurseForge modpack page “Propwash: All Add-ons” (banner, headers, cards,
+  GIFs); no page of the site uses them, the modpack description links them by URL
 - `sitemap.xml` and `robots.txt` – every page for search engines (see [Link check](#link-check))
 - `assets/fonts/` – Saira and JetBrains Mono (Latin with Latin Extended-A), Exo 2 and JetBrains Mono for the Cyrillic
   letters of the Russian pages, all under the SIL Open Font License 1.1 (see [Languages](#languages)); Barlow Condensed
